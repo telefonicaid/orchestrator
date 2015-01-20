@@ -1,0 +1,4 @@
+Django==1.7.3
+djangorestframework==3.0.3
+httplib2
+simplejson
