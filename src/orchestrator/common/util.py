@@ -10,23 +10,18 @@ class RestOperations(object):
     '''
 
     def __init__(self,
-                 KEYSTONE_PROTOCOL=None,
-                 KEYSTONE_HOST=None,
-                 KEYSTONE_PORT=None,
-                 KEYPASS_PROTOCOL=None,
-                 KEYPASS_HOST=None,
-                 KEYPASS_PORT=None
+                 PROTOCOL=None,
+                 HOST=None,
+                 PORT=None,
              ):
 
-        self.KEYSTONE_PROTOCOL=KEYSTONE_PROTOCOL
-        self.KEYSTONE_HOST=KEYSTONE_HOST
-        self.KEYSTONE_PORT=KEYSTONE_PORT
-        self.KEYPASS_PROTOCOL=KEYPASS_PROTOCOL
-        self.KEYPASS_HOST=KEYPASS_HOST
-        self.KEYPASS_PORT=KEYPASS_PORT
-        if KEYSTONE_PROTOCOL and KEYSTONE_HOST and KEYSTONE_PORT:
-            self.base_url = KEYSTONE_PROTOCOL+'://'+KEYSTONE_HOST+':'+KEYSTONE_PORT+'/'
-
+        self.PROTOCOL=PROTOCOL
+        self.HOST=HOST
+        self.PORT=PORT
+        if PROTOCOL and HOST and PORT:
+            self.base_url = PROTOCOL+'://'+HOST+':'+PORT+'/'
+        else:
+            self.base_url = None
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,

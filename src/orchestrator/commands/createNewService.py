@@ -1,5 +1,5 @@
 import sys
-from orchestrator.core.flow.createNewService import createNewServiceKeystone
+from orchestrator.core.flow.createNewService import createNewService
 
 
 
@@ -71,19 +71,19 @@ def main():
     #                    help='Shows tables draft')
     #args = parser.parse_args()
     
-    createNewServiceKeystone(KEYSTONE_PROTOCOL,
-                             KEYSTONE_HOST,
-                             KEYSTONE_PORT,
-                             DOMAIN_NAME,
-                             DOMAIN_ADMIN_USER,
-                             DOMAIN_ADMIN_PASSWORD,
-                             NEW_SERVICE_NAME,
-                             NEW_SERVICE_DESCRIPTION,
-                             NEW_SERVICE_ADMIN_USER,
-                             NEW_SERVICE_ADMIN_PASSWORD,
-                             KEYPASS_PROTOCOL,
-                             KEYPASS_HOST,
-                             KEYPASS_PORT)
+    createNewService(KEYSTONE_PROTOCOL,
+                     KEYSTONE_HOST,
+                     KEYSTONE_PORT,
+                     DOMAIN_NAME,
+                     DOMAIN_ADMIN_USER,
+                     DOMAIN_ADMIN_PASSWORD,
+                     NEW_SERVICE_NAME,
+                     NEW_SERVICE_DESCRIPTION,
+                     NEW_SERVICE_ADMIN_USER,
+                     NEW_SERVICE_ADMIN_PASSWORD,
+                     KEYPASS_PROTOCOL,
+                     KEYPASS_HOST,
+                     KEYPASS_PORT)
 
 if __name__ == '__main__':
     

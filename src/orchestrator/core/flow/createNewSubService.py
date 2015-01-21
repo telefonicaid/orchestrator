@@ -1,17 +1,19 @@
 import logging
+
 from orchestrator.core.idm import IdMOperations
 
 logger = logging.getLogger('orchestrator_core')
 
-def createNewServiceRole(KEYSTONE_PROTOCOL,
-                         KEYSTONE_HOST,
-                         KEYSTONE_PORT,
-                         SERVICE_NAME,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         NEW_ROLE_NAME):
-
-    '''Creates a new role Service (aka domain role keystone).
+def createNewSubService(KEYSTONE_PROTOCOL,
+                        KEYSTONE_HOST,
+                        KEYSTONE_PORT,
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD,
+                        NEW_SUBSERVICE_NAME,
+                        NEW_SUBSERVICE_DESCRIPTION):
+    
+    '''Creates a new SubService (aka project keystone).
 
     In case of HTTP error, return HTTP error
     
@@ -22,9 +24,15 @@ def createNewServiceRole(KEYSTONE_PROTOCOL,
         - SERVICE_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
-        - NEW_ROLE_NAME: New role name
+        - SUBSERVICE_NAME: New subservice name
+        - SUBSERVICE_DESCRIPTION: New subservice description
+     Return:
+        - ID: subservice id
     '''
     
+    #SUB_SERVICE_ADMIN_ROLE_NAME="SubServiceAdmin"
+    #SUB_SERVICE_CUSTOMER_ROLE_NAME="SubServiceCustomer"
+
     idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
 
     try:
@@ -35,7 +43,7 @@ def createNewServiceRole(KEYSTONE_PROTOCOL,
 
 
         #
-        # 1. Get service (aka domain)
+        # 1. Create service (aka domain)
         #
         ID_DOM1 = idm.getDomain(SERVICE_ADMIN_TOKEN,
                                 SERVICE_NAME)
@@ -43,12 +51,13 @@ def createNewServiceRole(KEYSTONE_PROTOCOL,
         logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
 
         #
-        # 2.  Create role
+        # 2.  Create subservice (aka project)
         #
-        ID_ROLE = idm.createRoleDomain(SERVICE_ADMIN_TOKEN,
-                                       ID_DOM1,
-                                       NEW_ROLE_NAME)
-        logger.debug("ID of user %s: %s" % (NEW_ROLE_NAME, ID_ROLE))
+        ID_PRO1 = idm.createProject(SERVICE_ADMIN_TOKEN,
+                                    ID_DOM1,
+                                    NEW_SUBSERVICE_NAME,
+                                    NEW_SUBSERVICE_DESCRIPTION)
+        logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
 
 
     except Exception, ex:
@@ -57,6 +66,6 @@ def createNewServiceRole(KEYSTONE_PROTOCOL,
     
     logger.info("Summary report:")
     logger.info("ID_DOM1=%s" % ID_DOM1)
-    logger.info("ID_ROLE=%s" % ID_ROLE)
+    logger.info("ID_PRO1=%s" % ID_PRO1)
 
-    return {"id": ID_ROLE}
+    return {"id": ID_PRO1}
