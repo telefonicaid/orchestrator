@@ -28,7 +28,7 @@ def assignRoleSubServiceUser(KEYSTONE_PROTOCOL,
         - ROLE_NAME: Role name
         - SERVICE_USER_NAME: User service name
     Return:
-        - ¿?
+        - ?
     '''
     
     idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)

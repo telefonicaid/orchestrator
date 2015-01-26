@@ -15,7 +15,7 @@ def assignRoleServiceUser(KEYSTONE_PROTOCOL,
     '''assigns a service role to an user in IoT keystone).
 
     In case of HTTP error, return HTTP error
-    
+
     Params:
         - KEYSTONE_PROTOCOL: HTTP or HTTPS
         - KEYSTONE_HOST: Keystone HOSTNAME or IP
@@ -26,9 +26,9 @@ def assignRoleServiceUser(KEYSTONE_PROTOCOL,
         - ROLE_NAME: Role name
         - SERVICE_USER_NAME: User service name
     Return:
-        - ¿?
+        - ?
     '''
-    
+
     idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
 
     try:
@@ -68,12 +68,12 @@ def assignRoleServiceUser(KEYSTONE_PROTOCOL,
                             ID_DOM1,
                             ID_USER,
                             ID_ROLE)
-        
-        
+
+
     except Exception, ex:
         logger.error(ex)
         return ex.message[0]
-    
+
     logger.info("Summary report:")
     logger.info("ID_DOM1=%s" % ID_DOM1)
     logger.info("ID_USER=%s" % ID_USER)

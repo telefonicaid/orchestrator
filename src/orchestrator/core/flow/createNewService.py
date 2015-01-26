@@ -46,10 +46,11 @@ def createNewService(KEYSTONE_PROTOCOL,
     idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT,
                         KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)
     try:
+
         CLOUD_ADMIN_TOKEN = idm.getToken(DOMAIN_NAME,
                                          DOMAIN_ADMIN_USER,
                                          DOMAIN_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % CLOUD_ADMIN_TOKEN)
+        logger.debug("CLOUD_ADMIN_TOKEN=%s" % CLOUD_ADMIN_TOKEN)
 
 
         #
@@ -63,11 +64,11 @@ def createNewService(KEYSTONE_PROTOCOL,
         #
         # 2. Create user admin for new service (aka domain)
         #
-        ID_ADM1 = idm.createUserAdminDomain(CLOUD_ADMIN_TOKEN,
-                                            NEW_SERVICE_NAME,
-                                            ID_DOM1,
-                                            NEW_SERVICE_ADMIN_USER,
-                                            NEW_SERVICE_ADMIN_PASSWORD)
+        ID_ADM1 = idm.createUserDomain(CLOUD_ADMIN_TOKEN,
+                                       ID_DOM1,
+                                       NEW_SERVICE_NAME,
+                                       NEW_SERVICE_ADMIN_USER,
+                                       NEW_SERVICE_ADMIN_PASSWORD)
         logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER, ID_ADM1))
 
         #
@@ -79,6 +80,9 @@ def createNewService(KEYSTONE_PROTOCOL,
         
         idm.grantDomainRole(CLOUD_ADMIN_TOKEN, ID_DOM1, ID_ADM1, ADMIN_ROLE_ID)
         
+
+
+
         NEW_SERVICE_ADMIN_TOKEN = idm.getToken(NEW_SERVICE_NAME,
                                                NEW_SERVICE_ADMIN_USER,
                                                NEW_SERVICE_ADMIN_PASSWORD)
@@ -121,7 +125,10 @@ def createNewService(KEYSTONE_PROTOCOL,
 
     except Exception, ex:
         logger.error(ex)
-        return ex.message[0]
+        # i.e.: (409, 'Conflict')
+        # i.e.: (2, 'No existent file policy')
+        # TODO: provide error code
+        return { "error": str(ex) }
     
     logger.info("Summary report:")
     logger.info("ID_DOM1=%s" % ID_DOM1)

@@ -160,3 +160,20 @@ REST_FRAMEWORK = {
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'PAGINATE_BY': 10
 }
+
+
+
+# TO DO:
+# split settings into settings/common.py settings/dev.py settings/qa_integration.py
+
+KEYSTONE = {
+    "host": "localhost",
+    "port": "5000",
+    "protocol":"http"
+}
+
+KEYPASS = {
+    "host": "localhost",
+    "port": "8080",
+    "protocol":"http"
+}

@@ -31,6 +31,8 @@ def createNewServiceUser(KEYSTONE_PROTOCOL,
     idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
 
     try:
+        import ipdb
+        ipdb.set_trace()
         SERVICE_ADMIN_TOKEN = idm.getToken(SERVICE_NAME,
                                            SERVICE_ADMIN_USER,
                                            SERVICE_ADMIN_PASSWORD)
@@ -40,8 +42,8 @@ def createNewServiceUser(KEYSTONE_PROTOCOL,
         #
         # 1. Get service (aka domain)
         #
-        ID_DOM1 = idm.getDomain(SERVICE_ADMIN_TOKEN,
-                                SERVICE_NAME)
+        ID_DOM1 = idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                  SERVICE_NAME)
 
         logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
 
@@ -57,8 +59,10 @@ def createNewServiceUser(KEYSTONE_PROTOCOL,
 
 
     except Exception, ex:
+        import ipdb
+        ipdb.set_trace()
         logger.error(ex)
-        return ex.message[0]
+        return { "error": str(ex) }
     
     logger.info("Summary report:")
     logger.info("ID_DOM1=%s" % ID_DOM1)

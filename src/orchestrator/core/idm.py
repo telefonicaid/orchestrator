@@ -1,6 +1,8 @@
 import json
+import os
 
 from orchestrator.common.util import RestOperations
+from orchestrator.core import policies
 
 # TODO: Interface (Base) + Implementations (Derived)
 
@@ -46,11 +48,13 @@ class IdMOperations(object):
                                                 KEYSTONE_HOST,
                                                 KEYSTONE_PORT)
 
-        self.AccessControlRestOperations = RestOperations(KEYSTONE_PROTOCOL,
-                                                          KEYSTONE_HOST,
-                                                          KEYSTONE_PORT)
+        self.AccessControlRestOperations = RestOperations(KEYPASS_PROTOCOL,
+                                                          KEYPASS_HOST,
+                                                          KEYPASS_PORT)
 
-
+        self.policy_dir = os.path.dirname(policies.__file__)
+    
+    
     def getToken(self,
                  DOMAIN_NAME,
                  DOMAIN_ADMIN_USER,
@@ -107,31 +111,6 @@ class IdMOperations(object):
         return json_body_response['domain']['id']
 
 
-    def createUserAdminDomain(self,
-                              CLOUD_ADMIN_TOKEN,
-                              NEW_SERVICE_NAME,
-                              ID_DOM1,
-                              NEW_SERVICE_ADMIN_USER,
-                              NEW_SERVICE_ADMIN_PASSWORD):
-        body_data = {
-            "user": {
-                "description": "Administrator of domain %s" % NEW_SERVICE_NAME,
-                "domain_id": "%s" % ID_DOM1,
-                "enabled": True,
-                "name": "%s" % NEW_SERVICE_ADMIN_USER,
-                "password": "%s" % NEW_SERVICE_ADMIN_PASSWORD
-            }
-        }
-        res = self.IdMRestOperations.rest_request(url='/v3/users',
-                                method='POST', data=body_data,
-                                auth_token=CLOUD_ADMIN_TOKEN)
-
-        assert res.code == 201, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        return json_body_response['user']['id']
-
-
     def getRoleId(self,
                  CLOUD_ADMIN_TOKEN,
                  ROLE_NAME):
@@ -184,12 +163,12 @@ class IdMOperations(object):
                         SERVICE_ADMIN_TOKEN,
                         SUB_SERVICE_ROLE_ID,
                         POLICY_FILE_NAME):
-        xml_data = open(POLICY_FILE_NAME)
+        
+        xml_data = open(self.policy_dir + '/' + POLICY_FILE_NAME)
         body_data = xml_data.read()
         xml_data.close()
-        # keypassurl = "%s://%s:%s" % (self.KEYPASS_PROTOCOL, self.KEYPASS_HOST,
-        #                        self.KEYPASS_PORT)
-        res = self.AccessControlRestOperations.rest_request(url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+        res = self.AccessControlRestOperations.rest_request(
+                                url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
                                 method='POST',
                                 json_data=False,
                                 data=body_data,
@@ -262,11 +241,11 @@ class IdMOperations(object):
 
         body_data = {
             "user": {
-                "description": "user of domain" % SERVICE_NAME,
+                "description": "user of domain %s" % SERVICE_NAME,
                 "enabled": True,
                 "domain_id": "%s" % ID_DOM1,
-                "name": "/%s" % NEW_USER_NAME,
-                "password": "/%s" % NEW_USER_PASSWORD,
+                "name": "%s" % NEW_USER_NAME,
+                "password": "%s" % NEW_USER_PASSWORD,
             }
         }
         res = self.IdMRestOperations.rest_request(url='/v3/users',
@@ -287,7 +266,7 @@ class IdMOperations(object):
         body_data = {
                 "enabled": "\[\"urn:scim:schemas:extension:keystone:1.0\"\]",  # TODO: check this string!
                 "domain_id": "%s" % ID_DOM1,
-                "name": "/%s" % NEW_ROLE_NAME,
+                "name": "%s" % NEW_ROLE_NAME,
         }
         res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles',
                                 method='POST', data=body_data,
@@ -375,3 +354,34 @@ class IdMOperations(object):
 
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
+
+    def removeUser(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_USER):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
+                                method='DELETE', data=None,
+                                auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+        #return ?
+
+    def updateUser(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_USER,
+                   USER_DATA):
+        body_data = {
+
+            "schemas": ["urn:scim:schemas:core:1.0",
+                        "urn:scim:schemas:extension:keystone:1.0"],
+        }
+        body_data.update(USER_DATA)
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
+                                method='PATCH', data=body_data,
+                                auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        #return ?
+        return json_body_response
