@@ -71,6 +71,8 @@ class Service_RESTView(APIView, IoTConf):
 
     def post(self, request, *args, **kw):
         serializer = ServiceSerializer(data=request.DATA)
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+
         if serializer.is_valid():
 
             cs = CreateNewService(self.KEYSTONE_PROTOCOL,
@@ -83,7 +85,7 @@ class Service_RESTView(APIView, IoTConf):
             result = cs.createNewService(request.DATA.get("DOMAIN_NAME", None), 
                                          request.DATA.get("DOMAIN_ADMIN_USER", None), 
                                          request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
-                                         request.DATA.get("DOMAIN_ADMIN_TOKEN", None), 
+                                         request.DATA.get("DOMAIN_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN), 
                                          request.DATA.get("NEW_SERVICE_NAME"),
                                          request.DATA.get("NEW_SERVICE_DESCRIPTION"),
                                          request.DATA.get("NEW_SERVICE_ADMIN_USER"),
@@ -102,6 +104,7 @@ class Service_RESTView(APIView, IoTConf):
 
     def get(self, request, *args, **kw):
         # TODO: check params with a serializer?
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Domains(self.KEYSTONE_PROTOCOL,
                                 self.KEYSTONE_HOST,
                                 self.KEYSTONE_PORT)
@@ -109,7 +112,7 @@ class Service_RESTView(APIView, IoTConf):
         result = flow.domains(request.DATA.get("DOMAIN_NAME", None),
                               request.DATA.get("SERVICE_ADMIN_USER", None),
                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                              request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
 
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
@@ -127,6 +130,7 @@ class SubService_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         # TODO: check domain_id also!
         serializer = SubServiceSerializer(data=request.DATA)
         if serializer.is_valid():
@@ -137,7 +141,7 @@ class SubService_RESTView(APIView, IoTConf):
             result = flow.createNewSubService(request.DATA.get("SERVICE_NAME", None),
                                               request.DATA.get("SERVICE_ADMIN_USER", None),
                                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                              request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                               request.DATA.get("NEW_SUBSERVICE_NAME", None),
                                               request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
 
@@ -153,6 +157,7 @@ class SubService_RESTView(APIView, IoTConf):
                             status=status.HTTP_400_BAD_REQUEST)            
 
     def get(self, request, service_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         # TODO: check params with a serializer?
         flow = Projects(self.KEYSTONE_PROTOCOL,
                         self.KEYSTONE_HOST,
@@ -160,7 +165,7 @@ class SubService_RESTView(APIView, IoTConf):
         result = flow.projects(service_id,
                                request.DATA.get("SERVICE_ADMIN_USER", None),
                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                               request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+                               request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
 
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
@@ -179,6 +184,7 @@ class User_RESTView(APIView, IoTConf):
     
     def post(self, request, *args, **kw):
         serializer = ServiceUserSerializer(data=request.DATA)
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         if serializer.is_valid():
             flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
                                       self.KEYSTONE_HOST,
@@ -186,7 +192,7 @@ class User_RESTView(APIView, IoTConf):
             result = flow.createNewServiceUser(request.DATA.get("SERVICE_NAME", None),
                                              request.DATA.get("SERVICE_ADMIN_USER", None),
                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                             request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                              request.DATA.get("NEW_SERVICE_USER_NAME", None),
                                              request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
             if 'id' in result:
@@ -205,6 +211,7 @@ class User_RESTView(APIView, IoTConf):
         import ipdb
         ipdb.set_trace()
         serializer = ServiceUserDeleteSerializer(data=request.DATA)
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         if serializer.is_valid():
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
@@ -213,7 +220,7 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("SERVICE_NAME", None),
                                 request.DATA.get("SERVICE_ADMIN_USER", None), 
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                 request.DATA.get("USER_NAME", None))
             
             return Response(result, status=status.HTTP_204_NO_CONTENT)
@@ -225,6 +232,7 @@ class User_RESTView(APIView, IoTConf):
         # TODO: use a form to validate
         import ipdb
         ipdb.set_trace()
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         if True:
             # TODO: el usuario se edita a si mismo?
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
@@ -234,7 +242,7 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("SERVICE_NAME"),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                 request.DATA.get("USER_NAME"),
                                 request.DATA.get("USER_DATA_VALUE"))
             return Response(result, status=status.HTTP_200_OK)
@@ -243,7 +251,7 @@ class User_RESTView(APIView, IoTConf):
                         status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, *args, **kw):
-        
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Users(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
@@ -251,7 +259,7 @@ class User_RESTView(APIView, IoTConf):
         result = flow.Users(request.DATA.get("SERVICE_NAME", None),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
         
         #     if 'id' in result:
         #         return Response(result, status=status.HTTP_201_CREATED)
@@ -272,6 +280,7 @@ class Role_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, *args, **kw):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         serializer = ServiceRoleSerializer(data=request.DATA)
         if serializer.is_valid():
             flow = CreateNewServiceRole(self.KEYSTONE_PROTOCOL,
@@ -281,7 +290,7 @@ class Role_RESTView(APIView, IoTConf):
                                           request.DATA.get("SERVICE_NAME"),
                                           request.DATA.get("SERVICE_ADMIN_USER", None),
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                          request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                          request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                           request.DATA.get("NEW_ROLE_NAME"))
 
             return Response(result, status=status.HTTP_201_CREATED)
@@ -290,6 +299,7 @@ class Role_RESTView(APIView, IoTConf):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, service_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         # TODO: check params with a serializer
         flow = Roles(self.KEYSTONE_PROTOCOL,
                      self.KEYSTONE_HOST,
@@ -299,7 +309,7 @@ class Role_RESTView(APIView, IoTConf):
                             None,
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
 
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
@@ -317,6 +327,7 @@ class AssignRoleServiceUser_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
         
     def post(self, request, *args, **kw):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         serializer = RoleServiceUserSerializer(data=request.DATA)
         if serializer.is_valid():
             flow = AssignRoleServiceUser(self.KEYSTONE_PROTOCOL,
@@ -326,7 +337,7 @@ class AssignRoleServiceUser_RESTView(APIView, IoTConf):
                                            request.DATA.get("SERVICE_NAME"),
                                            request.DATA.get("SERVICE_ADMIN_USER", None),
                                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                           request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                            request.DATA.get("NEW_ROLE_NAME"),
                                            request.DATA.get("NEW_SERVICE_USER_NAME"))
 
@@ -342,6 +353,7 @@ class AssignRoleSubServiceUser_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
     
     def post(self, request, *args, **kw):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         serializer = RoleSubServiceUserSerializer(data=request.DATA)
         if serializer.is_valid():
             flow = AssignRoleSubServiceUser(self.KEYSTONE_PROTOCOL,
@@ -352,7 +364,7 @@ class AssignRoleSubServiceUser_RESTView(APIView, IoTConf):
                                               request.DATA.get("SUBSERVICE_NAME"),
                                               request.DATA.get("SERVICE_ADMIN_USER", None),
                                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                              request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                               request.DATA.get("NEW_ROLE_NAME"),
                                               request.DATA.get("NEW_SERVICE_USER_NAME"))
 
@@ -369,7 +381,7 @@ class Users_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
     
     def get(self, request, *args, **kw):
-        
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Users(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
@@ -377,7 +389,7 @@ class Users_RESTView(APIView, IoTConf):
         result = flow.Users(request.DATA.get("SERVICE_NAME", None),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
         
         #     if 'id' in result:
         #         return Response(result, status=status.HTTP_201_CREATED)
@@ -391,27 +403,6 @@ class Users_RESTView(APIView, IoTConf):
         #                     status=status.HTTP_400_BAD_REQUEST)
 
 
-# class Domains_RESTView(APIView, IoTConf):
-#     #serializer_class = ServiceUserSerializer
 
-#     def __init__(self):
-#         IoTConf.__init__(self)
-    
-
-
-# class Projects_RESTView(APIView, IoTConf):
-#     #serializer_class = ServiceUserSerializer
-
-#     def __init__(self):
-#         IoTConf.__init__(self)
-    
-
-
-
-# class Roles_RESTView(APIView, IoTConf):
-#     #serializer_class = ServiceUserSerializer
-
-#     def __init__(self):
-#         IoTConf.__init__(self)
     
 
