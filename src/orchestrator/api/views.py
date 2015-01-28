@@ -9,19 +9,26 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 
-from orchestrator.core.flow.createNewService import createNewService
-from orchestrator.core.flow.createNewServiceUser import createNewServiceUser
-from orchestrator.core.flow.createNewServiceRole import createNewServiceRole
-from orchestrator.core.flow.assignRoleServiceUser import assignRoleServiceUser
-from orchestrator.core.flow.assignRoleSubServiceUser import assignRoleSubServiceUser
-from orchestrator.core.flow.removeUser import removeUser
-from orchestrator.core.flow.updateUser import updateUser
+from orchestrator.core.flow.createNewService import CreateNewService
+from orchestrator.core.flow.createNewSubService import CreateNewSubService
+from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
+from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
+from orchestrator.core.flow.assignRoleServiceUser import AssignRoleServiceUser
+from orchestrator.core.flow.assignRoleSubServiceUser import AssignRoleSubServiceUser
+from orchestrator.core.flow.removeUser import RemoveUser
+from orchestrator.core.flow.updateUser import UpdateUser
+from orchestrator.core.flow.Domains import Domains
+from orchestrator.core.flow.Projects import Projects
+from orchestrator.core.flow.Roles import Roles
+from orchestrator.core.flow.Users import Users
 
 from orchestrator.api.serializers import (ServiceSerializer, \
+    SubServiceSerializer, \
     ServiceUserSerializer, \
+    ServiceUserDeleteSerializer, \
     ServiceRoleSerializer, \
     RoleServiceUserSerializer, \
-    RoleSubServiceUserSerializer) 
+    RoleSubServiceUserSerializer)
 
 # class ServiceBrowsableAPIRenderer(BrowsableAPIRenderer):
 #     def get_context(self, *args, **kwargs):
@@ -55,7 +62,7 @@ class IoTConf(object):
 
 
 
-class NewService_RESTView(APIView, IoTConf):
+class Service_RESTView(APIView, IoTConf):
     serializer_class = ServiceSerializer
     #renderer_classes = (JSONRenderer, ServiceBrowsableAPIRenderer)
 
@@ -65,20 +72,23 @@ class NewService_RESTView(APIView, IoTConf):
     def post(self, request, *args, **kw):
         serializer = ServiceSerializer(data=request.DATA)
         if serializer.is_valid():
-            result = createNewService(self.KEYSTONE_PROTOCOL,
-                                      self.KEYSTONE_HOST,
-                                      self.KEYSTONE_PORT,
-                                      request.data["DOMAIN_NAME"],
-                                      request.DATA["DOMAIN_ADMIN_USER"],
-                                      request.DATA["DOMAIN_ADMIN_PASSWORD"],
-                                      request.DATA["NEW_SERVICE_NAME"],
-                                      request.DATA["NEW_SERVICE_DESCRIPTION"],
-                                      request.DATA["NEW_SERVICE_ADMIN_USER"],
-                                      request.DATA["NEW_SERVICE_ADMIN_PASSWORD"],
-                                      self.KEYPASS_PROTOCOL,
-                                      self.KEYPASS_HOST,
-                                      self.KEYPASS_PORT)
 
+            cs = CreateNewService(self.KEYSTONE_PROTOCOL,
+                                  self.KEYSTONE_HOST,
+                                  self.KEYSTONE_PORT,
+                                  self.KEYPASS_PROTOCOL,
+                                  self.KEYPASS_HOST,
+                                  self.KEYPASS_PORT)
+            
+            result = cs.createNewService(request.DATA.get("DOMAIN_NAME", None), 
+                                         request.DATA.get("DOMAIN_ADMIN_USER", None), 
+                                         request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
+                                         request.DATA.get("DOMAIN_ADMIN_TOKEN", None), 
+                                         request.DATA.get("NEW_SERVICE_NAME"),
+                                         request.DATA.get("NEW_SERVICE_DESCRIPTION"),
+                                         request.DATA.get("NEW_SERVICE_ADMIN_USER"),
+                                         request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"))
+            
             if 'token' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -90,7 +100,78 @@ class NewService_RESTView(APIView, IoTConf):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-class NewServiceUser_RESTView(APIView, IoTConf):
+    def get(self, request, *args, **kw):
+        # TODO: check params with a serializer?
+        flow = Domains(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT)
+        
+        result = flow.domains(request.DATA.get("DOMAIN_NAME", None),
+                              request.DATA.get("SERVICE_ADMIN_USER", None),
+                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                              request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+
+        if not 'error' in result:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            # TODO: return status from result error code
+            #status=status.HTTP_404_NOT_FOUND)
+            return Response(result['error'],
+                            status=status.HTTP_400_BAD_REQUEST)
+            
+
+class SubService_RESTView(APIView, IoTConf):
+    serializer_class = SubServiceSerializer
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request, service_id):
+        # TODO: check domain_id also!
+        serializer = SubServiceSerializer(data=request.DATA)
+        if serializer.is_valid():
+            flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
+                                       self.KEYSTONE_HOST,
+                                       self.KEYSTONE_PORT)
+            
+            result = flow.createNewSubService(request.DATA.get("SERVICE_NAME", None),
+                                              request.DATA.get("SERVICE_ADMIN_USER", None),
+                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                              request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                              request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                                              request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
+
+            if 'id' in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                # TODO: return status from result error code
+                #status=status.HTTP_404_NOT_FOUND)
+                return Response(result['error'],
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)            
+
+    def get(self, request, service_id):
+        # TODO: check params with a serializer?
+        flow = Projects(self.KEYSTONE_PROTOCOL,
+                        self.KEYSTONE_HOST,
+                        self.KEYSTONE_PORT)
+        result = flow.projects(service_id,
+                               request.DATA.get("SERVICE_ADMIN_USER", None),
+                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                               request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+
+        if not 'error' in result:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            # TODO: return status from result error code
+            #status=status.HTTP_404_NOT_FOUND)
+            return Response(result['error'],
+                            status=status.HTTP_400_BAD_REQUEST)
+
+            
+class User_RESTView(APIView, IoTConf):
     serializer_class = ServiceUserSerializer
 
     def __init__(self):
@@ -99,14 +180,15 @@ class NewServiceUser_RESTView(APIView, IoTConf):
     def post(self, request, *args, **kw):
         serializer = ServiceUserSerializer(data=request.DATA)
         if serializer.is_valid():
-            result = createNewServiceUser(self.KEYSTONE_PROTOCOL,
-                                          self.KEYSTONE_HOST,
-                                          self.KEYSTONE_PORT,
-                                          request.DATA["SERVICE_NAME"],
-                                          request.DATA["SERVICE_ADMIN_USER"],
-                                          request.DATA["SERVICE_ADMIN_PASSWORD"],
-                                          request.DATA["NEW_SERVICE_USER_NAME"],
-                                          request.DATA["NEW_SERVICE_USER_PASSWORD"])
+            flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
+                                      self.KEYSTONE_HOST,
+                                      self.KEYSTONE_PORT)
+            result = flow.createNewServiceUser(request.DATA.get("SERVICE_NAME", None),
+                                             request.DATA.get("SERVICE_ADMIN_USER", None),
+                                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                             request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                             request.DATA.get("NEW_SERVICE_USER_NAME", None),
+                                             request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -122,14 +204,17 @@ class NewServiceUser_RESTView(APIView, IoTConf):
         # TODO:
         import ipdb
         ipdb.set_trace()
-        if True:
-            result = removeUser(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT,
-                                request.DATA["SERVICE_NAME"],
-                                request.DATA["SERVICE_ADMIN_USER"],
-                                request.DATA["SERVICE_ADMIN_PASSWORD"],
-                                request.DATA["USER_NAME"])
+        serializer = ServiceUserDeleteSerializer(data=request.DATA)
+        if serializer.is_valid():
+            flow = RemoveUser(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT)
+            result = flow.removeUser(
+                                request.DATA.get("SERVICE_NAME", None),
+                                request.DATA.get("SERVICE_ADMIN_USER", None), 
+                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                request.DATA.get("USER_NAME", None))
             
             return Response(result, status=status.HTTP_204_NO_CONTENT)
         else:
@@ -141,20 +226,46 @@ class NewServiceUser_RESTView(APIView, IoTConf):
         import ipdb
         ipdb.set_trace()
         if True:
-            result = updateUser(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT,
-                                request.DATA["SERVICE_NAME"],
-                                request.DATA["SERVICE_ADMIN_USER"],
-                                request.DATA["SERVICE_ADMIN_PASSWORD"],
-                                request.DATA["USER_NAME"],
-                                request.DATA["USER_DATA_VALUE"],)
+            # TODO: el usuario se edita a si mismo?
+            flow = UpdateUser(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT)
+            result = flow.updateUser(
+                                request.DATA.get("SERVICE_NAME"),
+                                request.DATA.get("SERVICE_ADMIN_USER", None),
+                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                request.DATA.get("USER_NAME"),
+                                request.DATA.get("USER_DATA_VALUE"))
             return Response(result, status=status.HTTP_200_OK)
         else:
             return Response(None,
                         status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, *args, **kw):
+        
+        flow = Users(self.KEYSTONE_PROTOCOL,
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
+        
+        result = flow.Users(request.DATA.get("SERVICE_NAME", None),
+                            request.DATA.get("SERVICE_ADMIN_USER", None),
+                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+        
+        #     if 'id' in result:
+        #         return Response(result, status=status.HTTP_201_CREATED)
+        #     else:
+        #         # TODO: return status from result error code
+        #         #status=status.HTTP_404_NOT_FOUND)
+        #         return Response(result['error'],
+        #                         status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     return Response(serializer.errors,
+        #                     status=status.HTTP_400_BAD_REQUEST)
+
             
-class NewServiceRole_RESTView(APIView, IoTConf):
+class Role_RESTView(APIView, IoTConf):
     serializer_class = ServiceRoleSerializer
 
     def __init__(self):
@@ -163,18 +274,41 @@ class NewServiceRole_RESTView(APIView, IoTConf):
     def post(self, request, *args, **kw):
         serializer = ServiceRoleSerializer(data=request.DATA)
         if serializer.is_valid():
-            result = createNewServiceRole(self.KEYSTONE_PROTOCOL,
-                                          self.KEYSTONE_HOST,
-                                          self.KEYSTONE_PORT,
-                                          request.DATA["SERVICE_NAME"],
-                                          request.DATA["SERVICE_ADMIN_USER"],
-                                          request.DATA["SERVICE_ADMIN_PASSWORD"],
-                                          request.DATA["NEW_ROLE_NAME"])
+            flow = CreateNewServiceRole(self.KEYSTONE_PROTOCOL,
+                                      self.KEYSTONE_HOST,
+                                      self.KEYSTONE_PORT)
+            result = flow.createNewServiceRole(
+                                          request.DATA.get("SERVICE_NAME"),
+                                          request.DATA.get("SERVICE_ADMIN_USER", None),
+                                          request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                          request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                          request.DATA.get("NEW_ROLE_NAME"))
 
             return Response(result, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, service_id):
+        # TODO: check params with a serializer
+        flow = Roles(self.KEYSTONE_PROTOCOL,
+                     self.KEYSTONE_HOST,
+                     self.KEYSTONE_PORT)
+        # get DOMAIN_ID from  url param
+        result = flow.roles(service_id,
+                            None,
+                            request.DATA.get("SERVICE_ADMIN_USER", None),
+                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+
+        if not 'error' in result:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            # TODO: return status from result error code
+            #status=status.HTTP_404_NOT_FOUND)
+            return Response(result['error'],
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 class AssignRoleServiceUser_RESTView(APIView, IoTConf):
     serializer_class = RoleServiceUserSerializer
@@ -185,14 +319,16 @@ class AssignRoleServiceUser_RESTView(APIView, IoTConf):
     def post(self, request, *args, **kw):
         serializer = RoleServiceUserSerializer(data=request.DATA)
         if serializer.is_valid():
-            result = assignRoleServiceUser(self.KEYSTONE_PROTOCOL,
-                                           self.KEYSTONE_HOST,
-                                           self.KEYSTONE_PORT,
-                                           request.DATA["SERVICE_NAME"],
-                                           request.DATA["SERVICE_ADMIN_USER"],
-                                           request.DATA["SERVICE_ADMIN_PASSWORD"],
-                                           request.DATA["NEW_ROLE_NAME"],
-                                           request.DATA["NEW_SERVICE_USER_NAME"])
+            flow = AssignRoleServiceUser(self.KEYSTONE_PROTOCOL,
+                                       self.KEYSTONE_HOST,
+                                       self.KEYSTONE_PORT)
+            result = flow.assignRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME"),
+                                           request.DATA.get("SERVICE_ADMIN_USER", None),
+                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                           request.DATA.get("NEW_ROLE_NAME"),
+                                           request.DATA.get("NEW_SERVICE_USER_NAME"))
 
             return Response(result, status=status.HTTP_201_CREATED)
         else:
@@ -200,7 +336,7 @@ class AssignRoleServiceUser_RESTView(APIView, IoTConf):
                             status=status.HTTP_400_BAD_REQUEST)
 
 class AssignRoleSubServiceUser_RESTView(APIView, IoTConf):
-    serializer_class = assignRoleSubServiceUser
+    serializer_class = RoleSubServiceUserSerializer
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -208,17 +344,74 @@ class AssignRoleSubServiceUser_RESTView(APIView, IoTConf):
     def post(self, request, *args, **kw):
         serializer = RoleSubServiceUserSerializer(data=request.DATA)
         if serializer.is_valid():
-            result = assignRoleSubServiceUser(self.KEYSTONE_PROTOCOL,
-                                              self.KEYSTONE_HOST,
-                                              self.KEYSTONE_PORT,
-                                              request.DATA["SERVICE_NAME"],
-                                              request.DATA["SUBSERVICE_NAME"],
-                                              request.DATA["SERVICE_ADMIN_USER"],
-                                              request.DATA["SERVICE_ADMIN_PASSWORD"],
-                                              request.DATA["NEW_ROLE_NAME"],
-                                              request.DATA["NEW_SERVICE_USER_NAME"])
+            flow = AssignRoleSubServiceUser(self.KEYSTONE_PROTOCOL,
+                                          self.KEYSTONE_HOST,
+                                          self.KEYSTONE_PORT)
+            result = flow.assignRoleSubServiceUser(
+                                              request.DATA.get("SERVICE_NAME"),
+                                              request.DATA.get("SUBSERVICE_NAME"),
+                                              request.DATA.get("SERVICE_ADMIN_USER", None),
+                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                              request.DATA.get("SERVICE_ADMIN_TOKEN", None),
+                                              request.DATA.get("NEW_ROLE_NAME"),
+                                              request.DATA.get("NEW_SERVICE_USER_NAME"))
 
             return Response(result, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class Users_RESTView(APIView, IoTConf):
+    #serializer_class = ServiceUserSerializer
+
+    def __init__(self):
+        IoTConf.__init__(self)
+    
+    def get(self, request, *args, **kw):
+        
+        flow = Users(self.KEYSTONE_PROTOCOL,
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
+        
+        result = flow.Users(request.DATA.get("SERVICE_NAME", None),
+                            request.DATA.get("SERVICE_ADMIN_USER", None),
+                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", None))
+        
+        #     if 'id' in result:
+        #         return Response(result, status=status.HTTP_201_CREATED)
+        #     else:
+        #         # TODO: return status from result error code
+        #         #status=status.HTTP_404_NOT_FOUND)
+        #         return Response(result['error'],
+        #                         status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     return Response(serializer.errors,
+        #                     status=status.HTTP_400_BAD_REQUEST)
+
+
+# class Domains_RESTView(APIView, IoTConf):
+#     #serializer_class = ServiceUserSerializer
+
+#     def __init__(self):
+#         IoTConf.__init__(self)
+    
+
+
+# class Projects_RESTView(APIView, IoTConf):
+#     #serializer_class = ServiceUserSerializer
+
+#     def __init__(self):
+#         IoTConf.__init__(self)
+    
+
+
+
+# class Roles_RESTView(APIView, IoTConf):
+#     #serializer_class = ServiceUserSerializer
+
+#     def __init__(self):
+#         IoTConf.__init__(self)
+    
+

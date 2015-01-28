@@ -61,33 +61,91 @@ class IdMOperations(object):
                  DOMAIN_ADMIN_PASSWORD):
 
         auth_data = {
-        "auth": {
-            "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "domain": {
-                            "name": DOMAIN_NAME,
-                        },
-                        "name": DOMAIN_ADMIN_USER,
-                        "password": DOMAIN_ADMIN_PASSWORD
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": DOMAIN_ADMIN_USER,
+                            "password": DOMAIN_ADMIN_PASSWORD
+                        }
                     }
                 }
-            },
-            "scope": {
-                "domain": {
-                    "name": DOMAIN_NAME
+            }
+            }
+                # ,
+                #   "scope": {
+                #       "domain": {
+                #           "name": DOMAIN_NAME
+                #       }
+                #   }
+                # }
+            #}
+            
+        if DOMAIN_NAME:
+            auth_data['auth']['identity']['password']['user'].update({"domain": { "name": DOMAIN_NAME}})
+            
+            scope_domain = {
+                "scope": {
+                    "domain": {
+                        "name": DOMAIN_NAME
+                    }
                 }
             }
-        }
-        }
+            auth_data['auth'].update(scope_domain)
+        
         res = self.IdMRestOperations.rest_request(url='/v3/auth/tokens',
                                 method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
         return res.headers.get('X-Subject-Token')
 
+    def getToken2(self,
+                 DOMAIN_ID,
+                 DOMAIN_ADMIN_USER,
+                 DOMAIN_ADMIN_PASSWORD):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": DOMAIN_ADMIN_USER,
+                            "password": DOMAIN_ADMIN_PASSWORD
+                        }
+                    }
+                }
+            }
+            }
+                # ,
+                #   "scope": {
+                #       "domain": {
+                #           "name": DOMAIN_NAME
+                #       }
+                #   }
+                # }
+            #}
+            
+        if DOMAIN_ID:
+            auth_data['auth']['identity']['password']['user'].update({"domain": { "id": DOMAIN_ID}})
+            
+            scope_domain = {
+                "scope": {
+                    "domain": {
+                        "id": DOMAIN_ID
+                    }
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        
+        res = self.IdMRestOperations.rest_request(url='/v3/auth/tokens',
+                                method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res.headers.get('X-Subject-Token')
+        
     # aka createService
     def createDomain(self,
                      CLOUD_ADMIN_TOKEN,
@@ -157,7 +215,7 @@ class IdMOperations(object):
         return json_body_response['id']
 
 
-    # TODO: put int AccessControlOperations?
+    # TODO: move into AccessControlOperations?
     def provisionPolicy(self,
                         SERVICE_NAME,
                         SERVICE_ADMIN_TOKEN,
@@ -197,11 +255,10 @@ class IdMOperations(object):
         res = self.IdMRestOperations.rest_request(url='/v3/projects',
                                 method='POST', data=body_data,
                                 auth_token=SERVICE_ADMIN_TOKEN)
-
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return json_body_response['domain']['id']
+        return json_body_response['project']['id']
 
 
     def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME):
@@ -326,6 +383,7 @@ class IdMOperations(object):
                 return role['id']
 
 
+                
     def getDomainUserId(self,
                  SERVICE_ADMIN_TOKEN,
                  DOMAIN_ID,
@@ -385,3 +443,131 @@ class IdMOperations(object):
         json_body_response = json.loads(data)
         #return ?
         return json_body_response
+
+    def getDomains(self,
+                   SERVICE_ADMIN_TOKEN):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/domains',
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+
+        domains = []
+        for domain in json_body_response['domains']:
+            domain_data = {
+                "id": domain['id'],
+                "name": domain['name'],
+                "enabled": domain['enabled']
+            }
+            if 'description' in domain:
+                domain_data.update({"description": domain['description']})
+            domains.append(domain_data)
+            
+        return domains
+
+        
+    def getDomainRoles(self,
+                       SERVICE_ADMIN_TOKEN,
+                       DOMAIN_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles?domain_id=%s' % DOMAIN_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+
+        # Group each role by name and id
+        roles = []
+        for role in json_body_response['Resources']:
+            role_data = {"role":
+                         {
+                             "name": role['name'],
+                             "id": role['id']
+                         }
+                     }
+            roles.append(role_data)
+                         
+        return roles
+
+
+    def getDomainUsers(self,
+                       SERVICE_ADMIN_TOKEN,
+                       DOMAIN_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+
+        # Group each role by name and id
+        users = {}
+        for user in json_body_response['Resources']:
+            users.append({"name": user['name'],
+                          "id": user['id']})
+        return users
+
+    def getDomainProjects(self,
+                          SERVICE_ADMIN_TOKEN,
+                          DOMAIN_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/projects?domain_id=%s' % DOMAIN_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+
+        # Group each role by name and id
+        projects = []
+        for project in json_body_response['projects']:
+            project_data = {
+                "name": project['name'],
+                "id": project['id'],
+                "domain_id": project['domain_id']
+            }
+            # TODO: include domain_name into each project ?
+            if 'description' in project:
+                project_data.update({"description": project['description']})
+            
+            projects.append(project_data)
+        return projects
+
+
+    def getRoleAssignmnts(self,
+                          SERVICE_ADMIN_TOKEN,
+                          PROJECT_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.project.id=%s' % PROJECT_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+
+        # Group each role by name and id
+        import pdb
+        pdb.set_trace()
+        return None
+        
+        # projects = {}
+        # for project in json_body_response['projects']:
+        #     project_data = {
+        #         "name": project['name'],
+        #         "id": project['id'],
+        #         "domain_id": project['domain_id']
+        #     }
+        #     # TODO: include domain_name into each project ?
+        #     if 'description' in project:
+        #         project_data.update({"description": project['description']})
+            
+        #     projects.append(project_data)
+        # return projects
