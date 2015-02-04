@@ -287,21 +287,18 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
 
-        result = flow.Users(request.DATA.get("SERVICE_NAME", None),
+        result = flow.users(service_id,
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
 
-        #     if 'id' in result:
-        #         return Response(result, status=status.HTTP_201_CREATED)
-        #     else:
-        #         # TODO: return status from result error code
-        #         #status=status.HTTP_404_NOT_FOUND)
-        #         return Response(result['error'],
-        #                         status=status.HTTP_400_BAD_REQUEST)
-        # else:
-        #     return Response(serializer.errors,
-        #                     status=status.HTTP_400_BAD_REQUEST)
+        if not 'error' in result:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            # TODO: return status from result error code
+            #status=status.HTTP_404_NOT_FOUND)
+            return Response(result['error'],
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class Role_RESTView(APIView, IoTConf):
@@ -336,6 +333,7 @@ class Role_RESTView(APIView, IoTConf):
                      self.KEYSTONE_HOST,
                      self.KEYSTONE_PORT)
         # get DOMAIN_ID from  url param
+
         result = flow.roles(service_id,
                             None,
                             request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -403,36 +401,5 @@ class AssignRoleSubServiceUser_RESTView(APIView, IoTConf):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-class Users_RESTView(APIView, IoTConf):
-    #serializer_class = ServiceUserSerializer
-
-    def __init__(self):
-        IoTConf.__init__(self)
-
-    def get(self, request, *args, **kw):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        flow = Users(self.KEYSTONE_PROTOCOL,
-                              self.KEYSTONE_HOST,
-                              self.KEYSTONE_PORT)
-
-        result = flow.Users(request.DATA.get("SERVICE_NAME", None),
-                            request.DATA.get("SERVICE_ADMIN_USER", None),
-                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-
-        #     if 'id' in result:
-        #         return Response(result, status=status.HTTP_201_CREATED)
-        #     else:
-        #         # TODO: return status from result error code
-        #         #status=status.HTTP_404_NOT_FOUND)
-        #         return Response(result['error'],
-        #                         status=status.HTTP_400_BAD_REQUEST)
-        # else:
-        #     return Response(serializer.errors,
-        #                     status=status.HTTP_400_BAD_REQUEST)
-
-
 
 

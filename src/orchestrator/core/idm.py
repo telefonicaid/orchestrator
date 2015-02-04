@@ -519,10 +519,15 @@ class IdMOperations(object):
         json_body_response = json.loads(data)
 
         # Group each role by name and id
-        users = {}
+        users = []
         for user in json_body_response['Resources']:
-            users.append({"name": user['name'],
-                          "id": user['id']})
+            users.append(
+                {"name": user['userName'],
+                 "id": user['id'],
+                 "description": user["displayName"],
+                 "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
+                 "enabled": user['active']
+             })
         return users
 
     def getDomainProjects(self,
