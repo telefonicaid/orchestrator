@@ -42,8 +42,8 @@ class CreateNewServiceRole(object):
             #
             # 1. Get service (aka domain)
             #
-            ID_DOM1 = self.idm.getDomain(SERVICE_ADMIN_TOKEN,
-                                         SERVICE_NAME)
+            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                           SERVICE_NAME)
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
 

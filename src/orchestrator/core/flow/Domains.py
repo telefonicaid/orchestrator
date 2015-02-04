@@ -19,24 +19,24 @@ class Domains(object):
                 ADMIN_TOKEN):
 
         '''Get Domains.
-        
+
         In case of HTTP error, return HTTP error
-        
+
         Params:
-        - DOMAIN_NAME: 
+        - DOMAIN_NAME:
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         '''
-    
+
         try:
-            if not ADMIN_TOKEN: 
+            if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
-            
+
             DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
 
             logger.debug("DOMAINS=%s" % DOMAINS)
@@ -44,10 +44,47 @@ class Domains(object):
         except Exception, ex:
             logger.error(ex)
             return { "error": str(ex) }
-    
+
         logger.info("Summary report:")
-        
+
         return DOMAINS
+
+    def get_domain(self,
+                DOMAIN_ID,
+                ADMIN_USER,
+                ADMIN_PASSWORD,
+                ADMIN_TOKEN):
+
+        '''Get Domains.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID:
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        '''
+
+        try:
+            if not ADMIN_TOKEN:
+                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                ADMIN_USER,
+                                                ADMIN_PASSWORD)
+            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+
+            DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+
+            logger.debug("DOMAINS=%s" % DOMAIN)
+
+        except Exception, ex:
+            logger.error(ex)
+            return { "error": str(ex) }
+
+        logger.info("Summary report:")
+
+        return DOMAIN
 
 
 

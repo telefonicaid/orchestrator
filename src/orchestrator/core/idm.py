@@ -9,13 +9,13 @@ from orchestrator.core import policies
 # class IdMOperations(object):
 #     def __init__(self):
 #         None
-    
+
 #     def createService(self):
 #         None
 
 #     def createSubService(self):
-#         None        
-    
+#         None
+
 
 # class IdMKeystoneOperations
 
@@ -53,8 +53,8 @@ class IdMOperations(object):
                                                           KEYPASS_PORT)
 
         self.policy_dir = os.path.dirname(policies.__file__)
-    
-    
+
+
     def getToken(self,
                  DOMAIN_NAME,
                  DOMAIN_ADMIN_USER,
@@ -83,10 +83,10 @@ class IdMOperations(object):
                 #   }
                 # }
             #}
-            
+
         if DOMAIN_NAME:
             auth_data['auth']['identity']['password']['user'].update({"domain": { "name": DOMAIN_NAME}})
-            
+
             scope_domain = {
                 "scope": {
                     "domain": {
@@ -95,7 +95,7 @@ class IdMOperations(object):
                 }
             }
             auth_data['auth'].update(scope_domain)
-        
+
         res = self.IdMRestOperations.rest_request(url='/v3/auth/tokens',
                                 method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
@@ -128,10 +128,10 @@ class IdMOperations(object):
                 #   }
                 # }
             #}
-            
+
         if DOMAIN_ID:
             auth_data['auth']['identity']['password']['user'].update({"domain": { "id": DOMAIN_ID}})
-            
+
             scope_domain = {
                 "scope": {
                     "domain": {
@@ -140,12 +140,12 @@ class IdMOperations(object):
                 }
             }
             auth_data['auth'].update(scope_domain)
-        
+
         res = self.IdMRestOperations.rest_request(url='/v3/auth/tokens',
                                 method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
         return res.headers.get('X-Subject-Token')
-        
+
     # aka createService
     def createDomain(self,
                      CLOUD_ADMIN_TOKEN,
@@ -221,7 +221,7 @@ class IdMOperations(object):
                         SERVICE_ADMIN_TOKEN,
                         SUB_SERVICE_ROLE_ID,
                         POLICY_FILE_NAME):
-        
+
         xml_data = open(self.policy_dir + '/' + POLICY_FILE_NAME)
         body_data = xml_data.read()
         xml_data.close()
@@ -282,7 +282,7 @@ class IdMOperations(object):
         }
         res = self.IdMRestOperations.rest_request(url='/v3/auth/tokens',
                                 method='POST', data=auth_data)
-        
+
 
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
@@ -356,7 +356,7 @@ class IdMOperations(object):
         }
         res = self.IdMRestOperations.rest_request(url='/v3/auth/tokens',
                                 method='POST', data=auth_data)
-        
+
 
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
@@ -364,8 +364,8 @@ class IdMOperations(object):
         for project in json_body_response['projects']:
             if project['name'] == PROJECT_NAME:
                 return project['id']
-        
-        
+
+
     def getDomainRoleId(self,
                  SERVICE_ADMIN_TOKEN,
                  DOMAIN_ID,
@@ -383,7 +383,7 @@ class IdMOperations(object):
                 return role['id']
 
 
-                
+
     def getDomainUserId(self,
                  SERVICE_ADMIN_TOKEN,
                  DOMAIN_ID,
@@ -465,10 +465,21 @@ class IdMOperations(object):
             if 'description' in domain:
                 domain_data.update({"description": domain['description']})
             domains.append(domain_data)
-            
+
         return domains
 
-        
+    def getDomain(self,
+                  SERVICE_ADMIN_TOKEN,
+                  DOMAIN_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/domains?domain_id=%s' % DOMAIN_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
+
     def getDomainRoles(self,
                        SERVICE_ADMIN_TOKEN,
                        DOMAIN_ID):
@@ -491,7 +502,7 @@ class IdMOperations(object):
                          }
                      }
             roles.append(role_data)
-                         
+
         return roles
 
 
@@ -536,7 +547,7 @@ class IdMOperations(object):
             # TODO: include domain_name into each project ?
             if 'description' in project:
                 project_data.update({"description": project['description']})
-            
+
             projects.append(project_data)
         return projects
 
@@ -557,7 +568,7 @@ class IdMOperations(object):
         import pdb
         pdb.set_trace()
         return None
-        
+
         # projects = {}
         # for project in json_body_response['projects']:
         #     project_data = {
@@ -568,6 +579,6 @@ class IdMOperations(object):
         #     # TODO: include domain_name into each project ?
         #     if 'description' in project:
         #         project_data.update({"description": project['description']})
-            
+
         #     projects.append(project_data)
         # return projects
