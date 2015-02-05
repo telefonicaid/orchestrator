@@ -449,7 +449,6 @@ class IdMOperations(object):
         res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
                                 method='PATCH', data=body_data,
                                 auth_token=SERVICE_ADMIN_TOKEN)
-
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)

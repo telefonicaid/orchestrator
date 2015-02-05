@@ -259,22 +259,22 @@ class User_RESTView(APIView, IoTConf):
             return Response(None,
                         status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, service_id):
+    def put(self, request, service_id, user_id):
         # TODO: use a form to validate
-        import ipdb
-        ipdb.set_trace()
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         if True:
-            # TODO: el usuario se edita a si mismo?
+            # TODO: el usuario se edita a si mismo? NO
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT)
             result = flow.updateUser(
-                                request.DATA.get("SERVICE_NAME"),
+                                request.DATA.get("SERVICE_NAME"), 
+                                request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                 request.DATA.get("USER_NAME"),
+                                request.DATA.get("USER_ID", user_id),
                                 request.DATA.get("USER_DATA_VALUE"))
             return Response(result, status=status.HTTP_200_OK)
         else:
@@ -292,7 +292,7 @@ class User_RESTView(APIView, IoTConf):
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-
+        print result
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
         else:
