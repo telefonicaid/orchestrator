@@ -95,34 +95,36 @@ class Roles(object):
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
 
-            # Try to filter by PROJECT_ID each ROLE
-            # Filter ROLE_ID and USER_ID ?
-            res = []
+            role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS:
+                # 'OR' Filter
                 if ROLE_ID:
                     if (role_assignment['role']['id'] == ROLE_ID):
-                        # TODO: Expand role name into role_assignment role['role']
-                        res.append(role_assignment)
+                        role_assignments_expanded.append(role_assignment)
                         continue
                 if PROJECT_ID:
                     if (role_assignment['scope']['project']['id'] == PROJECT_ID):
-                        # TODO: Expand project name into role_assignment role['scope']['project']
-                        res.append(role_assignment)
+                        role_assignments_expanded.append(role_assignment)
                         continue
                 if USER_ID:
                     if (role_assignment['user']['id'] == USER_ID):
-                        # TODO: Expand user name into role_assignment role['user']
-                        res.append(role_assignment)
+                        role_assignments_expanded.append(role_assignment)
                         continue
 
+            # Cache these data? -> memcached/redis
             domain_roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
             domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
-            # for assign in res:
-            #     assign['user']['name'] = filter(lambda x: x['id'] == str(assign['user']['id']), domain_users)[0]['name']
+            for assign in role_assignments_expanded:
+                assign['user']['name'] = \
+                    [x for x in domain_users if x['id'] == str(assign['user']['id'])][0]['name']
+                assign['role']['name'] = \
+                    [x for x in domain_roles['roles'] if x['id'] == str(assign['role']['id'])][0]['name']
+                assign['scope']['project']['name'] = \
+                    [x for x in domain_projects if x['id'] == str(assign['scope']['project']['id'])][0]['name']
 
-            logger.debug("ROLES=%s" % res)
+            logger.debug("ROLES=%s" % role_assignments_expanded)
 
         except Exception, ex:
             logger.error(ex)
@@ -130,5 +132,5 @@ class Roles(object):
 
         logger.info("Summary report:")
 
-        return { "roles-assginments": res }
+        return { "roles-assginments": role_assignments_expanded }
 
