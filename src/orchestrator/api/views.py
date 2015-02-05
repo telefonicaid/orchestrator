@@ -213,40 +213,13 @@ class User_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
-    def post(self, request, service_id):
-        serializer = ServiceUserSerializer(data=request.DATA)
+    def delete(self, request, service_id, user_id):
+        #serializer = ServiceUserDeleteSerializer(data=request.DATA)
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        if serializer.is_valid():
-            flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
-                                      self.KEYSTONE_HOST,
-                                      self.KEYSTONE_PORT)
-            result = flow.createNewServiceUser(request.DATA.get("SERVICE_NAME", None),
-                                             request.DATA.get("SERVICE_ADMIN_USER", None),
-                                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                             request.DATA.get("NEW_SERVICE_USER_NAME", None),
-                                             request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
-            if 'id' in result:
-                return Response(result, status=status.HTTP_201_CREATED)
-            else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
-                return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, service_id):
-        # TODO:
-        import ipdb
-        ipdb.set_trace()
-        serializer = ServiceUserDeleteSerializer(data=request.DATA)
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        if serializer.is_valid():
+        if True: #serializer.is_valid():
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT)
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
             result = flow.removeUser(
                                 request.DATA.get("SERVICE_NAME", None),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -326,6 +299,31 @@ class UserList_RESTView(APIView, IoTConf):
             return Response(result['error'],
                             status=status.HTTP_400_BAD_REQUEST)
 
+    def post(self, request, service_id):
+        serializer = ServiceUserSerializer(data=request.DATA)
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        if serializer.is_valid():
+            flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
+                                      self.KEYSTONE_HOST,
+                                      self.KEYSTONE_PORT)
+            result = flow.createNewServiceUser(request.DATA.get("SERVICE_NAME", None),
+                                             request.DATA.get("SERVICE_ADMIN_USER", None),
+                                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                             request.DATA.get("NEW_SERVICE_USER_NAME", None),
+                                             request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
+            if 'id' in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                # TODO: return status from result error code
+                #status=status.HTTP_404_NOT_FOUND)
+                return Response(result['error'],
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+            
 class Role_RESTView(APIView, IoTConf):
     serializer_class = ServiceRoleSerializer
 
