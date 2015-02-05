@@ -281,6 +281,32 @@ class User_RESTView(APIView, IoTConf):
             return Response(None,
                         status=status.HTTP_400_BAD_REQUEST)
 
+    def get(self, request, service_id, user_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        flow = Users(self.KEYSTONE_PROTOCOL,
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
+
+        result = flow.user( service_id,
+                            user_id,
+                            request.DATA.get("SERVICE_ADMIN_USER", None),
+                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+
+        if not 'error' in result:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            # TODO: return status from result error code
+            #status=status.HTTP_404_NOT_FOUND)
+            return Response(result['error'],
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserList_RESTView(APIView, IoTConf):
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
     def get(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Users(self.KEYSTONE_PROTOCOL,
@@ -299,7 +325,6 @@ class User_RESTView(APIView, IoTConf):
             #status=status.HTTP_404_NOT_FOUND)
             return Response(result['error'],
                             status=status.HTTP_400_BAD_REQUEST)
-
 
 class Role_RESTView(APIView, IoTConf):
     serializer_class = ServiceRoleSerializer

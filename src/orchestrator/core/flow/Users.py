@@ -23,11 +23,10 @@ class Users(object):
         In case of HTTP error, return HTTP error
 
         Params:
+        - SERVICE_ID: Service name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - SERVICE_NAME: Service name
-        - SUBSERVICE_NAME: SubService name
         '''
 
         try:
@@ -71,3 +70,44 @@ class Users(object):
 
 
 
+    def user(self,
+              SERVICE_ID,
+              USER_ID,
+              SERVICE_ADMIN_USER,
+              SERVICE_ADMIN_PASSWORD,
+              SERVICE_ADMIN_TOKEN):
+
+        '''Get user detail
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_ID: Service ID
+        - USER_ID: User ID
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+
+        '''
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                         SERVICE_ADMIN_USER,
+                                                         SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
+                                              USER_ID)
+            import ipdb
+            ipdb.set_trace()
+            logger.debug("DETAIL_USER=%s" % DETAIL_USER)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return { "error": str(ex) }
+
+        logger.info("Summary report:")
+
+        return DETAIL_USER

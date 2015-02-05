@@ -546,8 +546,34 @@ class Test_UserList_RestView(object):
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+class Test_UserDetail_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_get_ok(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        user_id = json_body_response['token']['user']['id']
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/user/%s" % (service_id,
+                                                                             user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
 
 if __name__ == '__main__':
+
     test_NewService = Test_NewService_RestView()
     test_NewService.test_post_ok()
     test_NewService.test_post_ok_bad()
@@ -584,6 +610,9 @@ if __name__ == '__main__':
 
     test_UserList = Test_UserList_RestView()
     test_UserList.test_get_ok()
+
+    test_UserDetail = Test_UserDetail_RestView()
+    test_UserDetail.test_get_ok()
 
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()

@@ -413,6 +413,18 @@ class IdMOperations(object):
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
 
+    def detailUser(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_USER):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
+                                                  method='GET', data=None,
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
+
     def removeUser(self,
                    SERVICE_ADMIN_TOKEN,
                    ID_USER):
