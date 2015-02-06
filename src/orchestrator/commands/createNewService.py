@@ -71,21 +71,23 @@ def main():
     #                    help='Shows tables draft')
     #args = parser.parse_args()
 
-    cs = createNewService(KEYSTONE_PROTOCOL,
-                          KEYSTONE_HOST,
-                          KEYSTONE_PORT,
-                          KEYPASS_PROTOCOL,
-                          KEYPASS_HOST,
-                          KEYPASS_PORT)
+    flow = createNewService(KEYSTONE_PROTOCOL,
+                            KEYSTONE_HOST,
+                            KEYSTONE_PORT,
+                            KEYPASS_PROTOCOL,
+                            KEYPASS_HOST,
+                            KEYPASS_PORT)
     
-    cs.createNewService(None,
-                        DOMAIN_NAME,
-                        DOMAIN_ADMIN_USER,
-                        DOMAIN_ADMIN_PASSWORD,
-                        NEW_SERVICE_NAME,
-                        NEW_SERVICE_DESCRIPTION,
-                        NEW_SERVICE_ADMIN_USER,
-                        NEW_SERVICE_ADMIN_PASSWORD)
+    flow.createNewService(None,
+                          DOMAIN_NAME,
+                          DOMAIN_ADMIN_USER,
+                          DOMAIN_ADMIN_PASSWORD,
+                          None,
+                          NEW_SERVICE_NAME,
+                          NEW_SERVICE_DESCRIPTION,
+                          NEW_SERVICE_ADMIN_USER,
+                          NEW_SERVICE_ADMIN_PASSWORD)
+
 
 
 if __name__ == '__main__':

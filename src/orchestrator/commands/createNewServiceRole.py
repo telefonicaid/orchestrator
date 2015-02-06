@@ -1,5 +1,5 @@
 import sys
-from orchestrator.core.flow.createNewServiceRole import createNewServiceRole
+from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
 
 
 
@@ -43,12 +43,15 @@ def main():
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
     NEW_ROLE_NAME=sys.argv[7]
 
-    createNewServiceRole(KEYSTONE_PROTOCOL,
-                         KEYSTONE_HOST,
-                         KEYSTONE_PORT,
+    flow = CreateNewServiceRole(KEYSTONE_PROTOCOL,
+                                KEYSTONE_HOST,
+                                KEYSTONE_PORT)
+
+    flow.createNewServiceRole(
                          SERVICE_NAME,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
+                         None,
                          NEW_ROLE_NAME)
     
 
