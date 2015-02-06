@@ -22,13 +22,22 @@ from orchestrator.core.flow.Projects import Projects
 from orchestrator.core.flow.Roles import Roles
 from orchestrator.core.flow.Users import Users
 
-from orchestrator.api.serializers import (ServiceSerializer, \
-    SubServiceSerializer, \
-    ServiceUserSerializer, \
-    ServiceUserDeleteSerializer, \
+from orchestrator.api.serializers import (
+    # ServiceSerializer, \
+    # SubServiceSerializer, \
+    # ServiceUserSerializer, \
+#    ServiceUserDeleteSerializer, \
     ServiceRoleSerializer, \
     RoleServiceUserSerializer, \
     RoleSubServiceUserSerializer)
+
+
+from rest_framework.exceptions import ParseError
+from rest_framework.response import Response
+from rest_framework import views
+ 
+from . import negotiators, parsers
+
 
 # class ServiceBrowsableAPIRenderer(BrowsableAPIRenderer):
 #     def get_context(self, *args, **kwargs):
@@ -42,10 +51,10 @@ from orchestrator.api.serializers import (ServiceSerializer, \
 
 logger = logging.getLogger('orchestrator_api')
 
-# TOOD: extract Keystone/Keypass from django settings instead of API
+
 
 class IoTConf(object):
-
+    # Class to extract Keystone/Keypass conf from django settings
     def __init__(self):
         try:
             self.KEYSTONE_PROTOCOL = settings.KEYSTONE['protocol']
@@ -62,136 +71,163 @@ class IoTConf(object):
 
 
 class ServiceList_RESTView(APIView, IoTConf):
-    #renderer_classes = (JSONRenderer, ServiceBrowsableAPIRenderer)
-
+    schema_name = "ServiceList"
+    parser_classes = (parsers.JSONSchemaParser,)
+    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    
     def __init__(self):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None):
-        # TODO: check params with a serializer?
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        flow = Domains(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT)
-        if not service_id:
-            result = flow.domains(request.DATA.get("DOMAIN_NAME", None),
-                                  request.DATA.get("SERVICE_ADMIN_USER", None),
-                                  request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                  request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-        else:
-            # TODO: return detail of domain_id: name, etc
-            result = flow.get_domain(request.DATA.get("DOMAIN_ID", service_id),
-                                     request.DATA.get("SERVICE_ADMIN_USER", None),
-                                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-
-        if not 'error' in result:
-            return Response(result, status=status.HTTP_200_OK)
-        else:
-            # TODO: return status from result error code
-            #status=status.HTTP_404_NOT_FOUND)
-            return Response(result['error'],
-                            status=status.HTTP_400_BAD_REQUEST)
-
+        try:
+            request.DATA  # json validation
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT)
+            if not service_id:
+                # Get all domains
+                result = flow.domains(request.DATA.get("DOMAIN_NAME", None),
+                                      request.DATA.get("SERVICE_ADMIN_USER", None),
+                                      request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                      request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                       HTTP_X_AUTH_TOKEN))
+            else:
+                # Get detail of one domains
+                result = flow.get_domain(request.DATA.get("DOMAIN_ID", service_id),
+                                         request.DATA.get("SERVICE_ADMIN_USER", None),
+                                         request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                         request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                          HTTP_X_AUTH_TOKEN))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                # TODO: return status from result error code
+                #status=status.HTTP_404_NOT_FOUND)
+                return Response(result['error'],
+                                status=status.HTTP_400_BAD_REQUEST)
+                
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
-    serializer_class = ServiceSerializer
-
+    schema_name = "ServiceCreate"
+    parser_classes = (parsers.JSONSchemaParser,)
+    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    
     def __init__(self):
         ServiceList_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
-        serializer = ServiceSerializer(data=request.DATA)
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-
-        if serializer.is_valid():
-
-            cs = CreateNewService(self.KEYSTONE_PROTOCOL,
-                                  self.KEYSTONE_HOST,
-                                  self.KEYSTONE_PORT,
-                                  self.KEYPASS_PROTOCOL,
-                                  self.KEYPASS_HOST,
-                                  self.KEYPASS_PORT)
-
-            result = cs.createNewService(request.DATA.get("DOMAIN_NAME", None),
-                                         request.DATA.get("DOMAIN_ADMIN_USER", None), 
-                                         request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
-                                         request.DATA.get("DOMAIN_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN), 
-                                         request.DATA.get("NEW_SERVICE_NAME"),
-                                         request.DATA.get("NEW_SERVICE_DESCRIPTION"),
-                                         request.DATA.get("NEW_SERVICE_ADMIN_USER"),
-                                         request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"))
-
+        try:
+            request.DATA # json validation
+            flow = CreateNewService(self.KEYSTONE_PROTOCOL,
+                                    self.KEYSTONE_HOST,
+                                    self.KEYSTONE_PORT,
+                                    self.KEYPASS_PROTOCOL,
+                                    self.KEYPASS_HOST,
+                                    self.KEYPASS_PORT)
+            result = flow.createNewService(request.DATA.get("DOMAIN_NAME", None),
+                                           request.DATA.get("DOMAIN_ADMIN_USER", None), 
+                                           request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
+                                           request.DATA.get("DOMAIN_ADMIN_TOKEN",
+                                                            HTTP_X_AUTH_TOKEN), 
+                                           request.DATA.get("NEW_SERVICE_NAME"),
+                                           request.DATA.get("NEW_SERVICE_DESCRIPTION"),
+                                           request.DATA.get("NEW_SERVICE_ADMIN_USER"),
+                                           request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"))
+            
             if 'token' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
                 # TODO: return status from result error code
                 #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
+                                #status=result['status']
                                 status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class SubServiceList_RESTView(APIView, IoTConf):
+    schema_name = "SubServiceList"
+    parser_classes = (parsers.JSONSchemaParser,)
+    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None, subservice_id=None):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        # TODO: check params with a serializer?: service_id, subservice_id
-        flow = Projects(self.KEYSTONE_PROTOCOL,
-                        self.KEYSTONE_HOST,
-                        self.KEYSTONE_PORT)
-        if service_id:
-            if not subservice_id:
-                result = flow.projects(service_id,
+        try:
+            request.DATA # json validation
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT)
+            if service_id:
+                if not subservice_id:
+                    result = flow.projects(
+                                   service_id,
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-            else:
-                # TODO: get detail of subservice
-                result = flow.get_project(
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                    HTTP_X_AUTH_TOKEN))
+                else:
+                    # TODO: get detail of subservice
+                    result = flow.get_project(
                                    request.DATA.get("SERVICE_ID", service_id),
                                    request.DATA.get("SUBSERVICE_ID", subservice_id),
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-        else:
-            result['error'] = "ERROR not service_id provided"
+            else:
+                # Really service_id is not mandatory already in urls?
+                result['error'] = "ERROR not service_id provided"
 
-        if not 'error' in result:
-            return Response(result, status=status.HTTP_200_OK)
-        else:
-            # TODO: return status from result error code
-            #status=status.HTTP_404_NOT_FOUND)
-            return Response(result['error'],
-                            status=status.HTTP_400_BAD_REQUEST)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                # TODO: return status from result error code
+                #status=status.HTTP_404_NOT_FOUND)
+                return Response(result['error'],
+                                status=status.HTTP_400_BAD_REQUEST)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
-    serializer_class = SubServiceSerializer
+    schema_name = "SubServiceCreate"
+    parser_classes = (parsers.JSONSchemaParser,)
+    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         SubServiceList_RESTView.__init__(self)
 
     def post(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        # TODO: check domain_id also!
-        serializer = SubServiceSerializer(data=request.DATA)
-        if serializer.is_valid():
+        try:
+            request.DATA # json validation
             flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
                                        self.KEYSTONE_PORT)
-            # service_id -> SERVICE_NAME
-            result = flow.createNewSubService(request.DATA.get("SERVICE_NAME", None),
-                                              request.DATA.get("SERVICE_ADMIN_USER", None),
-                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                              request.DATA.get("NEW_SUBSERVICE_NAME", None),
-                                              request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
+            result = flow.createNewSubService(
+                                     request.DATA.get("SERVICE_NAME", None),
+                                     request.DATA.get("SERVICE_ID", service_id),
+                                     request.DATA.get("SERVICE_ADMIN_USER", None),
+                                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                     request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                      HTTP_X_AUTH_TOKEN),
+                                     request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                                     request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -200,42 +236,49 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
                                 status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
-
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class User_RESTView(APIView, IoTConf):
-    serializer_class = ServiceUserSerializer
+    schema_name = "User"
+    parser_classes = (parsers.JSONSchemaParser,)
+    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, user_id):
-        #serializer = ServiceUserDeleteSerializer(data=request.DATA)
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        if True: #serializer.is_valid():
+        try:
+            request.DATA # json validation
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
+            # TODO: use user_id
             result = flow.removeUser(
                                 request.DATA.get("SERVICE_NAME", None),
+                                request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                request.DATA.get("USER_NAME", None))
+                                request.DATA.get("USER_NAME", None),
+                                request.DATA.get("USER_ID", user_id))
 
             return Response(result, status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(None,
-                        status=status.HTTP_400_BAD_REQUEST)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def put(self, request, service_id, user_id):
-        # TODO: use a form to validate
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        if True:
+        try:
+            request.DATA # json validation
             # TODO: el usuario se edita a si mismo? NO
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
@@ -250,68 +293,89 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("USER_ID", user_id),
                                 request.DATA.get("USER_DATA_VALUE"))
             return Response(result, status=status.HTTP_200_OK)
-        else:
-            return Response(None,
-                        status=status.HTTP_400_BAD_REQUEST)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def get(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        flow = Users(self.KEYSTONE_PROTOCOL,
-                              self.KEYSTONE_HOST,
-                              self.KEYSTONE_PORT)
-
-        result = flow.user( service_id,
-                            user_id,
-                            request.DATA.get("SERVICE_ADMIN_USER", None),
-                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-        print result
-        if not 'error' in result:
-            return Response(result, status=status.HTTP_200_OK)
-        else:
-            # TODO: return status from result error code
-            #status=status.HTTP_404_NOT_FOUND)
-            return Response(result['error'],
-                            status=status.HTTP_400_BAD_REQUEST)
-
+        try:
+            request.DATA # json validation        
+            flow = Users(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT)
+            result = flow.user(request.DATA.get("SERVICE_ID",  service_id),
+                               request.DATA.get("USER_ID", user_id),
+                               request.DATA.get("SERVICE_ADMIN_USER", None),
+                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                               request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                HTTP_X_AUTH_TOKEN))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                # TODO: return status from result error code
+                #status=status.HTTP_404_NOT_FOUND)
+                return Response(result['error'],
+                                status=status.HTTP_400_BAD_REQUEST)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class UserList_RESTView(APIView, IoTConf):
+    schema_name = "UserList"
+    parser_classes = (parsers.JSONSchemaParser,)
+    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        flow = Users(self.KEYSTONE_PROTOCOL,
-                              self.KEYSTONE_HOST,
-                              self.KEYSTONE_PORT)
+        try:
+            request.DATA # json validation        
+            flow = Users(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT)
 
-        result = flow.users(service_id,
+            result = flow.users(
+                            request.DATA.get("SERVICE_ID", service_id),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
 
-        if not 'error' in result:
-            return Response(result, status=status.HTTP_200_OK)
-        else:
-            # TODO: return status from result error code
-            #status=status.HTTP_404_NOT_FOUND)
-            return Response(result['error'],
-                            status=status.HTTP_400_BAD_REQUEST)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                # TODO: return status from result error code
+                #status=status.HTTP_404_NOT_FOUND)
+                return Response(result['error'],
+                                status=status.HTTP_400_BAD_REQUEST)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def post(self, request, service_id):
-        serializer = ServiceUserSerializer(data=request.DATA)
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        if serializer.is_valid():
+        try:
+            request.DATA # json validation                
             flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
-                                      self.KEYSTONE_HOST,
-                                      self.KEYSTONE_PORT)
-            result = flow.createNewServiceUser(request.DATA.get("SERVICE_NAME", None),
-                                             request.DATA.get("SERVICE_ADMIN_USER", None),
-                                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                             request.DATA.get("NEW_SERVICE_USER_NAME", None),
-                                             request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
+                                        self.KEYSTONE_HOST,
+                                        self.KEYSTONE_PORT)
+            result = flow.createNewServiceUser(
+                                    request.DATA.get("SERVICE_NAME", None),
+                                    request.DATA.get("SERVICE_ID", service_id),
+                                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                    request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                     HTTP_X_AUTH_TOKEN),
+                                    request.DATA.get("NEW_SERVICE_USER_NAME", None),
+                                    request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -319,9 +383,11 @@ class UserList_RESTView(APIView, IoTConf):
                 #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
                                 status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
             
 class Role_RESTView(APIView, IoTConf):
@@ -335,8 +401,8 @@ class Role_RESTView(APIView, IoTConf):
         serializer = ServiceRoleSerializer(data=request.DATA)
         if serializer.is_valid():
             flow = CreateNewServiceRole(self.KEYSTONE_PROTOCOL,
-                                      self.KEYSTONE_HOST,
-                                      self.KEYSTONE_PORT)
+                                        self.KEYSTONE_HOST,
+                                        self.KEYSTONE_PORT)
             result = flow.createNewServiceRole(
                                           request.DATA.get("SERVICE_NAME"),
                                           request.DATA.get("SERVICE_ADMIN_USER", None),
