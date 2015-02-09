@@ -572,6 +572,7 @@ class Test_UserDetail_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
+
 class Test_UserModify_RestView(object):
     def __init__(self):
         self.payload_data_ok = {
@@ -596,6 +597,7 @@ class Test_UserModify_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+
 
 
 class Test_UserDelete_RestView(object):
@@ -643,7 +645,6 @@ class Test_AssignRoleUserList_RestView(object):
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/%s/role_assignments?project_id=%s" % (
                                                 service_id, subservice_id),
-
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)

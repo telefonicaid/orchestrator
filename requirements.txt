@@ -2,3 +2,4 @@ Django==1.6.10
 djangorestframework==3.0.3
 httplib2
 simplejson
+jsonschema

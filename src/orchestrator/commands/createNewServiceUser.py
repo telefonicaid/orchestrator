@@ -1,5 +1,6 @@
 import sys
-from orchestrator.core.flow.createNewServiceUser import createNewServiceUser
+import pprint
+from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
 
 
 
@@ -48,15 +49,18 @@ def main():
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
     NEW_USER_NAME=sys.argv[7]
     NEW_USER_PASSWORD=sys.argv[8]
-
-    createNewServiceUser(KEYSTONE_PROTOCOL,
-                         KEYSTONE_HOST,
-                         KEYSTONE_PORT,
+    
+    flow = CreateNewServiceUser(KEYSTONE_PROTOCOL,
+                                KEYSTONE_HOST,
+                                KEYSTONE_PORT)
+    
+    res = flow.createNewServiceUser(
                          SERVICE_NAME,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
                          NEW_USER_NAME,
                          NEW_USER_PASSWORD)
+    pprint(res)
 
 
 if __name__ == '__main__':

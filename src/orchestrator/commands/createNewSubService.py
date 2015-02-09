@@ -1,4 +1,5 @@
 import sys
+import pprint
 from orchestrator.core.flow.createNewService import createNewSubService
 
 
@@ -57,15 +58,19 @@ def main():
     #                    help='Shows tables draft')
     #args = parser.parse_args()
     
-    createNewSubService(KEYSTONE_PROTOCOL,
-                        KEYSTONE_HOST,
-                        KEYSTONE_PORT,
+    flow = createNewSubService(KEYSTONE_PROTOCOL,
+                               KEYSTONE_HOST,
+                               KEYSTONE_PORT)
+    
+    res = flow.createNewSubService(
                         SERVICE_NAME,
+                        None,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD,
+                        None,
                         NEW_SUBSERVICE_NAME,
                         NEW_SUBSERVICE_DESCRIPTION)
-
+    pprint.pprint(res)
 
 
 if __name__ == '__main__':
