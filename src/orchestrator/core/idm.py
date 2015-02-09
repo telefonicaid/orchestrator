@@ -507,15 +507,14 @@ class IdMOperations(object):
         # Group each role by name and id
         roles = []
         for role in json_body_response['Resources']:
-            role_data = {"role":
-                         {
-                             "name": role['name'],
-                             "id": role['id']
-                         }
-                     }
+            role_data = {
+                "name": role['name'],
+                "id": role['id'],
+                "domain_id": DOMAIN_ID
+            }
             roles.append(role_data)
 
-        return roles
+        return {"roles": roles }
 
 
     def getDomainUsers(self,
@@ -569,9 +568,9 @@ class IdMOperations(object):
         return projects
 
 
-    def getRoleAssignmnts(self,
-                          SERVICE_ADMIN_TOKEN,
-                          PROJECT_ID):
+    def getProjectRoleAssignments(self,
+                                SERVICE_ADMIN_TOKEN,
+                                PROJECT_ID):
 
         res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.project.id=%s' % PROJECT_ID,
                                                   method='GET',
@@ -580,22 +579,17 @@ class IdMOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        return json_body_response['role_assignments']
 
-        # Group each role by name and id
-        import pdb
-        pdb.set_trace()
-        return None
+    def getDomainRoleAssignments(self,
+                                SERVICE_ADMIN_TOKEN,
+                                DOMAIN_ID):
 
-        # projects = {}
-        # for project in json_body_response['projects']:
-        #     project_data = {
-        #         "name": project['name'],
-        #         "id": project['id'],
-        #         "domain_id": project['domain_id']
-        #     }
-        #     # TODO: include domain_name into each project ?
-        #     if 'description' in project:
-        #         project_data.update({"description": project['description']})
+        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.domain.id=%s' % DOMAIN_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
 
-        #     projects.append(project_data)
-        # return projects
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['role_assignments']
