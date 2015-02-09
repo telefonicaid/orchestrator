@@ -175,6 +175,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 if not subservice_id:
                     result = flow.projects(
                                    service_id,
+                                   request.DATA.get("SERVICE_NAME", None),
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                    request.DATA.get("SERVICE_ADMIN_TOKEN",

@@ -14,6 +14,7 @@ class Projects(object):
 
     def projects(self,
                 DOMAIN_ID,
+                DOMAIN_NAME,
                 ADMIN_USER,
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
@@ -31,9 +32,19 @@ class Projects(object):
 
         try:
             if not ADMIN_TOKEN:
-                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                ADMIN_USER,
-                                                ADMIN_PASSWORD)
+                if not DOMAIN_ID:
+                    import ipdb
+                    ipdb.set_trace()
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
+
+                else:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
 
