@@ -5,30 +5,30 @@ from orchestrator.core.idm import IdMOperations
 logger = logging.getLogger('orchestrator_core')
 
 
-class RemoveUser(object):
+class Users(object):
     def __init__(self,
                  KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
 
-    def removeUser_impl(self,
-                        SERVICE_NAME,
-                        SERVICE_ADMIN_USER,
-                        SERVICE_ADMIN_PASSWORD,
-                        SERVICE_ADMIN_TOKEN,
-                        USER_NAME):
+    def Users(self,
+              SERVICE_ADMIN_USER,
+              SERVICE_ADMIN_PASSWORD,
+              SERVICE_ADMIN_TOKEN,
+              SERVICE_NAME = None,
+              SUBSERVICE_NAME = None):
 
-        '''Removes an user Service (aka domain user keystone).
+        '''Get users.
         
         In case of HTTP error, return HTTP error
         
         Params:
-        - SERVICE_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - USER_NAME: User name
+        - SERVICE_NAME: Service name
+        - SUBSERVICE_NAME: SubService name        
         '''
     
         try:
@@ -39,33 +39,34 @@ class RemoveUser(object):
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
-            #
-            # 2. Get user ID
-            #
-            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                               USER_NAME)
-            logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
+            
+            ID_DOM1 = self.idm.getDomainId(SERVICE_NAME,
+                                           SERVICE_ADMIN_TOKEN)
 
+            SERVICE_ROLES = self.idm.getDomainRoles(ID_DOM1,
+                                                    SERVICE_ADMIN_TOKEN)
+            logger.debug("SERVICE_ROLES=%s" % SERVICE_ROLES)
 
-            # TODO: disable us before remove it ?
-        
-            #
-            # 3. Remove user ID
-            #
-            self.idm.removeUser(SERVICE_ADMIN_TOKEN,
-                                ID_USER)
-            #logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
+            SERVICE_USERS = self.idm.getDomainUsers(ID_DOM1,
+                                                    SERVICE_ADMIN_TOKEN)
+            logger.debug("SERVICE_USERS=%s" % SERVICE_USERS)
 
+            
+            # Get Roles de SubServicio
+
+            # Listar los usuarios de un Servicio
+              # Obtener roles de usuario
+            
+            # Listar los usuarios de un Subservicio
+            
 
         except Exception, ex:
             logger.error(ex)
             return { "error": str(ex) }
     
         logger.info("Summary report:")
-        logger.info("ID_USER=%s" % ID_USER)
-
+        
         #return {"id":ID_USER}
-
 
 
 

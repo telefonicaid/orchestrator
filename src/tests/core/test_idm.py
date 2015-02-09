@@ -20,14 +20,22 @@ class Test_createNewService(object):
         pass
     def test_createDomain(CLOUD_ADMIN_TOKEN, NEW_SERVICE_NAME, NEW_SERVICE_DESCRIPTION):
         pass
-    def test_createUserAdminDomain(CLOUD_ADMIN_TOKEN, NEW_SERVICE_NAME, ID_DOM1,
-                                   NEW_SERVICE_ADMIN_USER, NEW_SERVICE_ADMIN_PASSWORD):
-        pass
+    # def test_createUserAdminDomain(CLOUD_ADMIN_TOKEN, NEW_SERVICE_NAME, ID_DOM1,
+    #                                NEW_SERVICE_ADMIN_USER, NEW_SERVICE_ADMIN_PASSWORD):
+    #     pass
 
+    def createUserDomain(
+            SERVICE_ADMIN_TOKEN,
+            ID_DOM1,
+            SERVICE_NAME,
+            NEW_USER_NAME,
+            NEW_USER_PASSWORD):
+        pass
+        
     def test_getRoleId(CLOUD_ADMIN_TOKEN, ROLE_NAME):
         pass
 
-    def test_grantAdminRole(CLOUD_ADMIN_TOKEN, ID_DOM1, ID_ADM1, ADMIN_ROLE_ID):
+    def test_grantDomainRole(CLOUD_ADMIN_TOKEN, ID_DOM1, ID_ADM1, ADMIN_ROLE_ID):
         pass
 
     def test_createDomainRole(SERVICE_ADMIN_TOKEN, SUB_SERVICE_ROLE_NAME, ID_DOM1):
@@ -36,7 +44,14 @@ class Test_createNewService(object):
                              SUB_SERVICE_ROLE_ID, POLICY_FILE_NAME):
         pass
 
+    def createProject(SERVICE_ADMIN_TOKEN,
+                      ID_DOM1,
+                      NEW_SUBSERVICE_NAME,
+                      NEW_SUBSERVICE_DESCRIPTION):
+        pass
+    
 
+        
 class Test_createNewSubService(object):
 
     def __init__(self):
