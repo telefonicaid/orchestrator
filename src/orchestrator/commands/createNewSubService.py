@@ -1,4 +1,5 @@
 import sys
+import pprint
 from orchestrator.core.flow.createNewService import createNewSubService
 
 
@@ -61,7 +62,7 @@ def main():
                                KEYSTONE_HOST,
                                KEYSTONE_PORT)
     
-    flow.createNewSubService(
+    res = flow.createNewSubService(
                         SERVICE_NAME,
                         None,
                         SERVICE_ADMIN_USER,
@@ -69,7 +70,7 @@ def main():
                         None,
                         NEW_SUBSERVICE_NAME,
                         NEW_SUBSERVICE_DESCRIPTION)
-
+    pprint.pprint(res)
 
 
 if __name__ == '__main__':

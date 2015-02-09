@@ -1,4 +1,5 @@
 import sys
+import pprint
 from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
 
 
@@ -53,13 +54,13 @@ def main():
                                 KEYSTONE_HOST,
                                 KEYSTONE_PORT)
     
-    flow.createNewServiceUser(
+    res = flow.createNewServiceUser(
                          SERVICE_NAME,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
                          NEW_USER_NAME,
                          NEW_USER_PASSWORD)
-
+    pprint(res)
 
 
 if __name__ == '__main__':

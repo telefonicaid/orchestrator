@@ -1,4 +1,5 @@
 import sys
+import pprint
 from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
 
 
@@ -47,13 +48,13 @@ def main():
                                 KEYSTONE_HOST,
                                 KEYSTONE_PORT)
 
-    flow.createNewServiceRole(
+    res = flow.createNewServiceRole(
                          SERVICE_NAME,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
                          None,
                          NEW_ROLE_NAME)
-    
+    pprint.pprint(res)
 
 if __name__ == '__main__':
 

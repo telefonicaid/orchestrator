@@ -1,4 +1,5 @@
 import sys
+import pprint
 from orchestrator.core.flow.createNewService import createNewService
 
 
@@ -78,7 +79,7 @@ def main():
                             KEYPASS_HOST,
                             KEYPASS_PORT)
     
-    flow.createNewService(None,
+    res = flow.createNewService(None,
                           DOMAIN_NAME,
                           DOMAIN_ADMIN_USER,
                           DOMAIN_ADMIN_PASSWORD,
@@ -88,7 +89,7 @@ def main():
                           NEW_SERVICE_ADMIN_USER,
                           NEW_SERVICE_ADMIN_PASSWORD)
 
-
+    pprint.pprint(res)
 
 if __name__ == '__main__':
     
