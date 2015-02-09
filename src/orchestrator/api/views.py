@@ -62,6 +62,10 @@ class IoTConf(object):
 
 
 class ServiceList_RESTView(APIView, IoTConf):
+    """
+    Lists of modifies and existent service
+
+    """
     #renderer_classes = (JSONRenderer, ServiceBrowsableAPIRenderer)
 
     def __init__(self):
@@ -95,6 +99,10 @@ class ServiceList_RESTView(APIView, IoTConf):
 
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
+    """
+    Creates a new service
+
+    """
     serializer_class = ServiceSerializer
 
     def __init__(self):
