@@ -95,6 +95,7 @@ class ServiceList_RESTView(APIView, IoTConf):
             else:
                 # Get detail of one domains
                 result = flow.get_domain(request.DATA.get("DOMAIN_ID", service_id),
+                                         None,
                                          request.DATA.get("SERVICE_ADMIN_USER", None),
                                          request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                          request.DATA.get("SERVICE_ADMIN_TOKEN",
