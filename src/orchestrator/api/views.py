@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.renderers import JSONRenderer, YAMLRenderer, BrowsableAPIRenderer
+from rest_framework.exceptions import ParseError
+from rest_framework.response import Response
+from rest_framework import views
 import logging
 
 from django.conf import settings
@@ -31,12 +34,7 @@ from orchestrator.api.serializers import (
     RoleServiceUserSerializer, \
     RoleSubServiceUserSerializer)
 
-
-from rest_framework.exceptions import ParseError
-from rest_framework.response import Response
-from rest_framework import views
- 
-from . import negotiators, parsers
+from orchestrator.api import negotiators, parsers
 
 
 # class ServiceBrowsableAPIRenderer(BrowsableAPIRenderer):
@@ -66,6 +64,7 @@ class IoTConf(object):
             self.KEYPASS_PORT = settings.KEYPASS['port']
 
         except KeyError:
+            logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
 
 
