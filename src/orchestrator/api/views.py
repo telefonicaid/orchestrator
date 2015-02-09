@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.renderers import JSONRenderer, YAMLRenderer, BrowsableAPIRenderer
+from rest_framework.exceptions import ParseError
+from rest_framework.response import Response
+from rest_framework import views
 import logging
 
 from django.conf import settings
@@ -31,12 +34,7 @@ from orchestrator.api.serializers import (
     RoleServiceUserSerializer, \
     RoleSubServiceUserSerializer)
 
-
-from rest_framework.exceptions import ParseError
-from rest_framework.response import Response
-from rest_framework import views
- 
-from . import negotiators, parsers
+from orchestrator.api import negotiators, parsers
 
 
 # class ServiceBrowsableAPIRenderer(BrowsableAPIRenderer):
@@ -66,6 +64,7 @@ class IoTConf(object):
             self.KEYPASS_PORT = settings.KEYPASS['port']
 
         except KeyError:
+            logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
 
 
@@ -77,7 +76,7 @@ class ServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
     
     def __init__(self):
         IoTConf.__init__(self)
@@ -99,6 +98,7 @@ class ServiceList_RESTView(APIView, IoTConf):
             else:
                 # Get detail of one domains
                 result = flow.get_domain(request.DATA.get("DOMAIN_ID", service_id),
+                                         None,
                                          request.DATA.get("SERVICE_ADMIN_USER", None),
                                          request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                          request.DATA.get("SERVICE_ADMIN_TOKEN",
@@ -124,8 +124,6 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
     """
 
     schema_name = "ServiceCreate"
-    parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
     
     def __init__(self):
         ServiceList_RESTView.__init__(self)
@@ -171,7 +169,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -187,6 +185,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 if not subservice_id:
                     result = flow.projects(
                                    service_id,
+                                   request.DATA.get("SERVICE_NAME", None),
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                    request.DATA.get("SERVICE_ADMIN_TOKEN",
@@ -221,8 +220,6 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
     Creates a new SubService into a Service
     """
     schema_name = "SubServiceCreate"
-    parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         SubServiceList_RESTView.__init__(self)
@@ -265,7 +262,7 @@ class User_RESTView(APIView, IoTConf):
     """
     schema_name = "User"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -351,7 +348,7 @@ class UserList_RESTView(APIView, IoTConf):
     """
     schema_name = "UserList"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)

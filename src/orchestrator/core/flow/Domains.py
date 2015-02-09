@@ -51,6 +51,7 @@ class Domains(object):
 
     def get_domain(self,
                 DOMAIN_ID,
+                DOMAIN_NAME,
                 ADMIN_USER,
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
@@ -61,6 +62,7 @@ class Domains(object):
 
         Params:
         - DOMAIN_ID:
+        - DOMAIN_NAME:
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -68,11 +70,18 @@ class Domains(object):
 
         try:
             if not ADMIN_TOKEN:
-                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                ADMIN_USER,
-                                                ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+                if DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
+                else:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
 
+            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
 
