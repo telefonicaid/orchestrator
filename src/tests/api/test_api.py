@@ -584,8 +584,7 @@ class Test_UserModify_RestView(object):
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
-
-    def test_get_ok(self):
+    def test_put_ok(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
         data_response = token_res.read()
         json_body_response = json.loads(data_response)
@@ -598,6 +597,32 @@ class Test_UserModify_RestView(object):
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+
+class Test_UserDelete_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "USER_NAME":"Alice"
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_delete_ok(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        user_id = json_body_response['token']['user']['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="v1.0/service/%s/user/%s" % (service_id,
+                                                                             user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 class Test_AssignRoleUserList_RestView(object):
 
@@ -618,10 +643,10 @@ class Test_AssignRoleUserList_RestView(object):
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/%s/role_assignments?project_id=%s" % (
                                                 service_id, subservice_id),
+
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
 
 
 if __name__ == '__main__':
@@ -667,7 +692,7 @@ if __name__ == '__main__':
     test_UserDetail.test_get_ok()
 
     test_UserModify = Test_UserModify_RestView()
-    test_UserModify.test_get_ok()
+    test_UserModify.test_put_ok()
 
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
