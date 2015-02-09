@@ -6,14 +6,14 @@ from orchestrator.common.util import RestOperations
 
 # TODO: split TestRestOperations in another file
 class TestRestOperations(RestOperations):
-    
+
     def __init__(self, PROTOCOL, HOST, PORT):
         RestOperations.__init__(self,
                                 PROTOCOL,
                                 HOST,
                                 PORT)
 
-    def getServiceId(self, data):
+    def getToken(self, data):
         auth_data = {
             "auth": {
                 "identity": {
@@ -31,7 +31,7 @@ class TestRestOperations(RestOperations):
         }
         if "SERVICE_NAME" in data:
             auth_data['auth']['identity']['password']['user'].update({"domain": { "name": data["SERVICE_NAME"]}})
-            
+
             scope_domain = {
                 "scope": {
                     "domain": {
@@ -44,45 +44,58 @@ class TestRestOperations(RestOperations):
                                 relative_url=False,
                                 method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
-        data_response = res.read()
+        return res
+
+    def getScopedToken(self, data):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": data["SERVICE_ADMIN_USER"],
+                            "password": data["SERVICE_ADMIN_PASSWORD"]
+                        }
+                    }
+                }
+            }
+        }
+        if "SERVICE_NAME" in data and "SUBSERVICE_NAME" in data:
+            auth_data['auth']['identity']['password']['user'].update({"domain": { "name": data["SERVICE_NAME"]}})
+
+            scope_domain = {
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "name": data["SERVICE_NAME"]
+                        },
+                        "name": "/"+ data["SUBSERVICE_NAME"]
+                    }
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        res = self.rest_request(url='http://localhost:5000/v3/auth/tokens',
+                                relative_url=False,
+                                method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res
+
+    def getServiceId(self, data):
+        token_res = self.getToken(data)
+        data_response = token_res.read()
         json_body_response = json.loads(data_response)
         return json_body_response['token']['user']['domain']['id']
 
     def getSubServiceId(self, data):
-        auth_data = {
-            "auth": {
-                "identity": {
-                    "methods": [
-                        "password"
-                    ],
-                    "password": {
-                        "user": {
-                            "name": data["SERVICE_ADMIN_USER"],
-                            "password": data["SERVICE_ADMIN_PASSWORD"]
-                        }
-                    }
-                }
-            }
-        }
-        if "SERVICE_NAME" in data:
-            auth_data['auth']['identity']['password']['user'].update({"domain": { "name": data["SERVICE_NAME"]}})
-            
-            scope_domain = {
-                "scope": {
-                    "domain": {
-                        "name": data["SERVICE_NAME"]
-                    }
-                }
-            }
-            auth_data['auth'].update(scope_domain)
-        res = self.rest_request(url='http://localhost:5000/v3/auth/tokens',
-                                relative_url=False,
-                                method='POST', data=auth_data)
-        assert res.code == 201, (res.code, res.msg)
-        data_response = res.read()
+        token_res = self.getToken(data)
+        data_response = token_res.read()
         json_body_response = json.loads(data_response)
+
         DOMAIN_ID = json_body_response['token']['user']['domain']['id']
-        ADMIN_TOKEN = res.headers.get('X-Subject-Token')
+
+        ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
         res = self.rest_request(url='http://localhost:5000/v3/projects?domain_id=%s' % DOMAIN_ID,
                                 relative_url=False,
                                 method='GET', auth_token=ADMIN_TOKEN)
@@ -91,7 +104,7 @@ class TestRestOperations(RestOperations):
         for project in json_body_response['projects']:
             if project['name'] == '/' + data["SUBSERVICE_NAME"]:
                 return project['id']
-            
+
 
 
 class Test_NewService_RestView(object):
@@ -254,7 +267,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",            
+            "NEW_SERVICE_USER_PASSWORD":"password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
@@ -262,7 +275,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",            
+            "NEW_SERVICE_USER_PASSWORD":"password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
@@ -306,7 +319,7 @@ class Test_NewServiceUser_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
-        
+
 class Test_ServiceLists_RestView(object):
 
     def __init__(self):
@@ -333,7 +346,7 @@ class Test_ServiceLists_RestView(object):
             "DOMAIN_NAME":"wrong_admin_domain",
             "SERVICE_ADMIN_USER":"cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
-        }                        
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -344,7 +357,7 @@ class Test_ServiceLists_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-        
+
     def test_get_bad(self):
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/",
@@ -473,36 +486,94 @@ class Test_RoleList_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
-        self.payload_data_ok = {
+        self.payload_data_ok2 = {
             "SERVICE_NAME":"SmartValencia",
             "SUBSERVICE_NAME":"Electricidad",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-        }        
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
-        
+
     def test_get_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/%s/role" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)        
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
 
-    # def test_get_ok2(self):
-    #     service_id = None # self.TestRestOps.getServiceId(self.payload_data_ok)
-    #     subservice_id = None # self.TestRestOps.getServiceId(self.payload_data_ok)
-    #     res = self.TestRestOps.rest_request(method="GET",
-    #                                         user="admin",
-    #                                         password="admin",
-    #                                         url="v1.0/service/%s/role/%s" % (service_id, subservice_id),
-    #                                         json_data=True,
-    #                                         data=self.payload_data_ok)
-    #     assert res.code == 200, (res.code, res.msg, res.raw_json)
+    def test_get_bad(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
+        auth_token_res = self.TestRestOps.getScopedToken(self.payload_data_ok2)
+        auth_token = auth_token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role" % service_id,
+                                            auth_token=auth_token,
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
+
+    def test_get_bad2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="GET",
+                                            user="admin",
+                                            password="admin",
+                                            url="v1.0/service/%s/role" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+
+class Test_UserList_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_get_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/user" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+class Test_UserDetail_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_get_ok(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        user_id = json_body_response['token']['user']['id']
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/user/%s" % (service_id,
+                                                                             user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
 
 if __name__ == '__main__':
+
     test_NewService = Test_NewService_RestView()
     test_NewService.test_post_ok()
     test_NewService.test_post_ok_bad()
@@ -526,7 +597,7 @@ if __name__ == '__main__':
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
     #test_ServiceDetail.test_get_ok()
-        
+
     test_ServiceLists = Test_ServiceLists_RestView()
     test_ServiceLists.test_get_ok()
     test_ServiceLists.test_get_bad()
@@ -537,9 +608,16 @@ if __name__ == '__main__':
     test_ProjectList = Test_ProjectList_RestView()
     test_ProjectList.test_get_ok()
 
+    test_UserList = Test_UserList_RestView()
+    test_UserList.test_get_ok()
+
+    test_UserDetail = Test_UserDetail_RestView()
+    test_UserDetail.test_get_ok()
+
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
-    
+
     test_RoleList = Test_RoleList_RestView()
     test_RoleList.test_get_ok()
-    # test_RoleList.test_get_ok2()
+    test_RoleList.test_get_bad()
+    # test_RoleList.test_get_bad2() # TODO: error 500

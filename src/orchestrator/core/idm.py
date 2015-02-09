@@ -413,6 +413,18 @@ class IdMOperations(object):
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
 
+    def detailUser(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_USER):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
+                                                  method='GET', data=None,
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
+
     def removeUser(self,
                    SERVICE_ADMIN_TOKEN,
                    ID_USER):
@@ -519,10 +531,15 @@ class IdMOperations(object):
         json_body_response = json.loads(data)
 
         # Group each role by name and id
-        users = {}
+        users = []
         for user in json_body_response['Resources']:
-            users.append({"name": user['name'],
-                          "id": user['id']})
+            users.append(
+                {"name": user['userName'],
+                 "id": user['id'],
+                 "description": user["displayName"],
+                 "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
+                 "enabled": user['active']
+             })
         return users
 
     def getDomainProjects(self,
