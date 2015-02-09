@@ -144,7 +144,9 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
 
 
 class SubServiceList_RESTView(APIView, IoTConf):
-
+    """
+    Modifies a SubService
+    """
     def __init__(self):
         IoTConf.__init__(self)
 
@@ -180,6 +182,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             status=status.HTTP_400_BAD_REQUEST)
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
+    """
+    Creates a new SubService into a Service
+    """
     serializer_class = SubServiceSerializer
 
     def __init__(self):
@@ -216,6 +221,10 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
 
 class User_RESTView(APIView, IoTConf):
+    """
+    Modifies an Users of a Service
+
+    """
     serializer_class = ServiceUserSerializer
 
     def __init__(self):
@@ -284,7 +293,10 @@ class User_RESTView(APIView, IoTConf):
 
 
 class UserList_RESTView(APIView, IoTConf):
+    """
+    Return a list of Users of a Service
 
+    """
     def __init__(self):
         IoTConf.__init__(self)
 

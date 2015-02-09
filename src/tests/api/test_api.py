@@ -572,9 +572,7 @@ class Test_UserDetail_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
-<<<<<<< HEAD
 class Test_UserModify_RestView(object):
-
     def __init__(self):
         self.payload_data_ok = {
             "SERVICE_NAME":"SmartValencia",
