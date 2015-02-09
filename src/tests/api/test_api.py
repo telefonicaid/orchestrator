@@ -572,6 +572,7 @@ class Test_UserDetail_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
+<<<<<<< HEAD
 class Test_UserModify_RestView(object):
 
     def __init__(self):
@@ -585,7 +586,6 @@ class Test_UserModify_RestView(object):
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
-
     def test_put_ok(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
         data_response = token_res.read()
@@ -622,6 +622,30 @@ class Test_UserDelete_RestView(object):
         res = self.TestRestOps.rest_request(method="DELETE",
                                             url="v1.0/service/%s/user/%s" % (service_id,
                                                                              user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+class Test_AssignRoleUserList_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SUBSERVICE_NAME":"Electricidad",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_get_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role_assignments?project_id=%s" % (
+                                                service_id, subservice_id),
+
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -679,3 +703,6 @@ if __name__ == '__main__':
     test_RoleList.test_get_ok()
     test_RoleList.test_get_bad()
     # test_RoleList.test_get_bad2() # TODO: error 500
+
+    test_AssignRoleUserList = Test_AssignRoleUserList_RestView()
+    test_AssignRoleUserList.test_get_ok()
