@@ -573,7 +573,6 @@ class Test_UserDetail_RestView(object):
 
 
 class Test_UserModify_RestView(object):
-
     def __init__(self):
         self.payload_data_ok = {
             "SERVICE_NAME":"SmartValencia",
@@ -598,7 +597,33 @@ class Test_UserModify_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-        
+
+
+class Test_AssignRoleUserList_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SUBSERVICE_NAME":"Electricidad",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_get_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role_assignments?project_id=%s" % (
+                                                service_id, subservice_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+
+
 if __name__ == '__main__':
 
     test_NewService = Test_NewService_RestView()
@@ -651,3 +676,6 @@ if __name__ == '__main__':
     test_RoleList.test_get_ok()
     test_RoleList.test_get_bad()
     # test_RoleList.test_get_bad2() # TODO: error 500
+
+    test_AssignRoleUserList = Test_AssignRoleUserList_RestView()
+    test_AssignRoleUserList.test_get_ok()
