@@ -574,7 +574,6 @@ class Test_UserDetail_RestView(object):
 
 
 class Test_UserModify_RestView(object):
-
     def __init__(self):
         self.payload_data_ok = {
             "SERVICE_NAME":"SmartValencia",
@@ -599,6 +598,7 @@ class Test_UserModify_RestView(object):
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+
 class Test_AssignRoleUserList_RestView(object):
 
     def __init__(self):
@@ -611,6 +611,10 @@ class Test_AssignRoleUserList_RestView(object):
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
     def test_get_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
@@ -622,6 +626,7 @@ class Test_AssignRoleUserList_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
+<<<<<<< HEAD
 class Test_UserDelete_RestView(object):
 
     def __init__(self):
@@ -648,6 +653,8 @@ class Test_UserDelete_RestView(object):
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+=======
+>>>>>>> develop
 
 if __name__ == '__main__':
 

@@ -166,6 +166,9 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
 
 
 class SubServiceList_RESTView(APIView, IoTConf):
+    """
+    Modifies a SubService
+    """
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
     content_negotiation_class = negotiators.IgnoreClientContentNegotiation
@@ -214,6 +217,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
+    """
+    Creates a new SubService into a Service
+    """
     schema_name = "SubServiceCreate"
     parser_classes = (parsers.JSONSchemaParser,)
     content_negotiation_class = negotiators.IgnoreClientContentNegotiation
@@ -253,6 +259,10 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
 
 class User_RESTView(APIView, IoTConf):
+    """
+    Modifies an Users of a Service
+
+    """
     schema_name = "User"
     parser_classes = (parsers.JSONSchemaParser,)
     content_negotiation_class = negotiators.IgnoreClientContentNegotiation
@@ -335,6 +345,10 @@ class User_RESTView(APIView, IoTConf):
             )
 
 class UserList_RESTView(APIView, IoTConf):
+    """
+    Return a list of Users of a Service
+
+    """
     schema_name = "UserList"
     parser_classes = (parsers.JSONSchemaParser,)
     content_negotiation_class = negotiators.IgnoreClientContentNegotiation
