@@ -71,6 +71,10 @@ class IoTConf(object):
 
 
 class ServiceList_RESTView(APIView, IoTConf):
+    """
+    Lists of modifies and existent service
+
+    """
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
     content_negotiation_class = negotiators.IgnoreClientContentNegotiation
@@ -114,6 +118,11 @@ class ServiceList_RESTView(APIView, IoTConf):
             )
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
+    """
+    Creates a new service
+
+    """
+
     schema_name = "ServiceCreate"
     parser_classes = (parsers.JSONSchemaParser,)
     content_negotiation_class = negotiators.IgnoreClientContentNegotiation
@@ -415,7 +424,7 @@ class Role_RESTView(APIView, IoTConf):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, service_id):
+    def get(self, request, service_id=None):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         # TODO: check params with a serializer
         flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -424,7 +433,6 @@ class Role_RESTView(APIView, IoTConf):
         # get DOMAIN_ID from  url param
 
         result = flow.roles(service_id,
-                            None,
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
@@ -437,12 +445,43 @@ class Role_RESTView(APIView, IoTConf):
             return Response(result['error'],
                             status=status.HTTP_400_BAD_REQUEST)
 
+class AssignRoleUser_RESTView(APIView, IoTConf):
+    def __init__(self):
+        IoTConf.__init__(self)
 
-class AssignRoleServiceUser_RESTView(APIView, IoTConf):
+    def get(self, request, service_id):
+        user_id = request.GET.get('user_id', None)
+        project_id = request.GET.get('project_id', None)
+        role_id = request.GET.get('role_id', None)
+
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        flow = Roles(self.KEYSTONE_PROTOCOL,
+                     self.KEYSTONE_HOST,
+                     self.KEYSTONE_PORT)
+        # get DOMAIN_ID from  url param
+
+        result = flow.roles_assignments(
+                            request.DATA.get("SERVICE_ID", service_id),
+                            request.DATA.get("SUBSERVICE_ID", project_id),
+                            request.DATA.get("ROLE_ID", role_id),
+                            request.DATA.get("USER_ID", user_id),
+                            request.DATA.get("SERVICE_ADMIN_USER", None),
+                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+
+        if not 'error' in result:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            # TODO: return status from result error code
+            #status=status.HTTP_404_NOT_FOUND)
+            return Response(result['error'],
+                            status=status.HTTP_400_BAD_REQUEST)
+
+class AssignRoleServiceUser_RESTView(AssignRoleUser_RESTView):
     serializer_class = RoleServiceUserSerializer
 
     def __init__(self):
-        IoTConf.__init__(self)
+        AssignRoleUser_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
@@ -464,11 +503,11 @@ class AssignRoleServiceUser_RESTView(APIView, IoTConf):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-class AssignRoleSubServiceUser_RESTView(APIView, IoTConf):
+class AssignRoleSubServiceUser_RESTView(AssignRoleUser_RESTView):
     serializer_class = RoleSubServiceUserSerializer
 
     def __init__(self):
-        IoTConf.__init__(self)
+        AssignRoleUser_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
