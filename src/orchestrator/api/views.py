@@ -73,7 +73,7 @@ class IoTConf(object):
 class ServiceList_RESTView(APIView, IoTConf):
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
     
     def __init__(self):
         IoTConf.__init__(self)
@@ -116,8 +116,6 @@ class ServiceList_RESTView(APIView, IoTConf):
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
     schema_name = "ServiceCreate"
-    parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
     
     def __init__(self):
         ServiceList_RESTView.__init__(self)
@@ -160,7 +158,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
 class SubServiceList_RESTView(APIView, IoTConf):
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -208,8 +206,6 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
     schema_name = "SubServiceCreate"
-    parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         SubServiceList_RESTView.__init__(self)
@@ -248,7 +244,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 class User_RESTView(APIView, IoTConf):
     schema_name = "User"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -330,7 +326,7 @@ class User_RESTView(APIView, IoTConf):
 class UserList_RESTView(APIView, IoTConf):
     schema_name = "UserList"
     parser_classes = (parsers.JSONSchemaParser,)
-    content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
