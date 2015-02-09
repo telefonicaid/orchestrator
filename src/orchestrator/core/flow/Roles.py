@@ -97,19 +97,31 @@ class Roles(object):
 
             role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS:
-                # 'OR' Filter
+                # # 'OR' Filter
+                # if ROLE_ID:
+                #     if (role_assignment['role']['id'] == ROLE_ID):
+                #         role_assignments_expanded.append(role_assignment)
+                #         continue
+                # if PROJECT_ID:
+                #     if (role_assignment['scope']['project']['id'] == PROJECT_ID):
+                #         role_assignments_expanded.append(role_assignment)
+                #         continue
+                # if USER_ID:
+                #     if (role_assignment['user']['id'] == USER_ID):
+                #         role_assignments_expanded.append(role_assignment)
+                #         continue
+                # 'AND' filter
                 if ROLE_ID:
-                    if (role_assignment['role']['id'] == ROLE_ID):
-                        role_assignments_expanded.append(role_assignment)
+                    if not (role_assignment['role']['id'] == ROLE_ID):
                         continue
                 if PROJECT_ID:
-                    if (role_assignment['scope']['project']['id'] == PROJECT_ID):
-                        role_assignments_expanded.append(role_assignment)
+                    if not (role_assignment['scope']['project']['id'] == PROJECT_ID):
                         continue
                 if USER_ID:
-                    if (role_assignment['user']['id'] == USER_ID):
-                        role_assignments_expanded.append(role_assignment)
+                    if not (role_assignment['user']['id'] == USER_ID):
                         continue
+                role_assignments_expanded.append(role_assignment)
+
 
             # Cache these data? -> memcached/redis
             domain_roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
