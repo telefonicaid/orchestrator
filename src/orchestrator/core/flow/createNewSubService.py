@@ -69,7 +69,10 @@ class CreateNewSubService(object):
             
         except Exception, ex:
             logger.error(ex)
-            return { "error": str(ex) }
+            res = { "error": str(ex), "code": 400 }
+            if isinstance(ex.message, tuple):
+                res['code'] = ex.message[0]
+            return res
     
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % ID_DOM1)

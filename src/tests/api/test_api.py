@@ -178,14 +178,14 @@ class Test_NewService_RestView(object):
                                             url="v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 409, (res.code, res.msg)
 
     def test_post_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
                                             url="v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
     def test_post_bad2(self):
         res = self.TestRestOps.rest_request(method="POST",
@@ -834,7 +834,7 @@ if __name__ == '__main__':
     test_RoleList = Test_RoleList_RestView()
     test_RoleList.test_get_ok()
     test_RoleList.test_get_bad()
-    # test_RoleList.test_get_bad2() # TODO: error 500
+    test_RoleList.test_get_bad2() # TODO: error 500 due to basic auth
 
     test_AssignRoleUserList = Test_AssignRoleUserList_RestView()
     test_AssignRoleUserList.test_get_ok()

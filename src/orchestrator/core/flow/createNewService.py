@@ -131,17 +131,16 @@ class CreateNewService(object):
             logger.error(ex)
             
             # Get line where exception was produced
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
+            #exc_type, exc_obj, exc_tb = sys.exc_info()
+            #fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            #print(exc_type, fname, exc_tb.tb_lineno)
 
-            # i.e.: (409, 'Conflict')
-            # i.e.: (2, 'No existent file policy')
-            #if isinstance(ex.args[0], tuple):
+            res = { "error": str(ex), "code": 400 }
             
-            # TO DO: provide error code
-            # TO DO: provide operation error
-            return { "error": str(ex) }
+            if isinstance(ex.message, tuple):
+                res['code'] = ex.message[0]
+
+            return res
 
 
         logger.info("Summary report:")
