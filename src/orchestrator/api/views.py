@@ -465,6 +465,10 @@ class Role_RESTView(APIView, IoTConf):
                             status=status.HTTP_400_BAD_REQUEST)
 
 class AssignRoleUser_RESTView(APIView, IoTConf):
+    """
+    Assing or list asignments of a role to a user in a service or subservice
+
+    """
     def __init__(self):
         IoTConf.__init__(self)
 

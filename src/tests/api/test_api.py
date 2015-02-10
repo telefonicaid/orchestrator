@@ -191,14 +191,14 @@ class Test_NewSubService_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD":"password",
             "NEW_SUBSERVICE_NAME":"Electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,            
+            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD":"password",
             "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,            
+            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
@@ -206,7 +206,7 @@ class Test_NewSubService_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD":"wrong_password",
             "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,                        
+            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
@@ -635,6 +635,13 @@ class Test_AssignRoleUserList_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
+        self.payload_data_ok2 = {
+            "SERVICE_USER_NAME":"Alice",
+            "SERVICE_NAME":"SmartValencia",
+            "SUBSERVICE_NAME":"Electricidad",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -649,6 +656,19 @@ class Test_AssignRoleUserList_RestView(object):
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+
+    def test_get_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        role_id = json_body_response['token']['roles'][0]['id']  # admin role
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role_assignments?role_id=%s" % (
+                                                service_id, role_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 if __name__ == '__main__':
 
@@ -705,3 +725,4 @@ if __name__ == '__main__':
 
     test_AssignRoleUserList = Test_AssignRoleUserList_RestView()
     test_AssignRoleUserList.test_get_ok()
+    test_AssignRoleUserList.test_get_ok2()
