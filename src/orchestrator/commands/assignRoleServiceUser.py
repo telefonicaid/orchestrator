@@ -1,5 +1,5 @@
 import sys
-from orchestrator.core.flow.assignRoleServiceUser import AssignRoleServiceUser
+from orchestrator.core.flow.Roles import Roles
 
 
 
@@ -46,9 +46,9 @@ def main():
     ROLE_NAME=sys.argv[7]
     SERVICE_USER=sys.argv[8]
 
-    flow = AssignRoleServiceUser(KEYSTONE_PROTOCOL,
-                                 KEYSTONE_HOST,
-                                 KEYSTONE_PORT)
+    flow = Roles(KEYSTONE_PROTOCOL,
+                 KEYSTONE_HOST,
+                 KEYSTONE_PORT)
     
     flow.assignRoleServiceUser(
                           SERVICE_NAME,

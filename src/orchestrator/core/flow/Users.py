@@ -99,8 +99,6 @@ class Users(object):
 
             DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
                                               USER_ID)
-            import ipdb
-            ipdb.set_trace()
             logger.debug("DETAIL_USER=%s" % DETAIL_USER)
 
 
