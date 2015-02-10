@@ -49,6 +49,7 @@ class Roles(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("ROLES=%s" % ROLES)
 
         return ROLES
 
@@ -95,9 +96,8 @@ class Roles(object):
                 logger.debug("DOMAIN_ROLES=%s" % DOMAIN_ROLES)
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
-
             role_assignments_expanded = []
-            for role_assignment in ROLE_ASSIGNMENTS:
+            for role_assignment in ROLE_ASSIGNMENTS['role-assignments']:
                 # # 'OR' Filter
                 # if ROLE_ID:
                 #     if (role_assignment['role']['id'] == ROLE_ID):
@@ -130,12 +130,15 @@ class Roles(object):
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
             for assign in role_assignments_expanded:
-                assign['user']['name'] = \
-                    [x for x in domain_users if x['id'] == str(assign['user']['id'])][0]['name']
-                assign['role']['name'] = \
-                    [x for x in domain_roles['roles'] if x['id'] == str(assign['role']['id'])][0]['name']
-                assign['scope']['project']['name'] = \
-                    [x for x in domain_projects if x['id'] == str(assign['scope']['project']['id'])][0]['name']
+                match_list = [x for x in domain_users if x['id'] == str(assign['user']['id'])]
+                if len(match_list) > 0:
+                    assign['user']['name'] = match_list[0]['name']
+                match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
+                if len(match_list) > 0:
+                    assign['role']['name'] = match_list[0]['name']
+                if 'project' in assign['scope']:
+                    match_list = [x for x in domain_projects if x['id'] == str(assign['scope']['project']['id'])]
+                    assign['scope']['project']['name'] = match_list[0]['name']
 
             logger.debug("ROLES=%s" % role_assignments_expanded)
 
@@ -144,6 +147,7 @@ class Roles(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("role-assignments=%s" % role_assignments_expanded)
 
         return { "roles-assginments": role_assignments_expanded }
 
@@ -313,4 +317,3 @@ class Roles(object):
         logger.info("ID_ROLE=%s" % ID_ROLE)
 
         return {}
-

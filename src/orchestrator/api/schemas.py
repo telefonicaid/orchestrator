@@ -162,7 +162,7 @@ json = {
             },
             "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
-            },            
+            },
         },
         "required": [
             "NEW_SUBSERVICE_NAME"
@@ -201,7 +201,7 @@ json = {
             },
             "USER_ID": {
                 "type": "string",
-            },            
+            },
         },
         #"required": [ ],
     },
@@ -274,8 +274,84 @@ json = {
         "required": [
             "NEW_ROLE_NAME"
         ],
+    },
+    ####################
+    "RoleAssignmentList": {
+    ####################
+        "name": "RoleAssignmentList",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "USER_ID": {
+                "type": "string",
+            },
+        },
+    },
+    #############
+    "AssignRole": {
+    #############
+        "name": "AssignRole",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "ROLE_NAME": {
+                "type": "string",
+            },
+        },
+        "required": [
+            "ROLE_NAME",
+            "SERVICE_USER_NAME"
+        ],
     }
-    
+
 }
 
 # The JSON Schema above can be used to test the validity of the JSON code below:

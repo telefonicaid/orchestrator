@@ -461,7 +461,7 @@ class IdMOperations(object):
                 domain_data.update({"description": domain['description']})
             domains.append(domain_data)
 
-        return domains
+        return { "domains": domains }
 
     def getDomain(self,
                   SERVICE_ADMIN_TOKEN,
@@ -522,7 +522,7 @@ class IdMOperations(object):
                  "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
                  "enabled": user['active']
              })
-        return users
+        return { "users": users }
 
     def getDomainProjects(self,
                           SERVICE_ADMIN_TOKEN,
@@ -548,7 +548,7 @@ class IdMOperations(object):
                 project_data.update({"description": project['description']})
 
             projects.append(project_data)
-        return projects
+        return { "projects": projects }
 
     def getProject(self,
                    SERVICE_ADMIN_TOKEN,
@@ -574,7 +574,7 @@ class IdMOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return json_body_response['role_assignments']
+        return {"role-assignments": json_body_response['role_assignments'] }
 
     def getDomainRoleAssignments(self,
                                 SERVICE_ADMIN_TOKEN,
@@ -587,4 +587,4 @@ class IdMOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return json_body_response['role_assignments']
+        return {"role-assignments": json_body_response['role_assignments'] }
