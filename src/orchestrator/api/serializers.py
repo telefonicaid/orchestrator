@@ -1,38 +1,38 @@
 from rest_framework import serializers
 
-class ServiceSerializer(serializers.Serializer):
-    DOMAIN_NAME=serializers.CharField(max_length=25, required=False)
-    DOMAIN_ADMIN_USER=serializers.CharField(max_length=25, required=False)
-    DOMAIN_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
-    DOMAIN_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
-    NEW_SERVICE_NAME=serializers.CharField(max_length=25, required=True)
-    NEW_SERVICE_DESCRIPTION=serializers.CharField(max_length=250, required=False)
-    NEW_SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=True)
-    NEW_SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=True)
+# class ServiceSerializer(serializers.Serializer):
+#     DOMAIN_NAME=serializers.CharField(max_length=25, required=False)        # -> DOMAIN_ADMIN_USER & DOMAIN_ADMIN_PASSWORD
+#     DOMAIN_ADMIN_USER=serializers.CharField(max_length=25, required=False)  # -> DOMAIN_ADMIN_USER & DOMAIN_ADMIN_PASSWORD
+#     DOMAIN_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False) # -> DOMAIN_ADMIN_USER
+#     DOMAIN_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
+#     NEW_SERVICE_NAME=serializers.CharField(max_length=25, required=True)
+#     NEW_SERVICE_DESCRIPTION=serializers.CharField(max_length=250, required=False)
+#     NEW_SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=True)
+#     NEW_SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=True)
 
-class SubServiceSerializer(serializers.Serializer):
-    SERVICE_NAME=serializers.CharField(max_length=25, required=True)
-    SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=False)
-    SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
-    SERVICE_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
-    NEW_SUBSERVICE_NAME=serializers.CharField(max_length=25, required=True)
-    NEW_SUBSERVICE_DESCRIPTION=serializers.CharField(max_length=250, required=False)
+# class SubServiceSerializer(serializers.Serializer):
+#     SERVICE_NAME=serializers.CharField(max_length=25, required=True)
+#     SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=False)
+#     SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
+#     SERVICE_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
+#     NEW_SUBSERVICE_NAME=serializers.CharField(max_length=25, required=True)
+#     NEW_SUBSERVICE_DESCRIPTION=serializers.CharField(max_length=250, required=False)
     
-class ServiceUserSerializer(serializers.Serializer):
-    SERVICE_NAME=serializers.CharField(max_length=25, required=True)
-    SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=False)
-    SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
-    SERVICE_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
-    NEW_SERVICE_USER_NAME=serializers.CharField(max_length=25, required=True)
-    NEW_SERVICE_USER_PASSWORD=serializers.CharField(max_length=25, required=True)
-    NEW_SERICE_USER_EMAIL=serializers.EmailField(required=False)
+# class ServiceUserSerializer(serializers.Serializer):
+#     SERVICE_NAME=serializers.CharField(max_length=25, required=True)
+#     SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=False)
+#     SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
+#     SERVICE_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
+#     NEW_SERVICE_USER_NAME=serializers.CharField(max_length=25, required=True)
+#     NEW_SERVICE_USER_PASSWORD=serializers.CharField(max_length=25, required=True)
+#     NEW_SERICE_USER_EMAIL=serializers.EmailField(required=False)
 
-class ServiceUserDeleteSerializer(serializers.Serializer):
-    SERVICE_NAME=serializers.CharField(max_length=25, required=True)
-    SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=False)
-    SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
-    SERVICE_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
-    NEW_SERVICE_USER_NAME=serializers.CharField(max_length=25, required=True)
+# class ServiceUserDeleteSerializer(serializers.Serializer):
+#     SERVICE_NAME=serializers.CharField(max_length=25, required=True)
+#     SERVICE_ADMIN_USER=serializers.CharField(max_length=25, required=False)
+#     SERVICE_ADMIN_PASSWORD=serializers.CharField(max_length=25, required=False)
+#     SERVICE_ADMIN_TOKEN=serializers.CharField(max_length=100, required=False)
+#     NEW_SERVICE_USER_NAME=serializers.CharField(max_length=25, required=True)
 
 class ServiceRoleSerializer(serializers.Serializer):
     SERVICE_NAME=serializers.CharField(max_length=25, required=True)

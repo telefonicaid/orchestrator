@@ -15,6 +15,7 @@ class CreateNewSubService(object):
         
     def createNewSubService(self,
                             SERVICE_NAME,
+                            SERVICE_ID,
                             SERVICE_ADMIN_USER,
                             SERVICE_ADMIN_PASSWORD,
                             SERVICE_ADMIN_TOKEN,
@@ -27,10 +28,11 @@ class CreateNewSubService(object):
         
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id 
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - SUBSERVICE_NAME: New subservice name
+        - SUBSERVICE_NAME: New subservice name (required)
         - SUBSERVICE_DESCRIPTION: New subservice description
         Return:
         - ID: subservice id
@@ -48,8 +50,10 @@ class CreateNewSubService(object):
             #
             # 1. Create service (aka domain)
             #
-            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                           SERVICE_NAME)
+            if not SERVICE_ID:
+                ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_NAME)
+                SERVICE_ID=ID_DOM1
             
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
             

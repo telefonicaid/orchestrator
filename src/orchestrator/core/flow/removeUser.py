@@ -12,12 +12,14 @@ class RemoveUser(object):
                  KEYSTONE_PORT):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
 
-    def removeUser_impl(self,
-                        SERVICE_NAME,
-                        SERVICE_ADMIN_USER,
-                        SERVICE_ADMIN_PASSWORD,
-                        SERVICE_ADMIN_TOKEN,
-                        USER_NAME):
+    def removeUser(self,
+                   SERVICE_NAME,
+                   DOMAIN_ID,
+                   SERVICE_ADMIN_USER,
+                   SERVICE_ADMIN_PASSWORD,
+                   SERVICE_ADMIN_TOKEN,
+                   USER_NAME,
+                   USER_ID):
 
         '''Removes an user Service (aka domain user keystone).
         
@@ -25,10 +27,12 @@ class RemoveUser(object):
         
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         - USER_NAME: User name
+        - USER_ID: User name
         '''
     
         try:
@@ -42,9 +46,15 @@ class RemoveUser(object):
             #
             # 2. Get user ID
             #
-            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                               USER_NAME)
-            logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
+            if not USER_ID:
+                if not DOMAIN_ID:
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                     SERVICE_NAME)
+                    
+                USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   USER_NAME)            
+            logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
 
 
             # TODO: disable us before remove it ?
@@ -53,7 +63,7 @@ class RemoveUser(object):
             # 3. Remove user ID
             #
             self.idm.removeUser(SERVICE_ADMIN_TOKEN,
-                                ID_USER)
+                                USER_ID)
             #logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
 
 
@@ -62,7 +72,7 @@ class RemoveUser(object):
             return { "error": str(ex) }
     
         logger.info("Summary report:")
-        logger.info("ID_USER=%s" % ID_USER)
+        logger.info("ID_USER=%s was deleted" % USER_ID)
 
         #return {"id":ID_USER}
 

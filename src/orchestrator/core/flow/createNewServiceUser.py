@@ -29,8 +29,8 @@ class CreateNewServiceUser(object):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - NEW_USER_NAME: New user name
-        - NEW_USER_PASSWORD: New user password
+        - NEW_USER_NAME: New user name (required)
+        - NEW_USER_PASSWORD: New user password (required)
         '''
     
         try:
