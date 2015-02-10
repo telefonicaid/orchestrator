@@ -96,7 +96,7 @@ class Roles(object):
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
             role_assignments_expanded = []
-            for role_assignment in ROLE_ASSIGNMENTS:
+            for role_assignment in ROLE_ASSIGNMENTS['role-assignments']:
                 # # 'OR' Filter
                 # if ROLE_ID:
                 #     if (role_assignment['role']['id'] == ROLE_ID):
