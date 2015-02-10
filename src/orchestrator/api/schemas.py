@@ -96,8 +96,7 @@ json = {
                 "type": "string",
             },
         },
-        "required": [
-        ],
+        #"required": [ ],
     },
     ################
     "SubServiceList": {
@@ -128,8 +127,7 @@ json = {
                 "type": "string",
             },
         },
-        "required": [
-        ],
+        #"required": [ ],
     },
     #################
     "SubServiceCreate": {
@@ -205,8 +203,7 @@ json = {
                 "type": "string",
             },            
         },
-        "required": [
-        ],
+        #"required": [ ],
     },
     ##########
     "UserList": {
@@ -240,8 +237,7 @@ json = {
                 "type": "string",
             },
         },
-        "required": [
-        ],
+        #"required": [ ],
     },
     #######
     "Role": {

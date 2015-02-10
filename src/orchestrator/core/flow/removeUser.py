@@ -72,7 +72,7 @@ class RemoveUser(object):
             return { "error": str(ex) }
     
         logger.info("Summary report:")
-        logger.info("ID_USER=%s" % USER_ID)
+        logger.info("ID_USER=%s was deleted" % USER_ID)
 
         #return {"id":ID_USER}
 

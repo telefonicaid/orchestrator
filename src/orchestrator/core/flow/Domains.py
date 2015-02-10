@@ -46,7 +46,7 @@ class Domains(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
-
+        logger.info("DOMAINS=%s" % DOMAINS)
         return DOMAINS
 
     def get_domain(self,
@@ -56,7 +56,7 @@ class Domains(object):
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
 
-        '''Get Domains.
+        '''Get Domain.
 
         In case of HTTP error, return HTTP error
 
@@ -92,6 +92,7 @@ class Domains(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("DOMAIN=%s" % DOMAIN)
 
         return DOMAIN
 

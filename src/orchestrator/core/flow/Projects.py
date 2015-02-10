@@ -25,6 +25,7 @@ class Projects(object):
 
         Params:
         - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -58,6 +59,7 @@ class Projects(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("PROJECTS=%s" % PROJECTS)
 
         return PROJECTS
 
@@ -68,12 +70,13 @@ class Projects(object):
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
 
-        '''Get Projects of a domain.
+        '''Ge Project detail of a domain
 
         In case of HTTP error, return HTTP error
 
         Params:
         - DOMAIN_ID: id of domain
+        - PROJECT_ID: id of project
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -86,12 +89,13 @@ class Projects(object):
                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
-
-            PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
-                                                  DOMAIN_ID)
-            for project in PROJECTS:
-                if project['id'] == PROJECT_ID:
-                    PROJECT = project
+            PROJECT = self.idm.getProject(ADMIN_TOKEN,
+                                          PROJECT_ID)
+            # PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
+            #                                       DOMAIN_ID)
+            # for project in PROJECTS:
+            #     if project['id'] == PROJECT_ID:
+            #         PROJECT = project
 
             logger.debug("PROJECT=%s" % PROJECT)
 
@@ -100,7 +104,8 @@ class Projects(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
-
+        logger.info("PROJECT=%s" % PROJECT)
+        
         return PROJECT
 
 
