@@ -49,6 +49,7 @@ class Roles(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("ROLES=%s" % ROLES)
 
         return ROLES
 
@@ -145,6 +146,7 @@ class Roles(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("role-assignments=%s" % role_assignments_expanded)
 
         return { "roles-assginments": role_assignments_expanded }
 
