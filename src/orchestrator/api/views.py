@@ -414,13 +414,14 @@ class Role_RESTView(APIView, IoTConf):
     Creates or returns a Role into a service
 
     """
-    schema_name = "Role"
+    schema_name = None
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
+        self.schema_name = "Role"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
