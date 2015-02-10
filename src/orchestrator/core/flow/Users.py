@@ -65,7 +65,7 @@ class Users(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
-
+        logger.info("SERVICE_USERS=%s" % SERVICE_USERS)
         return SERVICE_USERS
 
 
@@ -107,5 +107,6 @@ class Users(object):
             return { "error": str(ex) }
 
         logger.info("Summary report:")
+        logger.info("DETAIL_USER=%s" % DETAIL_USER)
 
         return DETAIL_USER

@@ -18,7 +18,7 @@ class Roles(object):
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
 
-        '''Get Roles of a domain (and project).
+        '''Get Roles of a domain
 
         In case of HTTP error, return HTTP error
 
@@ -53,6 +53,7 @@ class Roles(object):
 
         return ROLES
 
+
     def roles_assignments(self,
                 DOMAIN_ID,
                 PROJECT_ID,
@@ -62,7 +63,7 @@ class Roles(object):
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
 
-        '''Get Roles of a domain (and project).
+        '''Get roles assignments of a domain (and project).
 
         In case of HTTP error, return HTTP error
 
@@ -159,7 +160,7 @@ class Roles(object):
                               ROLE_NAME,
                               SERVICE_USER_NAME):
 
-        '''assigns a service role to an user in IoT keystone).
+        '''Assigns a service role to an user in IoT keystone).
 
         In case of HTTP error, return HTTP error
 

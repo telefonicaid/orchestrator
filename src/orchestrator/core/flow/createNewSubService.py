@@ -28,10 +28,11 @@ class CreateNewSubService(object):
         
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id 
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - SUBSERVICE_NAME: New subservice name
+        - SUBSERVICE_NAME: New subservice name (required)
         - SUBSERVICE_DESCRIPTION: New subservice description
         Return:
         - ID: subservice id

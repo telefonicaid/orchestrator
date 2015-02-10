@@ -407,16 +407,21 @@ class Test_ServiceDetail_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME":"admin_domain",
+            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
 
     def test_get_ok(self):
-        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/%s" % service_id,
                                             json_data=True,
-                                            data=self.payload_data_ok)
+                                            data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
@@ -802,7 +807,7 @@ if __name__ == '__main__':
     test_NewServiceRole.test_post_ok()
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
-    #test_ServiceDetail.test_get_ok()
+    test_ServiceDetail.test_get_ok()
 
     test_ServiceLists = Test_ServiceLists_RestView()
     test_ServiceLists.test_get_ok()

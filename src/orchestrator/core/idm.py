@@ -74,15 +74,7 @@ class IdMOperations(object):
                     }
                 }
             }
-            }
-                # ,
-                #   "scope": {
-                #       "domain": {
-                #           "name": DOMAIN_NAME
-                #       }
-                #   }
-                # }
-            #}
+        }
 
         if DOMAIN_NAME:
             auth_data['auth']['identity']['password']['user'].update({"domain": { "name": DOMAIN_NAME}})
@@ -119,15 +111,7 @@ class IdMOperations(object):
                     }
                 }
             }
-            }
-                # ,
-                #   "scope": {
-                #       "domain": {
-                #           "name": DOMAIN_NAME
-                #       }
-                #   }
-                # }
-            #}
+        }
 
         if DOMAIN_ID:
             auth_data['auth']['identity']['password']['user'].update({"domain": { "id": DOMAIN_ID}})
@@ -482,7 +466,7 @@ class IdMOperations(object):
     def getDomain(self,
                   SERVICE_ADMIN_TOKEN,
                   DOMAIN_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/domains?domain_id=%s' % DOMAIN_ID,
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s' % DOMAIN_ID,
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -566,6 +550,18 @@ class IdMOperations(object):
             projects.append(project_data)
         return { "projects": projects }
 
+    def getProject(self,
+                   SERVICE_ADMIN_TOKEN,
+                   PROJECT_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % PROJECT_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+
+        return json_body_response
 
     def getProjectRoleAssignments(self,
                                 SERVICE_ADMIN_TOKEN,
