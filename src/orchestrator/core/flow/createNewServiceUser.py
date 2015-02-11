@@ -14,6 +14,7 @@ class CreateNewServiceUser(object):
 
     def createNewServiceUser(self,
                              SERVICE_NAME,
+                             SERVICE_ID,
                              SERVICE_ADMIN_USER,
                              SERVICE_ADMIN_PASSWORD,
                              SERVICE_ADMIN_TOKEN,
@@ -44,28 +45,33 @@ class CreateNewServiceUser(object):
             #
             # 1. Get service (aka domain)
             #
-            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                           SERVICE_NAME)
+            if not SERVICE_ID:
+                ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_NAME)
+                SERVICE_ID=ID_DOM1
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
             #
             # 2.  Create user 
             #
             ID_USER = self.idm.createUserDomain(SERVICE_ADMIN_TOKEN,
-                                           ID_DOM1,
-                                           SERVICE_NAME,
-                                           NEW_USER_NAME,
-                                           NEW_USER_PASSWORD)
+                                                SERVICE_ID,
+                                                SERVICE_NAME,
+                                                NEW_USER_NAME,
+                                                NEW_USER_PASSWORD)
             logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
 
 
         except Exception, ex:
             logger.error(ex)
-            return { "error": str(ex) }
+            res = { "error": str(ex), "code": 400 }
+            if isinstance(ex.message, tuple):
+                res['code'] = ex.message[0]
+            return res
     
         logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % ID_DOM1)
+        logger.info("ID_DOM1=%s" % SERVICE_ID)
         logger.info("ID_USER=%s" % ID_USER)
         
         return {"id":ID_USER}

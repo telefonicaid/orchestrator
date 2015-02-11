@@ -55,13 +55,13 @@ class CreateNewSubService(object):
                                                SERVICE_NAME)
                 SERVICE_ID=ID_DOM1
             
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
             
             #
             # 2.  Create subservice (aka project)
             #
             ID_PRO1 = self.idm.createProject(SERVICE_ADMIN_TOKEN,
-                                             ID_DOM1,
+                                             SERVICE_ID,
                                              NEW_SUBSERVICE_NAME,
                                              NEW_SUBSERVICE_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
@@ -69,10 +69,13 @@ class CreateNewSubService(object):
             
         except Exception, ex:
             logger.error(ex)
-            return { "error": str(ex) }
+            res = { "error": str(ex), "code": 400 }
+            if isinstance(ex.message, tuple):
+                res['code'] = ex.message[0]
+            return res
     
         logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % ID_DOM1)
+        logger.info("ID_DOM1=%s" % SERVICE_ID)
         logger.info("ID_PRO1=%s" % ID_PRO1)
 
         return {"id": ID_PRO1}

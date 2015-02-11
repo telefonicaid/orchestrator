@@ -66,6 +66,21 @@ class IoTConf(object):
             logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
 
+    # Get Django status error from simple HTTP error code
+    def getStatusFromCode(self, code):
+        if code == 400:
+            rstatus = status.HTTP_400_BAD_REQUEST
+        elif code == 401:
+            rstatus = status.HTTP_401_UNAUTHORIZED
+        elif code == 404:
+            rstatus = status.HTTP_404_NOT_FOUND
+        elif code == 403:
+            rstatus = status.HTTP_403_FORBIDDEN
+        elif code == 409:
+            rstatus = status.HTTP_409_CONFLICT
+        else:
+            rstatus = status.HTTP_400_BAD_REQUEST
+        return rstatus
 
 
 class ServiceList_RESTView(APIView, IoTConf):
@@ -81,6 +96,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None):
+        self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -105,10 +121,9 @@ class ServiceList_RESTView(APIView, IoTConf):
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
+
 
         except ParseError as error:
             return Response(
@@ -150,11 +165,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
             if 'token' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                #status=result['status']
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -174,6 +186,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None, subservice_id=None):
+        self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA # json validation
@@ -204,10 +217,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
+
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -243,10 +255,9 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
+
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -330,10 +341,8 @@ class User_RESTView(APIView, IoTConf):
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -369,10 +378,8 @@ class UserList_RESTView(APIView, IoTConf):
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -398,10 +405,8 @@ class UserList_RESTView(APIView, IoTConf):
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
-                # TODO: return status from result error code
-                #status=status.HTTP_404_NOT_FOUND)
                 return Response(result['error'],
-                                status=status.HTTP_400_BAD_REQUEST)
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -414,7 +419,7 @@ class Role_RESTView(APIView, IoTConf):
     Creates or returns a Role into a service
 
     """
-    schema_name = None
+    schema_name = "Role"
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
@@ -445,25 +450,30 @@ class Role_RESTView(APIView, IoTConf):
             )
 
     def get(self, request, service_id=None):
+        self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        #request.DATA  # json validation
+        try:
+            request.DATA  # json validation
 
-        flow = Roles(self.KEYSTONE_PROTOCOL,
-                     self.KEYSTONE_HOST,
-                     self.KEYSTONE_PORT)
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT)
 
-        result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
-                            request.DATA.get("SERVICE_ADMIN_USER", None),
-                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+            result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
+                                request.DATA.get("SERVICE_ADMIN_USER", None),
+                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
 
-        if not 'error' in result:
-            return Response(result, status=status.HTTP_200_OK)
-        else:
-            # TODO: return status from result error code
-            #status=status.HTTP_404_NOT_FOUND)
-            return Response(result['error'],
-                            status=status.HTTP_400_BAD_REQUEST)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class AssignRoleUser_RESTView(APIView, IoTConf):
     """
@@ -496,10 +506,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
         else:
-            # TODO: return status from result error code
-            #status=status.HTTP_404_NOT_FOUND)
             return Response(result['error'],
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=self.getStatusFromCode(result['code']))
 
     def post(self, request, *args, **kw):
         self.schema_name = "AssignRole"
