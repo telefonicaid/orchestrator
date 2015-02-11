@@ -283,6 +283,15 @@ class Test_NewServiceUser_RestView(object):
             "NEW_SERVICE_USER_PASSWORD":"password",
         }
         self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok3 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"password",
+            "NEW_SERVICE_USER_PASSWORD":"email@email.com",
+        }
+        self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
@@ -316,6 +325,14 @@ class Test_NewServiceUser_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 409, (res.code, res.msg)
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg)
 
     def test_post_bad(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
@@ -360,6 +377,11 @@ class Test_ServiceLists_RestView(object):
             "SERVICE_ADMIN_USER":"cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
         }
+        self.payload_data_bad5 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -398,6 +420,16 @@ class Test_ServiceLists_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_bad4)
         assert res.code == 401, (res.code, res.msg)
+
+    def test_get_bad5(self):
+        auth_token_res = self.TestRestOps.getToken(self.payload_data_bad5)
+        auth_token = auth_token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service",
+                                            auth_token=auth_token,
+                                            json_data=True,
+                                            data=None)
+        assert res.code == 403, (res.code, res.msg)
 
 class Test_ServiceDetail_RestView(object):
 
@@ -800,6 +832,7 @@ if __name__ == '__main__':
     test_NewServiceUser = Test_NewServiceUser_RestView()
     test_NewServiceUser.test_post_ok()
     test_NewServiceUser.test_post_ok_bad()
+    test_NewServiceUser.test_post_ok3()
     test_NewServiceUser.test_post_bad()
     test_NewServiceUser.test_post_bad2()
 
@@ -815,6 +848,7 @@ if __name__ == '__main__':
     test_ServiceLists.test_get_bad2()
     test_ServiceLists.test_get_bad3()
     test_ServiceLists.test_get_bad4()
+    test_ServiceLists.test_get_bad5()
 
     test_ProjectList = Test_ProjectList_RestView()
     test_ProjectList.test_get_ok()
