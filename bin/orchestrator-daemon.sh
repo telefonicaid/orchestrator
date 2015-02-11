@@ -15,7 +15,7 @@ ORCHESTRATOR_DIR=usr/lib/python2.6/site-packages/iotp-orchestrator
 pname="orchestrator"
 user="orchestrator"
 
-exe="/usr/bin/python ./manage.py runserver 0.0.0.0:8084"
+exe="/usr/bin/python ./manage.py runserver 0.0.0.0:8084 --setings=settings.dev"
 
 server="$exe"
 

@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('IoT support', 'iot_support@tid.es'),
 )
 
 MANAGERS = ADMINS
@@ -126,11 +126,25 @@ INSTALLED_APPS = (
     'rest_framework',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
+"""
+Simple logging: Use Sentry to improve logging
+
+Handle it in modular settings like this:
+
+    [settings/custom.py]
+    LOGGING.update({
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'propagate': True,
+                'level': 'INFO',
+            },
+            'extra_log': {
+                ...
+            }
+        }
+    })
+"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -198,14 +212,8 @@ REST_FRAMEWORK = {
 # TO DO:
 # split settings into settings/common.py settings/dev.py settings/qa_integration.py
 
-KEYSTONE = {
-    "host": "localhost",
-    "port": "5000",
-    "protocol":"http"
-}
+# Custom settings
+# ---------------
+KEYSTONE = {}
+KEYPASS = {}
 
-KEYPASS = {
-    "host": "localhost",
-    "port": "8080",
-    "protocol":"http"
-}
