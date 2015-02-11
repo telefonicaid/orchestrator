@@ -11,12 +11,12 @@
 . /etc/rc.d/init.d/functions
 
 CURR="$( cd "$( dirname "$( readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
-
+ORCHESTRATOR_DIR=usr/lib/python2.6/site-packages/iotp-orchestrator
 pname="orchestrator"
 user="orchestrator"
 
-exe="python ./manage.py runserver 8084"
-cfg="$CURR/config.yml"
+exe="/usr/bin/python ./manage.py runserver 0.0.0.0:8084 --setings=settings.dev"
+
 server="$exe"
 
 pidfile="/var/run/orchestrator.pid"
@@ -33,7 +33,7 @@ start() {
         touch $pidfile
         chown $user $pidfile
         su -s /bin/sh $user -c "
-                cd $CURR
+                cd $ORCHESTRATOR_DIR
                 exec setsid ${server}   \
                 </dev/null >/dev/null 2>&1 &
                 echo \$! >${pidfile}
