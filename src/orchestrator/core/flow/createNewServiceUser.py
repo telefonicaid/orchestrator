@@ -19,12 +19,13 @@ class CreateNewServiceUser(object):
                              SERVICE_ADMIN_PASSWORD,
                              SERVICE_ADMIN_TOKEN,
                              NEW_USER_NAME,
-                             NEW_USER_PASSWORD):
+                             NEW_USER_PASSWORD,
+                             NEW_USER_EMAIL):
 
         '''Creates a new user Service (aka domain user keystone).
-        
+
         In case of HTTP error, return HTTP error
-        
+
         Params:
         - SERVICE_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin username
@@ -32,10 +33,11 @@ class CreateNewServiceUser(object):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - NEW_USER_NAME: New user name (required)
         - NEW_USER_PASSWORD: New user password (required)
+        - NEW_USER_EMAIL: New user password (optional)
         '''
-    
+
         try:
-            if not SERVICE_ADMIN_TOKEN: 
+            if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
@@ -53,13 +55,14 @@ class CreateNewServiceUser(object):
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
             #
-            # 2.  Create user 
+            # 2.  Create user
             #
             ID_USER = self.idm.createUserDomain(SERVICE_ADMIN_TOKEN,
                                                 SERVICE_ID,
                                                 SERVICE_NAME,
                                                 NEW_USER_NAME,
-                                                NEW_USER_PASSWORD)
+                                                NEW_USER_PASSWORD,
+                                                NEW_USER_EMAIL)
             logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
 
 
@@ -69,11 +72,11 @@ class CreateNewServiceUser(object):
             if isinstance(ex.message, tuple):
                 res['code'] = ex.message[0]
             return res
-    
+
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % SERVICE_ID)
         logger.info("ID_USER=%s" % ID_USER)
-        
+
         return {"id":ID_USER}
 
 

@@ -278,7 +278,8 @@ class IdMOperations(object):
                       ID_DOM1,
                       SERVICE_NAME,
                       NEW_USER_NAME,
-                      NEW_USER_PASSWORD):
+                      NEW_USER_PASSWORD,
+                      NEW_USER_EMAIL):
 
         body_data = {
             "user": {
@@ -289,6 +290,8 @@ class IdMOperations(object):
                 "password": "%s" % NEW_USER_PASSWORD,
             }
         }
+        if NEW_USER_EMAIL:
+            body_data['user'].update({'email' : NEW_USER_EMAIL})
         res = self.IdMRestOperations.rest_request(url='/v3/users',
                                 method='POST', data=body_data,
                                 auth_token=SERVICE_ADMIN_TOKEN)

@@ -230,6 +230,15 @@ json = {
             "SERVICE_ID": {
                 "type": "string",
             },
+            "NEW_SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "NEW_SERVICE_USER_PASSWORD":{
+                "type": "string",
+            },
+            "NEW_SERVICE_USER_EMAIL":{
+                "type": "string",
+            },
         },
         #"required": [ ],
     },

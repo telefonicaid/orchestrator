@@ -401,7 +401,8 @@ class UserList_RESTView(APIView, IoTConf):
                                     request.DATA.get("SERVICE_ADMIN_TOKEN",
                                                      HTTP_X_AUTH_TOKEN),
                                     request.DATA.get("NEW_SERVICE_USER_NAME", None),
-                                    request.DATA.get("NEW_SERVICE_USER_PASSWORD", None))
+                                    request.DATA.get("NEW_SERVICE_USER_PASSWORD", None),
+                                    request.DATA.get("NEW_SERVICE_USER_EMAIL", None))
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
