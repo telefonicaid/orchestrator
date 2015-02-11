@@ -12,6 +12,7 @@ class CreateNewServiceRole(object):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
         
     def createNewServiceRole(self,
+                             SERVICE_ID,
                              SERVICE_NAME,
                              SERVICE_ADMIN_USER,
                              SERVICE_ADMIN_PASSWORD,
@@ -42,16 +43,18 @@ class CreateNewServiceRole(object):
             #
             # 1. Get service (aka domain)
             #
-            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                           SERVICE_NAME)
+            if not SERVICE_ID:
+                ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_NAME)
+                SEVICE_ID = ID_DOM1
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
             #
             # 2.  Create role
             #
             ID_ROLE = self.idm.createRoleDomain(SERVICE_ADMIN_TOKEN,
-                                                ID_DOM1,
+                                                SERVICE_ID,
                                                 NEW_ROLE_NAME)
             logger.debug("ID of user %s: %s" % (NEW_ROLE_NAME, ID_ROLE))
 
@@ -64,7 +67,7 @@ class CreateNewServiceRole(object):
             return res
     
         logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % ID_DOM1)
+        logger.info("ID_DOM1=%s" % SERVICE_ID)
         logger.info("ID_ROLE=%s" % ID_ROLE)
 
         return {"id": ID_ROLE}

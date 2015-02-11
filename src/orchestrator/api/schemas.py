@@ -66,17 +66,11 @@ json = {
     #############
         "name": "ServiceList",
         "dependencies": {
-            "DOMAIN_NAME": [
-                "DOMAIN_ADMIN_USER",
-                "DOMAIN_ADMIN_PASSWORD"
-            ],
             "DOMAIN_ADMIN_USER": [
-                "DOMAIN_NAME",
                 "DOMAIN_ADMIN_PASSWORD"
             ],
             "DOMAIN_ADMIN_PASSWORD": [
                 "DOMAIN_ADMIN_USER",
-                "DOMAIN_NAME"
             ]
         },
         "properties": {

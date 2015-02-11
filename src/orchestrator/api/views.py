@@ -96,6 +96,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None):
+        self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -185,6 +186,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None, subservice_id=None):
+        self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA # json validation

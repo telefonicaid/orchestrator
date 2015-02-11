@@ -253,7 +253,7 @@ class Test_NewSubService_RestView(object):
                                             url="v1.0/service/%s/subservice/" % service_id,
                                             json_data=True,
                                             data=self.payload_data_bad)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
     def test_post_bad2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
@@ -323,7 +323,7 @@ class Test_NewServiceUser_RestView(object):
                                             url="v1.0/service/%s/user/" % service_id,
                                             json_data=True,
                                             data=self.payload_data_bad)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
     def test_post_bad2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
@@ -383,21 +383,21 @@ class Test_ServiceLists_RestView(object):
                                             url="v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad2)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
     def test_get_bad3(self):
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad3)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
     def test_get_bad4(self):
         res = self.TestRestOps.rest_request(method="GET",
                                             url="v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad4)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
 class Test_ServiceDetail_RestView(object):
 
@@ -531,7 +531,7 @@ class Test_RoleList_RestView(object):
                                             auth_token=auth_token,
                                             json_data=True,
                                             data=self.payload_data_ok2)
-        assert res.code == 400, (res.code, res.msg, res.raw_json)
+        assert res.code == 403, (res.code, res.msg, res.raw_json)
 
     def test_get_bad2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
