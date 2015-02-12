@@ -22,6 +22,8 @@ class Domains(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - array list of domains
         '''
 
         try:
@@ -61,6 +63,8 @@ class Domains(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - domain detail
         '''
 
         try:

@@ -29,6 +29,8 @@ class CreateNewServiceUser(FlowBase):
         - NEW_USER_NAME: New user name (required)
         - NEW_USER_PASSWORD: New user password (required)
         - NEW_USER_EMAIL: New user password (optional)
+        Return:
+        - id: New user Id
         '''
 
         try:

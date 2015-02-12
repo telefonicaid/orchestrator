@@ -31,7 +31,8 @@ class CreateNewService(FlowBase):
         - NEW_SERVICE_ADMIN_USER: New service admin username
         - NEW_SERVICE_ADMIN_PASSWORD: New service admin password
         Return:
-        - TOKEN: service admin token
+        - token: service admin token
+        - id: service Id
         '''
 
         SUB_SERVICE_ADMIN_ROLE_NAME="SubServiceAdmin"

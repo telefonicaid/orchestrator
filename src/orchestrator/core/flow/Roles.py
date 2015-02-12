@@ -22,6 +22,8 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - array list of roles
         '''
 
         try:
@@ -70,6 +72,8 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - roles_assginments: array of role assignments
         '''
 
         try:
@@ -224,8 +228,6 @@ class Roles(FlowBase):
         logger.info("ID_USER=%s" % ID_USER)
         logger.info("ID_ROLE=%s" % ID_ROLE)
 
-        return {}
-
 
     def assignRoleSubServiceUser(self,
                                  SERVICE_NAME,
@@ -248,8 +250,6 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - ROLE_NAME: Role name
         - SERVICE_USER_NAME: User service name
-        Return:
-        - ?
         '''
 
         try:
@@ -315,5 +315,3 @@ class Roles(FlowBase):
         logger.info("ID_PRO1=%s" % ID_PRO1)
         logger.info("ID_USER=%s" % ID_USER)
         logger.info("ID_ROLE=%s" % ID_ROLE)
-
-        return {}

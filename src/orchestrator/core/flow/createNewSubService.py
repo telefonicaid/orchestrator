@@ -29,7 +29,7 @@ class CreateNewSubService(FlowBase):
         - SUBSERVICE_NAME: New subservice name (required)
         - SUBSERVICE_DESCRIPTION: New subservice description
         Return:
-        - ID: subservice id
+        - ID: New subservice id
         '''
     
         

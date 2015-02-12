@@ -24,6 +24,8 @@ class Projects(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - project array list
         '''
 
         try:
@@ -75,6 +77,8 @@ class Projects(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - project detail
         '''
 
         try:

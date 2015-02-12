@@ -24,6 +24,8 @@ class CreateNewServiceRole(FlowBase):
         - SERVICE_ADMIN_PASSWORD: Service admin token
         - SERVICE_ADMIN_TOKEN: Service admin token
         - NEW_ROLE_NAME: New role name
+        Return:
+        - id: New role Id
         '''
     
         
