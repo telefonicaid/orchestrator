@@ -17,9 +17,9 @@ class UpdateUser(FlowBase):
                    USER_DATA_VALUE):
 
         '''Update an User Service (aka domain user keystone).
-        
+
         In case of HTTP error, return HTTP error
-        
+
         Params:
         - SERVICE_NAME: Service name
         - DOMAIN_ID: Service Id
@@ -30,16 +30,24 @@ class UpdateUser(FlowBase):
         - USER_ID: User Id
         - USER_DATA_VALUE: user data value in json
         '''
-        
-        
+        logger.debug("updateUser invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("USER_NAME=%s" % USER_NAME)
+        logger.debug("USER_ID=%s" % USER_ID)
+        logger.debug("USER_DATA_VALUE=%s" % USER_DATA_VALUE)
+
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-                
-                
+
+
             #
             # 2. Get user ID
             #
@@ -47,7 +55,7 @@ class UpdateUser(FlowBase):
                 if not DOMAIN_ID:
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                      SERVICE_NAME)
-                    
+
                 USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    USER_NAME)
@@ -68,5 +76,5 @@ class UpdateUser(FlowBase):
 
         logger.info("Summary report:")
         logger.info("USER_ID=%s" % USER_ID)
-        
+
         #return {"id":ID_USER}

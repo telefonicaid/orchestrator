@@ -38,6 +38,15 @@ class CreateNewService(FlowBase):
         SUB_SERVICE_ADMIN_ROLE_NAME="SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME="SubServiceCustomer"
 
+        logger.debug("createNewService invoked with: ")
+        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+        logger.debug("DOMAIN_ADMIN_USER=%s" % DOMAIN_ADMIN_USER)
+        logger.debug("DOMAIN_ADMIN_PASSWORD=%s" % DOMAIN_ADMIN_PASSWORD)
+        logger.debug("DOMAIN_ADMIN_TOKEN=%s" % DOMAIN_ADMIN_TOKEN)
+        logger.debug("NEW_SERVICE_NAME=%s" % NEW_SERVICE_NAME)
+        logger.debug("NEW_SERVICE_DESCRIPTION=%s" % NEW_SERVICE_DESCRIPTION)
+        logger.debug("NEW_SERVICE_ADMIN_USER=%s" % NEW_SERVICE_ADMIN_PASSWORD)
+
         try:
 
             if not DOMAIN_ADMIN_TOKEN:

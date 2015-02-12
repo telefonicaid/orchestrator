@@ -25,6 +25,11 @@ class Domains(FlowBase):
         Return:
         - array list of domains
         '''
+        logger.debug("domains invoked with: ")
+        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
+        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
+        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
         try:
             if not ADMIN_TOKEN:
@@ -66,6 +71,12 @@ class Domains(FlowBase):
         Return:
         - domain detail
         '''
+        logger.debug("get_domain invoked with: ")
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
+        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
+        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
         try:
             if not ADMIN_TOKEN:

@@ -25,6 +25,11 @@ class Roles(FlowBase):
         Return:
         - array list of roles
         '''
+        logger.debug("roles invoked with: ")
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
+        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
+        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
         try:
             if not ADMIN_TOKEN:
@@ -75,7 +80,14 @@ class Roles(FlowBase):
         Return:
         - roles_assginments: array of role assignments
         '''
-
+        logger.debug("roles_assignments invoked with: ")
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("PROJECT_ID=%s" % PROJECT_ID)
+        logger.debug("ROLE_ID=%s" % ROLE_ID)
+        logger.debug("USER_ID=%s" % USER_ID)
+        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
+        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
+        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
@@ -153,7 +165,7 @@ class Roles(FlowBase):
         logger.info("Summary report:")
         logger.info("role_assignments=%s" % role_assignments_expanded)
 
-        return { "roles_assginments": role_assignments_expanded }
+        return { "roles_assignments": role_assignments_expanded }
 
 
     def assignRoleServiceUser(self,
@@ -178,6 +190,13 @@ class Roles(FlowBase):
         Return:
         - ?
         '''
+        logger.debug("assignRoleServiceUser invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("ROLE_NAME=%s" % ROLE_NAME)
+        logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -251,7 +270,14 @@ class Roles(FlowBase):
         - ROLE_NAME: Role name
         - SERVICE_USER_NAME: User service name
         '''
-
+        logger.debug("assignRoleSubServiceUser invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SUBSERVICE_NAME=%s" % SUBSERVICE_NAME)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("ROLE_NAME=%s" % ROLE_NAME)
+        logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
