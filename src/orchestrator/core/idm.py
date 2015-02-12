@@ -577,7 +577,7 @@ class IdMOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return {"role-assignments": json_body_response['role_assignments'] }
+        return json_body_response
 
     def getDomainRoleAssignments(self,
                                 SERVICE_ADMIN_TOKEN,
@@ -590,4 +590,4 @@ class IdMOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return {"role-assignments": json_body_response['role_assignments'] }
+        return json_body_response

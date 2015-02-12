@@ -1,16 +1,11 @@
 import logging
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
 
-class Roles(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class Roles(FlowBase):
 
     def roles(self,
                 DOMAIN_ID,
@@ -27,6 +22,8 @@ class Roles(object):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - array list of roles
         '''
 
         try:
@@ -46,10 +43,7 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("ROLES=%s" % ROLES)
@@ -78,6 +72,8 @@ class Roles(object):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - roles_assginments: array of role assignments
         '''
 
         try:
@@ -100,7 +96,7 @@ class Roles(object):
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
             role_assignments_expanded = []
-            for role_assignment in ROLE_ASSIGNMENTS['role-assignments']:
+            for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
                 # # 'OR' Filter
                 # if ROLE_ID:
                 #     if (role_assignment['role']['id'] == ROLE_ID):
@@ -133,29 +129,31 @@ class Roles(object):
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
             for assign in role_assignments_expanded:
+                # Expand user detail
                 match_list = [x for x in domain_users['users'] if x['id'] == str(assign['user']['id'])]
                 if len(match_list) > 0:
-                    assign['user']['name'] = match_list[0]['name']
+                    assign['user'].update(match_list[0])
+                # Expand role detail
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
-                    assign['role']['name'] = match_list[0]['name']
+                    assign['role'].update(match_list[0])
+                # Expand project detail
                 if 'project' in assign['scope']:
                     match_list = [x for x in domain_projects['projects'] if x['id'] == str(assign['scope']['project']['id'])]
-                    assign['scope']['project']['name'] = match_list[0]['name']
+                    if len(match_list) > 0:
+                        assign['scope']['project'].update(match_list[0])
+
 
             logger.debug("ROLES=%s" % role_assignments_expanded)
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
-        logger.info("role-assignments=%s" % role_assignments_expanded)
+        logger.info("role_assignments=%s" % role_assignments_expanded)
 
-        return { "roles-assginments": role_assignments_expanded }
+        return { "roles_assginments": role_assignments_expanded }
 
 
     def assignRoleServiceUser(self,
@@ -223,17 +221,12 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % ID_DOM1)
         logger.info("ID_USER=%s" % ID_USER)
         logger.info("ID_ROLE=%s" % ID_ROLE)
-
-        return {}
 
 
     def assignRoleSubServiceUser(self,
@@ -257,8 +250,6 @@ class Roles(object):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - ROLE_NAME: Role name
         - SERVICE_USER_NAME: User service name
-        Return:
-        - ?
         '''
 
         try:
@@ -318,14 +309,9 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("ID_PRO1=%s" % ID_PRO1)
         logger.info("ID_USER=%s" % ID_USER)
         logger.info("ID_ROLE=%s" % ID_ROLE)
-
-        return {}

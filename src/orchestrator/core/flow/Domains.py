@@ -1,16 +1,11 @@
 import logging
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
 
-class Domains(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class Domains(FlowBase):
 
     def domains(self,
                 DOMAIN_NAME,
@@ -27,6 +22,8 @@ class Domains(object):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - array list of domains
         '''
 
         try:
@@ -43,10 +40,7 @@ class Domains(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("DOMAINS=%s" % DOMAINS)
@@ -69,6 +63,8 @@ class Domains(object):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        Return:
+        - domain detail
         '''
 
         try:
@@ -92,10 +88,7 @@ class Domains(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("DOMAIN=%s" % DOMAIN)
