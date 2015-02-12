@@ -92,7 +92,7 @@ class Roles(FlowBase):
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
             role_assignments_expanded = []
-            for role_assignment in ROLE_ASSIGNMENTS['role-assignments']:
+            for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
                 # # 'OR' Filter
                 # if ROLE_ID:
                 #     if (role_assignment['role']['id'] == ROLE_ID):
@@ -125,17 +125,20 @@ class Roles(FlowBase):
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
             for assign in role_assignments_expanded:
+                # Expand user detail
                 match_list = [x for x in domain_users['users'] if x['id'] == str(assign['user']['id'])]
-
                 if len(match_list) > 0:
-                    assign['user']['name'] = match_list[0]['name']
-                    # TODO: add description, email, all all possible fields
+                    assign['user'].update(match_list[0])
+                # Expand role detail
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
-                    assign['role']['name'] = match_list[0]['name']
+                    assign['role'].update(match_list[0])
+                # Expand project detail
                 if 'project' in assign['scope']:
                     match_list = [x for x in domain_projects['projects'] if x['id'] == str(assign['scope']['project']['id'])]
-                    assign['scope']['project']['name'] = match_list[0]['name']
+                    if len(match_list) > 0:
+                        assign['scope']['project'].update(match_list[0])
+
 
             logger.debug("ROLES=%s" % role_assignments_expanded)
 
@@ -144,9 +147,9 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
-        logger.info("role-assignments=%s" % role_assignments_expanded)
+        logger.info("role_assignments=%s" % role_assignments_expanded)
 
-        return { "roles-assginments": role_assignments_expanded }
+        return { "roles_assginments": role_assignments_expanded }
 
 
     def assignRoleServiceUser(self,
