@@ -1,16 +1,11 @@
 import logging
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
 
-class Roles(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class Roles(FlowBase):
 
     def roles(self,
                 DOMAIN_ID,
@@ -46,10 +41,7 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("ROLES=%s" % ROLES)
@@ -134,8 +126,10 @@ class Roles(object):
 
             for assign in role_assignments_expanded:
                 match_list = [x for x in domain_users['users'] if x['id'] == str(assign['user']['id'])]
+
                 if len(match_list) > 0:
                     assign['user']['name'] = match_list[0]['name']
+                    # TODO: add description, email, all all possible fields
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
                     assign['role']['name'] = match_list[0]['name']
@@ -147,10 +141,7 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("role-assignments=%s" % role_assignments_expanded)
@@ -223,10 +214,7 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % ID_DOM1)
@@ -318,10 +306,7 @@ class Roles(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("ID_PRO1=%s" % ID_PRO1)

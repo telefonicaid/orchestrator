@@ -1,15 +1,10 @@
 import logging
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
 
-class CreateNewServiceRole(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class CreateNewServiceRole(FlowBase):
         
     def createNewServiceRole(self,
                              SERVICE_ID,
@@ -46,7 +41,7 @@ class CreateNewServiceRole(object):
             if not SERVICE_ID:
                 ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                SERVICE_NAME)
-                SEVICE_ID = ID_DOM1
+                SERVICE_ID = ID_DOM1
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
@@ -61,10 +56,8 @@ class CreateNewServiceRole(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
+
     
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % SERVICE_ID)

@@ -1,16 +1,11 @@
 import logging
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
 
-class CreateNewServiceUser(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class CreateNewServiceUser(FlowBase):
 
     def createNewServiceUser(self,
                              SERVICE_NAME,
@@ -68,10 +63,8 @@ class CreateNewServiceUser(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
+
 
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % SERVICE_ID)

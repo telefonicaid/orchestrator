@@ -1,16 +1,11 @@
 import logging
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
 
-class Projects(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class Projects(FlowBase):
 
     def projects(self,
                 DOMAIN_ID,
@@ -56,10 +51,7 @@ class Projects(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("PROJECTS=%s" % PROJECTS)
@@ -104,10 +96,7 @@ class Projects(object):
 
         except Exception, ex:
             logger.error(ex)
-            res = { "error": str(ex), "code": 400 }
-            if isinstance(ex.message, tuple):
-                res['code'] = ex.message[0]
-            return res
+            return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
         logger.info("PROJECT=%s" % PROJECT)
