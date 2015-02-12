@@ -63,7 +63,8 @@ class Roles(FlowBase):
                 USER_ID,
                 ADMIN_USER,
                 ADMIN_PASSWORD,
-                ADMIN_TOKEN):
+                ADMIN_TOKEN,
+                EFFECTIVE):
 
         '''Get roles assignments of a domain (and project).
 
@@ -77,6 +78,7 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        - EFECTIVE: effective roles
         Return:
         - roles_assginments: array of role assignments
         '''
@@ -97,13 +99,15 @@ class Roles(FlowBase):
 
             if PROJECT_ID:
                 PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
-                                                                   PROJECT_ID)
+                                                                   PROJECT_ID,
+                                                                   EFFECTIVE)
                 logger.debug("PROJECT_ROLES=%s" % PROJECT_ROLES)
                 ROLE_ASSIGNMENTS = PROJECT_ROLES
 
             else:
                 DOMAIN_ROLES = self.idm.getDomainRoleAssignments(ADMIN_TOKEN,
-                                                                 DOMAIN_ID)
+                                                                 DOMAIN_ID,
+                                                                 EFFECTIVE)
                 logger.debug("DOMAIN_ROLES=%s" % DOMAIN_ROLES)
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
@@ -165,7 +169,7 @@ class Roles(FlowBase):
         logger.info("Summary report:")
         logger.info("role_assignments=%s" % role_assignments_expanded)
 
-        return { "roles_assignments": role_assignments_expanded }
+        return { "role_assignments": role_assignments_expanded }
 
 
     def assignRoleServiceUser(self,

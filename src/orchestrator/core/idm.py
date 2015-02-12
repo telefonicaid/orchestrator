@@ -567,10 +567,12 @@ class IdMOperations(object):
         return json_body_response
 
     def getProjectRoleAssignments(self,
-                                SERVICE_ADMIN_TOKEN,
-                                PROJECT_ID):
+                                  SERVICE_ADMIN_TOKEN,
+                                  PROJECT_ID,
+                                  EFFECTIVE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.project.id=%s' % PROJECT_ID,
+        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.project.id=%s%s' % (
+                                                         PROJECT_ID, "&effective" if EFFECTIVE else ""),
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -581,9 +583,11 @@ class IdMOperations(object):
 
     def getDomainRoleAssignments(self,
                                 SERVICE_ADMIN_TOKEN,
-                                DOMAIN_ID):
+                                DOMAIN_ID,
+                                EFFECTIVE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.domain.id=%s' % DOMAIN_ID,
+        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.domain.id=%s%s' % (
+                                                        DOMAIN_ID, "&effective" if EFFECTIVE else ""),
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 

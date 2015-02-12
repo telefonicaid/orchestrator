@@ -758,6 +758,28 @@ class Test_AssignRoleUserList_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
+    def test_get_ok5(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['token']['user']['id']
+        role_id = json_body_response['token']['roles'][0]['id']  # admin role
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=true" % (
+                                                service_id, role_id, user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        res2 = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=false" % (
+                                                service_id, role_id, user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res2.code == 200, (res2.code, res2.msg, res2.raw_json)
+
+
 
 class Test_AssignRoleUser_RestView(object):
 
@@ -875,3 +897,4 @@ if __name__ == '__main__':
     test_AssignRoleUserList.test_get_ok2()
     test_AssignRoleUserList.test_get_ok3()
     test_AssignRoleUserList.test_get_ok4()
+    test_AssignRoleUserList.test_get_ok5()
