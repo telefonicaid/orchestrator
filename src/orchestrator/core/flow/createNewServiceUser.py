@@ -33,6 +33,17 @@ class CreateNewServiceUser(FlowBase):
         - id: New user Id
         '''
 
+        logger.debug("createNewServiceUser invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("NEW_USER_NAME=%s" % NEW_USER_NAME)
+        logger.debug("NEW_USER_PASSWORD=%s" % NEW_USER_PASSWORD)
+        logger.debug("NEW_USER_EMAIL=%s" % NEW_USER_EMAIL)
+
+
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,

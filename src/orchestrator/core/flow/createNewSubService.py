@@ -15,14 +15,14 @@ class CreateNewSubService(FlowBase):
                             SERVICE_ADMIN_TOKEN,
                             NEW_SUBSERVICE_NAME,
                             NEW_SUBSERVICE_DESCRIPTION):
-        
+
         '''Creates a new SubService (aka project keystone).
-        
+
         In case of HTTP error, return HTTP error
-        
+
         Params:
         - SERVICE_NAME: Service name
-        - SERVICE_ID: Service Id 
+        - SERVICE_ID: Service Id
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -31,15 +31,23 @@ class CreateNewSubService(FlowBase):
         Return:
         - ID: New subservice id
         '''
-    
-        
+
+        logger.debug("createNewSubService invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("NEW_SUBSERVICE_NAME=%s" % NEW_SUBSERVICE_NAME)
+        logger.debug("NEW_SUBSERVICE_DESCRIPTION=%s" % NEW_SUBSERVICE_DESCRIPTION)
+
         try:
-            if not SERVICE_ADMIN_TOKEN: 
+            if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-            
+
 
             #
             # 1. Create service (aka domain)
@@ -48,9 +56,9 @@ class CreateNewSubService(FlowBase):
                 ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                SERVICE_NAME)
                 SERVICE_ID=ID_DOM1
-            
+
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
-            
+
             #
             # 2.  Create subservice (aka project)
             #
@@ -59,13 +67,13 @@ class CreateNewSubService(FlowBase):
                                              NEW_SUBSERVICE_NAME,
                                              NEW_SUBSERVICE_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
-            
-            
+
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-    
+
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % SERVICE_ID)
         logger.info("ID_PRO1=%s" % ID_PRO1)

@@ -23,6 +23,11 @@ class Users(FlowBase):
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         '''
+        logger.debug("users invoked with: ")
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -84,7 +89,12 @@ class Users(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
 
         '''
-
+        logger.debug("users invoked with: ")
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
+        logger.debug("USER_ID=%s" % USER_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,

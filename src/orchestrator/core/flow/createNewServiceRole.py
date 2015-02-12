@@ -5,7 +5,7 @@ logger = logging.getLogger('orchestrator_core')
 
 
 class CreateNewServiceRole(FlowBase):
-        
+
     def createNewServiceRole(self,
                              SERVICE_ID,
                              SERVICE_NAME,
@@ -15,9 +15,9 @@ class CreateNewServiceRole(FlowBase):
                              NEW_ROLE_NAME):
 
         '''Creates a new role Service (aka domain role keystone).
-        
+
         In case of HTTP error, return HTTP error
-        
+
         Params:
         - SERVICE_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin token
@@ -27,8 +27,15 @@ class CreateNewServiceRole(FlowBase):
         Return:
         - id: New role Id
         '''
-    
-        
+
+        logger.debug("createNewServiceRole invoked with: ")
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("NEW_ROLE_NAME=%s" % NEW_ROLE_NAME)
+
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
@@ -60,7 +67,7 @@ class CreateNewServiceRole(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-    
+
         logger.info("Summary report:")
         logger.info("ID_DOM1=%s" % SERVICE_ID)
         logger.info("ID_ROLE=%s" % ID_ROLE)

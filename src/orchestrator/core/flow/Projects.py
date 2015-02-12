@@ -27,6 +27,12 @@ class Projects(FlowBase):
         Return:
         - project array list
         '''
+        logger.debug("projects invoked with: ")
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
+        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
+        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
         try:
             if not ADMIN_TOKEN:
@@ -80,6 +86,12 @@ class Projects(FlowBase):
         Return:
         - project detail
         '''
+        logger.debug("get_project invoked with: ")
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("PROJECT_ID=%s" % PROJECT_ID)
+        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
+        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
+        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
         try:
             if not ADMIN_TOKEN:
@@ -104,7 +116,7 @@ class Projects(FlowBase):
 
         logger.info("Summary report:")
         logger.info("PROJECT=%s" % PROJECT)
-        
+
         return PROJECT
 
 

@@ -17,9 +17,9 @@ class RemoveUser(FlowBase):
                    USER_ID):
 
         '''Removes an user Service (aka domain user keystone).
-        
+
         In case of HTTP error, return HTTP error
-        
+
         Params:
         - SERVICE_NAME: Service name
         - SERVICE_ID: Service name
@@ -29,9 +29,18 @@ class RemoveUser(FlowBase):
         - USER_NAME: User name
         - USER_ID: User name
         '''
-    
+        logger.debug("projects invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("USER_NAME=%s" % USER_NAME)
+        logger.debug("USER_ID=%s" % USER_ID)
+
+
         try:
-            if not SERVICE_ADMIN_TOKEN: 
+            if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
@@ -45,15 +54,15 @@ class RemoveUser(FlowBase):
                 if not DOMAIN_ID:
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                      SERVICE_NAME)
-                    
+
                 USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                    DOMAIN_ID,
-                                                   USER_NAME)            
+                                                   USER_NAME)
             logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
 
 
             # TODO: disable us before remove it ?
-        
+
             #
             # 3. Remove user ID
             #
@@ -65,7 +74,7 @@ class RemoveUser(FlowBase):
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
-    
+
         logger.info("Summary report:")
         logger.info("ID_USER=%s was deleted" % USER_ID)
 
