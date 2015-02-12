@@ -489,6 +489,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         user_id = request.GET.get('user_id', None)
         project_id = request.GET.get('project_id', None)
         role_id = request.GET.get('role_id', None)
+        effective = request.GET.get('effective', False) =="true"
 
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -502,7 +503,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                             request.DATA.get("USER_ID", user_id),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                            request.DATA.get("EFFECTIVE", effective))
 
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
