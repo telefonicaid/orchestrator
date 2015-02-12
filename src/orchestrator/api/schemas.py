@@ -342,10 +342,19 @@ json = {
             "SERVICE_USER_NAME": {
                 "type": "string",
             },
+            "SERVICE_USER_ID": {
+                "type": "string",
+            },
             "SUBSERVICE_NAME": {
                 "type": "string",
             },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
             "ROLE_NAME": {
+                "type": "string",
+            },
+            "ROLE_ID": {
                 "type": "string",
             },
         },

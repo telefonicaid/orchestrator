@@ -512,7 +512,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             return Response(result['error'],
                             status=self.getStatusFromCode(result['code']))
 
-    def post(self, request, *args, **kw):
+    def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -522,21 +522,27 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                        self.KEYSTONE_PORT)
             if not (request.DATA.get("SUBSERVICE_NAME"), None):
                 result = flow.assignRoleServiceUser(
-                                           request.DATA.get("SERVICE_NAME"),
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
                                            request.DATA.get("SERVICE_ADMIN_USER", None),
                                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                            request.DATA.get("ROLE_NAME"),
-                                           request.DATA.get("SERVICE_USER_NAME"))
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
             else:
                 result = flow.assignRoleSubServiceUser(
                                               request.DATA.get("SERVICE_NAME"),
+                                              request.DATA.get("SERVICE_ID", service_id),
                                               request.DATA.get("SUBSERVICE_NAME"),
                                               request.DATA.get("SERVICE_ADMIN_USER", None),
                                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                               request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                              request.DATA.get("ROLE_NAME"),
-                                              request.DATA.get("SERVICE_USER_NAME"))
+                                              request.DATA.get("ROLE_NAME", None),
+                                              request.DATA.get("ROLE_ID", None),
+                                              request.DATA.get("SERVICE_USER_NAME", None),
+                                              request.DATA.get("SERVICE_USER_ID", None))
 
             return Response(result, status=status.HTTP_201_CREATED)
         except ParseError as error:
