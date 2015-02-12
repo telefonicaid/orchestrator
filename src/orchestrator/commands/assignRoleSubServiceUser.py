@@ -22,7 +22,7 @@ def main():
         print "  <SERVICE_ADMIN_USER>            New service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        New service admin password"
         print "  <ROLE_NAME>                     Name of role"
-        print "  <SERVICE_USER>                  Service username"        
+        print "  <SERVICE_USER>                  Service username"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -52,16 +52,19 @@ def main():
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
-    
+
     flow.assignRoleSubServiceUser(
                              SERVICE_NAME,
                              SUBSERVICE_NAME,
+                             None,
                              SERVICE_ADMIN_USER,
                              SERVICE_ADMIN_PASSWORD,
                              None,
                              ROLE_NAME,
-                             SERVICE_USER)
-    
+                             None,
+                             SERVICE_USER,
+                             None)
+
 
 if __name__ == '__main__':
 

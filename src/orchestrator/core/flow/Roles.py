@@ -141,6 +141,7 @@ class Roles(FlowBase):
 
             # Cache these data? -> memcached/redis
             domain_roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
+            # TOOD: add to domain_roles also tenant roles like admin and service
             domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
@@ -174,11 +175,14 @@ class Roles(FlowBase):
 
     def assignRoleServiceUser(self,
                               SERVICE_NAME,
+                              SERVICE_ID,
                               SERVICE_ADMIN_USER,
                               SERVICE_ADMIN_PASSWORD,
                               SERVICE_ADMIN_TOKEN,
                               ROLE_NAME,
-                              SERVICE_USER_NAME):
+                              ROLE_ID,
+                              SERVICE_USER_NAME,
+                              SERVICE_USER_ID):
 
         '''Assigns a service role to an user in IoT keystone).
 
@@ -254,12 +258,16 @@ class Roles(FlowBase):
 
     def assignRoleSubServiceUser(self,
                                  SERVICE_NAME,
+                                 SERVICE_ID,
                                  SUBSERVICE_NAME,
+                                 SUBSERVICE_ID,
                                  SERVICE_ADMIN_USER,
                                  SERVICE_ADMIN_PASSWORD,
                                  SERVICE_ADMIN_TOKEN,
                                  ROLE_NAME,
-                                 SERVICE_USER_NAME):
+                                 ROLE_ID,
+                                 SERVICE_USER_NAME,
+                                 SERVICE_USER_ID):
 
         '''Assigns a subservice role to an user in IoT keystone.
 
