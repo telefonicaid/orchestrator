@@ -1,1 +1,9 @@
+CHANGES
+=======
 
+* add user ops, service test and policies
+* add assign role to subservice user flow
+* add assign role to user flow
+* add user and role provision api
+* orchestrator skeleton
+* Initial commit
