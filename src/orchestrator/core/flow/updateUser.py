@@ -8,7 +8,7 @@ class UpdateUser(FlowBase):
 
     def updateUser(self,
                    SERVICE_NAME,
-                   DOMAIN_ID,
+                   SERVICE_ID,
                    SERVICE_ADMIN_USER,
                    SERVICE_ADMIN_PASSWORD,
                    SERVICE_ADMIN_TOKEN,
@@ -22,7 +22,7 @@ class UpdateUser(FlowBase):
 
         Params:
         - SERVICE_NAME: Service name
-        - DOMAIN_ID: Service Id
+        - SERVICE_ID: Service Id
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -32,7 +32,7 @@ class UpdateUser(FlowBase):
         '''
         logger.debug("updateUser invoked with: ")
         logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
         logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
         logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
         logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
@@ -42,9 +42,16 @@ class UpdateUser(FlowBase):
 
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
-                                                        SERVICE_ADMIN_USER,
-                                                        SERVICE_ADMIN_PASSWORD)
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
@@ -52,12 +59,8 @@ class UpdateUser(FlowBase):
             # 2. Get user ID
             #
             if not USER_ID:
-                if not DOMAIN_ID:
-                    DOMAIN_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                                     SERVICE_NAME)
-
                 USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                                   DOMAIN_ID,
+                                                   SERVICE_ID,
                                                    USER_NAME)
             logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
 

@@ -653,11 +653,14 @@ class Test_UserModify_RestView(object):
 class Test_UserDelete_RestView(object):
 
     def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "USER_NAME":"Alice"
+            "USER_NAME":"Alice_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"password",            
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -673,15 +676,17 @@ class Test_UserDelete_RestView(object):
                                             url="v1.0/service/%s/user/" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
+        print self.payload_data_ok["USER_NAME"]
         assert res.code == 201, (res.code, res.msg, res.raw_json)
-        user_id = res['id']
-
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id= json_body_response['id']
         res = self.TestRestOps.rest_request(method="DELETE",
                                             url="v1.0/service/%s/user/%s" % (service_id,
                                                                              user_id),
                                             json_data=True,
                                             data=self.payload_data_ok)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        assert res.code == 204, (res.code, res.msg)
 
 class Test_AssignRoleUserList_RestView(object):
 
@@ -913,6 +918,9 @@ if __name__ == '__main__':
     test_UserModify = Test_UserModify_RestView()
     test_UserModify.test_put_ok()
 
+    test_UserModify = Test_UserDelete_RestView()
+    test_UserModify.test_delete_ok()
+    
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
 
@@ -932,3 +940,4 @@ if __name__ == '__main__':
     test_AssignRoleUser.test_post_ok()
     test_AssignRoleUser.test_post_ok2()
     test_AssignRoleUser.test_post_ok3()
+

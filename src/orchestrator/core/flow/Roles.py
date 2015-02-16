@@ -207,46 +207,54 @@ class Roles(FlowBase):
         logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
         logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
         logger.debug("ROLE_NAME=%s" % ROLE_NAME)
+        logger.debug("ROLE_ID=%s" % ROLE_ID)
         logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
+        logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
 
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
-                                                        SERVICE_ADMIN_USER,
-                                                        SERVICE_ADMIN_PASSWORD)
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
             #
             # 1. Get service (aka domain)
             #
-            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                           SERVICE_NAME)
-
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
             #
             # 2.  Get role
             #
-            ID_ROLE = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
-                                         ROLE_NAME)
-            logger.debug("ID of user %s: %s" % (ROLE_NAME, ID_ROLE))
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
+                                             ROLE_NAME)
+            logger.debug("ID of user %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 3.  Get User
             #
-            ID_USER = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                         SERVICE_USER_NAME)
-            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                     SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
             #
             # 4.  Grant role to user in service
             #
             self.idm.grantDomainRole(SERVICE_ADMIN_TOKEN,
-                                     ID_DOM1,
-                                     ID_USER,
-                                     ID_ROLE)
+                                     SERVICE_ID,
+                                     SERVICE_USER_ID,
+                                     ROLE_ID)
 
 
         except Exception, ex:
@@ -254,9 +262,9 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % ID_DOM1)
-        logger.info("ID_USER=%s" % ID_USER)
-        logger.info("ID_ROLE=%s" % ID_ROLE)
+        logger.info("SERVICE_ID=%s" % SERVICE_ID)
+        logger.info("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
+        logger.info("ROLE_ID=%s" % ROLE_ID)
 
 
     def assignRoleSubServiceUser(self,
@@ -291,65 +299,74 @@ class Roles(FlowBase):
         '''
         logger.debug("assignRoleSubServiceUser invoked with: ")
         logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
         logger.debug("SUBSERVICE_NAME=%s" % SUBSERVICE_NAME)
+        logger.debug("SUBSERVICE_ID=%s" % SUBSERVICE_ID)
         logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
         logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
         logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
         logger.debug("ROLE_NAME=%s" % ROLE_NAME)
+        logger.debug("ROLE_ID=%s" % ROLE_ID)
         logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
+        logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
-                                                        SERVICE_ADMIN_USER,
-                                                        SERVICE_ADMIN_PASSWORD)
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
             #
             # 1. Get service (aka domain)
             #
-
-            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                           SERVICE_NAME)
-
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
 
 
             #
             # 2. Get SubService (aka project)
             #
+            if not SUBSERVICE_ID:
+                SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
 
-            ID_PRO1 = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
-                                            SERVICE_NAME,
-                                            SUBSERVICE_NAME)
-
-            logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME, ID_PRO1))
+            logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME, SUBSERVICE_ID))
 
             #
             # 3. Get role
             #
-            ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                               ID_DOM1,
-                                               ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ID_ROLE))
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 4. Get User
             #
-            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                               ID_DOM1,
-                                               SERVICE_USER_NAME)
-            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
             #
             # 5. Grant role to user in service
             #
             self.idm.grantProjectRole(SERVICE_ADMIN_TOKEN,
-                                      ID_PRO1,
-                                      ID_USER,
-                                      ID_ROLE)
+                                      SUBSERVICE_ID,
+                                      SERVICE_USER_ID,
+                                      ROLE_ID)
 
 
         except Exception, ex:
@@ -357,9 +374,9 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         logger.info("Summary report:")
-        logger.info("ID_PRO1=%s" % ID_PRO1)
-        logger.info("ID_USER=%s" % ID_USER)
-        logger.info("ID_ROLE=%s" % ID_ROLE)
+        logger.info("SUBSERVICE_ID=%s" % SUBSERVICE_ID)
+        logger.info("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
+        logger.info("ROLE_ID=%s" % ROLE_ID)
 
 
     def assignInheritRoleServiceUser(self,
@@ -383,8 +400,8 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - ROLE_NAME: Role name
-        - ROLE_ID: Role Id
+        - INEHRIT_ROLE_NAME: Role name
+        - INHERIT_ROLE_ID: Role Id
         - SERVICE_USER_NAME: User service name
         - SERVICE_USER_ID: User service Id
         '''
@@ -400,28 +417,32 @@ class Roles(FlowBase):
         logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
-                                                        SERVICE_ADMIN_USER,
-                                                        SERVICE_ADMIN_PASSWORD)
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
             #
             # 1. Get service (aka domain)
             #
-
-            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                           SERVICE_NAME)
-
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
             #
             # 2. Get role
             #
-            INHERIT_ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                                       ID_DOM1,
-                                                       INHERIT_ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (INHERIT_ROLE_NAME, INHERIT_ID_ROLE))
+            if not INHERIT_ROLE_ID:
+                INHERIT_ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           INHERIT_ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (INHERIT_ROLE_NAME, INHERIT_ROLE_ID))
 
             #
             # 3. Get User
@@ -436,7 +457,7 @@ class Roles(FlowBase):
             #
             self.idm.grantInheritRole(SERVICE_ADMIN_TOKEN,
                                       ID_USER,
-                                      INHERIT_ID_ROLE)
+                                      INHERIT_ROLE_ID)
 
 
         except Exception, ex:
@@ -445,4 +466,4 @@ class Roles(FlowBase):
 
         logger.info("Summary report:")
         logger.info("ID_USER=%s" % ID_USER)
-        logger.info("INHERIT_ID_ROLE=%s" % INHERIT_ID_ROLE)
+        logger.info("INHERIT_ROLE_ID=%s" % INHERIT_ROLE_ID)
