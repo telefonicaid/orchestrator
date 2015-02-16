@@ -478,7 +478,7 @@ class Role_RESTView(APIView, IoTConf):
 
 class AssignRoleUser_RESTView(APIView, IoTConf):
     """
-    Assing or list asignments of a role to a user in a service or subservice
+    Assign or list assignments of a role to a user in a service or subservice
 
     """
     def __init__(self):
@@ -549,6 +549,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                               request.DATA.get("SERVICE_NAME"),
                                               request.DATA.get("SERVICE_ID", service_id),
                                               request.DATA.get("SUBSERVICE_NAME"),
+                                              request.DATA.get("SUBSERVICE_ID", None),
                                               request.DATA.get("SERVICE_ADMIN_USER", None),
                                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                               request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
@@ -557,7 +558,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                               request.DATA.get("SERVICE_USER_NAME", None),
                                               request.DATA.get("SERVICE_USER_ID", None))
 
-            return Response(result, status=status.HTTP_201_CREATED)
+            return Response(result, status=status.HTTP_204_NO_CONTENT)
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),

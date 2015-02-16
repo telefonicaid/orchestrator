@@ -790,17 +790,30 @@ class Test_AssignRoleUser_RestView(object):
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME":"ServiceCustomer",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
             "SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
             "SERVICE_NAME":"SmartValencia",
             "SUBSERVICE_NAME":"Electricidad",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME":"SubServiceCustomer",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
             "SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok3 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "ROLE_NAME":"SubServiceCustomer",
+            "SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -820,7 +833,7 @@ class Test_AssignRoleUser_RestView(object):
                                                 service_id),
                                             json_data=True,
                                             data=self.payload_data_ok)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
     def test_post_ok2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
@@ -828,14 +841,30 @@ class Test_AssignRoleUser_RestView(object):
         res = self.TestRestOps.rest_request(method="POST",
                                             url="v1.0/service/%s/user/" % service_id,
                                             json_data=True,
-                                            data=self.payload_data_ok)
+                                            data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(method="POST",
                                             url="v1.0/service/%s/role_assignments" % (
                                                 service_id),
                                             json_data=True,
                                             data=self.payload_data_ok2)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        # Create a user to test it
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/role_assignments?inheritance=true" % (
+                                                service_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 if __name__ == '__main__':
 
@@ -898,3 +927,8 @@ if __name__ == '__main__':
     test_AssignRoleUserList.test_get_ok3()
     test_AssignRoleUserList.test_get_ok4()
     test_AssignRoleUserList.test_get_ok5()
+
+    test_AssignRoleUser = Test_AssignRoleUser_RestView()
+    test_AssignRoleUser.test_post_ok()
+    test_AssignRoleUser.test_post_ok2()
+    test_AssignRoleUser.test_post_ok3()
