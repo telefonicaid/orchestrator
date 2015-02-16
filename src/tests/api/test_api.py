@@ -707,7 +707,7 @@ class Test_AssignRoleUserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s/role_assignments?project_id=%s" % (
+                                            url="v1.0/service/%s/role_assignments?subservice_id=%s" % (
                                                 service_id, subservice_id),
                                             json_data=True,
                                             data=self.payload_data_ok)
@@ -751,7 +751,7 @@ class Test_AssignRoleUserList_RestView(object):
         user_id = json_body_response['token']['user']['id']
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s/role_assignments?project_id=%s&role_id=%s&user_id=%s" % (
+                                            url="v1.0/service/%s/role_assignments?subservice_id=%s&role_id=%s&user_id=%s" % (
                                                 service_id, subservice_id, role_id, user_id),
                                             json_data=True,
                                             data=self.payload_data_ok)

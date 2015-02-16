@@ -487,7 +487,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def get(self, request, service_id):
         self.schema_name = "RoleAssignmentList"
         user_id = request.GET.get('user_id', None)
-        project_id = request.GET.get('project_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
         effective = request.GET.get('effective', False) =="true"
 
@@ -498,7 +498,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
         result = flow.roles_assignments(
                             request.DATA.get("SERVICE_ID", service_id),
-                            request.DATA.get("SUBSERVICE_ID", project_id),
+                            request.DATA.get("SUBSERVICE_ID", subservice_id),
                             request.DATA.get("ROLE_ID", role_id),
                             request.DATA.get("USER_ID", user_id),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
