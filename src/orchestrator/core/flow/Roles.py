@@ -190,11 +190,14 @@ class Roles(FlowBase):
 
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
         - SERVICE_USER_NAME: User service name
+        - SERVICE_USER_ID: User service Id
         Return:
         - ?
         '''
@@ -217,8 +220,8 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
-            ID_DOM1 = self.idm.getDomain(SERVICE_ADMIN_TOKEN,
-                                    SERVICE_NAME)
+            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                           SERVICE_NAME)
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
 
@@ -275,12 +278,16 @@ class Roles(FlowBase):
 
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
         - SUBSERVICE_NAME: SubService name
+        - SUBSERVICE_ID: SubService Id
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
         - SERVICE_USER_NAME: User service name
+        - SERVICE_USER_ID: User service Id
         '''
         logger.debug("assignRoleSubServiceUser invoked with: ")
         logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
@@ -353,3 +360,89 @@ class Roles(FlowBase):
         logger.info("ID_PRO1=%s" % ID_PRO1)
         logger.info("ID_USER=%s" % ID_USER)
         logger.info("ID_ROLE=%s" % ID_ROLE)
+
+
+    def assignInheritRoleServiceUser(self,
+                                 SERVICE_NAME,
+                                 SERVICE_ID,
+                                 SERVICE_ADMIN_USER,
+                                 SERVICE_ADMIN_PASSWORD,
+                                 SERVICE_ADMIN_TOKEN,
+                                 INHERIT_ROLE_NAME,
+                                 INHERIT_ROLE_ID,
+                                 SERVICE_USER_NAME,
+                                 SERVICE_USER_ID):
+
+        '''Assigns a subservice role to an user in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_USER_NAME: User service name
+        - SERVICE_USER_ID: User service Id
+        '''
+        logger.debug("assignRoleSubServiceUser invoked with: ")
+        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
+        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
+        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
+        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        logger.debug("INHERIT_ROLE_NAME=%s" % INHERIT_ROLE_NAME)
+        logger.debug("INHERIT_ROLE_ID=%s" % INHERIT_ROLE_ID)
+        logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
+        logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                        SERVICE_ADMIN_USER,
+                                                        SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+
+            #
+            # 1. Get service (aka domain)
+            #
+
+            ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                           SERVICE_NAME)
+
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, ID_DOM1))
+
+            #
+            # 2. Get role
+            #
+            INHERIT_ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       ID_DOM1,
+                                                       INHERIT_ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (INHERIT_ROLE_NAME, INHERIT_ID_ROLE))
+
+            #
+            # 3. Get User
+            #
+            ID_USER = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                         SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+
+
+            #
+            # 4. Grant inherit role to user in all subservices
+            #
+            self.idm.grantInheritRole(SERVICE_ADMIN_TOKEN,
+                                      ID_USER,
+                                      INHERIT_ID_ROLE)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        logger.info("Summary report:")
+        logger.info("ID_USER=%s" % ID_USER)
+        logger.info("INHERIT_ID_ROLE=%s" % INHERIT_ID_ROLE)
