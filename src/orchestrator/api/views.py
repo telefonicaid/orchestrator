@@ -478,7 +478,7 @@ class Role_RESTView(APIView, IoTConf):
 
 class AssignRoleUser_RESTView(APIView, IoTConf):
     """
-    Assing or list asignments of a role to a user in a service or subservice
+    Assign or list assignments of a role to a user in a service or subservice
 
     """
     def __init__(self):
@@ -487,8 +487,9 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def get(self, request, service_id):
         self.schema_name = "RoleAssignmentList"
         user_id = request.GET.get('user_id', None)
-        project_id = request.GET.get('project_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
+        effective = request.GET.get('effective', False) =="true"
 
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -497,12 +498,13 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
         result = flow.roles_assignments(
                             request.DATA.get("SERVICE_ID", service_id),
-                            request.DATA.get("SUBSERVICE_ID", project_id),
+                            request.DATA.get("SUBSERVICE_ID", subservice_id),
                             request.DATA.get("ROLE_ID", role_id),
                             request.DATA.get("USER_ID", user_id),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                            request.DATA.get("EFFECTIVE", effective))
 
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
@@ -510,33 +512,53 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             return Response(result['error'],
                             status=self.getStatusFromCode(result['code']))
 
-    def post(self, request, *args, **kw):
+    def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        inherit = request.GET.get('inherit', False) =="true"
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
                                        self.KEYSTONE_PORT)
             if not (request.DATA.get("SUBSERVICE_NAME"), None):
-                result = flow.assignRoleServiceUser(
-                                           request.DATA.get("SERVICE_NAME"),
+                if inherit:
+                    result = flow.assignInheritRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
                                            request.DATA.get("SERVICE_ADMIN_USER", None),
                                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                            request.DATA.get("ROLE_NAME"),
-                                           request.DATA.get("SERVICE_USER_NAME"))
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
+                else:
+                    result = flow.assignRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
+                                           request.DATA.get("SERVICE_ADMIN_USER", None),
+                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                           request.DATA.get("ROLE_NAME"),
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
             else:
                 result = flow.assignRoleSubServiceUser(
                                               request.DATA.get("SERVICE_NAME"),
+                                              request.DATA.get("SERVICE_ID", service_id),
                                               request.DATA.get("SUBSERVICE_NAME"),
+                                              request.DATA.get("SUBSERVICE_ID", None),
                                               request.DATA.get("SERVICE_ADMIN_USER", None),
                                               request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                               request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                              request.DATA.get("ROLE_NAME"),
-                                              request.DATA.get("SERVICE_USER_NAME"))
+                                              request.DATA.get("ROLE_NAME", None),
+                                              request.DATA.get("ROLE_ID", None),
+                                              request.DATA.get("SERVICE_USER_NAME", None),
+                                              request.DATA.get("SERVICE_USER_ID", None))
 
-            return Response(result, status=status.HTTP_201_CREATED)
+            return Response(result, status=status.HTTP_204_NO_CONTENT)
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
