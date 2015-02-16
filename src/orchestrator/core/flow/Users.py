@@ -38,16 +38,13 @@ class Users(FlowBase):
 
 
 
-            ID_DOM1 = SERVICE_ID
-
-
             SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
-                                                    ID_DOM1)
+                                                    SERVICE_ID)
 
             logger.debug("SERVICE_ROLES=%s" % SERVICE_ROLES)
 
             SERVICE_USERS = self.idm.getDomainUsers(SERVICE_ADMIN_TOKEN,
-                                                    ID_DOM1)
+                                                    SERVICE_ID)
 
             logger.debug("SERVICE_USERS=%s" % SERVICE_USERS)
 

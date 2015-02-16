@@ -9,7 +9,7 @@ class RemoveUser(FlowBase):
 
     def removeUser(self,
                    SERVICE_NAME,
-                   DOMAIN_ID,
+                   SERVICE_ID,
                    SERVICE_ADMIN_USER,
                    SERVICE_ADMIN_PASSWORD,
                    SERVICE_ADMIN_TOKEN,
@@ -31,7 +31,7 @@ class RemoveUser(FlowBase):
         '''
         logger.debug("projects invoked with: ")
         logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
+        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
         logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
         logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
         logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
@@ -41,9 +41,16 @@ class RemoveUser(FlowBase):
 
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
-                                                        SERVICE_ADMIN_USER,
-                                                        SERVICE_ADMIN_PASSWORD)
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
@@ -51,12 +58,8 @@ class RemoveUser(FlowBase):
             # 2. Get user ID
             #
             if not USER_ID:
-                if not DOMAIN_ID:
-                    DOMAIN_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                                     SERVICE_NAME)
-
                 USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                                   DOMAIN_ID,
+                                                   SERVICE_ID,
                                                    USER_NAME)
             logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
 

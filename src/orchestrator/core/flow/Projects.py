@@ -37,8 +37,6 @@ class Projects(FlowBase):
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:
-                    import ipdb
-                    ipdb.set_trace()
                     ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                     ADMIN_USER,
                                                     ADMIN_PASSWORD)
