@@ -44,12 +44,12 @@ class Users(FlowBase):
             SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID)
 
-            logger.debug("SERVICE_ROLES=%s" % SERVICE_ROLES)
+            logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES, indent=3))
 
             SERVICE_USERS = self.idm.getDomainUsers(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID)
 
-            logger.debug("SERVICE_USERS=%s" % SERVICE_USERS)
+            logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS, indent=3))
 
 
             # Get Roles de SubServicio
@@ -108,7 +108,7 @@ class Users(FlowBase):
 
             DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
                                               USER_ID)
-            logger.debug("DETAIL_USER=%s" % DETAIL_USER)
+            logger.debug("DETAIL_USER=%s" % json.dumps(DETAIL_USER, indent=3))
 
 
         except Exception, ex:

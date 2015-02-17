@@ -44,7 +44,7 @@ class Domains(FlowBase):
 
             DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
 
-            logger.debug("DOMAINS=%s" % DOMAINS)
+            logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -102,7 +102,7 @@ class Domains(FlowBase):
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
 
-            logger.debug("DOMAINS=%s" % DOMAIN)
+            logger.debug("DOMAIN=%s" % DOMAIN)
 
         except Exception, ex:
             logger.error(ex)

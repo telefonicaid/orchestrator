@@ -43,11 +43,11 @@ class Roles(FlowBase):
 
             DOMAIN_ROLES = self.idm.getDomainRoles(ADMIN_TOKEN,
                                                    DOMAIN_ID)
-            logger.debug("DOMAIN_ROLES=%s" % ADMIN_TOKEN)
+            logger.debug("DOMAIN_ROLES=%s" % json.dumps(DOMAIN_ROLES, indent=3))
 
             ROLES = DOMAIN_ROLES
 
-            logger.debug("ROLES=%s" % ROLES)
+            logger.debug("ROLES=%s" %  json.dumps(ROLES, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -110,14 +110,14 @@ class Roles(FlowBase):
                 PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
                                                                    PROJECT_ID,
                                                                    EFFECTIVE)
-                logger.debug("PROJECT_ROLES=%s" % PROJECT_ROLES)
+                logger.debug("PROJECT_ROLES=%s" % json.dumps(PROJECT_ROLES, indent=3))
                 ROLE_ASSIGNMENTS = PROJECT_ROLES
 
             else:
                 DOMAIN_ROLES = self.idm.getDomainRoleAssignments(ADMIN_TOKEN,
                                                                  DOMAIN_ID,
                                                                  EFFECTIVE)
-                logger.debug("DOMAIN_ROLES=%s" % DOMAIN_ROLES)
+                logger.debug("DOMAIN_ROLES=%s" % json.dumps(DOMAIN_ROLES, indent=3))
                 ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
             role_assignments_expanded = []
@@ -213,6 +213,7 @@ class Roles(FlowBase):
         '''
         data_log = {
             "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
