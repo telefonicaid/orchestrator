@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -23,6 +24,7 @@ class CreateNewServiceUser(FlowBase):
 
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -32,17 +34,17 @@ class CreateNewServiceUser(FlowBase):
         Return:
         - id: New user Id
         '''
-
-        logger.debug("createNewServiceUser invoked with: ")
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("NEW_USER_NAME=%s" % NEW_USER_NAME)
-        logger.debug("NEW_USER_PASSWORD=%s" % NEW_USER_PASSWORD)
-        logger.debug("NEW_USER_EMAIL=%s" % NEW_USER_EMAIL)
-
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_USER_NAME":"%s" % NEW_USER_NAME,
+            "NEW_USER_PASSWORD":"%s" % NEW_USER_PASSWORD,
+            "NEW_USER_EMAIL":"%s" % NEW_USER_EMAIL
+        }
+        logger.debug("createNewServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -56,9 +58,8 @@ class CreateNewServiceUser(FlowBase):
             # 1. Get service (aka domain)
             #
             if not SERVICE_ID:
-                ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_NAME)
-                SERVICE_ID=ID_DOM1
+                SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                  SERVICE_NAME)
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
@@ -78,10 +79,11 @@ class CreateNewServiceUser(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-
-        logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % SERVICE_ID)
-        logger.info("ID_USER=%s" % ID_USER)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "ID_USER":"%s" % ID_USER,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id":ID_USER}
 

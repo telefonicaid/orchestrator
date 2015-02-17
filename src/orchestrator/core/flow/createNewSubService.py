@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -32,14 +33,16 @@ class CreateNewSubService(FlowBase):
         - ID: New subservice id
         '''
 
-        logger.debug("createNewSubService invoked with: ")
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("NEW_SUBSERVICE_NAME=%s" % NEW_SUBSERVICE_NAME)
-        logger.debug("NEW_SUBSERVICE_DESCRIPTION=%s" % NEW_SUBSERVICE_DESCRIPTION)
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_SUBSERVICE_NAME":"%s" % NEW_SUBSERVICE_NAME,
+            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION
+        }
+        logger.debug("createNewSubService invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -53,9 +56,8 @@ class CreateNewSubService(FlowBase):
             # 1. Create service (aka domain)
             #
             if not SERVICE_ID:
-                ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_NAME)
-                SERVICE_ID=ID_DOM1
+                SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                  SERVICE_NAME)
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
@@ -73,10 +75,11 @@ class CreateNewSubService(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-
-        logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % SERVICE_ID)
-        logger.info("ID_PRO1=%s" % ID_PRO1)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "ID_PRO1":"%s" % ID_PRO1,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_PRO1}
 

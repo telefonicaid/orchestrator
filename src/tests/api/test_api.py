@@ -660,7 +660,7 @@ class Test_UserDelete_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME":"Alice_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",            
+            "NEW_SERVICE_USER_PASSWORD":"password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -676,7 +676,6 @@ class Test_UserDelete_RestView(object):
                                             url="v1.0/service/%s/user/" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
-        print self.payload_data_ok["USER_NAME"]
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         data_response = res.read()
         json_body_response = json.loads(data_response)
@@ -820,6 +819,17 @@ class Test_AssignRoleUser_RestView(object):
             "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok4 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "ROLE_NAME":"SubServiceCustomer",
+            "SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "INHERIT": True
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -865,10 +875,26 @@ class Test_AssignRoleUser_RestView(object):
                                             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/%s/role_assignments?inheritance=true" % (
+                                            url="v1.0/service/%s/role_assignments?inherit=true" % (
                                                 service_id),
                                             json_data=True,
                                             data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+    def test_post_ok4(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok4)
+        # Create a user to test it
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok4)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/role_assignments" % (
+                                                service_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok4)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 if __name__ == '__main__':
@@ -920,7 +946,7 @@ if __name__ == '__main__':
 
     test_UserModify = Test_UserDelete_RestView()
     test_UserModify.test_delete_ok()
-    
+
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
 

@@ -1,4 +1,5 @@
 import logging
+import json
 from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
@@ -20,6 +21,7 @@ class CreateNewServiceRole(FlowBase):
 
         Params:
         - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
         - SERVICE_ADMIN_USER: Service admin token
         - SERVICE_ADMIN_PASSWORD: Service admin token
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -27,14 +29,15 @@ class CreateNewServiceRole(FlowBase):
         Return:
         - id: New role Id
         '''
-
-        logger.debug("createNewServiceRole invoked with: ")
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("NEW_ROLE_NAME=%s" % NEW_ROLE_NAME)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_ROLE_NAME":"%s" % NEW_ROLE_NAME
+        }
+        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -48,9 +51,9 @@ class CreateNewServiceRole(FlowBase):
             # 1. Get service (aka domain)
             #
             if not SERVICE_ID:
-                ID_DOM1 = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_NAME)
-                SERVICE_ID = ID_DOM1
+                SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                  SERVICE_NAME)
+
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
@@ -68,9 +71,11 @@ class CreateNewServiceRole(FlowBase):
             return self.composeErrorCode(ex)
 
 
-        logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % SERVICE_ID)
-        logger.info("ID_ROLE=%s" % ID_ROLE)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "ID_ROLE":"%s" % ID_ROLE
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_ROLE}
 

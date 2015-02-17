@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -27,12 +28,14 @@ class Projects(FlowBase):
         Return:
         - project array list
         '''
-        logger.debug("projects invoked with: ")
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
-        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
-        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
-        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+        data_log = {
+            "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+        }
+        logger.debug("createNewService invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -59,8 +62,10 @@ class Projects(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("PROJECTS=%s" % PROJECTS)
+        data_log = {
+            "PROJECTS":"%s" % PROJECTS
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return PROJECTS
 
@@ -84,12 +89,14 @@ class Projects(FlowBase):
         Return:
         - project detail
         '''
-        logger.debug("get_project invoked with: ")
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
-        logger.debug("PROJECT_ID=%s" % PROJECT_ID)
-        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
-        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
-        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+        data_log = {
+            "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "PROJECT_ID":"%s" % PROJECT_ID,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+        }
+        logger.debug("get_project invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -112,9 +119,10 @@ class Projects(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("PROJECT=%s" % PROJECT)
-
+        data_log = {
+            "PROJECT":"%s" % PROJECT
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
 
 
