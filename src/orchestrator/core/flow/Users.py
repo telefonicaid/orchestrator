@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -23,11 +24,13 @@ class Users(FlowBase):
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         '''
-        logger.debug("users invoked with: ")
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN
+        }
+        logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -61,8 +64,10 @@ class Users(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("SERVICE_USERS=%s" % SERVICE_USERS)
+        data_log = {
+            "SERVICE_USERS":"%s" % SERVICE_USERS,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return SERVICE_USERS
 
 
@@ -86,12 +91,14 @@ class Users(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
 
         '''
-        logger.debug("users invoked with: ")
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("USER_ID=%s" % USER_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "USER_ID":"%s" % USER_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN
+        }
+        logger.debug("user invoked with: %s" % json.dumps(data_log, indent=3))
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
@@ -108,7 +115,8 @@ class Users(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("DETAIL_USER=%s" % DETAIL_USER)
-
+        data_log = {
+            "DETAIL_USER":"%s" % DETAIL_USER,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DETAIL_USER

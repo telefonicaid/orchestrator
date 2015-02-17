@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -25,11 +26,13 @@ class Domains(FlowBase):
         Return:
         - array list of domains
         '''
-        logger.debug("domains invoked with: ")
-        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
-        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
-        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+        data_log = {
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+        }
+        logger.debug("domains invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -47,8 +50,10 @@ class Domains(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("DOMAINS=%s" % DOMAINS)
+        data_log = {
+            "DOMAINS":"%s" % DOMAINS
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DOMAINS
 
     def get_domain(self,
@@ -71,12 +76,14 @@ class Domains(FlowBase):
         Return:
         - domain detail
         '''
-        logger.debug("get_domain invoked with: ")
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
-        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
-        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
-        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+        data_log = {
+            "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+        }
+        logger.debug("createNewService invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -101,9 +108,10 @@ class Domains(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("DOMAIN=%s" % DOMAIN)
-
+        data_log = {
+            "DOMAIN":"%s" % DOMAIN
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DOMAIN
 
 

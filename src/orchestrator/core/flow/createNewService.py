@@ -1,5 +1,6 @@
 import logging
 import sys, os
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -38,14 +39,17 @@ class CreateNewService(FlowBase):
         SUB_SERVICE_ADMIN_ROLE_NAME="SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME="SubServiceCustomer"
 
-        logger.debug("createNewService invoked with: ")
-        logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-        logger.debug("DOMAIN_ADMIN_USER=%s" % DOMAIN_ADMIN_USER)
-        logger.debug("DOMAIN_ADMIN_PASSWORD=%s" % DOMAIN_ADMIN_PASSWORD)
-        logger.debug("DOMAIN_ADMIN_TOKEN=%s" % DOMAIN_ADMIN_TOKEN)
-        logger.debug("NEW_SERVICE_NAME=%s" % NEW_SERVICE_NAME)
-        logger.debug("NEW_SERVICE_DESCRIPTION=%s" % NEW_SERVICE_DESCRIPTION)
-        logger.debug("NEW_SERVICE_ADMIN_USER=%s" % NEW_SERVICE_ADMIN_PASSWORD)
+        data_log = {
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ADMIN_USER":"%s" % DOMAIN_ADMIN_USER,
+            "DOMAIN_ADMIN_PASSWORD":"%s" % DOMAIN_ADMIN_PASSWORD,
+            "DOMAIN_ADMIN_TOKEN":"%s" % DOMAIN_ADMIN_TOKEN,
+            "NEW_SERVICE_NAME":"%s" % NEW_SERVICE_NAME,
+            "NEW_SERVICE_DESCRIPTION":"%s" % NEW_SERVICE_DESCRIPTION,
+            "NEW_SERVICE_ADMIN_USER":"%s" % NEW_SERVICE_ADMIN_PASSWORD
+        }
+        logger.debug("createNewService invoked with: %s" % json.dumps(data_log, indent=3))
+
 
         try:
 
@@ -131,11 +135,13 @@ class CreateNewService(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("ID_DOM1=%s" % ID_DOM1)
-        logger.info("NEW_SERVICE_ADMIN_TOKEN=%s" % NEW_SERVICE_ADMIN_TOKEN)
-        logger.info("ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN=%s" % ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
-        logger.info("ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER=%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
+        data_log = {
+            "ID_DOM1":"%s" % ID_DOM1,
+            "NEW_SERVICE_ADMIN_TOKEN":"%s" % NEW_SERVICE_ADMIN_TOKEN,
+            "ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN":"%s" % ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN, 
+            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER":"%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {
             "token": NEW_SERVICE_ADMIN_TOKEN,

@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -30,15 +31,17 @@ class UpdateUser(FlowBase):
         - USER_ID: User Id
         - USER_DATA_VALUE: user data value in json
         '''
-        logger.debug("updateUser invoked with: ")
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("USER_NAME=%s" % USER_NAME)
-        logger.debug("USER_ID=%s" % USER_ID)
-        logger.debug("USER_DATA_VALUE=%s" % USER_DATA_VALUE)
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "USER_NAME":"%s" % USER_NAME,
+            "USER_ID":"%s" % USER_ID,
+            "USER_DATA_VALUE":"%s" % USER_DATA_VALUE
+        }
+        logger.debug("updateUser invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -77,7 +80,9 @@ class UpdateUser(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("USER_ID=%s" % USER_ID)
+        data_log = {
+            "USER_ID":"%s" % USER_ID,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         #return {"id":ID_USER}

@@ -1,4 +1,5 @@
 import logging
+import json
 
 from orchestrator.core.flow.base import FlowBase
 
@@ -25,11 +26,13 @@ class Roles(FlowBase):
         Return:
         - array list of roles
         '''
-        logger.debug("roles invoked with: ")
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
-        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
-        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
-        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+        data_log = {
+            "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+        }
+        logger.debug("roles invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -50,8 +53,10 @@ class Roles(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("ROLES=%s" % ROLES)
+        data_log = {
+            "ROLES":"%s" % ROLES
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return ROLES
 
@@ -75,21 +80,25 @@ class Roles(FlowBase):
         - PROJECT_ID: id of project (optional)
         - ROLE_ID: id of role (optional)
         - USER_ID: id of user (optional)
-        - SERVICE_ADMIN_USER: Service admin username
-        - SERVICE_ADMIN_PASSWORD: Service admin password
-        - SERVICE_ADMIN_TOKEN: Service admin token
-        - EFECTIVE: effective roles
+        - ADMIN_USER: Service admin username
+        - ADMIN_PASSWORD: Service admin password
+        - ADMIN_TOKEN: Service admin token
+        - EFFECTIVE: effective roles
         Return:
         - roles_assginments: array of role assignments
         '''
-        logger.debug("roles_assignments invoked with: ")
-        logger.debug("DOMAIN_ID=%s" % DOMAIN_ID)
-        logger.debug("PROJECT_ID=%s" % PROJECT_ID)
-        logger.debug("ROLE_ID=%s" % ROLE_ID)
-        logger.debug("USER_ID=%s" % USER_ID)
-        logger.debug("ADMIN_USER=%s" % ADMIN_USER)
-        logger.debug("ADMIN_PASSWORD=%s" % ADMIN_PASSWORD)
-        logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+        data_log = {
+            "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "PROJECT_ID":"%s" % PROJECT_ID,
+            "ROLE_ID":"%s" % ROLE_ID,
+            "USER_ID":"%s" % USER_ID,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
+            "EFFECTIVE:":"%s" % EFFECTIVE
+        }
+        logger.debug("roles_assignments invoked with: %s" % json.dumps(data_log, indent=3))
+
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
@@ -167,9 +176,10 @@ class Roles(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("role_assignments=%s" % role_assignments_expanded)
-
+        data_log = {
+            "role_assignments":"%s" % role_assignments_expanded,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return { "role_assignments": role_assignments_expanded }
 
 
@@ -201,15 +211,17 @@ class Roles(FlowBase):
         Return:
         - ?
         '''
-        logger.debug("assignRoleServiceUser invoked with: ")
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("ROLE_NAME=%s" % ROLE_NAME)
-        logger.debug("ROLE_ID=%s" % ROLE_ID)
-        logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
-        logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME":"%s" % ROLE_NAME,
+            "ROLE_ID":"%s" % ROLE_ID,
+            "SERVICE_USER_NAME":"%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID
+        }
+        logger.debug("assignRoleServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -261,10 +273,12 @@ class Roles(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("SERVICE_ID=%s" % SERVICE_ID)
-        logger.info("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
-        logger.info("ROLE_ID=%s" % ROLE_ID)
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID,
+            "ROLE_ID":"%s" % ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
 
     def assignRoleSubServiceUser(self,
@@ -297,18 +311,21 @@ class Roles(FlowBase):
         - SERVICE_USER_NAME: User service name
         - SERVICE_USER_ID: User service Id
         '''
-        logger.debug("assignRoleSubServiceUser invoked with: ")
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SUBSERVICE_NAME=%s" % SUBSERVICE_NAME)
-        logger.debug("SUBSERVICE_ID=%s" % SUBSERVICE_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("ROLE_NAME=%s" % ROLE_NAME)
-        logger.debug("ROLE_ID=%s" % ROLE_ID)
-        logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
-        logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SUBSERVICE_NAME":"%s" % SUBSERVICE_NAME,
+            "SUBSERVICE_ID":"%s" % SUBSERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME":"%s" % ROLE_NAME,
+            "ROLE_ID":"%s" % ROLE_ID,
+            "SERVICE_USER_NAME":"%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID
+        }
+        logger.debug("assignRoleSubServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
+
         try:
             if not SERVICE_ADMIN_TOKEN:
                 if not SERVICE_ID:
@@ -373,11 +390,12 @@ class Roles(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("SUBSERVICE_ID=%s" % SUBSERVICE_ID)
-        logger.info("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
-        logger.info("ROLE_ID=%s" % ROLE_ID)
-
+        data_log = {
+            "SUBSERVICE_ID":"%s" % SUBSERVICE_ID,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID,
+            "ROLE_ID":"%s" % ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
     def assignInheritRoleServiceUser(self,
                                  SERVICE_NAME,
@@ -405,16 +423,18 @@ class Roles(FlowBase):
         - SERVICE_USER_NAME: User service name
         - SERVICE_USER_ID: User service Id
         '''
-        logger.debug("assignRoleSubServiceUser invoked with: ")
-        logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
-        logger.debug("SERVICE_ID=%s" % SERVICE_ID)
-        logger.debug("SERVICE_ADMIN_USER=%s" % SERVICE_ADMIN_USER)
-        logger.debug("SERVICE_ADMIN_PASSWORD=%s" % SERVICE_ADMIN_PASSWORD)
-        logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-        logger.debug("INHERIT_ROLE_NAME=%s" % INHERIT_ROLE_NAME)
-        logger.debug("INHERIT_ROLE_ID=%s" % INHERIT_ROLE_ID)
-        logger.debug("SERVICE_USER_NAME=%s" % SERVICE_USER_NAME)
-        logger.debug("SERVICE_USER_ID=%s" % SERVICE_USER_ID)
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "INHERIT_ROLE_NAME":"%s" % INHERIT_ROLE_NAME,
+            "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID,
+            "SERVICE_USER_NAME":"%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID
+        }
+        logger.debug("assignRoleSubServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
         try:
             if not SERVICE_ADMIN_TOKEN:
                 if not SERVICE_ID:
@@ -464,6 +484,8 @@ class Roles(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        logger.info("Summary report:")
-        logger.info("ID_USER=%s" % ID_USER)
-        logger.info("INHERIT_ROLE_ID=%s" % INHERIT_ROLE_ID)
+        data_log = {
+            "ID_USER":"%s" % ID_USER,
+            "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
