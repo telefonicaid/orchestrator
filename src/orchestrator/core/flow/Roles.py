@@ -122,20 +122,6 @@ class Roles(FlowBase):
 
             role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
-                # # 'OR' Filter
-                # if ROLE_ID:
-                #     if (role_assignment['role']['id'] == ROLE_ID):
-                #         role_assignments_expanded.append(role_assignment)
-                #         continue
-                # if PROJECT_ID:
-                #     if (role_assignment['scope']['project']['id'] == PROJECT_ID):
-                #         role_assignments_expanded.append(role_assignment)
-                #         continue
-                # if USER_ID:
-                #     if (role_assignment['user']['id'] == USER_ID):
-                #         role_assignments_expanded.append(role_assignment)
-                #         continue
-                # 'AND' filter
                 if ROLE_ID:
                     if not (role_assignment['role']['id'] == ROLE_ID):
                         continue
@@ -150,7 +136,10 @@ class Roles(FlowBase):
 
             # Cache these data? -> memcached/redis
             domain_roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
-            # TOOD: add to domain_roles also tenant roles like admin and service
+            domain_roles['roles'].append({"name": "admin",
+                                          "id": self.idm.getRoleId(ADMIN_TOKEN, "admin")})
+            domain_roles['roles'].append({"name": "service",
+                                          "id": self.idm.getRoleId(ADMIN_TOKEN, "service")})
             domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
@@ -170,7 +159,7 @@ class Roles(FlowBase):
                         assign['scope']['project'].update(match_list[0])
 
 
-            logger.debug("ROLES=%s" % role_assignments_expanded)
+            logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded, indent=3))
 
         except Exception, ex:
             logger.error(ex)
