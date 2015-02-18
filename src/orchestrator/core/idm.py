@@ -607,3 +607,28 @@ class IdMOperations(object):
                                 auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
+
+
+    def revokeDomainRole(self,
+                      CLOUD_ADMIN_TOKEN,
+                      ID_DOM1,
+                      ID_ADM1,
+                      ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s/users/%s/roles/%s' % (
+                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+                                method='DELETE',
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def revokeProjectRole(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_PRO1,
+                      ID_USER,
+                      ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s/users/%s/roles/%s' % (
+                                ID_PRO1, ID_USER, ROLE_ID),
+                                method='DELETE',
+                                auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
