@@ -24,3 +24,5 @@ KEYPASS = {
     "port": "7070",
     "protocol":"http"
 }
+
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
