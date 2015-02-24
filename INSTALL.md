@@ -13,7 +13,7 @@ Due to its stateless behavior, iotp-orchestrator does not require any backup pro
  * Connectivity to http://pdihub.hi.inet
  * [Git](http://git-scm.com/)
  * Python and pip
- * preferably UNIX platforms but not mandatory
+ * UNIX platforms but not mandatory
  * WSGI Web server (Apache2/Nginx) but not mandatory
 
 ### Installation procedure
@@ -42,6 +42,13 @@ Start server in 8084 port
 ```
 python manage.py runserver 8084 --settings=settings.custom_dev
 ```
+
+### Build procedure
+Build RPM by running script
+```
+package-orchestrator.sh
+```
+
 
 ## Installation by RPM packages
 Just install as usual:

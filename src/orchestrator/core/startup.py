@@ -2,6 +2,8 @@ from django.conf import settings
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
 
+from orchestrator.core.idm import IdMOperations
+
 import logging
 import os
 
@@ -14,5 +16,33 @@ def read_banner():
     var=handle.read()
     return var
 
+def check_endpoints():
+
+    KEYSTONE_PROTOCOL = settings.KEYSTONE['protocol']
+    KEYSTONE_HOST = settings.KEYSTONE['host']
+    KEYSTONE_PORT = settings.KEYSTONE['port']
+    
+    KEYPASS_PROTOCOL = settings.KEYPASS['protocol']
+    KEYPASS_HOST = settings.KEYPASS['host']
+    KEYPASS_PORT = settings.KEYPASS['port']
+
+    idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT,
+                        KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)
+    try:
+        idm.checkKeystone();
+    except Exception, ex:
+        logger.error("keystone endpoint not found")
+        return "ERROR keystone endpoint not found"
+        
+    try:
+        idm.checkKeypass();
+    except Exception, ex:
+        logger.error("keyspass endpoint not found")        
+        return "ERROR keypass endpoint not found"
+        
+    return "OK"
+    
+    
 def run():
     logger.info("Starting Service %s " % read_banner())
+    logger.info("Checking endpoints %s " % check_endpoints())    
