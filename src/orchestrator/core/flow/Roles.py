@@ -63,6 +63,7 @@ class Roles(FlowBase):
 
     def roles_assignments(self,
                 DOMAIN_ID,
+                DOMAIN_NAME,
                 PROJECT_ID,
                 ROLE_ID,
                 USER_ID,
@@ -89,6 +90,7 @@ class Roles(FlowBase):
         '''
         data_log = {
             "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
             "PROJECT_ID":"%s" % PROJECT_ID,
             "ROLE_ID":"%s" % ROLE_ID,
             "USER_ID":"%s" % USER_ID,
@@ -101,7 +103,14 @@ class Roles(FlowBase):
 
         try:
             if not ADMIN_TOKEN:
-                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                if not DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)                    
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
