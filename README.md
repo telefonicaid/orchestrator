@@ -15,16 +15,18 @@ Orchestrator is based mainly on:
 - Python
 - Django / DjangoRestFramework
 - httplib
+
 These are all dependencies [requirements.txt](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/requirements.txt)
 
 Orchestrator needs a WSGI server like Apache, Lighttpd or NGIX. [wsgi.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/wsgi.py)
 
-Orchestrator interacts mainly with Identity Manager [Keystone](https://github.com/telefonicaid/fiware-keystone-scim) and Access Control [Keypass](https://github.com/telefonicaid/fiware-keypasskeypass)
+Orchestrator interacts mainly with Identity Manager [Keystone](https://github.com/telefonicaid/fiware-keystone-scim)  and Access Control [Keypass](https://github.com/telefonicaid/fiware-keypass)
 
 
 In this README document you will find how to get started with the application and basic concepts. For a more detailed information you can read the following docs:
 
 * [API](http://docs.piotp.apiary.io/#orchestrator)
+* [scripts](SCRIPTS.md)
 * [Logs and Alarms](TROUBLESHOOTING.md)
 * [Installation guide](INSTALL.md)
 * [Configuration](CONFIG.md)

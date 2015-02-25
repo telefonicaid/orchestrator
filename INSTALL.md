@@ -12,7 +12,7 @@ Due to its stateless behavior, iotp-orchestrator does not require any backup pro
  * Internet access
  * Connectivity to http://pdihub.hi.inet
  * [Git](http://git-scm.com/)
- * Python and pip
+ * Python 2.6 (or upper) and pip
  * UNIX platforms but not mandatory
  * WSGI Web server (Apache2/Nginx) but not mandatory
 
@@ -35,7 +35,7 @@ cd src
 
 Then install all dependencies by running:
 ```
-pip install -f requirements
+pip install -f requirements.txt
 ```
 
 Start server in 8084 port
@@ -44,7 +44,7 @@ python manage.py runserver 8084 --settings=settings.custom_dev
 ```
 
 ### Build procedure
-Build RPM by running script
+Build RPM by running script [package-orchestrator](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/package-orchestrator.sh)
 ```
 package-orchestrator.sh
 ```
@@ -57,10 +57,12 @@ Just install as usual:
 rpm -iVh iotp-orchestrator.rpm
 ```
 
-Once installed, configure your environment settings , like
-keystone and keypass endpoints.
+Once installed, configure your environment [settings](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings) following [Configuration](CONFIG.md)
 
-Start the server
+
+
+## Start the server
+RPM install orchestrator as a service controlled by a [daemon](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/bin/orchestrator-daemon.sh)
 
 ```
 $ sudo service orchestrator start
