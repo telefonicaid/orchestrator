@@ -55,6 +55,20 @@ class IdMOperations(object):
         self.policy_dir = os.path.dirname(policies.__file__)
 
 
+    def checkKeystone(self):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/',
+            method='GET',
+            data=None)
+        assert res.code == 200, (res.code, res.msg)
+
+    def checkKeypass(self):
+        res = self.AccessControlRestOperations.rest_request(
+            url='/pap/v1/subject/',
+            method='GET',
+            data=None)
+        assert res.code == 404, (res.code, res.msg)
+
     def getToken(self,
                  DOMAIN_NAME,
                  DOMAIN_ADMIN_USER,
