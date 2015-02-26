@@ -54,7 +54,7 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ROLES":"%s" % ROLES
+            "ROLES": ROLES
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
@@ -78,6 +78,7 @@ class Roles(FlowBase):
 
         Params:
         - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: Name of domain
         - PROJECT_ID: id of project (optional)
         - ROLE_ID: id of role (optional)
         - USER_ID: id of user (optional)
@@ -106,7 +107,7 @@ class Roles(FlowBase):
                 if not DOMAIN_ID:
                     ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                     ADMIN_USER,
-                                                    ADMIN_PASSWORD)                    
+                                                    ADMIN_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                      DOMAIN_NAME)
                 else:
@@ -175,7 +176,7 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "role_assignments":"%s" % role_assignments_expanded,
+            "role_assignments": role_assignments_expanded,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return { "role_assignments": role_assignments_expanded }
