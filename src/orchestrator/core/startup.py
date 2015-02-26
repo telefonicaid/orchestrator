@@ -2,7 +2,8 @@ from django.conf import settings
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
+from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 
 import logging
 import os
@@ -26,16 +27,16 @@ def check_endpoints():
     KEYPASS_HOST = settings.KEYPASS['host']
     KEYPASS_PORT = settings.KEYPASS['port']
 
-    idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT,
-                        KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)
+    idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
     try:
-        idm.checkKeystone();
+        idm.checkIdM();
     except Exception, ex:
         logger.error("keystone endpoint not found")
         return "ERROR keystone endpoint not found"
-        
+
+    ac = AccCOperations(KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)        
     try:
-        idm.checkKeypass();
+        ac.checkAccC();
     except Exception, ex:
         logger.error("keyspass endpoint not found")        
         return "ERROR keypass endpoint not found"
