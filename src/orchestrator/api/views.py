@@ -23,28 +23,8 @@ from orchestrator.core.flow.Projects import Projects
 from orchestrator.core.flow.Roles import Roles
 from orchestrator.core.flow.Users import Users
 
-#from orchestrator.api.serializers import (
-    # ServiceSerializer, \
-    # SubServiceSerializer, \
-    # ServiceUserSerializer, \
-#    ServiceUserDeleteSerializer, \
-#    ServiceRoleSerializer, \
-#    RoleServiceUserSerializer, \
-#    RoleSubServiceUserSerializer
-#)
-
 from orchestrator.api import negotiators, parsers
 
-
-# class ServiceBrowsableAPIRenderer(BrowsableAPIRenderer):
-#     def get_context(self, *args, **kwargs):
-#         context = super(ServiceBrowsableAPIRenderer, self).get_context(*args, **kwargs)
-#         context['display_edit_forms'] = True
-#         context["post_form"] = ServiceForm
-#         return context
-
-#     def get_default_renderer(self, view):
-#         return JSONRenderer()
 
 logger = logging.getLogger('orchestrator_api')
 
