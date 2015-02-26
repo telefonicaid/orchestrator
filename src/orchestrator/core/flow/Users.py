@@ -65,7 +65,7 @@ class Users(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "SERVICE_USERS":"%s" % SERVICE_USERS,
+            "SERVICE_USERS": SERVICE_USERS,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return SERVICE_USERS
@@ -116,7 +116,7 @@ class Users(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "DETAIL_USER":"%s" % DETAIL_USER,
+            "DETAIL_USER": DETAIL_USER,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DETAIL_USER

@@ -63,7 +63,7 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "PROJECTS":"%s" % PROJECTS
+            "PROJECTS": PROJECTS
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
@@ -120,7 +120,7 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "PROJECT":"%s" % PROJECT
+            "PROJECT": PROJECT
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
