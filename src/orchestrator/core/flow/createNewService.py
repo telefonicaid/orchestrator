@@ -121,7 +121,7 @@ class CreateNewService(FlowBase):
             self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                      POLICY_FILE_NAME='policy-orion-admin.xml')
-            self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                      POLICY_FILE_NAME='policy-perseo-admin.xml')
             self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
