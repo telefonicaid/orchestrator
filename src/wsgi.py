@@ -15,7 +15,7 @@ framework.
 """
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orchestrator.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orchestrator.settings.dev")
 
 
 import orchestrator.core.startup as startup

@@ -3,3 +3,4 @@ djangorestframework==3.0.3
 httplib2
 simplejson
 jsonschema
+uwsgi
