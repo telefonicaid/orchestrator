@@ -516,6 +516,13 @@ class Test_NewServiceRole_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME":"role_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_nok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_ROLE_NAME":"role_%s" % self.suffix,
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -527,6 +534,19 @@ class Test_NewServiceRole_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+    def test_post_nok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_nok)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/role/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_nok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/role/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_nok)
+        assert res.code == 409, (res.code, res.msg, res.raw_json)
 
 class Test_RoleList_RestView(object):
 
@@ -920,6 +940,7 @@ if __name__ == '__main__':
 
     test_NewServiceRole = Test_NewServiceRole_RestView()
     test_NewServiceRole.test_post_ok()
+    test_NewServiceRole.test_post_nok()
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
     test_ServiceDetail.test_get_ok()
