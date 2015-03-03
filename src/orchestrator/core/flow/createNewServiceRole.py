@@ -13,19 +13,21 @@ class CreateNewServiceRole(FlowBase):
                              SERVICE_ADMIN_USER,
                              SERVICE_ADMIN_PASSWORD,
                              SERVICE_ADMIN_TOKEN,
-                             NEW_ROLE_NAME):
+                             NEW_ROLE_NAME,
+                             XACML_POLICY):
 
         '''Creates a new role Service (aka domain role keystone).
 
         In case of HTTP error, return HTTP error
 
         Params:
-        - SERVICE_NAME: Service name
         - SERVICE_ID: Service Id
+        - SERVICE_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin token
         - SERVICE_ADMIN_PASSWORD: Service admin token
         - SERVICE_ADMIN_TOKEN: Service admin token
         - NEW_ROLE_NAME: New role name
+        - XACML_POLICY: XACML POLICY for new role
         Return:
         - id: New role Id
         '''
@@ -35,7 +37,8 @@ class CreateNewServiceRole(FlowBase):
             "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "NEW_ROLE_NAME":"%s" % NEW_ROLE_NAME
+            "NEW_ROLE_NAME":"%s" % NEW_ROLE_NAME,
+            "XACML_POLICY":"%s" % XACML_POLICY
         }
         logger.debug("createNewServiceRole invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -58,13 +61,21 @@ class CreateNewServiceRole(FlowBase):
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
 
             #
-            # 2.  Create role
+            # 2. Create role
             #
             ID_ROLE = self.idm.createRoleDomain(SERVICE_ADMIN_TOKEN,
                                                 SERVICE_ID,
                                                 NEW_ROLE_NAME)
             logger.debug("ID of user %s: %s" % (NEW_ROLE_NAME, ID_ROLE))
 
+
+            #
+            # 3. Provision policy provided in keypass
+            #
+            self.ac.provisionPolicyByContent(SERVICE_NAME,
+                                              SERVICE_ADMIN_TOKEN,
+                                              ID_ROLE,
+                                              XACML_POLICY)
 
         except Exception, ex:
             logger.error(ex)

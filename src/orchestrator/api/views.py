@@ -417,11 +417,12 @@ class Role_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_PORT)
             result = flow.createNewServiceRole(
                                           request.DATA.get("SERVICE_ID", service_id),
-                                          request.DATA.get("SERVICE_NAME"),
+                                          request.DATA.get("SERVICE_NAME", None),
                                           request.DATA.get("SERVICE_ADMIN_USER", None),
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                          request.DATA.get("NEW_ROLE_NAME"))
+                                          request.DATA.get("NEW_ROLE_NAME", None),
+                                          request.DATA.get("XACML_POLICY", None))
 
             return Response(result, status=status.HTTP_201_CREATED)
         except ParseError as error:

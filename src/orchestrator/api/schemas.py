@@ -273,6 +273,9 @@ json = {
             "NEW_ROLE_NAME": {
                 "type": "string",
             },
+            "XACML_POLICY": {
+                "type": "string",
+            },
         },
         "required": [
             "NEW_ROLE_NAME"
