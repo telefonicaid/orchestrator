@@ -239,7 +239,7 @@ class Roles(FlowBase):
             if not ROLE_ID:
                 ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
                                              ROLE_NAME)
-            logger.debug("ID of user %s: %s" % (ROLE_NAME, ROLE_ID))
+            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 3.  Get User
@@ -480,6 +480,103 @@ class Roles(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+    def revokeRoleServiceUser(self,
+                              SERVICE_NAME,
+                              SERVICE_ID,
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD,
+                              SERVICE_ADMIN_TOKEN,
+                              ROLE_NAME,
+                              ROLE_ID,
+                              SERVICE_USER_NAME,
+                              SERVICE_USER_ID):
+
+        '''Revoke a service role to an user in IoT keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_USER_NAME: User service name
+        - SERVICE_USER_ID: User service Id
+        Return:
+        - ?
+        '''
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME":"%s" % ROLE_NAME,
+            "ROLE_ID":"%s" % ROLE_ID,
+            "SERVICE_USER_NAME":"%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID
+        }
+        logger.debug("revokeRoleServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+
+            #
+            # 1. Get service (aka domain)
+            #
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+
+            #
+            # 2. Get role
+            #
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
+                                             ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 3. Get User
+            #
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                     SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
+
+
+            #
+            # 4. Revoke role to user in service
+            #
+            self.idm.revokeDomainRole(SERVICE_ADMIN_TOKEN,
+                                      SERVICE_ID,
+                                      SERVICE_USER_ID,
+                                      ROLE_ID)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID,
+            "ROLE_ID":"%s" % ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
     def revokeRoleSubServiceUser(self,
                                  SERVICE_NAME,

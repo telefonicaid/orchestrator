@@ -565,3 +565,57 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                 'Invalid JSON - {0}'.format(error.message),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def delete(self, request, service_id):
+        self.schema_name = "AssignRole"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        inherit = ( request.GET.get('inherit', False) =="true" or
+                    request.DATA.get('INHERIT', False) =="true" )
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                                       self.KEYSTONE_HOST,
+                                       self.KEYSTONE_PORT)
+            if not (request.DATA.get("SUBSERVICE_NAME"), None):
+                if inherit:
+                    result = flow.revokeInheritRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
+                                           request.DATA.get("SERVICE_ADMIN_USER", None),
+                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                           request.DATA.get("ROLE_NAME"),
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
+                else:
+                    result = flow.revokeRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
+                                           request.DATA.get("SERVICE_ADMIN_USER", None),
+                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                           request.DATA.get("ROLE_NAME"),
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
+            else:
+                result = flow.revokeRoleSubServiceUser(
+                                              request.DATA.get("SERVICE_NAME"),
+                                              request.DATA.get("SERVICE_ID", service_id),
+                                              request.DATA.get("SUBSERVICE_NAME"),
+                                              request.DATA.get("SUBSERVICE_ID", None),
+                                              request.DATA.get("SERVICE_ADMIN_USER", None),
+                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                              request.DATA.get("ROLE_NAME", None),
+                                              request.DATA.get("ROLE_ID", None),
+                                              request.DATA.get("SERVICE_USER_NAME", None),
+                                              request.DATA.get("SERVICE_USER_ID", None))
+
+            return Response(result, status=status.HTTP_204_NO_CONTENT)
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
