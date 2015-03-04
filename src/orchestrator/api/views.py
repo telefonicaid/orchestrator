@@ -140,7 +140,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                            request.DATA.get("NEW_SERVICE_NAME"),
                                            request.DATA.get("NEW_SERVICE_DESCRIPTION"),
                                            request.DATA.get("NEW_SERVICE_ADMIN_USER"),
-                                           request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"))
+                                           request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"),
+                                           request.DATA.get("NEW_SERVICE_ADMIN_EMAIL", None))
 
             if 'token' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
