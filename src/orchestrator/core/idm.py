@@ -632,3 +632,16 @@ class IdMOperations(object):
                                 auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
+
+
+    def revokeInheritRole(self,
+                         CLOUD_ADMIN_TOKEN,
+                         ID_DOM1,
+                         ID_ADM1,
+                         ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-INHERIT/domains/%s/users/%s/roles/%s/inherited_to_projects' % (
+                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+                                method='DELETE',
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)

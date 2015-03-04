@@ -479,3 +479,214 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+
+    def revokeRoleSubServiceUser(self,
+                                 SERVICE_NAME,
+                                 SERVICE_ID,
+                                 SUBSERVICE_NAME,
+                                 SUBSERVICE_ID,
+                                 SERVICE_ADMIN_USER,
+                                 SERVICE_ADMIN_PASSWORD,
+                                 SERVICE_ADMIN_TOKEN,
+                                 ROLE_NAME,
+                                 ROLE_ID,
+                                 SERVICE_USER_NAME,
+                                 SERVICE_USER_ID):
+
+        '''Revoke a subservice role to an user in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SUBSERVICE_NAME: SubService name
+        - SUBSERVICE_ID: SubService Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_USER_NAME: User service name
+        - SERVICE_USER_ID: User service Id
+        '''
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SUBSERVICE_NAME":"%s" % SUBSERVICE_NAME,
+            "SUBSERVICE_ID":"%s" % SUBSERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME":"%s" % ROLE_NAME,
+            "ROLE_ID":"%s" % ROLE_ID,
+            "SERVICE_USER_NAME":"%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID
+        }
+        logger.debug("revokeRoleSubServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+
+            #
+            # 1. Get service (aka domain)
+            #
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+
+
+
+            #
+            # 2. Get SubService (aka project)
+            #
+            if not SUBSERVICE_ID:
+                SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
+
+            logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME, SUBSERVICE_ID))
+
+            #
+            # 3. Get role
+            #
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 4. Get User
+            #
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
+
+
+            #
+            # 5. Revoke role to user in service
+            #
+            self.idm.revokeProjectRole(SERVICE_ADMIN_TOKEN,
+                                      SUBSERVICE_ID,
+                                      SERVICE_USER_ID,
+                                      ROLE_ID)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "SUBSERVICE_ID":"%s" % SUBSERVICE_ID,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID,
+            "ROLE_ID":"%s" % ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+
+    def revokeInheritRoleServiceUser(self,
+                                 SERVICE_NAME,
+                                 SERVICE_ID,
+                                 SERVICE_ADMIN_USER,
+                                 SERVICE_ADMIN_PASSWORD,
+                                 SERVICE_ADMIN_TOKEN,
+                                 INHERIT_ROLE_NAME,
+                                 INHERIT_ROLE_ID,
+                                 SERVICE_USER_NAME,
+                                 SERVICE_USER_ID):
+
+        '''Revoke a subservice role to an user in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - INEHRIT_ROLE_NAME: Role name
+        - INHERIT_ROLE_ID: Role Id
+        - SERVICE_USER_NAME: User service name
+        - SERVICE_USER_ID: User service Id
+        '''
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "INHERIT_ROLE_NAME":"%s" % INHERIT_ROLE_NAME,
+            "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID,
+            "SERVICE_USER_NAME":"%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_ID":"%s" % SERVICE_USER_ID
+        }
+        logger.debug("revokeRoleSubServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+
+            #
+            # 1. Get service (aka domain)
+            #
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+
+            #
+            # 2. Get role
+            #
+            if not INHERIT_ROLE_ID:
+                INHERIT_ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           INHERIT_ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (INHERIT_ROLE_NAME, INHERIT_ROLE_ID))
+
+            #
+            # 3. Get User
+            #
+            ID_USER = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                         SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+
+
+            #
+            # 4. Revoke inherit role to user in all subservices
+            #
+            self.idm.revokeInheritRole(SERVICE_ADMIN_TOKEN,
+                                      ID_USER,
+                                      INHERIT_ROLE_ID)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "ID_USER":"%s" % ID_USER,
+            "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
