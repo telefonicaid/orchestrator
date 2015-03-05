@@ -645,3 +645,23 @@ class IdMOperations(object):
                                 auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
+
+
+    def getUserDomainRoleAssignments(self,
+                                SERVICE_ADMIN_TOKEN,
+                                DOMAIN_ID,
+                                USER_ID,
+                                EFFECTIVE):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/inherited_to_projects' % (
+                 DOMAIN_ID,
+                 USER_ID,
+             ),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
