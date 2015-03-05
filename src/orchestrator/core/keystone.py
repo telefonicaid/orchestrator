@@ -569,3 +569,60 @@ class IdMKeystoneOperations(IdMOperations):
                                 auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
+
+    def revokeDomainRole(self,
+                      CLOUD_ADMIN_TOKEN,
+                      ID_DOM1,
+                      ID_ADM1,
+                      ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s/users/%s/roles/%s' % (
+                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+                                method='DELETE',
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def revokeProjectRole(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_PRO1,
+                      ID_USER,
+                      ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s/users/%s/roles/%s' % (
+                                ID_PRO1, ID_USER, ROLE_ID),
+                                method='DELETE',
+                                auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+
+    def revokeInheritRole(self,
+                         CLOUD_ADMIN_TOKEN,
+                         ID_DOM1,
+                         ID_ADM1,
+                         ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-INHERIT/domains/%s/users/%s/roles/%s/inherited_to_projects' % (
+                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+                                method='DELETE',
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+
+    def getUserDomainRoleAssignments(self,
+                                SERVICE_ADMIN_TOKEN,
+                                DOMAIN_ID,
+                                USER_ID,
+                                EFFECTIVE):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/inherited_to_projects' % (
+                 DOMAIN_ID,
+                 USER_ID,
+             ),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
