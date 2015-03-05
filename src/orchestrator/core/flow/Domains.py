@@ -51,7 +51,7 @@ class Domains(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "DOMAINS":"%s" % DOMAINS
+            "DOMAINS": DOMAINS
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DOMAINS
@@ -109,7 +109,7 @@ class Domains(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "DOMAIN":"%s" % DOMAIN
+            "DOMAIN": DOMAIN
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DOMAIN
