@@ -273,8 +273,11 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                 request.DATA.get("USER_NAME", None),
                                 request.DATA.get("USER_ID", user_id))
-
-            return Response(result, status=status.HTTP_204_NO_CONTENT)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -298,7 +301,11 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("USER_NAME"),
                                 request.DATA.get("USER_ID", user_id),
                                 request.DATA.get("USER_DATA_VALUE"))
-            return Response(result, status=status.HTTP_200_OK)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -422,8 +429,11 @@ class Role_RESTView(APIView, IoTConf):
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                           request.DATA.get("NEW_ROLE_NAME"))
-
-            return Response(result, status=status.HTTP_201_CREATED)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
@@ -540,8 +550,11 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                               request.DATA.get("ROLE_ID", None),
                                               request.DATA.get("SERVICE_USER_NAME", None),
                                               request.DATA.get("SERVICE_USER_ID", None))
-
-            return Response(result, status=status.HTTP_204_NO_CONTENT)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
