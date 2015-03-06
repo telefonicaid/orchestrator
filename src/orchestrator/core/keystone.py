@@ -608,3 +608,64 @@ class IdMKeystoneOperations(IdMOperations):
                                 auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
+
+
+    def deleteDomain(self,
+                  SERVICE_ADMIN_TOKEN,
+                  DOMAIN_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s' % DOMAIN_ID,
+                                                  method='DELETE',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
+
+    def deleteProject(self,
+                  SERVICE_ADMIN_TOKEN,
+                  PROJECT_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % PROJECT_ID,
+                                                  method='DELETE',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response        
+
+    def disableDomain(self,
+                     CLOUD_ADMIN_TOKEN,
+                     SERVICE_ID):
+
+        body_data = {
+            "domain": {
+                "enabled": False
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s'% SERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['domain']['id']
+
+    def disableProject(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_DOM1,
+                      SUBSERVICE_ID):
+
+        body_data = {
+            "project": {
+                "enabled": False
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % SUBSERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['project']['id']
