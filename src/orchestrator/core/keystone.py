@@ -608,14 +608,13 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 204, (res.code, res.msg)
 
 
-    def getUserDomainRoleAssignments(self,
-                                SERVICE_ADMIN_TOKEN,
-                                DOMAIN_ID,
-                                USER_ID,
-                                EFFECTIVE):
+    def getUserDomainInheritRoleAssignments(self,
+                                            SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            USER_ID):
 
         res = self.IdMRestOperations.rest_request(
-            url='/OS-INHERIT/domains/{domain_id}/users/{user_id}/roles/inherited_to_projects' % (
+            url='/v3/OS-INHERIT/domains/%s/users/%s/roles/inherited_to_projects' % (
                  DOMAIN_ID,
                  USER_ID,
              ),

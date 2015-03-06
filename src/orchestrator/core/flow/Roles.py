@@ -153,6 +153,12 @@ class Roles(FlowBase):
             domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
+            inherit_roles = []
+            if USER_ID:
+                inherit_roles = self.idm.getUserDomainInheritRoleAssignments(ADMIN_TOKEN,
+                                                                             DOMAIN_ID,
+                                                                             USER_ID)
+
             for assign in role_assignments_expanded:
                 # Expand user detail
                 match_list = [x for x in domain_users['users'] if x['id'] == str(assign['user']['id'])]
@@ -162,6 +168,11 @@ class Roles(FlowBase):
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
                     assign['role'].update(match_list[0])
+
+                # Expand if role is inherited
+                match_list = [x for x in inherit_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
+                assign['role']['inherited'] = len(match_list) > 0
+
                 # Expand project detail
                 if 'project' in assign['scope']:
                     match_list = [x for x in domain_projects['projects'] if x['id'] == str(assign['scope']['project']['id'])]
