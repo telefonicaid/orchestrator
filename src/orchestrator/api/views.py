@@ -111,6 +111,35 @@ class ServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    def put(self, request, service_id=None):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # request.DATA # json validation
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT)
+            if service_id:
+                result = flow.update_domain(
+                                   request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_ADMIN_USER", None),
+                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                   request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
+            else:
+                # Really service_id is not mandatory already in urls?
+                result['error'] = "ERROR not service_id provided"
+
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 class ServiceCreate_RESTView(ServiceList_RESTView):
     """
     Creates a new service
@@ -205,6 +234,38 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 'Invalid JSON - {0}'.format(error.message),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def put(self, request, service_id=None, subservice_id=None):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # request.DATA # json validation
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT)
+            if service_id:
+                if subservice_id:
+                    result = flow.update_project(
+                                   request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SUBSERVICE_ID", subservice_id),
+                                   request.DATA.get("SERVICE_ADMIN_USER", None),
+                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                   request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
+            else:
+                # Really service_id is not mandatory already in urls?
+                result['error'] = "ERROR not service_id provided"
+
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Invalid JSON - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
     """
