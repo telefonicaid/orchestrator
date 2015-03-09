@@ -133,6 +133,25 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         return json_body_response['domain']['id']
 
+    def updateDomain(self,
+                     CLOUD_ADMIN_TOKEN,
+                     SERVICE_ID,
+                     NEW_SERVICE_DESCRIPTION):
+
+        body_data = {
+            "domain": {
+                "description": "%s" % NEW_SERVICE_DESCRIPTION
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s'% SERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['domain']['id']
+
 
     def getRoleId(self,
                  CLOUD_ADMIN_TOKEN,
@@ -205,6 +224,26 @@ class IdMKeystoneOperations(IdMOperations):
                                 method='POST', data=body_data,
                                 auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['project']['id']
+
+
+    def updateProject(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_DOM1,
+                      SUBSERVICE_ID,
+                      NEW_SUBSERVICE_DESCRIPTION):
+
+        body_data = {
+            "project": {
+                "description": "%s" % NEW_SUBSERVICE_DESCRIPTION
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % SUBSERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
         return json_body_response['project']['id']
