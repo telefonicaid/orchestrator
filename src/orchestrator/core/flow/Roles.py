@@ -170,8 +170,9 @@ class Roles(FlowBase):
                     assign['role'].update(match_list[0])
 
                 # Expand if role is inherited
-                match_list = [x for x in inherit_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
-                assign['role']['inherited'] = len(match_list) > 0
+                if len(inherit_roles) > 0:
+                    match_list = [x for x in inherit_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
+                    assign['role']['inherited'] = len(match_list) > 0
 
                 # Expand project detail
                 if 'project' in assign['scope']:
