@@ -85,4 +85,4 @@ class UpdateUser(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        #return {"id":ID_USER}
+        return { "id":USER_ID }
