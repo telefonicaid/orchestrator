@@ -10,7 +10,7 @@ def main():
     print "including admin user with role admin, subservice roles"
     print "and configures keypass policies for orion and perseo"
     print ""
-    
+
     SCRIPT_NAME=sys.argv[0]
     NUM_ARGS_EXPECTED=13
 
@@ -78,7 +78,7 @@ def main():
                             KEYPASS_PROTOCOL,
                             KEYPASS_HOST,
                             KEYPASS_PORT)
-    
+
     res = flow.createNewService(None,
                           DOMAIN_NAME,
                           DOMAIN_ADMIN_USER,
@@ -87,10 +87,13 @@ def main():
                           NEW_SERVICE_NAME,
                           NEW_SERVICE_DESCRIPTION,
                           NEW_SERVICE_ADMIN_USER,
-                          NEW_SERVICE_ADMIN_PASSWORD)
+                          NEW_SERVICE_ADMIN_PASSWORD,
+                          None)
+
+
 
     pprint.pprint(res)
 
 if __name__ == '__main__':
-    
+
     main()
