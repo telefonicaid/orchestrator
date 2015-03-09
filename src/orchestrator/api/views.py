@@ -112,23 +112,20 @@ class ServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None):
+        self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # request.DATA # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT)
-            if service_id:
-                result = flow.update_domain(
+            result = flow.update_domain(
                                    request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                    request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
-            else:
-                # Really service_id is not mandatory already in urls?
-                result['error'] = "ERROR not service_id provided"
-
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
@@ -222,7 +219,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
             else:
                 # Really service_id is not mandatory already in urls?
-                result['error'] = "ERROR not service_id provided"
+                result = {'error':  "ERROR not service_id provided", "code": "400"}
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
