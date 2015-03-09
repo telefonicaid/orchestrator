@@ -119,6 +119,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_DESCRIPTION":"SmartValencia_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es"
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {

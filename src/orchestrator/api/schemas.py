@@ -42,6 +42,9 @@ json = {
             "NEW_SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
             },
+            "NEW_SERVICE_ADMIN_EMAIL": {
+                "type": "string",
+            },
         },
         # "oneof": {
         #     "required": [
@@ -271,6 +274,9 @@ json = {
                 "type": "string",
             },
             "NEW_ROLE_NAME": {
+                "type": "string",
+            },
+            "XACML_POLICY": {
                 "type": "string",
             },
         },
