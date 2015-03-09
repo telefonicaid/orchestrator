@@ -9,7 +9,7 @@ from orchestrator.core.ac import AccCOperations
 
 class AccCKeypassOperations(AccCOperations):
     '''
-       IoT Access Control: Keypass 
+       IoT Access Control: Keypass
     '''
 
     def __init__(self,
@@ -34,7 +34,7 @@ class AccCKeypassOperations(AccCOperations):
             method='GET',
             data=None)
         assert res.code == 404, (res.code, res.msg)
-        
+
 
     def provisionPolicy(self,
                         SERVICE_NAME,
@@ -45,11 +45,22 @@ class AccCKeypassOperations(AccCOperations):
         xml_data = open(self.policy_dir + '/' + POLICY_FILE_NAME)
         body_data = xml_data.read()
         xml_data.close()
+        self.provisionPolicyByContent(SERVICE_NAME,
+                                      SERVICE_ADMIN_TOKEN,
+                                      SUB_SERVICE_ROLE_ID,
+                                      body_data)
+
+    def provisionPolicyByContent(self,
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_TOKEN,
+                        SUB_SERVICE_ROLE_ID,
+                        POLICY_CONTENT):
+
         res = self.AccessControlRestOperations.rest_request(
                                 url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
                                 method='POST',
                                 json_data=False,
-                                data=body_data,
+                                data=POLICY_CONTENT,
                                 auth_token=SERVICE_ADMIN_TOKEN,
                                 fiware_service=SERVICE_NAME)
 

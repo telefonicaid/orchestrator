@@ -425,16 +425,19 @@ class Role_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_PORT)
             result = flow.createNewServiceRole(
                                           request.DATA.get("SERVICE_ID", service_id),
-                                          request.DATA.get("SERVICE_NAME"),
+                                          request.DATA.get("SERVICE_NAME", None),
                                           request.DATA.get("SERVICE_ADMIN_USER", None),
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                          request.DATA.get("NEW_ROLE_NAME", None),
+                                          request.DATA.get("XACML_POLICY", None),
                                           request.DATA.get("NEW_ROLE_NAME"))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
+
         except ParseError as error:
             return Response(
                 'Invalid JSON - {0}'.format(error.message),
