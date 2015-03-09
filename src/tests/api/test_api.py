@@ -994,7 +994,6 @@ if __name__ == '__main__':
     test_ProjectList = Test_ProjectList_RestView()
     test_ProjectList.test_get_ok()
     test_ProjectList.test_put_ok()
-    test_ProjectList.test_put_ok2()
 
     test_UserList = Test_UserList_RestView()
     test_UserList.test_get_ok()
