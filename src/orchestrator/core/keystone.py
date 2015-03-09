@@ -164,7 +164,10 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         # TODO ensure ADMIN_ROLE_ID?
-        return json_body_response['roles'][0]['id']
+        if len(json_body_response['roles']) > 0:
+            return json_body_response['roles'][0]['id']
+        else:
+            return None
 
 
     def grantDomainRole(self,
