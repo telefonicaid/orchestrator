@@ -1,14 +1,11 @@
 import sys
-import pprint
-from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
+from orchestrator.core.flow.Roles import Roles
 
 
 
 def main():
 
-    print "This script creates a new service in IoT keystone"
-    print "including admin user with role admin, subservice roles"
-    print "and configures keypass policies for orion and perseo"
+    print "This script assigns a role to a service user IoT keystone"
     print ""
 
     SCRIPT_NAME=sys.argv[0]
@@ -23,8 +20,8 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            New service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        New service admin password"
-        print "  <NEW_USER_NAME>                 Name of new user"
-        print "  <NEW_USER_PASSWORD>             Password of new user"
+        print "  <SERVICE_USER_NAME>             Service username"        
+        print "  <ROLE_NAME>                     Name of role"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -33,9 +30,8 @@ def main():
         print "                                 SmartValencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 Electricidad   \\"
-        print "                                 bob            \\"
-        print "                                 password       \\"
+        print "                                 adm1           \\"
+        print "                                 SubServiceAdmin\\"        
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -47,21 +43,24 @@ def main():
     SERVICE_NAME=sys.argv[4]
     SERVICE_ADMIN_USER=sys.argv[5]
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
-    NEW_USER_NAME=sys.argv[7]
-    NEW_USER_PASSWORD=sys.argv[8]
+    SERVICE_USER=sys.argv[7]    
+    ROLE_NAME=sys.argv[8]
 
-    flow = CreateNewServiceUser(KEYSTONE_PROTOCOL,
-                                KEYSTONE_HOST,
-                                KEYSTONE_PORT)
 
-    res = flow.createNewServiceUser(
-                         SERVICE_NAME,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         NEW_USER_NAME,
-                         NEW_USER_PASSWORD,
-                         None)
-    pprint(res)
+    flow = Roles(KEYSTONE_PROTOCOL,
+                 KEYSTONE_HOST,
+                 KEYSTONE_PORT)
+
+    flow.assignInheritRoleServiceUser(
+                          SERVICE_NAME,
+                          None,
+                          SERVICE_ADMIN_USER,
+                          SERVICE_ADMIN_PASSWORD,
+                          None,
+                          ROLE_NAME,
+                          None,
+                          SERVICE_USER,
+                          None)
 
 
 if __name__ == '__main__':

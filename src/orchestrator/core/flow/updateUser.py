@@ -1,67 +1,88 @@
 import logging
+import json
 
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
-class UpdateUser(object):
-    def __init__(self,
-                 KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT):
-        self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
+class UpdateUser(FlowBase):
 
-        def updateUser(self,
-                       SERVICE_NAME,
-                       SERVICE_ADMIN_USER,
-                       SERVICE_ADMIN_PASSWORD,
-                       SERVICE_ADMIN_TOKEN,
-                       USER_NAME,
-                       USER_DATA_VALUE):
+    def updateUser(self,
+                   SERVICE_NAME,
+                   SERVICE_ID,
+                   SERVICE_ADMIN_USER,
+                   SERVICE_ADMIN_PASSWORD,
+                   SERVICE_ADMIN_TOKEN,
+                   USER_NAME,
+                   USER_ID,
+                   USER_DATA_VALUE):
 
-            '''Update an user Service (aka domain user keystone).
-            
-            In case of HTTP error, return HTTP error
-            
-            Params:
-            - SERVICE_NAME: Service name
-            - SERVICE_ADMIN_USER: Service admin username
-            - SERVICE_ADMIN_PASSWORD: Service admin password
-            - SERVICE_ADMIN_TOKEN: Service admin token            
-            - USER_NAME: User name
-            - USER_DATA_VALUE: user data value in json
-            '''
-            
-            
-            try:
-                if not SERVICE_ADMIN_TOKEN:
+        '''Update an User Service (aka domain user keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - USER_NAME: User name
+        - USER_ID: User Id
+        - USER_DATA_VALUE: user data value in json
+        '''
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "USER_NAME":"%s" % USER_NAME,
+            "USER_ID":"%s" % USER_ID,
+            "USER_DATA_VALUE":"%s" % USER_DATA_VALUE
+        }
+        logger.debug("updateUser invoked with: %s" % json.dumps(data_log, indent=3))
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
                     SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                             SERVICE_ADMIN_USER,
                                                             SERVICE_ADMIN_PASSWORD)
-                logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
-                #
-                # 2. Get user ID
-                #
-                ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+            #
+            # 2. Get user ID
+            #
+            if not USER_ID:
+                USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
                                                    USER_NAME)
-                logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
-        
-                #
-                # 3. Remove user 
-                #
-                self.idm.updateUser(SERVICE_ADMIN_TOKEN,
-                                    USER_NAME,
-                                    USER_DATA_VALUE)
-                #logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
+            logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
+
+            #
+            # 3. Updateuser
+            #
+            self.idm.updateUser(SERVICE_ADMIN_TOKEN,
+                                USER_ID,
+                                USER_DATA_VALUE)
 
 
-            except Exception, ex:
-                logger.error(ex)
-                return { "error": str(ex) }
-    
-            logger.info("Summary report:")
-            logger.info("ID_USER=%s" % ID_USER)
 
-            #return {"id":ID_USER}
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "USER_ID": USER_ID,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        #return {"id":ID_USER}

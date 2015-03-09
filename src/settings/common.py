@@ -4,20 +4,20 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('IoT support', 'iot_support@tid.es'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    #     'NAME': 'dborchestrator',                      # Or path to database file if using sqlite3.
-    #     'USER': '',                      # Not used with sqlite3.
-    #     'PASSWORD': '',                  # Not used with sqlite3.
-    #     'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-    #     'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                      # Or path to datqabase file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -93,18 +93,18 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'src.urls'
+ROOT_URLCONF = 'urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'src.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -113,9 +113,9 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
+    # 'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    # 'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -126,31 +126,77 @@ INSTALLED_APPS = (
     'rest_framework',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
+"""
+Simple logging: Use Sentry to improve logging
+
+Handle it in modular settings like this:
+
+    [settings/custom.py]
+    LOGGING.update({
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'propagate': True,
+                'level': 'INFO',
+            },
+            'extra_log': {
+                ...
+            }
+        }
+    })
+"""
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | msg=%(message)s",            
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/orchestrator/' + "/orchestrator.log",
+            'maxBytes': 50000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        # 'mail_admins': {
+        #     'level': 'ERROR',
+        #     'filters': ['require_debug_false'],
+        #     'class': 'django.utils.log.AdminEmailHandler'
+        # },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+        'django': {
+            'handlers':['console'],
             'propagate': True,
+            'level':'WARN',
+        },
+        'django.request': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'orchestrator_api': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+        },
+        'orchestrator_core': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
         },
     }
 }
@@ -166,14 +212,8 @@ REST_FRAMEWORK = {
 # TO DO:
 # split settings into settings/common.py settings/dev.py settings/qa_integration.py
 
-KEYSTONE = {
-    "host": "localhost",
-    "port": "5000",
-    "protocol":"http"
-}
+# Custom settings
+# ---------------
+KEYSTONE = {}
+KEYPASS = {}
 
-KEYPASS = {
-    "host": "localhost",
-    "port": "8080",
-    "protocol":"http"
-}

@@ -1,16 +1,17 @@
 import sys
 import pprint
-from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
+from orchestrator.core.flow.Projects import Projects
 
 
 
 def main():
 
-    print "This script creates a new role service in IoT keystone"
-    print ""
+    print "This script prints subservices of service"
 
+    print ""
+    
     SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=7
+    NUM_ARGS_EXPECTED=6
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -19,9 +20,8 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SERVICE_ADMIN_USER>            New service admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        New service admin password"
-        print "  <NEW_ROLE_NAME>                 Name of new role"
+        print "  <SERVICE_ADMIN_USER>            Service admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -30,7 +30,6 @@ def main():
         print "                                 SmartValencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 ServiceCustomer\\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -42,20 +41,20 @@ def main():
     SERVICE_NAME=sys.argv[4]
     SERVICE_ADMIN_USER=sys.argv[5]
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
-    NEW_ROLE_NAME=sys.argv[7]
 
-    flow = CreateNewServiceRole(KEYSTONE_PROTOCOL,
-                                KEYSTONE_HOST,
-                                KEYSTONE_PORT)
+    flow = Projects(KEYSTONE_PROTOCOL,
+                            KEYSTONE_HOST,
+                            KEYSTONE_PORT)
+    
+    subservices = flow.projects(None,
+                                SERVICE_NAME,
+                                SERVICE_ADMIN_USER,
+                                SERVICE_ADMIN_PASSWORD,
+                                None)
+    pprint.pprint(subservices)
 
-    res = flow.createNewServiceRole(
-                         SERVICE_NAME,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         None,
-                         NEW_ROLE_NAME)
-    pprint.pprint(res)
+
 
 if __name__ == '__main__':
-
+    
     main()
