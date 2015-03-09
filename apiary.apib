@@ -101,6 +101,27 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
               ]
             }
 
+### edicion de subservicio [PUT]
+
++ Request (application/json)
+        
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
+            }
+
+
++ Response 201 (application/json)
+
+    + Body
+        
+            {
+                   "id" : 0000
+            }
+
 ### Create SubService [POST]
 + Parameters
     + serviceId (required, `string`) ... Service Id
