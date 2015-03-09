@@ -266,8 +266,9 @@ class Roles(FlowBase):
             # 3.  Get User
             #
             if not SERVICE_USER_ID:
-                SERVICE_USER_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                                     SERVICE_USER_NAME)
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
@@ -478,8 +479,9 @@ class Roles(FlowBase):
             #
             # 3. Get User
             #
-            ID_USER = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                         SERVICE_USER_NAME)
+            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_ID,
+                                               SERVICE_USER_NAME)
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
 
 

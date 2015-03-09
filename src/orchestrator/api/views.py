@@ -430,8 +430,7 @@ class Role_RESTView(APIView, IoTConf):
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                           request.DATA.get("NEW_ROLE_NAME", None),
-                                          request.DATA.get("XACML_POLICY", None),
-                                          request.DATA.get("NEW_ROLE_NAME"))
+                                          request.DATA.get("XACML_POLICY", None))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
