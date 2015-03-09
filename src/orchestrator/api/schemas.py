@@ -42,6 +42,9 @@ json = {
             "NEW_SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
             },
+            "NEW_SERVICE_ADMIN_EMAIL": {
+                "type": "string",
+            },
         },
         # "oneof": {
         #     "required": [
