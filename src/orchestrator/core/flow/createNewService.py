@@ -33,7 +33,7 @@ class CreateNewService(FlowBase):
         - NEW_SERVICE_DESCRIPTION: New service description
         - NEW_SERVICE_ADMIN_USER: New service admin username
         - NEW_SERVICE_ADMIN_PASSWORD: New service admin password
-        - NEW_SERVICE_ADMIN_EMAIL: New service admin password
+        - NEW_SERVICE_ADMIN_EMAIL: New service admin password (optional)
         Return:
         - token: service admin token
         - id: service Id
