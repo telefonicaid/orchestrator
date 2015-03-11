@@ -157,8 +157,8 @@ class IdMKeystoneOperations(IdMOperations):
                  CLOUD_ADMIN_TOKEN,
                  ROLE_NAME):
         res = self.IdMRestOperations.rest_request(url='/v3/roles?name=%s' % ROLE_NAME,
-                                method='GET',
-                                auth_token=CLOUD_ADMIN_TOKEN)
+                                                  method='GET',
+                                                  auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -352,9 +352,12 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        for project in json_body_response['projects']:
-            if project['name'] == PROJECT_NAME:
-                return project['id']
+        if 'projects' in json_body_response:
+            for project in json_body_response['projects']:
+                if project['name'] == PROJECT_NAME:
+                    return project['id']
+        else:
+            return None
 
 
     def getDomainRoleId(self,

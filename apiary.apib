@@ -285,6 +285,29 @@ not implemented yet
 
 + Response 201
 
+
+### rovocar rol a usuario [DELETE]
++ Parameters
+    + service_id (required, `string`) ... Domain
+
++ Request (application/json)
+
+        {
+            "SUBSERVICE_NAME":"Electricidad",
+            "SUBSERVICE_NAME_ID":"234234234234",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_NAME_ID":"sadfasdfasdfas",
+            "SERVICE_USER_NAME":"user_nameX",
+            "SERVICE_USER_ID":"asdfasdf",
+            "INHERIT":true
+        }
+
++ Response 204
+
+
 ## Users in Service [/v1.0/service/{serviceId}/user]
 ### Users list [GET]
 + Parameters

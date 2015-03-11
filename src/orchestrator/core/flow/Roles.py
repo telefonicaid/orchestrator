@@ -170,8 +170,9 @@ class Roles(FlowBase):
                     assign['role'].update(match_list[0])
 
                 # Expand if role is inherited
-                match_list = [x for x in inherit_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
-                assign['role']['inherited'] = len(match_list) > 0
+                if len(inherit_roles) > 0:
+                    match_list = [x for x in inherit_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
+                    assign['role']['inherited'] = len(match_list) > 0
 
                 # Expand project detail
                 if 'project' in assign['scope']:
@@ -258,8 +259,9 @@ class Roles(FlowBase):
             # 2.  Get role
             #
             if not ROLE_ID:
-                ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
-                                             ROLE_NAME)
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
@@ -291,6 +293,7 @@ class Roles(FlowBase):
             "ROLE_ID":"%s" % ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
 
     def assignRoleSubServiceUser(self,
@@ -408,6 +411,7 @@ class Roles(FlowBase):
             "ROLE_ID":"%s" % ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
     def assignInheritRoleServiceUser(self,
                                  SERVICE_NAME,
@@ -489,6 +493,7 @@ class Roles(FlowBase):
             # 4. Grant inherit role to user in all subservices
             #
             self.idm.grantInheritRole(SERVICE_ADMIN_TOKEN,
+                                      SERVICE_ID,
                                       ID_USER,
                                       INHERIT_ROLE_ID)
 
@@ -502,6 +507,7 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
     def revokeRoleServiceUser(self,
                               SERVICE_NAME,
@@ -568,16 +574,18 @@ class Roles(FlowBase):
             # 2. Get role
             #
             if not ROLE_ID:
-                ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
-                                             ROLE_NAME)
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 3. Get User
             #
             if not SERVICE_USER_ID:
-                SERVICE_USER_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                                     SERVICE_USER_NAME)
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
@@ -600,6 +608,7 @@ class Roles(FlowBase):
             "ROLE_ID":"%s" % ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
     def revokeRoleSubServiceUser(self,
                                  SERVICE_NAME,
@@ -716,6 +725,7 @@ class Roles(FlowBase):
             "ROLE_ID":"%s" % ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
 
     def revokeInheritRoleServiceUser(self,
@@ -788,8 +798,9 @@ class Roles(FlowBase):
             #
             # 3. Get User
             #
-            ID_USER = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                         SERVICE_USER_NAME)
+            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_ID,
+                                               SERVICE_USER_NAME)
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
 
 
@@ -797,8 +808,9 @@ class Roles(FlowBase):
             # 4. Revoke inherit role to user in all subservices
             #
             self.idm.revokeInheritRole(SERVICE_ADMIN_TOKEN,
-                                      ID_USER,
-                                      INHERIT_ROLE_ID)
+                                       SERVICE_ID,
+                                       ID_USER,
+                                       INHERIT_ROLE_ID)
 
 
         except Exception, ex:
@@ -810,3 +822,4 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
