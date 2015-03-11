@@ -352,9 +352,12 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        for project in json_body_response['projects']:
-            if project['name'] == PROJECT_NAME:
-                return project['id']
+        if 'projects' in json_body_response:
+            for project in json_body_response['projects']:
+                if project['name'] == PROJECT_NAME:
+                    return project['id']
+        else:
+            return None
 
 
     def getDomainRoleId(self,
