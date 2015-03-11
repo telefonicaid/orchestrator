@@ -8,7 +8,7 @@ Distribution: noarch
 Vendor: Telefonica I+D
 Group: Applications/System
 Packager: Telefonica I+D
-Requires: python, python-devel, python-virtualenv
+Requires: python
 Requires(post): /sbin/chkconfig, /usr/sbin/useradd npm
 Requires(preun): /sbin/chkconfig, /sbin/service
 Requires(postun): /sbin/service
