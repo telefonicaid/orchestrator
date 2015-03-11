@@ -160,7 +160,6 @@ class Domains(FlowBase):
                                                      DOMAIN_NAME)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
-
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN, DOMAIN_ID, NEW_SERVICE_DESCRIPTION)
 
             logger.debug("DOMAIN=%s" % DOMAIN)

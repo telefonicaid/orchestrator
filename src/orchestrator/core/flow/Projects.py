@@ -166,6 +166,7 @@ class Projects(FlowBase):
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
+                                             DOMAIN_ID,
                                              PROJECT_ID,
                                              NEW_SUBSERVICE_DESCRIPTION)
 
