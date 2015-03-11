@@ -259,8 +259,9 @@ class Roles(FlowBase):
             # 2.  Get role
             #
             if not ROLE_ID:
-                ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
-                                             ROLE_NAME)
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
@@ -292,6 +293,7 @@ class Roles(FlowBase):
             "ROLE_ID":"%s" % ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
 
     def assignRoleSubServiceUser(self,
@@ -409,6 +411,7 @@ class Roles(FlowBase):
             "ROLE_ID":"%s" % ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
     def assignInheritRoleServiceUser(self,
                                  SERVICE_NAME,
@@ -569,8 +572,9 @@ class Roles(FlowBase):
             # 2. Get role
             #
             if not ROLE_ID:
-                ROLE_ID = self.idm.getRoleId(SERVICE_ADMIN_TOKEN,
-                                             ROLE_NAME)
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #

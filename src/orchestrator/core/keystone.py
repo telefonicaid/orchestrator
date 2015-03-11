@@ -157,8 +157,8 @@ class IdMKeystoneOperations(IdMOperations):
                  CLOUD_ADMIN_TOKEN,
                  ROLE_NAME):
         res = self.IdMRestOperations.rest_request(url='/v3/roles?name=%s' % ROLE_NAME,
-                                method='GET',
-                                auth_token=CLOUD_ADMIN_TOKEN)
+                                                  method='GET',
+                                                  auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
