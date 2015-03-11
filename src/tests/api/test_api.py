@@ -973,7 +973,7 @@ class Test_UnassignRoleUser_RestView(object):
                                               HOST="localhost",
                                               PORT="8084")
 
-    def test_put_ok(self):
+    def test_delete_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         # Create a user to test it
         res = self.TestRestOps.rest_request(method="POST",
@@ -994,11 +994,11 @@ class Test_UnassignRoleUser_RestView(object):
                                                 service_id),
                                             json_data=True,
                                             data=self.payload_data_ok)
-        assert res.code == 204, (res.code, res.msg, res.raw_json)        
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 
-        
+
 
 if __name__ == '__main__':
 
@@ -1070,9 +1070,9 @@ if __name__ == '__main__':
 
     test_AssignRoleUser = Test_AssignRoleUser_RestView()
     test_AssignRoleUser.test_post_ok()
-    test_AssignRoleUser.test_post_ok2()
+    #test_AssignRoleUser.test_post_ok2()
     test_AssignRoleUser.test_post_ok3()
 
     test_UnassignRoleUser = Test_UnassignRoleUser_RestView()
-    test_UnassignRoleUser.test_post_ok()    
+    test_UnassignRoleUser.test_delete_ok()
 

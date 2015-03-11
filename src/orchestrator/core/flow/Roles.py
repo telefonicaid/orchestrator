@@ -493,6 +493,7 @@ class Roles(FlowBase):
             # 4. Grant inherit role to user in all subservices
             #
             self.idm.grantInheritRole(SERVICE_ADMIN_TOKEN,
+                                      SERVICE_ID,
                                       ID_USER,
                                       INHERIT_ROLE_ID)
 
@@ -506,6 +507,7 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
 
     def revokeRoleServiceUser(self,
                               SERVICE_NAME,
@@ -581,8 +583,9 @@ class Roles(FlowBase):
             # 3. Get User
             #
             if not SERVICE_USER_ID:
-                SERVICE_USER_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                                     SERVICE_USER_NAME)
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
@@ -795,8 +798,9 @@ class Roles(FlowBase):
             #
             # 3. Get User
             #
-            ID_USER = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
-                                         SERVICE_USER_NAME)
+            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_ID,
+                                               SERVICE_USER_NAME)
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
 
 
@@ -804,8 +808,9 @@ class Roles(FlowBase):
             # 4. Revoke inherit role to user in all subservices
             #
             self.idm.revokeInheritRole(SERVICE_ADMIN_TOKEN,
-                                      ID_USER,
-                                      INHERIT_ROLE_ID)
+                                       SERVICE_ID,
+                                       ID_USER,
+                                       INHERIT_ROLE_ID)
 
 
         except Exception, ex:
