@@ -11,7 +11,7 @@ $ python ./<orchestrator_script_name>.py <args>
 These are current command line availables:
 
 * [createNewService.py](SCRIPTS.md#createnewservicepy)
-* [createNewServiceRole.py]((SCRIPTS.md#createnewservicerolepy)
+* [createNewServiceRole.py](SCRIPTS.md#createnewservicerolepy)
 * [createNewServiceUser.py](SCRIPTS.md#createnewserviceuserpy)
 * [createNewSubService.py](SCRIPTS.md#createnewsubservicepy)
 * [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
