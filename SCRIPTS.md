@@ -10,18 +10,18 @@ $ python ./<orchestrator_script_name>.py <args>
 
 These are current command line availables:
 
-* createNewService.py
-* createNewServiceRole.py
-* createNewServiceUser.py
-* createNewSubService.py
-* assignRoleServiceUser.py
-* assignRoleSubServiceUser.py
-* assignInheritRoleServiceUser.py
-* printServices.py
-* printSubServices.py
-* unassignInheritRoleServiceUser.py
-* unassignRoleServiceUser.py
-* unassignRoleSubServiceUser.py
+* [createNewService.py](SCRIPTS.md#createnewservicepy)
+* [createNewServiceRole.py]((SCRIPTS.md#createnewservicerolepy)
+* [createNewServiceUser.py](SCRIPTS.md#createnewserviceuserpy)
+* [createNewSubService.py](SCRIPTS.md#createnewsubservicepy)
+* [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
+* [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
+* [assignInheritRoleServiceUser.py](SCRIPTS.md#assigninheritroleserviceuserpy)
+* [printServices.py](SCRIPTS.md#printservicespy)
+* [printSubServices.py](SCRIPTS.md#printsubservicespy)
+* [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
+* [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
+* [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
 
 
 
