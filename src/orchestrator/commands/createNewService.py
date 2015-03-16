@@ -1,6 +1,6 @@
 import sys
 import pprint
-from orchestrator.core.flow.createNewService import createNewService
+from orchestrator.core.flow.createNewService import CreateNewService
 
 
 
@@ -72,7 +72,7 @@ def main():
     #                    help='Shows tables draft')
     #args = parser.parse_args()
 
-    flow = createNewService(KEYSTONE_PROTOCOL,
+    flow = CreateNewService(KEYSTONE_PROTOCOL,
                             KEYSTONE_HOST,
                             KEYSTONE_PORT,
                             KEYPASS_PROTOCOL,
