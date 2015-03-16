@@ -86,9 +86,7 @@ Args:
 ```
 
 ### createNewServiceUser.py
-This script creates a new service in IoT keystone
-including admin user with role admin, subservice roles
-and configures keypass policies for orion and perseo
+This script creates a new sub service in IoT keystone
 ```
 Usage: ./createNewServiceUser.py [args]
 Args:
