@@ -9,7 +9,7 @@ def main():
     print "This script prints subservices of service"
 
     print ""
-    
+
     SCRIPT_NAME=sys.argv[0]
     NUM_ARGS_EXPECTED=6
 
@@ -45,7 +45,7 @@ def main():
     flow = Projects(KEYSTONE_PROTOCOL,
                             KEYSTONE_HOST,
                             KEYSTONE_PORT)
-    
+
     subservices = flow.projects(None,
                                 SERVICE_NAME,
                                 SERVICE_ADMIN_USER,
@@ -56,5 +56,5 @@ def main():
 
 
 if __name__ == '__main__':
-    
+
     main()

@@ -10,7 +10,7 @@ def main():
     print ""
 
     SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=7
+    NUM_ARGS_EXPECTED=10
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -22,6 +22,9 @@ def main():
         print "  <SERVICE_ADMIN_USER>            New service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        New service admin password"
         print "  <NEW_ROLE_NAME>                 Name of new role"
+        print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
+        print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
+        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -31,6 +34,9 @@ def main():
         print "                                 adm1           \\"
         print "                                 password       \\"
         print "                                 ServiceCustomer\\"
+        print "                                 http           \\"
+        print "                                 localhost      \\"
+        print "                                 8080           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -43,10 +49,16 @@ def main():
     SERVICE_ADMIN_USER=sys.argv[5]
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
     NEW_ROLE_NAME=sys.argv[7]
+    KEYPASS_PROTOCOL=sys.argv[8]
+    KEYPASS_HOST=sys.argv[9]
+    KEYPASS_PORT=sys.argv[10]
 
     flow = CreateNewServiceRole(KEYSTONE_PROTOCOL,
                                 KEYSTONE_HOST,
-                                KEYSTONE_PORT)
+                                KEYSTONE_PORT,
+                                KEYPASS_PROTOCOL,
+                                KEYPASS_HOST,
+                                KEYPASS_PORT)
 
     res = flow.createNewServiceRole(
                          SERVICE_NAME,
