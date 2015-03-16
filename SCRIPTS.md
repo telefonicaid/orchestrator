@@ -149,8 +149,8 @@ Args:
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <ROLE_NAME>                     Name of role
   <SERVICE_USER>                  Service username
 
@@ -175,8 +175,8 @@ Args:
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
   <SUBSERVICE_NAME>               SubService name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <ROLE_NAME>                     Name of role
   <SERVICE_USER>                  Service username
 
@@ -201,8 +201,8 @@ Args:
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <SERVICE_USER_NAME>             Service username
   <ROLE_NAME>                     Name of role
 
@@ -230,7 +230,7 @@ Args:
   <DOMAIN_ADMIN_PASSWORD>         Regional Service Provider password
 
   Typical usage:
-     ./printServices.py http           \
+     ./printServices.py http                    \
                                  localhost      \
                                  5000           \
                                  SmartValencia  \
@@ -268,13 +268,13 @@ Args:
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <SERVICE_USER_NAME>             Service username
   <ROLE_NAME>                     Name of role
 
   Typical usage:
-     ./unassignInheritRoleServiceUser.py http           \
+     ./unassignInheritRoleServiceUser.py http   \
                                  localhost      \
                                  5000           \
                                  SmartValencia  \
@@ -293,13 +293,13 @@ Args:
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <ROLE_NAME>                     Name of role
   <SERVICE_USER>                  Service username
 
   Typical usage:
-     ./unassignRoleServiceUser.py http           \
+     ./unassignRoleServiceUser.py http          \
                                  localhost      \
                                  5000           \
                                  SmartValencia  \
@@ -319,13 +319,13 @@ Args:
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
   <SUBSERVICE_NAME>               SubService name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <ROLE_NAME>                     Name of role
   <SERVICE_USER>                  Service username
 
   Typical usage:
-     ./unassignRoleSubServiceUser.py http           \
+     ./unassignRoleSubServiceUser.py http       \
                                  localhost      \
                                  5000           \
                                  SmartValencia  \
