@@ -964,10 +964,11 @@ class Test_UnassignRoleUser_RestView(object):
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"ServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "ROLE_NAME":"SubServiceCustomer",
             "SERVICE_USER_NAME":"user_%s" % self.suffix,
             "SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
