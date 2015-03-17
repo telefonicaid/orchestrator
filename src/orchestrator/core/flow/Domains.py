@@ -209,6 +209,8 @@ class Domains(FlowBase):
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
+                    DOMAIN_NAME = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+
                 else:
                     ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                     ADMIN_USER,
@@ -222,8 +224,9 @@ class Domains(FlowBase):
 
             DOMAIN = self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
 
-            # TOOD: Keypass delete policy of roles
-            
+            # Delete policy of roles in Access Control
+            self.ac.deleteTenantPolicies(ADMIN_TOKEN, DOMAIN_NAME)
+
             logger.debug("DOMAIN=%s" % DOMAIN)
 
         except Exception, ex:
