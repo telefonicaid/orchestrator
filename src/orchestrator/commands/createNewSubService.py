@@ -1,16 +1,14 @@
 import sys
 import pprint
-from orchestrator.core.flow.createNewService import createNewSubService
+from orchestrator.core.flow.createNewSubService import CreateNewSubService
 
 
 
 def main():
 
-    print "This script creates a new service in IoT keystone"
-    print "including admin user with role admin, subservice roles"
-    print "and configures keypass policies for orion and perseo"
+    print "This script creates a new sub service in IoT keystone"
     print ""
-    
+
     SCRIPT_NAME=sys.argv[0]
     NUM_ARGS_EXPECTED=8
 
@@ -24,7 +22,7 @@ def main():
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print "  <NEW_SUBSERVICE_NAME>           New subservice name"
-        print "  <NEW_SUBSERVICE_DESCRIPTION>    New subservice description"        
+        print "  <NEW_SUBSERVICE_DESCRIPTION>    New subservice description"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -57,11 +55,11 @@ def main():
     # parser.add_argument('--tables', dest='tables', action='store_true',
     #                    help='Shows tables draft')
     #args = parser.parse_args()
-    
-    flow = createNewSubService(KEYSTONE_PROTOCOL,
+
+    flow = CreateNewSubService(KEYSTONE_PROTOCOL,
                                KEYSTONE_HOST,
                                KEYSTONE_PORT)
-    
+
     res = flow.createNewSubService(
                         SERVICE_NAME,
                         None,
@@ -74,5 +72,5 @@ def main():
 
 
 if __name__ == '__main__':
-    
+
     main()

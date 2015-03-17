@@ -18,9 +18,9 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SERVICE_ADMIN_USER>            New service admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        New service admin password"
-        print "  <SERVICE_USER_NAME>             Service username"        
+        print "  <SERVICE_ADMIN_USER>            Service admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
+        print "  <SERVICE_USER_NAME>             Service username"
         print "  <ROLE_NAME>                     Name of role"
         print ""
         print "  Typical usage:"
@@ -31,7 +31,7 @@ def main():
         print "                                 adm1           \\"
         print "                                 password       \\"
         print "                                 adm1           \\"
-        print "                                 SubServiceAdmin\\"        
+        print "                                 SubServiceAdmin\\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -43,7 +43,7 @@ def main():
     SERVICE_NAME=sys.argv[4]
     SERVICE_ADMIN_USER=sys.argv[5]
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
-    SERVICE_USER=sys.argv[7]    
+    SERVICE_USER=sys.argv[7]
     ROLE_NAME=sys.argv[8]
 
 
