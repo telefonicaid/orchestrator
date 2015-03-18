@@ -196,6 +196,48 @@ class Test_NewService_RestView(object):
         assert res.code == 400, (res.code, res.msg)
 
 
+
+class Test_DeleteService_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "DOMAIN_NAME":"admin_domain",
+            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_NAME":"SmartValencia_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION":"SmartValencia_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
+            "SERVICE_NAME":"SmartValencia_%s" % self.suffix,
+            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_ADMIN_PASSWORD":"password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_delete_ok(self):
+
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/",
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        service_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+
+
 class Test_NewSubService_RestView(object):
 
     def __init__(self):
@@ -1074,6 +1116,9 @@ if __name__ == '__main__':
     test_NewService.test_post_ok_bad()
     test_NewService.test_post_bad()
     test_NewService.test_post_bad2()
+
+    test_DeleteService = Test_DeleteService_RestView()
+    test_DeleteService.test_delete_ok()
 
     test_NewSubService = Test_NewSubService_RestView()
     test_NewSubService.test_post_ok()

@@ -201,18 +201,12 @@ q        - SERVICE_ADMIN_USER: Service admin username
 
         try:
             if not ADMIN_TOKEN:
-                if DOMAIN_ID:
-                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                     ADMIN_USER,
-                                                     ADMIN_PASSWORD)
-                    DOMAIN_NAME = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
-
-                else:
-                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
-                                                    ADMIN_USER,
-                                                    ADMIN_PASSWORD)
-                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-                                                     DOMAIN_NAME)
+                ADMIN_TOKEN = self.idm.getToken("admin_domain",
+                                                ADMIN_USER,
+                                                ADMIN_PASSWORD)
+            if not DOMAIN_ID:
+                DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                 DOMAIN_NAME)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
