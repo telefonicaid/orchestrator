@@ -732,7 +732,7 @@ class IdMKeystoneOperations(IdMOperations):
                    SERVICE_ADMIN_TOKEN,
                    ID_ROLE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/Roles/%s' % ID_ROLE,
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles/%s' % ID_ROLE,
                                                   method='DELETE', data=None,
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
