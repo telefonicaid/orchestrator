@@ -272,7 +272,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 if subservice_id:
                     result = flow.update_project(
                                    request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
                                    request.DATA.get("SUBSERVICE_ID", subservice_id),
+                                   request.DATA.get("SUBSERVICE_NAME", None),
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
@@ -303,7 +305,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 if subservice_id:
                     result = flow.delete_project(
                                    request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
                                    request.DATA.get("SUBSERVICE_ID", subservice_id),
+                                   request.DATA.get("SUBSERVICE_NAME", None),
                                    request.DATA.get("SERVICE_ADMIN_USER", None),
                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))

@@ -819,7 +819,7 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ID_USER":"%s" % ID_USER,
+            "ID_USER":"%s" % SERVICE_USER_ID,
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))

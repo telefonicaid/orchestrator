@@ -184,7 +184,7 @@ class Domains(FlowBase):
         Params:
         - DOMAIN_ID:
         - DOMAIN_NAME:
-q        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         Return:

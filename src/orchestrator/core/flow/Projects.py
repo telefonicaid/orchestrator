@@ -128,7 +128,9 @@ class Projects(FlowBase):
 
     def update_project(self,
                        DOMAIN_ID,
+                       DOMAIN_NAME,
                        PROJECT_ID,
+                       PROJECT_NAME,
                        ADMIN_USER,
                        ADMIN_PASSWORD,
                        ADMIN_TOKEN,
@@ -140,7 +142,9 @@ class Projects(FlowBase):
 
         Params:
         - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
         - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -150,7 +154,9 @@ class Projects(FlowBase):
         '''
         data_log = {
             "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
             "PROJECT_ID":"%s" % PROJECT_ID,
+            "PROJECT_NAME":"%s" % PROJECT_NAME,
             "ADMIN_USER":"%s" % ADMIN_USER,
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
@@ -160,10 +166,21 @@ class Projects(FlowBase):
 
         try:
             if not ADMIN_TOKEN:
-                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                ADMIN_USER,
-                                                ADMIN_PASSWORD)
+                if not DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   PROJECT_NAME)
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
                                              DOMAIN_ID,
@@ -185,7 +202,9 @@ class Projects(FlowBase):
 
     def delete_project(self,
                 DOMAIN_ID,
+                DOMAIN_NAME,
                 PROJECT_ID,
+                PROJECT_NAME,
                 ADMIN_USER,
                 ADMIN_PASSWORD,
                 ADMIN_TOKEN):
@@ -196,14 +215,18 @@ class Projects(FlowBase):
 
         Params:
         - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
         - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         '''
         data_log = {
             "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
             "PROJECT_ID":"%s" % PROJECT_ID,
+            "PROJECT_NAME":"%s" % PROJECT_NAME,
             "ADMIN_USER":"%s" % ADMIN_USER,
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
@@ -211,11 +234,23 @@ class Projects(FlowBase):
         logger.debug("get_project invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
+
             if not ADMIN_TOKEN:
-                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                ADMIN_USER,
-                                                ADMIN_PASSWORD)
+                if not DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   PROJECT_NAME)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
