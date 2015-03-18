@@ -1,15 +1,17 @@
 import sys
+import pprint
 from orchestrator.core.flow.Roles import Roles
 
 
 
 def main():
 
-    print "This script assigns a role to a service user IoT keystone"
+    print "This script prints roles in a service"
+
     print ""
 
     SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=8
+    NUM_ARGS_EXPECTED=6
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -20,8 +22,10 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <SERVICE_USER_NAME>             Service username"
-        print "  <ROLE_NAME>                     Name of role"
+        # print "  <SUBSERVICE_NAME>               SubService name (optional)"
+        # print "  <ROLE_NAME>                     Role Name (optional)"
+        # print "  <USER_NAME>                     User Name (optional)"
+        # print "  <EFFECTIVE>                     Effective roles (optional)"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -30,8 +34,10 @@ def main():
         print "                                 SmartValencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 adm1           \\"
-        print "                                 SubServiceAdmin\\"
+        # print "                                 Electricidad   \\"
+        # print "                                 SubServiceAdmin\\"
+        # print "                                 Alice          \\"
+        # print "                                 True           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -43,24 +49,27 @@ def main():
     SERVICE_NAME=sys.argv[4]
     SERVICE_ADMIN_USER=sys.argv[5]
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
-    SERVICE_USER=sys.argv[7]
-    ROLE_NAME=sys.argv[8]
-
+    # SUBSERVICE_NAME=sys.argv[7]
+    # ROLE_NAME=sys.argv[8]
+    # USER_NAME=sys.argv[9]
+    # EFFECTIVE=sys.argv[10]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    flow.assignInheritRoleServiceUser(
-                          SERVICE_NAME,
-                          None,
-                          SERVICE_ADMIN_USER,
-                          SERVICE_ADMIN_PASSWORD,
-                          None,
-                          ROLE_NAME,
-                          None,
-                          SERVICE_USER,
-                          None)
+    roles = flow.roles_assignments(None,
+                                   SERVICE_NAME,
+                                   None,
+                                   None,
+                                   None,
+                                   SERVICE_ADMIN_USER,
+                                   SERVICE_ADMIN_PASSWORD,
+                                   None,
+                                   True)
+
+    pprint.pprint(roles)
+
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ from orchestrator.core.flow.Roles import Roles
 
 def main():
 
-    print "This script assigns a role to a service user IoT keystone"
+    print "This script revoke a role to a service user IoT keystone"
     print ""
 
     SCRIPT_NAME=sys.argv[0]
@@ -51,7 +51,7 @@ def main():
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    flow.assignInheritRoleServiceUser(
+    flow.revokeInheritRoleServiceUser(
                           SERVICE_NAME,
                           None,
                           SERVICE_ADMIN_USER,

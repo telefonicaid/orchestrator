@@ -15,7 +15,12 @@ framework.
 """
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orchestrator.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orchestrator.settings.dev")
+
+
+import orchestrator.core.startup as startup
+startup.run()
+
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION

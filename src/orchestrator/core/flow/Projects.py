@@ -63,7 +63,7 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "PROJECTS":"%s" % PROJECTS
+            "PROJECTS": PROJECTS
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
@@ -120,10 +120,65 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "PROJECT":"%s" % PROJECT
+            "PROJECT": PROJECT
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
 
 
+    def update_project(self,
+                       DOMAIN_ID,
+                       PROJECT_ID,
+                       ADMIN_USER,
+                       ADMIN_PASSWORD,
+                       ADMIN_TOKEN,
+                       NEW_SUBSERVICE_DESCRIPTION):
+
+        '''Update Project detail of a domain
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - PROJECT_ID: id of project
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - NEW_SUBSERVICE_DESCRIPTION: New subservice description
+        Return:
+        - project detail
+        '''
+        data_log = {
+            "DOMAIN_ID":"%s" % DOMAIN_ID,
+            "PROJECT_ID":"%s" % PROJECT_ID,
+            "ADMIN_USER":"%s" % ADMIN_USER,
+            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
+            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION, 
+        }
+        logger.debug("update_project invoked with: %s" % json.dumps(data_log, indent=3))
+
+        try:
+            if not ADMIN_TOKEN:
+                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                ADMIN_USER,
+                                                ADMIN_PASSWORD)
+            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            PROJECT = self.idm.updateProject(ADMIN_TOKEN,
+                                             DOMAIN_ID,
+                                             PROJECT_ID,
+                                             NEW_SUBSERVICE_DESCRIPTION)
+
+            logger.debug("PROJECT=%s" % PROJECT)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "PROJECT": PROJECT
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return PROJECT
 

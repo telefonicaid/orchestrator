@@ -16,7 +16,9 @@ class CreateNewService(FlowBase):
                          NEW_SERVICE_NAME,
                          NEW_SERVICE_DESCRIPTION,
                          NEW_SERVICE_ADMIN_USER,
-                         NEW_SERVICE_ADMIN_PASSWORD):
+                         NEW_SERVICE_ADMIN_PASSWORD,
+                         NEW_SERVICE_ADMIN_EMAIL):
+
 
         '''Creates a new Service (aka domain keystone).
 
@@ -31,6 +33,7 @@ class CreateNewService(FlowBase):
         - NEW_SERVICE_DESCRIPTION: New service description
         - NEW_SERVICE_ADMIN_USER: New service admin username
         - NEW_SERVICE_ADMIN_PASSWORD: New service admin password
+        - NEW_SERVICE_ADMIN_EMAIL: New service admin password (optional)
         Return:
         - token: service admin token
         - id: service Id
@@ -76,7 +79,7 @@ class CreateNewService(FlowBase):
                                                 NEW_SERVICE_NAME,
                                                 NEW_SERVICE_ADMIN_USER,
                                                 NEW_SERVICE_ADMIN_PASSWORD,
-                                                None)  # TODO admin email
+                                                NEW_SERVICE_ADMIN_EMAIL)
 
             logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER, ID_ADM1))
 
@@ -118,18 +121,24 @@ class CreateNewService(FlowBase):
             #
             # 5. Provision default platform roles AccessControl policies
             #
-            self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                      POLICY_FILE_NAME='policy-orion-admin.xml')
-            self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                      POLICY_FILE_NAME='policy-perseo-admin.xml')
-            self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                      ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                      POLICY_FILE_NAME='policy-orion-customer.xml')
-            self.idm.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                      ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                      POLICY_FILE_NAME='policy-perseo-customer.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                     ADMIN_ROLE_ID,
+                                     POLICY_FILE_NAME='policy-orion-admin.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                     ADMIN_ROLE_ID,
+                                     POLICY_FILE_NAME='policy-perseo-admin.xml')
 
         except Exception, ex:
             logger.error(ex)

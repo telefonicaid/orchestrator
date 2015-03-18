@@ -81,8 +81,8 @@ class UpdateUser(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "USER_ID":"%s" % USER_ID,
+            "USER_ID": USER_ID,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        #return {"id":ID_USER}
+        return { "id":USER_ID }
