@@ -670,3 +670,14 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         return json_body_response
+
+
+    def removeRole(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_ROLE):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/Roles/%s' % ID_ROLE,
+                                                  method='DELETE', data=None,
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
