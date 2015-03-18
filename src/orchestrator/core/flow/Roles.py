@@ -798,10 +798,11 @@ class Roles(FlowBase):
             #
             # 3. Get User
             #
-            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_ID,
-                                               SERVICE_USER_NAME)
-            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
             #
@@ -809,7 +810,7 @@ class Roles(FlowBase):
             #
             self.idm.revokeInheritRole(SERVICE_ADMIN_TOKEN,
                                        SERVICE_ID,
-                                       ID_USER,
+                                       SERVICE_USER_ID,
                                        INHERIT_ROLE_ID)
 
 
@@ -818,7 +819,7 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ID_USER":"%s" % ID_USER,
+            "ID_USER":"%s" % SERVICE_USER_ID,
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))

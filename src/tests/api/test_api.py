@@ -196,6 +196,48 @@ class Test_NewService_RestView(object):
         assert res.code == 400, (res.code, res.msg)
 
 
+
+class Test_DeleteService_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "DOMAIN_NAME":"admin_domain",
+            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_NAME":"SmartValencia_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION":"SmartValencia_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
+            "SERVICE_NAME":"SmartValencia_%s" % self.suffix,
+            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_ADMIN_PASSWORD":"password",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_delete_ok(self):
+
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/",
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        service_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+
+
 class Test_NewSubService_RestView(object):
 
     def __init__(self):
@@ -263,6 +305,60 @@ class Test_NewSubService_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
+
+
+
+class Test_DeleteSubService_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SUBSERVICE_NAME":"Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+        }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD":"wrong_password",
+            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad2 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_delete_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/subservice/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_NewServiceUser_RestView(object):
@@ -360,13 +456,13 @@ class Test_ServiceLists_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "DOMAIN_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
             "SERVICE_NAME":"SmartValencia",
             "NEW_SERVICE_DESCRIPTION": "SmartValencia Calore",
         }
         self.payload_data_ok3 = {
+            "DOMAIN_NAME":"SmartValencia",
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD":"password",
@@ -452,6 +548,17 @@ class Test_ServiceLists_RestView(object):
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+        # Get domain and check domain description
+        res = self.TestRestOps.rest_request(method="GET",
+                                             url="v1.0/service/%s" % service_id,
+                                             json_data=True,
+                                             data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert json_body_response['domain']['description'] == self.payload_data_ok2["NEW_SERVICE_DESCRIPTION"]
+
+
 class Test_ServiceDetail_RestView(object):
 
     def __init__(self):
@@ -517,6 +624,7 @@ class Test_ProjectList_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+
 
 
 class Test_ProjectDetail_RestView(object):
@@ -964,10 +1072,11 @@ class Test_UnassignRoleUser_RestView(object):
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"ServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "ROLE_NAME":"SubServiceCustomer",
             "SERVICE_USER_NAME":"user_%s" % self.suffix,
             "SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -1008,11 +1117,17 @@ if __name__ == '__main__':
     test_NewService.test_post_bad()
     test_NewService.test_post_bad2()
 
+    test_DeleteService = Test_DeleteService_RestView()
+    test_DeleteService.test_delete_ok()
+
     test_NewSubService = Test_NewSubService_RestView()
     test_NewSubService.test_post_ok()
     test_NewSubService.test_post_ok_bad()
     test_NewSubService.test_post_bad()
     test_NewSubService.test_post_bad2()
+
+    test_DeleteSubService = Test_DeleteSubService_RestView()
+    test_DeleteSubService.test_delete_ok()
 
     test_NewServiceUser = Test_NewServiceUser_RestView()
     test_NewServiceUser.test_post_ok()
@@ -1035,7 +1150,7 @@ if __name__ == '__main__':
     test_ServiceLists.test_get_bad3()
     test_ServiceLists.test_get_bad4()
     test_ServiceLists.test_get_bad5()
-    #test_ServiceLists.test_put_ok()
+    test_ServiceLists.test_put_ok()
 
     test_ProjectList = Test_ProjectList_RestView()
     test_ProjectList.test_get_ok()
