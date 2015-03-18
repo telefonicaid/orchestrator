@@ -625,9 +625,6 @@ class IdMKeystoneOperations(IdMOperations):
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        return json_body_response
 
     def deleteProject(self,
                   SERVICE_ADMIN_TOKEN,
@@ -637,9 +634,6 @@ class IdMKeystoneOperations(IdMOperations):
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        return json_body_response        
 
     def disableDomain(self,
                      CLOUD_ADMIN_TOKEN,

@@ -154,7 +154,7 @@ class Projects(FlowBase):
             "ADMIN_USER":"%s" % ADMIN_USER,
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
-            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION, 
+            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION,
         }
         logger.debug("update_project invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -218,12 +218,13 @@ class Projects(FlowBase):
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
-                                          PROJECT_ID)
+                                              DOMAIN_ID,
+                                              PROJECT_ID)
 
-            PROJECT = self.idm.deleteProject(ADMIN_TOKEN,
-                                             PROJECT_ID)            
+            self.idm.deleteProject(ADMIN_TOKEN,
+                                   PROJECT_ID)
 
-            
+
             logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:

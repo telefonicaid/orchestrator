@@ -184,7 +184,7 @@ class Domains(FlowBase):
         Params:
         - DOMAIN_ID:
         - DOMAIN_NAME:
-        - SERVICE_ADMIN_USER: Service admin username
+q        - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         Return:
@@ -218,7 +218,7 @@ class Domains(FlowBase):
 
             DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
 
-            DOMAIN = self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
+            self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             # Delete policy of roles in Access Control
             self.ac.deleteTenantPolicies(ADMIN_TOKEN, DOMAIN_NAME)
