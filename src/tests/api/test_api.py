@@ -360,13 +360,13 @@ class Test_ServiceLists_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "DOMAIN_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
             "SERVICE_NAME":"SmartValencia",
             "NEW_SERVICE_DESCRIPTION": "SmartValencia Calore",
         }
         self.payload_data_ok3 = {
+            "DOMAIN_NAME":"SmartValencia",
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD":"password",
@@ -451,6 +451,17 @@ class Test_ServiceLists_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        # Get domain and check domain description
+        res = self.TestRestOps.rest_request(method="GET",
+                                             url="v1.0/service/%s" % service_id,
+                                             json_data=True,
+                                             data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert json_body_response['domain']['description'] == self.payload_data_ok2["NEW_SERVICE_DESCRIPTION"]
+
 
 class Test_ServiceDetail_RestView(object):
 
@@ -1036,7 +1047,7 @@ if __name__ == '__main__':
     test_ServiceLists.test_get_bad3()
     test_ServiceLists.test_get_bad4()
     test_ServiceLists.test_get_bad5()
-    #test_ServiceLists.test_put_ok()
+    test_ServiceLists.test_put_ok()
 
     test_ProjectList = Test_ProjectList_RestView()
     test_ProjectList.test_get_ok()
