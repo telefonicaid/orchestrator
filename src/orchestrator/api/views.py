@@ -609,7 +609,6 @@ class RoleList_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
-
             result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
@@ -645,7 +644,6 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         flow = Roles(self.KEYSTONE_PROTOCOL,
                      self.KEYSTONE_HOST,
                      self.KEYSTONE_PORT)
-
         result = flow.roles_assignments(
                             request.DATA.get("SERVICE_ID", service_id),
                             None,
@@ -666,13 +664,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        inherit = ( request.GET.get('inherit', False) =="true" or
-                    request.DATA.get('INHERIT', False) =="true" )
+        inherit = ( request.GET.get('inherit', False) == True or
+                    request.DATA.get('INHERIT', False) == True )
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
                                        self.KEYSTONE_PORT)
+
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", None) ):
                 if inherit:
