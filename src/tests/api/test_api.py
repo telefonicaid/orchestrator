@@ -753,6 +753,9 @@ class Test_DeleteServiceRole_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        user_id = json_body_response['id']
 
         res = self.TestRestOps.rest_request(method="POST",
                                             url="v1.0/service/%s/role_assignments" % (
@@ -767,9 +770,15 @@ class Test_DeleteServiceRole_RestView(object):
                                             data=self.payload_data_ok2)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
-        # TODO: Check user exists with no role
-        None
-
+        # Check user exists with no role
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/role_assignments?user_id=%s" % (
+                                                service_id, user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert len(json_body_response['role_assignments']) == 0
 
 class Test_RoleList_RestView(object):
 
