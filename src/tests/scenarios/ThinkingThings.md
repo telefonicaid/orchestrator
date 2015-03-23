@@ -6,6 +6,7 @@
                      
 ### SubServicios
  * ThinkingThings\
+ * ThinkingThings\user_x
 
 
 ### Roles
@@ -19,5 +20,7 @@
 ```
 adm    - admin               - ThinkingThings
        - SubServiceAdmin     - ThinkingThings\*
+
+user_x - SubServiceAdmin     - ThinkingThings\user_x
 
 ```
