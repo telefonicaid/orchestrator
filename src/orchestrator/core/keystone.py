@@ -730,9 +730,10 @@ class IdMKeystoneOperations(IdMOperations):
 
     def removeRole(self,
                    SERVICE_ADMIN_TOKEN,
+                   DOMAIN_ID,
                    ID_ROLE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles/%s' % ID_ROLE,
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles/%s?domain_id=%s' % (ID_ROLE, DOMAIN_ID),
                                                   method='DELETE', data=None,
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 

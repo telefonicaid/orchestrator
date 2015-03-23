@@ -699,10 +699,22 @@ class Test_DeleteServiceRole_RestView(object):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
             "SERVICE_NAME":"SmartValencia",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_USER":"Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME":"role_%s" % self.suffix,
+            "ROLE_NAME":"role_%s" % self.suffix,
         }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_ROLE_NAME":"role_tmp_%s" % self.suffix,
+            "ROLE_NAME":"role_tmp_%s" % self.suffix,
+            "SERVICE_USER_NAME":"user_for_role_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"user_for_role_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"user_for_role_%s" % self.suffix,
+        }
+
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -722,6 +734,41 @@ class Test_DeleteServiceRole_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+    def test_delete_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/role/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        role_id = json_body_response['id']
+
+        # Create a user to test it
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/role_assignments" % (
+                                                service_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+        # TODO: Check user exists with no role
+        None
 
 
 class Test_RoleList_RestView(object):
@@ -1174,6 +1221,7 @@ if __name__ == '__main__':
 
     test_DeleteServiceRole = Test_DeleteServiceRole_RestView()
     test_DeleteServiceRole.test_delete_ok()
+    test_DeleteServiceRole.test_delete_ok2()
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
     test_ServiceDetail.test_get_ok()

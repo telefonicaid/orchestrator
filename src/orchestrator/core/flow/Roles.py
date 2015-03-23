@@ -890,6 +890,7 @@ class Roles(FlowBase):
             # 3. Remove user ID
             #
             self.idm.removeRole(SERVICE_ADMIN_TOKEN,
+                                SERVICE_ID,
                                 ROLE_ID)
 
 
