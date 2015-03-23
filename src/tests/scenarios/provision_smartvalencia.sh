@@ -2,7 +2,7 @@
 
 cd ../../orchestrator/commands/
 
-  ./createNewServiceKeystone.py http            \
+  ./createNewService.py http                    \
                                  localhost      \
                                  5000           \
                                  admin_domain   \
@@ -16,7 +16,7 @@ cd ../../orchestrator/commands/
                                  localhost      \
                                  8080
 
-  ./assignInheritRoleServiceUserKeystone.py http     \
+  ./assignInheritRoleServiceUser.py http             \
                                     localhost        \
                                     5000             \
                                     SmartValencia    \
@@ -28,7 +28,7 @@ cd ../../orchestrator/commands/
                                     localhost        \
                                     8080
 
-  ./createNewSubServiceKeystone.py  http             \
+  ./createNewSubService.py  http                     \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -37,7 +37,7 @@ cd ../../orchestrator/commands/
                                       Electricidad   \
                                       electricidad
 
-  ./createNewSubServiceAdminKeystone.py  http        \
+  ./createNewSubServiceAdmin.py  http                \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -47,7 +47,7 @@ cd ../../orchestrator/commands/
                                       Alice          \
                                       password
 
-  ./createNewSubServiceKeystone.py  http             \
+  ./createNewSubService.py  http                     \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -56,7 +56,7 @@ cd ../../orchestrator/commands/
                                       Basuras        \
                                       basuras
 
-  ./createNewSubServiceUserKeystone.py  http          \
+  ./createNewSubServiceUser.py  http                  \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
@@ -66,7 +66,7 @@ cd ../../orchestrator/commands/
                                        bob            \
                                        password
 
-  ./assignRoleSubServiceUserKeystone.py http          \
+  ./assignRoleSubServiceUser.py http                  \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
@@ -76,7 +76,7 @@ cd ../../orchestrator/commands/
                                        SubServiceAdmin\
                                        bob           
 
-  ./createNewServiceUserKeystone.py  http            \
+  ./createNewServiceUser.py  http                    \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -94,7 +94,7 @@ cd ../../orchestrator/commands/
                                       ServiceCustomer
 
 
-  ./assignRoleServiceUserKeystone.py http             \
+  ./assignRoleServiceUser.py http                     \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
@@ -103,7 +103,7 @@ cd ../../orchestrator/commands/
                                        ServiceCustomer\
                                        Carl           
 
-  ./assignInheritRoleServiceUserKeystone.py http      \
+  ./assignInheritRoleServiceUser.py http              \
                                     localhost         \
                                     5000              \
                                     SmartValencia     \
