@@ -49,6 +49,7 @@ json = {
             },
             "NEW_SERVICE_ADMIN_EMAIL": {
                 "type": "string",
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
             },
         },
         # "oneof": {
@@ -252,6 +253,7 @@ json = {
             },
             "NEW_SERVICE_USER_EMAIL":{
                 "type": "string",
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
             },
         },
         #"required": [ ],
