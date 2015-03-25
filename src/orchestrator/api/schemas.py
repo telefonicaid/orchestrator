@@ -33,7 +33,7 @@ json = {
             "NEW_SERVICE_NAME": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9]+)$",
+                "pattern": "^([A-Za-z0-9_]+)$",
             },
             "NEW_SERVICE_DESCRIPTION": {
                 "type": "string",
@@ -41,10 +41,11 @@ json = {
             "NEW_SERVICE_ADMIN_USER": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9]+)$",
+                "pattern": "^([A-Za-z0-9_]+)$",
             },
             "NEW_SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
+                "minLength": 6,
             },
             "NEW_SERVICE_ADMIN_EMAIL": {
                 "type": "string",
@@ -161,7 +162,7 @@ json = {
             "NEW_SUBSERVICE_NAME": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9]+)$",
+                "pattern": "^([A-Za-z0-9_]+)$",
             },
             "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
@@ -201,7 +202,7 @@ json = {
             },
             "USER_NAME": {
                 "type": "string",
-                "pattern": "^([A-Za-z0-9]+)$",
+                "pattern": "^([A-Za-z0-9_]+)$",
             },
             "USER_ID": {
                 "type": "string",
@@ -243,10 +244,11 @@ json = {
             "NEW_SERVICE_USER_NAME": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9]+)$",
+                "pattern": "^([A-Za-z0-9_]+)$",
             },
             "NEW_SERVICE_USER_PASSWORD":{
                 "type": "string",
+                "minLength": 6,
             },
             "NEW_SERVICE_USER_EMAIL":{
                 "type": "string",
@@ -285,7 +287,7 @@ json = {
             "NEW_ROLE_NAME": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9]+)$",
+                "pattern": "^([A-Za-z0-9_]+)$",
             },
             "XACML_POLICY": {
                 "type": "string",
