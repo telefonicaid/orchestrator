@@ -32,7 +32,7 @@ json = {
             },
             "NEW_SERVICE_NAME": {
                 "type": "string",
-                #"maxLength": 20,
+                "maxLength": 50,
                 "pattern": "^([A-Za-z0-9]+)$",
             },
             "NEW_SERVICE_DESCRIPTION": {
@@ -40,6 +40,8 @@ json = {
             },
             "NEW_SERVICE_ADMIN_USER": {
                 "type": "string",
+                "maxLength": 50,
+                "pattern": "^([A-Za-z0-9]+)$",
             },
             "NEW_SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
@@ -158,6 +160,7 @@ json = {
             },
             "NEW_SUBSERVICE_NAME": {
                 "type": "string",
+                "maxLength": 50,
                 "pattern": "^([A-Za-z0-9]+)$",
             },
             "NEW_SUBSERVICE_DESCRIPTION": {
@@ -239,6 +242,7 @@ json = {
             },
             "NEW_SERVICE_USER_NAME": {
                 "type": "string",
+                "maxLength": 50,
                 "pattern": "^([A-Za-z0-9]+)$",
             },
             "NEW_SERVICE_USER_PASSWORD":{
@@ -280,6 +284,7 @@ json = {
             },
             "NEW_ROLE_NAME": {
                 "type": "string",
+                "maxLength": 50,
                 "pattern": "^([A-Za-z0-9]+)$",
             },
             "XACML_POLICY": {
