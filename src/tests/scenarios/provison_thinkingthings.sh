@@ -6,7 +6,7 @@
 
 cd ../../orchestrator/commands/
 
-./createNewService.py http                      \
+ ./createNewService.py http                     \
                                  localhost      \
                                  5000           \
                                  admin_domain   \
@@ -21,7 +21,7 @@ cd ../../orchestrator/commands/
                                  8080
 
 
-./createNewSubKeystone.py  http                      \
+ ./createNewSubService.py  http                      \
                                       localhost      \
                                       5000           \
                                       ThinkingThings \
@@ -44,7 +44,7 @@ cd ../../orchestrator/commands/
   ./assignRoleSubServiceUserpy http                   \
                                        localhost      \
                                        5000           \
-                                       SmartValencia  \
+                                       ThinkingThings \
                                        admin_tt       \
                                        password       \
                                        user_x         \
