@@ -12,7 +12,9 @@ class Roles(FlowBase):
                 DOMAIN_ID,
                 ADMIN_USER,
                 ADMIN_PASSWORD,
-                ADMIN_TOKEN):
+                ADMIN_TOKEN,
+                START_INDEX=None,
+                COUNT=None):
 
         '''Get Roles of a domain
 
@@ -23,6 +25,8 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        - START_INDEX: Start index
+        - COUNT: Count
         Return:
         - array list of roles
         '''
@@ -30,7 +34,9 @@ class Roles(FlowBase):
             "DOMAIN_ID":"%s" % DOMAIN_ID,
             "ADMIN_USER":"%s" % ADMIN_USER,
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
+            "START_INDEX":"%s" % START_INDEX,
+            "COUNT":"%s" % COUNT,
         }
         logger.debug("roles invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -115,6 +121,12 @@ class Roles(FlowBase):
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            # if USER_ID:
+            #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
+            #                                                  USER_ID,
+            #                                                  EFFECTIVE)
+            #     logger.debug("USER_ROLES=%s" % json.dumps(USER_ROLES, indent=3))
 
             if PROJECT_ID:
                 PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
