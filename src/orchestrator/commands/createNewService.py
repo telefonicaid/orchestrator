@@ -1,6 +1,13 @@
+#-*- coding: utf-8 -*-
 import sys
 import pprint
+from jsonschema import validate
+from jsonschema import Draft4Validator
+
 from orchestrator.core.flow.createNewService import CreateNewService
+from orchestrator.api import schemas
+
+
 
 
 
@@ -71,6 +78,20 @@ def main():
     # parser.add_argument('--tables', dest='tables', action='store_true',
     #                    help='Shows tables draft')
     #args = parser.parse_args()
+
+    Draft4Validator.check_schema(schemas.json["ServiceCreate"])
+
+    validate(
+        {
+            "DOMAIN_NAME": DOMAIN_NAME,
+            "DOMAIN_ADMIN_USER": DOMAIN_ADMIN_USER,
+            "DOMAIN_ADMIN_PASSWORD": DOMAIN_ADMIN_PASSWORD,
+            "NEW_SERVICE_NAME": NEW_SERVICE_NAME,
+            "NEW_SERVICE_DESCRIPTION": NEW_SERVICE_DESCRIPTION,
+            "NEW_SERVICE_ADMIN_USER": NEW_SERVICE_ADMIN_USER,
+            "NEW_SERVICE_ADMIN_PASSWORD": NEW_SERVICE_ADMIN_PASSWORD,
+        },
+        schemas.json["ServiceCreate"])
 
     flow = CreateNewService(KEYSTONE_PROTOCOL,
                             KEYSTONE_HOST,
