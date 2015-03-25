@@ -1,7 +1,9 @@
 import sys
 import pprint
-from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
+from jsonschema import validate
 
+from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
+from orchestrator.api import schemas
 
 
 def main():
@@ -49,6 +51,16 @@ def main():
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
     NEW_USER_NAME=sys.argv[7]
     NEW_USER_PASSWORD=sys.argv[8]
+
+    validate(
+        {
+            "SERVICE_NAME": SERVICE_NAME,
+            "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
+            "NEW_USER_NAME": NEW_USER_NAME,
+            "NEW_USER_PASSWORD": NEW_USER_PASSWORD,
+        },
+        schemas.json["ServiceCreate"])
 
     flow = CreateNewServiceUser(KEYSTONE_PROTOCOL,
                                 KEYSTONE_HOST,
