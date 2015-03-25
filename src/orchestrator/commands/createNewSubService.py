@@ -1,6 +1,9 @@
 import sys
 import pprint
+from jsonschema import validate
+
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
+from orchestrator.api import schemas
 
 
 
@@ -55,6 +58,17 @@ def main():
     # parser.add_argument('--tables', dest='tables', action='store_true',
     #                    help='Shows tables draft')
     #args = parser.parse_args()
+
+
+    validate(
+        {
+            "SERVICE_NAME": SERVICE_NAME,
+            "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
+            "NEW_SUBSERVICE_NAME": NEW_SUBSERVICE_NAME,
+            "NEW_SUBSERVICE_DESCRIPTION": NEW_SUBSERVICE_DESCRIPTION,
+        },
+        schemas.json["SubServiceCreate"])
 
     flow = CreateNewSubService(KEYSTONE_PROTOCOL,
                                KEYSTONE_HOST,

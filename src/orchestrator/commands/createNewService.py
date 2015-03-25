@@ -79,7 +79,7 @@ def main():
     #                    help='Shows tables draft')
     #args = parser.parse_args()
 
-    Draft4Validator.check_schema(schemas.json["ServiceCreate"])
+    #Draft4Validator.check_schema(schemas.json["ServiceCreate"])
 
     validate(
         {
