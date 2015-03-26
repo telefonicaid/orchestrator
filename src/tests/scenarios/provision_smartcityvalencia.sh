@@ -6,7 +6,7 @@
 
 cd ../../orchestrator/commands/
 
-./createNewServiceKeystone.sh http              \
+./createNewService.sh http                     \
                                 localhost      \
                                 5000           \
                                 admin_domain   \

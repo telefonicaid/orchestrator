@@ -2,7 +2,7 @@
 
 cd ../../orchestrator/commands/
 
-  ./createNewServiceKeystone.py http            \
+  ./createNewService.py http                    \
                                  localhost      \
                                  5000           \
                                  admin_domain   \
@@ -16,7 +16,7 @@ cd ../../orchestrator/commands/
                                  localhost      \
                                  8080
 
-  ./assignInheritRoleServiceUserKeystone.py http     \
+  ./assignInheritRoleServiceUser.py http             \
                                     localhost        \
                                     5000             \
                                     Tecnoport2015    \
@@ -28,7 +28,7 @@ cd ../../orchestrator/commands/
                                     localhost        \
                                     8080
 
-  ./createNewSubServiceKeystone.py  http          \
+  ./createNewSubService.py  http                  \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -37,7 +37,7 @@ cd ../../orchestrator/commands/
                                       cuts        \
                                       cuts
 
-  ./createNewServiceUserKeystone.py  http           \
+  ./createNewServiceUser.py  http                   \
                                       localhost     \
                                       5000          \
                                       tecnoport     \
@@ -55,7 +55,7 @@ cd ../../orchestrator/commands/
                                      ServiceCustomer
 
 
-  ./assignRoleServiceUserKeystone.py http            \
+  ./assignRoleServiceUser.py http                    \
                                       localhost      \
                                       5001           \
                                       tecnoport      \
@@ -64,7 +64,7 @@ cd ../../orchestrator/commands/
                                       ServiceCustomer\
                                       tecnoport_customer
 
- ./createNewSubServiceAdminKeystone.py  http      \
+ ./createNewSubServiceAdmin.py  http              \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -74,7 +74,7 @@ cd ../../orchestrator/commands/
                                       tecnoport_cuts_admin  \
                                       password
 
-  ./createNewSubServiceUserKeystone.py  http         \
+  ./createNewSubServiceUser.py  http                 \
                                        localhost     \
                                        5000          \
                                        tecnoport     \
@@ -84,7 +84,7 @@ cd ../../orchestrator/commands/
                                        tecnoport_cuts_customer \
                                        password
 
- ./createNewSubServiceKeystone.py  http           \
+ ./createNewSubService.py  http                   \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -93,7 +93,7 @@ cd ../../orchestrator/commands/
                                       erio        \
                                       erio
 
- ./createNewSubServiceAdminKeystone.py  http      \
+ ./createNewSubServiceAdmin.py  http              \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -103,7 +103,7 @@ cd ../../orchestrator/commands/
                                       tecnoport_erio_admin  \
                                       password
 
- ./createNewSubServiceKeystone.py  http           \
+ ./createNewSubService.py  http                   \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -112,7 +112,7 @@ cd ../../orchestrator/commands/
                                       fps         \
                                       fps
 
- ./createNewSubServiceAdminKeystone.py  http      \
+ ./createNewSubServiceAdmin.py  http              \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
