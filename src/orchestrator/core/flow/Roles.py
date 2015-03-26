@@ -836,7 +836,7 @@ class Roles(FlowBase):
                    ROLE_NAME,
                    ROLE_ID):
 
-        '''Removes an user Service (aka domain user keystone).
+        '''Removes an role Service (aka domain user keystone).
 
         In case of HTTP error, return HTTP error
 
@@ -876,7 +876,7 @@ class Roles(FlowBase):
 
 
             #
-            # 2. Get user ID
+            # 2. Get Role ID
             #
             if not ROLE_ID:
                 ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
@@ -885,10 +885,8 @@ class Roles(FlowBase):
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
 
-            # TODO: disable us before remove it ?
-
             #
-            # 3. Remove user ID
+            # 3. Remove role ID
             #
             self.idm.removeRole(SERVICE_ADMIN_TOKEN,
                                 SERVICE_ID,
