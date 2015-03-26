@@ -55,6 +55,7 @@ def main():
 
     flow.assignRoleSubServiceUser(
                              SERVICE_NAME,
+                             None,
                              SUBSERVICE_NAME,
                              None,
                              SERVICE_ADMIN_USER,

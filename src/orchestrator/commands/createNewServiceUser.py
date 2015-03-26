@@ -57,10 +57,10 @@ def main():
             "SERVICE_NAME": SERVICE_NAME,
             "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
-            "NEW_USER_NAME": NEW_USER_NAME,
-            "NEW_USER_PASSWORD": NEW_USER_PASSWORD,
+            "NEW_SERVICE_USER_NAME": NEW_USER_NAME,
+            "NEW_SERVICE_USER_PASSWORD": NEW_USER_PASSWORD,
         },
-        schemas.json["ServiceCreate"])
+        schemas.json["UserList"])
 
     flow = CreateNewServiceUser(KEYSTONE_PROTOCOL,
                                 KEYSTONE_HOST,
@@ -68,12 +68,14 @@ def main():
 
     res = flow.createNewServiceUser(
                          SERVICE_NAME,
+                         None,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
+                         None,
                          NEW_USER_NAME,
                          NEW_USER_PASSWORD,
                          None)
-    pprint(res)
+    pprint.pprint(res)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@
 
 cd ../../orchestrator/commands/
 
-./createNewService.sh http                     \
+python ./createNewService.sh http              \
                                 localhost      \
                                 5000           \
                                 admin_domain   \

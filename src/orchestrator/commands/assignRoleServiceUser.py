@@ -52,6 +52,7 @@ def main():
 
     flow.assignRoleServiceUser(
                           SERVICE_NAME,
+                          None,
                           SERVICE_ADMIN_USER,
                           SERVICE_ADMIN_PASSWORD,
                           None,

@@ -73,11 +73,13 @@ def main():
                                 KEYPASS_PORT)
 
     res = flow.createNewServiceRole(
+                         None,
                          SERVICE_NAME,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
                          None,
-                         NEW_ROLE_NAME)
+                         NEW_ROLE_NAME,
+                         None)
     pprint.pprint(res)
 
 if __name__ == '__main__':
