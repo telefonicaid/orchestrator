@@ -66,3 +66,18 @@ class AccCKeypassOperations(AccCOperations):
 
         assert res.code == 201, (res.code, res.msg)
         # TODO: return ?
+
+
+    def deleteTenantPolicies(self,
+                              SERVICE_NAME,
+                              SERVICE_ADMIN_TOKEN):
+
+        res = self.AccessControlRestOperations.rest_request(
+                                url='pap/v1',
+                                method='DELETE',
+                                json_data=False,
+                                auth_token=SERVICE_ADMIN_TOKEN,
+                                fiware_service=SERVICE_NAME)
+
+        assert res.code == 204, (res.code, res.msg)
+

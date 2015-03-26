@@ -483,10 +483,11 @@ class Roles(FlowBase):
             #
             # 3. Get User
             #
-            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_ID,
-                                               SERVICE_USER_NAME)
-            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
             #
@@ -494,7 +495,7 @@ class Roles(FlowBase):
             #
             self.idm.grantInheritRole(SERVICE_ADMIN_TOKEN,
                                       SERVICE_ID,
-                                      ID_USER,
+                                      SERVICE_USER_ID,
                                       INHERIT_ROLE_ID)
 
 
@@ -503,7 +504,7 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ID_USER":"%s" % ID_USER,
+            "ID_USER":"%s" % SERVICE_USER_ID,
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
@@ -798,10 +799,11 @@ class Roles(FlowBase):
             #
             # 3. Get User
             #
-            ID_USER = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_ID,
-                                               SERVICE_USER_NAME)
-            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, ID_USER))
+            if not SERVICE_USER_ID:
+                SERVICE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           SERVICE_USER_NAME)
+            logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, SERVICE_USER_ID))
 
 
             #
@@ -809,7 +811,7 @@ class Roles(FlowBase):
             #
             self.idm.revokeInheritRole(SERVICE_ADMIN_TOKEN,
                                        SERVICE_ID,
-                                       ID_USER,
+                                       SERVICE_USER_ID,
                                        INHERIT_ROLE_ID)
 
 
@@ -818,8 +820,88 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ID_USER":"%s" % ID_USER,
+            "ID_USER":"%s" % SERVICE_USER_ID,
             "INHERIT_ROLE_ID":"%s" % INHERIT_ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+
+    def removeRole(self,
+                   SERVICE_NAME,
+                   SERVICE_ID,
+                   SERVICE_ADMIN_USER,
+                   SERVICE_ADMIN_PASSWORD,
+                   SERVICE_ADMIN_TOKEN,
+                   ROLE_NAME,
+                   ROLE_ID):
+
+        '''Removes an user Service (aka domain user keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service name
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role ID
+        '''
+        data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
+            "SERVICE_ID":"%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME":"%s" % ROLE_NAME,
+            "ROLE_ID":"%s" % ROLE_ID
+        }
+        logger.debug("projects invoked with: %s" % json.dumps(data_log, indent=3))
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+
+            #
+            # 2. Get user ID
+            #
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+
+            # TODO: disable us before remove it ?
+
+            #
+            # 3. Remove user ID
+            #
+            self.idm.removeRole(SERVICE_ADMIN_TOKEN,
+                                SERVICE_ID,
+                                ROLE_ID)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "ROLE_ID": ROLE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
         return {}
