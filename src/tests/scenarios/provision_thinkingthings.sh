@@ -6,7 +6,7 @@
 
 cd ../../orchestrator/commands/
 
- ./createNewService.py http                     \
+python ./createNewService.py http               \
                                  localhost      \
                                  5000           \
                                  admin_domain   \
@@ -21,7 +21,7 @@ cd ../../orchestrator/commands/
                                  8080
 
 
- ./createNewSubService.py  http                      \
+python ./createNewSubService.py  http                \
                                       localhost      \
                                       5000           \
                                       ThinkingThings \
@@ -30,18 +30,16 @@ cd ../../orchestrator/commands/
                                       user_x         \
                                       user_x
 
-
-  ./createNewSubServiceUser.py  http                  \
+python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        ThinkingThings \
                                        adm_tt         \
                                        password       \
                                        user_x         \
-                                       user_x         \
                                        password
 
-  ./assignRoleSubServiceUserpy http                   \
+python ./assignRoleSubServiceUserpy http              \
                                        localhost      \
                                        5000           \
                                        ThinkingThings \
@@ -49,6 +47,16 @@ cd ../../orchestrator/commands/
                                        password       \
                                        user_x         \
                                        SubServiceAdmin\
+                                       user_x
+
+python ./assignRoleSubServiceUserpy http              \
+                                       localhost      \
+                                       5000           \
+                                       ThinkingThings \
+                                       admin_tt       \
+                                       password       \
+                                       user_x         \
+                                       SubServiceCustomer\
                                        user_x
 
 cd -

@@ -14,13 +14,13 @@
  * SubServiceAdmin
  * SubServiceCustomer
 
-
 ### Users
 ```
 adm    - admin               - ThinkingThings
        - SubServiceAdmin     - ThinkingThings\*
 
 user_x - SubServiceAdmin     - ThinkingThings\user_x
+       - SubServiceCustomer  - ThinkingThings\user_x
 
 ```
 
