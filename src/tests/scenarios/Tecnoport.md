@@ -23,6 +23,6 @@ tecnoport_cuts_admin  - SubServiceAdmin
 tecnoport_erio_admin  - SubServiceAdmin              
 tecnoport_fps_admin   - SubServiceAdmin
 
-repsol_admin          - admin
-                      - SubServiceAdmin 
 ```
+
+[Provision script](provision_tecnoport.sh)

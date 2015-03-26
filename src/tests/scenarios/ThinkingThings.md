@@ -13,7 +13,6 @@
  * admin
  * SubServiceAdmin
  * SubServiceCustomer
- * ServiceCustomer
 
 
 ### Users
@@ -24,3 +23,5 @@ adm    - admin               - ThinkingThings
 user_x - SubServiceAdmin     - ThinkingThings\user_x
 
 ```
+
+[Provision script](provision_thinkingthings.sh)

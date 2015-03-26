@@ -29,3 +29,5 @@ bob    - SubServiceCustomer  - SmartValencia\Electricidad
 Carl   - ServiceCustomer     - SmartValencia
        - SubServiceCustomer  - SmartValencia\*
 ```
+[Provision script](provision_smartvalencia.sh)
+[Provision script](provision_smartcityvalencia.sh)
