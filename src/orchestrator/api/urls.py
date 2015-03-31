@@ -10,6 +10,7 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     Role_RESTView,
                                     RoleList_RESTView,
                                     AssignRoleUser_RESTView,
+                                    Trust_RESTView,
                                     )
 
 
@@ -23,4 +24,5 @@ urlpatterns = patterns('',
      url(r'^service/(?P<service_id>\w+)/role[/]?$', RoleList_RESTView.as_view(), name='new_role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role/(?P<role_id>\w+)?$', Role_RESTView.as_view(), name='role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role_assignments[/]?$', AssignRoleUser_RESTView.as_view(), name='assign_role_rest_view'),
+     url(r'^service/(?P<service_id>\w+)/trust[/]?$', Trust_RESTView.as_view(), name='new_trust_rest_view'),
 )

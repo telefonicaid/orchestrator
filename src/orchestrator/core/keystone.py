@@ -762,7 +762,8 @@ class IdMKeystoneOperations(IdMOperations):
             }
         res = self.IdMRestOperations.rest_request(url='/v3/OS-TRUST/trusts',
                                                   method='POST',
-                                                  data=trust_data)
+                                                  data=trust_data,
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
