@@ -739,3 +739,32 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
 
+
+    def createTrustToken(self,
+                         SERVICE_ADMIN_TOKEN,
+                         SUBSERVICE_ID,
+                         ROLE_ID,
+                         TRUSTEE_USER_ID,
+                         TRUSTOR_USER_ID):
+
+        trust_data = {
+            "trust": {
+                "impersonation": False,
+                "project_id": SUBSERVICE_ID,
+                "roles": [
+                    {
+                        "id": ROLE_ID
+                        }
+                    ],
+                "trustee_user_id": TRUSTEE_USER_ID,
+                "trustor_user_id": TRUSTOR_USER_ID
+                }
+            }
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-TRUST/trusts',
+                                                  method='POST',
+                                                  data=trust_data)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['trust']['id']
