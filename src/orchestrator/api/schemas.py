@@ -383,7 +383,7 @@ json = {
             "ROLE_NAME",
             "SERVICE_USER_NAME"
         ],
-    }
+    },
 
     ########
     "Trust": {

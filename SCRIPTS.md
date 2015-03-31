@@ -22,6 +22,7 @@ These are current command line availables:
 * [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
 * [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
+* [createTrustToken.py](SCRIPTS.md#createtrusttokenpy)
 
 
 
@@ -332,4 +333,35 @@ Args:
                                  password       \
                                  ServiceCustomer\
                                  Carl           \
+```
+
+
+### createTrustToken.py
+This script creates a new Trust Token in IoT keystone
+```
+
+Usage: ./src/orchestrator/commands/createTrustToken.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SUBSERVICE_NAME>               SubService name
+  <SERVICE_ADMIN_USER>            New service admin username
+  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <ROLE_NAME>                     Name of role
+  <TRUSTEE_USER_NAME>             Trustee user name
+  <TRUSTOR_USER_NAME>             Trustor user name
+
+  Typical usage:
+     ./src/orchestrator/commands/createTrustToken.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 Electricidad   \
+                                 adm1           \
+                                 password       \
+                                 SubServiceAdmin\
+                                 pep            \
+                                 adm1           \
 ```

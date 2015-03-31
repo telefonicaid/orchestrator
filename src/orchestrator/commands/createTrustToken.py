@@ -2,7 +2,7 @@ import sys
 import pprint
 from jsonschema import validate
 
-from orchestrator.core.flow.createTrustToken import CresteTrustToken
+from orchestrator.core.flow.createTrustToken import CreateTrustToken
 from orchestrator.api import schemas
 
 
@@ -84,7 +84,7 @@ def main():
                          None,
                          TRUSTEE_USER_NAME,
                          None,
-                         TRUSTOR_USER_NAME
+                         TRUSTOR_USER_NAME,
                          None
                          )
     pprint.pprint(res)
