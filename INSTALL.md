@@ -26,6 +26,12 @@ git checkout BRANCH
 cd iotp-orchestrator
 ```
 
+Define some variables:
+```
+export DJANGO_SETTINGS_MODULE=settings
+export PYTHONPATH=$(pwd):$(pwd)/src:/usr/local/lib/python2.7/site-packages
+```
+
 Create a virtual env
 ```
 virtualenv env
@@ -38,9 +44,15 @@ Then install all dependencies by running:
 pip install -f requirements.txt
 ```
 
-Start server in 8084 port
+
+Start server in 8084 port using django web server:
 ```
 python manage.py runserver 8084 --settings=settings.custom_dev
+```
+
+or using another web server like uWSGI
+```
+uwsgi --http :8084 --chdir /home/avega/tid/fiware/iotp-orchestrator/src --wsgi-file wsgi.py  --env DJANGO_SETTINGS_MODULE=settings.custom_dev --virtualenv /home/avega/tid/fiware/iotp-orchestrator/env --master --processes 1 --threads 4 --stats 127.0.0.1:8085
 ```
 
 ### Build procedure
