@@ -231,8 +231,9 @@ json = {
                                 }
                             },
                         "maxItems": 4
-                        }
+                        },
                     },
+                "additionalProperties": False,
                 #"required": ["user", "emails"]
             },
         },
