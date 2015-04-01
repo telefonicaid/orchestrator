@@ -12,7 +12,9 @@ class Users(FlowBase):
               SERVICE_ID,
               SERVICE_ADMIN_USER,
               SERVICE_ADMIN_PASSWORD,
-              SERVICE_ADMIN_TOKEN):
+              SERVICE_ADMIN_TOKEN,
+              START_INDEX=None,
+              COUNT=None):
 
         '''Get users.
 
@@ -23,12 +25,16 @@ class Users(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
+        - START_INDEX: where pagination start
+        - COUNT: number of results
         '''
         data_log = {
             "SERVICE_ID":"%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN
+            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
+            "START_INDEX":"%s" % START_INDEX,
+            "COUNT":"%s" % COUNT,
         }
         logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -41,13 +47,15 @@ class Users(FlowBase):
 
 
 
-            SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
-                                                    SERVICE_ID)
+            # SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
+            #                                         SERVICE_ID)
 
-            logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES, indent=3))
+            # logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES, indent=3))
 
             SERVICE_USERS = self.idm.getDomainUsers(SERVICE_ADMIN_TOKEN,
-                                                    SERVICE_ID)
+                                                    SERVICE_ID,
+                                                    START_INDEX,
+                                                    COUNT)
 
             logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS, indent=3))
 

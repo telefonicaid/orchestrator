@@ -490,9 +490,11 @@ class IdMKeystoneOperations(IdMOperations):
 
     def getDomainRoles(self,
                        SERVICE_ADMIN_TOKEN,
-                       DOMAIN_ID):
+                       DOMAIN_ID,
+                       START_INDEX=None,
+                       COUNT=None):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles?domain_id=%s' % DOMAIN_ID,
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles?domain_id=%s%s' % (DOMAIN_ID, "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -510,14 +512,23 @@ class IdMKeystoneOperations(IdMOperations):
             }
             roles.append(role_data)
 
-        return {"roles": roles }
+        res = {"roles": roles }
+        if "totalResults" in json_body_response:
+            res["totalResults"] = json_body_response["totalResults"]
+        if "itemsPerPage" in json_body_response:
+            res["itemsPerPage"] = json_body_response["itemsPerPage"]
+        if "startIndex" in json_body_response:
+            res["startIndex"] = json_body_response["startIndex"]
+        return res
 
 
     def getDomainUsers(self,
                        SERVICE_ADMIN_TOKEN,
-                       DOMAIN_ID):
+                       DOMAIN_ID,
+                       START_INDEX=None,
+                       COUNT=None):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s%s' % (DOMAIN_ID, "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -525,7 +536,7 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
 
-        # Group each role by name and id
+        # Group each user by name and id
         users = []
         for user in json_body_response['Resources']:
             users.append(
@@ -535,7 +546,15 @@ class IdMKeystoneOperations(IdMOperations):
                  "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
                  "enabled": user['active']
              })
-        return { "users": users }
+        res = { "users": users }
+        if "totalResults" in json_body_response:
+            res["totalResults"] = json_body_response["totalResults"]
+        if "itemsPerPage" in json_body_response:
+            res["itemsPerPage"] = json_body_response["itemsPerPage"]
+        if "totalResults" in json_body_response:
+            res["startIndex"] = json_body_response["startIndex"]
+        return res
+
 
     def getDomainProjects(self,
                           SERVICE_ADMIN_TOKEN,
