@@ -53,7 +53,9 @@ class Users(FlowBase):
             # logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES, indent=3))
 
             SERVICE_USERS = self.idm.getDomainUsers(SERVICE_ADMIN_TOKEN,
-                                                    SERVICE_ID)
+                                                    SERVICE_ID,
+                                                    START_INDEX,
+                                                    COUNT)
 
             logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS, indent=3))
 

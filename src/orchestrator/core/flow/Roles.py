@@ -48,7 +48,9 @@ class Roles(FlowBase):
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAIN_ROLES = self.idm.getDomainRoles(ADMIN_TOKEN,
-                                                   DOMAIN_ID)
+                                                   DOMAIN_ID,
+                                                   START_INDEX,
+                                                   COUNT)
             logger.debug("DOMAIN_ROLES=%s" % json.dumps(DOMAIN_ROLES, indent=3))
 
             ROLES = DOMAIN_ROLES
