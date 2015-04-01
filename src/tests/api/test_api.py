@@ -962,8 +962,8 @@ class Test_UserList_RestView(object):
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "START_INDEX": "1",
-            "COUNT": "1"
+            "START_INDEX": "10",
+            "COUNT": "10"
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -986,6 +986,7 @@ class Test_UserList_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
         data_response = res.read()
         json_body_response = json.loads(data_response)
+        assert len(json_body_response['users']) <= 10
 
 class Test_UserDetail_RestView(object):
 
@@ -1459,6 +1460,7 @@ if __name__ == '__main__':
 
     test_UserList = Test_UserList_RestView()
     test_UserList.test_get_ok()
+    test_UserList.test_get_ok2()
 
     test_UserDetail = Test_UserDetail_RestView()
     test_UserDetail.test_get_ok()
