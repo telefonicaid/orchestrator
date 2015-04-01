@@ -2,7 +2,7 @@
 
 cd ../../orchestrator/commands/
 
-  ./createNewServiceKeystone.py http            \
+python ./createNewService.py http               \
                                  localhost      \
                                  5000           \
                                  admin_domain   \
@@ -16,7 +16,7 @@ cd ../../orchestrator/commands/
                                  localhost      \
                                  8080
 
-  ./assignInheritRoleServiceUserKeystone.py http     \
+python ./assignInheritRoleServiceUser.py http        \
                                     localhost        \
                                     5000             \
                                     SmartValencia    \
@@ -28,7 +28,7 @@ cd ../../orchestrator/commands/
                                     localhost        \
                                     8080
 
-  ./createNewSubServiceKeystone.py  http             \
+python ./createNewSubService.py  http                \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -37,17 +37,26 @@ cd ../../orchestrator/commands/
                                       Electricidad   \
                                       electricidad
 
-  ./createNewSubServiceAdminKeystone.py  http        \
+python ./createNewServiceUser.py  http               \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
                                       adm1           \
                                       password       \
-                                      Electricidad   \
                                       Alice          \
                                       password
 
-  ./createNewSubServiceKeystone.py  http             \
+python ./assignRoleSubServiceUser.py http             \
+                                       localhost      \
+                                       5000           \
+                                       SmartValencia  \
+                                       adm1           \
+                                       password       \
+                                       Electricidad   \
+                                       SubServiceAdmin\
+                                       Alice
+
+python ./createNewSubService.py  http                \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -56,17 +65,16 @@ cd ../../orchestrator/commands/
                                       Basuras        \
                                       basuras
 
-  ./createNewSubServiceUserKeystone.py  http          \
+python ./createNewServiceUser.py  http                \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
                                        adm1           \
                                        password       \
-                                       Electricidad   \
                                        bob            \
                                        password
 
-  ./assignRoleSubServiceUserKeystone.py http          \
+python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
@@ -74,9 +82,9 @@ cd ../../orchestrator/commands/
                                        password       \
                                        Basuras        \
                                        SubServiceAdmin\
-                                       bob           
+                                       bob
 
-  ./createNewServiceUserKeystone.py  http            \
+python ./createNewServiceUser.py  http               \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
@@ -85,35 +93,34 @@ cd ../../orchestrator/commands/
                                       Carl           \
                                       password
 
-  ./createNewServiceRole.py  http                    \
+python ./createNewServiceRole.py  http               \
                                       localhost      \
                                       5000           \
                                       SmartValencia  \
                                       adm1           \
                                       password       \
-                                      ServiceCustomer
+                                      ServiceCustomer\
+                                      http           \
+                                      localhost      \
+                                      8080
 
-
-  ./assignRoleServiceUserKeystone.py http             \
+python ./assignRoleServiceUser.py http                \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
                                        adm1           \
                                        password       \
                                        ServiceCustomer\
-                                       Carl           
+                                       Carl
 
-  ./assignInheritRoleServiceUserKeystone.py http      \
+python ./assignInheritRoleServiceUser.py http         \
                                     localhost         \
                                     5000              \
                                     SmartValencia     \
                                     adm1              \
                                     password          \
                                     Carl              \
-                                    SubServiceCustomer\
-                                    http              \
-                                    localhost         \
-                                    8080
+                                    SubServiceCustomer
 
 
 cd -

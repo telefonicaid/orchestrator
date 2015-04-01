@@ -11,7 +11,6 @@ import logging
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
 from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
@@ -107,7 +106,7 @@ class ServiceList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -133,7 +132,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -161,7 +160,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -204,7 +203,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -257,7 +256,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -290,7 +289,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -322,7 +321,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -361,7 +360,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -401,7 +400,7 @@ class User_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -429,7 +428,7 @@ class User_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0}'.format(error.message),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -453,7 +452,7 @@ class User_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -492,7 +491,7 @@ class UserList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -520,7 +519,7 @@ class UserList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -557,7 +556,7 @@ class Role_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -598,7 +597,7 @@ class RoleList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -623,7 +622,7 @@ class RoleList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -718,7 +717,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -777,6 +776,6 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )

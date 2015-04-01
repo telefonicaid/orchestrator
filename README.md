@@ -4,7 +4,7 @@ Orchestrator tries to group all provision operations for IoT platform that tipic
 Orchestrator exposes an API and provide scripts commands to perform all these operations.
 Orchestrator is used maninly by [IoT Portal](https://pdihub.hi.inet/fiware/iotp-portal)
 
-A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.inet/ep/fiware-components/wiki/Keystone-scenario-test) or [Tecnoport](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/tests/scenarios/Tecnoport.md)
+A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.inet/ep/fiware-components/wiki/Keystone-scenario-test) or [these](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/tests/scenarios/SCENARIOS.md)
 
 - Create/list services
 - Create/list subservices

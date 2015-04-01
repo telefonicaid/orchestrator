@@ -118,6 +118,16 @@ class CreateNewService(FlowBase):
             logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
 
+
+            #
+            # 4.5 Inherit subserviceadim
+            #
+
+            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                      ID_DOM1,
+                                      ID_ADM1,
+                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+
             #
             # 5. Provision default platform roles AccessControl policies
             #

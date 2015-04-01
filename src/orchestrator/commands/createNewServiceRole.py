@@ -1,6 +1,9 @@
 import sys
 import pprint
+from jsonschema import validate
+
 from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
+from orchestrator.api import schemas
 
 
 
@@ -53,6 +56,15 @@ def main():
     KEYPASS_HOST=sys.argv[9]
     KEYPASS_PORT=sys.argv[10]
 
+    validate(
+        {
+            "SERVICE_NAME": SERVICE_NAME,
+            "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
+            "NEW_ROLE_NAME": NEW_ROLE_NAME,
+        },
+        schemas.json["Role"])
+
     flow = CreateNewServiceRole(KEYSTONE_PROTOCOL,
                                 KEYSTONE_HOST,
                                 KEYSTONE_PORT,
@@ -61,11 +73,13 @@ def main():
                                 KEYPASS_PORT)
 
     res = flow.createNewServiceRole(
+                         None,
                          SERVICE_NAME,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
                          None,
-                         NEW_ROLE_NAME)
+                         NEW_ROLE_NAME,
+                         None)
     pprint.pprint(res)
 
 if __name__ == '__main__':

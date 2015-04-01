@@ -568,7 +568,7 @@ class IdMKeystoneOperations(IdMOperations):
         projects = []
         for project in json_body_response['projects']:
             project_data = {
-                "name": '/' + project['name'],
+                "name": project['name'],
                 "id": project['id'],
                 "domain_id": project['domain_id']
             }

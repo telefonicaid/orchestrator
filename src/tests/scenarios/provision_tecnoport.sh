@@ -2,7 +2,7 @@
 
 cd ../../orchestrator/commands/
 
-  ./createNewServiceKeystone.py http            \
+python  ./createNewService.py http              \
                                  localhost      \
                                  5000           \
                                  admin_domain   \
@@ -16,7 +16,7 @@ cd ../../orchestrator/commands/
                                  localhost      \
                                  8080
 
-  ./assignInheritRoleServiceUserKeystone.py http     \
+python ./assignInheritRoleServiceUser.py http        \
                                     localhost        \
                                     5000             \
                                     Tecnoport2015    \
@@ -28,7 +28,7 @@ cd ../../orchestrator/commands/
                                     localhost        \
                                     8080
 
-  ./createNewSubServiceKeystone.py  http          \
+python  ./createNewSubService.py  http            \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -37,7 +37,7 @@ cd ../../orchestrator/commands/
                                       cuts        \
                                       cuts
 
-  ./createNewServiceUserKeystone.py  http           \
+python ./createNewServiceUser.py  http              \
                                       localhost     \
                                       5000          \
                                       tecnoport     \
@@ -46,16 +46,18 @@ cd ../../orchestrator/commands/
                                       tecnoport_customer\
                                       password
 
-  ./createNewServiceRole.py  http                   \
+python ./createNewServiceRole.py  http              \
                                      localhost      \
                                      5001           \
                                      tecnoport      \
                                      tecnoport_admin\
                                      password       \
-                                     ServiceCustomer
+                                     ServiceCustomer\
+                                     http           \
+                                     localhost      \
+                                     8080
 
-
-  ./assignRoleServiceUserKeystone.py http            \
+python  ./assignRoleServiceUser.py http              \
                                       localhost      \
                                       5001           \
                                       tecnoport      \
@@ -64,27 +66,45 @@ cd ../../orchestrator/commands/
                                       ServiceCustomer\
                                       tecnoport_customer
 
- ./createNewSubServiceAdminKeystone.py  http      \
-                                      localhost   \
-                                      5000        \
-                                      tecnoport   \
-                                      tecnoport_admin \
-                                      password    \
-                                      cuts        \
-                                      tecnoport_cuts_admin  \
+python ./createNewServiceUser.py  http               \
+                                      localhost      \
+                                      5000           \
+                                      tecnoport      \
+                                      tecnoport_admin\
+                                      password       \
+                                      tecnoport_cuts_admin          \
                                       password
 
-  ./createNewSubServiceUserKeystone.py  http         \
-                                       localhost     \
-                                       5000          \
-                                       tecnoport     \
-                                       tecnoport_admin         \
+python ./assignRoleSubServiceUser.py http             \
+                                       localhost      \
+                                       5000           \
+                                       tecnoport      \
+                                       tecnoport_admin\
                                        password       \
                                        cuts           \
-                                       tecnoport_cuts_customer \
-                                       password
+                                       SubServiceAdmin\
+                                       tecnoport_cuts_admin
 
- ./createNewSubServiceKeystone.py  http           \
+python ./createNewServiceUser.py  http               \
+                                      localhost      \
+                                      5000           \
+                                      tecnoport      \
+                                      tecnoport_admin\
+                                      password       \
+                                      tecnoport_cuts_customer          \
+                                      password
+
+python ./assignRoleSubServiceUser.py http             \
+                                       localhost      \
+                                       5000           \
+                                       tecnoport      \
+                                       tecnoport_admin\
+                                       password       \
+                                       cuts           \
+                                       SubServiceCustomer\
+                                       tecnoport_cuts_customer
+
+python ./createNewSubService.py  http             \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -93,17 +113,26 @@ cd ../../orchestrator/commands/
                                       erio        \
                                       erio
 
- ./createNewSubServiceAdminKeystone.py  http      \
-                                      localhost   \
-                                      5000        \
-                                      tecnoport   \
-                                      tecnoport_admin \
-                                      password    \
-                                      erio        \
-                                      tecnoport_erio_admin  \
+python ./createNewServiceUser.py  http               \
+                                      localhost      \
+                                      5000           \
+                                      tecnoport      \
+                                      tecnoport_admin\
+                                      password       \
+                                      tecnoport_erio_admin          \
                                       password
 
- ./createNewSubServiceKeystone.py  http           \
+python ./assignRoleSubServiceUser.py http             \
+                                       localhost      \
+                                       5000           \
+                                       tecnoport      \
+                                       tecnoport_admin\
+                                       password       \
+                                       erio           \
+                                       SubServiceAdmin\
+                                       tecnoport_erio_admin
+
+python ./createNewSubService.py  http             \
                                       localhost   \
                                       5000        \
                                       tecnoport   \
@@ -112,15 +141,23 @@ cd ../../orchestrator/commands/
                                       fps         \
                                       fps
 
- ./createNewSubServiceAdminKeystone.py  http      \
-                                      localhost   \
-                                      5000        \
-                                      tecnoport   \
-                                      tecnoport_admin \
-                                      password    \
-                                      fps         \
-                                      tecnoport_fps_admin  \
+python ./createNewServiceUser.py  http               \
+                                      localhost      \
+                                      5000           \
+                                      tecnoport      \
+                                      tecnoport_admin\
+                                      password       \
+                                      tecnoport_fps_admin          \
                                       password
 
+python ./assignRoleSubServiceUser.py http             \
+                                       localhost      \
+                                       5000           \
+                                       tecnoport      \
+                                       tecnoport_admin\
+                                       password       \
+                                       fps            \
+                                       SubServiceAdmin\
+                                       tecnoport_fps_admin
 
 cd -
