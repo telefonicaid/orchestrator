@@ -1,5 +1,6 @@
 import uuid
 import json
+from src.settings import custom_dev as settings
 
 from orchestrator.common.util import RestOperations
 
@@ -12,6 +13,8 @@ class TestRestOperations(RestOperations):
                                 PROTOCOL,
                                 HOST,
                                 PORT)
+        self.keystone_endpoint_url = settings.KEYSTONE['protocol'] + '://' + \
+            settings.KEYSTONE['host'] + ":" +  settings.KEYSTONE['port']
 
     def getToken(self, data):
         auth_data = {
@@ -40,7 +43,7 @@ class TestRestOperations(RestOperations):
                 }
             }
             auth_data['auth'].update(scope_domain)
-        res = self.rest_request(url='http://localhost:5000/v3/auth/tokens',
+        res = self.rest_request(url=self.keystone_endpoint_url + '/v3/auth/tokens',
                                 relative_url=False,
                                 method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
@@ -76,7 +79,7 @@ class TestRestOperations(RestOperations):
                 }
             }
             auth_data['auth'].update(scope_domain)
-        res = self.rest_request(url='http://localhost:5000/v3/auth/tokens',
+        res = self.rest_request(url=self.keystone_endpoint_url + '/v3/auth/tokens',
                                 relative_url=False,
                                 method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
@@ -96,7 +99,7 @@ class TestRestOperations(RestOperations):
         DOMAIN_ID = json_body_response['token']['user']['domain']['id']
 
         ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
-        res = self.rest_request(url='http://localhost:5000/v3/projects?domain_id=%s' % DOMAIN_ID,
+        res = self.rest_request(url=self.keystone_endpoint_url + '/v3/projects?domain_id=%s' % DOMAIN_ID,
                                 relative_url=False,
                                 method='GET', auth_token=ADMIN_TOKEN)
         data_response = res.read()
@@ -1020,6 +1023,26 @@ class Test_UserModify_RestView(object):
             "USER_NAME":"adm1",
             "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}] }
         }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok2 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "USER_NAME":"alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
+            "USER_DATA_VALUE": { "name": "bet_%s" % self.suffix }
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "USER_NAME":"alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
+            "USER_DATA_VALUE": { "nameKK3": "bet_%s" % self.suffix }
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -1035,6 +1058,50 @@ class Test_UserModify_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_put_ok2(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok2)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        # Create user
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        user_id = json_body_response['id']
+        # Modify user name
+        res = self.TestRestOps.rest_request(method="PUT",
+                                            url="v1.0/service/%s/user/%s" % (service_id,
+                                                                             user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_put_bad(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_bad)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        # Create user
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_bad)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        user_id = json_body_response['id']
+        # Modify user name
+        res = self.TestRestOps.rest_request(method="PUT",
+                                            url="v1.0/service/%s/user/%s" % (service_id,
+                                                                             user_id),
+                                            json_data=True,
+                                            data=self.payload_data_bad)
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
 
 
 
@@ -1398,6 +1465,8 @@ if __name__ == '__main__':
 
     test_UserModify = Test_UserModify_RestView()
     test_UserModify.test_put_ok()
+    test_UserModify.test_put_ok2()
+    test_UserModify.test_put_bad()
 
     test_UserModify = Test_UserDelete_RestView()
     test_UserModify.test_delete_ok()
