@@ -805,7 +805,7 @@ class Trust_RESTView(APIView, IoTConf):
                                           request.DATA.get("SERVICE_NAME", None),
                                           request.DATA.get("SERVICE_ID", service_id),
                                           request.DATA.get("SUBSERVICE_NAME", None),
-                                          request.DATA.get("SUBSERVICE_ID", service_id),
+                                          request.DATA.get("SUBSERVICE_ID", None),
                                           request.DATA.get("SERVICE_ADMIN_USER", None),
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
