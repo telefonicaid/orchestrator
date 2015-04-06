@@ -47,12 +47,12 @@ pip install -f requirements.txt
 
 Start server in 8084 port using django web server:
 ```
-python manage.py runserver 8084 --settings=settings.custom_dev
+python manage.py runserver 8084 --settings=settings.dev
 ```
 
 or using another web server like uWSGI
 ```
-uwsgi --http :8084 --chdir /home/avega/tid/fiware/iotp-orchestrator/src --wsgi-file wsgi.py  --env DJANGO_SETTINGS_MODULE=settings.custom_dev --virtualenv /home/avega/tid/fiware/iotp-orchestrator/env --master --processes 1 --threads 4 --stats 127.0.0.1:8085
+uwsgi --http :8084 --chdir /home/user/iotp-orchestrator/src --wsgi-file wsgi.py  --env DJANGO_SETTINGS_MODULE=settings.dev --virtualenv /home/user/iotp-orchestrator/env --master --processes 1 --threads 4 --stats 127.0.0.1:8085
 ```
 
 ### Build procedure
