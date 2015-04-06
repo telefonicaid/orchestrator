@@ -120,10 +120,7 @@ python ./assignInheritRoleServiceUser.py http         \
                                     adm1              \
                                     password          \
                                     Carl              \
-                                    SubServiceCustomer\
-                                    http              \
-                                    localhost         \
-                                    8080
+                                    SubServiceCustomer
 
 
 cd -

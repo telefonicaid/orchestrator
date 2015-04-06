@@ -1,7 +1,7 @@
 %define timestamp %(date +"%Y%m%d%H%M%S")
 Name: iotp-orchestrator
-Version: 0.1.0
-Release: %{timestamp}
+Version: %{_version}
+Release: %{_release}
 Summary: IoT Platform Orchestrator 
 License: Copyright 2015 Telefonica Investigación y Desarrollo, S.A.U
 Distribution: noarch

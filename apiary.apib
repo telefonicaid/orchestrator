@@ -160,6 +160,13 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 + Parameters
     + serviceId (required, `string`) ... Service
 
++ Request (application/json)
+
+        {
+            "START_INDEX":"10",
+            "COUNT":"10",
+        }
+
 + Response 200 (application/json)
 
         {
@@ -311,6 +318,13 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ### Users list [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
+
++ Request (application/json)
+
+        {
+            "START_INDEX":"10",
+            "COUNT":"10",
+        }
 
 + Response 200 (application/json)
 

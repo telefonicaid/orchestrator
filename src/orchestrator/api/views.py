@@ -481,7 +481,9 @@ class UserList_RESTView(APIView, IoTConf):
                             request.DATA.get("SERVICE_ID", service_id),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                            request.DATA.get("START_INDEX", None),
+                            request.DATA.get("COUNT", None))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)

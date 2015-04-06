@@ -208,6 +208,34 @@ json = {
             "USER_ID": {
                 "type": "string",
             },
+            "USER_DATA_VALUE": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "pattern": "^([A-Za-z0-9_]+)$",
+                        },
+                    "password": {
+                        "type": "string",
+                        "minLength": 6,
+                        },
+                    "emails": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "value": {
+                                    "type": "string",
+                                    "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                                    },
+                                }
+                            },
+                        "maxItems": 4
+                        },
+                    },
+                "additionalProperties": False,
+                #"required": ["user", "emails"]
+            },
         },
         #"required": [ ],
     },
