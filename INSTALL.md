@@ -41,7 +41,7 @@ cd src
 
 Then install all dependencies by running:
 ```
-pip install -f requirements.txt
+pip install -r requirements.txt
 ```
 
 

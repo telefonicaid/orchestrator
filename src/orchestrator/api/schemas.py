@@ -411,7 +411,64 @@ json = {
             "ROLE_NAME",
             "SERVICE_USER_NAME"
         ],
-    }
+    },
+
+    ########
+    "Trust": {
+    ########
+        "name": "Trust",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "ROLE_NAME": {
+                "type": "string",
+            },
+            "ROLE_ID": {
+                "type": "string",
+            },
+            "TRUSTEE_USER_NAME": {
+                "type": "string",
+            },
+            "TRUSTEE_USER__ID": {
+                "type": "string",
+            },
+            "TRUSTOR_USER_NAME": {
+                "type": "string",
+            },
+            "TRUSTOR_USER__ID": {
+                "type": "string",
+            },
+        },
+        #"required": [
+        #],
+    },
 
 }
 
