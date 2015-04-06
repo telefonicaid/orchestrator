@@ -418,3 +418,28 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 + Response 204
 
+## Trust Token [/orc/service/{serviceId}/trust]
+
+### Create Trust Token [POST]
+
++ Request (application/json)
+
+        {
+            "SUBSERVICE_NAME":"Electricidad",
+            "SUBSERVICE_ID":"234234234234",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfas",
+            "TRUSTEE_USER_NAME":"user_nameX",
+            "TRUSTEE_USER_ID":"asdfasdf",
+            "TRUSTOR_USER_NAME":"user_nameX",
+            "TRUSTOR_USER_ID":"asdfasdf",
+        }
+
++ Response 201 (application/json)
+
+        {
+            "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
+        }
