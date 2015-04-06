@@ -66,7 +66,7 @@ def main():
             "TRUSTEE_USER_NAME": TRUSTEE_USER_NAME,
             "TRUSTOR_USER_NAME": TRUSTOR_USER_NAME,
         },
-        schemas.json["Role"])
+        schemas.json["Trust"])
 
     flow = CreateTrustToken(KEYSTONE_PROTOCOL,
                             KEYSTONE_HOST,

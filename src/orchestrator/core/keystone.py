@@ -357,6 +357,10 @@ class IdMKeystoneOperations(IdMOperations):
                 if project['name'] == PROJECT_NAME:
                     return project['id']
         else:
+            projects = self.getUserProjects(SERVICE_ADMIN_TOKEN, json_body_response['token']['user']['id'])
+            for project in projects['projects']:
+                if project['name'] == '/' + PROJECT_NAME:
+                    return project['id']
             return None
 
 
@@ -581,6 +585,18 @@ class IdMKeystoneOperations(IdMOperations):
 
             projects.append(project_data)
         return { "projects": projects }
+
+    def getUserProjects(self,
+                        SERVICE_ADMIN_TOKEN,
+                        USER_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/users/%s/projects' % USER_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return { "projects": json_body_response['projects'] }
 
     def getProject(self,
                    SERVICE_ADMIN_TOKEN,
