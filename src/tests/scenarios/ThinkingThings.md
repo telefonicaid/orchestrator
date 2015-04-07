@@ -16,7 +16,7 @@
 
 ### Users
 ```
-adm    - admin               - ThinkingThings
+adm:tt - admin               - ThinkingThings
        - SubServiceAdmin     - ThinkingThings\*
 
 user_x - SubServiceAdmin     - ThinkingThings\user_x
