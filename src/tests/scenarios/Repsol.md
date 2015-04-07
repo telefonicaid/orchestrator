@@ -12,8 +12,8 @@
 
 ### Users
 ```
-repsol_admin          - admin
-                      - SubServiceAdmin\*
+repsol_admin          - admin               - Repsol
+                      - SubServiceAdmin     - Repsol\*
 ```
 
 [Provision script](provision_repsol.sh)
