@@ -1,8 +1,11 @@
 import sys
 import pprint
+import logging.config
+
+from src.settings.common import LOGGING
 from orchestrator.core.flow.Domains import Domains
 
-
+logging.config.dictConfig(LOGGING)
 
 def main():
 
