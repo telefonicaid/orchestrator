@@ -10,6 +10,14 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ## Services query [/v1.0/service]
 ### Listado de Services [GET]
 
++ Request (application/json)
+        
+            {
+                "DOMAIN_NAME":"admin_domain",
+                "SERVICE_ADMIN_USER":"cloud_admin",
+                "SERVICE_ADMIN_PASSWORD": "password",
+            }
+
 + Response 200 (application/json)
 
     + Body
@@ -56,15 +64,15 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ## Service manager [/v1.0/service/{serviceId}]
 ### Get data [GET]
 + Parameters
-    
+    + serviceId (required, `string`) ... Service Id
+
 + Request (application/json)
         
             {
-                "DOMAIN_NAME":"admin_domain",
-                "SERVICE_ADMIN_USER":"cloud_admin",
-                "SERVICE_ADMIN_PASSWORD": "password",
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
             }
-
 + Response 200 (application/json)
 
     + Body
