@@ -10,6 +10,14 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ## Services query [/v1.0/service]
 ### Listado de Services [GET]
 
++ Request (application/json)
+        
+            {
+                "DOMAIN_NAME":"admin_domain",
+                "SERVICE_ADMIN_USER":"cloud_admin",
+                "SERVICE_ADMIN_PASSWORD": "password",
+            }
+
 + Response 200 (application/json)
 
     + Body
@@ -26,7 +34,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
                         "name": "SmartLogrono",
-                        "description": "SmartLogroño"
+                        "description": "SmartLogroï¿½o"
                     }
                 ]
             }
@@ -58,6 +66,13 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 + Parameters
     + serviceId (required, `string`) ... Service Id
 
++ Request (application/json)
+        
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
 + Response 200 (application/json)
 
     + Body
@@ -73,6 +88,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ### listado de subservicio [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
+
 
 + Response 200 (application/json)
 
