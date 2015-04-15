@@ -11,7 +11,7 @@
 . /etc/rc.d/init.d/functions
 
 CURR="$( cd "$( dirname "$( readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
-ORCHESTRATOR_DIR=/usr/lib/python2.6/site-packages/iotp-orchestrator
+ORCHESTRATOR_DIR=/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator
 pname="orchestrator"
 user="orchestrator"
 
