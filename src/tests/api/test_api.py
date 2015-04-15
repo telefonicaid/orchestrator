@@ -1,6 +1,6 @@
 import uuid
 import json
-from src.settings import custom_dev as settings
+from settings import custom_dev as settings
 
 from orchestrator.common.util import RestOperations
 
@@ -1030,6 +1030,17 @@ class Test_UserList_RestView(object):
         json_body_response = json.loads(data_response)
         assert len(json_body_response['users']) <= 10
 
+    def test_get_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/user?index=10&count=10" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert len(json_body_response['users']) <= 10
+
 class Test_UserDetail_RestView(object):
 
     def __init__(self):
@@ -1503,6 +1514,7 @@ if __name__ == '__main__':
     test_UserList = Test_UserList_RestView()
     test_UserList.test_get_ok()
     test_UserList.test_get_ok2()
+    test_UserList.test_get_ok3()
 
     test_UserDetail = Test_UserDetail_RestView()
     test_UserDetail.test_get_ok()

@@ -471,6 +471,9 @@ class UserList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        index = request.GET.get('index', None)
+        count = request.GET.get('count', None)
+
         try:
             request.DATA # json validation
             flow = Users(self.KEYSTONE_PROTOCOL,
@@ -482,8 +485,8 @@ class UserList_RESTView(APIView, IoTConf):
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                            request.DATA.get("START_INDEX", None),
-                            request.DATA.get("COUNT", None))
+                            request.DATA.get("START_INDEX", index),
+                            request.DATA.get("COUNT", count))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -605,6 +608,8 @@ class RoleList_RESTView(APIView, IoTConf):
     def get(self, request, service_id=None):
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        index = request.GET.get('index', None)
+        count = request.GET.get('count', None)
         try:
             request.DATA  # json validation
 
@@ -614,7 +619,9 @@ class RoleList_RESTView(APIView, IoTConf):
             result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                request.DATA.get("START_INDEX", index),
+                                request.DATA.get("COUNT", count))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
