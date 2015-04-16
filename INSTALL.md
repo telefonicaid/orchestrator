@@ -41,7 +41,7 @@ cd src
 
 Then install all dependencies by running:
 ```
-pip install -f requirements.txt
+pip install -r requirements.txt
 ```
 
 
@@ -78,4 +78,9 @@ RPM install orchestrator as a service controlled by a [daemon](https://pdihub.hi
 
 ```
 $ sudo service orchestrator start
+```
+
+## Make a simple test:
+```
+curl -X GET http://127.0.0.1:8084/v1.0/service -H "Content-Type: application/json" -d '{ "DOMAIN_NAME": "admin_domain", "SERVICE_ADMIN_USER": "cloud_admin", "SERVICE_ADMIN_PASSWORD":"password"}'
 ```

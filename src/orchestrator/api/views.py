@@ -15,6 +15,7 @@ from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
 from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
 from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
+from orchestrator.core.flow.createTrustToken import CreateTrustToken
 from orchestrator.core.flow.removeUser import RemoveUser
 from orchestrator.core.flow.updateUser import UpdateUser
 from orchestrator.core.flow.Domains import Domains
@@ -470,6 +471,9 @@ class UserList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        index = request.GET.get('index', None)
+        count = request.GET.get('count', None)
+
         try:
             request.DATA # json validation
             flow = Users(self.KEYSTONE_PROTOCOL,
@@ -481,8 +485,8 @@ class UserList_RESTView(APIView, IoTConf):
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                            request.DATA.get("START_INDEX", None),
-                            request.DATA.get("COUNT", None))
+                            request.DATA.get("START_INDEX", index),
+                            request.DATA.get("COUNT", count))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -605,6 +609,8 @@ class RoleList_RESTView(APIView, IoTConf):
     def get(self, request, service_id=None):
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        index = request.GET.get('index', None)
+        count = request.GET.get('count', None)
         try:
             request.DATA  # json validation
 
@@ -614,7 +620,9 @@ class RoleList_RESTView(APIView, IoTConf):
             result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                request.DATA.get("START_INDEX", index),
+                                request.DATA.get("COUNT", count))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -775,6 +783,53 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+class Trust_RESTView(APIView, IoTConf):
+    """
+    Creates a Trust Token
+
+    """
+    schema_name = "Trust"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request, service_id):
+        self.schema_name = "Trust"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = CreateTrustToken(self.KEYSTONE_PROTOCOL,
+                                        self.KEYSTONE_HOST,
+                                        self.KEYSTONE_PORT)
+            result = flow.createTrustToken(
+                                          request.DATA.get("SERVICE_NAME", None),
+                                          request.DATA.get("SERVICE_ID", service_id),
+                                          request.DATA.get("SUBSERVICE_NAME", None),
+                                          request.DATA.get("SUBSERVICE_ID", None),
+                                          request.DATA.get("SERVICE_ADMIN_USER", None),
+                                          request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                          request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                          request.DATA.get("ROLE_NAME", None),
+                                          request.DATA.get("ROLE_ID", None),
+                                          request.DATA.get("TRUSTEE_USER_NAME", None),
+                                          request.DATA.get("TRUSTEE_USER_ID", None),
+                                          request.DATA.get("TRUSTOR_USER_NAME", None),
+                                          request.DATA.get("TRUSTOR_USER_ID", None)
+                                          )
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
         except ParseError as error:
             return Response(
                 'Input validation error - {0} {1}'.format(error.message, error.detail),

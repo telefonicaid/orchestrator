@@ -68,7 +68,6 @@ class CreateNewServiceRole(FlowBase):
                                                 NEW_ROLE_NAME)
             logger.debug("ID of user %s: %s" % (NEW_ROLE_NAME, ID_ROLE))
 
-
             #
             # 3. Provision policy provided in keypass
             #
@@ -80,7 +79,7 @@ class CreateNewServiceRole(FlowBase):
                                               XACML_POLICY)
 
             if NEW_ROLE_NAME =='ServiceCustomer':
-                logger.debug("set default XACML policy %s for role %s" % NEW_ROLE_NAME)
+                logger.debug("set default XACML policy for role %s" % NEW_ROLE_NAME)
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-orion-customer2.xml')

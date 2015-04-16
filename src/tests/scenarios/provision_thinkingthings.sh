@@ -39,7 +39,7 @@ python  ./createNewServiceUser.py  http               \
                                        user_x         \
                                        password
 
-python ./assignRoleSubServiceUserpy http              \
+python ./assignRoleSubServiceUser.py http              \
                                        localhost      \
                                        5000           \
                                        ThinkingThings \
@@ -49,7 +49,7 @@ python ./assignRoleSubServiceUserpy http              \
                                        SubServiceAdmin\
                                        user_x
 
-python ./assignRoleSubServiceUserpy http              \
+python ./assignRoleSubServiceUser.py http              \
                                        localhost      \
                                        5000           \
                                        ThinkingThings \

@@ -1,6 +1,6 @@
 import uuid
 import json
-from src.settings import custom_dev as settings
+from settings import custom_dev as settings
 
 from orchestrator.common.util import RestOperations
 
@@ -499,6 +499,48 @@ class Test_NewServiceUser_RestView(object):
                                             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
 
+
+class Test_NewServiceTrust_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME":"SmartValencia",
+            "SUBSERVICE_NAME":"Basuras",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "ROLE_NAME":"SubServiceAdmin",
+            "TRUSTEE_USER_NAME":"pep",
+            "TRUSTOR_USER_NAME":"adm1",
+        }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME":"admin_domain",
+            "SERVICE_ADMIN_USER":"pep",
+            "SERVICE_ADMIN_PASSWORD": "pep",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_post_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        trustor_user_id = json_body_response['token']['user']['id']
+
+        token_res = self.TestRestOps.getToken(self.payload_data_ok2)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        trustee_user_id = json_body_response['token']['user']['id']
+        self.payload_data_ok["TRUSTEE_USER_ID"] = trustee_user_id
+
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/trust/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
 class Test_ServiceLists_RestView(object):
 
     def __init__(self):
@@ -988,6 +1030,17 @@ class Test_UserList_RestView(object):
         json_body_response = json.loads(data_response)
         assert len(json_body_response['users']) <= 10
 
+    def test_get_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s/user?index=10&count=10" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert len(json_body_response['users']) <= 10
+
 class Test_UserDetail_RestView(object):
 
     def __init__(self):
@@ -1461,6 +1514,7 @@ if __name__ == '__main__':
     test_UserList = Test_UserList_RestView()
     test_UserList.test_get_ok()
     test_UserList.test_get_ok2()
+    test_UserList.test_get_ok3()
 
     test_UserDetail = Test_UserDetail_RestView()
     test_UserDetail.test_get_ok()
@@ -1496,3 +1550,5 @@ if __name__ == '__main__':
     test_UnassignRoleUser = Test_UnassignRoleUser_RestView()
     test_UnassignRoleUser.test_delete_ok()
 
+    test_NewServiceTrust = Test_NewServiceTrust_RestView()
+    test_NewServiceTrust.test_post_ok()

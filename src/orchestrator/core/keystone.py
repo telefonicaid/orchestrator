@@ -358,6 +358,10 @@ class IdMKeystoneOperations(IdMOperations):
                 if project['name'] == PROJECT_NAME:
                     return project['id']
         else:
+            projects = self.getUserProjects(SERVICE_ADMIN_TOKEN, json_body_response['token']['user']['id'])
+            for project in projects['projects']:
+                if project['name'] == '/' + PROJECT_NAME:
+                    return project['id']
             return None
 
 
@@ -583,6 +587,18 @@ class IdMKeystoneOperations(IdMOperations):
             projects.append(project_data)
         return { "projects": projects }
 
+    def getUserProjects(self,
+                        SERVICE_ADMIN_TOKEN,
+                        USER_ID):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/users/%s/projects' % USER_ID,
+                                                  method='GET',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return { "projects": json_body_response['projects'] }
+
     def getProject(self,
                    SERVICE_ADMIN_TOKEN,
                    PROJECT_ID):
@@ -762,3 +778,33 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
 
+
+    def createTrustToken(self,
+                         SERVICE_ADMIN_TOKEN,
+                         SUBSERVICE_ID,
+                         ROLE_ID,
+                         TRUSTEE_USER_ID,
+                         TRUSTOR_USER_ID):
+
+        trust_data = {
+            "trust": {
+                "impersonation": False,
+                "project_id": SUBSERVICE_ID,
+                "roles": [
+                    {
+                        "id": ROLE_ID
+                        }
+                    ],
+                "trustee_user_id": TRUSTEE_USER_ID,
+                "trustor_user_id": TRUSTOR_USER_ID
+                }
+            }
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-TRUST/trusts',
+                                                  method='POST',
+                                                  data=trust_data,
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['trust']['id']
