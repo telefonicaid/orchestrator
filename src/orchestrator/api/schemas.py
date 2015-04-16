@@ -215,6 +215,10 @@ json = {
                         "type": "string",
                         "pattern": "^([A-Za-z0-9_]+)$",
                         },
+                    "userName": {
+                        "type": "string",
+                        "pattern": "^([A-Za-z0-9_]+)$",
+                        },                    
                     "password": {
                         "type": "string",
                         "minLength": 6,

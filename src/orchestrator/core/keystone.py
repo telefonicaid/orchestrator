@@ -283,11 +283,12 @@ class IdMKeystoneOperations(IdMOperations):
                       SERVICE_NAME,
                       NEW_USER_NAME,
                       NEW_USER_PASSWORD,
-                      NEW_USER_EMAIL):
+                      NEW_USER_EMAIL,
+                      NEW_USER_DESCRIPTION):
 
         body_data = {
             "user": {
-                "description": "user of domain %s" % SERVICE_NAME,
+                "description": NEW_USER_DESCRIPTION if NEW_USER_DESCRIPTION else "user of domain %s" % SERVICE_NAME,
                 "enabled": True,
                 "domain_id": "%s" % ID_DOM1,
                 "name": "%s" % NEW_USER_NAME,
@@ -531,7 +532,6 @@ class IdMKeystoneOperations(IdMOperations):
                        DOMAIN_ID,
                        START_INDEX=None,
                        COUNT=None):
-
         res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s%s' % (DOMAIN_ID, "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
@@ -545,6 +545,7 @@ class IdMKeystoneOperations(IdMOperations):
         for user in json_body_response['Resources']:
             users.append(
                 {"name": user['userName'],
+                 "userName": user['userName'],                 
                  "id": user['id'],
                  "description": user["displayName"],
                  "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
@@ -555,7 +556,7 @@ class IdMKeystoneOperations(IdMOperations):
             res["totalResults"] = json_body_response["totalResults"]
         if "itemsPerPage" in json_body_response:
             res["itemsPerPage"] = json_body_response["itemsPerPage"]
-        if "totalResults" in json_body_response:
+        if "startIndex" in json_body_response:
             res["startIndex"] = json_body_response["startIndex"]
         return res
 

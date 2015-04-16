@@ -79,7 +79,8 @@ class CreateNewService(FlowBase):
                                                 NEW_SERVICE_NAME,
                                                 NEW_SERVICE_ADMIN_USER,
                                                 NEW_SERVICE_ADMIN_PASSWORD,
-                                                NEW_SERVICE_ADMIN_EMAIL)
+                                                NEW_SERVICE_ADMIN_EMAIL,
+                                                None)
 
             logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER, ID_ADM1))
 
