@@ -3,7 +3,7 @@ import pprint
 from jsonschema import validate
 import logging.config
 
-from src.settings.common import LOGGING
+from settings.common import LOGGING
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
 from orchestrator.api import schemas
 

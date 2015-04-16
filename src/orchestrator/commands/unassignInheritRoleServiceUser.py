@@ -1,7 +1,7 @@
 import sys
 import logging.config
 
-from src.settings.common import LOGGING
+from settings.common import LOGGING
 from orchestrator.core.flow.Roles import Roles
 
 logging.config.dictConfig(LOGGING)

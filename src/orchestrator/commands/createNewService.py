@@ -5,7 +5,7 @@ from jsonschema import validate
 from jsonschema import Draft4Validator
 import logging.config
 
-from src.settings.common import LOGGING
+from settings.common import LOGGING
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.api import schemas
 
