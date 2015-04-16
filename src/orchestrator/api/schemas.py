@@ -211,11 +211,11 @@ json = {
             "USER_DATA_VALUE": {
                 "type": "object",
                 "properties": {
-                    "name ": {
+                    "name": {
                         "type": "string",
                         "pattern": "^([A-Za-z0-9_]+)$",
                         },
-                    "userName ": {
+                    "userName": {
                         "type": "string",
                         "pattern": "^([A-Za-z0-9_]+)$",
                         },                    
