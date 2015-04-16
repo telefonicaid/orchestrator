@@ -546,6 +546,7 @@ class IdMKeystoneOperations(IdMOperations):
         for user in json_body_response['Resources']:
             users.append(
                 {"name": user['userName'],
+                 "userName": user['userName'],                 
                  "id": user['id'],
                  "description": user["displayName"],
                  "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
