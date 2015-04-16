@@ -1,8 +1,11 @@
 import sys
 import pprint
+import logging.config
+
+from settings.common import LOGGING
 from orchestrator.core.flow.Projects import Projects
 
-
+logging.config.dictConfig(LOGGING)
 
 def main():
 

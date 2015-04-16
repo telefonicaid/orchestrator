@@ -3,11 +3,13 @@ import sys
 import pprint
 from jsonschema import validate
 from jsonschema import Draft4Validator
+import logging.config
 
+from settings.common import LOGGING
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.api import schemas
 
-
+logging.config.dictConfig(LOGGING)
 
 
 

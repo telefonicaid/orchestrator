@@ -1,11 +1,13 @@
 import sys
 import pprint
 from jsonschema import validate
+import logging.config
 
+from settings.common import LOGGING
 from orchestrator.core.flow.createNewServiceRole import CreateNewServiceRole
 from orchestrator.api import schemas
 
-
+logging.config.dictConfig(LOGGING)
 
 def main():
 
