@@ -531,7 +531,6 @@ class IdMKeystoneOperations(IdMOperations):
                        DOMAIN_ID,
                        START_INDEX=None,
                        COUNT=None):
-
         res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s%s' % (DOMAIN_ID, "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
                                                   method='GET',
                                                   auth_token=SERVICE_ADMIN_TOKEN)
@@ -555,7 +554,7 @@ class IdMKeystoneOperations(IdMOperations):
             res["totalResults"] = json_body_response["totalResults"]
         if "itemsPerPage" in json_body_response:
             res["itemsPerPage"] = json_body_response["itemsPerPage"]
-        if "totalResults" in json_body_response:
+        if "startIndex" in json_body_response:
             res["startIndex"] = json_body_response["startIndex"]
         return res
 

@@ -85,6 +85,31 @@ class TestRestOperations(RestOperations):
         assert res.code == 201, (res.code, res.msg)
         return res
 
+    def getUnScopedToken(self, data):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": data["SERVICE_ADMIN_USER"],
+                            "password": data["SERVICE_ADMIN_PASSWORD"]
+                        }
+                    }
+                }
+            }
+        }
+        if "SERVICE_NAME" in data:
+            auth_data['auth']['identity']['password']['user'].update({"domain": { "name": data["SERVICE_NAME"]}})
+
+        res = self.rest_request(url=self.keystone_endpoint_url + '/v3/auth/tokens',
+                                relative_url=False,
+                                method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res
+
     def getServiceId(self, data):
         token_res = self.getToken(data)
         data_response = token_res.read()
@@ -1033,13 +1058,13 @@ class Test_UserList_RestView(object):
     def test_get_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s/user?index=10&count=10" % service_id,
+                                            url="v1.0/service/%s/user?count=2&index=0" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
         data_response = res.read()
         json_body_response = json.loads(data_response)
-        assert len(json_body_response['users']) <= 10
+        assert len(json_body_response['users']) <= 2
 
 class Test_UserDetail_RestView(object):
 
@@ -1088,6 +1113,17 @@ class Test_UserModify_RestView(object):
             "USER_DATA_VALUE": { "name": "bet_%s" % self.suffix }
         }
         self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok3 = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "USER_NAME":"alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
+            "USER_DATA_VALUE": { "name": "bet_%s" % self.suffix,
+                                 "password": "bet_%s" % self.suffix }
+        }
+        self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
             "SERVICE_NAME":"SmartValencia",
             "SERVICE_ADMIN_USER":"adm1",
@@ -1134,6 +1170,50 @@ class Test_UserModify_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_put_ok3(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok3)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        # Create user
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="v1.0/service/%s/user/" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        user_id = json_body_response['id']
+
+        # Login -> OK
+        self.payload_data_tmp = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER": self.payload_data_ok3["NEW_SERVICE_USER_NAME"],
+            "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["NEW_SERVICE_USER_PASSWORD"]
+        }
+        token_res = self.TestRestOps.getUnScopedToken(self.payload_data_tmp)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+
+        # Modify user password
+        res = self.TestRestOps.rest_request(method="PUT",
+                                            url="v1.0/service/%s/user/%s" % (service_id,
+                                                                             user_id),
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        # Login -> OK
+        self.payload_data_tmp = {
+            "SERVICE_NAME":"SmartValencia",
+            "SERVICE_ADMIN_USER": self.payload_data_ok3["USER_DATA_VALUE"]["name"],
+            "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["USER_DATA_VALUE"]["password"]
+        }
+
+        token_res = self.TestRestOps.getUnScopedToken(self.payload_data_tmp)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
 
     def test_put_bad(self):
         token_res = self.TestRestOps.getToken(self.payload_data_bad)
@@ -1522,6 +1602,7 @@ if __name__ == '__main__':
     test_UserModify = Test_UserModify_RestView()
     test_UserModify.test_put_ok()
     test_UserModify.test_put_ok2()
+    test_UserModify.test_put_ok3()
     test_UserModify.test_put_bad()
 
     test_UserModify = Test_UserDelete_RestView()
