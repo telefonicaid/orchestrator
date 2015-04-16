@@ -283,11 +283,12 @@ class IdMKeystoneOperations(IdMOperations):
                       SERVICE_NAME,
                       NEW_USER_NAME,
                       NEW_USER_PASSWORD,
-                      NEW_USER_EMAIL):
+                      NEW_USER_EMAIL,
+                      NEW_USER_DESCRIPTION):
 
         body_data = {
             "user": {
-                "description": "user of domain %s" % SERVICE_NAME,
+                "description": NEW_USER_DESCRIPTION if NEW_USER_DESCRIPTION else "user of domain %s" % SERVICE_NAME,
                 "enabled": True,
                 "domain_id": "%s" % ID_DOM1,
                 "name": "%s" % NEW_USER_NAME,
@@ -544,6 +545,7 @@ class IdMKeystoneOperations(IdMOperations):
         for user in json_body_response['Resources']:
             users.append(
                 {"name": user['userName'],
+                 "userName": user['userName'],                 
                  "id": user['id'],
                  "description": user["displayName"],
                  "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],

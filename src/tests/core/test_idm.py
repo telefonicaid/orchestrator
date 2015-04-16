@@ -1,4 +1,4 @@
-from orchestrator.core.idm import IdMOperations
+from orchestrator.core.keystone import IdMKeystoneOperations
 
 class Test_createNewService(object):
 
@@ -68,9 +68,9 @@ class Test_createNewSubService(object):
         pass
 
     def test_getDomainId(self):
-        ko=IdMOperations(self.KEYSTONE_PROTOCOL,
-                              self.KEYSTONE_HOST,
-                              self.KEYSTONE_PORT)
+        ko = IdMKeystoneOperations(self.KEYSTONE_PROTOCOL,
+                                   self.KEYSTONE_HOST,
+                                   self.KEYSTONE_PORT)
         SERVICE_ADMIN_TOKEN = ko.getToken(self.SERVICE_NAME,
                                           self.SERVICE_ADMIN_USER,
                                           self.SERVICE_ADMIN_PASSWORD)

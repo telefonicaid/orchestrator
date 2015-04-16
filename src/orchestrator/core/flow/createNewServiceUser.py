@@ -16,7 +16,9 @@ class CreateNewServiceUser(FlowBase):
                              SERVICE_ADMIN_TOKEN,
                              NEW_USER_NAME,
                              NEW_USER_PASSWORD,
-                             NEW_USER_EMAIL):
+                             NEW_USER_EMAIL,
+                             NEW_USER_DESCRIPTION):
+
 
         '''Creates a new user Service (aka domain user keystone).
 
@@ -42,7 +44,8 @@ class CreateNewServiceUser(FlowBase):
             "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
             "NEW_USER_NAME":"%s" % NEW_USER_NAME,
             "NEW_USER_PASSWORD":"%s" % NEW_USER_PASSWORD,
-            "NEW_USER_EMAIL":"%s" % NEW_USER_EMAIL
+            "NEW_USER_EMAIL":"%s" % NEW_USER_EMAIL,
+            "NEW_USER_DESCRIPTION":"%s" % NEW_USER_DESCRIPTION
         }
         logger.debug("createNewServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -71,7 +74,8 @@ class CreateNewServiceUser(FlowBase):
                                                 SERVICE_NAME,
                                                 NEW_USER_NAME,
                                                 NEW_USER_PASSWORD,
-                                                NEW_USER_EMAIL)
+                                                NEW_USER_EMAIL,
+                                                NEW_USER_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
 
 
