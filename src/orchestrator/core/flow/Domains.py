@@ -204,18 +204,26 @@ class Domains(FlowBase):
                 ADMIN_TOKEN = self.idm.getToken("admin_domain",
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
-            if not DOMAIN_ID:
-                DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-                                                 DOMAIN_NAME)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            # Another way:
+            # if not DOMAIN_ID:
+            #     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+            #                                      DOMAIN_NAME)
+
+            DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
+
+            for domain in DOMAINS['domains']:
+                if domain['name'] == DOMAIN_NAME:
+                    DOMAIN_ID = domain['id']
+                    break
 
             DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             # Delete policy of roles in Access Control
-            self.ac.deleteTenantPolicies(ADMIN_TOKEN, DOMAIN_NAME)
+            self.ac.deleteTenantPolicies(DOMAIN_NAME, ADMIN_TOKEN)
 
             logger.debug("DOMAIN=%s" % DOMAIN)
 
