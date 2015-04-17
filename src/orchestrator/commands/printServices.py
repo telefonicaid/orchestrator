@@ -30,8 +30,8 @@ def main():
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
-        print "                                 adm1           \\"
+        print "                                 admin_domain   \\"
+        print "                                 cloud_admin    \\"
         print "                                 password       \\"
         print ""
         print "For bug reporting, please contact with:"
@@ -49,11 +49,10 @@ def main():
                             KEYSTONE_HOST,
                             KEYSTONE_PORT)
 
-    domain_detail = flow.get_domain(None,
-                                    DOMAIN_NAME,
-                                    DOMAIN_ADMIN_USER,
-                                    DOMAIN_ADMIN_PASSWORD,
-                                    None)
+    domain_detail = flow.domains(DOMAIN_NAME,
+                                 DOMAIN_ADMIN_USER,
+                                 DOMAIN_ADMIN_PASSWORD,
+                                 None)
     pprint.pprint(domain_detail)
 
 

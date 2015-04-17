@@ -14,7 +14,7 @@ def main():
     print ""
 
     SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=6
+    NUM_ARGS_EXPECTED=9
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -25,14 +25,20 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <DOMAIN_ADMIN_USER>             Regional Service Provider username"
         print "  <DOMAIN_ADMIN_PASSWORD>         Regional Service Provider password"
+        print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
+        print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
+        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
-        print "                                 adm1           \\"
+        print "                                 SmartValenciaB \\"
+        print "                                 cloud_admin    \\"
         print "                                 password       \\"
+        print "                                 http           \\"
+        print "                                 localhost      \\"
+        print "                                 8080           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -44,11 +50,16 @@ def main():
     SERVICE_NAME=sys.argv[4]
     DOMAIN_ADMIN_USER=sys.argv[5]
     DOMAIN_ADMIN_PASSWORD=sys.argv[6]
-
+    KEYPASS_PROTOCOL=sys.argv[7]
+    KEYPASS_HOST=sys.argv[8]
+    KEYPASS_PORT=sys.argv[9]
 
     flow = Domains(KEYSTONE_PROTOCOL,
                             KEYSTONE_HOST,
-                            KEYSTONE_PORT)
+                            KEYSTONE_PORT,
+                            KEYPASS_PROTOCOL,
+                            KEYPASS_HOST,
+                            KEYPASS_PORT)
 
     domain_detail = flow.delete_domain(None,
                                        SERVICE_NAME,
