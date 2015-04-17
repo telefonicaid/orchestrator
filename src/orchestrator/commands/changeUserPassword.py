@@ -4,14 +4,14 @@ from jsonschema import validate
 import logging.config
 
 from settings.common import LOGGING
-from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
+from orchestrator.core.flow.updateUser import UpdateUser
 from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script creates a new  service user in IoT keystone"
+    print "This scripts changes service user password in IoT keystone"
     print ""
 
     SCRIPT_NAME=sys.argv[0]
@@ -26,8 +26,8 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <NEW_USER_NAME>                 Name of new user"
-        print "  <NEW_USER_PASSWORD>             Password of new user"
+        print "  <NEW_USER_NAME>                 User name"
+        print "  <NEW_USER_PASSWORD>             New user password"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -37,7 +37,7 @@ def main():
         print "                                 adm1           \\"
         print "                                 password       \\"
         print "                                 bob            \\"
-        print "                                 password       \\"
+        print "                                 new_password   \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -49,33 +49,35 @@ def main():
     SERVICE_NAME=sys.argv[4]
     SERVICE_ADMIN_USER=sys.argv[5]
     SERVICE_ADMIN_PASSWORD=sys.argv[6]
-    NEW_USER_NAME=sys.argv[7]
+    USER_NAME=sys.argv[7]
     NEW_USER_PASSWORD=sys.argv[8]
 
-    validate(
-        {
-            "SERVICE_NAME": SERVICE_NAME,
-            "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
-            "NEW_SERVICE_USER_NAME": NEW_USER_NAME,
-            "NEW_SERVICE_USER_PASSWORD": NEW_USER_PASSWORD,
-        },
-        schemas.json["UserList"])
+    # validate(
+    #     {
+    #         "SERVICE_NAME": SERVICE_NAME,
+    #         "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
+    #         "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
+    #         "NEW_SERVICE_USER_NAME": NEW_USER_NAME,
+    #         "NEW_SERVICE_USER_PASSWORD": NEW_USER_PASSWORD,
+    #     },
+    #     schemas.json["UserList"])
 
-    flow = CreateNewServiceUser(KEYSTONE_PROTOCOL,
-                                KEYSTONE_HOST,
-                                KEYSTONE_PORT)
+    flow = UpdateUser(KEYSTONE_PROTOCOL,
+                      KEYSTONE_HOST,
+                      KEYSTONE_PORT)
 
-    res = flow.createNewServiceUser(
+    USER_DATA_VALUE = { "password": NEW_USER_PASSWORD }
+
+    res = flow.updateUser(
                          SERVICE_NAME,
                          None,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,
                          None,
-                         NEW_USER_NAME,
-                         NEW_USER_PASSWORD,
+                         USER_NAME,
                          None,
-                         None)
+                         USER_DATA_VALUE)
+
     pprint.pprint(res)
 
 
