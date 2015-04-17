@@ -52,15 +52,15 @@ def main():
     USER_NAME=sys.argv[7]
     NEW_USER_PASSWORD=sys.argv[8]
 
-    # validate(
-    #     {
-    #         "SERVICE_NAME": SERVICE_NAME,
-    #         "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
-    #         "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
-    #         "NEW_SERVICE_USER_NAME": NEW_USER_NAME,
-    #         "NEW_SERVICE_USER_PASSWORD": NEW_USER_PASSWORD,
-    #     },
-    #     schemas.json["UserList"])
+    validate(
+        {
+            "SERVICE_NAME": SERVICE_NAME,
+            "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_USER_NAME": USER_NAME,
+            "NEW_SERVICE_USER_PASSWORD": NEW_USER_PASSWORD,
+        },
+        schemas.json["UserList"])
 
     flow = UpdateUser(KEYSTONE_PROTOCOL,
                       KEYSTONE_HOST,
