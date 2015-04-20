@@ -1,4 +1,6 @@
 import sys
+import logging.config
+
 
 from settings.common import LOGGING
 from orchestrator.core.flow.Roles import Roles
