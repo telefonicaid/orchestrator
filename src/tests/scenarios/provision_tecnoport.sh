@@ -79,9 +79,9 @@ python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        tecnoport      \
+                                       cuts           \
                                        tecnoport_admin\
                                        password       \
-                                       cuts           \
                                        SubServiceAdmin\
                                        tecnoport_cuts_admin
 
@@ -98,9 +98,9 @@ python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        tecnoport      \
+                                       cuts           \
                                        tecnoport_admin\
                                        password       \
-                                       cuts           \
                                        SubServiceCustomer\
                                        tecnoport_cuts_customer
 
@@ -126,9 +126,9 @@ python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        tecnoport      \
+                                       erio           \
                                        tecnoport_admin\
                                        password       \
-                                       erio           \
                                        SubServiceAdmin\
                                        tecnoport_erio_admin
 
@@ -154,9 +154,9 @@ python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        tecnoport      \
+                                       fps            \
                                        tecnoport_admin\
                                        password       \
-                                       fps            \
                                        SubServiceAdmin\
                                        tecnoport_fps_admin
 

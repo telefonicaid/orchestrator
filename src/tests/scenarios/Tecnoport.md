@@ -17,7 +17,7 @@
 ### Users
 ```
 tecnoport_admin       - admin               - tecnoport
-                      - SubServiceAdmin    - tecnoport\*
+                      - SubServiceAdmin     - tecnoport\*
 tecnoport_cuts_admin  - SubServiceAdmin     - tecnoport\cuts
                       - ServiceCustomer     - tecnoport\cuts
 tecnoport_erio_admin  - SubServiceAdmin     - tecnoport\erio

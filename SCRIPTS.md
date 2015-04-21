@@ -23,8 +23,11 @@ These are current command line availables:
 * [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
 * [createTrustToken.py](SCRIPTS.md#createtrusttokenpy)
-
-
+* [listRoleAssignments.py](SCRIPTS.md#listRoleAssignmentspy)
+* [removeService.py](SCRIPTS.md#removeServicepy)
+* [removeSubService.py](SCRIPTS.md#removeSubServicepy)
+* [removeServiceRole.py](SCRIPTS.md#removeServiceRolepy)
+* [changeUserPassword.py](SCRIPTS.md#changeUserPasswordpy)
 
 ### createNewService.py
 This script creates a new service in IoT keystone
@@ -113,9 +116,7 @@ Args:
 ```
 
 ### createNewSubService.py
-This script creates a new service in IoT keystone
-including admin user with role admin, subservice roles
-and configures keypass policies for orion and perseo
+This script creates a new sub service in IoT keystone
 ```
 Usage: ./createNewSubService.py [args]
 Args:
@@ -364,4 +365,142 @@ Args:
                                  SubServiceAdmin\
                                  pep            \
                                  adm1           \
+```
+
+
+
+
+
+
+### listRoleAssignments.py
+This script prints roles in a service
+```
+Usage: ./listRoleAssignments.py [args]
+Args: 
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+
+  Typical usage:
+     ./listRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+
+For bug reporting, please contact with:
+<iot_support@tid.es>
+```
+
+
+### removeService.py
+This script removes a Service (aka keystone domain) in IoT Platform
+```
+Usage: ./removeService.py [args]
+Args: 
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <DOMAIN_ADMIN_USER>             Regional Service Provider username
+  <DOMAIN_ADMIN_PASSWORD>         Regional Service Provider password
+  <KEYPASS_PROTOCOL>              HTTP or HTTPS
+  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP
+  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT
+
+  Typical usage:
+     ./removeService.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValenciaB \
+                                 cloud_admin    \
+                                 password       \
+                                 http           \
+                                 localhost      \
+                                 8080           \
+
+For bug reporting, please contact with:
+<iot_support@tid.es>
+```
+
+### removeSubService.py
+This script removes a SubService (aka keystone domain) in IoT Platform
+```
+Usage: ./removeSubService.py [args]
+Args: 
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SUBSERVICE_NAME>               SubService name
+  <SERVICE_ADMIN_USER>            Service Admin username
+  <SERVICE_ADMIN_PASSWORD>        Service Admin password
+
+  Typical usage:
+     ./removeSubService.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+
+For bug reporting, please contact with:
+<iot_support@tid.es>
+```
+
+### removeSubService.py
+This script removes a SubService (aka keystone domain) in IoT Platform
+```
+Usage: ./removeSubService.py [args]
+Args: 
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SUBSERVICE_NAME>               SubService name
+  <SERVICE_ADMIN_USER>            Service Admin username
+  <SERVICE_ADMIN_PASSWORD>        Service Admin password
+
+  Typical usage:
+     ./removeSubService.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+
+For bug reporting, please contact with:
+<iot_support@tid.es>
+```
+
+### changeUserPassword.py
+This scripts changes service user password in IoT keystone
+```
+Usage: ./changeUserPassword.py [args]
+Args: 
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <NEW_USER_NAME>                 User name
+  <NEW_USER_PASSWORD>             New user password
+
+  Typical usage:
+     ./changeUserPassword.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+                                 bob            \
+                                 new_password   \
+
+For bug reporting, please contact with:
+<iot_support@tid.es>
 ```

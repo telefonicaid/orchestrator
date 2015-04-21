@@ -43,9 +43,9 @@ python ./assignRoleSubServiceUser.py http              \
                                        localhost      \
                                        5000           \
                                        ThinkingThings \
+                                       user_x         \
                                        admin_tt       \
                                        password       \
-                                       user_x         \
                                        SubServiceAdmin\
                                        user_x
 
@@ -53,9 +53,9 @@ python ./assignRoleSubServiceUser.py http              \
                                        localhost      \
                                        5000           \
                                        ThinkingThings \
+                                       user_x         \
                                        admin_tt       \
                                        password       \
-                                       user_x         \
                                        SubServiceCustomer\
                                        user_x
 
