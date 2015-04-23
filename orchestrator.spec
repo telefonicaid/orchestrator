@@ -3,7 +3,7 @@ Name: iotp-orchestrator
 Version: %{_version}
 Release: %{_release}
 Summary: IoT Platform Orchestrator 
-License: Copyright 2015 Telefonica Investigación y Desarrollo, S.A.U
+License: AGPLv3
 Distribution: noarch
 Vendor: Telefonica I+D
 Group: Applications/System
