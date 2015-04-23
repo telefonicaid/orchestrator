@@ -26,7 +26,7 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <NEW_USER_NAME>                 User name"
+        print "  <USER_NAME>                 User name"
         print "  <NEW_USER_PASSWORD>             New user password"
         print ""
         print "  Typical usage:"

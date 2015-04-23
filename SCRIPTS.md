@@ -75,8 +75,8 @@ Args:
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <NEW_ROLE_NAME>                 Name of new role
 
   Typical usage:
@@ -90,7 +90,7 @@ Args:
 ```
 
 ### createNewServiceUser.py
-This script creates a new sub service in IoT keystone
+This script creates a new service user in IoT keystone
 ```
 Usage: ./createNewServiceUser.py [args]
 Args:
@@ -98,8 +98,8 @@ Args:
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <NEW_USER_NAME>                 Name of new user
   <NEW_USER_PASSWORD>             Password of new user
 
@@ -348,8 +348,8 @@ Args:
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
   <SUBSERVICE_NAME>               SubService name
-  <SERVICE_ADMIN_USER>            New service admin username
-  <SERVICE_ADMIN_PASSWORD>        New service admin password
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
   <ROLE_NAME>                     Name of role
   <TRUSTEE_USER_NAME>             Trustee user name
   <TRUSTOR_USER_NAME>             Trustor user name
@@ -478,7 +478,7 @@ For bug reporting, please contact with:
 ```
 
 ### changeUserPassword.py
-This scripts changes service user password in IoT keystone
+This script changes service user password in IoT keystone
 ```
 Usage: ./changeUserPassword.py [args]
 Args: 
@@ -488,7 +488,7 @@ Args:
   <SERVICE_NAME>                  Service name
   <SERVICE_ADMIN_USER>            Service admin username
   <SERVICE_ADMIN_PASSWORD>        Service admin password
-  <NEW_USER_NAME>                 User name
+  <USER_NAME>                     User name
   <NEW_USER_PASSWORD>             New user password
 
   Typical usage:
