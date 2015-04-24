@@ -9,6 +9,7 @@ logger = logging.getLogger('orchestrator_core')
 class Roles(FlowBase):
 
     def roles(self,
+                DOMAIN_NAME,              
                 DOMAIN_ID,
                 ADMIN_USER,
                 ADMIN_PASSWORD,
@@ -21,6 +22,7 @@ class Roles(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
+        - DOMAIN_NAME: name of domain        
         - DOMAIN_ID: id of domain
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
@@ -31,6 +33,7 @@ class Roles(FlowBase):
         - array list of roles
         '''
         data_log = {
+            "DOMAIN_NAME":"%s" % DOMAIN_NAME,            
             "DOMAIN_ID":"%s" % DOMAIN_ID,
             "ADMIN_USER":"%s" % ADMIN_USER,
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
@@ -41,6 +44,18 @@ class Roles(FlowBase):
         logger.debug("roles invoked with: %s" % json.dumps(data_log, indent=3))
 
         try:
+            if not ADMIN_TOKEN:
+                if not DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                      DOMAIN_NAME)
+                else:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
+            
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                 ADMIN_USER,
