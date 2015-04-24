@@ -223,6 +223,12 @@ json = {
                         "type": "string",
                         "minLength": 6,
                         },
+                    "displayName": {
+                        "type": "string",
+                        },
+                    "description": {
+                        "type": "string",
+                        },
                     "emails": {
                         "type": "array",
                         "items": {

@@ -447,6 +447,8 @@ class IdMKeystoneOperations(IdMOperations):
         # Replace 'name' by 'userName' since we are using SCIM API
         if 'name' in USER_DATA:
             USER_DATA['userName']=USER_DATA['name']
+        if 'description' in USER_DATA:
+            USER_DATA['displayName']=USER_DATA['description']
         body_data.update(USER_DATA)
         res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
                                 method='PATCH', data=body_data,
