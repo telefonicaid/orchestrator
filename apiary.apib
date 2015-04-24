@@ -431,7 +431,11 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 + Request (application/json)
 
         {
-             "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}] }
+             "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}],
+                                  "name": "new name user",
+                                  "description": "new description user",
+                                  "password": "new description password"
+             }
         }
 
 + Response 200
