@@ -28,6 +28,7 @@ from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
 
+
 class UpdateUser(FlowBase):
 
     def updateUser(self,
@@ -108,4 +109,4 @@ class UpdateUser(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id":USER_ID}
+        return {"id": USER_ID}

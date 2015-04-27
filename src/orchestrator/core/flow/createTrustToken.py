@@ -92,7 +92,6 @@ class CreateTrustToken(FlowBase):
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 1. Get service (aka domain)
             #
@@ -153,11 +152,10 @@ class CreateTrustToken(FlowBase):
                                                  TRUSTOR_USER_ID)
 
             logger.debug("ID of Trust %s" % (ID_TRUST))
-                
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
-
 
         data_log = {
             "ID_TRUST": "%s" % ID_TRUST
@@ -165,5 +163,3 @@ class CreateTrustToken(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_TRUST}
-
-

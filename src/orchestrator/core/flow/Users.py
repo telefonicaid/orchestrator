@@ -32,7 +32,7 @@ logger = logging.getLogger('orchestrator_core')
 class Users(FlowBase):
 
     def users(self,
-              SERVICE_NAME,              
+              SERVICE_NAME,
               SERVICE_ID,
               SERVICE_ADMIN_USER,
               SERVICE_ADMIN_PASSWORD,
@@ -83,7 +83,8 @@ class Users(FlowBase):
             # SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
             #                                         SERVICE_ID)
 
-            # logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES, indent=3))
+            # logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES,
+            #                                               indent=3))
 
             SERVICE_USERS = self.idm.getDomainUsers(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
@@ -96,7 +97,7 @@ class Users(FlowBase):
             # Get Roles de SubServicio
 
             # Listar los usuarios de un Servicio
-              # Obtener roles de usuario
+            # Obtener roles de usuario
 
             # Listar los usuarios de un Subservicio
 

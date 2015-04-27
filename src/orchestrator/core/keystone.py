@@ -597,7 +597,7 @@ class IdMKeystoneOperations(IdMOperations):
                     "id": user['id'],
                     "description": user["displayName"],
                     "domain_id":
-                      user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
+                       user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
                     "enabled": user['active']
                 }
             )

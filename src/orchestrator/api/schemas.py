@@ -123,7 +123,7 @@ json = {
                 "type": "string",
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     ################
     "SubServiceList": {
@@ -154,7 +154,7 @@ json = {
                 "type": "string",
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     #################
     "SubServiceCreate": {
@@ -268,10 +268,10 @@ json = {
                         },
                     },
                 "additionalProperties": False,
-                #"required": ["user", "emails"]
+                # "required": ["user", "emails"]
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     ##########
     "UserList": {
@@ -318,7 +318,7 @@ json = {
                 "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     #######
     "Role": {
@@ -500,8 +500,8 @@ json = {
                 "type": "string",
             },
         },
-        #"required": [
-        #],
+        # "required": [
+        # ],
     },
 
 }

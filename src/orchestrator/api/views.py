@@ -725,8 +725,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        inherit = (request.GET.get('inherit', False) == True or
-                   request.DATA.get('INHERIT', False) == True)
+        inherit = (request.GET.get('inherit', False) is True or
+                   request.DATA.get('INHERIT', False) is True)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -787,8 +787,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def delete(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        inherit = (request.GET.get('inherit', False) == True or
-                   request.DATA.get('INHERIT', False) == True)
+        inherit = (request.GET.get('inherit', False) is True or
+                   request.DATA.get('INHERIT', False) is True)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,

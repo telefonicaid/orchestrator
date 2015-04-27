@@ -22,12 +22,14 @@
 # Author: IoT team
 #
 import logging
-import sys, os
+import sys
+import os
 import json
 
 from orchestrator.core.flow.base import FlowBase
 
 logger = logging.getLogger('orchestrator_core')
+
 
 class CreateNewService(FlowBase):
 
@@ -41,7 +43,6 @@ class CreateNewService(FlowBase):
                          NEW_SERVICE_ADMIN_USER,
                          NEW_SERVICE_ADMIN_PASSWORD,
                          NEW_SERVICE_ADMIN_EMAIL):
-
 
         '''Creates a new Service (aka domain keystone).
 
@@ -74,8 +75,10 @@ class CreateNewService(FlowBase):
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
             "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_PASSWORD
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(data_log,
-                                                                      indent=3))
+        logger.debug("createNewService invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+            )
         try:
 
             if not DOMAIN_ADMIN_TOKEN:
@@ -83,7 +86,6 @@ class CreateNewService(FlowBase):
                                                        DOMAIN_ADMIN_USER,
                                                        DOMAIN_ADMIN_PASSWORD)
             logger.debug("DOMAIN_ADMIN_TOKEN=%s" % DOMAIN_ADMIN_TOKEN)
-
 
             #
             # 1. Create service (aka domain)
@@ -119,15 +121,11 @@ class CreateNewService(FlowBase):
             self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
                                      ADMIN_ROLE_ID)
 
-
-
-
             NEW_SERVICE_ADMIN_TOKEN = self.idm.getToken(
                 NEW_SERVICE_NAME,
                 NEW_SERVICE_ADMIN_USER,
                 NEW_SERVICE_ADMIN_PASSWORD)
             logger.debug("NEW_SERVICE_ADMIN_TOKEN %s" % NEW_SERVICE_ADMIN_TOKEN)
-
 
             #
             # 4. Create SubService roles
@@ -146,7 +144,6 @@ class CreateNewService(FlowBase):
             logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
 
-
             #
             # 4.5 Inherit subserviceadim
             #
@@ -155,28 +152,27 @@ class CreateNewService(FlowBase):
                                       ID_DOM1,
                                       ID_ADM1,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
-
             #
             # 5. Provision default platform roles AccessControl policies
             #
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-                                     POLICY_FILE_NAME='policy-orion-admin.xml')
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-orion-admin.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-                                     POLICY_FILE_NAME='policy-perseo-admin.xml')
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-perseo-admin.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-                                     POLICY_FILE_NAME='policy-orion-customer.xml')
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-orion-customer.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-                                     POLICY_FILE_NAME='policy-perseo-customer.xml')
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-perseo-customer.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                     ADMIN_ROLE_ID,
-                                     POLICY_FILE_NAME='policy-orion-admin2.xml')
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-orion-admin2.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                     ADMIN_ROLE_ID,
-                                     POLICY_FILE_NAME='policy-perseo-admin2.xml')
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-perseo-admin2.xml')
 
         except Exception, ex:
             logger.error(ex)
@@ -194,4 +190,3 @@ class CreateNewService(FlowBase):
             "token": NEW_SERVICE_ADMIN_TOKEN,
             "id": ID_DOM1,
         }
-

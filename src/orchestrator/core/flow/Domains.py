@@ -66,7 +66,6 @@ class Domains(FlowBase):
                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
-
             DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
 
             logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
@@ -201,11 +200,11 @@ class Domains(FlowBase):
         return DOMAIN
 
     def delete_domain(self,
-                   DOMAIN_ID,
-                   DOMAIN_NAME,
-                   ADMIN_USER,
-                   ADMIN_PASSWORD,
-                   ADMIN_TOKEN):
+                      DOMAIN_ID,
+                      DOMAIN_NAME,
+                      ADMIN_USER,
+                      ADMIN_PASSWORD,
+                      ADMIN_TOKEN):
 
         '''Delete a Domain.
 

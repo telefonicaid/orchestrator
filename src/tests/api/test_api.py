@@ -14,7 +14,7 @@ class TestRestOperations(RestOperations):
                                 HOST,
                                 PORT)
         self.keystone_endpoint_url = settings.KEYSTONE['protocol'] + '://' + \
-            settings.KEYSTONE['host'] + ":" +  settings.KEYSTONE['port']
+            settings.KEYSTONE['host'] + ":" + settings.KEYSTONE['port']
 
     def getToken(self, data):
         auth_data = {
@@ -34,7 +34,7 @@ class TestRestOperations(RestOperations):
         }
         if "SERVICE_NAME" in data:
             auth_data['auth']['identity']['password']['user'].update(
-                {"domain": { "name": data["SERVICE_NAME"]}})
+                {"domain": {"name": data["SERVICE_NAME"]}})
 
             scope_domain = {
                 "scope": {
@@ -69,7 +69,7 @@ class TestRestOperations(RestOperations):
         }
         if "SERVICE_NAME" in data and "SUBSERVICE_NAME" in data:
             auth_data['auth']['identity']['password']['user'].update(
-                {"domain": { "name": data["SERVICE_NAME"]}})
+                {"domain": {"name": data["SERVICE_NAME"]}})
 
             scope_domain = {
                 "scope": {
@@ -77,14 +77,15 @@ class TestRestOperations(RestOperations):
                         "domain": {
                             "name": data["SERVICE_NAME"]
                         },
-                        "name": "/"+ data["SUBSERVICE_NAME"]
+                        "name": "/" + data["SUBSERVICE_NAME"]
                     }
                 }
             }
             auth_data['auth'].update(scope_domain)
-        res = self.rest_request(url=self.keystone_endpoint_url + '/v3/auth/tokens',
-                                relative_url=False,
-                                method='POST', data=auth_data)
+        res = self.rest_request(
+            url=self.keystone_endpoint_url + '/v3/auth/tokens',
+            relative_url=False,
+            method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
         return res
 
@@ -106,7 +107,7 @@ class TestRestOperations(RestOperations):
         }
         if "SERVICE_NAME" in data:
             auth_data['auth']['identity']['password']['user'].update(
-                {"domain": { "name": data["SERVICE_NAME"]}})
+                {"domain": {"name": data["SERVICE_NAME"]}})
 
         res = self.rest_request(
             url=self.keystone_endpoint_url + '/v3/auth/tokens',
@@ -140,62 +141,61 @@ class TestRestOperations(RestOperations):
                 return project['id']
 
 
-
 class Test_NewService_RestView(object):
 
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "DOMAIN_NAME":"admin_domain",
-            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es"
+            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es"
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "DOMAIN_NAME":"admin_domain",
-            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "SERVICE_NAME":"admin_domain",
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_NAME": "admin_domain",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD": "password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "DOMAIN_NAME":"admin_domain",
-            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "wrong_password",
-            "NEW_SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD": "password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "DOMAIN_NAME":"admin_domain",
-            "DOMAIN_ADMIN_USER":"cloud_admin",
-            "NEW_SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
+            "DOMAIN_NAME": "admin_domain",
+            "DOMAIN_ADMIN_USER": "cloud_admin",
+            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
 
     def test_post_ok(self):
-        #TOKEN="kk3"
+        # TOKEN="kk3"
         res = self.TestRestOps.rest_request(method="POST",
                                             url="v1.0/service/",
                                             json_data=True,
-         #                                   auth_token=TOKEN,
+                                            # auth_token=TOKEN,
                                             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
@@ -233,42 +233,41 @@ class Test_NewService_RestView(object):
         assert res.code == 400, (res.code, res.msg)
 
 
-
 class Test_DeleteService_RestView(object):
 
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "DOMAIN_NAME":"admin_domain",
-            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
-            "SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "SERVICE_ADMIN_USER":"cloud_admin",
-            "SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
+            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_ADMIN_USER": "cloud_admin",
+            "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "DOMAIN_NAME":"admin_domain",
-            "DOMAIN_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION":"SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
-            "SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "SERVICE_ADMIN_USER":"cloud_admin",
-            "SERVICE_ADMIN_PASSWORD":"password",
+            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
+            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
+            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_ADMIN_USER": "cloud_admin",
+            "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad = {
-            "SERVICE_NAME":"SmartCity_%s" % self.suffix,
-            "SERVICE_ADMIN_USER":"adm_%s" % self.suffix,
-            "SERVICE_ADMIN_PASSWORD":"password",
+            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
+            "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -309,38 +308,37 @@ class Test_DeleteService_RestView(object):
         assert res.code == 401, (res.code, res.msg, res.raw_json)
 
 
-
 class Test_NewSubService_RestView(object):
 
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SUBSERVICE_NAME":"Electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"wrong_password",
-            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "wrong_password",
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -383,32 +381,31 @@ class Test_NewSubService_RestView(object):
         assert res.code == 400, (res.code, res.msg)
 
 
-
 class Test_DeleteSubService_RestView(object):
 
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SUBSERVICE_NAME":"Electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"password",
-            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_bad = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"wrong_password",
-            "NEW_SUBSERVICE_NAME":"electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION":"electricidad_%s" % self.suffix,
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "wrong_password",
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -431,7 +428,6 @@ class Test_DeleteSubService_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
-
 
     def test_delete_wrong(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
@@ -457,44 +453,44 @@ class Test_NewServiceUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",
-            "NEW_SERVICE_USER_EMAIL":"pepe@gmail.com",
-            "NEW_SERVICE_USER_DESSCRIPTION":"Pepito",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_EMAIL": "pepe@gmail.com",
+            "NEW_SERVICE_USER_DESSCRIPTION": "Pepito",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",
-            "NEW_SERVICE_USER_PASSWORD":"email@email.com",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "email@email.com",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -551,17 +547,17 @@ class Test_NewServiceTrust_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SUBSERVICE_NAME":"Basuras",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SUBSERVICE_NAME": "Basuras",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"SubServiceAdmin",
-            "TRUSTEE_USER_NAME":"pep",
-            "TRUSTOR_USER_NAME":"adm1",
+            "ROLE_NAME": "SubServiceAdmin",
+            "TRUSTEE_USER_NAME": "pep",
+            "TRUSTOR_USER_NAME": "adm1",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"admin_domain",
-            "SERVICE_ADMIN_USER":"pep",
+            "SERVICE_NAME": "admin_domain",
+            "SERVICE_ADMIN_USER": "pep",
             "SERVICE_ADMIN_PASSWORD": "pep",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -588,48 +584,49 @@ class Test_NewServiceTrust_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+
 class Test_ServiceLists_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "DOMAIN_NAME":"admin_domain",
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SERVICE_NAME":"SmartCity",
+            "SERVICE_NAME": "SmartCity",
             "NEW_SERVICE_DESCRIPTION": "SmartCity village",
         }
         self.payload_data_ok3 = {
-            "DOMAIN_NAME":"SmartCity",
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD":"password",
+            "DOMAIN_NAME": "SmartCity",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad = {
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad2 = {
-            "DOMAIN_NAME":"admin_domain",
-            "SERVICE_ADMIN_USER":"adm1",
+            "DOMAIN_NAME": "admin_domain",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad3 = {
-            "DOMAIN_NAME":"admin_domain",
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "admin_domain",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
         }
         self.payload_data_bad4 = {
-            "DOMAIN_NAME":"wrong_admin_domain",
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "DOMAIN_NAME": "wrong_admin_domain",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
         }
         self.payload_data_bad5 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -691,9 +688,9 @@ class Test_ServiceLists_RestView(object):
 
         # Get domain and check domain description
         res = self.TestRestOps.rest_request(method="GET",
-                                             url="v1.0/service/%s" % service_id,
-                                             json_data=True,
-                                             data=self.payload_data_ok3)
+                                            url="v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
         data_response = res.read()
         json_body_response = json.loads(data_response)
@@ -712,13 +709,13 @@ class Test_ServiceDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_nok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"admin_domain",
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_NAME": "admin_domain",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -746,27 +743,27 @@ class Test_ProjectList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SUBSERVICE_NAME":"Electricidad",
-            "NEW_SUBSERVICE_DESCRIPTION":"Elektricidad",
+            "SUBSERVICE_NAME": "Electricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
         }
         self.payload_data_bad = {
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"cloud_admin",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SUBSERVICE_NAME":"Electricidad",
-            "NEW_SUBSERVICE_DESCRIPTION":"Elektricidad",
+            "SUBSERVICE_NAME": "Electricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -810,13 +807,14 @@ class Test_ProjectList_RestView(object):
             data=self.payload_data_bad2)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
 
+
 class Test_ProjectDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SUBSERVICE_NAME": "Electricidad",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -831,7 +829,7 @@ class Test_ProjectDetail_RestView(object):
             url="v1.0/service/%s/subservice/%s" % (
                 service_id,
                 subservice_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
@@ -840,17 +838,17 @@ class Test_NewServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_ROLE_NAME":"role_%s" % self.suffix,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_nok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_ROLE_NAME":"role_%s" % self.suffix,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -885,36 +883,36 @@ class Test_DeleteServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"Adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_ROLE_NAME":"role_%s" % self.suffix,
-            "ROLE_NAME":"role_%s" % self.suffix,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
+            "ROLE_NAME": "role_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_ROLE_NAME":"role_tmp_%s" % self.suffix,
-            "ROLE_NAME":"role_tmp_%s" % self.suffix,
-            "SERVICE_USER_NAME":"user_for_role_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_for_role_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"user_for_role_%s" % self.suffix,
+            "NEW_ROLE_NAME": "role_tmp_%s" % self.suffix,
+            "ROLE_NAME": "role_tmp_%s" % self.suffix,
+            "SERVICE_USER_NAME": "user_for_role_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_for_role_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "user_for_role_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"Adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_ROLE_NAME":"role_%s" % self.suffix,
-            "ROLE_NAME":"role_%s" % self.suffix,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
+            "ROLE_NAME": "role_%s" % self.suffix,
         }
         self.payload_data_bad = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"Adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
-            "NEW_ROLE_NAME":"role_%s" % self.suffix,
-            "ROLE_NAME":"role_%s" % self.suffix,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
+            "ROLE_NAME": "role_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -937,7 +935,6 @@ class Test_DeleteServiceRole_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
-
 
     def test_delete_ok2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
@@ -966,7 +963,7 @@ class Test_DeleteServiceRole_RestView(object):
             method="POST",
             url="v1.0/service/%s/role_assignments" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
@@ -982,12 +979,11 @@ class Test_DeleteServiceRole_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?user_id=%s" % (
                 service_id, user_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok2)
         response = res.read()
         json_body_response = json.loads(response)
         assert len(json_body_response['role_assignments']) == 0
-
 
     def test_delete_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
@@ -1007,18 +1003,19 @@ class Test_DeleteServiceRole_RestView(object):
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
 
+
 class Test_RoleList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SUBSERVICE_NAME":"Electricidad",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SUBSERVICE_NAME": "Electricidad",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -1058,18 +1055,17 @@ class Test_RoleList_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
-
 class Test_UserList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "START_INDEX": "10",
             "COUNT": "10"
@@ -1111,12 +1107,13 @@ class Test_UserList_RestView(object):
         json_body_response = json.loads(data_response)
         assert len(json_body_response['users']) <= 2
 
+
 class Test_UserDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -1133,56 +1130,56 @@ class Test_UserDetail_RestView(object):
             method="GET",
             url="v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
-                                             json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
 
 
 class Test_UserModify_RestView(object):
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "USER_NAME":"adm1",
-            "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}] }
+            "USER_NAME": "adm1",
+            "USER_DATA_VALUE": {"emails": [{"value": "test@gmail.com"}]}
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "USER_NAME":"alf_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
-            "USER_DATA_VALUE": { "name": "bet_%s" % self.suffix }
+            "USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
+            "USER_DATA_VALUE": {"name": "bet_%s" % self.suffix}
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "USER_NAME":"alf_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
-            "USER_DATA_VALUE": { "name": "bet_%s" % self.suffix,
-                                 "password": "bet_%s" % self.suffix,
-                                 "description": "Bet bet_%s" % self.suffix }
+            "USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
+            "USER_DATA_VALUE": {"name": "bet_%s" % self.suffix,
+                                "password": "bet_%s" % self.suffix,
+                                "description": "Bet bet_%s" % self.suffix}
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "USER_NAME":"alf_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
-            "USER_DATA_VALUE": { "nameKK3": "bet_%s" % self.suffix }
+            "USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
+            "USER_DATA_VALUE": {"nameKK3": "bet_%s" % self.suffix}
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
+
     def test_put_ok(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
         data_response = token_res.read()
@@ -1217,7 +1214,7 @@ class Test_UserModify_RestView(object):
             method="PUT",
             url="v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
-                                             json_data=True,
+            json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
@@ -1239,7 +1236,7 @@ class Test_UserModify_RestView(object):
 
         # Login -> OK
         self.payload_data_tmp = {
-            "SERVICE_NAME":"SmartCity",
+            "SERVICE_NAME": "SmartCity",
             "SERVICE_ADMIN_USER": self.payload_data_ok3["NEW_SERVICE_USER_NAME"],
             "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["NEW_SERVICE_USER_PASSWORD"]
         }
@@ -1252,13 +1249,13 @@ class Test_UserModify_RestView(object):
             method="PUT",
             url="v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
-                                             json_data=True,
+            json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
         # Login -> OK
         self.payload_data_tmp = {
-            "SERVICE_NAME":"SmartCity",
+            "SERVICE_NAME": "SmartCity",
             "SERVICE_ADMIN_USER": self.payload_data_ok3["USER_DATA_VALUE"]["name"],
             "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["USER_DATA_VALUE"]["password"]
         }
@@ -1287,10 +1284,9 @@ class Test_UserModify_RestView(object):
             method="PUT",
             url="v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
-                                             json_data=True,
+            json_data=True,
             data=self.payload_data_bad)
         assert res.code == 400, (res.code, res.msg, res.raw_json)
-
 
 
 class Test_UserDelete_RestView(object):
@@ -1298,12 +1294,12 @@ class Test_UserDelete_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "USER_NAME":"Alice_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"password",
+            "USER_NAME": "Alice_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -1323,29 +1319,30 @@ class Test_UserDelete_RestView(object):
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         data_response = res.read()
         json_body_response = json.loads(data_response)
-        user_id= json_body_response['id']
+        user_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
             url="v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
-                                             json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg)
+
 
 class Test_AssignRoleUserList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SUBSERVICE_NAME":"Electricidad",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SUBSERVICE_NAME": "Electricidad",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_USER_NAME":"Alice",
-            "SERVICE_NAME":"SmartCity",
-            "SUBSERVICE_NAME":"Electricidad",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_USER_NAME": "Alice",
+            "SERVICE_NAME": "SmartCity",
+            "SUBSERVICE_NAME": "Electricidad",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -1359,15 +1356,14 @@ class Test_AssignRoleUserList_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?subservice_id=%s" % (
                 service_id, subservice_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
 
     def test_get_ok2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
-        #token_res = self.TestRestOps.getScopedToken(self.payload_data_ok)
+        # token_res = self.TestRestOps.getScopedToken(self.payload_data_ok)
         data_response = token_res.read()
         json_body_response = json.loads(data_response)
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
@@ -1375,7 +1371,7 @@ class Test_AssignRoleUserList_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?role_id=%s" % (
                 service_id, role_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
@@ -1390,7 +1386,7 @@ class Test_AssignRoleUserList_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s" % (
                 service_id, role_id, user_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
@@ -1406,10 +1402,9 @@ class Test_AssignRoleUserList_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?subservice_id=%s&role_id=%s&user_id=%s" % (
                 service_id, subservice_id, role_id, user_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
 
     def test_get_ok5(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
@@ -1422,7 +1417,7 @@ class Test_AssignRoleUserList_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=true" % (
                 service_id, role_id, user_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
@@ -1430,10 +1425,9 @@ class Test_AssignRoleUserList_RestView(object):
             method="GET",
             url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=false" % (
                 service_id, role_id, user_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res2.code == 200, (res2.code, res2.msg, res2.raw_json)
-
 
 
 class Test_AssignRoleUser_RestView(object):
@@ -1441,44 +1435,44 @@ class Test_AssignRoleUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"ServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "ROLE_NAME": "ServiceCustomer",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME":"SmartCity",
-            "SUBSERVICE_NAME":"Electricidad",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SUBSERVICE_NAME": "Electricidad",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"SubServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "ROLE_NAME": "SubServiceCustomer",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"SubServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "ROLE_NAME": "SubServiceCustomer",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok4 = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"SubServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "ROLE_NAME": "SubServiceCustomer",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
             "INHERIT": True
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -1499,7 +1493,7 @@ class Test_AssignRoleUser_RestView(object):
             method="POST",
             url="v1.0/service/%s/role_assignments" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
@@ -1516,10 +1510,9 @@ class Test_AssignRoleUser_RestView(object):
             method="POST",
             url="v1.0/service/%s/role_assignments" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
-
 
     def test_post_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
@@ -1534,10 +1527,9 @@ class Test_AssignRoleUser_RestView(object):
             method="POST",
             url="v1.0/service/%s/role_assignments?inherit=true" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
-
 
     def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok4)
@@ -1552,10 +1544,9 @@ class Test_AssignRoleUser_RestView(object):
             method="POST",
             url="v1.0/service/%s/role_assignments" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok4)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
-
 
 
 class Test_UnassignRoleUser_RestView(object):
@@ -1563,14 +1554,14 @@ class Test_UnassignRoleUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME":"SmartCity",
-            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "ROLE_NAME":"SubServiceCustomer",
-            "SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_NAME":"user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD":"user_%s" % self.suffix,
+            "ROLE_NAME": "SubServiceCustomer",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -1590,7 +1581,7 @@ class Test_UnassignRoleUser_RestView(object):
             method="POST",
             url="v1.0/service/%s/role_assignments" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
@@ -1598,12 +1589,9 @@ class Test_UnassignRoleUser_RestView(object):
             method="DELETE",
             url="v1.0/service/%s/role_assignments" % (
                 service_id),
-                json_data=True,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
-
-
-
 
 
 if __name__ == '__main__':
@@ -1687,7 +1675,7 @@ if __name__ == '__main__':
     test_RoleList = Test_RoleList_RestView()
     test_RoleList.test_get_ok()
     test_RoleList.test_get_bad()
-    #test_RoleList.test_get_bad2() # TODO: error 500 due to basic auth
+    # test_RoleList.test_get_bad2()  # TODO: error 500 due to basic auth
 
     test_AssignRoleUserList = Test_AssignRoleUserList_RestView()
     test_AssignRoleUserList.test_get_ok()
@@ -1698,7 +1686,7 @@ if __name__ == '__main__':
 
     test_AssignRoleUser = Test_AssignRoleUser_RestView()
     test_AssignRoleUser.test_post_ok()
-    #test_AssignRoleUser.test_post_ok2()
+    # test_AssignRoleUser.test_post_ok2()
     test_AssignRoleUser.test_post_ok3()
 
     test_UnassignRoleUser = Test_UnassignRoleUser_RestView()

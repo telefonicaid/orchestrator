@@ -77,7 +77,6 @@ class Projects(FlowBase):
                                                      ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
-
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
 
@@ -150,7 +149,6 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
-
 
     def update_project(self,
                        DOMAIN_ID,
@@ -227,7 +225,6 @@ class Projects(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
 
-
     def delete_project(self,
                        DOMAIN_ID,
                        DOMAIN_NAME,
@@ -287,7 +284,6 @@ class Projects(FlowBase):
 
             self.idm.deleteProject(ADMIN_TOKEN,
                                    PROJECT_ID)
-
 
             logger.debug("PROJECT=%s" % PROJECT)
 

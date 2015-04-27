@@ -81,7 +81,6 @@ class RemoveUser(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 2. Get user ID
             #
@@ -91,7 +90,6 @@ class RemoveUser(FlowBase):
                                                    USER_NAME)
             logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
 
-
             # TODO: disable us before remove it ?
 
             #
@@ -99,8 +97,7 @@ class RemoveUser(FlowBase):
             #
             self.idm.removeUser(SERVICE_ADMIN_TOKEN,
                                 USER_ID)
-            #logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
-
+            # logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
 
         except Exception, ex:
             logger.error(ex)
@@ -112,7 +109,3 @@ class RemoveUser(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {}
-
-
-
-

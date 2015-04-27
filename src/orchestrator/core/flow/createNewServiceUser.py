@@ -79,7 +79,6 @@ class CreateNewServiceUser(FlowBase):
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 1. Get service (aka domain)
             #
@@ -102,7 +101,6 @@ class CreateNewServiceUser(FlowBase):
                                                 NEW_USER_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
 
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -113,7 +111,4 @@ class CreateNewServiceUser(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id":ID_USER}
-
-
-
+        return {"id": ID_USER}

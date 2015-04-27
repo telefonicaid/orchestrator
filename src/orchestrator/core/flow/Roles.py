@@ -45,7 +45,7 @@ class Roles(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_NAME: name of domain        
+        - DOMAIN_NAME: name of domain
         - DOMAIN_ID: id of domain
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
@@ -73,16 +73,15 @@ class Roles(FlowBase):
                                                     ADMIN_USER,
                                                     ADMIN_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-                                                      DOMAIN_NAME)
+                                                     DOMAIN_NAME)
                 else:
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
-            
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                ADMIN_USER,
-                                                ADMIN_PASSWORD)
+                                                 ADMIN_USER,
+                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAIN_ROLES = self.idm.getDomainRoles(ADMIN_TOKEN,
@@ -93,7 +92,7 @@ class Roles(FlowBase):
 
             ROLES = DOMAIN_ROLES
 
-            logger.debug("ROLES=%s" %  json.dumps(ROLES, indent=3))
+            logger.debug("ROLES=%s" % json.dumps(ROLES, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -105,7 +104,6 @@ class Roles(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return ROLES
-
 
     def roles_assignments(self,
                           DOMAIN_ID,
@@ -198,15 +196,18 @@ class Roles(FlowBase):
                         continue
                 role_assignments_expanded.append(role_assignment)
 
-
             # Cache these data? -> memcached/redis
             domain_roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
             domain_roles['roles'].append(
-                { "name": "admin",
-                  "id": self.idm.getRoleId(ADMIN_TOKEN, "admin")})
+                {
+                    "name": "admin",
+                    "id": self.idm.getRoleId(ADMIN_TOKEN, "admin")
+                })
             domain_roles['roles'].append(
-                { "name": "service",
-                  "id": self.idm.getRoleId(ADMIN_TOKEN, "service")})
+                {
+                    "name": "service",
+                    "id": self.idm.getRoleId(ADMIN_TOKEN, "service")
+                })
             domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
@@ -238,10 +239,8 @@ class Roles(FlowBase):
                     if len(match_list) > 0:
                         assign['scope']['project'].update(match_list[0])
 
-
             logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded,
                                                  indent=3))
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -250,8 +249,7 @@ class Roles(FlowBase):
             "role_assignments": role_assignments_expanded,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return { "role_assignments": role_assignments_expanded }
-
+        return {"role_assignments": role_assignments_expanded}
 
     def assignRoleServiceUser(self,
                               SERVICE_NAME,
@@ -312,7 +310,6 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 1. Get service (aka domain)
             #
@@ -338,7 +335,6 @@ class Roles(FlowBase):
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME,
                                                 SERVICE_USER_ID))
 
-
             #
             # 4.  Grant role to user in service
             #
@@ -346,8 +342,6 @@ class Roles(FlowBase):
                                      SERVICE_ID,
                                      SERVICE_USER_ID,
                                      ROLE_ID)
-
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -359,7 +353,6 @@ class Roles(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return {}
-
 
     def assignRoleSubServiceUser(self,
                                  SERVICE_NAME,
@@ -423,7 +416,6 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
-
 
             #
             # 1. Get service (aka domain)
@@ -570,7 +562,6 @@ class Roles(FlowBase):
                                       SERVICE_USER_ID,
                                       INHERIT_ROLE_ID)
 
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -666,7 +657,6 @@ class Roles(FlowBase):
             logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME,
                                                 SERVICE_USER_ID))
 
-
             #
             # 4. Revoke role to user in service
             #
@@ -674,7 +664,6 @@ class Roles(FlowBase):
                                       SERVICE_ID,
                                       SERVICE_USER_ID,
                                       ROLE_ID)
-
 
         except Exception, ex:
             logger.error(ex)
@@ -727,7 +716,7 @@ class Roles(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
             "ROLE_NAME": "%s" % ROLE_NAME,
-            "ROLE_ID":"%s" % ROLE_ID,
+            "ROLE_ID": "%s" % ROLE_ID,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_ID": "%s" % SERVICE_USER_ID
         }
@@ -791,9 +780,9 @@ class Roles(FlowBase):
             # 5. Revoke role to user in service
             #
             self.idm.revokeProjectRole(SERVICE_ADMIN_TOKEN,
-                                      SUBSERVICE_ID,
-                                      SERVICE_USER_ID,
-                                      ROLE_ID)
+                                       SUBSERVICE_ID,
+                                       SERVICE_USER_ID,
+                                       ROLE_ID)
 
         except Exception, ex:
             logger.error(ex)
@@ -806,7 +795,6 @@ class Roles(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return {}
-
 
     def revokeInheritRoleServiceUser(self,
                                      SERVICE_NAME,
@@ -906,7 +894,6 @@ class Roles(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return {}
-
 
     def removeRole(self,
                    SERVICE_NAME,

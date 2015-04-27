@@ -64,8 +64,10 @@ class CreateNewServiceRole(FlowBase):
             "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
             "XACML_POLICY": "%s" % XACML_POLICY
         }
-        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(data_log,
-                                                                          indent=3))
+        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+            )
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -74,14 +76,12 @@ class CreateNewServiceRole(FlowBase):
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 1. Get service (aka domain)
             #
             if not SERVICE_ID:
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
-
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
@@ -105,7 +105,7 @@ class CreateNewServiceRole(FlowBase):
                                                  ID_ROLE,
                                                  XACML_POLICY)
 
-            if NEW_ROLE_NAME =='ServiceCustomer':
+            if NEW_ROLE_NAME == 'ServiceCustomer':
                 logger.debug("set default XACML policy for role %s" % NEW_ROLE_NAME)
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
@@ -113,11 +113,10 @@ class CreateNewServiceRole(FlowBase):
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-perseo-customer2.xml')
-                
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
-
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
@@ -126,5 +125,3 @@ class CreateNewServiceRole(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_ROLE}
-
-
