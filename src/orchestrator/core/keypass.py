@@ -36,12 +36,11 @@ class AccCKeypassOperations(AccCOperations):
     def __init__(self,
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,
-                 KEYPASS_PORT=None
-             ):
+                 KEYPASS_PORT=None):
 
-        self.KEYPASS_PROTOCOL=KEYPASS_PROTOCOL
-        self.KEYPASS_HOST=KEYPASS_HOST
-        self.KEYPASS_PORT=KEYPASS_PORT
+        self.KEYPASS_PROTOCOL = KEYPASS_PROTOCOL
+        self.KEYPASS_HOST = KEYPASS_HOST
+        self.KEYPASS_PORT = KEYPASS_PORT
 
         self.AccessControlRestOperations = RestOperations(KEYPASS_PROTOCOL,
                                                           KEYPASS_HOST,
@@ -55,7 +54,6 @@ class AccCKeypassOperations(AccCOperations):
             method='GET',
             data=None)
         assert res.code == 404, (res.code, res.msg)
-
 
     def provisionPolicy(self,
                         SERVICE_NAME,
@@ -72,33 +70,33 @@ class AccCKeypassOperations(AccCOperations):
                                       body_data)
 
     def provisionPolicyByContent(self,
-                        SERVICE_NAME,
-                        SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_ROLE_ID,
-                        POLICY_CONTENT):
+                                 SERVICE_NAME,
+                                 SERVICE_ADMIN_TOKEN,
+                                 SUB_SERVICE_ROLE_ID,
+                                 POLICY_CONTENT):
 
         res = self.AccessControlRestOperations.rest_request(
-                                url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
-                                method='POST',
-                                json_data=False,
-                                data=POLICY_CONTENT,
-                                auth_token=SERVICE_ADMIN_TOKEN,
-                                fiware_service=SERVICE_NAME)
+            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            method='POST',
+            json_data=False,
+            data=POLICY_CONTENT,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
 
         assert res.code == 201, (res.code, res.msg)
         # TODO: return ?
 
-
     def deleteTenantPolicies(self,
-                              SERVICE_NAME,
-                              SERVICE_ADMIN_TOKEN):
+                             SERVICE_NAME,
+                             SERVICE_ADMIN_TOKEN):
 
         res = self.AccessControlRestOperations.rest_request(
-                                url='pap/v1',
-                                method='DELETE',
-                                json_data=False,
-                                auth_token=SERVICE_ADMIN_TOKEN,
-                                fiware_service=SERVICE_NAME)
+            url='pap/v1',
+            method='DELETE',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
 
         assert res.code == 204, (res.code, res.msg)
+
 

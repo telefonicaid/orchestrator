@@ -41,8 +41,6 @@ class CreateNewServiceUser(FlowBase):
                              NEW_USER_PASSWORD,
                              NEW_USER_EMAIL,
                              NEW_USER_DESCRIPTION):
-
-
         '''Creates a new user Service (aka domain user keystone).
 
         In case of HTTP error, return HTTP error
@@ -60,15 +58,15 @@ class CreateNewServiceUser(FlowBase):
         - id: New user Id
         '''
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "NEW_USER_NAME":"%s" % NEW_USER_NAME,
-            "NEW_USER_PASSWORD":"%s" % NEW_USER_PASSWORD,
-            "NEW_USER_EMAIL":"%s" % NEW_USER_EMAIL,
-            "NEW_USER_DESCRIPTION":"%s" % NEW_USER_DESCRIPTION
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_USER_NAME": "%s" % NEW_USER_NAME,
+            "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD,
+            "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
+            "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION
         }
         logger.debug("createNewServiceUser invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -110,8 +108,8 @@ class CreateNewServiceUser(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "ID_USER":"%s" % ID_USER,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "ID_USER": "%s" % ID_USER,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 

@@ -62,22 +62,20 @@ class CreateNewService(FlowBase):
         - id: service Id
         '''
 
-        SUB_SERVICE_ADMIN_ROLE_NAME="SubServiceAdmin"
-        SUB_SERVICE_CUSTOMER_ROLE_NAME="SubServiceCustomer"
+        SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
+        SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
-            "DOMAIN_ADMIN_USER":"%s" % DOMAIN_ADMIN_USER,
-            "DOMAIN_ADMIN_PASSWORD":"%s" % DOMAIN_ADMIN_PASSWORD,
-            "DOMAIN_ADMIN_TOKEN":"%s" % DOMAIN_ADMIN_TOKEN,
-            "NEW_SERVICE_NAME":"%s" % NEW_SERVICE_NAME,
-            "NEW_SERVICE_DESCRIPTION":"%s" % NEW_SERVICE_DESCRIPTION,
-            "NEW_SERVICE_ADMIN_USER":"%s" % NEW_SERVICE_ADMIN_PASSWORD
+            "DOMAIN_ADMIN_USER": "%s" % DOMAIN_ADMIN_USER,
+            "DOMAIN_ADMIN_PASSWORD": "%s" % DOMAIN_ADMIN_PASSWORD,
+            "DOMAIN_ADMIN_TOKEN": "%s" % DOMAIN_ADMIN_TOKEN,
+            "NEW_SERVICE_NAME": "%s" % NEW_SERVICE_NAME,
+            "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
+            "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_PASSWORD
         }
         logger.debug("createNewService invoked with: %s" % json.dumps(data_log,
                                                                       indent=3))
-
-
         try:
 
             if not DOMAIN_ADMIN_TOKEN:
@@ -185,10 +183,10 @@ class CreateNewService(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ID_DOM1":"%s" % ID_DOM1,
-            "NEW_SERVICE_ADMIN_TOKEN":"%s" % NEW_SERVICE_ADMIN_TOKEN,
-            "ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN":"%s" % ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN, 
-            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER":"%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER
+            "ID_DOM1": "%s" % ID_DOM1,
+            "NEW_SERVICE_ADMIN_TOKEN": "%s" % NEW_SERVICE_ADMIN_TOKEN,
+            "ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 

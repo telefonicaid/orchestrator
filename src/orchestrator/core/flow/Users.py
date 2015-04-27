@@ -54,13 +54,13 @@ class Users(FlowBase):
         - COUNT: number of results
         '''
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "START_INDEX":"%s" % START_INDEX,
-            "COUNT":"%s" % COUNT,
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "START_INDEX": "%s" % START_INDEX,
+            "COUNT": "%s" % COUNT,
         }
         logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -80,8 +80,6 @@ class Users(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
-
             # SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
             #                                         SERVICE_ID)
 
@@ -95,14 +93,12 @@ class Users(FlowBase):
             logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS,
                                                          indent=3))
 
-
             # Get Roles de SubServicio
 
             # Listar los usuarios de un Servicio
               # Obtener roles de usuario
 
             # Listar los usuarios de un Subservicio
-
 
         except Exception, ex:
             logger.error(ex)
@@ -114,14 +110,12 @@ class Users(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return SERVICE_USERS
 
-
-
     def user(self,
-              SERVICE_ID,
-              USER_ID,
-              SERVICE_ADMIN_USER,
-              SERVICE_ADMIN_PASSWORD,
-              SERVICE_ADMIN_TOKEN):
+             SERVICE_ID,
+             USER_ID,
+             SERVICE_ADMIN_USER,
+             SERVICE_ADMIN_PASSWORD,
+             SERVICE_ADMIN_TOKEN):
 
         '''Get user detail
 
@@ -136,11 +130,11 @@ class Users(FlowBase):
 
         '''
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "USER_ID":"%s" % USER_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "USER_ID": "%s" % USER_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN
         }
         logger.debug("user invoked with: %s" % json.dumps(data_log,
                                                           indent=3))
@@ -155,7 +149,6 @@ class Users(FlowBase):
             DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
                                               USER_ID)
             logger.debug("DETAIL_USER=%s" % json.dumps(DETAIL_USER, indent=3))
-
 
         except Exception, ex:
             logger.error(ex)

@@ -45,7 +45,6 @@ class CreateTrustToken(FlowBase):
                          TRUSTEE_USER_ID,
                          TRUSTOR_USER_NAME,
                          TRUSTOR_USER_ID):
-
         '''Creates a trust token
 
         In case of HTTP error, return HTTP error
@@ -68,19 +67,19 @@ class CreateTrustToken(FlowBase):
         - token: Trust Token
         '''
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SUBSERVICE_NAME":"%s" % SUBSERVICE_NAME,
-            "SUBSERVICE_ID":"%s" % SUBSERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "ROLE_NAME":"%s" % ROLE_NAME,
-            "ROLE_ID":"%s" % ROLE_ID,
-            "TRUSTEE_USER_NAME":"%s" % TRUSTEE_USER_NAME,
-            "TRUSTEE_USER_ID":"%s" % TRUSTEE_USER_ID,
-            "TRUSTOR_USER_NAME":"%s" % TRUSTOR_USER_NAME,
-            "TRUSTOR_USER_ID":"%s" % TRUSTOR_USER_ID,
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,
+            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "TRUSTEE_USER_NAME": "%s" % TRUSTEE_USER_NAME,
+            "TRUSTEE_USER_ID": "%s" % TRUSTEE_USER_ID,
+            "TRUSTOR_USER_NAME": "%s" % TRUSTOR_USER_NAME,
+            "TRUSTOR_USER_ID": "%s" % TRUSTOR_USER_ID,
         }
         logger.debug("createTrustToken invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -123,7 +122,6 @@ class CreateTrustToken(FlowBase):
                                                    ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
-
             #
             # 4. Get Trustee User
             #
@@ -145,7 +143,6 @@ class CreateTrustToken(FlowBase):
             logger.debug("ID of trustor user %s: %s" % (TRUSTOR_USER_NAME,
                                                         TRUSTOR_USER_ID))
 
-
             #
             # 6. Create trust
             #
@@ -156,8 +153,6 @@ class CreateTrustToken(FlowBase):
                                                  TRUSTOR_USER_ID)
 
             logger.debug("ID of Trust %s" % (ID_TRUST))
-
-
                 
         except Exception, ex:
             logger.error(ex)
@@ -165,7 +160,7 @@ class CreateTrustToken(FlowBase):
 
 
         data_log = {
-            "ID_TRUST":"%s" % ID_TRUST
+            "ID_TRUST": "%s" % ID_TRUST
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 

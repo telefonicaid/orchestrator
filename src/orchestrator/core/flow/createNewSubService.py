@@ -57,13 +57,13 @@ class CreateNewSubService(FlowBase):
         '''
 
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "NEW_SUBSERVICE_NAME":"%s" % NEW_SUBSERVICE_NAME,
-            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
+            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION
         }
         logger.debug("createNewSubService invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -101,8 +101,8 @@ class CreateNewSubService(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "ID_PRO1":"%s" % ID_PRO1,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "ID_PRO1": "%s" % ID_PRO1,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 

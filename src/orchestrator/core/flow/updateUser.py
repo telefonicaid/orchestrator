@@ -55,14 +55,14 @@ class UpdateUser(FlowBase):
         - USER_DATA_VALUE: user data value in json
         '''
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "USER_NAME":"%s" % USER_NAME,
-            "USER_ID":"%s" % USER_ID,
-            "USER_DATA_VALUE":"%s" % USER_DATA_VALUE
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "USER_NAME": "%s" % USER_NAME,
+            "USER_ID": "%s" % USER_ID,
+            "USER_DATA_VALUE": "%s" % USER_DATA_VALUE
         }
         logger.debug("updateUser invoked with: %s" % json.dumps(data_log,
                                                                 indent=3))
@@ -83,7 +83,6 @@ class UpdateUser(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 2. Get user ID
             #
@@ -100,8 +99,6 @@ class UpdateUser(FlowBase):
                                 USER_ID,
                                 USER_DATA_VALUE)
 
-
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -111,4 +108,4 @@ class UpdateUser(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return { "id":USER_ID }
+        return {"id":USER_ID}

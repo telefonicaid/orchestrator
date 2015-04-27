@@ -50,10 +50,10 @@ class Domains(FlowBase):
         - array list of domains
         '''
         data_log = {
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
         logger.debug("domains invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -88,7 +88,6 @@ class Domains(FlowBase):
                    ADMIN_USER,
                    ADMIN_PASSWORD,
                    ADMIN_TOKEN):
-
         '''Get Domain.
 
         In case of HTTP error, return HTTP error
@@ -103,11 +102,11 @@ class Domains(FlowBase):
         - domain detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
         logger.debug("get_domain invoked with: %s" % json.dumps(data_log,
                                                                 indent=3))
@@ -164,12 +163,12 @@ class Domains(FlowBase):
         - domain detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
-            "NEW_SERVICE_DESCRIPTION":"%s" % NEW_SERVICE_DESCRIPTION,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
         logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
                                                                   indent=3))
@@ -222,11 +221,11 @@ class Domains(FlowBase):
         - domain detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
         logger.debug("delete_domain invoked with: %s" % json.dumps(
             data_log, indent=3)

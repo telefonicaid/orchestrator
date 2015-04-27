@@ -93,7 +93,7 @@ class ServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -113,22 +113,21 @@ class ServiceList_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN",
-                                    HTTP_X_AUTH_TOKEN))
+                                     HTTP_X_AUTH_TOKEN))
             else:
                 # Get detail of one domains
                 result = flow.get_domain(
                     request.DATA.get("DOMAIN_ID", service_id),
-                    request.DATA.get("DOMAIN_NAME",None),
+                    request.DATA.get("DOMAIN_NAME", None),
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN",
                                      HTTP_X_AUTH_TOKEN))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
-
 
         except ParseError as error:
             return Response(
@@ -152,7 +151,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -168,7 +167,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            # request.DATA # json validation
+            # request.DATA  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
@@ -181,7 +180,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_USER", None),
                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
@@ -192,6 +191,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
     """
@@ -207,7 +207,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
     def post(self, request, *args, **kw):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = CreateNewService(self.KEYSTONE_PROTOCOL,
                                     self.KEYSTONE_HOST,
                                     self.KEYSTONE_PORT,
@@ -245,7 +245,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -254,7 +254,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT)
@@ -281,7 +281,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 result = {'error':  "ERROR not service_id provided",
                           "code": "400"}
 
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -317,7 +317,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 # Really service_id is not mandatory already in urls?
                 result['error'] = "ERROR not service_id provided"
 
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -351,7 +351,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 # Really service_id is not mandatory already in urls?
                 result['error'] = "ERROR not service_id provided"
 
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
@@ -376,7 +376,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
     def post(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
                                        self.KEYSTONE_PORT)
@@ -388,7 +388,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 request.DATA.get("SERVICE_ADMIN_TOKEN",
                                  HTTP_X_AUTH_TOKEN),
                 request.DATA.get("NEW_SUBSERVICE_NAME", None),
-                request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
+                request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -411,7 +411,7 @@ class User_RESTView(APIView, IoTConf):
     """
     schema_name = "User"
     parser_classes = (parsers.JSONSchemaParser,)
-    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -419,7 +419,7 @@ class User_RESTView(APIView, IoTConf):
     def delete(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
@@ -432,7 +432,7 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("USER_NAME", None),
                 request.DATA.get("USER_ID", user_id))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
@@ -447,11 +447,11 @@ class User_RESTView(APIView, IoTConf):
     def put(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             # TODO: el usuario se edita a si mismo? NO
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT)
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
             result = flow.updateUser(
                 request.DATA.get("SERVICE_NAME"),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -461,7 +461,7 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("USER_NAME"),
                 request.DATA.get("USER_ID", user_id),
                 request.DATA.get("USER_DATA_VALUE"))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -475,7 +475,7 @@ class User_RESTView(APIView, IoTConf):
     def get(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = Users(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
@@ -485,7 +485,7 @@ class User_RESTView(APIView, IoTConf):
                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                request.DATA.get("SERVICE_ADMIN_TOKEN",
                                                 HTTP_X_AUTH_TOKEN))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -497,6 +497,7 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
 class UserList_RESTView(APIView, IoTConf):
     """
     Return a list of Users of a Service
@@ -504,7 +505,7 @@ class UserList_RESTView(APIView, IoTConf):
     """
     schema_name = "UserList"
     parser_classes = (parsers.JSONSchemaParser,)
-    #content_negotiation_class = negotiators.IgnoreClientContentNegotiation
+    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -515,7 +516,7 @@ class UserList_RESTView(APIView, IoTConf):
         count = request.GET.get('count', None)
 
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = Users(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
@@ -529,7 +530,7 @@ class UserList_RESTView(APIView, IoTConf):
                 request.DATA.get("START_INDEX", index),
                 request.DATA.get("COUNT", count))
 
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -544,7 +545,7 @@ class UserList_RESTView(APIView, IoTConf):
     def post(self, request, service_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT)
@@ -571,6 +572,7 @@ class UserList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
 class Role_RESTView(APIView, IoTConf):
     """
     Modifies an Roles of a Service
@@ -585,10 +587,10 @@ class Role_RESTView(APIView, IoTConf):
     def delete(self, request, service_id, role_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            request.DATA # json validation
+            request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
-                              self.KEYSTONE_HOST,
-                              self.KEYSTONE_PORT)
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT)
             result = flow.removeRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -597,7 +599,7 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("ROLE_NAME", None),
                 request.DATA.get("ROLE_ID", role_id))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
@@ -638,7 +640,7 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("NEW_ROLE_NAME", None),
                 request.DATA.get("XACML_POLICY", None))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
                 return Response(result['error'],
@@ -663,7 +665,7 @@ class RoleList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
             result = flow.roles(
-                request.DATA.get("SERVICE_NAME", None),                
+                request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
@@ -671,7 +673,7 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.DATA.get("START_INDEX", index),
                 request.DATA.get("COUNT", count))
 
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
@@ -682,6 +684,7 @@ class RoleList_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 
 class AssignRoleUser_RESTView(APIView, IoTConf):
     """
@@ -696,7 +699,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
-        effective = request.GET.get('effective', False) =="true"
+        effective = request.GET.get('effective', False) == "true"
 
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -713,7 +716,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
             request.DATA.get("EFFECTIVE", effective))
 
-        if not 'error' in result:
+        if 'error' not in result:
             return Response(result, status=status.HTTP_200_OK)
         else:
             return Response(result['error'],
@@ -722,16 +725,16 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        inherit = ( request.GET.get('inherit', False) == True or
-                    request.DATA.get('INHERIT', False) == True )
+        inherit = (request.GET.get('inherit', False) == True or
+                   request.DATA.get('INHERIT', False) == True)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
-                                       self.KEYSTONE_HOST,
-                                       self.KEYSTONE_PORT)
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT)
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
-                    request.DATA.get("SUBSERVICE_ID", None) ):
+                    request.DATA.get("SUBSERVICE_ID", None)):
                 if inherit:
                     result = flow.assignInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
@@ -769,7 +772,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("ROLE_ID", None),
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_ID", None))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
@@ -784,16 +787,16 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def delete(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        inherit = ( request.GET.get('inherit', False) == True or
-                    request.DATA.get('INHERIT', False) == True )
+        inherit = (request.GET.get('inherit', False) == True or
+                   request.DATA.get('INHERIT', False) == True)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
-                                       self.KEYSTONE_HOST,
-                                       self.KEYSTONE_PORT)
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT)
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
-                    request.DATA.get("SUBSERVICE_ID", None) ):
+                    request.DATA.get("SUBSERVICE_ID", None)):
                 if inherit:
                     result = flow.revokeInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
@@ -829,7 +832,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("ROLE_ID", None),
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_ID", None))
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
@@ -840,6 +843,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 
 class Trust_RESTView(APIView, IoTConf):
     """
@@ -859,8 +863,8 @@ class Trust_RESTView(APIView, IoTConf):
             request.DATA  # json validation
 
             flow = CreateTrustToken(self.KEYSTONE_PROTOCOL,
-                                        self.KEYSTONE_HOST,
-                                        self.KEYSTONE_PORT)
+                                    self.KEYSTONE_HOST,
+                                    self.KEYSTONE_PORT)
             result = flow.createTrustToken(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -876,7 +880,7 @@ class Trust_RESTView(APIView, IoTConf):
                 request.DATA.get("TRUSTOR_USER_NAME", None),
                 request.DATA.get("TRUSTOR_USER_ID", None)
             )
-            if not 'error' in result:
+            if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
                 return Response(result['error'],

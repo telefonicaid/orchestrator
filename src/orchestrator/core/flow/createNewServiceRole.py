@@ -56,13 +56,13 @@ class CreateNewServiceRole(FlowBase):
         - id: New role Id
         '''
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "NEW_ROLE_NAME":"%s" % NEW_ROLE_NAME,
-            "XACML_POLICY":"%s" % XACML_POLICY
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
+            "XACML_POLICY": "%s" % XACML_POLICY
         }
         logger.debug("createNewServiceRole invoked with: %s" % json.dumps(data_log,
                                                                           indent=3))
@@ -101,9 +101,9 @@ class CreateNewServiceRole(FlowBase):
                 logger.debug("set XACML_POLICY %s for role %s" % (XACML_POLICY,
                                                                   ID_ROLE))
                 self.ac.provisionPolicyByContent(SERVICE_NAME,
-                                              SERVICE_ADMIN_TOKEN,
-                                              ID_ROLE,
-                                              XACML_POLICY)
+                                                 SERVICE_ADMIN_TOKEN,
+                                                 ID_ROLE,
+                                                 XACML_POLICY)
 
             if NEW_ROLE_NAME =='ServiceCustomer':
                 logger.debug("set default XACML policy for role %s" % NEW_ROLE_NAME)
@@ -120,8 +120,8 @@ class CreateNewServiceRole(FlowBase):
 
 
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "ID_ROLE":"%s" % ID_ROLE
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "ID_ROLE": "%s" % ID_ROLE
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
