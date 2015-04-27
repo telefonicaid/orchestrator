@@ -34,7 +34,7 @@ logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script creates a new  service user in IoT keystone"
+    print "This script creates a new service user in IoT keystone"
     print ""
 
     SCRIPT_NAME=sys.argv[0]

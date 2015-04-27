@@ -244,12 +244,16 @@ class Domains(FlowBase):
             #     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
             #                                      DOMAIN_NAME)
 
-            DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
+            if not DOMAIN_ID:
+                DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
+                for domain in DOMAINS['domains']:
+                    if domain['name'] == DOMAIN_NAME:
+                        DOMAIN_ID = domain['id']
+                        break
 
-            for domain in DOMAINS['domains']:
-                if domain['name'] == DOMAIN_NAME:
-                    DOMAIN_ID = domain['id']
-                    break
+            if not DOMAIN_NAME:
+                DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+                DOMAIN_NAME = DOMAIN['domain']['name']
 
             DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
 

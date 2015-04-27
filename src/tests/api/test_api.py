@@ -1167,7 +1167,8 @@ class Test_UserModify_RestView(object):
             "NEW_SERVICE_USER_NAME":"alf_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD":"alf_%s" % self.suffix,
             "USER_DATA_VALUE": { "name": "bet_%s" % self.suffix,
-                                 "password": "bet_%s" % self.suffix }
+                                 "password": "bet_%s" % self.suffix,
+                                 "description": "Bet bet_%s" % self.suffix }
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
