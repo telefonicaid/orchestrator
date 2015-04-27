@@ -14,7 +14,7 @@
 # General Public License for more details.
 #
 # You should have received a copy of the GNU Affero General Public License
-# along with Orion Context Broker. If not, see http://www.gnu.org/licenses/.
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
 #
 # For those usages not covered by this license please contact with
 # iot_support at tid dot es
@@ -147,7 +147,6 @@ class CreateNewService(FlowBase):
             #
             # 4.5 Inherit subserviceadim
             #
-
             self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
                                       ID_DOM1,
                                       ID_ADM1,
