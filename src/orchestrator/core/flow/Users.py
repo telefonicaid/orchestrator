@@ -9,6 +9,7 @@ logger = logging.getLogger('orchestrator_core')
 class Users(FlowBase):
 
     def users(self,
+              SERVICE_NAME,              
               SERVICE_ID,
               SERVICE_ADMIN_USER,
               SERVICE_ADMIN_PASSWORD,
@@ -21,7 +22,8 @@ class Users(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - SERVICE_ID: Service name
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service id
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -29,6 +31,7 @@ class Users(FlowBase):
         - COUNT: number of results
         '''
         data_log = {
+            "SERVICE_NAME":"%s" % SERVICE_NAME,
             "SERVICE_ID":"%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
@@ -40,9 +43,16 @@ class Users(FlowBase):
 
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
-                                                         SERVICE_ADMIN_USER,
-                                                         SERVICE_ADMIN_PASSWORD)
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
+                                                            SERVICE_ADMIN_USER,
+                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
+                                                             SERVICE_ADMIN_USER,
+                                                             SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 

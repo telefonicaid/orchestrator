@@ -481,6 +481,7 @@ class UserList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT)
 
             result = flow.users(
+                            request.DATA.get("SERVICE_NAME", None),
                             request.DATA.get("SERVICE_ID", service_id),
                             request.DATA.get("SERVICE_ADMIN_USER", None),
                             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
@@ -617,7 +618,8 @@ class RoleList_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
-            result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
+            result = flow.roles(request.DATA.get("SERVICE_NAME", None),
+                                request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
