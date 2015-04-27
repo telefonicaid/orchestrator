@@ -23,9 +23,10 @@
 #
 import sys
 import pprint
+import logging.config
+
 from jsonschema import validate
 from jsonschema import Draft4Validator
-import logging.config
 
 from settings.common import LOGGING
 from orchestrator.core.flow.createNewService import CreateNewService
@@ -42,8 +43,8 @@ def main():
     print "and configures keypass policies for orion and perseo"
     print ""
 
-    SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=13
+    SCRIPT_NAME = sys.argv[0]
+    NUM_ARGS_EXPECTED = 13
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -81,19 +82,19 @@ def main():
         print "<iot_support@tid.es>"
         return
 
-    KEYSTONE_PROTOCOL=sys.argv[1]
-    KEYSTONE_HOST=sys.argv[2]
-    KEYSTONE_PORT=sys.argv[3]
-    DOMAIN_NAME=sys.argv[4]
-    DOMAIN_ADMIN_USER=sys.argv[5]
-    DOMAIN_ADMIN_PASSWORD=sys.argv[6]
-    NEW_SERVICE_NAME=sys.argv[7]
-    NEW_SERVICE_DESCRIPTION=sys.argv[8]
-    NEW_SERVICE_ADMIN_USER=sys.argv[9]
-    NEW_SERVICE_ADMIN_PASSWORD=sys.argv[10]
-    KEYPASS_PROTOCOL=sys.argv[11]
-    KEYPASS_HOST=sys.argv[12]
-    KEYPASS_PORT=sys.argv[13]
+    KEYSTONE_PROTOCOL = sys.argv[1]
+    KEYSTONE_HOST = sys.argv[2]
+    KEYSTONE_PORT = sys.argv[3]
+    DOMAIN_NAME = sys.argv[4]
+    DOMAIN_ADMIN_USER = sys.argv[5]
+    DOMAIN_ADMIN_PASSWORD = sys.argv[6]
+    NEW_SERVICE_NAME = sys.argv[7]
+    NEW_SERVICE_DESCRIPTION = sys.argv[8]
+    NEW_SERVICE_ADMIN_USER = sys.argv[9]
+    NEW_SERVICE_ADMIN_PASSWORD = sys.argv[10]
+    KEYPASS_PROTOCOL = sys.argv[11]
+    KEYPASS_HOST = sys.argv[12]
+    KEYPASS_PORT = sys.argv[13]
 
     #parser = argparse.ArgumentParser(
     #         description='Utilities to update API documentation from code')

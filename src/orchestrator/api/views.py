@@ -21,6 +21,7 @@
 #
 # Author: IoT team
 #
+import logging
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -31,7 +32,6 @@ from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 from rest_framework import views
-import logging
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -47,12 +47,10 @@ from orchestrator.core.flow.Domains import Domains
 from orchestrator.core.flow.Projects import Projects
 from orchestrator.core.flow.Roles import Roles
 from orchestrator.core.flow.Users import Users
-
 from orchestrator.api import negotiators, parsers
 
 
 logger = logging.getLogger('orchestrator_api')
-
 
 
 class IoTConf(object):

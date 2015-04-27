@@ -37,8 +37,8 @@ def main():
 
     print ""
 
-    SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=6
+    SCRIPT_NAME = sys.argv[0]
+    NUM_ARGS_EXPECTED = 6
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -70,12 +70,12 @@ def main():
         print "<iot_support@tid.es>"
         return
 
-    KEYSTONE_PROTOCOL=sys.argv[1]
-    KEYSTONE_HOST=sys.argv[2]
-    KEYSTONE_PORT=sys.argv[3]
-    SERVICE_NAME=sys.argv[4]
-    SERVICE_ADMIN_USER=sys.argv[5]
-    SERVICE_ADMIN_PASSWORD=sys.argv[6]
+    KEYSTONE_PROTOCOL = sys.argv[1]
+    KEYSTONE_HOST = sys.argv[2]
+    KEYSTONE_PORT = sys.argv[3]
+    SERVICE_NAME = sys.argv[4]
+    SERVICE_ADMIN_USER = sys.argv[5]
+    SERVICE_ADMIN_PASSWORD = sys.argv[6]
     # SUBSERVICE_NAME=sys.argv[7]
     # ROLE_NAME=sys.argv[8]
     # USER_NAME=sys.argv[9]

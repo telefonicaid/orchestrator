@@ -21,15 +21,15 @@
 #
 # Author: IoT team
 #
+import logging
+import os
+
 from django.conf import settings
 from django.utils.importlib import import_module
 from django.utils.module_loading import module_has_submodule
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
-
-import logging
-import os
 
 logger = logging.getLogger('orchestrator_api')
 

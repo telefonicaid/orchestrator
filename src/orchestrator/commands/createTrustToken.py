@@ -37,8 +37,8 @@ def main():
     print "This script creates a new Trust Token in IoT keystone"
     print ""
 
-    SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=10
+    SCRIPT_NAME = sys.argv[0]
+    NUM_ARGS_EXPECTED = 10
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -70,16 +70,16 @@ def main():
         print "<iot_support@tid.es>"
         return
 
-    KEYSTONE_PROTOCOL=sys.argv[1]
-    KEYSTONE_HOST=sys.argv[2]
-    KEYSTONE_PORT=sys.argv[3]
-    SERVICE_NAME=sys.argv[4]
-    SUBSERVICE_NAME=sys.argv[5]
-    SERVICE_ADMIN_USER=sys.argv[6]
-    SERVICE_ADMIN_PASSWORD=sys.argv[7]
-    ROLE_NAME=sys.argv[8]
-    TRUSTEE_USER_NAME=sys.argv[9]
-    TRUSTOR_USER_NAME=sys.argv[10]
+    KEYSTONE_PROTOCOL = sys.argv[1]
+    KEYSTONE_HOST = sys.argv[2]
+    KEYSTONE_PORT = sys.argv[3]
+    SERVICE_NAME = sys.argv[4]
+    SUBSERVICE_NAME = sys.argv[5]
+    SERVICE_ADMIN_USER = sys.argv[6]
+    SERVICE_ADMIN_PASSWORD = sys.argv[7]
+    ROLE_NAME = sys.argv[8]
+    TRUSTEE_USER_NAME = sys.argv[9]
+    TRUSTOR_USER_NAME = sys.argv[10]
 
     validate(
         {

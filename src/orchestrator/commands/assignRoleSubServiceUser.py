@@ -31,8 +31,8 @@ def main():
     print "This script assigns a role to a service user IoT keystone"
     print ""
 
-    SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=9
+    SCRIPT_NAME = sys.argv[0]
+    NUM_ARGS_EXPECTED = 9
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -62,15 +62,15 @@ def main():
         print "<iot_support@tid.es>"
         return
 
-    KEYSTONE_PROTOCOL=sys.argv[1]
-    KEYSTONE_HOST=sys.argv[2]
-    KEYSTONE_PORT=sys.argv[3]
-    SERVICE_NAME=sys.argv[4]
-    SUBSERVICE_NAME=sys.argv[5]
-    SERVICE_ADMIN_USER=sys.argv[6]
-    SERVICE_ADMIN_PASSWORD=sys.argv[7]
-    ROLE_NAME=sys.argv[8]
-    SERVICE_USER=sys.argv[9]
+    KEYSTONE_PROTOCOL = sys.argv[1]
+    KEYSTONE_HOST = sys.argv[2]
+    KEYSTONE_PORT = sys.argv[3]
+    SERVICE_NAME = sys.argv[4]
+    SUBSERVICE_NAME = sys.argv[5]
+    SERVICE_ADMIN_USER = sys.argv[6]
+    SERVICE_ADMIN_PASSWORD = sys.argv[7]
+    ROLE_NAME = sys.argv[8]
+    SERVICE_USER = sys.argv[9]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,

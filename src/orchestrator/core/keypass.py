@@ -29,12 +29,10 @@ from orchestrator.core import policies
 from orchestrator.core.ac import AccCOperations
 
 
-
 class AccCKeypassOperations(AccCOperations):
     '''
        IoT Access Control: Keypass
     '''
-
     def __init__(self,
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,

@@ -37,8 +37,8 @@ def main():
     print "This script creates a new role service in IoT keystone"
     print ""
 
-    SCRIPT_NAME=sys.argv[0]
-    NUM_ARGS_EXPECTED=10
+    SCRIPT_NAME = sys.argv[0]
+    NUM_ARGS_EXPECTED = 10
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -70,16 +70,16 @@ def main():
         print "<iot_support@tid.es>"
         return
 
-    KEYSTONE_PROTOCOL=sys.argv[1]
-    KEYSTONE_HOST=sys.argv[2]
-    KEYSTONE_PORT=sys.argv[3]
-    SERVICE_NAME=sys.argv[4]
-    SERVICE_ADMIN_USER=sys.argv[5]
-    SERVICE_ADMIN_PASSWORD=sys.argv[6]
-    NEW_ROLE_NAME=sys.argv[7]
-    KEYPASS_PROTOCOL=sys.argv[8]
-    KEYPASS_HOST=sys.argv[9]
-    KEYPASS_PORT=sys.argv[10]
+    KEYSTONE_PROTOCOL = sys.argv[1]
+    KEYSTONE_HOST = sys.argv[2]
+    KEYSTONE_PORT = sys.argv[3]
+    SERVICE_NAME = sys.argv[4]
+    SERVICE_ADMIN_USER = sys.argv[5]
+    SERVICE_ADMIN_PASSWORD = sys.argv[6]
+    NEW_ROLE_NAME = sys.argv[7]
+    KEYPASS_PROTOCOL = sys.argv[8]
+    KEYPASS_HOST = sys.argv[9]
+    KEYPASS_PORT = sys.argv[10]
 
     validate(
         {
