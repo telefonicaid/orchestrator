@@ -26,7 +26,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, throttle_classes
-from rest_framework.renderers import JSONRenderer, YAMLRenderer, BrowsableAPIRenderer
+from rest_framework.renderers import JSONRenderer, YAMLRenderer
+from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 from rest_framework import views
@@ -109,19 +110,21 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_PORT)
             if not service_id:
                 # Get all domains
-                result = flow.domains(request.DATA.get("DOMAIN_NAME", None),
-                                      request.DATA.get("SERVICE_ADMIN_USER", None),
-                                      request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                      request.DATA.get("SERVICE_ADMIN_TOKEN",
-                                                       HTTP_X_AUTH_TOKEN))
+                result = flow.domains(
+                    request.DATA.get("DOMAIN_NAME", None),
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                    HTTP_X_AUTH_TOKEN))
             else:
                 # Get detail of one domains
-                result = flow.get_domain(request.DATA.get("DOMAIN_ID", service_id),
-                                         request.DATA.get("DOMAIN_NAME",None),
-                                         request.DATA.get("SERVICE_ADMIN_USER", None),
-                                         request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                         request.DATA.get("SERVICE_ADMIN_TOKEN",
-                                                          HTTP_X_AUTH_TOKEN))
+                result = flow.get_domain(
+                    request.DATA.get("DOMAIN_ID", service_id),
+                    request.DATA.get("DOMAIN_NAME",None),
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                     HTTP_X_AUTH_TOKEN))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
@@ -131,7 +134,8 @@ class ServiceList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -144,12 +148,12 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT)
             result = flow.update_domain(
-                                   request.DATA.get("SERVICE_ID", service_id),
-                                   request.DATA.get("SERVICE_NAME", None),
-                                   request.DATA.get("SERVICE_ADMIN_USER", None),
-                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                   request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
@@ -157,7 +161,8 @@ class ServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -173,11 +178,11 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYPASS_HOST,
                            self.KEYPASS_PORT)
             result = flow.delete_domain(
-                                   request.DATA.get("SERVICE_ID", service_id),
-                                   request.DATA.get("SERVICE_NAME", None),
-                                   request.DATA.get("SERVICE_ADMIN_USER", None),
-                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
@@ -185,7 +190,8 @@ class ServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -210,16 +216,17 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                     self.KEYPASS_PROTOCOL,
                                     self.KEYPASS_HOST,
                                     self.KEYPASS_PORT)
-            result = flow.createNewService(request.DATA.get("DOMAIN_NAME", None),
-                                           request.DATA.get("DOMAIN_ADMIN_USER", None),
-                                           request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
-                                           request.DATA.get("DOMAIN_ADMIN_TOKEN",
-                                                            HTTP_X_AUTH_TOKEN),
-                                           request.DATA.get("NEW_SERVICE_NAME"),
-                                           request.DATA.get("NEW_SERVICE_DESCRIPTION"),
-                                           request.DATA.get("NEW_SERVICE_ADMIN_USER"),
-                                           request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"),
-                                           request.DATA.get("NEW_SERVICE_ADMIN_EMAIL", None))
+            result = flow.createNewService(
+                request.DATA.get("DOMAIN_NAME", None),
+                request.DATA.get("DOMAIN_ADMIN_USER", None),
+                request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
+                request.DATA.get("DOMAIN_ADMIN_TOKEN",
+                                 HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_SERVICE_NAME"),
+                request.DATA.get("NEW_SERVICE_DESCRIPTION"),
+                request.DATA.get("NEW_SERVICE_ADMIN_USER"),
+                request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"),
+                request.DATA.get("NEW_SERVICE_ADMIN_EMAIL", None))
 
             if 'token' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -228,7 +235,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -255,23 +263,25 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if service_id:
                 if not subservice_id:
                     result = flow.projects(
-                                   service_id,
-                                   request.DATA.get("SERVICE_NAME", None),
-                                   request.DATA.get("SERVICE_ADMIN_USER", None),
-                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN",
-                                                    HTTP_X_AUTH_TOKEN))
+                        service_id,
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN))
                 else:
                     # TODO: get detail of subservice
                     result = flow.get_project(
-                                   request.DATA.get("SERVICE_ID", service_id),
-                                   request.DATA.get("SUBSERVICE_ID", subservice_id),
-                                   request.DATA.get("SERVICE_ADMIN_USER", None),
-                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SUBSERVICE_ID", subservice_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN))
             else:
                 # Really service_id is not mandatory already in urls?
-                result = {'error':  "ERROR not service_id provided", "code": "400"}
+                result = {'error':  "ERROR not service_id provided",
+                          "code": "400"}
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -281,7 +291,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -295,14 +306,15 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if service_id:
                 if subservice_id:
                     result = flow.update_project(
-                                   request.DATA.get("SERVICE_ID", service_id),
-                                   request.DATA.get("SERVICE_NAME", None),
-                                   request.DATA.get("SUBSERVICE_ID", subservice_id),
-                                   request.DATA.get("SUBSERVICE_NAME", None),
-                                   request.DATA.get("SERVICE_ADMIN_USER", None),
-                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                   request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SUBSERVICE_ID", subservice_id),
+                        request.DATA.get("SUBSERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
             else:
                 # Really service_id is not mandatory already in urls?
                 result['error'] = "ERROR not service_id provided"
@@ -314,7 +326,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -328,13 +341,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if service_id:
                 if subservice_id:
                     result = flow.delete_project(
-                                   request.DATA.get("SERVICE_ID", service_id),
-                                   request.DATA.get("SERVICE_NAME", None),
-                                   request.DATA.get("SUBSERVICE_ID", subservice_id),
-                                   request.DATA.get("SUBSERVICE_NAME", None),
-                                   request.DATA.get("SERVICE_ADMIN_USER", None),
-                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SUBSERVICE_ID", subservice_id),
+                        request.DATA.get("SUBSERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN))
             else:
                 # Really service_id is not mandatory already in urls?
                 result['error'] = "ERROR not service_id provided"
@@ -346,7 +360,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -368,14 +383,14 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        self.KEYSTONE_HOST,
                                        self.KEYSTONE_PORT)
             result = flow.createNewSubService(
-                                     request.DATA.get("SERVICE_NAME", None),
-                                     request.DATA.get("SERVICE_ID", service_id),
-                                     request.DATA.get("SERVICE_ADMIN_USER", None),
-                                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                     request.DATA.get("SERVICE_ADMIN_TOKEN",
-                                                      HTTP_X_AUTH_TOKEN),
-                                     request.DATA.get("NEW_SUBSERVICE_NAME", None),
-                                     request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                 HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                request.DATA.get("NEW_SUBSERVICE_DESCRIPTION",None))
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -385,7 +400,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -411,13 +427,13 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_PORT)
             # TODO: use user_id
             result = flow.removeUser(
-                                request.DATA.get("SERVICE_NAME", None),
-                                request.DATA.get("SERVICE_ID", service_id),
-                                request.DATA.get("SERVICE_ADMIN_USER", None),
-                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                request.DATA.get("USER_NAME", None),
-                                request.DATA.get("USER_ID", user_id))
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("USER_NAME", None),
+                request.DATA.get("USER_ID", user_id))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
@@ -425,7 +441,8 @@ class User_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -438,14 +455,14 @@ class User_RESTView(APIView, IoTConf):
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT)
             result = flow.updateUser(
-                                request.DATA.get("SERVICE_NAME"),
-                                request.DATA.get("SERVICE_ID", service_id),
-                                request.DATA.get("SERVICE_ADMIN_USER", None),
-                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                request.DATA.get("USER_NAME"),
-                                request.DATA.get("USER_ID", user_id),
-                                request.DATA.get("USER_DATA_VALUE"))
+                request.DATA.get("SERVICE_NAME"),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("USER_NAME"),
+                request.DATA.get("USER_ID", user_id),
+                request.DATA.get("USER_DATA_VALUE"))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
@@ -477,7 +494,8 @@ class User_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -505,12 +523,12 @@ class UserList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT)
 
             result = flow.users(
-                            request.DATA.get("SERVICE_ID", service_id),
-                            request.DATA.get("SERVICE_ADMIN_USER", None),
-                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                            request.DATA.get("START_INDEX", index),
-                            request.DATA.get("COUNT", count))
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("START_INDEX", index),
+                request.DATA.get("COUNT", count))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -519,7 +537,8 @@ class UserList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -531,16 +550,16 @@ class UserList_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT)
             result = flow.createNewServiceUser(
-                                    request.DATA.get("SERVICE_NAME", None),
-                                    request.DATA.get("SERVICE_ID", service_id),
-                                    request.DATA.get("SERVICE_ADMIN_USER", None),
-                                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                    request.DATA.get("SERVICE_ADMIN_TOKEN",
-                                                     HTTP_X_AUTH_TOKEN),
-                                    request.DATA.get("NEW_SERVICE_USER_NAME", None),
-                                    request.DATA.get("NEW_SERVICE_USER_PASSWORD", None),
-                                    request.DATA.get("NEW_SERVICE_USER_EMAIL", None),
-                                    request.DATA.get("NEW_SERVICE_USER_DESCRIPTION", None))
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                 HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_SERVICE_USER_NAME", None),
+                request.DATA.get("NEW_SERVICE_USER_PASSWORD", None),
+                request.DATA.get("NEW_SERVICE_USER_EMAIL", None),
+                request.DATA.get("NEW_SERVICE_USER_DESCRIPTION", None))
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -548,7 +567,8 @@ class UserList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -571,13 +591,13 @@ class Role_RESTView(APIView, IoTConf):
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
             result = flow.removeRole(
-                                request.DATA.get("SERVICE_NAME", None),
-                                request.DATA.get("SERVICE_ID", service_id),
-                                request.DATA.get("SERVICE_ADMIN_USER", None),
-                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                request.DATA.get("ROLE_NAME", None),
-                                request.DATA.get("ROLE_ID", role_id))
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
@@ -585,7 +605,8 @@ class Role_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -611,13 +632,13 @@ class RoleList_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT)
             result = flow.createNewServiceRole(
-                                          request.DATA.get("SERVICE_ID", service_id),
-                                          request.DATA.get("SERVICE_NAME", None),
-                                          request.DATA.get("SERVICE_ADMIN_USER", None),
-                                          request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                          request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                          request.DATA.get("NEW_ROLE_NAME", None),
-                                          request.DATA.get("XACML_POLICY", None))
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_ROLE_NAME", None),
+                request.DATA.get("XACML_POLICY", None))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -626,7 +647,8 @@ class RoleList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -641,12 +663,13 @@ class RoleList_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
-            result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
-                                request.DATA.get("SERVICE_ADMIN_USER", None),
-                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                request.DATA.get("START_INDEX", index),
-                                request.DATA.get("COUNT", count))
+            result = flow.roles(
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("START_INDEX", index),
+                request.DATA.get("COUNT", count))
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -655,7 +678,8 @@ class RoleList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -679,15 +703,15 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                      self.KEYSTONE_HOST,
                      self.KEYSTONE_PORT)
         result = flow.roles_assignments(
-                            request.DATA.get("SERVICE_ID", service_id),
-                            None,
-                            request.DATA.get("SUBSERVICE_ID", subservice_id),
-                            request.DATA.get("ROLE_ID", role_id),
-                            request.DATA.get("USER_ID", user_id),
-                            request.DATA.get("SERVICE_ADMIN_USER", None),
-                            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                            request.DATA.get("EFFECTIVE", effective))
+            request.DATA.get("SERVICE_ID", service_id),
+            None,
+            request.DATA.get("SUBSERVICE_ID", subservice_id),
+            request.DATA.get("ROLE_ID", role_id),
+            request.DATA.get("USER_ID", user_id),
+            request.DATA.get("SERVICE_ADMIN_USER", None),
+            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+            request.DATA.get("EFFECTIVE", effective))
 
         if not 'error' in result:
             return Response(result, status=status.HTTP_200_OK)
@@ -710,39 +734,41 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("SUBSERVICE_ID", None) ):
                 if inherit:
                     result = flow.assignInheritRoleServiceUser(
-                                           request.DATA.get("SERVICE_NAME", None),
-                                           request.DATA.get("SERVICE_ID", service_id),
-                                           request.DATA.get("SERVICE_ADMIN_USER", None),
-                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                           request.DATA.get("ROLE_NAME", None),
-                                           request.DATA.get("ROLE_ID", None),
-                                           request.DATA.get("SERVICE_USER_NAME", None),
-                                           request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME", None),
+                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("SERVICE_USER_NAME", None),
+                        request.DATA.get("SERVICE_USER_ID", None))
                 else:
                     result = flow.assignRoleServiceUser(
-                                           request.DATA.get("SERVICE_NAME", None),
-                                           request.DATA.get("SERVICE_ID", service_id),
-                                           request.DATA.get("SERVICE_ADMIN_USER", None),
-                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                           request.DATA.get("ROLE_NAME", None),
-                                           request.DATA.get("ROLE_ID", None),
-                                           request.DATA.get("SERVICE_USER_NAME", None),
-                                           request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME", None),
+                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("SERVICE_USER_NAME", None),
+                        request.DATA.get("SERVICE_USER_ID", None))
             else:
                 result = flow.assignRoleSubServiceUser(
-                                              request.DATA.get("SERVICE_NAME", None),
-                                              request.DATA.get("SERVICE_ID", service_id),
-                                              request.DATA.get("SUBSERVICE_NAME", None),
-                                              request.DATA.get("SUBSERVICE_ID", None),
-                                              request.DATA.get("SERVICE_ADMIN_USER", None),
-                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                              request.DATA.get("ROLE_NAME", None),
-                                              request.DATA.get("ROLE_ID", None),
-                                              request.DATA.get("SERVICE_USER_NAME", None),
-                                              request.DATA.get("SERVICE_USER_ID", None))
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID", None),
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("ROLE_NAME", None),
+                    request.DATA.get("ROLE_ID", None),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_ID", None))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
@@ -750,7 +776,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -769,39 +796,39 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("SUBSERVICE_ID", None) ):
                 if inherit:
                     result = flow.revokeInheritRoleServiceUser(
-                                           request.DATA.get("SERVICE_NAME", None),
-                                           request.DATA.get("SERVICE_ID", service_id),
-                                           request.DATA.get("SERVICE_ADMIN_USER", None),
-                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                           request.DATA.get("ROLE_NAME"),
-                                           request.DATA.get("ROLE_ID", None),
-                                           request.DATA.get("SERVICE_USER_NAME", None),
-                                           request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME"),
+                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("SERVICE_USER_NAME", None),
+                        request.DATA.get("SERVICE_USER_ID", None))
                 else:
                     result = flow.revokeRoleServiceUser(
-                                           request.DATA.get("SERVICE_NAME", None),
-                                           request.DATA.get("SERVICE_ID", service_id),
-                                           request.DATA.get("SERVICE_ADMIN_USER", None),
-                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                           request.DATA.get("ROLE_NAME"),
-                                           request.DATA.get("ROLE_ID", None),
-                                           request.DATA.get("SERVICE_USER_NAME", None),
-                                           request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME"),
+                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("SERVICE_USER_NAME", None),
+                        request.DATA.get("SERVICE_USER_ID", None))
             else:
                 result = flow.revokeRoleSubServiceUser(
-                                              request.DATA.get("SERVICE_NAME"),
-                                              request.DATA.get("SERVICE_ID", service_id),
-                                              request.DATA.get("SUBSERVICE_NAME"),
-                                              request.DATA.get("SUBSERVICE_ID", None),
-                                              request.DATA.get("SERVICE_ADMIN_USER", None),
-                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                              request.DATA.get("ROLE_NAME", None),
-                                              request.DATA.get("ROLE_ID", None),
-                                              request.DATA.get("SERVICE_USER_NAME", None),
-                                              request.DATA.get("SERVICE_USER_ID", None))
+                    request.DATA.get("SERVICE_NAME"),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME"),
+                    request.DATA.get("SUBSERVICE_ID", None),
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("ROLE_NAME", None),
+                    request.DATA.get("ROLE_ID", None),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_ID", None))
             if not 'error' in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
@@ -809,7 +836,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -834,20 +862,20 @@ class Trust_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT)
             result = flow.createTrustToken(
-                                          request.DATA.get("SERVICE_NAME", None),
-                                          request.DATA.get("SERVICE_ID", service_id),
-                                          request.DATA.get("SUBSERVICE_NAME", None),
-                                          request.DATA.get("SUBSERVICE_ID", None),
-                                          request.DATA.get("SERVICE_ADMIN_USER", None),
-                                          request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                                          request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                          request.DATA.get("ROLE_NAME", None),
-                                          request.DATA.get("ROLE_ID", None),
-                                          request.DATA.get("TRUSTEE_USER_NAME", None),
-                                          request.DATA.get("TRUSTEE_USER_ID", None),
-                                          request.DATA.get("TRUSTOR_USER_NAME", None),
-                                          request.DATA.get("TRUSTOR_USER_ID", None)
-                                          )
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", None),
+                request.DATA.get("TRUSTEE_USER_NAME", None),
+                request.DATA.get("TRUSTEE_USER_ID", None),
+                request.DATA.get("TRUSTOR_USER_NAME", None),
+                request.DATA.get("TRUSTOR_USER_ID", None)
+            )
             if not 'error' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -856,6 +884,7 @@ class Trust_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )

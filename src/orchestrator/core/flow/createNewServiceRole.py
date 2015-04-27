@@ -63,7 +63,8 @@ class CreateNewServiceRole(FlowBase):
             "NEW_ROLE_NAME":"%s" % NEW_ROLE_NAME,
             "XACML_POLICY":"%s" % XACML_POLICY
         }
-        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(data_log,
+                                                                          indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -81,7 +82,8 @@ class CreateNewServiceRole(FlowBase):
                                                   SERVICE_NAME)
 
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                       SERVICE_ID))
 
             #
             # 2. Create role
@@ -95,7 +97,8 @@ class CreateNewServiceRole(FlowBase):
             # 3. Provision policy provided in keypass
             #
             if XACML_POLICY:
-                logger.debug("set XACML_POLICY %s for role %s" % (XACML_POLICY, ID_ROLE))
+                logger.debug("set XACML_POLICY %s for role %s" % (XACML_POLICY,
+                                                                  ID_ROLE))
                 self.ac.provisionPolicyByContent(SERVICE_NAME,
                                               SERVICE_ADMIN_TOKEN,
                                               ID_ROLE,

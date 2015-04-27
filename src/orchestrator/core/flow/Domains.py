@@ -55,7 +55,9 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
         }
-        logger.debug("domains invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("domains invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -76,7 +78,8 @@ class Domains(FlowBase):
         data_log = {
             "DOMAINS": DOMAINS
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return DOMAINS
 
     def get_domain(self,
@@ -106,7 +109,8 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
         }
-        logger.debug("get_domain invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("get_domain invoked with: %s" % json.dumps(data_log,
+                                                                indent=3))
         try:
             if not ADMIN_TOKEN:
                 if DOMAIN_ID:
@@ -133,7 +137,8 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return DOMAIN
 
     def update_domain(self,
@@ -166,7 +171,8 @@ class Domains(FlowBase):
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
             "NEW_SERVICE_DESCRIPTION":"%s" % NEW_SERVICE_DESCRIPTION,
         }
-        logger.debug("updateDomain invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
+                                                                  indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -179,7 +185,9 @@ class Domains(FlowBase):
                                                  DOMAIN_NAME)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
-            DOMAIN = self.idm.updateDomain(ADMIN_TOKEN, DOMAIN_ID, NEW_SERVICE_DESCRIPTION)
+            DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
+                                           DOMAIN_ID,
+                                           NEW_SERVICE_DESCRIPTION)
 
             logger.debug("DOMAIN=%s" % DOMAIN)
 
@@ -220,7 +228,9 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
         }
-        logger.debug("delete_domain invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("delete_domain invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -257,5 +267,6 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return DOMAIN

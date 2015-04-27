@@ -65,7 +65,9 @@ class CreateNewSubService(FlowBase):
             "NEW_SUBSERVICE_NAME":"%s" % NEW_SUBSERVICE_NAME,
             "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION
         }
-        logger.debug("createNewSubService invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewSubService invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not SERVICE_ADMIN_TOKEN:

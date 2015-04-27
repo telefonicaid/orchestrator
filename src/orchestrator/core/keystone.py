@@ -81,7 +81,9 @@ class IdMKeystoneOperations(IdMOperations):
         }
 
         if DOMAIN_NAME:
-            auth_data['auth']['identity']['password']['user'].update({"domain": { "name": DOMAIN_NAME}})
+            auth_data['auth']['identity']['password']['user'].update({
+                "domain": { "name": DOMAIN_NAME}
+                })
 
             scope_domain = {
                 "scope": {
@@ -98,9 +100,9 @@ class IdMKeystoneOperations(IdMOperations):
         return res.headers.get('X-Subject-Token')
 
     def getToken2(self,
-                 DOMAIN_ID,
-                 DOMAIN_ADMIN_USER,
-                 DOMAIN_ADMIN_PASSWORD):
+                  DOMAIN_ID,
+                  DOMAIN_ADMIN_USER,
+                  DOMAIN_ADMIN_PASSWORD):
         auth_data = {
             "auth": {
                 "identity": {
@@ -118,7 +120,9 @@ class IdMKeystoneOperations(IdMOperations):
         }
 
         if DOMAIN_ID:
-            auth_data['auth']['identity']['password']['user'].update({"domain": { "id": DOMAIN_ID}})
+            auth_data['auth']['identity']['password']['user'].update({
+                "domain": { "id": DOMAIN_ID}
+                })
 
             scope_domain = {
                 "scope": {
@@ -166,9 +170,10 @@ class IdMKeystoneOperations(IdMOperations):
                 "description": "%s" % NEW_SERVICE_DESCRIPTION
             }
         }
-        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s'% SERVICE_ID,
-                                method='PATCH', data=body_data,
-                                auth_token=CLOUD_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s' % SERVICE_ID,
+            method='PATCH', data=body_data,
+            auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -179,9 +184,10 @@ class IdMKeystoneOperations(IdMOperations):
     def getRoleId(self,
                  CLOUD_ADMIN_TOKEN,
                  ROLE_NAME):
-        res = self.IdMRestOperations.rest_request(url='/v3/roles?name=%s' % ROLE_NAME,
-                                                  method='GET',
-                                                  auth_token=CLOUD_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/roles?name=%s' % ROLE_NAME,
+            method='GET',
+            auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -194,22 +200,23 @@ class IdMKeystoneOperations(IdMOperations):
 
 
     def grantDomainRole(self,
-                      CLOUD_ADMIN_TOKEN,
-                      ID_DOM1,
-                      ID_ADM1,
-                      ADMIN_ROLE_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s/users/%s/roles/%s' % (
-                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
-                                method='PUT',
-                                auth_token=CLOUD_ADMIN_TOKEN)
+                        CLOUD_ADMIN_TOKEN,
+                        ID_DOM1,
+                        ID_ADM1,
+                        ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s/users/%s/roles/%s' % (
+            ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+            method='PUT',
+            auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
 
     def createDomainRole(self,
-                        SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_ROLE_NAME,
-                        ID_DOM1):
+                         SERVICE_ADMIN_TOKEN,
+                         SUB_SERVICE_ROLE_NAME,
+                         ID_DOM1):
         body_data = {
             "schemas": ["urn:scim:schemas:extension:keystone:1.0"],
             "name": "%s" % SUB_SERVICE_ROLE_NAME,
@@ -263,9 +270,10 @@ class IdMKeystoneOperations(IdMOperations):
                 "description": "%s" % NEW_SUBSERVICE_DESCRIPTION
             }
         }
-        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % SUBSERVICE_ID,
-                                method='PATCH', data=body_data,
-                                auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s' % SUBSERVICE_ID,
+            method='PATCH', data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
@@ -301,13 +309,13 @@ class IdMKeystoneOperations(IdMOperations):
         return json_body_response['token']['user']['domain']['id']
 
     def createUserDomain(self,
-                      SERVICE_ADMIN_TOKEN,
-                      ID_DOM1,
-                      SERVICE_NAME,
-                      NEW_USER_NAME,
-                      NEW_USER_PASSWORD,
-                      NEW_USER_EMAIL,
-                      NEW_USER_DESCRIPTION):
+                         SERVICE_ADMIN_TOKEN,
+                         ID_DOM1,
+                         SERVICE_NAME,
+                         NEW_USER_NAME,
+                         NEW_USER_PASSWORD,
+                         NEW_USER_EMAIL,
+                         NEW_USER_DESCRIPTION):
 
         body_data = {
             "user": {
@@ -331,14 +339,15 @@ class IdMKeystoneOperations(IdMOperations):
 
 
     def createRoleDomain(self,
-                      SERVICE_ADMIN_TOKEN,
-                      ID_DOM1,
-                      NEW_ROLE_NAME):
+                         SERVICE_ADMIN_TOKEN,
+                         ID_DOM1,
+                         NEW_ROLE_NAME):
 
         body_data = {
-                "enabled": "\[\"urn:scim:schemas:extension:keystone:1.0\"\]",  # TODO: check this string!
-                "domain_id": "%s" % ID_DOM1,
-                "name": "%s" % NEW_ROLE_NAME,
+            # TODO: check this string!
+            "enabled": "\[\"urn:scim:schemas:extension:keystone:1.0\"\]",
+            "domain_id": "%s" % ID_DOM1,
+            "name": "%s" % NEW_ROLE_NAME,
         }
         res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles',
                                 method='POST', data=body_data,
@@ -381,7 +390,9 @@ class IdMKeystoneOperations(IdMOperations):
                 if project['name'] == PROJECT_NAME:
                     return project['id']
         else:
-            projects = self.getUserProjects(SERVICE_ADMIN_TOKEN, json_body_response['token']['user']['id'])
+            projects = self.getUserProjects(
+                SERVICE_ADMIN_TOKEN,
+                json_body_response['token']['user']['id'])
             for project in projects['projects']:
                 if project['name'] == '/' + PROJECT_NAME:
                     return project['id']
@@ -392,9 +403,10 @@ class IdMKeystoneOperations(IdMOperations):
                  SERVICE_ADMIN_TOKEN,
                  DOMAIN_ID,
                  ROLE_NAME):
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles?domain_id=%s' % DOMAIN_ID,
-                                method='GET',
-                                auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Roles?domain_id=%s' % DOMAIN_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -407,12 +419,13 @@ class IdMKeystoneOperations(IdMOperations):
 
 
     def getDomainUserId(self,
-                 SERVICE_ADMIN_TOKEN,
-                 DOMAIN_ID,
-                 USER_NAME):
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
-                                method='GET',
-                                auth_token=SERVICE_ADMIN_TOKEN)
+                        SERVICE_ADMIN_TOKEN,
+                        DOMAIN_ID,
+                        USER_NAME):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -423,14 +436,15 @@ class IdMKeystoneOperations(IdMOperations):
                 return user['id']
 
     def grantProjectRole(self,
-                      SERVICE_ADMIN_TOKEN,
-                      ID_PRO1,
-                      ID_USER,
-                      ROLE_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s/users/%s/roles/%s' % (
-                                ID_PRO1, ID_USER, ROLE_ID),
-                                method='PUT',
-                                auth_token=SERVICE_ADMIN_TOKEN)
+                         SERVICE_ADMIN_TOKEN,
+                         ID_PRO1,
+                         ID_USER,
+                         ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s/users/%s/roles/%s' % (
+            ID_PRO1, ID_USER, ROLE_ID),
+            method='PUT',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
@@ -439,9 +453,10 @@ class IdMKeystoneOperations(IdMOperations):
                    SERVICE_ADMIN_TOKEN,
                    ID_USER):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
-                                                  method='GET', data=None,
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Users/%s' % ID_USER,
+            method='GET', data=None,
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
@@ -451,9 +466,10 @@ class IdMKeystoneOperations(IdMOperations):
                    SERVICE_ADMIN_TOKEN,
                    ID_USER):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
-                                method='DELETE', data=None,
-                                auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Users/%s' % ID_USER,
+            method='DELETE', data=None,
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
         #return ?
@@ -471,9 +487,10 @@ class IdMKeystoneOperations(IdMOperations):
         if 'name' in USER_DATA:
             USER_DATA['userName']=USER_DATA['name']
         body_data.update(USER_DATA)
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users/%s' % ID_USER,
-                                method='PATCH', data=body_data,
-                                auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Users/%s' % ID_USER,
+            method='PATCH', data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
@@ -483,9 +500,10 @@ class IdMKeystoneOperations(IdMOperations):
     def getDomains(self,
                    SERVICE_ADMIN_TOKEN):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/domains',
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains',
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -507,9 +525,10 @@ class IdMKeystoneOperations(IdMOperations):
     def getDomain(self,
                   SERVICE_ADMIN_TOKEN,
                   DOMAIN_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s' % DOMAIN_ID,
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s' % DOMAIN_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -522,9 +541,12 @@ class IdMKeystoneOperations(IdMOperations):
                        START_INDEX=None,
                        COUNT=None):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles?domain_id=%s%s' % (DOMAIN_ID, "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Roles?domain_id=%s%s' % (
+                DOMAIN_ID,
+                "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -555,9 +577,12 @@ class IdMKeystoneOperations(IdMOperations):
                        DOMAIN_ID,
                        START_INDEX=None,
                        COUNT=None):
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Users?domain_id=%s%s' % (DOMAIN_ID, "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Users?domain_id=%s%s' % (
+                DOMAIN_ID,
+                "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -571,7 +596,8 @@ class IdMKeystoneOperations(IdMOperations):
                  "userName": user['userName'],                 
                  "id": user['id'],
                  "description": user["displayName"],
-                 "domain_id": user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
+                 "domain_id":
+                  user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
                  "enabled": user['active']
              })
         res = { "users": users }
@@ -588,9 +614,10 @@ class IdMKeystoneOperations(IdMOperations):
                           SERVICE_ADMIN_TOKEN,
                           DOMAIN_ID):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/projects?domain_id=%s' % DOMAIN_ID,
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects?domain_id=%s' % DOMAIN_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
@@ -614,9 +641,10 @@ class IdMKeystoneOperations(IdMOperations):
                         SERVICE_ADMIN_TOKEN,
                         USER_ID):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/users/%s/projects' % USER_ID,
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/users/%s/projects' % USER_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
@@ -626,9 +654,10 @@ class IdMKeystoneOperations(IdMOperations):
                    SERVICE_ADMIN_TOKEN,
                    PROJECT_ID):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % PROJECT_ID,
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s' % PROJECT_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
@@ -640,10 +669,11 @@ class IdMKeystoneOperations(IdMOperations):
                                   PROJECT_ID,
                                   EFFECTIVE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.project.id=%s%s' % (
-                                                         PROJECT_ID, "&effective" if EFFECTIVE else ""),
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/role_assignments?scope.project.id=%s%s' % (
+                PROJECT_ID, "&effective" if EFFECTIVE else ""),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -651,14 +681,15 @@ class IdMKeystoneOperations(IdMOperations):
         return json_body_response
 
     def getDomainRoleAssignments(self,
-                                SERVICE_ADMIN_TOKEN,
-                                DOMAIN_ID,
-                                EFFECTIVE):
+                                 SERVICE_ADMIN_TOKEN,
+                                 DOMAIN_ID,
+                                 EFFECTIVE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/role_assignments?scope.domain.id=%s%s' % (
-                                                        DOMAIN_ID, "&effective" if EFFECTIVE else ""),
-                                                  method='GET',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/role_assignments?scope.domain.id=%s%s' % (
+                DOMAIN_ID, "&effective" if EFFECTIVE else ""),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -670,45 +701,49 @@ class IdMKeystoneOperations(IdMOperations):
                          ID_DOM1,
                          ID_ADM1,
                          ADMIN_ROLE_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-INHERIT/domains/%s/users/%s/roles/%s/inherited_to_projects' % (
-                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
-                                method='PUT',
-                                auth_token=CLOUD_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-INHERIT/domains/%s/users/%s/roles/%s/inherited_to_projects' % (
+                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+            method='PUT',
+            auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
 
 
 
     def deleteDomain(self,
-                  SERVICE_ADMIN_TOKEN,
-                  DOMAIN_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s' % DOMAIN_ID,
-                                                  method='DELETE',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+                     SERVICE_ADMIN_TOKEN,
+                     DOMAIN_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s' % DOMAIN_ID,
+            method='DELETE',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
 
     def deleteProject(self,
-                  SERVICE_ADMIN_TOKEN,
-                  PROJECT_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % PROJECT_ID,
-                                                  method='DELETE',
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+                      SERVICE_ADMIN_TOKEN,
+                      PROJECT_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s' % PROJECT_ID,
+            method='DELETE',
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
 
     def disableDomain(self,
-                     CLOUD_ADMIN_TOKEN,
-                     SERVICE_ID):
+                      CLOUD_ADMIN_TOKEN,
+                      SERVICE_ID):
 
         body_data = {
             "domain": {
                 "enabled": False
             }
         }
-        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s'% SERVICE_ID,
-                                method='PATCH', data=body_data,
-                                auth_token=CLOUD_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s'% SERVICE_ID,
+            method='PATCH', data=body_data,
+            auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
@@ -716,40 +751,42 @@ class IdMKeystoneOperations(IdMOperations):
         return json_body_response['domain']['id']
 
     def disableProject(self,
-                      SERVICE_ADMIN_TOKEN,
-                      ID_DOM1,
-                      SUBSERVICE_ID):
+                       SERVICE_ADMIN_TOKEN,
+                       ID_DOM1,
+                       SUBSERVICE_ID):
 
         body_data = {
             "project": {
                 "enabled": False
             }
         }
-        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % SUBSERVICE_ID,
-                                method='PATCH', data=body_data,
-                                auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s' % SUBSERVICE_ID,
+            method='PATCH', data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
         return json_body_response['project']['id']
 
     def revokeDomainRole(self,
-                      CLOUD_ADMIN_TOKEN,
-                      ID_DOM1,
-                      ID_ADM1,
-                      ADMIN_ROLE_ID):
-        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s/users/%s/roles/%s' % (
-                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
-                                method='DELETE',
-                                auth_token=CLOUD_ADMIN_TOKEN)
+                         CLOUD_ADMIN_TOKEN,
+                         ID_DOM1,
+                         ID_ADM1,
+                         ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s/users/%s/roles/%s' % (
+                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+            method='DELETE',
+            auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
 
     def revokeProjectRole(self,
-                      SERVICE_ADMIN_TOKEN,
-                      ID_PRO1,
-                      ID_USER,
-                      ROLE_ID):
+                          SERVICE_ADMIN_TOKEN,
+                          ID_PRO1,
+                          ID_USER,
+                          ROLE_ID):
         res = self.IdMRestOperations.rest_request(url='/v3/projects/%s/users/%s/roles/%s' % (
                                 ID_PRO1, ID_USER, ROLE_ID),
                                 method='DELETE',
@@ -759,10 +796,10 @@ class IdMKeystoneOperations(IdMOperations):
 
 
     def revokeInheritRole(self,
-                         CLOUD_ADMIN_TOKEN,
-                         ID_DOM1,
-                         ID_ADM1,
-                         ADMIN_ROLE_ID):
+                          CLOUD_ADMIN_TOKEN,
+                          ID_DOM1,
+                          ID_ADM1,
+                          ADMIN_ROLE_ID):
         res = self.IdMRestOperations.rest_request(url='/v3/OS-INHERIT/domains/%s/users/%s/roles/%s/inherited_to_projects' % (
                                 ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
                                 method='DELETE',
@@ -795,9 +832,10 @@ class IdMKeystoneOperations(IdMOperations):
                    DOMAIN_ID,
                    ID_ROLE):
 
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles/%s?domain_id=%s' % (ID_ROLE, DOMAIN_ID),
-                                                  method='DELETE', data=None,
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-SCIM/Roles/%s?domain_id=%s' % (ID_ROLE, DOMAIN_ID),
+            method='DELETE', data=None,
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
 
@@ -822,10 +860,11 @@ class IdMKeystoneOperations(IdMOperations):
                 "trustor_user_id": TRUSTOR_USER_ID
                 }
             }
-        res = self.IdMRestOperations.rest_request(url='/v3/OS-TRUST/trusts',
-                                                  method='POST',
-                                                  data=trust_data,
-                                                  auth_token=SERVICE_ADMIN_TOKEN)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-TRUST/trusts',
+            method='POST',
+            data=trust_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
 
         assert res.code == 201, (res.code, res.msg)
         data = res.read()

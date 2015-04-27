@@ -63,9 +63,10 @@ class Users(FlowBase):
 
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
-                                                         SERVICE_ADMIN_USER,
-                                                         SERVICE_ADMIN_PASSWORD)
+                SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ID,
+                    SERVICE_ADMIN_USER,
+                    SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
@@ -80,7 +81,8 @@ class Users(FlowBase):
                                                     START_INDEX,
                                                     COUNT)
 
-            logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS, indent=3))
+            logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS,
+                                                         indent=3))
 
 
             # Get Roles de SubServicio
@@ -129,12 +131,14 @@ class Users(FlowBase):
             "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN
         }
-        logger.debug("user invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("user invoked with: %s" % json.dumps(data_log,
+                                                          indent=3))
         try:
             if not SERVICE_ADMIN_TOKEN:
-                SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
-                                                         SERVICE_ADMIN_USER,
-                                                         SERVICE_ADMIN_PASSWORD)
+                SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ID,
+                    SERVICE_ADMIN_USER,
+                    SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,

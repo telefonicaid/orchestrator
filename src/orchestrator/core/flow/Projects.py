@@ -58,7 +58,9 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewService invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -119,7 +121,8 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
         }
-        logger.debug("get_project invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("get_project invoked with: %s" % json.dumps(data_log,
+                                                                 indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -185,7 +188,9 @@ class Projects(FlowBase):
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
             "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION,
         }
-        logger.debug("update_project invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("update_project invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -254,7 +259,8 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
         }
-        logger.debug("get_project invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("get_project invoked with: %s" % json.dumps(data_log,
+                                                                 indent=3))
 
         try:
 
@@ -292,5 +298,6 @@ class Projects(FlowBase):
         data_log = {
             "PROJECT": PROJECT
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return PROJECT

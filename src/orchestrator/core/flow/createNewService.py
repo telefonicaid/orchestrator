@@ -74,7 +74,8 @@ class CreateNewService(FlowBase):
             "NEW_SERVICE_DESCRIPTION":"%s" % NEW_SERVICE_DESCRIPTION,
             "NEW_SERVICE_ADMIN_USER":"%s" % NEW_SERVICE_ADMIN_PASSWORD
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewService invoked with: %s" % json.dumps(data_log,
+                                                                      indent=3))
 
 
         try:
@@ -92,7 +93,8 @@ class CreateNewService(FlowBase):
             ID_DOM1 = self.idm.createDomain(DOMAIN_ADMIN_TOKEN,
                                             NEW_SERVICE_NAME,
                                             NEW_SERVICE_DESCRIPTION)
-            logger.debug("ID of your new service %s:%s" % (NEW_SERVICE_NAME, ID_DOM1))
+            logger.debug("ID of your new service %s:%s" % (NEW_SERVICE_NAME,
+                                                           ID_DOM1))
 
             #
             # 2. Create user admin for new service (aka domain)
@@ -105,23 +107,27 @@ class CreateNewService(FlowBase):
                                                 NEW_SERVICE_ADMIN_EMAIL,
                                                 None)
 
-            logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER, ID_ADM1))
+            logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER,
+                                                ID_ADM1))
 
             #
             # 3. Grant Admin role to $NEW_SERVICE_ADMIN_USER of new service
             #
             ADMIN_ROLE_ID = self.idm.getRoleId(DOMAIN_ADMIN_TOKEN,
                                                ROLE_NAME="admin")
-            logger.debug("ID of role  %s: %s" % (NEW_SERVICE_ADMIN_USER, ID_ADM1))
+            logger.debug("ID of role  %s: %s" % (NEW_SERVICE_ADMIN_USER,
+                                                 ID_ADM1))
 
-            self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1, ADMIN_ROLE_ID)
+            self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
+                                     ADMIN_ROLE_ID)
 
 
 
 
-            NEW_SERVICE_ADMIN_TOKEN = self.idm.getToken(NEW_SERVICE_NAME,
-                                                        NEW_SERVICE_ADMIN_USER,
-                                                        NEW_SERVICE_ADMIN_PASSWORD)
+            NEW_SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                NEW_SERVICE_NAME,
+                NEW_SERVICE_ADMIN_USER,
+                NEW_SERVICE_ADMIN_PASSWORD)
             logger.debug("NEW_SERVICE_ADMIN_TOKEN %s" % NEW_SERVICE_ADMIN_TOKEN)
 
 

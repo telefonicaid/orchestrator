@@ -62,20 +62,23 @@ class RemoveUser(FlowBase):
             "USER_NAME":"%s" % USER_NAME,
             "USER_ID":"%s" % USER_ID
         }
-        logger.debug("projects invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("projects invoked with: %s" % json.dumps(data_log,
+                                                              indent=3))
 
         try:
             if not SERVICE_ADMIN_TOKEN:
                 if not SERVICE_ID:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
-                                                            SERVICE_ADMIN_USER,
-                                                            SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(SERVICE_ID,
-                                                             SERVICE_ADMIN_USER,
-                                                             SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
 
