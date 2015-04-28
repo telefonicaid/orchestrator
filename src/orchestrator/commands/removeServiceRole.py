@@ -30,6 +30,7 @@ from orchestrator.core.flow.Roles import Roles
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script removes a Role Service (aka keystone domain) in IoT Platform"
@@ -46,7 +47,7 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <ROLE_NAME>                     Role name"        
+        print "  <ROLE_NAME>                     Role name"
         print "  <SERVICE_ADMIN_USER>            Service Admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
         print ""
@@ -70,7 +71,6 @@ def main():
     SERVICE_ADMIN_USER = sys.argv[6]
     SERVICE_ADMIN_PASSWORD = sys.argv[7]
 
-
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
@@ -84,8 +84,6 @@ def main():
                                   None)
 
     pprint.pprint(role_detail)
-
-
 
 if __name__ == '__main__':
 

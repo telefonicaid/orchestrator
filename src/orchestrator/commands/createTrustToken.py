@@ -32,6 +32,7 @@ from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script creates a new Trust Token in IoT keystone"
@@ -98,20 +99,20 @@ def main():
                             KEYSTONE_PORT)
 
     res = flow.createTrustToken(
-                         SERVICE_NAME,
-                         None,
-                         SUBSERVICE_NAME,
-                         None,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         None,
-                         ROLE_NAME,
-                         None,
-                         TRUSTEE_USER_NAME,
-                         None,
-                         TRUSTOR_USER_NAME,
-                         None
-                         )
+        SERVICE_NAME,
+        None,
+        SUBSERVICE_NAME,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        ROLE_NAME,
+        None,
+        TRUSTEE_USER_NAME,
+        None,
+        TRUSTOR_USER_NAME,
+        None)
+
     pprint.pprint(res)
 
 if __name__ == '__main__':

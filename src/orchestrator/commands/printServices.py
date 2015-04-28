@@ -30,10 +30,10 @@ from orchestrator.core.flow.Domains import Domains
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script prints services"
-
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -69,16 +69,14 @@ def main():
     DOMAIN_ADMIN_PASSWORD = sys.argv[6]
 
     flow = Domains(KEYSTONE_PROTOCOL,
-                            KEYSTONE_HOST,
-                            KEYSTONE_PORT)
+                   KEYSTONE_HOST,
+                   KEYSTONE_PORT)
 
     domain_detail = flow.domains(DOMAIN_NAME,
                                  DOMAIN_ADMIN_USER,
                                  DOMAIN_ADMIN_PASSWORD,
                                  None)
     pprint.pprint(domain_detail)
-
-
 
 if __name__ == '__main__':
 

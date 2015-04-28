@@ -34,7 +34,6 @@ logging.config.dictConfig(LOGGING)
 def main():
 
     print "This script prints roles in a service"
-
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -85,19 +84,18 @@ def main():
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    roles = flow.roles_assignments(None,
-                                   SERVICE_NAME,
-                                   None,
-                                   None,
-                                   None,
-                                   SERVICE_ADMIN_USER,
-                                   SERVICE_ADMIN_PASSWORD,
-                                   None,
-                                   True)
+    roles = flow.roles_assignments(
+        None,
+        SERVICE_NAME,
+        None,
+        None,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        True)
 
     pprint.pprint(roles)
-
-
 
 if __name__ == '__main__':
 

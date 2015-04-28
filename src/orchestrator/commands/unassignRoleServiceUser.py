@@ -29,6 +29,7 @@ from orchestrator.core.flow.Roles import Roles
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script revokes a role to a service user IoT keystone"
@@ -77,15 +78,14 @@ def main():
                  KEYSTONE_PORT)
 
     flow.revokeRoleServiceUser(
-                          SERVICE_NAME,
-                          SERVICE_ADMIN_USER,
-                          SERVICE_ADMIN_PASSWORD,
-                          None,
-                          ROLE_NAME,
-                          None,
-                          SERVICE_USER,
-                          None)
-
+        SERVICE_NAME,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        ROLE_NAME,
+        None,
+        SERVICE_USER,
+        None)
 
 if __name__ == '__main__':
 

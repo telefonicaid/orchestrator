@@ -30,6 +30,7 @@ from orchestrator.core.flow.Roles import Roles
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script assigns a role to a service user IoT keystone"
@@ -73,22 +74,20 @@ def main():
     SERVICE_USER = sys.argv[7]
     ROLE_NAME = sys.argv[8]
 
-
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
     flow.assignInheritRoleServiceUser(
-                          SERVICE_NAME,
-                          None,
-                          SERVICE_ADMIN_USER,
-                          SERVICE_ADMIN_PASSWORD,
-                          None,
-                          ROLE_NAME,
-                          None,
-                          SERVICE_USER,
-                          None)
-
+        SERVICE_NAME,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        ROLE_NAME,
+        None,
+        SERVICE_USER,
+        None)
 
 if __name__ == '__main__':
 

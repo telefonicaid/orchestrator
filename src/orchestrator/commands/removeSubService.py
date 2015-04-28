@@ -30,6 +30,7 @@ from orchestrator.core.flow.Projects import Projects
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script removes a SubService (aka keystone domain) in IoT Platform"
@@ -46,7 +47,7 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SUBSERVICE_NAME>               SubService name"        
+        print "  <SUBSERVICE_NAME>               SubService name"
         print "  <SERVICE_ADMIN_USER>            Service Admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
         print ""
@@ -70,7 +71,6 @@ def main():
     SERVICE_ADMIN_USER = sys.argv[6]
     SERVICE_ADMIN_PASSWORD = sys.argv[7]
 
-
     flow = Projects(KEYSTONE_PROTOCOL,
                     KEYSTONE_HOST,
                     KEYSTONE_PORT)
@@ -78,13 +78,11 @@ def main():
     project_detail = flow.delete_project(None,
                                          SERVICE_NAME,
                                          None,
-                                         SUBSERVICE_NAME,                                        
+                                         SUBSERVICE_NAME,
                                          SERVICE_ADMIN_USER,
                                          SERVICE_ADMIN_PASSWORD,
                                          None)
     pprint.pprint(project_detail)
-
-
 
 if __name__ == '__main__':
 

@@ -45,7 +45,6 @@ class FlowBase(object):
                                  KEYPASS_HOST,
                                  KEYPASS_PORT)
 
-
     def composeErrorCode(self, ex):
         '''
         Compose error detail and code from AssertionError exception ex
@@ -54,7 +53,7 @@ class FlowBase(object):
         # exc_type, exc_obj, exc_tb = sys.exc_info()
         # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         # print(exc_type, fname, exc_tb.tb_lineno)
-        res = { "error": str(ex), "code": 400 }
+        res = {"error": str(ex), "code": 400}
         if isinstance(ex.message, tuple):  # Python 2.7
             res['code'] = ex.message[0]
         elif isinstance(ex.args, tuple):   # Python 2.6

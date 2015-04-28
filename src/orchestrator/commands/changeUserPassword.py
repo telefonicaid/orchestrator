@@ -32,6 +32,7 @@ from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This scripts changes service user password in IoT keystone"
@@ -89,20 +90,19 @@ def main():
                       KEYSTONE_HOST,
                       KEYSTONE_PORT)
 
-    USER_DATA_VALUE = { "password": NEW_USER_PASSWORD }
+    USER_DATA_VALUE = {"password": NEW_USER_PASSWORD}
 
     res = flow.updateUser(
-                         SERVICE_NAME,
-                         None,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         None,
-                         USER_NAME,
-                         None,
-                         USER_DATA_VALUE)
+        SERVICE_NAME,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        USER_NAME,
+        None,
+        USER_DATA_VALUE)
 
     pprint.pprint(res)
-
 
 if __name__ == '__main__':
 

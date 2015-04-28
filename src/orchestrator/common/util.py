@@ -26,7 +26,6 @@ import base64
 import json
 
 
-
 class RestOperations(object):
     '''
        IoT IdM (keystone + keypass)
@@ -35,12 +34,11 @@ class RestOperations(object):
     def __init__(self,
                  PROTOCOL=None,
                  HOST=None,
-                 PORT=None,
-             ):
+                 PORT=None):
 
-        self.PROTOCOL=PROTOCOL
-        self.HOST=HOST
-        self.PORT=PORT
+        self.PROTOCOL = PROTOCOL
+        self.HOST = HOST
+        self.PORT = PORT
         if PROTOCOL and HOST and PORT:
             self.base_url = PROTOCOL+'://'+HOST+':'+PORT+'/'
         else:
@@ -80,7 +78,7 @@ class RestOperations(object):
 
         if user and password:
             base64string = base64.encodestring(
-            '%s:%s' % (user, password))[:-1]
+                '%s:%s' % (user, password))[:-1]
             authheader = "Basic %s" % base64string
             request.add_header("Authorization", authheader)
 

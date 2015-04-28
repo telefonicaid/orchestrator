@@ -98,5 +98,3 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 204, (res.code, res.msg)
-
-

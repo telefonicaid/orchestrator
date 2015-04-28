@@ -32,6 +32,7 @@ from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script creates a new service user in IoT keystone"
@@ -90,17 +91,17 @@ def main():
                                 KEYSTONE_PORT)
 
     res = flow.createNewServiceUser(
-                         SERVICE_NAME,
-                         None,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         None,
-                         NEW_USER_NAME,
-                         NEW_USER_PASSWORD,
-                         None,
-                         None)
-    pprint.pprint(res)
+        SERVICE_NAME,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        NEW_USER_NAME,
+        NEW_USER_PASSWORD,
+        None,
+        None)
 
+    pprint.pprint(res)
 
 if __name__ == '__main__':
 

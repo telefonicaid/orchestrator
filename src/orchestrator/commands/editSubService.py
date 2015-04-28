@@ -26,11 +26,9 @@ import pprint
 from orchestrator.core.flow.Projects import Projects
 
 
-
 def main():
 
     print "This script edits a SubService (aka keystone domain) in IoT Platform"
-
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -44,7 +42,7 @@ def main():
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
         print "  <SUBSERVICE_NAME>               SubService name"
-        print "  <NEW_SUBSERVICE_DESCRIPTION>    New SubService description"        
+        print "  <NEW_SUBSERVICE_DESCRIPTION>    New SubService description"
         print "  <SERVICE_ADMIN_USER>            Service Admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
         print ""
@@ -53,7 +51,7 @@ def main():
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 SmartValencia  \\"
-        print "                                 smartvalencia  \\"        
+        print "                                 smartvalencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
         print ""
@@ -66,27 +64,25 @@ def main():
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
     SUBSERVICE_NAME = sys.argv[5]
-    NEW_SUBSERVICE_DESCRIPTION = sys.argv[6]    
+    NEW_SUBSERVICE_DESCRIPTION = sys.argv[6]
     SERVICE_ADMIN_USER = sys.argv[7]
     SERVICE_ADMIN_PASSWORD = sys.argv[8]
-
-
 
     flow = Projects(KEYSTONE_PROTOCOL,
                     KEYSTONE_HOST,
                     KEYSTONE_PORT)
 
-    project_detail = flow.update_project(None,
-                                         SERVICE_NAME,
-                                         None,
-                                         SUBSERVICE_NAME,                                        
-                                         SERVICE_ADMIN_USER,
-                                         SERVICE_ADMIN_PASSWORD,
-                                         None,
-                                         NEW_SUBSERVICE_DESCRIPTION)
+    project_detail = flow.update_project(
+        None,
+        SERVICE_NAME,
+        None,
+        SUBSERVICE_NAME,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        NEW_SUBSERVICE_DESCRIPTION)
+
     pprint.pprint(project_detail)
-
-
 
 if __name__ == '__main__':
 

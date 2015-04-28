@@ -34,7 +34,6 @@ logging.config.dictConfig(LOGGING)
 def main():
 
     print "This script prints roles in a service"
-
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -82,8 +81,6 @@ def main():
                        None)
 
     pprint.pprint(roles)
-
-
 
 if __name__ == '__main__':
 

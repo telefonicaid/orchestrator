@@ -30,6 +30,7 @@ from orchestrator.core.flow.Projects import Projects
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script prints subservices of service"
@@ -78,7 +79,6 @@ def main():
                                 SERVICE_ADMIN_PASSWORD,
                                 None)
     pprint.pprint(subservices)
-
 
 
 if __name__ == '__main__':

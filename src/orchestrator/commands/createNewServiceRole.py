@@ -32,6 +32,7 @@ from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script creates a new role service in IoT keystone"
@@ -98,13 +99,14 @@ def main():
                                 KEYPASS_PORT)
 
     res = flow.createNewServiceRole(
-                         None,
-                         SERVICE_NAME,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         None,
-                         NEW_ROLE_NAME,
-                         None)
+        None,
+        SERVICE_NAME,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        NEW_ROLE_NAME,
+        None)
+
     pprint.pprint(res)
 
 if __name__ == '__main__':

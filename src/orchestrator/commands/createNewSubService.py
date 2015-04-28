@@ -32,6 +32,7 @@ from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script creates a new sub service in IoT keystone"
@@ -75,7 +76,6 @@ def main():
     NEW_SUBSERVICE_NAME = sys.argv[7]
     NEW_SUBSERVICE_DESCRIPTION = sys.argv[8]
 
-
     #parser = argparse.ArgumentParser(
     #         description='Utilities to update API documentation from code')
     # parser.add_argument('-p', '--path', dest='path', default=None,
@@ -83,7 +83,6 @@ def main():
     # parser.add_argument('--tables', dest='tables', action='store_true',
     #                    help='Shows tables draft')
     #args = parser.parse_args()
-
 
     validate(
         {
@@ -100,15 +99,15 @@ def main():
                                KEYSTONE_PORT)
 
     res = flow.createNewSubService(
-                        SERVICE_NAME,
-                        None,
-                        SERVICE_ADMIN_USER,
-                        SERVICE_ADMIN_PASSWORD,
-                        None,
-                        NEW_SUBSERVICE_NAME,
-                        NEW_SUBSERVICE_DESCRIPTION)
-    pprint.pprint(res)
+        SERVICE_NAME,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        NEW_SUBSERVICE_NAME,
+        NEW_SUBSERVICE_DESCRIPTION)
 
+    pprint.pprint(res)
 
 if __name__ == '__main__':
 

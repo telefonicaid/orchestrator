@@ -30,6 +30,7 @@ from orchestrator.core.flow.Domains import Domains
 
 logging.config.dictConfig(LOGGING)
 
+
 def main():
 
     print "This script removes a Service (aka keystone domain) in IoT Platform"
@@ -78,11 +79,11 @@ def main():
     KEYPASS_PORT = sys.argv[9]
 
     flow = Domains(KEYSTONE_PROTOCOL,
-                            KEYSTONE_HOST,
-                            KEYSTONE_PORT,
-                            KEYPASS_PROTOCOL,
-                            KEYPASS_HOST,
-                            KEYPASS_PORT)
+                   KEYSTONE_HOST,
+                   KEYSTONE_PORT,
+                   KEYPASS_PROTOCOL,
+                   KEYPASS_HOST,
+                   KEYPASS_PORT)
 
     domain_detail = flow.delete_domain(None,
                                        SERVICE_NAME,
@@ -90,8 +91,6 @@ def main():
                                        DOMAIN_ADMIN_PASSWORD,
                                        None)
     pprint.pprint(domain_detail)
-
-
 
 if __name__ == '__main__':
 
