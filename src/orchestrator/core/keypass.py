@@ -98,3 +98,33 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 204, (res.code, res.msg)
+
+    def getRolePolicies(self,
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_TOKEN,
+                        SUB_SERVICE_ROLE_ID):
+
+        res = self.AccessControlRestOperations.rest_request(
+            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            method='GET',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()          
+        return data
+
+    def deleteRolePolicies(self,
+                           SERVICE_NAME,
+                           SERVICE_ADMIN_TOKEN,
+                           SUB_SERVICE_ROLE_ID):
+
+        res = self.AccessControlRestOperations.rest_request(
+            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            method='DELETE',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
+
+        assert res.code == 204, (res.code, res.msg)
