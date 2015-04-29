@@ -35,7 +35,7 @@ logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script creates a new Trust Token in IoT keystone"
+    print "This script lists all users trusts in IoT keystone"
     print ""
 
     SCRIPT_NAME = sys.argv[0]

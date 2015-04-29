@@ -774,7 +774,7 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         assert 'project' in json_body_response, "project not found"
-        assert 'id' in json_body_response['domain'], "project id not found"
+        assert 'id' in json_body_response['project'], "project id not found"
         return json_body_response['project']['id']
 
     def revokeDomainRole(self,
