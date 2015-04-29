@@ -167,7 +167,7 @@ class IdMKeystoneOperations(IdMOperations):
         if len(json_body_response['roles']) > 0:
             return json_body_response['roles'][0]['id']
         else:
-            return None
+            assert False, "role id not found"
 
 
     def grantDomainRole(self,
@@ -362,7 +362,7 @@ class IdMKeystoneOperations(IdMOperations):
             for project in projects['projects']:
                 if project['name'] == '/' + PROJECT_NAME:
                     return project['id']
-            return None
+            assert False, "Project not found"
 
 
     def getDomainRoleId(self,
@@ -380,6 +380,7 @@ class IdMKeystoneOperations(IdMOperations):
         for role in json_body_response['Resources']:
             if role['name'] == ROLE_NAME:
                 return role['id']
+        assert False, "Role name not found"
 
 
 
@@ -398,6 +399,7 @@ class IdMKeystoneOperations(IdMOperations):
         for user in json_body_response['Resources']:
             if user['userName'] == USER_NAME:
                 return user['id']
+        assert False, "user name not Found"
 
     def grantProjectRole(self,
                       SERVICE_ADMIN_TOKEN,
