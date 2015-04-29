@@ -19,7 +19,7 @@ python  ./createNewService.py http              \
 python ./assignInheritRoleServiceUser.py http        \
                                     localhost        \
                                     5000             \
-                                    Tecnoport2015    \
+                                    tecnoport        \
                                     tecnoport_admin  \
                                     password         \
                                     tecnoport_admin  \

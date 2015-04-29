@@ -1,3 +1,26 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
 import logging
 import json
 
@@ -27,12 +50,14 @@ class Domains(FlowBase):
         - array list of domains
         '''
         data_log = {
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("domains invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("domains invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -40,7 +65,6 @@ class Domains(FlowBase):
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
-
 
             DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
 
@@ -53,7 +77,8 @@ class Domains(FlowBase):
         data_log = {
             "DOMAINS": DOMAINS
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return DOMAINS
 
     def get_domain(self,
@@ -62,7 +87,6 @@ class Domains(FlowBase):
                    ADMIN_USER,
                    ADMIN_PASSWORD,
                    ADMIN_TOKEN):
-
         '''Get Domain.
 
         In case of HTTP error, return HTTP error
@@ -77,13 +101,14 @@ class Domains(FlowBase):
         - domain detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("get_domain invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("get_domain invoked with: %s" % json.dumps(data_log,
+                                                                indent=3))
         try:
             if not ADMIN_TOKEN:
                 if DOMAIN_ID:
@@ -110,7 +135,8 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return DOMAIN
 
     def update_domain(self,
@@ -136,14 +162,15 @@ class Domains(FlowBase):
         - domain detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
-            "NEW_SERVICE_DESCRIPTION":"%s" % NEW_SERVICE_DESCRIPTION,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
-        logger.debug("updateDomain invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
+                                                                  indent=3))
 
         try:
             if not ADMIN_TOKEN:
@@ -156,7 +183,9 @@ class Domains(FlowBase):
                                                  DOMAIN_NAME)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
-            DOMAIN = self.idm.updateDomain(ADMIN_TOKEN, DOMAIN_ID, NEW_SERVICE_DESCRIPTION)
+            DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
+                                           DOMAIN_ID,
+                                           NEW_SERVICE_DESCRIPTION)
 
             logger.debug("DOMAIN=%s" % DOMAIN)
 
@@ -171,11 +200,11 @@ class Domains(FlowBase):
         return DOMAIN
 
     def delete_domain(self,
-                   DOMAIN_ID,
-                   DOMAIN_NAME,
-                   ADMIN_USER,
-                   ADMIN_PASSWORD,
-                   ADMIN_TOKEN):
+                      DOMAIN_ID,
+                      DOMAIN_NAME,
+                      ADMIN_USER,
+                      ADMIN_PASSWORD,
+                      ADMIN_TOKEN):
 
         '''Delete a Domain.
 
@@ -191,13 +220,15 @@ class Domains(FlowBase):
         - domain detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("delete_domain invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("delete_domain invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -238,5 +269,6 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return DOMAIN

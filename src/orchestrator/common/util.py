@@ -1,7 +1,29 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
 import urllib2
 import base64
 import json
-
 
 
 class RestOperations(object):
@@ -12,12 +34,11 @@ class RestOperations(object):
     def __init__(self,
                  PROTOCOL=None,
                  HOST=None,
-                 PORT=None,
-             ):
+                 PORT=None):
 
-        self.PROTOCOL=PROTOCOL
-        self.HOST=HOST
-        self.PORT=PORT
+        self.PROTOCOL = PROTOCOL
+        self.HOST = HOST
+        self.PORT = PORT
         if PROTOCOL and HOST and PORT:
             self.base_url = PROTOCOL+'://'+HOST+':'+PORT+'/'
         else:
@@ -57,7 +78,7 @@ class RestOperations(object):
 
         if user and password:
             base64string = base64.encodestring(
-            '%s:%s' % (user, password))[:-1]
+                '%s:%s' % (user, password))[:-1]
             authheader = "Basic %s" % base64string
             request.add_header("Authorization", authheader)
 
