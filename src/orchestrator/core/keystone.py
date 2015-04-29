@@ -163,6 +163,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'domain' in json_body_response, "domain not found"
+        assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
     def updateDomain(self,
@@ -183,6 +185,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'domain' in json_body_response, "domain not found"
+        assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
     def getRoleId(self,
@@ -748,6 +752,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'domain' in json_body_response, "domain not found"
+        assert 'id' in json_body_response['domain'], "domain id not found"        
         return json_body_response['domain']['id']
 
     def disableProject(self,
@@ -767,6 +773,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'project' in json_body_response, "project not found"
+        assert 'id' in json_body_response['domain'], "project id not found"
         return json_body_response['project']['id']
 
     def revokeDomainRole(self,
@@ -868,3 +876,19 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         return json_body_response['trust']['id']
+
+
+    def getTrustsTrustee(self,
+                         SERVICE_ADMIN_TOKEN,
+                         USER_ID):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-TRUST/trusts?trustee_user_id=%s' % USER_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return { "trusts": json_body_response['trusts'] }
+            
