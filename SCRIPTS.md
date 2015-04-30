@@ -437,30 +437,33 @@ Args:
                                  localhost      \
                                  5000           \
                                  SmartValencia  \
+                                 Electricidad   \
                                  adm1           \
                                  password       \
 ```
 
-### removeSubService.py
-This script removes a SubService (aka keystone domain) in IoT Platform
+### removeServiceRole.py
+This script removes a Role Service (aka keystone domain) in IoT Platform
 ```
-Usage: ./removeSubService.py [args]
+Usage: ./removeServiceRole.py [args]
 Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SUBSERVICE_NAME>               SubService name
+  <ROLE_NAME>                     Role name
   <SERVICE_ADMIN_USER>            Service Admin username
   <SERVICE_ADMIN_PASSWORD>        Service Admin password
 
   Typical usage:
-     ./removeSubService.py http           \
+     ./removeServiceRole.py http           \
                                  localhost      \
                                  5000           \
                                  SmartValencia  \
+                                 SubServiceCustomer\
                                  adm1           \
                                  password       \
+
 ```
 
 ### changeUserPassword.py

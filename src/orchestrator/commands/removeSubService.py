@@ -56,6 +56,7 @@ def main():
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 SmartValencia  \\"
+        print "                                 Electricidad   \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
         print ""
