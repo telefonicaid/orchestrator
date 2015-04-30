@@ -14,22 +14,25 @@ These are current command line availables:
 * [createNewServiceRole.py](SCRIPTS.md#createnewservicerolepy)
 * [createNewServiceUser.py](SCRIPTS.md#createnewserviceuserpy)
 * [createNewSubService.py](SCRIPTS.md#createnewsubservicepy)
-* [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
-* [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
-* [assignInheritRoleServiceUser.py](SCRIPTS.md#assigninheritroleserviceuserpy)
 * [printServices.py](SCRIPTS.md#printservicespy)
 * [printSubServices.py](SCRIPTS.md#printsubservicespy)
-* [printServiceUsers.py](SCRIPTS.md#printservicerolespy)
-* [printServiceRoless.py](SCRIPTS.md#printserviceuserspy)
-* [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
-* [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
-* [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
-* [createTrustToken.py](SCRIPTS.md#createtrusttokenpy)
-* [listRoleAssignments.py](SCRIPTS.md#listRoleAssignmentspy)
+* [printServiceUsers.py](SCRIPTS.md#printserviceuserspy)
+* [printServiceRoless.py](SCRIPTS.md#printservicerolespy)
+* [printServiceRolePolicies.py](SCRIPTS.md#printservicerolepoliciespy)
 * [removeService.py](SCRIPTS.md#removeServicepy)
 * [removeSubService.py](SCRIPTS.md#removeSubServicepy)
 * [removeServiceRole.py](SCRIPTS.md#removeServiceRolepy)
 * [changeUserPassword.py](SCRIPTS.md#changeUserPasswordpy)
+* [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
+* [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
+* [assignInheritRoleServiceUser.py](SCRIPTS.md#assigninheritroleserviceuserpy)
+* [listRoleAssignments.py](SCRIPTS.md#listRoleAssignmentspy)
+* [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
+* [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
+* [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
+* [createTrustToken.py](SCRIPTS.md#createtrusttokenpy)
+* [printServiceUserTrusts.py](SCRIPTS.md#printserviceusertrustspy)
+
 
 ### createNewService.py
 This script creates a new service in IoT keystone
@@ -338,7 +341,6 @@ Args:
                                  Carl           \
 ```
 
-
 ### createTrustToken.py
 This script creates a new Trust Token in IoT keystone
 ```
@@ -369,16 +371,11 @@ Args:
                                  adm1           \
 ```
 
-
-
-
-
-
 ### listRoleAssignments.py
 This script prints roles in a service
 ```
 Usage: ./listRoleAssignments.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -393,17 +390,13 @@ Args:
                                  SmartValencia  \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
-
 
 ### removeService.py
 This script removes a Service (aka keystone domain) in IoT Platform
 ```
 Usage: ./removeService.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -424,16 +417,13 @@ Args:
                                  http           \
                                  localhost      \
                                  8080           \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
 ### removeSubService.py
 This script removes a SubService (aka keystone domain) in IoT Platform
 ```
 Usage: ./removeSubService.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -449,16 +439,13 @@ Args:
                                  SmartValencia  \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
 ### removeSubService.py
 This script removes a SubService (aka keystone domain) in IoT Platform
 ```
 Usage: ./removeSubService.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -474,16 +461,13 @@ Args:
                                  SmartValencia  \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
 ### changeUserPassword.py
 This script changes service user password in IoT keystone
 ```
 Usage: ./changeUserPassword.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -502,16 +486,13 @@ Args:
                                  password       \
                                  bob            \
                                  new_password   \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
 ### printServiceRoles.py
 This script prints roles in a service
-
+```
 Usage: ./printServiceRoles.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -526,16 +507,13 @@ Args:
                                  SmartValencia  \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
-
+```
 
 ### printServiceUsers.py
 This script prints users in a service
-
+```
 Usage: ./printServiceUsers.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -550,6 +528,57 @@ Args:
                                  SmartValencia  \
                                  adm1           \
                                  password       \
+```
 
-For bug reporting, please contact with:
-<iot_support@tid.es>
+### printServiceUserTrusts.py
+This script prints all user trusts in IoT keystone
+```
+Usage: ./printServiceUserTrusts.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Name of role
+  <TRUSTEE_USER_NAME>             Trustee user name
+
+  Typical usage:
+     ./printServiceUserTrusts.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+                                 adm1           \
+```
+
+### printServiceRolePolicies.py
+This script prints service role XACML policies
+```
+Usage: ./printServiceRolePolicies.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Role name
+  <KEYPASS_PROTOCOL>              HTTP or HTTPS
+  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP
+  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT
+
+  Typical usage:
+     ./printServiceRolePolicies.py http         \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+                                 SubServiceAdmin\
+                                 http           \
+                                 localhost      \
+                                 8080           \
+```

@@ -33,7 +33,7 @@ logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script prints service role policies"
+    print "This script prints service role XACML policies"
 
     print ""
 
