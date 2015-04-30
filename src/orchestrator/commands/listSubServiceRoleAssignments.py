@@ -33,11 +33,11 @@ logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script prints roles in a service"
+    print "This script prints user roles assignments in a service"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 6
+    NUM_ARGS_EXPECTED = 8
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -48,10 +48,10 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        # print "  <SUBSERVICE_NAME>               SubService name (optional)"
+        print "  <SUBSERVICE_NAME>               SubService name"
         # print "  <ROLE_NAME>                     Role Name (optional)"
-        # print "  <USER_NAME>                     User Name (optional)"
-        # print "  <EFFECTIVE>                     Effective roles (optional)"
+        # print "  <USER_NAME>                     User Name"
+        print "  <EFFECTIVE>                     Effective roles: True or False"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -60,9 +60,9 @@ def main():
         print "                                 SmartValencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        # print "                                 Electricidad   \\"
+        print "                                 Electricidad   \\"
         # print "                                 SubServiceAdmin\\"
-        # print "                                 Alice          \\"
+        #print "                                 Alice          \\"
         # print "                                 True           \\"
         print ""
         print "For bug reporting, please contact with:"
@@ -75,10 +75,10 @@ def main():
     SERVICE_NAME = sys.argv[4]
     SERVICE_ADMIN_USER = sys.argv[5]
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
-    # SUBSERVICE_NAME=sys.argv[7]
+    SUBSERVICE_NAME=sys.argv[7]
     # ROLE_NAME=sys.argv[8]
-    # USER_NAME=sys.argv[9]
-    # EFFECTIVE=sys.argv[10]
+    #USER_NAME=sys.argv[7]
+    EFFECTIVE=sys.argv[8]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
@@ -88,15 +88,15 @@ def main():
         None,
         SERVICE_NAME,
         None,
+        SUBSERVICE_NAME,
         None,
-        None,
-        None,
+        None,        
         None,
         None,
         SERVICE_ADMIN_USER,
         SERVICE_ADMIN_PASSWORD,
         None,
-        True)
+        EFFECTIVE)
 
     pprint.pprint(roles)
 
