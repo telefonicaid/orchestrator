@@ -26,7 +26,10 @@ These are current command line availables:
 * [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
 * [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
 * [assignInheritRoleServiceUser.py](SCRIPTS.md#assigninheritroleserviceuserpy)
-* [listRoleAssignments.py](SCRIPTS.md#listRoleAssignmentspy)
+* [listRoleAssignments.py](SCRIPTS.md#listroleassignmentspy)
+* [listAllRoleAssignments.py](SCRIPTS.md#listallroleassignmentspy)
+* [listUserRoleAssignments.py](SCRIPTS.md#listuserroleassignmentspy)
+* [listSubServiceRoleAssignments.py](SCRIPTS.md#listsubserviceroleassignmentspy)
 * [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
 * [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
@@ -371,10 +374,10 @@ Args:
                                  adm1           \
 ```
 
-### listRoleAssignments.py
+### listAllRoleAssignments.py
 This script prints roles in a service
 ```
-Usage: ./listRoleAssignments.py [args]
+Usage: ./listAllRoleAssignments.py [args]
 Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
@@ -390,6 +393,79 @@ Args:
                                  SmartValencia  \
                                  adm1           \
                                  password       \
+```
+
+### listRoleAssignments.py
+This script prints role assignments in a service
+```
+Usage: ./listRoleAssignments.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Role Name
+  <EFFECTIVE>                     Effective roles: True of False
+
+  Typical usage:
+     ./listRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+                                 SubServiceAdmin\
+                                 True           \
+```
+
+### listUserRoleAssignments.py
+This script prints user roles assignments in a service
+```
+Usage: ./listUserRoleAssignments.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <USER_NAME>                     User Name
+  <EFFECTIVE>                     Effective roles: True or False
+
+  Typical usage:
+     ./listUserRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+                                 Alice          \
+```
+
+### listSubServiceRoleAssignments.py
+This script prints user roles assignments in a service
+```
+Usage: ./listSubServiceRoleAssignments.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <SUBSERVICE_NAME>               SubService name
+  <EFFECTIVE>                     Effective roles: True or False
+
+  Typical usage:
+     ./listSubServiceRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 SmartValencia  \
+                                 adm1           \
+                                 password       \
+                                 Electricidad   \
 ```
 
 ### removeService.py

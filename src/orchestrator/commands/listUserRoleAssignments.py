@@ -77,8 +77,8 @@ def main():
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
     # SUBSERVICE_NAME=sys.argv[7]
     # ROLE_NAME=sys.argv[8]
-    USER_NAME=sys.argv[7]
-    EFFECTIVE=sys.argv[8]
+    USER_NAME = sys.argv[7]
+    EFFECTIVE = sys.argv[8]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
