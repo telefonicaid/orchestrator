@@ -109,8 +109,11 @@ class Roles(FlowBase):
                           DOMAIN_ID,
                           DOMAIN_NAME,
                           PROJECT_ID,
+                          PROJECT_NAME,
                           ROLE_ID,
+                          ROLE_NAME,
                           USER_ID,
+                          USER_NAME,
                           ADMIN_USER,
                           ADMIN_PASSWORD,
                           ADMIN_TOKEN,
@@ -124,8 +127,11 @@ class Roles(FlowBase):
         - DOMAIN_ID: id of domain
         - DOMAIN_NAME: Name of domain
         - PROJECT_ID: id of project (optional)
+        - PROJECT_NAME: name of project (optional)
         - ROLE_ID: id of role (optional)
+        - ROLE_NAME: name of role (optional)
         - USER_ID: id of user (optional)
+        - USER_NAME: name of user (optional)
         - ADMIN_USER: Service admin username
         - ADMIN_PASSWORD: Service admin password
         - ADMIN_TOKEN: Service admin token
@@ -137,8 +143,11 @@ class Roles(FlowBase):
             "DOMAIN_ID": "%s" % DOMAIN_ID,
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
+            "ROLE_NAME": "%s" % ROLE_NAME,
             "USER_ID": "%s" % USER_ID,
+            "USER_NAME": "%s" % USER_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
@@ -161,6 +170,19 @@ class Roles(FlowBase):
                                                      ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Extract PROJECT, USER, ROLE IDs from NAME
+            if not PROJECT_ID and PROJECT_NAME:
+                PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+            if not USER_ID and USER_NAME:
+                USER_ID = self.idm.getDomainUserId(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   USER_NAME)
+            if not ROLE_ID and ROLE_NAME:
+                ROLE_ID = self.idm.getDomainRoleId(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   ROLE_NAME)
             # if USER_ID:
             #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
             #                                                  USER_ID,
@@ -947,11 +969,11 @@ class Roles(FlowBase):
             #
             # 2. Get Role ID
             #
-            if not ROLE_ID:
+            if not ROLE_ID and ROLE_NAME:
                 ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                    SERVICE_ID,
                                                    ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+                logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 3. Remove role ID

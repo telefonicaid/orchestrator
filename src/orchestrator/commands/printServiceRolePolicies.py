@@ -26,19 +26,19 @@ import pprint
 import logging.config
 
 from settings.common import LOGGING
-from orchestrator.core.flow.Projects import Projects
+from orchestrator.core.flow.Domains import Domains
 
 logging.config.dictConfig(LOGGING)
 
 
 def main():
 
-    print "This script removes a SubService (aka keystone domain) in IoT Platform"
+    print "This script prints service role XACML policies"
 
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 7
+    NUM_ARGS_EXPECTED = 10
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -47,18 +47,24 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SUBSERVICE_NAME>               SubService name"
-        print "  <SERVICE_ADMIN_USER>            Service Admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
+        print "  <SERVICE_ADMIN_USER>            Service admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
+        print "  <ROLE_NAME>                     Role name"        
+        print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
+        print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
+        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"        
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 SmartValencia  \\"
-        print "                                 Electricidad   \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
+        print "                                 SubServiceAdmin\\"        
+        print "                                 http           \\"
+        print "                                 localhost      \\"
+        print "                                 8080           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -68,22 +74,30 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SUBSERVICE_NAME = sys.argv[5]
-    SERVICE_ADMIN_USER = sys.argv[6]
-    SERVICE_ADMIN_PASSWORD = sys.argv[7]
+    SERVICE_ADMIN_USER = sys.argv[5]
+    SERVICE_ADMIN_PASSWORD = sys.argv[6]
+    ROLE_NAME = sys.argv[7]
+    KEYPASS_PROTOCOL = sys.argv[8]
+    KEYPASS_HOST = sys.argv[9]
+    KEYPASS_PORT = sys.argv[10]
 
-    flow = Projects(KEYSTONE_PROTOCOL,
-                    KEYSTONE_HOST,
-                    KEYSTONE_PORT)
+    
+    flow = Domains(KEYSTONE_PROTOCOL,
+                   KEYSTONE_HOST,
+                   KEYSTONE_PORT,
+                   KEYPASS_PROTOCOL,
+                   KEYPASS_HOST,
+                   KEYPASS_PORT)
 
-    project_detail = flow.delete_project(None,
-                                         SERVICE_NAME,
-                                         None,
-                                         SUBSERVICE_NAME,
-                                         SERVICE_ADMIN_USER,
-                                         SERVICE_ADMIN_PASSWORD,
-                                         None)
-    pprint.pprint(project_detail)
+    policies = flow.getDomainRolePolicies(None,
+                                          SERVICE_NAME,
+                                          SERVICE_ADMIN_USER,
+                                          SERVICE_ADMIN_PASSWORD,
+                                          None,
+                                          ROLE_NAME,
+                                          None)
+    pprint.pprint(policies)
+
 
 if __name__ == '__main__':
 

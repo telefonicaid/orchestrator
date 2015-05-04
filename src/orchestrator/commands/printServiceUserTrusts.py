@@ -23,18 +23,19 @@
 #
 import sys
 import pprint
+from jsonschema import validate
 import logging.config
 
 from settings.common import LOGGING
-from orchestrator.core.flow.Projects import Projects
+from orchestrator.core.flow.createTrustToken import CreateTrustToken
+from orchestrator.api import schemas
 
 logging.config.dictConfig(LOGGING)
 
 
 def main():
 
-    print "This script removes a SubService (aka keystone domain) in IoT Platform"
-
+    print "This script prints all user trusts in IoT keystone"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -47,18 +48,19 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SUBSERVICE_NAME>               SubService name"
-        print "  <SERVICE_ADMIN_USER>            Service Admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
+        print "  <SERVICE_ADMIN_USER>            Service admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
+        print "  <ROLE_NAME>                     Name of role"
+        print "  <TRUSTEE_USER_NAME>             Trustee user name"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 SmartValencia  \\"
-        print "                                 Electricidad   \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
+        print "                                 adm1           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -68,22 +70,24 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SUBSERVICE_NAME = sys.argv[5]
-    SERVICE_ADMIN_USER = sys.argv[6]
-    SERVICE_ADMIN_PASSWORD = sys.argv[7]
+    SERVICE_ADMIN_USER = sys.argv[5]
+    SERVICE_ADMIN_PASSWORD = sys.argv[6]
+    TRUSTEE_USER_NAME = sys.argv[7]
 
-    flow = Projects(KEYSTONE_PROTOCOL,
-                    KEYSTONE_HOST,
-                    KEYSTONE_PORT)
+    flow = CreateTrustToken(KEYSTONE_PROTOCOL,
+                            KEYSTONE_HOST,
+                            KEYSTONE_PORT)
 
-    project_detail = flow.delete_project(None,
-                                         SERVICE_NAME,
-                                         None,
-                                         SUBSERVICE_NAME,
-                                         SERVICE_ADMIN_USER,
-                                         SERVICE_ADMIN_PASSWORD,
-                                         None)
-    pprint.pprint(project_detail)
+    res = flow.getTrustsUserTrustee(
+        SERVICE_NAME,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        TRUSTEE_USER_NAME,
+        None)
+
+    pprint.pprint(res)
 
 if __name__ == '__main__':
 

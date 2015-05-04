@@ -26,19 +26,18 @@ import pprint
 import logging.config
 
 from settings.common import LOGGING
-from orchestrator.core.flow.Projects import Projects
+from orchestrator.core.flow.Roles import Roles
 
 logging.config.dictConfig(LOGGING)
 
 
 def main():
 
-    print "This script removes a SubService (aka keystone domain) in IoT Platform"
-
+    print "This script prints user roles assignments in a service"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 7
+    NUM_ARGS_EXPECTED = 8
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -47,18 +46,24 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
+        print "  <SERVICE_ADMIN_USER>            Service admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print "  <SUBSERVICE_NAME>               SubService name"
-        print "  <SERVICE_ADMIN_USER>            Service Admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
+        # print "  <ROLE_NAME>                     Role Name (optional)"
+        # print "  <USER_NAME>                     User Name"
+        print "  <EFFECTIVE>                     Effective roles: True or False"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 SmartValencia  \\"
-        print "                                 Electricidad   \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
+        print "                                 Electricidad   \\"
+        # print "                                 SubServiceAdmin\\"
+        #print "                                 Alice          \\"
+        # print "                                 True           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -68,22 +73,32 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SUBSERVICE_NAME = sys.argv[5]
-    SERVICE_ADMIN_USER = sys.argv[6]
-    SERVICE_ADMIN_PASSWORD = sys.argv[7]
+    SERVICE_ADMIN_USER = sys.argv[5]
+    SERVICE_ADMIN_PASSWORD = sys.argv[6]
+    SUBSERVICE_NAME = sys.argv[7]
+    # ROLE_NAME=sys.argv[8]
+    #USER_NAME=sys.argv[7]
+    EFFECTIVE = sys.argv[8]
 
-    flow = Projects(KEYSTONE_PROTOCOL,
-                    KEYSTONE_HOST,
-                    KEYSTONE_PORT)
+    flow = Roles(KEYSTONE_PROTOCOL,
+                 KEYSTONE_HOST,
+                 KEYSTONE_PORT)
 
-    project_detail = flow.delete_project(None,
-                                         SERVICE_NAME,
-                                         None,
-                                         SUBSERVICE_NAME,
-                                         SERVICE_ADMIN_USER,
-                                         SERVICE_ADMIN_PASSWORD,
-                                         None)
-    pprint.pprint(project_detail)
+    roles = flow.roles_assignments(
+        None,
+        SERVICE_NAME,
+        None,
+        SUBSERVICE_NAME,
+        None,
+        None,        
+        None,
+        None,
+        SERVICE_ADMIN_USER,
+        SERVICE_ADMIN_PASSWORD,
+        None,
+        EFFECTIVE)
+
+    pprint.pprint(roles)
 
 if __name__ == '__main__':
 
