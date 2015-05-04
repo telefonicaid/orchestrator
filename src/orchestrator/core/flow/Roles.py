@@ -969,11 +969,11 @@ class Roles(FlowBase):
             #
             # 2. Get Role ID
             #
-            if not ROLE_ID:
+            if not ROLE_ID and ROLE_NAME:
                 ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                    SERVICE_ID,
                                                    ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+                logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 3. Remove role ID

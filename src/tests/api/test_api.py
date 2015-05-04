@@ -889,6 +889,7 @@ class Test_DeleteServiceRole_RestView(object):
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
             "ROLE_NAME": "role_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
             "SERVICE_NAME": "SmartCity",
             "SERVICE_ADMIN_USER": "adm1",
@@ -982,8 +983,9 @@ class Test_DeleteServiceRole_RestView(object):
             json_data=True,
             data=self.payload_data_ok2)
         response = res.read()
-        json_body_response = json.loads(response)
-        assert len(json_body_response['role_assignments']) == 0
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
+        # json_body_response = json.loads(response)
+        # assert len(json_body_response['role_assignments']) == 0
 
     def test_delete_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
