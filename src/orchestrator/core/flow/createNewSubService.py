@@ -1,3 +1,26 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
 import logging
 import json
 
@@ -34,15 +57,17 @@ class CreateNewSubService(FlowBase):
         '''
 
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "NEW_SUBSERVICE_NAME":"%s" % NEW_SUBSERVICE_NAME,
-            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
+            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION
         }
-        logger.debug("createNewSubService invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewSubService invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -51,7 +76,6 @@ class CreateNewSubService(FlowBase):
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 1. Create service (aka domain)
             #
@@ -59,7 +83,8 @@ class CreateNewSubService(FlowBase):
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                       SERVICE_ID))
 
             #
             # 2.  Create subservice (aka project)
@@ -70,18 +95,14 @@ class CreateNewSubService(FlowBase):
                                              NEW_SUBSERVICE_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
 
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "ID_PRO1":"%s" % ID_PRO1,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "ID_PRO1": "%s" % ID_PRO1,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_PRO1}
-
-
-

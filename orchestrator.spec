@@ -1,15 +1,15 @@
 %define timestamp %(date +"%Y%m%d%H%M%S")
 Name: iotp-orchestrator
-Version: 0.1.0
-Release: %{timestamp}
+Version: %{_version}
+Release: %{_release}
 Summary: IoT Platform Orchestrator 
-License: Copyright 2015 Telefonica Investigación y Desarrollo, S.A.U
+License: AGPLv3
 Distribution: noarch
 Vendor: Telefonica I+D
 Group: Applications/System
 Packager: Telefonica I+D
 Requires: python
-Requires(post): /sbin/chkconfig, /usr/sbin/useradd npm
+Requires(post): /sbin/chkconfig, /usr/sbin/useradd
 Requires(preun): /sbin/chkconfig, /sbin/service
 Requires(postun): /sbin/service
 autoprov: no
@@ -18,7 +18,7 @@ Prefix: /opt
 BuildArch: noarch
 
 %define _target_os Linux
-%define python_lib /usr/lib/python2.6/site-packages
+%define python_lib /var/env-orchestrator/lib/python2.6/site-packages
 
 %description
 IoT Platform Orchestrator
@@ -53,7 +53,7 @@ mkdir -p $RPM_BUILD_ROOT/etc/init.d
 cp -a %{_root}/bin/orchestrator-daemon.sh $RPM_BUILD_ROOT/etc/init.d/orchestrator
 
 %files
-"/usr/lib/python2.6/site-packages/iotp-orchestrator"
+"/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator"
 %defattr(755,%{_project_user},%{_project_user},755)
 %config /etc/init.d/%{_service_name}
 %{_install_dir}

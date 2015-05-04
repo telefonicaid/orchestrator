@@ -16,13 +16,13 @@
 
 ### Users
 ```
-tecnoport_admin       - admin
-                      - SubServiceAdmin\*
-tecnoport_cuts_admin  - SubServiceAdmin 
-                      - ServiceCustomer 
-tecnoport_erio_admin  - SubServiceAdmin              
-tecnoport_fps_admin   - SubServiceAdmin
+tecnoport_admin       - admin               - tecnoport
+                      - SubServiceAdmin     - tecnoport\*
+tecnoport_cuts_admin  - SubServiceAdmin     - tecnoport\cuts
+                      - ServiceCustomer     - tecnoport\cuts
+tecnoport_erio_admin  - SubServiceAdmin     - tecnoport\erio
+tecnoport_fps_admin   - SubServiceAdmin     - tecnoport\fps
 
-repsol_admin          - admin
-                      - SubServiceAdmin 
 ```
+
+[Provision script](provision_tecnoport.sh)

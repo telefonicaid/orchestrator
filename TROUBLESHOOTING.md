@@ -8,7 +8,7 @@ If you are using the `rpm` distribution the logs are located in `/var/log/orches
 
 ## Log rotation
 
-Logs are configured by default to rotate every 500Mb and keep 2 older copies. For further information seee LOGGIN section of settings
+Logs are configured by default to rotate every 25Mb and keep 2 older copies. For further information seee LOGGIN section of settings
 
 ## Version, launch date and listen ports
 
@@ -17,7 +17,7 @@ and on what ports are listening. Just search for the keyword `Starting Service` 
 files and you will see that information:
 
 ```
-time=15:12:54.743 | lvl=INFO | op= | msg=Starting Service
+time=15:12:54.743 | lvl=INFO | component=Orchestrator | msg=Starting Service
    ____           _               _             _
   / __ \         | |             | |           | |
  | |  | |_ __ ___| |__   ___  ___| |_ _ __ __ _| |_ ___  _ __
@@ -35,19 +35,19 @@ At start time Orchestrator tries to connect to Auth (Keystone) and Access Contro
 If all endpoints are available the following info entry will appear in the logs.
 
 ```
-time=24/Feb/2015 10:47:49 | lvl=INFO | op=orchestrator_api:48 | msg=Checking endpoints OK
+time=24/Feb/2015 10:47:49 | lvl=INFO | component=Orchestrator | msg=Checking endpoints OK
 ```
 
 If Keystone connection is not available the following error entry will appear in the logs.
 ```
-time=24/Feb/2015 10:50:04 | lvl=ERROR | op=orchestrator_api:34 | msg=keystone endpoint not found
-time=24/Feb/2015 10:50:04 | lvl=INFO | op=orchestrator_api:48 | msg=Checking endpoints ERROR keystone endpoint not found 
+time=24/Feb/2015 10:50:04 | lvl=ERROR | component=Orchestrator | msg=keystone endpoint not found
+time=24/Feb/2015 10:50:04 | lvl=INFO | component=Orchestrator | msg=Checking endpoints ERROR keystone endpoint not found
 ```
 
 If Keypass connection is not available the following error entry will appear in the logs.
 ```
-time=24/Feb/2015 10:49:27 | lvl=ERROR | op=orchestrator_api:40 | msg=keyspass endpoint not found
-time=24/Feb/2015 10:49:27 | lvl=INFO | op=orchestrator_api:48 | msg=Checking endpoints ERROR keypass endpoint not found
+time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg=keyspass endpoint not found
+time=24/Feb/2015 10:49:27 | lvl=INFO | component=Orchestrator | msg=Checking endpoints ERROR keypass endpoint not found
 ```
 
 ## API Errors

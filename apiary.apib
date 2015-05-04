@@ -10,6 +10,14 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ## Services query [/v1.0/service]
 ### Listado de Services [GET]
 
++ Request (application/json)
+        
+            {
+                "DOMAIN_NAME":"admin_domain",
+                "SERVICE_ADMIN_USER":"cloud_admin",
+                "SERVICE_ADMIN_PASSWORD": "password",
+            }
+
 + Response 200 (application/json)
 
     + Body
@@ -26,7 +34,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
                         "name": "SmartLogrono",
-                        "description": "SmartLogroño"
+                        "description": "SmartLogroï¿½o"
                     }
                 ]
             }
@@ -58,6 +66,13 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 + Parameters
     + serviceId (required, `string`) ... Service Id
 
++ Request (application/json)
+        
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
 + Response 200 (application/json)
 
     + Body
@@ -73,6 +88,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ### listado de subservicio [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
+
 
 + Response 200 (application/json)
 
@@ -155,10 +171,19 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
                 'name': '/Electricidad'}
             }
 
-## Roles in service [/v1.0/service/{serviceId}/role]
+## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
 ### List Roles[GET]
 + Parameters
     + serviceId (required, `string`) ... Service
+    + index (optional, `number`) ... Start index for pagination
+    + count (optional, `number`) ...  Number of results for pagination
+
++ Request (application/json)
+
+        {
+            "START_INDEX":"10",
+            "COUNT":"10",
+        }
 
 + Response 200 (application/json)
 
@@ -201,11 +226,10 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 ## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
 ### Delete a Role[DELETE]
-not implemented yet
 
 + Response 204
 
-## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective}]
+## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
 ### listado de roles asignados [GET]
 + Parameters
     + service_id (required, `string`) ... Domain
@@ -213,6 +237,7 @@ not implemented yet
     + subservice_id (optional, `string`) ... Subservice (aka Project)
     + role_id (optional, `string`) ... Role
     + effective (optional, `boolean`) ... effective
+    + inherit (optional, `boolean`) ... all inherit roles
 
 + Response 200 (application/json)
 
@@ -308,10 +333,19 @@ not implemented yet
 + Response 204
 
 
-## Users in Service [/v1.0/service/{serviceId}/user]
+## Users in Service [/v1.0/service/{serviceId}/user{?index}{?count}]
 ### Users list [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
+    + index (optional, `number`) ... Start index for pagination
+    + count (optional, `number`) ...  Number of results for pagination
+
++ Request (application/json)
+
+        {
+            "START_INDEX":"10",
+            "COUNT":"10",
+        }
 
 + Response 200 (application/json)
 
@@ -355,7 +389,8 @@ not implemented yet
         {
             "NEW_SERVICE_USER_NAME":"user_name_new",
             "NEW_SERVICE_USER_PASSWORD":"password",
-            "NEW_SERVICE_USER_EMAIL":"email@email.com"
+            "NEW_SERVICE_USER_EMAIL":"email@email.com",
+            "NEW_SERVICE_USER_DESCRIPTION":"user description"
         }
 
 + Response 201 (application/json)
@@ -396,7 +431,11 @@ not implemented yet
 + Request (application/json)
 
         {
-             "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}] }
+             "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}],
+                                  "name": "new name user",
+                                  "description": "new description user",
+                                  "password": "new description password"
+             }
         }
 
 + Response 200
@@ -405,3 +444,28 @@ not implemented yet
 
 + Response 204
 
+## Trust Token [/orc/service/{serviceId}/trust]
+
+### Create Trust Token [POST]
+
++ Request (application/json)
+
+        {
+            "SUBSERVICE_NAME":"Electricidad",
+            "SUBSERVICE_ID":"234234234234",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfas",
+            "TRUSTEE_USER_NAME":"user_nameX",
+            "TRUSTEE_USER_ID":"asdfasdf",
+            "TRUSTOR_USER_NAME":"user_nameX",
+            "TRUSTOR_USER_ID":"asdfasdf",
+        }
+
++ Response 201 (application/json)
+
+        {
+            "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
+        }

@@ -1,3 +1,26 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
 from django.conf.urls import (url, include, patterns)
 from django.contrib.auth.decorators import login_required
 
@@ -10,6 +33,7 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     Role_RESTView,
                                     RoleList_RESTView,
                                     AssignRoleUser_RESTView,
+                                    Trust_RESTView,
                                     )
 
 
@@ -23,4 +47,5 @@ urlpatterns = patterns('',
      url(r'^service/(?P<service_id>\w+)/role[/]?$', RoleList_RESTView.as_view(), name='new_role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role/(?P<role_id>\w+)?$', Role_RESTView.as_view(), name='role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role_assignments[/]?$', AssignRoleUser_RESTView.as_view(), name='assign_role_rest_view'),
+     url(r'^service/(?P<service_id>\w+)/trust[/]?$', Trust_RESTView.as_view(), name='new_trust_rest_view'),
 )

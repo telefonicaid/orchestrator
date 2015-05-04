@@ -6,7 +6,7 @@
 
 cd ../../orchestrator/commands/
 
-./createNewServiceKeystone.py http              \
+python ./createNewService.py http               \
                                  localhost      \
                                  5000           \
                                  admin_domain   \

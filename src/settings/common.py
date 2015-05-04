@@ -32,6 +32,10 @@ ALLOWED_HOSTS = []
 # In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'Europe/Madrid'
 
+# Encoding
+DEFAULT_CHARSET = 'utf-8'
+FILE_CHARSET = 'utf-8'
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en'
@@ -153,7 +157,8 @@ LOGGING = {
     'formatters': {
         'standard': {
             #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
+            #'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
+            'format' : 'time=%(asctime)s | lvl=%(levelname)s | component=Orchestrator | msg=%(message)s',
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
     },
@@ -166,8 +171,8 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/orchestrator/' + "/orchestrator.log",
-            'maxBytes': 500000,
-            'backupCount': 2,
+            'maxBytes': 25*1024*1024,  # 25 Mb
+            'backupCount': 3,
             'formatter': 'standard',
         },
         'console':{
@@ -214,6 +219,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '1/sec',
     }
+    #'PAGINATE_BY': 10
 }
 
 
