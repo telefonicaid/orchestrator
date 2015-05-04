@@ -37,7 +37,7 @@ def main():
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 6
+    NUM_ARGS_EXPECTED = 7
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -78,7 +78,7 @@ def main():
     # SUBSERVICE_NAME=sys.argv[7]
     # ROLE_NAME=sys.argv[8]
     # USER_NAME=sys.argv[9]
-    EFFECTIVE = sys.argv[8]
+    EFFECTIVE = sys.argv[7]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
