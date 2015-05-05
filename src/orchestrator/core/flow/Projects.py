@@ -1,3 +1,26 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
 import logging
 import json
 
@@ -9,11 +32,11 @@ logger = logging.getLogger('orchestrator_core')
 class Projects(FlowBase):
 
     def projects(self,
-                DOMAIN_ID,
-                DOMAIN_NAME,
-                ADMIN_USER,
-                ADMIN_PASSWORD,
-                ADMIN_TOKEN):
+                 DOMAIN_ID,
+                 DOMAIN_NAME,
+                 ADMIN_USER,
+                 ADMIN_PASSWORD,
+                 ADMIN_TOKEN):
 
         '''Get Projects of a domain.
 
@@ -29,13 +52,15 @@ class Projects(FlowBase):
         - project array list
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewService invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -51,7 +76,6 @@ class Projects(FlowBase):
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
-
 
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
@@ -70,11 +94,11 @@ class Projects(FlowBase):
         return PROJECTS
 
     def get_project(self,
-                DOMAIN_ID,
-                PROJECT_ID,
-                ADMIN_USER,
-                ADMIN_PASSWORD,
-                ADMIN_TOKEN):
+                    DOMAIN_ID,
+                    PROJECT_ID,
+                    ADMIN_USER,
+                    ADMIN_PASSWORD,
+                    ADMIN_TOKEN):
 
         '''Ge Project detail of a domain
 
@@ -90,19 +114,20 @@ class Projects(FlowBase):
         - project detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "PROJECT_ID":"%s" % PROJECT_ID,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("get_project invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("get_project invoked with: %s" % json.dumps(data_log,
+                                                                 indent=3))
 
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
-                                                ADMIN_USER,
-                                                ADMIN_PASSWORD)
+                                                 ADMIN_USER,
+                                                 ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             PROJECT = self.idm.getProject(ADMIN_TOKEN,
@@ -124,7 +149,6 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
-
 
     def update_project(self,
                        DOMAIN_ID,
@@ -153,16 +177,18 @@ class Projects(FlowBase):
         - project detail
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "PROJECT_ID":"%s" % PROJECT_ID,
-            "PROJECT_NAME":"%s" % PROJECT_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN,
-            "NEW_SUBSERVICE_DESCRIPTION":"%s" % NEW_SUBSERVICE_DESCRIPTION,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
         }
-        logger.debug("update_project invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("update_project invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not ADMIN_TOKEN:
@@ -180,6 +206,7 @@ class Projects(FlowBase):
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
                                                    PROJECT_NAME)
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
@@ -199,15 +226,14 @@ class Projects(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
 
-
     def delete_project(self,
-                DOMAIN_ID,
-                DOMAIN_NAME,
-                PROJECT_ID,
-                PROJECT_NAME,
-                ADMIN_USER,
-                ADMIN_PASSWORD,
-                ADMIN_TOKEN):
+                       DOMAIN_ID,
+                       DOMAIN_NAME,
+                       PROJECT_ID,
+                       PROJECT_NAME,
+                       ADMIN_USER,
+                       ADMIN_PASSWORD,
+                       ADMIN_TOKEN):
 
         '''Delete Project of domain
 
@@ -223,15 +249,16 @@ class Projects(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
         '''
         data_log = {
-            "DOMAIN_ID":"%s" % DOMAIN_ID,
-            "DOMAIN_NAME":"%s" % DOMAIN_NAME,
-            "PROJECT_ID":"%s" % PROJECT_ID,
-            "PROJECT_NAME":"%s" % PROJECT_NAME,
-            "ADMIN_USER":"%s" % ADMIN_USER,
-            "ADMIN_PASSWORD":"%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN":"%s" % ADMIN_TOKEN
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("get_project invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("get_project invoked with: %s" % json.dumps(data_log,
+                                                                 indent=3))
 
         try:
 
@@ -250,6 +277,7 @@ class Projects(FlowBase):
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
                                                    PROJECT_NAME)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
@@ -258,7 +286,6 @@ class Projects(FlowBase):
 
             self.idm.deleteProject(ADMIN_TOKEN,
                                    PROJECT_ID)
-
 
             logger.debug("PROJECT=%s" % PROJECT)
 
@@ -269,5 +296,6 @@ class Projects(FlowBase):
         data_log = {
             "PROJECT": PROJECT
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
         return PROJECT

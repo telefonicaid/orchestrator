@@ -22,6 +22,7 @@
 # Author: IoT team
 #
 import sys
+import pprint
 import logging.config
 
 from settings.common import LOGGING
@@ -32,7 +33,7 @@ logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script revoke a role to a service user IoT keystone"
+    print "This script prints user roles assignments in a service"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -47,8 +48,10 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <SERVICE_USER_NAME>             Service username"
-        print "  <ROLE_NAME>                     Name of role"
+        print "  <SUBSERVICE_NAME>               SubService name"
+        # print "  <ROLE_NAME>                     Role Name (optional)"
+        # print "  <USER_NAME>                     User Name"
+        print "  <EFFECTIVE>                     Effective roles: True or False"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -57,8 +60,10 @@ def main():
         print "                                 SmartValencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 adm1           \\"
-        print "                                 SubServiceAdmin\\"
+        print "                                 Electricidad   \\"
+        # print "                                 SubServiceAdmin\\"
+        #print "                                 Alice          \\"
+        # print "                                 True           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -70,23 +75,30 @@ def main():
     SERVICE_NAME = sys.argv[4]
     SERVICE_ADMIN_USER = sys.argv[5]
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
-    SERVICE_USER = sys.argv[7]
-    ROLE_NAME = sys.argv[8]
+    SUBSERVICE_NAME = sys.argv[7]
+    # ROLE_NAME=sys.argv[8]
+    #USER_NAME=sys.argv[7]
+    EFFECTIVE = sys.argv[8]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    flow.revokeInheritRoleServiceUser(
+    roles = flow.roles_assignments(
+        None,
         SERVICE_NAME,
+        None,
+        SUBSERVICE_NAME,
+        None,
+        None,        
+        None,
         None,
         SERVICE_ADMIN_USER,
         SERVICE_ADMIN_PASSWORD,
         None,
-        ROLE_NAME,
-        None,
-        SERVICE_USER,
-        None)
+        EFFECTIVE)
+
+    pprint.pprint(roles)
 
 if __name__ == '__main__':
 

@@ -26,6 +26,12 @@ git checkout BRANCH
 cd iotp-orchestrator
 ```
 
+Define some variables:
+```
+export DJANGO_SETTINGS_MODULE=settings
+export PYTHONPATH=$(pwd):$(pwd)/src:/usr/local/lib/python2.7/site-packages
+```
+
 Create a virtual env
 ```
 virtualenv env
@@ -35,12 +41,18 @@ cd src
 
 Then install all dependencies by running:
 ```
-pip install -f requirements.txt
+pip install -r requirements.txt
 ```
 
-Start server in 8084 port
+
+Start server in 8084 port using django web server:
 ```
-python manage.py runserver 8084 --settings=settings.custom_dev
+python manage.py runserver 8084 --settings=settings.dev
+```
+
+or using another web server like uWSGI
+```
+uwsgi --http :8084 --chdir /home/user/iotp-orchestrator/src --wsgi-file wsgi.py  --env DJANGO_SETTINGS_MODULE=settings.dev --virtualenv /home/user/iotp-orchestrator/env --master --processes 1 --threads 4 --stats 127.0.0.1:8085
 ```
 
 ### Build procedure
@@ -66,4 +78,9 @@ RPM install orchestrator as a service controlled by a [daemon](https://pdihub.hi
 
 ```
 $ sudo service orchestrator start
+```
+
+## Make a simple test:
+```
+curl -X GET http://127.0.0.1:8084/v1.0/service -H "Content-Type: application/json" -d '{ "DOMAIN_NAME": "admin_domain", "SERVICE_ADMIN_USER": "cloud_admin", "SERVICE_ADMIN_PASSWORD":"password"}'
 ```

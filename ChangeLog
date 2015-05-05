@@ -1,9 +1,40 @@
 CHANGES
 =======
 
-* add user ops, service test and policies
-* add assign role to subservice user flow
-* add assign role to user flow
-* add user and role provision api
-* orchestrator skeleton
-* Initial commit
+0.3.0
+
+feature/OIOTP-30_trust_token
+feature/OIOTP-25_pagination_api
+feature/OIOTP-51_subserviceadmin_to_admin_after_create
+task/OIOTP-15_script_commands
+task/OIOTP-52_trust_token_withoutservice
+bug/OIOTP-53_modify_user_name
+bug/OIOTP-55_bug_create_new_role
+
+
+
+0.2.0
+
+feature/OIOTP-4_subservice_edition
+feature/OIOTP-7_delete_role
+feature/OITOP-32_service_delete
+feature/OIOTP-24_creaet_role_with_xacml_policy
+feature/OITOP-1_service_provision
+
+task/OIOTP-15_script_commands
+task/OIOTP-48_log_format
+task/OIOTP-43_format_input_validation
+task/OIOTP-6_role_assigment_api
+task/OIOTP-22_role_unassignment_api
+task/OIOTP-12_jsonschema_validation
+
+bug/OIOTP-36_bad_error_code_creating_role_duplicated
+
+
+0.1.0
+
+task/OIOTP-8_user_edition_api
+task/OIOTP-8_delete_user_api
+task/OIOTP-5_user_provision_api
+task/OIOTP-14_rpm_package
+task/OIOTP-11_portal_interaction

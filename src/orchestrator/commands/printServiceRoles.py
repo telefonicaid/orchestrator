@@ -22,6 +22,7 @@
 # Author: IoT team
 #
 import sys
+import pprint
 import logging.config
 
 from settings.common import LOGGING
@@ -32,11 +33,11 @@ logging.config.dictConfig(LOGGING)
 
 def main():
 
-    print "This script revoke a role to a service user IoT keystone"
+    print "This script prints roles in a service"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 8
+    NUM_ARGS_EXPECTED = 6
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -47,8 +48,6 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <SERVICE_USER_NAME>             Service username"
-        print "  <ROLE_NAME>                     Name of role"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -57,8 +56,6 @@ def main():
         print "                                 SmartValencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 adm1           \\"
-        print "                                 SubServiceAdmin\\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -70,23 +67,20 @@ def main():
     SERVICE_NAME = sys.argv[4]
     SERVICE_ADMIN_USER = sys.argv[5]
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
-    SERVICE_USER = sys.argv[7]
-    ROLE_NAME = sys.argv[8]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    flow.revokeInheritRoleServiceUser(
-        SERVICE_NAME,
-        None,
-        SERVICE_ADMIN_USER,
-        SERVICE_ADMIN_PASSWORD,
-        None,
-        ROLE_NAME,
-        None,
-        SERVICE_USER,
-        None)
+    roles = flow.roles(SERVICE_NAME,
+                       None,
+                       SERVICE_ADMIN_USER,
+                       SERVICE_ADMIN_PASSWORD,
+                       None,
+                       None,
+                       None)
+
+    pprint.pprint(roles)
 
 if __name__ == '__main__':
 

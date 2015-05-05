@@ -1,3 +1,26 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
 import logging
 import json
 
@@ -16,8 +39,8 @@ class CreateNewServiceUser(FlowBase):
                              SERVICE_ADMIN_TOKEN,
                              NEW_USER_NAME,
                              NEW_USER_PASSWORD,
-                             NEW_USER_EMAIL):
-
+                             NEW_USER_EMAIL,
+                             NEW_USER_DESCRIPTION):
         '''Creates a new user Service (aka domain user keystone).
 
         In case of HTTP error, return HTTP error
@@ -35,16 +58,19 @@ class CreateNewServiceUser(FlowBase):
         - id: New user Id
         '''
         data_log = {
-            "SERVICE_NAME":"%s" % SERVICE_NAME,
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "SERVICE_ADMIN_USER":"%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD":"%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN":"%s" % SERVICE_ADMIN_TOKEN,
-            "NEW_USER_NAME":"%s" % NEW_USER_NAME,
-            "NEW_USER_PASSWORD":"%s" % NEW_USER_PASSWORD,
-            "NEW_USER_EMAIL":"%s" % NEW_USER_EMAIL
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "NEW_USER_NAME": "%s" % NEW_USER_NAME,
+            "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD,
+            "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
+            "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION
         }
-        logger.debug("createNewServiceUser invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("createNewServiceUser invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
 
         try:
             if not SERVICE_ADMIN_TOKEN:
@@ -53,7 +79,6 @@ class CreateNewServiceUser(FlowBase):
                                                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
-
             #
             # 1. Get service (aka domain)
             #
@@ -61,7 +86,8 @@ class CreateNewServiceUser(FlowBase):
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                       SERVICE_ID))
 
             #
             # 2.  Create user
@@ -71,21 +97,18 @@ class CreateNewServiceUser(FlowBase):
                                                 SERVICE_NAME,
                                                 NEW_USER_NAME,
                                                 NEW_USER_PASSWORD,
-                                                NEW_USER_EMAIL)
+                                                NEW_USER_EMAIL,
+                                                NEW_USER_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
-
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-            "SERVICE_ID":"%s" % SERVICE_ID,
-            "ID_USER":"%s" % ID_USER,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "ID_USER": "%s" % ID_USER,
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id":ID_USER}
-
-
-
+        return {"id": ID_USER}

@@ -11,8 +11,14 @@ from orchestrator.commands.assignInheritRoleServiceUser import main as assignInh
 from orchestrator.commands.assignRoleSubServiceUser import main as assignRoleSubServiceUser
 from orchestrator.commands.assignRoleServiceUser import main as assignRoleServiceUser
 from orchestrator.commands.listRoleAssignments import main as listRoleAssignments
+from orchestrator.commands.listAllRoleAssignments import main as listAllRoleAssignments
+from orchestrator.commands.listUserRoleAssignments import main as listUserRoleAssignments
+from orchestrator.commands.listSubServiceRoleAssignments import main as listSubServiceRoleAssignments
 from orchestrator.commands.printServices import main as printServices
 from orchestrator.commands.printSubServices import main as printSubServices
+from orchestrator.commands.printServiceUsers import main as printServiceUsers
+from orchestrator.commands.printServiceRoles import main as printServiceRoles
+from orchestrator.commands.printServiceRolePolicies import main as printServiceRolePolicies
 
 
 @contextlib.contextmanager
@@ -35,14 +41,13 @@ class Test_NewService_script(object):
                 "admin_domain",
                 "cloud_admin",
                 "password",
-                "SmartValencia_%s" % self.suffix,
+                "SmartCity_%s" % self.suffix,
                 "smartvalencia_%s" % self.suffix,
                 "adm1_%s" % self.suffix,
                 "password",
                 "http",
                 "localhost",
-                "8080"
-        ]
+                "8080"]
         with redirect_argv(args):
             CreateNewService()
 
@@ -56,12 +61,11 @@ class Test_NewSubService_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
                 "password",
                 "Electricidad_%s" % self.suffix,
-                "electricidad_%s" % self.suffix
-        ]
+                "electricidad_%s" % self.suffix]
         with redirect_argv(args):
             CreateNewSubService()
 
@@ -75,14 +79,13 @@ class Test_NewServiceRole_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
                 "password",
                 "ServiceCustomer_%s" % self.suffix,
                 "http",
                 "localhost",
-                "8080"
-        ]
+                "8080"]
         with redirect_argv(args):
             CreateNewServiceRole()
 
@@ -96,13 +99,12 @@ class Test_NewServiceUser_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
                 "password",
                 "Electricidad",
                 "bob_%s" % self.suffix,
-                "password",
-        ]
+                "password"]
         with redirect_argv(args):
             CreateNewServiceUser()
 
@@ -116,12 +118,11 @@ class Test_assignInheritRoleServiceUse_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
                 "password",
                 "adm1",
-                "SubServiceAdmin"
-        ]
+                "SubServiceAdmin"]
         with redirect_argv(args):
             assignInheritRoleServiceUser()
 
@@ -135,12 +136,11 @@ class Test_assignRoleServiceUser_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
                 "password",
                 "ServiceCustomer",
-                "Carl"
-        ]
+                "Carl"]
         with redirect_argv(args):
             assignRoleServiceUser()
 
@@ -154,15 +154,31 @@ class Test_assignRoleSubServiceUser_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "Electricidad",
                 "adm1",
                 "password",
                 "ServiceCustomer",
-                "Carl"
-        ]
+                "Carl"]
         with redirect_argv(args):
             assignRoleSubServiceUser()
+
+
+class Test_listAllRoleAssignments_script(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+
+    def test(self):
+        args = ["listAllRoleAssignments.py",
+                "http",
+                "localhost",
+                "5000",
+                "SmartCity",
+                "adm1",
+                "password",
+                "True"]
+        with redirect_argv(args):
+            listAllRoleAssignments()
 
 class Test_listRoleAssignments_script(object):
     def __init__(self):
@@ -173,12 +189,47 @@ class Test_listRoleAssignments_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
                 "password",
-        ]
+                "SubServiceAdmin",
+                "True"]
         with redirect_argv(args):
             listRoleAssignments()
+
+class Test_listUserRoleAssignments_script(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+
+    def test(self):
+        args = ["listUserRoleAssignments.py",
+                "http",
+                "localhost",
+                "5000",
+                "SmartCity",
+                "adm1",
+                "password",
+                "Alice",
+                "True"]
+        with redirect_argv(args):
+            listUserRoleAssignments()
+
+class Test_listSubServiceRoleAssignments_script(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+
+    def test(self):
+        args = ["listSubServiceRoleAssignments.py",
+                "http",
+                "localhost",
+                "5000",
+                "SmartCity",
+                "adm1",
+                "password",
+                "Basuras",
+                "True"]
+        with redirect_argv(args):
+            listSubServiceRoleAssignments()
 
 class Test_printServices_script(object):
     def __init__(self):
@@ -189,12 +240,12 @@ class Test_printServices_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
-                "password",
-        ]
+                "password"]
         with redirect_argv(args):
             printServices()
+
 
 class Test_printSubServices_script(object):
     def __init__(self):
@@ -205,12 +256,62 @@ class Test_printSubServices_script(object):
                 "http",
                 "localhost",
                 "5000",
-                "SmartValencia",
+                "SmartCity",
                 "adm1",
-                "password",
-        ]
+                "password"]
         with redirect_argv(args):
             printSubServices()
+
+
+class Test_printServiceUsers_script(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+
+    def test(self):
+        args = ["printServiceUsers.py",
+                "http",
+                "localhost",
+                "5000",
+                "SmartCity",
+                "adm1",
+                "password"]
+        with redirect_argv(args):
+            printServiceUsers()
+
+
+class Test_printServiceRoles_script(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+
+    def test(self):
+        args = ["printServiceRoles.py",
+                "http",
+                "localhost",
+                "5000",
+                "SmartCity",
+                "adm1",
+                "password"]
+        with redirect_argv(args):
+            printServiceRoles()
+
+class Test_printServiceRolePolicies_script(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+
+    def test(self):
+        args = ["printServiceRolePolicies.py",
+                "http",
+                "localhost",
+                "5000",
+                "SmartCity",
+                "adm1",
+                "password",
+                "SubServiceAdmin",
+                "http",
+                "localhost",
+                "8080"]
+        with redirect_argv(args):
+            printServiceRolePolicies()            
 
 
 if __name__ == '__main__':
@@ -238,8 +339,26 @@ if __name__ == '__main__':
     test_listRoleAssignments = Test_listRoleAssignments_script()
     test_listRoleAssignments.test()
 
+    test_listUserRoleAssignments = Test_listUserRoleAssignments_script()
+    test_listUserRoleAssignments.test()
+
+    test_listSubServiceRoleAssignments = Test_listSubServiceRoleAssignments_script()
+    test_listSubServiceRoleAssignments.test()    
+
+    test_listAllRoleAssignments = Test_listAllRoleAssignments_script()
+    test_listAllRoleAssignments.test()
+
     test_printServices = Test_printServices_script()
     test_printServices.test()
 
     test_printSubServices = Test_printSubServices_script()
     test_printSubServices.test()
+
+    test_printServiceUsers = Test_printServiceUsers_script()
+    test_printServiceUsers.test()
+
+    test_printServiceRoles = Test_printServiceRoles_script()
+    test_printServiceRoles.test()
+
+    test_printServiceRolePolicies = Test_printServiceRolePolicies_script()
+    test_printServiceRolePolicies.test()

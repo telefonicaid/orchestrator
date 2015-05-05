@@ -50,9 +50,9 @@ python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
+                                       Electricidad   \
                                        adm1           \
                                        password       \
-                                       Electricidad   \
                                        SubServiceAdmin\
                                        Alice
 
@@ -78,9 +78,9 @@ python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        SmartValencia  \
+                                       Basuras        \
                                        adm1           \
                                        password       \
-                                       Basuras        \
                                        SubServiceAdmin\
                                        bob
 
@@ -120,10 +120,7 @@ python ./assignInheritRoleServiceUser.py http         \
                                     adm1              \
                                     password          \
                                     Carl              \
-                                    SubServiceCustomer\
-                                    http              \
-                                    localhost         \
-                                    8080
+                                    SubServiceCustomer
 
 
 cd -

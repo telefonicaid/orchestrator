@@ -1,3 +1,27 @@
+#
+# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+#
+# This file is part of IoT orchestrator
+#
+# IoT orchestrator is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# IoT orchestrator is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with IoT orchestrator. If not, see http://www.gnu.org/licenses/.
+#
+# For those usages not covered by this license please contact with
+# iot_support at tid dot es
+#
+# Author: IoT team
+#
+
 json = {
     ###############
     "ServiceCreate": {
@@ -99,7 +123,7 @@ json = {
                 "type": "string",
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     ################
     "SubServiceList": {
@@ -130,7 +154,7 @@ json = {
                 "type": "string",
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     #################
     "SubServiceCreate": {
@@ -208,8 +232,46 @@ json = {
             "USER_ID": {
                 "type": "string",
             },
+            "USER_DATA_VALUE": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "pattern": "^([A-Za-z0-9_]+)$",
+                        },
+                    "userName": {
+                        "type": "string",
+                        "pattern": "^([A-Za-z0-9_]+)$",
+                        },                    
+                    "password": {
+                        "type": "string",
+                        "minLength": 6,
+                        },
+                    "displayName": {
+                        "type": "string",
+                        },
+                    "description": {
+                        "type": "string",
+                        },
+                    "emails": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "value": {
+                                    "type": "string",
+                                    "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                                    },
+                                }
+                            },
+                        "maxItems": 4
+                        },
+                    },
+                "additionalProperties": False,
+                # "required": ["user", "emails"]
+            },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     ##########
     "UserList": {
@@ -256,7 +318,7 @@ json = {
                 "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
             },
         },
-        #"required": [ ],
+        # "required": [ ],
     },
     #######
     "Role": {
@@ -383,7 +445,64 @@ json = {
             "ROLE_NAME",
             "SERVICE_USER_NAME"
         ],
-    }
+    },
+
+    ########
+    "Trust": {
+    ########
+        "name": "Trust",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "ROLE_NAME": {
+                "type": "string",
+            },
+            "ROLE_ID": {
+                "type": "string",
+            },
+            "TRUSTEE_USER_NAME": {
+                "type": "string",
+            },
+            "TRUSTEE_USER__ID": {
+                "type": "string",
+            },
+            "TRUSTOR_USER_NAME": {
+                "type": "string",
+            },
+            "TRUSTOR_USER__ID": {
+                "type": "string",
+            },
+        },
+        # "required": [
+        # ],
+    },
 
 }
 
