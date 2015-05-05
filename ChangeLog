@@ -7,6 +7,7 @@ feature/OIOTP-30_trust_token
 feature/OIOTP-25_pagination_api
 feature/OIOTP-51_subserviceadmin_to_admin_after_create
 task/OIOTP-15_script_commands
+task/OIOTP-52_trust_token_withoutservice
 bug/OIOTP-53_modify_user_name
 bug/OIOTP-55_bug_create_new_role
 
