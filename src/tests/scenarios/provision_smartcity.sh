@@ -9,14 +9,13 @@ KEYPASS_PORT=8080
 
 
 function checkResult() {
-  RESULT=$(( ! $1 && $RESULT ))
-
-  if [ $RESULT -eq 1 ]; then
-    echo -e "\t- $2 .............................. OK"
-  else
-    echo -e "Error found while $2. Code: $1. Aborting"
-    exit $RESULT
-  fi
+    if [ $1 -eq 0 ]; then
+        echo -n
+        echo -e "- $2 ....... OK"
+    else
+        echo -e "Error found while $2. Code: $1. Aborting"
+        exit $1
+    fi
 }
 
 cd ../../orchestrator/commands/

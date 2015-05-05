@@ -103,6 +103,8 @@ def main():
         USER_DATA_VALUE)
 
     pprint.pprint(res)
+    if 'error' in res:
+        sys.exit(res['code'])
 
 if __name__ == '__main__':
 

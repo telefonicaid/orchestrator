@@ -137,6 +137,9 @@ def main():
 
     pprint.pprint(res)
 
+    if 'error' in res:
+        sys.exit(res['code'])
+
 if __name__ == '__main__':
 
     main()

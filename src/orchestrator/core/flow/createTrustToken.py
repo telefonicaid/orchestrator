@@ -95,52 +95,52 @@ class CreateTrustToken(FlowBase):
             #
             # 1. Get service (aka domain)
             #
-            if not SERVICE_ID:
+            if not SERVICE_ID and SERVICE_NAME:
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
-                                                       SERVICE_ID))
+                logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                           SERVICE_ID))
 
             #
             # 2. Get SubService (aka project)
             #
-            if not SUBSERVICE_ID:
+            if not SUBSERVICE_ID and SUBSERVICE_NAME:
                 SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME,
                                                       SUBSERVICE_NAME)
-            logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
-                                                          SUBSERVICE_ID))
+                logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
+                                                            SUBSERVICE_ID))
 
             #
             # 3. Get role
             #
-            if not ROLE_ID:
+            if not ROLE_ID and ROLE_NAME:
                 ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                    SERVICE_ID,
                                                    ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+                logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 4. Get Trustee User
             #
-            if not TRUSTEE_USER_ID:
+            if not TRUSTEE_USER_ID and TRUSTEE_USER_NAME:
                 # We are asuming that trustee belong to SERVICE!!
                 TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                            SERVICE_ID,
                                                            TRUSTEE_USER_NAME)
-            logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
-                                                        TRUSTEE_USER_ID))
+                logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
+                                                            TRUSTEE_USER_ID))
 
             #
             # 5. Get Trustor User
             #
-            if not TRUSTOR_USER_ID:
+            if not TRUSTOR_USER_ID and TRUSTOR_USER_NAME:
                 TRUSTOR_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                            SERVICE_ID,
                                                            TRUSTOR_USER_NAME)
-            logger.debug("ID of trustor user %s: %s" % (TRUSTOR_USER_NAME,
-                                                        TRUSTOR_USER_ID))
+                logger.debug("ID of trustor user %s: %s" % (TRUSTOR_USER_NAME,
+                                                            TRUSTOR_USER_ID))
 
             #
             # 6. Create trust

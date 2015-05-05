@@ -116,6 +116,41 @@ class TestRestOperations(RestOperations):
         assert res.code == 201, (res.code, res.msg)
         return res
 
+    def getTrustScopedToken(self, data):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": data["SERVICE_ADMIN_USER"],
+                            "password": data["SERVICE_ADMIN_PASSWORD"]
+                        }
+                    }
+                }
+            }
+        }
+        if "SERVICE_NAME" in data:
+            auth_data['auth']['identity']['password']['user'].update(
+                {"domain": {"name": data["SERVICE_NAME"]}})
+
+            scope_domain = {
+                "scope": {
+                    "OS-TRUST:trust": {
+                        "id": data["ID_TRUST"]
+                    },
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        res = self.rest_request(
+            url=self.keystone_endpoint_url + '/v3/auth/tokens',
+            relative_url=False,
+            method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res
+
     def getServiceId(self, data):
         token_res = self.getToken(data)
         data_response = token_res.read()
@@ -560,6 +595,19 @@ class Test_NewServiceTrust_RestView(object):
             "SERVICE_ADMIN_USER": "pep",
             "SERVICE_ADMIN_PASSWORD": "pep",
         }
+        self.payload_data_ok3 = {
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME": "bob",
+            "TRUSTOR_USER_NAME": "adm1",
+        }
+        self.payload_data_ok4 = {
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "bob",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -583,6 +631,25 @@ class Test_NewServiceTrust_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+        self.payload_data_ok2["ID_TRUST"] = trust_id
+        token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok2)
+
+    def test_post_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+        self.payload_data_ok4["ID_TRUST"] = trust_id
+        token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok4)
 
 
 class Test_ServiceLists_RestView(object):
@@ -1696,3 +1763,5 @@ if __name__ == '__main__':
 
     test_NewServiceTrust = Test_NewServiceTrust_RestView()
     test_NewServiceTrust.test_post_ok()
+    # It will work just for keystone juno or upper
+    #test_NewServiceTrust.test_post_ok2()
