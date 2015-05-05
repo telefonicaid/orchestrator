@@ -852,9 +852,13 @@ class IdMKeystoneOperations(IdMOperations):
                 "trustor_user_id": TRUSTOR_USER_ID
                 }
             }
-        if SUBSERVICE_ID:
+
+
+        # According with:
+        # https://github.com/openstack-attic/identity-api/blob/master/v3/src/markdown/identity-api-v3-os-trust-ext.md
+        # A project_id may not be specified without at least one role, and vice versa. In other words, there is no way of implicitly delegating all roles to a trustee, in order to prevent users accidentally creating trust that are much more broad in scope than intended. A trust without a project_id or any delegated roles is unscoped, and therefore does not represent authorization on a specific resource
+        if SUBSERVICE_ID and ROLE_ID:
             trust_data['trust'].update({"project_id": SUBSERVICE_ID})
-        if ROLE_ID:
             trust_data['trust'].update({"roles": [{"id": ROLE_ID}]})
 
         res = self.IdMRestOperations.rest_request(
