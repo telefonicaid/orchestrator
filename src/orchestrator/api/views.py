@@ -11,7 +11,6 @@ import logging
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
 from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
@@ -107,7 +106,61 @@ class ServiceList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def put(self, request, service_id=None):
+        self.schema_name = "ServiceList"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # request.DATA # json validation
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT)
+            result = flow.update_domain(
+                                   request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
+                                   request.DATA.get("SERVICE_ADMIN_USER", None),
+                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                   request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def delete(self, request, service_id=None):
+        self.schema_name = "ServiceList"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # request.DATA # json validation
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT,
+                           self.KEYPASS_PROTOCOL,
+                           self.KEYPASS_HOST,
+                           self.KEYPASS_PORT)
+            result = flow.delete_domain(
+                                   request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
+                                   request.DATA.get("SERVICE_ADMIN_USER", None),
+                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -140,7 +193,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                            request.DATA.get("NEW_SERVICE_NAME"),
                                            request.DATA.get("NEW_SERVICE_DESCRIPTION"),
                                            request.DATA.get("NEW_SERVICE_ADMIN_USER"),
-                                           request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"))
+                                           request.DATA.get("NEW_SERVICE_ADMIN_PASSWORD"),
+                                           request.DATA.get("NEW_SERVICE_ADMIN_EMAIL", None))
 
             if 'token' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -149,7 +203,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -192,7 +246,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
             else:
                 # Really service_id is not mandatory already in urls?
-                result['error'] = "ERROR not service_id provided"
+                result = {'error':  "ERROR not service_id provided", "code": "400"}
 
             if not 'error' in result:
                 return Response(result, status=status.HTTP_200_OK)
@@ -202,9 +256,75 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def put(self, request, service_id=None, subservice_id=None):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # request.DATA # json validation
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT)
+            if service_id:
+                if subservice_id:
+                    result = flow.update_project(
+                                   request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
+                                   request.DATA.get("SUBSERVICE_ID", subservice_id),
+                                   request.DATA.get("SUBSERVICE_NAME", None),
+                                   request.DATA.get("SERVICE_ADMIN_USER", None),
+                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                   request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
+            else:
+                # Really service_id is not mandatory already in urls?
+                result['error'] = "ERROR not service_id provided"
+
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def delete(self, request, service_id=None, subservice_id=None):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # request.DATA # json validation
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT)
+            if service_id:
+                if subservice_id:
+                    result = flow.delete_project(
+                                   request.DATA.get("SERVICE_ID", service_id),
+                                   request.DATA.get("SERVICE_NAME", None),
+                                   request.DATA.get("SUBSERVICE_ID", subservice_id),
+                                   request.DATA.get("SUBSERVICE_NAME", None),
+                                   request.DATA.get("SERVICE_ADMIN_USER", None),
+                                   request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                   request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
+            else:
+                # Really service_id is not mandatory already in urls?
+                result['error'] = "ERROR not service_id provided"
+
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
     """
@@ -240,7 +360,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -273,11 +393,14 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                                 request.DATA.get("USER_NAME", None),
                                 request.DATA.get("USER_ID", user_id))
-
-            return Response(result, status=status.HTTP_204_NO_CONTENT)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -298,10 +421,14 @@ class User_RESTView(APIView, IoTConf):
                                 request.DATA.get("USER_NAME"),
                                 request.DATA.get("USER_ID", user_id),
                                 request.DATA.get("USER_DATA_VALUE"))
-            return Response(result, status=status.HTTP_200_OK)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0}'.format(error.message),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -325,7 +452,7 @@ class User_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -362,7 +489,7 @@ class UserList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -390,12 +517,49 @@ class UserList_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+class Role_RESTView(APIView, IoTConf):
+    """
+    Modifies an Roles of a Service
+
+    """
+    schema_name = "Role"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def delete(self, request, service_id, role_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
+            result = flow.removeRole(
+                                request.DATA.get("SERVICE_NAME", None),
+                                request.DATA.get("SERVICE_ID", service_id),
+                                request.DATA.get("SERVICE_ADMIN_USER", None),
+                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                request.DATA.get("ROLE_NAME", None),
+                                request.DATA.get("ROLE_ID", role_id))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
 
-class Role_RESTView(APIView, IoTConf):
+class RoleList_RESTView(APIView, IoTConf):
     """
     Creates or returns a Role into a service
 
@@ -417,16 +581,21 @@ class Role_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_PORT)
             result = flow.createNewServiceRole(
                                           request.DATA.get("SERVICE_ID", service_id),
-                                          request.DATA.get("SERVICE_NAME"),
+                                          request.DATA.get("SERVICE_NAME", None),
                                           request.DATA.get("SERVICE_ADMIN_USER", None),
                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                                          request.DATA.get("NEW_ROLE_NAME"))
+                                          request.DATA.get("NEW_ROLE_NAME", None),
+                                          request.DATA.get("XACML_POLICY", None))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
 
-            return Response(result, status=status.HTTP_201_CREATED)
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -439,7 +608,6 @@ class Role_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
-
             result = flow.roles(request.DATA.get("SERVICE_ID", service_id),
                                 request.DATA.get("SERVICE_ADMIN_USER", None),
                                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
@@ -452,7 +620,7 @@ class Role_RESTView(APIView, IoTConf):
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -475,7 +643,6 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         flow = Roles(self.KEYSTONE_PROTOCOL,
                      self.KEYSTONE_HOST,
                      self.KEYSTONE_PORT)
-
         result = flow.roles_assignments(
                             request.DATA.get("SERVICE_ID", service_id),
                             None,
@@ -496,13 +663,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-        inherit = ( request.GET.get('inherit', False) =="true" or
-                    request.DATA.get('INHERIT', False) =="true" )
+        inherit = ( request.GET.get('inherit', False) == True or
+                    request.DATA.get('INHERIT', False) == True )
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
                                        self.KEYSTONE_PORT)
+
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", None) ):
                 if inherit:
@@ -540,10 +708,72 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                                               request.DATA.get("ROLE_ID", None),
                                               request.DATA.get("SERVICE_USER_NAME", None),
                                               request.DATA.get("SERVICE_USER_ID", None))
-
-            return Response(result, status=status.HTTP_204_NO_CONTENT)
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
         except ParseError as error:
             return Response(
-                'Invalid JSON - {0}'.format(error.message),
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def delete(self, request, service_id):
+        self.schema_name = "AssignRole"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        inherit = ( request.GET.get('inherit', False) == True or
+                    request.DATA.get('INHERIT', False) == True )
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                                       self.KEYSTONE_HOST,
+                                       self.KEYSTONE_PORT)
+
+            if not (request.DATA.get("SUBSERVICE_NAME", None) or
+                    request.DATA.get("SUBSERVICE_ID", None) ):
+                if inherit:
+                    result = flow.revokeInheritRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
+                                           request.DATA.get("SERVICE_ADMIN_USER", None),
+                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                           request.DATA.get("ROLE_NAME"),
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
+                else:
+                    result = flow.revokeRoleServiceUser(
+                                           request.DATA.get("SERVICE_NAME", None),
+                                           request.DATA.get("SERVICE_ID", service_id),
+                                           request.DATA.get("SERVICE_ADMIN_USER", None),
+                                           request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                           request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                           request.DATA.get("ROLE_NAME"),
+                                           request.DATA.get("ROLE_ID", None),
+                                           request.DATA.get("SERVICE_USER_NAME", None),
+                                           request.DATA.get("SERVICE_USER_ID", None))
+            else:
+                result = flow.revokeRoleSubServiceUser(
+                                              request.DATA.get("SERVICE_NAME"),
+                                              request.DATA.get("SERVICE_ID", service_id),
+                                              request.DATA.get("SUBSERVICE_NAME"),
+                                              request.DATA.get("SUBSERVICE_ID", None),
+                                              request.DATA.get("SERVICE_ADMIN_USER", None),
+                                              request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                              request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                                              request.DATA.get("ROLE_NAME", None),
+                                              request.DATA.get("ROLE_ID", None),
+                                              request.DATA.get("SERVICE_USER_NAME", None),
+                                              request.DATA.get("SERVICE_USER_ID", None))
+            if not 'error' in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message, error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )

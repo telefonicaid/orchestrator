@@ -16,7 +16,7 @@ class FlowBase(object):
                  KEYPASS_PORT=None):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
 
-        self.ac = AccCOperations(KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)        
+        self.ac = AccCOperations(KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)
 
 
     def composeErrorCode(self, ex):

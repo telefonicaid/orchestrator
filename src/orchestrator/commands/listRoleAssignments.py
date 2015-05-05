@@ -9,7 +9,7 @@ def main():
     print "This script prints roles in a service"
 
     print ""
-    
+
     SCRIPT_NAME=sys.argv[0]
     NUM_ARGS_EXPECTED=6
 
@@ -60,7 +60,7 @@ def main():
 
     roles = flow.roles_assignments(None,
                                    SERVICE_NAME,
-                                   None,                                   
+                                   None,
                                    None,
                                    None,
                                    SERVICE_ADMIN_USER,
@@ -73,5 +73,5 @@ def main():
 
 
 if __name__ == '__main__':
-    
+
     main()

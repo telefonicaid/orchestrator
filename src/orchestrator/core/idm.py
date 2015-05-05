@@ -17,7 +17,3 @@ class IdMOperations(object):
     def checkIdM(self):
         pass
 
-
-
-
-

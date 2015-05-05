@@ -19,8 +19,8 @@ def main():
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
         print "  <SUBSERVICE_NAME>               SubService name"
-        print "  <SERVICE_ADMIN_USER>            New service admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        New service admin password"
+        print "  <SERVICE_ADMIN_USER>            Service admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print "  <ROLE_NAME>                     Name of role"
         print "  <SERVICE_USER>                  Service username"
         print ""
@@ -55,6 +55,7 @@ def main():
 
     flow.assignRoleSubServiceUser(
                              SERVICE_NAME,
+                             None,
                              SUBSERVICE_NAME,
                              None,
                              SERVICE_ADMIN_USER,

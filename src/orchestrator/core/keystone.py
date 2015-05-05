@@ -133,19 +133,41 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         return json_body_response['domain']['id']
 
+    def updateDomain(self,
+                     CLOUD_ADMIN_TOKEN,
+                     SERVICE_ID,
+                     NEW_SERVICE_DESCRIPTION):
 
-    def getRoleId(self,
-                 CLOUD_ADMIN_TOKEN,
-                 ROLE_NAME):
-        res = self.IdMRestOperations.rest_request(url='/v3/roles?name=%s' % ROLE_NAME,
-                                method='GET',
+        body_data = {
+            "domain": {
+                "description": "%s" % NEW_SERVICE_DESCRIPTION
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s'% SERVICE_ID,
+                                method='PATCH', data=body_data,
                                 auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        return json_body_response['domain']['id']
+
+
+    def getRoleId(self,
+                 CLOUD_ADMIN_TOKEN,
+                 ROLE_NAME):
+        res = self.IdMRestOperations.rest_request(url='/v3/roles?name=%s' % ROLE_NAME,
+                                                  method='GET',
+                                                  auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
         # TODO ensure ADMIN_ROLE_ID?
-        return json_body_response['roles'][0]['id']
+        if len(json_body_response['roles']) > 0:
+            return json_body_response['roles'][0]['id']
+        else:
+            return None
 
 
     def grantDomainRole(self,
@@ -202,6 +224,26 @@ class IdMKeystoneOperations(IdMOperations):
                                 method='POST', data=body_data,
                                 auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['project']['id']
+
+
+    def updateProject(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_DOM1,
+                      SUBSERVICE_ID,
+                      NEW_SUBSERVICE_DESCRIPTION):
+
+        body_data = {
+            "project": {
+                "description": "%s" % NEW_SUBSERVICE_DESCRIPTION
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % SUBSERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
         return json_body_response['project']['id']
@@ -310,9 +352,12 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        for project in json_body_response['projects']:
-            if project['name'] == PROJECT_NAME:
-                return project['id']
+        if 'projects' in json_body_response:
+            for project in json_body_response['projects']:
+                if project['name'] == PROJECT_NAME:
+                    return project['id']
+        else:
+            return None
 
 
     def getDomainRoleId(self,
@@ -504,7 +549,7 @@ class IdMKeystoneOperations(IdMOperations):
         projects = []
         for project in json_body_response['projects']:
             project_data = {
-                "name": '/' + project['name'],
+                "name": project['name'],
                 "id": project['id'],
                 "domain_id": project['domain_id']
             }
@@ -569,3 +614,128 @@ class IdMKeystoneOperations(IdMOperations):
                                 auth_token=CLOUD_ADMIN_TOKEN)
 
         assert res.code == 204, (res.code, res.msg)
+
+
+
+    def deleteDomain(self,
+                  SERVICE_ADMIN_TOKEN,
+                  DOMAIN_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s' % DOMAIN_ID,
+                                                  method='DELETE',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def deleteProject(self,
+                  SERVICE_ADMIN_TOKEN,
+                  PROJECT_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % PROJECT_ID,
+                                                  method='DELETE',
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def disableDomain(self,
+                     CLOUD_ADMIN_TOKEN,
+                     SERVICE_ID):
+
+        body_data = {
+            "domain": {
+                "enabled": False
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s'% SERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['domain']['id']
+
+    def disableProject(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_DOM1,
+                      SUBSERVICE_ID):
+
+        body_data = {
+            "project": {
+                "enabled": False
+            }
+        }
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s' % SUBSERVICE_ID,
+                                method='PATCH', data=body_data,
+                                auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['project']['id']
+
+    def revokeDomainRole(self,
+                      CLOUD_ADMIN_TOKEN,
+                      ID_DOM1,
+                      ID_ADM1,
+                      ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/domains/%s/users/%s/roles/%s' % (
+                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+                                method='DELETE',
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def revokeProjectRole(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_PRO1,
+                      ID_USER,
+                      ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/projects/%s/users/%s/roles/%s' % (
+                                ID_PRO1, ID_USER, ROLE_ID),
+                                method='DELETE',
+                                auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+
+    def revokeInheritRole(self,
+                         CLOUD_ADMIN_TOKEN,
+                         ID_DOM1,
+                         ID_ADM1,
+                         ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-INHERIT/domains/%s/users/%s/roles/%s/inherited_to_projects' % (
+                                ID_DOM1, ID_ADM1, ADMIN_ROLE_ID),
+                                method='DELETE',
+                                auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+
+    def getUserDomainInheritRoleAssignments(self,
+                                            SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            USER_ID):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-INHERIT/domains/%s/users/%s/roles/inherited_to_projects' % (
+                 DOMAIN_ID,
+                 USER_ID,
+             ),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response
+
+
+    def removeRole(self,
+                   SERVICE_ADMIN_TOKEN,
+                   DOMAIN_ID,
+                   ID_ROLE):
+
+        res = self.IdMRestOperations.rest_request(url='/v3/OS-SCIM/Roles/%s?domain_id=%s' % (ID_ROLE, DOMAIN_ID),
+                                                  method='DELETE', data=None,
+                                                  auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
