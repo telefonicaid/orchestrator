@@ -560,6 +560,13 @@ class Test_NewServiceTrust_RestView(object):
             "SERVICE_ADMIN_USER": "pep",
             "SERVICE_ADMIN_PASSWORD": "pep",
         }
+        self.payload_data_ok3 = {
+            "SERVICE_NAME": "SmartCity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME": "bob",
+            "TRUSTOR_USER_NAME": "adm1",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -582,6 +589,15 @@ class Test_NewServiceTrust_RestView(object):
             url="v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+    def test_post_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
 
@@ -1694,3 +1710,4 @@ if __name__ == '__main__':
 
     test_NewServiceTrust = Test_NewServiceTrust_RestView()
     test_NewServiceTrust.test_post_ok()
+    test_NewServiceTrust.test_post_ok2()

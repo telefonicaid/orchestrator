@@ -848,16 +848,15 @@ class IdMKeystoneOperations(IdMOperations):
         trust_data = {
             "trust": {
                 "impersonation": False,
-                "project_id": SUBSERVICE_ID,
-                "roles": [
-                    {
-                        "id": ROLE_ID
-                        }
-                    ],
                 "trustee_user_id": TRUSTEE_USER_ID,
                 "trustor_user_id": TRUSTOR_USER_ID
                 }
             }
+        if SUBSERVICE_ID:
+            trust_data['trust'].update({"project_id": SUBSERVICE_ID})
+        if ROLE_ID:
+            trust_data['trust'].update({"roles": [{"id": ROLE_ID}]})
+
         res = self.IdMRestOperations.rest_request(
             url='/v3/OS-TRUST/trusts',
             method='POST',
