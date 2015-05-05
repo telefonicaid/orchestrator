@@ -1762,4 +1762,4 @@ if __name__ == '__main__':
     test_NewServiceTrust = Test_NewServiceTrust_RestView()
     test_NewServiceTrust.test_post_ok()
     # It will work just for keystone juno or upper
-    test_NewServiceTrust.test_post_ok2()
+    #test_NewServiceTrust.test_post_ok2()
