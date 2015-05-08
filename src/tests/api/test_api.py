@@ -184,8 +184,8 @@ class Test_NewService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es"
@@ -198,8 +198,8 @@ class Test_NewService_RestView(object):
             "SERVICE_NAME": "admin_domain",
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -208,8 +208,8 @@ class Test_NewService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "wrong_password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -217,8 +217,8 @@ class Test_NewService_RestView(object):
         self.payload_data_bad2 = {
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -276,12 +276,12 @@ class Test_DeleteService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
-            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -290,17 +290,17 @@ class Test_DeleteService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
-            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -348,14 +348,14 @@ class Test_NewSubService_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
@@ -363,7 +363,7 @@ class Test_NewSubService_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
@@ -371,7 +371,7 @@ class Test_NewSubService_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
         }
@@ -421,7 +421,7 @@ class Test_DeleteSubService_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
@@ -429,14 +429,14 @@ class Test_DeleteSubService_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
@@ -488,7 +488,7 @@ class Test_NewServiceUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -497,7 +497,7 @@ class Test_NewServiceUser_RestView(object):
             "NEW_SERVICE_USER_DESSCRIPTION": "Pepito",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -505,7 +505,7 @@ class Test_NewServiceUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -514,7 +514,7 @@ class Test_NewServiceUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -522,7 +522,7 @@ class Test_NewServiceUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -582,7 +582,7 @@ class Test_NewServiceTrust_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Basuras",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -596,14 +596,14 @@ class Test_NewServiceTrust_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "pep",
         }
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "TRUSTEE_USER_NAME": "bob",
             "TRUSTOR_USER_NAME": "adm1",
         }
         self.payload_data_ok4 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "bob",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -663,12 +663,12 @@ class Test_ServiceLists_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SERVICE_NAME": "SmartCity",
-            "NEW_SERVICE_DESCRIPTION": "SmartCity village",
+            "SERVICE_NAME": "smartcity",
+            "NEW_SERVICE_DESCRIPTION": "smartcity village",
         }
         self.payload_data_ok3 = {
-            "DOMAIN_NAME": "SmartCity",
-            "SERVICE_NAME": "SmartCity",
+            "DOMAIN_NAME": "smartcity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -692,7 +692,7 @@ class Test_ServiceLists_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
         }
         self.payload_data_bad5 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -776,7 +776,7 @@ class Test_ServiceDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_nok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -810,12 +810,12 @@ class Test_ProjectList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "SUBSERVICE_NAME": "Electricidad",
@@ -826,7 +826,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
             "SUBSERVICE_NAME": "Electricidad",
@@ -880,7 +880,7 @@ class Test_ProjectDetail_RestView(object):
     def __init__(self):
         self.payload_data_ok = {
             "SUBSERVICE_NAME": "Electricidad",
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -905,14 +905,14 @@ class Test_NewServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_nok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
@@ -950,7 +950,7 @@ class Test_DeleteServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
@@ -958,7 +958,7 @@ class Test_DeleteServiceRole_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_tmp_%s" % self.suffix,
@@ -969,14 +969,14 @@ class Test_DeleteServiceRole_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
             "ROLE_NAME": "role_%s" % self.suffix,
         }
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
@@ -1077,12 +1077,12 @@ class Test_RoleList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -1128,12 +1128,12 @@ class Test_UserList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "START_INDEX": "10",
@@ -1181,7 +1181,7 @@ class Test_UserDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -1207,7 +1207,7 @@ class Test_UserDetail_RestView(object):
 class Test_UserModify_RestView(object):
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "adm1",
@@ -1215,7 +1215,7 @@ class Test_UserModify_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "alf_%s" % self.suffix,
@@ -1225,7 +1225,7 @@ class Test_UserModify_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "alf_%s" % self.suffix,
@@ -1237,7 +1237,7 @@ class Test_UserModify_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "alf_%s" % self.suffix,
@@ -1305,7 +1305,7 @@ class Test_UserModify_RestView(object):
 
         # Login -> OK
         self.payload_data_tmp = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": self.payload_data_ok3["NEW_SERVICE_USER_NAME"],
             "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["NEW_SERVICE_USER_PASSWORD"]
         }
@@ -1324,7 +1324,7 @@ class Test_UserModify_RestView(object):
 
         # Login -> OK
         self.payload_data_tmp = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": self.payload_data_ok3["USER_DATA_VALUE"]["name"],
             "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["USER_DATA_VALUE"]["password"]
         }
@@ -1363,7 +1363,7 @@ class Test_UserDelete_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "Alice_%s" % self.suffix,
@@ -1402,14 +1402,14 @@ class Test_AssignRoleUserList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
             "SERVICE_USER_NAME": "Alice",
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -1504,7 +1504,7 @@ class Test_AssignRoleUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "ServiceCustomer",
@@ -1514,7 +1514,7 @@ class Test_AssignRoleUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -1525,7 +1525,7 @@ class Test_AssignRoleUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "SubServiceCustomer",
@@ -1535,7 +1535,7 @@ class Test_AssignRoleUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok4 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "SubServiceCustomer",
@@ -1623,7 +1623,7 @@ class Test_UnassignRoleUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "SubServiceCustomer",
