@@ -50,7 +50,7 @@ def main():
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 smartvalencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
