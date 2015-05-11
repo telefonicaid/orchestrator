@@ -65,8 +65,8 @@ Args:
                                  admin_domain   \
                                  cloud_admin    \
                                  password       \
-                                 SmartValencia  \
-                                 smartvalencia  \
+                                 smartcity      \
+                                 smartcity      \
                                  adm1           \
                                  password       \
                                  http           \
@@ -91,7 +91,7 @@ Args:
      ./createNewServiceRole.py http             \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -115,7 +115,7 @@ Args:
      ./createNewServiceUser.py http             \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -141,7 +141,7 @@ Args:
      ./createNewSubService.py http              \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -166,7 +166,7 @@ Args:
      ./assignRoleServiceUser.py http            \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -192,7 +192,7 @@ Args:
      ./assignRoleSubServiceUser.py http         \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -218,7 +218,7 @@ Args:
      ./assignInheritRoleServiceUser.py http     \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -241,7 +241,7 @@ Args:
      ./printServices.py http                    \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -262,7 +262,7 @@ Args:
      ./printSubServices.py http                 \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -285,7 +285,7 @@ Args:
      ./unassignInheritRoleServiceUser.py http   \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -310,7 +310,7 @@ Args:
      ./unassignRoleServiceUser.py http          \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -336,7 +336,7 @@ Args:
      ./unassignRoleSubServiceUser.py http       \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -365,7 +365,7 @@ Args:
      ./src/orchestrator/commands/createTrustToken.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -390,7 +390,7 @@ Args:
      ./listRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -413,7 +413,7 @@ Args:
      ./listRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  SubServiceAdmin\
@@ -438,7 +438,7 @@ Args:
      ./listUserRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Alice          \
@@ -462,7 +462,7 @@ Args:
      ./listSubServiceRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -487,7 +487,7 @@ Args:
      ./removeService.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValenciaB \
+                                 smartcityB \
                                  cloud_admin    \
                                  password       \
                                  http           \
@@ -512,7 +512,7 @@ Args:
      ./removeSubService.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -535,7 +535,7 @@ Args:
      ./removeServiceRole.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  SubServiceCustomer\
                                  adm1           \
                                  password       \
@@ -560,7 +560,7 @@ Args:
      ./changeUserPassword.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  bob            \
@@ -583,7 +583,7 @@ Args:
      ./printServiceRoles.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -604,7 +604,7 @@ Args:
      ./printServiceUsers.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -627,7 +627,7 @@ Args:
      ./printServiceUserTrusts.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -653,7 +653,7 @@ Args:
      ./printServiceRolePolicies.py http         \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  SubServiceAdmin\

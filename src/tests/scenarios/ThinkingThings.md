@@ -1,12 +1,12 @@
 ## Scenario
 
 ####  Servicios
- * ThinkingThings
+ * thinkingthings
 
                      
 ### SubServicios
- * ThinkingThings\
- * ThinkingThings\user_x
+ * thinkingthings\
+ * thinkingthings\user_x
 
 
 ### Roles
@@ -16,11 +16,11 @@
 
 ### Users
 ```
-adm_tt - admin               - ThinkingThings
-       - SubServiceAdmin     - ThinkingThings\*
+adm_tt - admin               - thinkingthings
+       - SubServiceAdmin     - thinkingthings\*
 
-user_x - SubServiceAdmin     - ThinkingThings\user_x
-       - SubServiceCustomer  - ThinkingThings\user_x
+user_x - SubServiceAdmin     - thinkingthings\user_x
+       - SubServiceCustomer  - thinkingthings\user_x
 
 ```
 
