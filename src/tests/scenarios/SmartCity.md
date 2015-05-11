@@ -1,12 +1,12 @@
 ## Scenario
 
 ####  Servicios
- * SmartCity
+ * smartcity
 
                      
 ### SubServicios
- * SmartCity\Electricidad
- * SmartCity\Basuras
+ * smartcity\Electricidad
+ * smartcity\Basuras
 
 
 ### Roles
@@ -18,15 +18,15 @@
 
 ### Users
 ```
-adm1   - admin               - SmartCity
-       - SubServiceAdmin     - SmartCity\*
+adm1   - admin               - smartcity
+       - SubServiceAdmin     - smartcity\*
 
-Alice  - SubServiceAdmin     - SmartCity\Electricidad
+Alice  - SubServiceAdmin     - smartcity\Electricidad
 
-bob    - SubServiceCustomer  - SmartCity\Electricidad
-       - SubServiceAdmin     - SmartCity\Basuras
+bob    - SubServiceCustomer  - smartcity\Electricidad
+       - SubServiceAdmin     - smartcity\Basuras
 
-Carl   - ServiceCustomer     - SmartCity
-       - SubServiceCustomer  - SmartCity\*
+Carl   - ServiceCustomer     - smartcity
+       - SubServiceCustomer  - smartcity\*
 ```
 [Provision script](provision_smartcity.sh)

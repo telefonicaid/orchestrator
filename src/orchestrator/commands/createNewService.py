@@ -69,7 +69,7 @@ def main():
         print "                                 admin_domain   \\"
         print "                                 cloud_admin    \\"
         print "                                 password       \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 smartvalencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
