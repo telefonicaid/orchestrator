@@ -1,181 +1,471 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: *
 
 # Orchestrator
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+Component to expose an API to automatise provisioning in all the IoT Platform modules.
 
-# Polls API Root [/]
+# Group Orchestrator
 
-This resource does not have any attributes. Instead it offers the initial
-API affordances in the form of the links in the JSON body.
+## Services query [/v1.0/service]
+### Listado de Services [GET]
 
-It is recommend to follow the “url” link values,
-[Link](https://tools.ietf.org/html/rfc5988) or Location headers where
-applicable to retrieve resources. Instead of constructing your own URLs,
-to keep your client decoupled from implementation details.
-
-## Retrieve the Entry Point [GET]
-
-+ Response 200 (application/json)
-
-        {
-            "questions_url": "/questions"
-        }
-
-## Group Question
-
-Resources related to questions in the API.
-
-## Question [/questions/{question_id}]
-
-A Question object has the following attributes:
-
-+ question
-+ published_at - An ISO8601 date when the question was published.
-+ url
-+ choices - An array of Choice objects.
-
-+ Parameters
-    + question_id (required, number, `1`) ... ID of the Question in form of an integer
-
-### View a Questions Detail [GET]
++ Request (application/json)
+        
+            {
+                "DOMAIN_NAME":"admin_domain",
+                "SERVICE_ADMIN_USER":"cloud_admin",
+                "SERVICE_ADMIN_PASSWORD": "password",
+            }
 
 + Response 200 (application/json)
-
-                {
-                    "question": "Favourite programming language?",
-                    "published_at": "2014-11-11T08:40:51.620Z",
-                    "url": "/questions/1",
-                    "choices": [
-                        {
-                            "choice": "Swift",
-                            "url": "/questions/1/choices/1",
-                            "votes": 2048
-                        }, {
-                            "choice": "Python",
-                            "url": "/questions/1/choices/2",
-                            "votes": 1024
-                        }, {
-                            "choice": "Objective-C",
-                            "url": "/questions/1/choices/3",
-                            "votes": 512
-                        }, {
-                            "choice": "Ruby",
-                            "url": "/questions/1/choices/4",
-                            "votes": 256
-                        }
-                    ]
-                }
-
-## Choice [/questions/{question_id}/choices/{choice_id}]
-
-+ Parameters
-    + question_id (required, number, `1`) ... ID of the Question in form of an integer
-    + choice_id (required, number, `1`) ... ID of the Choice in form of an integer
-
-### Vote on a Choice [POST]
-
-This action allows you to vote on a question's choice.
-
-+ Response 201
-
-    + Headers
-
-            Location: /questions/1
-
-## Questions Collection [/questions{?page}]
-
-+ Parameters
-    + page (optional, number, `1`) ... The page of questions to return
-
-### List All Questions [GET]
-
-+ Response 200 (application/json)
-
-    + Headers
-
-            Link: </questions?page=2>; rel="next"
 
     + Body
 
-            [
-                {
-                    "question": "Favourite programming language?",
-                    "published_at": "2014-11-11T08:40:51.620Z",
-                    "url": "/questions/1",
-                    "choices": [
-                        {
-                            "choice": "Swift",
-                            "url": "/questions/1/choices/1",
-                            "votes": 2048
-                        }, {
-                            "choice": "Python",
-                            "url": "/questions/1/choices/2",
-                            "votes": 1024
-                        }, {
-                            "choice": "Objective-C",
-                            "url": "/questions/1/choices/3",
-                            "votes": 512
-                        }, {
-                            "choice": "Ruby",
-                            "url": "/questions/1/choices/4",
-                            "votes": 256
-                        }
-                    ]
-                }
-            ]
+            {
+                "domains": [
+                    {
+                        "enabled": true,
+                        "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
+                        "name": "SmartValencia",
+                        "description": "SmartValencia"
+                    },
+                    {
+                        "enabled": true,
+                        "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
+                        "name": "SmartLogrono",
+                        "description": "SmartLogroï¿½o"
+                    }
+                ]
+            }
 
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ question (string) - The question
-+ choices (array[string]) - A collection of choices.
-
+### Create Service [POST]
 + Request (application/json)
 
             {
-                "question": "Favourite programming language?",
-                "choices": [
-                    "Swift",
-                    "Python",
-                    "Objective-C",
-                    "Ruby"
-                ]
+                "DOMAIN_NAME":"admin_domain",
+                "DOMAIN_ADMIN_USER":"cloud_admin",
+                "DOMAIN_ADMIN_PASSWORD": "password",
+                "NEW_SERVICE_NAME":"SmartValencia",
+                "NEW_SERVICE_DESCRIPTION":"SmartValencia desc",
+                "NEW_SERVICE_ADMIN_USER":"adm1",
+                "NEW_SERVICE_ADMIN_PASSWORD":"password",
+                "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
             }
 
 + Response 201 (application/json)
 
-    + Headers
+    + Body
 
-            Location: /questions/2
+            {
+             "id" : 0000
+            }
+
+## Service manager [/v1.0/service/{serviceId}]
+### Get data [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+
++ Request (application/json)
+        
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
++ Response 200 (application/json)
 
     + Body
 
+            {
+                "enabled": true,
+                "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
+                "name": "SmartValencia",
+                "description": "SmartValencia"
+            }
+
+## Sub-services in service [/v1.0/service/{serviceId}/subservice]
+### listado de subservicio [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "projects": [
                 {
-                    "question": "Favourite programming language?",
-                    "published_at": "2014-11-11T08:40:51.620Z",
-                    "url": "/questions/2",
-                    "choices": [
-                        {
-                            "choice": "Swift",
-                            "url": "/questions/2/choices/1",
-                            "votes": 0
-                        }, {
-                            "choice": "Python",
-                            "url": "/questions/2/choices/2",
-                            "votes": 0
-                        }, {
-                            "choice": "Objective-C",
-                            "url": "/questions/2/choices/3",
-                            "votes": 0
-                        }, {
-                            "choice": "Ruby",
-                            "url": "/questions/2/choices/4",
-                            "votes": 0
-                        }
-                    ]
+                  "description": "SmartValencia Subservicio Electricidad",
+                  "id": "c6851f8ef57c4b91b567ab62ca3d0aea",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02",
+                  "name": "Electricidad"
+                },
+                {
+                  "description": "SmartValencia Subservicio Basuras",
+                  "id": "c6851f8ef57c4b91b567ab62ca3d0aeb",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc03",
+                  "name": "Basuras"
+                },
+                {
+                  "description": "SmartValencia Subservicio Jardines",
+                  "id": "c6851f8ef57c4b91b567ab62ca3d0aec",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc04",
+                  "name": "Jardines"
                 }
+              ]
+            }
+
+### edicion de subservicio [PUT]
+
++ Request (application/json)
+        
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
+            }
+
+
++ Response 201 (application/json)
+
+    + Body
+        
+            {
+                   "id" : 0000
+            }
+
+### Create SubService [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+                "NEW_SUBSERVICE_NAME":"Electricidad",
+                "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
+            }
+
++ Response 201 (application/json)
+
+            {
+                 "id" : 0000
+            }
+
+## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
+### listado de subservicio [GET]
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                'description': 'electricidad',
+                'domain_id': '06b9a460f5c343b3bc8b43f8533f7ab4',
+                'id': '1119023a10064570a2a3de0b5b286500',
+                'name': '/Electricidad'}
+            }
+
+## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
+### List Roles[GET]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + index (optional, `number`) ... Start index for pagination
+    + count (optional, `number`) ...  Number of results for pagination
+
++ Request (application/json)
+
+        {
+            "START_INDEX":"10",
+            "COUNT":"10",
+        }
+
++ Response 200 (application/json)
+
+        {
+            "roles": [
+                {
+                  "domain_id": "91d79dc2211d43a7985ebc27cdd146df",
+                  "id": "c80481d244454cc7b796d4acf8625a69",
+                  "name": "aRoleName"
+                },
+                {
+                  "domain_id": "91d79dc2211d43a7985ebc27cdd146dg",
+                  "id": "c80481d244454cc7b796d4acf8625a70",
+                  "name": "aRoleName 2"
+                },
+                {
+                  "domain_id": "91d79dc2211d43a7985ebc27cdd146dh",
+                  "id": "c80481d244454cc7b796d4acf8625a71",
+                  "name": "aRoleName 3"
+                }
+
+            ]
+        }
+
+### Create a Role[POST]
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD": "password",
+                "NEW_ROLE_NAME":"role_NameBlabla"
+            }
+
++ Response 201 (application/json)
+
+            {
+                 "id" : 0000
+            }
+
+## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
+### Delete a Role[DELETE]
+
++ Response 204
+
+## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
+### listado de roles asignados [GET]
++ Parameters
+    + service_id (required, `string`) ... Domain
+    + user_id (optional, `string`) ... User
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role
+    + effective (optional, `boolean`) ... effective
+    + inherit (optional, `boolean`) ... all inherit roles
+
++ Response 200 (application/json)
+
+        {
+          "role_assignments": [
+            {
+              "scope": {
+                "domain": {
+                  "id": "16966e6fdac74225afb4edf801dd9b2a"
+                }
+              },
+              "role": {
+                "id": "0993967f1ea24a82a72ca4198c16ca20",
+                "name": "ServiceCustomer",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "user": {
+                "description": "user of domain SmartValencia",
+                "name": "Carl",
+                "enabled": true,
+                "id": "7ee5a828843945a79026d99ae0057bb9",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "links": {
+                "assignment": "http://localhost:5001/v3/domains/16966e6fdac74225afb4edf801dd9b2a/users/7ee5a828843945a79026d99ae0057bb9/roles/0993967f1ea24a82a72ca4198c16ca20"
+              }
+            },
+            {
+              "scope": {
+                "domain": {
+                  "id": "16966e6fdac74225afb4edf801dd9b2a"
+                }
+              },
+              "role": {
+                "id": "0b597039040b4c31b8a13dfe1180c9ff",
+                "name": "admin"
+              },
+              "user": {
+                "description": "Administrator of domain SmartValencia",
+                "name": "adm1",
+                "enabled": true,
+                "id": "a5c624a8402b48c3931d4600a7fe2be9",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "links": {
+                "assignment": "http://localhost:5001/v3/domains/16966e6fdac74225afb4edf801dd9b2a/users/a5c624a8402b48c3931d4600a7fe2be9/roles/0b597039040b4c31b8a13dfe1180c9ff"
+              }
+            }
+          ]
+        }
+
+### asignacion de rol a usuario [POST]
++ Parameters
+    + service_id (required, `string`) ... Domain
+
++ Request (application/json)
+
+        {
+            "SUBSERVICE_NAME":"Electricidad",
+            "SUBSERVICE_ID":"234234234234",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfas",
+            "SERVICE_USER_NAME":"user_nameX",
+            "SERVICE_USER_ID":"asdfasdf",
+            "INHERIT":true
+        }
+
++ Response 201
+
+
+### rovocar rol a usuario [DELETE]
++ Parameters
+    + service_id (required, `string`) ... Domain
+
++ Request (application/json)
+
+        {
+            "SUBSERVICE_NAME":"Electricidad",
+            "SUBSERVICE_ID":"234234234234",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfas",
+            "SERVICE_USER_NAME":"user_nameX",
+            "SERVICE_USER_ID":"asdfasdf",
+            "INHERIT":true
+        }
+
++ Response 204
+
+
+## Users in Service [/v1.0/service/{serviceId}/user{?index}{?count}]
+### Users list [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + index (optional, `number`) ... Start index for pagination
+    + count (optional, `number`) ...  Number of results for pagination
+
++ Request (application/json)
+
+        {
+            "START_INDEX":"10",
+            "COUNT":"10",
+        }
+
++ Response 200 (application/json)
+
+        {
+            "users" : [
+                {
+                  "description": "Administrator of domain dom1",
+                  "name": "adm1",
+                  "enabled": true,
+                  "id": "8ac8aa6470c64b5083a6778fc2cd7828",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
+                },
+                {
+                  "description": "Alice",
+                  "name": "alice",
+                  "enabled": true,
+                  "id": "5e817c5e0d624ee68dfb7a72d0d31ce4",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
+                },
+                {
+                  "description": "Bob",
+                  "name": "bob",
+                  "enabled": true,
+                  "id": "5e817c5e0d624ee68dfb7a72d0d31ce4",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
+                },
+                {
+                  "description": "Alice2",
+                  "name": "alice",
+                  "enabled": true,
+                  "id": "5e817c5e0d624ee68dfb7a72d0d31ce4",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
+                }
+            ]
+        }
+
+### Create Users [POST]
+
++ Request (application/json)
+
+        {
+            "NEW_SERVICE_USER_NAME":"user_name_new",
+            "NEW_SERVICE_USER_PASSWORD":"password",
+            "NEW_SERVICE_USER_EMAIL":"email@email.com",
+            "NEW_SERVICE_USER_DESCRIPTION":"user description"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "id": 00000
+        }
+
+
+## User in Service [/v1.0/service/{serviceId}/user/{userId}]
+### detail of user[GET]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
+
++ Response 200 (application/json)
+
+        {
+          "userName": "alice",
+          "urn:scim:schemas:extension:keystone:1.0": {
+            "domain_id": "91d79dc2211d43a7985ebc27cdd146df"
+          },
+          "emails": [
+            {
+              "value": "alice@mailhost.com"
+            }
+          ],
+          "active": true,
+          "id": "a5e8c847f7264c5a9f01a22904e3ae93",
+          "schemas": [
+            "urn:scim:schemas:core:1.0",
+            "urn:scim:schemas:extension:keystone:1.0"
+          ]
+        }
+
+### update an user[PUT]
+
++ Request (application/json)
+
+        {
+             "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}],
+                                  "name": "new name user",
+                                  "description": "new description user",
+                                  "password": "new description password"
+             }
+        }
+
++ Response 200
+
+### delete an user[DELETE]
+
++ Response 204
+
+## Trust Token [/orc/service/{serviceId}/trust]
+
+### Create Trust Token [POST]
+
++ Request (application/json)
+
+        {
+            "SUBSERVICE_NAME":"Electricidad",
+            "SUBSERVICE_ID":"234234234234",
+            "SERVICE_ADMIN_USER":"adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfas",
+            "TRUSTEE_USER_NAME":"user_nameX",
+            "TRUSTEE_USER_ID":"asdfasdf",
+            "TRUSTOR_USER_NAME":"user_nameX",
+            "TRUSTOR_USER_ID":"asdfasdf",
+        }
+
++ Response 201 (application/json)
+
+        {
+            "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
+        }
