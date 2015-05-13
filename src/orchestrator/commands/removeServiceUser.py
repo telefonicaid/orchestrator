@@ -26,7 +26,7 @@ import pprint
 import logging.config
 
 from settings.common import LOGGING
-from orchestrator.core.flow.RemoveUser import RemoveUser
+from orchestrator.core.flow.removeUser import RemoveUser
 
 logging.config.dictConfig(LOGGING)
 

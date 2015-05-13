@@ -22,6 +22,7 @@ These are current command line availables:
 * [removeService.py](SCRIPTS.md#removeServicepy)
 * [removeSubService.py](SCRIPTS.md#removeSubServicepy)
 * [removeServiceRole.py](SCRIPTS.md#removeServiceRolepy)
+* [removeServiceUser.py](SCRIPTS.md#removeServiceUserpy)
 * [changeUserPassword.py](SCRIPTS.md#changeUserPasswordpy)
 * [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
 * [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
@@ -541,6 +542,30 @@ Args:
                                  password       \
 
 ```
+
+### removeServiceUser.py
+This script removes a User Service (aka keystone domain) in IoT Platform
+```
+Usage: ./removeServiceUser.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <USER_NAME>                     User name
+  <SERVICE_ADMIN_USER>            Service Admin username
+  <SERVICE_ADMIN_PASSWORD>        Service Admin password
+
+  Typical usage:
+     ./removeServiceUser.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 Carl           \
+                                 adm1           \
+                                 password       \
+```
+
 
 ### changeUserPassword.py
 This script changes service user password in IoT keystone
