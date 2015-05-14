@@ -497,6 +497,36 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    def post(self, request, service_id, user_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            #request.DATA  # json validation
+            flow = UpdateUser(self.KEYSTONE_PROTOCOL,
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
+
+            result = flow.changeUserPassword(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("USER_ID", user_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN",
+                                 HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_USER_PASSWORD", None),
+                )
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
 class UserList_RESTView(APIView, IoTConf):
     """
