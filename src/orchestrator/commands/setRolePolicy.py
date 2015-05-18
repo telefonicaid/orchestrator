@@ -49,7 +49,7 @@ def main():
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print "  <ROLE_NAME>                     Name of role"
         print "  <SERVICE_USER>                  Service username"
-        print "  <POLICY_FILE>                   Poilcy File name
+        print "  <POLICY_FILE>                   Poilcy File name"
         print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
         print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
         print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"        
