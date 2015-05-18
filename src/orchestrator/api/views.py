@@ -516,7 +516,7 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_USER_PASSWORD", None),
                 )
             if 'error' not in result:
-                return Response(result, status=status.HTTP_201_OK)
+                return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))

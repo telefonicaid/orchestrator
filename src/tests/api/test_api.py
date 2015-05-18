@@ -1398,6 +1398,48 @@ class Test_UserDelete_RestView(object):
         assert res.code == 204, (res.code, res.msg)
 
 
+class Test_UserChangePasswordByHimself_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "SERVICE_USER_PASSWORD": "password",
+            "NEW_USER_PASSWORD": "paswod234",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_post_ok(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        # Create a user to test it
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="v1.0/service/%s/user/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg)
+
+
 class Test_AssignRoleUserList_RestView(object):
 
     def __init__(self):
@@ -1737,6 +1779,9 @@ if __name__ == '__main__':
 
     test_UserModify = Test_UserDelete_RestView()
     test_UserModify.test_delete_ok()
+
+    test_UserChangePasswordByHimself = Test_UserChangePasswordByHimself_RestView()
+    test_UserChangePasswordByHimself.test_post_ok()
 
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
