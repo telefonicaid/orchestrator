@@ -17,7 +17,7 @@ These are current command line availables:
 * [printServices.py](SCRIPTS.md#printservicespy)
 * [printSubServices.py](SCRIPTS.md#printsubservicespy)
 * [printServiceUsers.py](SCRIPTS.md#printserviceuserspy)
-* [printServiceRoless.py](SCRIPTS.md#printservicerolespy)
+* [printServiceRoles.py](SCRIPTS.md#printservicerolespy)
 * [printServiceRolePolicies.py](SCRIPTS.md#printservicerolepoliciespy)
 * [removeService.py](SCRIPTS.md#removeServicepy)
 * [removeSubService.py](SCRIPTS.md#removeSubServicepy)
@@ -31,6 +31,7 @@ These are current command line availables:
 * [listAllRoleAssignments.py](SCRIPTS.md#listallroleassignmentspy)
 * [listUserRoleAssignments.py](SCRIPTS.md#listuserroleassignmentspy)
 * [listSubServiceRoleAssignments.py](SCRIPTS.md#listsubserviceroleassignmentspy)
+* [setRolePolicy.py](SCRIPTS.md#setrolepolicypy)
 * [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
 * [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
@@ -682,6 +683,38 @@ Args:
                                  adm1           \
                                  password       \
                                  SubServiceAdmin\
+                                 http           \
+                                 localhost      \
+                                 8080           \
+```
+
+### setRolePolicy.py
+This script set a XACML policy to a role in Access Control
+```
+Usage: ./setRolePolicy.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Name of role
+  <SERVICE_USER>                  Service username
+  <POLICY_FILE>                   Policy XACML file name
+  <KEYPASS_PROTOCOL>              HTTP or HTTPS
+  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP
+  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT
+
+  Typical usage:
+     ./setRolePolicy.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 adm1           \
+                                 password       \
+                                 ServiceCustomer\
+                                 mypolicy.xml   \
                                  http           \
                                  localhost      \
                                  8080           \

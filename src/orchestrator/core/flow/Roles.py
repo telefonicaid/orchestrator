@@ -1024,7 +1024,7 @@ class Roles(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
             "ROLE_NAME": "%s" % ROLE_NAME,
-            "ROLE_ID": "%s" % ROLE_ID
+            "ROLE_ID": "%s" % ROLE_ID,
             "POLICY_FILE_NAME": "%s" % POLICY_FILE_NAME
         }
         logger.debug("set policy role invoked with: %s" % json.dumps(data_log,
