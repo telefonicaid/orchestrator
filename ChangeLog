@@ -1,16 +1,24 @@
 CHANGES
 =======
 
+0.4.1
+
+feature/OIOTP-38_change_user_password_by_himself
+feature/OIOTP-63_set_acc_policy_for_role
+OIOTP-57_release_as_open_source
+task/OIOTP-52_trust_token_withoutservice
+task/OIOTP-64_naming_convention_restriction
+bug/return_error_if_non_found_entity
+
+
 0.3.0
 
 feature/OIOTP-30_trust_token
 feature/OIOTP-25_pagination_api
 feature/OIOTP-51_subserviceadmin_to_admin_after_create
 task/OIOTP-15_script_commands
-task/OIOTP-52_trust_token_withoutservice
 bug/OIOTP-53_modify_user_name
 bug/OIOTP-55_bug_create_new_role
-
 
 
 0.2.0
