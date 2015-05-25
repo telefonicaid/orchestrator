@@ -178,6 +178,9 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-perseo-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-iotagent-admin2.xml')
 
         except Exception, ex:
             logger.error(ex)
