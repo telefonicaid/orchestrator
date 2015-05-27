@@ -32,7 +32,8 @@ from settings.common import LOGGING
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.api import schemas
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: pass
 
 
 def main():
@@ -69,7 +70,7 @@ def main():
         print "                                 admin_domain   \\"
         print "                                 cloud_admin    \\"
         print "                                 password       \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 smartvalencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"

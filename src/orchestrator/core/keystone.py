@@ -57,7 +57,8 @@ class IdMKeystoneOperations(IdMOperations):
     def getToken(self,
                  DOMAIN_NAME,
                  DOMAIN_ADMIN_USER,
-                 DOMAIN_ADMIN_PASSWORD):
+                 DOMAIN_ADMIN_PASSWORD,
+                 SCOPED=True):
 
         auth_data = {
             "auth": {
@@ -82,15 +83,15 @@ class IdMKeystoneOperations(IdMOperations):
                         "name": DOMAIN_NAME
                     }
                 })
-
-            scope_domain = {
-                "scope": {
-                    "domain": {
-                        "name": DOMAIN_NAME
+            if SCOPED:
+                scope_domain = {
+                    "scope": {
+                        "domain": {
+                            "name": DOMAIN_NAME
+                        }
                     }
                 }
-            }
-            auth_data['auth'].update(scope_domain)
+                auth_data['auth'].update(scope_domain)
 
         res = self.IdMRestOperations.rest_request(
             url='/v3/auth/tokens',
@@ -102,7 +103,8 @@ class IdMKeystoneOperations(IdMOperations):
     def getToken2(self,
                   DOMAIN_ID,
                   DOMAIN_ADMIN_USER,
-                  DOMAIN_ADMIN_PASSWORD):
+                  DOMAIN_ADMIN_PASSWORD,
+                  SCOPED=True):
         auth_data = {
             "auth": {
                 "identity": {
@@ -126,15 +128,15 @@ class IdMKeystoneOperations(IdMOperations):
                         "id": DOMAIN_ID
                     }
                 })
-
-            scope_domain = {
-                "scope": {
-                    "domain": {
-                        "id": DOMAIN_ID
+            if SCOPED:
+                scope_domain = {
+                    "scope": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        }
                     }
                 }
-            }
-            auth_data['auth'].update(scope_domain)
+                auth_data['auth'].update(scope_domain)
 
         res = self.IdMRestOperations.rest_request(
             url='/v3/auth/tokens',
@@ -283,7 +285,7 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         return json_body_response['project']['id']
 
-    def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME):
+    def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME, SCOPED=True):
 
         auth_data = {
             "auth": {
@@ -295,13 +297,18 @@ class IdMKeystoneOperations(IdMOperations):
                             "id": SERVICE_ADMIN_TOKEN
                     }
                 },
+            }
+        }
+        if SCOPED:
+            scope = {
                 "scope": {
                     "domain": {
                         "name": DOMAIN_NAME
                     }
                 }
             }
-        }
+            auth_data['auth'].update(scope)
+
         res = self.IdMRestOperations.rest_request(
             url='/v3/auth/tokens',
             method='POST',
@@ -422,10 +429,38 @@ class IdMKeystoneOperations(IdMOperations):
                 return role['id']
         assert False, "Role name not found"
 
+    def getUserId(self,
+                  SERVICE_USER_TOKEN,
+                  USER_NAME):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                        ],
+                    "token": {
+                        "id": SERVICE_USER_TOKEN
+                    }
+                }
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return json_body_response['token']['user']['id']
+
     def getDomainUserId(self,
                         SERVICE_ADMIN_TOKEN,
                         DOMAIN_ID,
                         USER_NAME):
+
         res = self.IdMRestOperations.rest_request(
             url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
             method='GET',
@@ -655,6 +690,24 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         return {"projects": json_body_response['projects']}
+
+    def changeUserPassword(self,
+                           SERVICE_USER_TOKEN,
+                           USER_ID,
+                           USER_PASSWORD,
+                           NEW_USER_PASSWORD):
+
+        body_data = {
+            'user': {
+                'original_password': USER_PASSWORD,
+                'password': NEW_USER_PASSWORD
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/users/%s/password' % USER_ID,
+            method='POST', data=body_data,
+            auth_token=SERVICE_USER_TOKEN)
+        assert res.code == 204, (res.code, res.msg)
 
     def getProject(self,
                    SERVICE_ADMIN_TOKEN,

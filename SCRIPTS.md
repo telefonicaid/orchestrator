@@ -17,11 +17,12 @@ These are current command line availables:
 * [printServices.py](SCRIPTS.md#printservicespy)
 * [printSubServices.py](SCRIPTS.md#printsubservicespy)
 * [printServiceUsers.py](SCRIPTS.md#printserviceuserspy)
-* [printServiceRoless.py](SCRIPTS.md#printservicerolespy)
+* [printServiceRoles.py](SCRIPTS.md#printservicerolespy)
 * [printServiceRolePolicies.py](SCRIPTS.md#printservicerolepoliciespy)
 * [removeService.py](SCRIPTS.md#removeServicepy)
 * [removeSubService.py](SCRIPTS.md#removeSubServicepy)
 * [removeServiceRole.py](SCRIPTS.md#removeServiceRolepy)
+* [removeServiceUser.py](SCRIPTS.md#removeServiceUserpy)
 * [changeUserPassword.py](SCRIPTS.md#changeUserPasswordpy)
 * [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
 * [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
@@ -30,6 +31,7 @@ These are current command line availables:
 * [listAllRoleAssignments.py](SCRIPTS.md#listallroleassignmentspy)
 * [listUserRoleAssignments.py](SCRIPTS.md#listuserroleassignmentspy)
 * [listSubServiceRoleAssignments.py](SCRIPTS.md#listsubserviceroleassignmentspy)
+* [setRolePolicy.py](SCRIPTS.md#setrolepolicypy)
 * [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
 * [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
@@ -65,8 +67,8 @@ Args:
                                  admin_domain   \
                                  cloud_admin    \
                                  password       \
-                                 SmartValencia  \
-                                 smartvalencia  \
+                                 smartcity      \
+                                 smartcity      \
                                  adm1           \
                                  password       \
                                  http           \
@@ -91,7 +93,7 @@ Args:
      ./createNewServiceRole.py http             \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -115,7 +117,7 @@ Args:
      ./createNewServiceUser.py http             \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -141,7 +143,7 @@ Args:
      ./createNewSubService.py http              \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -166,7 +168,7 @@ Args:
      ./assignRoleServiceUser.py http            \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -192,7 +194,7 @@ Args:
      ./assignRoleSubServiceUser.py http         \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -218,7 +220,7 @@ Args:
      ./assignInheritRoleServiceUser.py http     \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -241,7 +243,7 @@ Args:
      ./printServices.py http                    \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -262,7 +264,7 @@ Args:
      ./printSubServices.py http                 \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -285,7 +287,7 @@ Args:
      ./unassignInheritRoleServiceUser.py http   \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -310,7 +312,7 @@ Args:
      ./unassignRoleServiceUser.py http          \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -336,7 +338,7 @@ Args:
      ./unassignRoleSubServiceUser.py http       \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -365,7 +367,7 @@ Args:
      ./src/orchestrator/commands/createTrustToken.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -390,7 +392,7 @@ Args:
      ./listRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -413,7 +415,7 @@ Args:
      ./listRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  SubServiceAdmin\
@@ -438,7 +440,7 @@ Args:
      ./listUserRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Alice          \
@@ -462,7 +464,7 @@ Args:
      ./listSubServiceRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -487,7 +489,7 @@ Args:
      ./removeService.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValenciaB \
+                                 smartcityB \
                                  cloud_admin    \
                                  password       \
                                  http           \
@@ -512,7 +514,7 @@ Args:
      ./removeSubService.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -535,12 +537,36 @@ Args:
      ./removeServiceRole.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  SubServiceCustomer\
                                  adm1           \
                                  password       \
 
 ```
+
+### removeServiceUser.py
+This script removes a User Service (aka keystone domain) in IoT Platform
+```
+Usage: ./removeServiceUser.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <USER_NAME>                     User name
+  <SERVICE_ADMIN_USER>            Service Admin username
+  <SERVICE_ADMIN_PASSWORD>        Service Admin password
+
+  Typical usage:
+     ./removeServiceUser.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 Carl           \
+                                 adm1           \
+                                 password       \
+```
+
 
 ### changeUserPassword.py
 This script changes service user password in IoT keystone
@@ -560,7 +586,7 @@ Args:
      ./changeUserPassword.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  bob            \
@@ -583,7 +609,7 @@ Args:
      ./printServiceRoles.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -604,7 +630,7 @@ Args:
      ./printServiceUsers.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -627,7 +653,7 @@ Args:
      ./printServiceUserTrusts.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -653,10 +679,42 @@ Args:
      ./printServiceRolePolicies.py http         \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  SubServiceAdmin\
+                                 http           \
+                                 localhost      \
+                                 8080           \
+```
+
+### setRolePolicy.py
+This script set a XACML policy to a role in Access Control
+```
+Usage: ./setRolePolicy.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Name of role
+  <SERVICE_USER>                  Service username
+  <POLICY_FILE>                   Policy XACML file name
+  <KEYPASS_PROTOCOL>              HTTP or HTTPS
+  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP
+  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT
+
+  Typical usage:
+     ./setRolePolicy.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 adm1           \
+                                 password       \
+                                 ServiceCustomer\
+                                 mypolicy.xml   \
                                  http           \
                                  localhost      \
                                  8080           \

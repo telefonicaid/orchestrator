@@ -28,7 +28,8 @@ import logging.config
 from settings.common import LOGGING
 from orchestrator.core.flow.Domains import Domains
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: pass
 
 
 def main():
@@ -55,7 +56,7 @@ def main():
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 smart_valencia \\"        
         print "                                 adm1           \\"
         print "                                 password       \\"

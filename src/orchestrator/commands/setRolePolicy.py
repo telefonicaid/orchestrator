@@ -33,11 +33,11 @@ except AttributeError: pass
 
 def main():
 
-    print "This script revokes a role to a service user IoT keystone"
+    print "This script set a XACML policy to a role in Access Control"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 9
+    NUM_ARGS_EXPECTED = 11
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -46,22 +46,27 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SUBSERVICE_NAME>               SubService name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print "  <ROLE_NAME>                     Name of role"
         print "  <SERVICE_USER>                  Service username"
+        print "  <POLICY_FILE>                   Policy XACML file name"
+        print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
+        print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
+        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"        
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 smartcity      \\"
-        print "                                 Electricidad   \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
         print "                                 ServiceCustomer\\"
-        print "                                 Carl           \\"
+        print "                                 mypolicy.xml   \\"        
+        print "                                 http           \\"
+        print "                                 localhost      \\"
+        print "                                 8080           \\"        
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -71,27 +76,30 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SUBSERVICE_NAME = sys.argv[5]
-    SERVICE_ADMIN_USER = sys.argv[6]
-    SERVICE_ADMIN_PASSWORD = sys.argv[7]
-    ROLE_NAME = sys.argv[8]
-    SERVICE_USER = sys.argv[9]
+    SERVICE_ADMIN_USER = sys.argv[5]
+    SERVICE_ADMIN_PASSWORD = sys.argv[6]
+    ROLE_NAME = sys.argv[7]
+    POLICY_FILE_NAME = sys.argv[8]
+    KEYPASS_PROTOCOL = sys.argv[9]
+    KEYPASS_HOST = sys.argv[10]
+    KEYPASS_PORT = sys.argv[11]    
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
-                 KEYSTONE_PORT)
+                 KEYSTONE_PORT,
+                 KEYPASS_PROTOCOL,
+                 KEYPASS_HOST,
+                 KEYPASS_PORT)                 
 
-    flow.revokeRoleSubServiceUser(
+    flow.setRolePolicy(
         SERVICE_NAME,
-        SUBSERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,
         SERVICE_ADMIN_PASSWORD,
         None,
         ROLE_NAME,
         None,
-        SERVICE_USER,
-        None)
+        POLICY_FILE_NAME)
 
 if __name__ == '__main__':
 

@@ -22,10 +22,13 @@
 # Author: IoT team
 #
 import sys
+import pprint
+from jsonschema import validate
 import logging.config
 
 from settings.common import LOGGING
-from orchestrator.core.flow.Roles import Roles
+from orchestrator.core.flow.updateUser import UpdateUser
+from orchestrator.api import schemas
 
 try: logging.config.dictConfig(LOGGING)
 except AttributeError: pass
@@ -33,11 +36,11 @@ except AttributeError: pass
 
 def main():
 
-    print "This script revokes a role to a service user IoT keystone"
+    print "This scripts changes service user password in IoT keystone"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 9
+    NUM_ARGS_EXPECTED = 7
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -46,22 +49,18 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SUBSERVICE_NAME>               SubService name"
-        print "  <SERVICE_ADMIN_USER>            Service admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <ROLE_NAME>                     Name of role"
-        print "  <SERVICE_USER>                  Service username"
+        print "  <SERVICE_USER_NAME>             Service username"
+        print "  <SERVICE_USER_PASSWORD>         Service password"
+        print "  <NEW_USER_PASSWORD>             New User password"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 smartcity      \\"
-        print "                                 Electricidad   \\"
-        print "                                 adm1           \\"
+        print "                                 bob            \\"
         print "                                 password       \\"
-        print "                                 ServiceCustomer\\"
-        print "                                 Carl           \\"
+        print "                                 new_password   \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -71,27 +70,35 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SUBSERVICE_NAME = sys.argv[5]
-    SERVICE_ADMIN_USER = sys.argv[6]
-    SERVICE_ADMIN_PASSWORD = sys.argv[7]
-    ROLE_NAME = sys.argv[8]
-    SERVICE_USER = sys.argv[9]
+    SERVICE_USER_NAME = sys.argv[5]
+    SERVICE_USER_PASSWORD = sys.argv[6]
+    NEW_USER_PASSWORD = sys.argv[7]
 
-    flow = Roles(KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT)
+    # validate(
+    #     {
+    #         "SERVICE_NAME": SERVICE_NAME,
+    #         "SERVICE_USER_NAME": SERVICE_USER_NAME,
+    #         "SERVICE_USER_PASSWORD": SERVICE_USER_PASSWORD,
+    #         "NEW_USER_PASSWORD": NEW_USER_PASSWORD,
+    #     },
+    #     schemas.json["UserList"])
 
-    flow.revokeRoleSubServiceUser(
+    flow = UpdateUser(KEYSTONE_PROTOCOL,
+                      KEYSTONE_HOST,
+                      KEYSTONE_PORT)
+
+    res = flow.changeUserPassword(
         SERVICE_NAME,
-        SUBSERVICE_NAME,
         None,
-        SERVICE_ADMIN_USER,
-        SERVICE_ADMIN_PASSWORD,
         None,
-        ROLE_NAME,
+        SERVICE_USER_NAME,
+        SERVICE_USER_PASSWORD,
         None,
-        SERVICE_USER,
-        None)
+        NEW_USER_PASSWORD)
+
+    pprint.pprint(res)
+    if 'error' in res:
+        sys.exit(res['code'])
 
 if __name__ == '__main__':
 
