@@ -91,7 +91,7 @@ def main():
                  KEYPASS_HOST,
                  KEYPASS_PORT)                 
 
-    flow.setRolePolicy(
+    flow.setPolicyRole(
         SERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,
