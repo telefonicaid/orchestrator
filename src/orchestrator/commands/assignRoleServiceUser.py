@@ -27,7 +27,8 @@ import logging.config
 from settings.common import LOGGING
 from orchestrator.core.flow.Roles import Roles
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: pass
 
 
 def main():
