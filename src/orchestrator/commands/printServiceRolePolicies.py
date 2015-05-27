@@ -28,7 +28,8 @@ import logging.config
 from settings.common import LOGGING
 from orchestrator.core.flow.Domains import Domains
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: pass
 
 
 def main():

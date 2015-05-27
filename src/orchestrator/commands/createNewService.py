@@ -32,7 +32,8 @@ from settings.common import LOGGING
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.api import schemas
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: pass
 
 
 def main():
