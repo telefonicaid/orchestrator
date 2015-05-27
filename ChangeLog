@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+0.4.3
+bug/python26_script_commands_logging_conf
+
 0.4.2
 
 feature/OIOTP-63_iota_policies
