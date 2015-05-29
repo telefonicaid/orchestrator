@@ -1049,9 +1049,28 @@ class Roles(FlowBase):
             # 2. Get Role ID
             #
             if not ROLE_ID and ROLE_NAME:
-                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                                   SERVICE_ID,
-                                                   ROLE_NAME)
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['roles_assigments']
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
                 logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
