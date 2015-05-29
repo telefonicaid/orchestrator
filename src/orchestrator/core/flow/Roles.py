@@ -1064,7 +1064,7 @@ class Roles(FlowBase):
                                                    None,
                                                    SERVICE_ADMIN_TOKEN,
                                                    True)
-                    for role in roles['roles_assigments']
+                    for role in roles['roles_assigments']:
                         if role['role']['name'] == 'admin':
                             ROLE_ID=role['role']['id']
                 else:
