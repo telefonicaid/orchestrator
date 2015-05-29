@@ -222,3 +222,7 @@ REST_FRAMEWORK = {
 KEYSTONE = {}
 KEYPASS = {}
 
+PEP = {
+    "user": "pep",
+    "password": "pep"
+}
