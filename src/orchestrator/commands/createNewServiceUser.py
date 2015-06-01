@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 #
@@ -24,14 +26,18 @@
 import sys
 import pprint
 import logging.config
-
 from jsonschema import validate
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
+
 from settings.common import LOGGING
 from orchestrator.core.flow.createNewServiceUser import CreateNewServiceUser
 from orchestrator.api import schemas
 
 try: logging.config.dictConfig(LOGGING)
-except AttributeError: pass
+except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 
 def main():
