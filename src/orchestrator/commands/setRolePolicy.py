@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 #
@@ -23,12 +25,16 @@
 #
 import sys
 import logging.config
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
 from orchestrator.core.flow.Roles import Roles
 
 try: logging.config.dictConfig(LOGGING)
-except AttributeError: pass
+except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 
 def main():
@@ -91,7 +97,7 @@ def main():
                  KEYPASS_HOST,
                  KEYPASS_PORT)                 
 
-    flow.setRolePolicy(
+    flow.setPolicyRole(
         SERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,
