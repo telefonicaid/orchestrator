@@ -1064,9 +1064,10 @@ class Roles(FlowBase):
                                                    None,
                                                    SERVICE_ADMIN_TOKEN,
                                                    True)
-                    for role in roles['roles_assigments']:
+                    for role in roles['role_assignments']:
                         if role['role']['name'] == 'admin':
                             ROLE_ID=role['role']['id']
+                            break
                 else:
                     ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                        SERVICE_ID,
