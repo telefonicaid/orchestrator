@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+0.4.5
+
+bug/get_role_assignments_in_set_policy_for_admin
+task/OIOTP-30_trust_token_pep_config
+bug/bad_effective_arg_value_in_scripts
+
+
 0.4.4
 
 bug/bug_update_policy_role_script
