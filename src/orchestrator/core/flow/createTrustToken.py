@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from settings.common import PEP
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -126,7 +127,15 @@ class CreateTrustToken(FlowBase):
             #
             if not TRUSTEE_USER_ID and TRUSTEE_USER_NAME:
                 # We are asuming that trustee belong to SERVICE!!
-                TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                if TRUSTEE_USER_NAME == "iotagent":
+                    PEP_TOKEN = self.idm.getToken('admin_domain',
+                                                  PEP['user'],
+                                                  PEP['password'],
+                                                  False)
+                    TRUSTEE_USER_ID = self.idm.getUserId(PEP_TOKEN,
+                                                         TRUSTEE_USER_NAME )
+                else:
+                    TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                            SERVICE_ID,
                                                            TRUSTEE_USER_NAME)
                 logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
@@ -224,8 +233,16 @@ class CreateTrustToken(FlowBase):
             #
             if not TRUSTEE_USER_ID:
                 # We are asuming that trustee belong to SERVICE!!
-                TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                                           SERVICE_ID,
+                if TRUSTEE_USER_NAME == "iotagent":
+                    PEP_TOKEN = self.idm.getToken('admin_domain',
+                                                  PEP['user'],
+                                                  PEP['password'],
+                                                  False)
+                    TRUSTEE_USER_ID = self.idm.getUserId(PEP_TOKEN,
+                                                         'iotagent')
+                else:
+                    TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                               SERVICE_ID,
                                                            TRUSTEE_USER_NAME)
             logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
                                                         TRUSTEE_USER_ID))
