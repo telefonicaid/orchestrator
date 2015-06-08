@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.core.flow.Roles import Roles
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -334,18 +335,22 @@ class Domains(FlowBase):
                 if ROLE_NAME == "Admin":
                     SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
                                                           SERVICE_ADMIN_USER)
-                    roles = self.roles_assignments(SERVICE_ID,
-                                                   None,
-                                                   None,
-                                                   None,
-                                                   None,
-                                                   None,
-                                                   SERVICE_ADMIN_ID,
-                                                   None,
-                                                   None,
-                                                   None,
-                                                   SERVICE_ADMIN_TOKEN,
-                                                   True)
+                    # Get KEYSTONE CONF from base idm class
+                    roles_flow = Roles(self.idm.KEYSTONE_PROTOCOL,
+                                       self.idm.KEYSTONE_HOST,
+                                       self.idm.KEYSTONE_PORT)
+                    roles = roles_flow.roles_assignments(SERVICE_ID,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         SERVICE_ADMIN_ID,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         SERVICE_ADMIN_TOKEN,
+                                                         True)
                     for role in roles['role_assignments']:
                         if role['role']['name'] == 'admin':
                             ROLE_ID=role['role']['id']
