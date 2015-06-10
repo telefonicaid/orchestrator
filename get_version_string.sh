@@ -38,7 +38,8 @@ get_version_string()
         stable)
            # If we are on stable branch get last tag as the version, but transform to x.x.x-x-SHA1
            version="${describe_tags%-*-*}"
-           echo "${version%.*}-${version#*.*.*.}-g$(git log --pretty=format:'%h' -1)"
+           #echo "${version%.*}-${version#*.*.*.}-g$(git log --pretty=format:'%h' -1)"
+           echo "${version%/*}-${version%.*.*/*}"
         ;;
         develop)
            ## if we are in develop use the total count of commits
