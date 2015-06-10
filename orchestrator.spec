@@ -66,6 +66,7 @@ echo "[INFO] Creating %{_project_user} user"
 grep ^%{_project_user}: /etc/passwd
 RET_VAL=$?
 if [ "$RET_VAL" != "0" ]; then
+      chown -R %{_project_user}:%{_project_user} %{_install_dir}
       /usr/sbin/useradd -s "/bin/bash" -d %{_install_dir} %{_project_user}
       RET_VAL=$?
       if [ "$RET_VAL" != "0" ]; then
