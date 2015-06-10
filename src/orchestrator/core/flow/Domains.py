@@ -172,16 +172,16 @@ class Domains(FlowBase):
         }
         logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
                                                                   indent=3))
-
         try:
             if not ADMIN_TOKEN:
                 # UpdateDomain can be only done by cloud_admin
                 ADMIN_TOKEN = self.idm.getToken("admin_domain",
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
-            if not DOMAIN_ID:
+            if not DOMAIN_ID and DOMAIN_NAME:
                 DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-                                                 DOMAIN_NAME)
+                                                 DOMAIN_NAME,
+                                                 False)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
