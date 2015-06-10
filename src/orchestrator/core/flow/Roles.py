@@ -341,10 +341,31 @@ class Roles(FlowBase):
             #
             # 2.  Get role
             #
-            if not ROLE_ID:
-                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                                   SERVICE_ID,
-                                                   ROLE_NAME)
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    # Get KEYSTONE CONF from base idm class
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
