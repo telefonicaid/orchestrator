@@ -295,6 +295,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None, subservice_id=None):
+        self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # request.DATA # json validation
@@ -330,6 +331,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id=None, subservice_id=None):
+        self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # request.DATA # json validation
@@ -337,7 +339,6 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT)
             if service_id:
-                if subservice_id:
                     result = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_NAME", None),
