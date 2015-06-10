@@ -494,7 +494,7 @@ class Test_NewServiceUser_RestView(object):
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "password",
             "NEW_SERVICE_USER_EMAIL": "pepe@gmail.com",
-            "NEW_SERVICE_USER_DESSCRIPTION": "Pepito",
+            "NEW_SERVICE_USER_DESCRIPTION": "Pepito",
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME": "smartcity",
@@ -510,7 +510,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "password",
-            "NEW_SERVICE_USER_PASSWORD": "email@email.com",
+            "NEW_SERVICE_USER_EMAIL": "email@email.com",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {

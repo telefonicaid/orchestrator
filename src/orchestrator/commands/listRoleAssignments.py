@@ -85,7 +85,7 @@ def main():
     # SUBSERVICE_NAME=sys.argv[7]
     ROLE_NAME = sys.argv[7]
     # USER_NAME=sys.argv[9]
-    EFFECTIVE = sys.argv[8]
+    EFFECTIVE = sys.argv[8] in ["True", "true", "TRUE"]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
