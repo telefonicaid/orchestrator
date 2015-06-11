@@ -28,6 +28,7 @@ IoT Platform Orchestrator
 %define _service_name orchestrator
 %define _install_dir %{python_lib}/iotp-orchestrator
 %define _orchestrator_log_dir /var/log/orchestrator
+%define _orchestrator_link_dir /opt/orchestrator
 
 # RPM Building folder
 %define _build_root_project %{buildroot}%{_install_dir}
@@ -91,6 +92,10 @@ echo "[INFO] Configuring application"
     echo "[INFO] Configuring application service"
     cd /etc/init.d
     chkconfig --add %{_service_name}
+
+    echo "[INFO] Link to /opt"
+    ln -s %{_install_dir} %{_orchestrator_link_dir}
+    ln -s %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
 echo "Done"
 
 
