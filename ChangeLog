@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.4.7
+
+bug/rpm_install_dir_permissions
+task/deploy_vagrant
+
 0.4.6
 
 bug/edit_service
