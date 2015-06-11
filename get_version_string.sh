@@ -36,9 +36,9 @@ get_version_string()
     [[ "${describe_tags}" == "${describe_all#*/}" ]] && version="${describe_tags%/*}" || version="${version#*/}"
     case $(get_branch_type) in
         stable)
-           # If we are on stable branch get last tag as the version, but transform to x.x.x-x-SHA1
-           version="${describe_tags%-*-*}"
-           echo "${version%.*}-${version#*.*.*.}-g$(git log --pretty=format:'%h' -1)"
+            # If we are on stable branch get last tag as the version, but transform to x.x.x-x-SHA1
+           version=$(git describe --tags --long --match */KO)
+           echo "${version%/*}-${version#*KO-}"
         ;;
         develop)
            ## if we are in develop use the total count of commits
