@@ -11,7 +11,7 @@
         <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
           <AttributeValue
               DataType="http://www.w3.org/2001/XMLSchema#string"
-              >fiware:orion:.*</AttributeValue>
+              >fiware:sth:.*</AttributeValue>
           <AttributeDesignator
               AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
               DataType="http://www.w3.org/2001/XMLSchema#string"
