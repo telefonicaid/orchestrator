@@ -22,7 +22,7 @@
     </AnyOf>
   </Target>
 
-  <Rule RuleId="OrionAdminRule1" Effect="Permit">
+  <Rule RuleId="STHAdminRule1" Effect="Permit">
     <Condition>
       <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-at-least-one-member-of">
         <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
