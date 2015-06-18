@@ -607,7 +607,24 @@ class Test_NewServiceTrust_RestView(object):
             "SERVICE_ADMIN_USER": "bob",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
-
+        self.payload_data_ok5 = {
+            "SERVICE_NAME": "smartvalencia",
+            "SUBSERVICE_NAME": "Basuras",
+            "ROLE_NAME": "SubServiceAdmin",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME":"iotagent",
+            "TRUSTOR_USER_NAME":"adm1"
+        }
+        self.payload_data_ok6 = {
+            "SERVICE_NAME": "smartvalencia",
+            "SUBSERVICE_NAME": "Basuras",
+            "ROLE_NAME": "SubServiceCustomer",
+            "SERVICE_ADMIN_USER": "Carl",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME":"iotagent",
+            "TRUSTOR_USER_NAME":"Carl"
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -650,6 +667,20 @@ class Test_NewServiceTrust_RestView(object):
         trust_id = json_body_response['id']
         self.payload_data_ok4["ID_TRUST"] = trust_id
         token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok4)
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok5)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok5)
+
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+        self.payload_data_ok2["ID_TRUST"] = trust_id
 
 
 class Test_ServiceLists_RestView(object):
@@ -1808,5 +1839,6 @@ if __name__ == '__main__':
 
     test_NewServiceTrust = Test_NewServiceTrust_RestView()
     test_NewServiceTrust.test_post_ok()
+    test_NewServiceTrust.test_post_ok3()
     # It will work just for keystone juno or upper
     #test_NewServiceTrust.test_post_ok2()
