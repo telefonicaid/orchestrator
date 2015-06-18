@@ -154,6 +154,8 @@ class CreateNewService(FlowBase):
             #
             # 5. Provision default platform roles AccessControl policies
             #
+
+            # SubServiceAdmin Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-orion-admin.xml')
@@ -167,6 +169,10 @@ class CreateNewService(FlowBase):
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-sth-admin.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-keypass-admin.xml')
+            # SubServiceCustomer Role
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-orion-customer.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
@@ -179,6 +185,10 @@ class CreateNewService(FlowBase):
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-sth-customer.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-keypass-customer.xml')
+            # Admin Role
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-orion-admin2.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
@@ -190,6 +200,9 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-sth-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-keypass-admin2.xml')
 
         except Exception, ex:
             logger.error(ex)
