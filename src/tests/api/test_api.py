@@ -117,33 +117,48 @@ class TestRestOperations(RestOperations):
         return res
 
     def getTrustScopedToken(self, data):
-        auth_data = {
-            "auth": {
-                "identity": {
-                    "methods": [
-                        "password"
-                    ],
-                    "password": {
-                        "user": {
-                            "name": data["SERVICE_ADMIN_USER"],
-                            "password": data["SERVICE_ADMIN_PASSWORD"]
+        auth_data = { }
+        if "SERVICE_ADMIN_USER" in data:
+            auth_data = {
+                "auth": {
+                    "identity": {
+                        "methods": [
+                            "password"
+                            ],
+                            "password": {
+                                "user": {
+                                    "name": data["SERVICE_ADMIN_USER"],
+                                    "password": data["SERVICE_ADMIN_PASSWORD"]
+                                    }
+                                }
                         }
                     }
                 }
-            }
-        }
+        if "TOKEN" in data:
+            auth_data = {
+                "auth": {
+                    "identity": {
+                        "methods": [
+                            "token"
+                            ],
+                            "token": {
+                                "id": "TOKEN_ID"
+                                }
+                        }
+                        }
+                        }
         if "SERVICE_NAME" in data:
             auth_data['auth']['identity']['password']['user'].update(
                 {"domain": {"name": data["SERVICE_NAME"]}})
 
-            scope_domain = {
+        scope_domain = {
                 "scope": {
                     "OS-TRUST:trust": {
                         "id": data["ID_TRUST"]
                     },
                 }
-            }
-            auth_data['auth'].update(scope_domain)
+        }
+        auth_data['auth'].update(scope_domain)
         res = self.rest_request(
             url=self.keystone_endpoint_url + '/v3/auth/tokens',
             relative_url=False,
@@ -616,6 +631,11 @@ class Test_NewServiceTrust_RestView(object):
             "TRUSTEE_USER_NAME":"iotagent",
             "TRUSTOR_USER_NAME":"adm1"
         }
+        self.payload_data_ok5b = {
+            "SERVICE_ADMIN_USER":"iotagent",
+            "SERVICE_ADMIN_PASSWORD": "iotagent",
+            "SERVICE_NAME": "default"
+        }
         self.payload_data_ok6 = {
             "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Basuras",
@@ -685,6 +705,8 @@ class Test_NewServiceTrust_RestView(object):
         data_response = res.read()
         json_body_response = json.loads(data_response)
         trust_id = json_body_response['id']
+        self.payload_data_ok5b["ID_TRUST"] = trust_id
+        #token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok5b)
 
     def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok6)
