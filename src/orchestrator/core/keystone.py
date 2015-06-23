@@ -429,6 +429,42 @@ class IdMKeystoneOperations(IdMOperations):
                 return role['id']
         assert False, "Role name not found"
 
+    def getUserRoleId(self, SERVICE_ADMIN_TOKEN, DOMAIN_ID, PROJECT_ID, ROLE_NAME):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                        ],
+                    "token": {
+                        "id": SERVICE_ADMIN_TOKEN
+                    }
+                },
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        },
+                        "id": PROJECT_ID
+                    }
+                }
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        if 'roles' in json_body_response['token']:
+            for role in json_body_response['token']['roles']:
+                if DOMAIN_ID + '#' + ROLE_NAME == role['name']:
+                    return role['id']
+        assert False, "Role not found"
+
     def getUserId(self,
                   SERVICE_USER_TOKEN,
                   USER_NAME):
@@ -454,7 +490,11 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return json_body_response['token']['user']['id']
+        if json_body_response['token']['user']['name'] == USER_NAME:
+            return json_body_response['token']['user']['id']
+        else:
+            assert False, "user %s not Found" % USER_NAME
+
 
     def getDomainUserId(self,
                         SERVICE_ADMIN_TOKEN,
