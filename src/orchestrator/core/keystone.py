@@ -490,7 +490,11 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return json_body_response['token']['user']['id']
+        if json_body_response['token']['user']['name'] == USER_NAME:
+            return json_body_response['token']['user']['id']
+        else:
+            assert False, "user %s not Found" % USER_NAME
+
 
     def getDomainUserId(self,
                         SERVICE_ADMIN_TOKEN,

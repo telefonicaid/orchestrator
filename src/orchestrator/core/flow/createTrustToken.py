@@ -25,7 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-from settings.common import PEP
+from settings.common import IOTAGENT
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -139,12 +139,12 @@ class CreateTrustToken(FlowBase):
             if not TRUSTEE_USER_ID and TRUSTEE_USER_NAME:
                 # We are asuming that trustee belong to SERVICE!!
                 if TRUSTEE_USER_NAME == "iotagent":
-                    PEP_TOKEN = self.idm.getToken('admin_domain',
-                                                  PEP['user'],
-                                                  PEP['password'],
+                    IOTAGENT_TOKEN = self.idm.getToken('default',
+                                                  IOTAGENT['user'],
+                                                  IOTAGENT['password'],
                                                   False)
-                    TRUSTEE_USER_ID = self.idm.getUserId(PEP_TOKEN,
-                                                         TRUSTEE_USER_NAME )
+                    TRUSTEE_USER_ID = self.idm.getUserId(IOTAGENT_TOKEN,
+                                                        TRUSTEE_USER_NAME)
                 else:
                     TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                                SERVICE_ID,
