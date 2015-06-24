@@ -712,12 +712,8 @@ class Test_NewServiceTrust_RestView(object):
         token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok5b)
         #self.payload_data_ok5b["ID_TOKEN"] = token_res.headers.get('X-Subject-Token')
         self.payload_data_ok5b["ID_TRUST"] = trust_id
-        #self.payload_data_ok5b.pop("SERVICE_NAME")
-        import ipdb
-        ipdb.set_trace()
-        #self.payload_data_ok5b["SERVICE_NAME"] = self.payload_data_ok5['SERVICE_NAME']
         token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok5b)
-        None
+
 
     def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok6)
