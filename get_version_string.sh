@@ -42,8 +42,8 @@ get_version_string()
         ;;
         develop)
            ## if we are in develop use the total count of commits
-           version=$(git describe --tags --long --match */KO)
-           echo "${version%/*}-${version#*KO-}"
+           version=$(git describe --tag $(git tag | tail -1) --long --match */CC)
+           echo "${version%/*}-${version#*CC-}"
         ;;
         release)
            version=$(get_branch)
