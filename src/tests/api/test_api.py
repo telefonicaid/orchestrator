@@ -710,10 +710,29 @@ class Test_NewServiceTrust_RestView(object):
         json_body_response = json.loads(data_response)
         trust_id = json_body_response['id']
         token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok5b)
-        #self.payload_data_ok5b["ID_TOKEN"] = token_res.headers.get('X-Subject-Token')
+        auth_token = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s" % (service_id),
+                                            json_data=True,
+                                            auth_token=auth_token,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        #print "IOTAGENT token: " + auth_token
+
         self.payload_data_ok5b["ID_TRUST"] = trust_id
         token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok5b)
-
+        auth_token = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="v1.0/service/%s" % (service_id),
+                                            json_data=True,
+                                            auth_token=auth_token,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        #print "TRUST ID:" + trust_id,
+        #print "IOTAGENT trust token: " + auth_token
+        # curl -X GET  "http://127.0.0.1:1026/v1/contextEntities?details=on&limit=15&offset=0" -i -H "Accept: application/json"   -H "Fiware-Service: smartcity"   -H "Fiware-ServicePath: /Basuras" -H "X-Auth-Token: "
+        # curl -X GET 'http://127.0.0.1:8088/iot/d?i=dev_01&d=t|18&k=apikey2' -i
+        # curl -X GET  http://10.95.83.100:8081/iot/services   -i   -H "Content-Type: application/json"   -H "Fiware-Service: smartalcorcon"   -H "Fiware-ServicePath: /norte"
 
     def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok6)
@@ -740,6 +759,16 @@ class Test_NewServiceTrust_RestView(object):
         json_body_response = json.loads(data_response)
         trust_id2 = json_body_response['id']
         assert trust_id != trust_id2
+
+        # # Check token of iotagent does not allow a simple operation
+        # token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok7)
+        # auth_token = token_res.headers.get('X-Subject-Token')
+        # res = self.TestRestOps.rest_request(method="GET",
+        #                                     url="v1.0/service/%s" % service_id,
+        #                                     json_data=True,
+        #                                     auth_token=auth_token,
+        #                                     data=self.payload_data_ok7)
+        # #assert res.code == 401, (res.code, res.msg, res.raw_json)
 
         # Use first trust to get a token
         self.payload_data_ok7["ID_TRUST"] = trust_id
