@@ -246,7 +246,7 @@ class Test_NewService_RestView(object):
     def test_post_ok(self):
         # TOKEN="kk3"
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             # auth_token=TOKEN,
                                             data=self.payload_data_ok)
@@ -258,7 +258,7 @@ class Test_NewService_RestView(object):
         json_body_response = json.loads(data_response)
         TOKEN = json_body_response['token']
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             auth_token=TOKEN,
                                             data=self.payload_data_ok2)
@@ -266,21 +266,21 @@ class Test_NewService_RestView(object):
 
     def test_post_ok_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 409, (res.code, res.msg)
 
     def test_post_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
 
     def test_post_bad2(self):
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
@@ -329,7 +329,7 @@ class Test_DeleteService_RestView(object):
     def test_delete_ok(self):
 
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -338,7 +338,7 @@ class Test_DeleteService_RestView(object):
         json_body_response = json.loads(response)
         service_id = json_body_response['id']
         res = self.TestRestOps.rest_request(method="DELETE",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -346,7 +346,7 @@ class Test_DeleteService_RestView(object):
     def test_delete_wrong(self):
 
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -355,7 +355,7 @@ class Test_DeleteService_RestView(object):
         json_body_response = json.loads(response)
         service_id = json_body_response['id']
         res = self.TestRestOps.rest_request(method="DELETE",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -401,7 +401,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -410,7 +410,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 409, (res.code, res.msg)
@@ -419,7 +419,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
@@ -428,7 +428,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
@@ -468,7 +468,7 @@ class Test_DeleteSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -477,7 +477,7 @@ class Test_DeleteSubService_RestView(object):
         subservice_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -486,7 +486,7 @@ class Test_DeleteSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -495,7 +495,7 @@ class Test_DeleteSubService_RestView(object):
         subservice_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -553,7 +553,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -562,7 +562,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 409, (res.code, res.msg)
@@ -571,7 +571,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg)
@@ -580,7 +580,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
@@ -589,7 +589,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
@@ -672,7 +672,7 @@ class Test_NewServiceTrust_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/trust/" % service_id,
+            url="/v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -686,7 +686,7 @@ class Test_NewServiceTrust_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/trust/" % service_id,
+            url="/v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -818,35 +818,35 @@ class Test_ServiceLists_RestView(object):
 
     def test_get_ok(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
     def test_get_bad(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 400, (res.code, res.msg)
 
     def test_get_bad2(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad2)
         assert res.code == 401, (res.code, res.msg)
 
     def test_get_bad3(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad3)
         assert res.code == 401, (res.code, res.msg)
 
     def test_get_bad4(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad4)
         assert res.code == 401, (res.code, res.msg)
@@ -855,7 +855,7 @@ class Test_ServiceLists_RestView(object):
         auth_token_res = self.TestRestOps.getToken(self.payload_data_bad5)
         auth_token = auth_token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service",
+                                            url="/v1.0/service",
                                             auth_token=auth_token,
                                             json_data=True,
                                             data=None)
@@ -864,14 +864,14 @@ class Test_ServiceLists_RestView(object):
     def test_put_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(method="PUT",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
         # Get domain and check domain description
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -882,7 +882,7 @@ class Test_ServiceLists_RestView(object):
     def test_put_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_bad5)
         res = self.TestRestOps.rest_request(method="PUT",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_bad5)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -908,7 +908,7 @@ class Test_ServiceDetail_RestView(object):
     def test_get_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -916,7 +916,7 @@ class Test_ServiceDetail_RestView(object):
     def test_get_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_nok)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -956,7 +956,7 @@ class Test_ProjectList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/subservice" % service_id,
+            url="/v1.0/service/%s/subservice" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -965,7 +965,7 @@ class Test_ProjectList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/subservice" % service_id,
+            url="/v1.0/service/%s/subservice" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -975,7 +975,7 @@ class Test_ProjectList_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -985,7 +985,7 @@ class Test_ProjectList_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -1009,7 +1009,7 @@ class Test_ProjectDetail_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/subservice/%s" % (
+            url="/v1.0/service/%s/subservice/%s" % (
                 service_id,
                 subservice_id),
             json_data=True,
@@ -1041,7 +1041,7 @@ class Test_NewServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1050,13 +1050,13 @@ class Test_NewServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_nok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_nok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_nok)
         assert res.code == 409, (res.code, res.msg, res.raw_json)
@@ -1106,7 +1106,7 @@ class Test_DeleteServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1115,7 +1115,7 @@ class Test_DeleteServiceRole_RestView(object):
         role_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -1124,7 +1124,7 @@ class Test_DeleteServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1135,7 +1135,7 @@ class Test_DeleteServiceRole_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1145,7 +1145,7 @@ class Test_DeleteServiceRole_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -1153,7 +1153,7 @@ class Test_DeleteServiceRole_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -1161,7 +1161,7 @@ class Test_DeleteServiceRole_RestView(object):
         # Check user exists with no role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?user_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?user_id=%s" % (
                 service_id, user_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -1174,7 +1174,7 @@ class Test_DeleteServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1183,7 +1183,7 @@ class Test_DeleteServiceRole_RestView(object):
         role_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -1211,7 +1211,7 @@ class Test_RoleList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role" % service_id,
+            url="/v1.0/service/%s/role" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1222,7 +1222,7 @@ class Test_RoleList_RestView(object):
         auth_token = auth_token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role" % service_id,
+            url="/v1.0/service/%s/role" % service_id,
             auth_token=auth_token,
             json_data=True,
             data=self.payload_data_ok2)
@@ -1234,7 +1234,7 @@ class Test_RoleList_RestView(object):
             method="GET",
             user="admin",
             password="admin",
-            url="v1.0/service/%s/role" % service_id,
+            url="/v1.0/service/%s/role" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1263,7 +1263,7 @@ class Test_UserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user" % service_id,
+            url="/v1.0/service/%s/user" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1272,7 +1272,7 @@ class Test_UserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user" % service_id,
+            url="/v1.0/service/%s/user" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1284,7 +1284,7 @@ class Test_UserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user?count=2&index=0" % service_id,
+            url="/v1.0/service/%s/user?count=2&index=0" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1313,7 +1313,7 @@ class Test_UserDetail_RestView(object):
         user_id = json_body_response['token']['user']['id']
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1373,7 +1373,7 @@ class Test_UserModify_RestView(object):
         user_id = json_body_response['token']['user']['id']
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1387,7 +1387,7 @@ class Test_UserModify_RestView(object):
         # Create user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1397,7 +1397,7 @@ class Test_UserModify_RestView(object):
         # Modify user name
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -1411,7 +1411,7 @@ class Test_UserModify_RestView(object):
         # Create user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1432,7 +1432,7 @@ class Test_UserModify_RestView(object):
         # Modify user password
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok3)
@@ -1457,7 +1457,7 @@ class Test_UserModify_RestView(object):
         # Create user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1467,7 +1467,7 @@ class Test_UserModify_RestView(object):
         # Modify user name
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_bad)
@@ -1498,7 +1498,7 @@ class Test_UserDelete_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1507,7 +1507,7 @@ class Test_UserDelete_RestView(object):
         user_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1540,7 +1540,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1549,7 +1549,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
         user_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1581,7 +1581,7 @@ class Test_AssignRoleUserList_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?subservice_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?subservice_id=%s" % (
                 service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1596,7 +1596,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s" % (
                 service_id, role_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1611,7 +1611,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s&user_id=%s" % (
                 service_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1627,7 +1627,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?subservice_id=%s&role_id=%s&user_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?subservice_id=%s&role_id=%s&user_id=%s" % (
                 service_id, subservice_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1642,7 +1642,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=true" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=true" % (
                 service_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1650,7 +1650,7 @@ class Test_AssignRoleUserList_RestView(object):
 
         res2 = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=false" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=false" % (
                 service_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1711,14 +1711,14 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1729,13 +1729,13 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -1746,13 +1746,13 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments?inherit=true" % (
+            url="/v1.0/service/%s/role_assignments?inherit=true" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok3)
@@ -1763,13 +1763,13 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok4)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok4)
@@ -1799,14 +1799,14 @@ class Test_UnassignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1814,7 +1814,7 @@ class Test_UnassignRoleUser_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok)
