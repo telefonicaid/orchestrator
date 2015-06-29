@@ -3,7 +3,7 @@ CHANGES
 
 0.4.9
 
-task/trust_token_user_id
+task/OIOTP-30_create_trust_token_by_user_id
 
 0.4.8
 
@@ -11,21 +11,21 @@ task/OIOTP-66_sth_XACML_policies
 
 0.4.7
 
-bug/rpm_install_dir_permissions
 task/OIOTP-68_deploy_vagrant
+bug/OIOTP-69_rpm_install_dir_permissions
 
 0.4.6
 
-bug/edit_service
+task/get_admin_role_from_assignments_to_get_domain_role_policies
+bug/edit_service_with_non_scoped_token
 bug/remove_role
 bug/delete_subservice_without_id_in_url
-task/get_admin_role_from_assignments_to_get_domain_role_policies
 
 0.4.5
 
+task/OIOTP-30_trust_token_pep_config
 bug/get_role_assignments_in_set_policy_for_admin
 bug/bad_effective_arg_value_in_scripts
-task/OIOTP-30_trust_token_pep_config
 
 0.4.4
 
