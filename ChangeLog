@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.0
+
+task/log_format_change: add op name to each trace
+
 0.4.4
 
 bug/bug_update_policy_role_script
