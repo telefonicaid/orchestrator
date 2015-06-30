@@ -54,7 +54,8 @@ class FlowBase(object):
         # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         # print(exc_type, fname, exc_tb.tb_lineno)
         res = {"error": str(ex), "code": 400}
-        if isinstance(ex.args, tuple):   # Python 2.6
+        if isinstance(ex.args, tuple) and (
+            not isinstance(ex.args[0], tuple)):  # Python 2.6
             res['code'] = ex.args[0]
         elif isinstance(ex.message, tuple):  # Python 2.7
             res['code'] = ex.message[0]
