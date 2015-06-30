@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.core.flow.Roles import Roles
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -171,16 +172,16 @@ class Domains(FlowBase):
         }
         logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
                                                                   indent=3))
-
         try:
             if not ADMIN_TOKEN:
                 # UpdateDomain can be only done by cloud_admin
                 ADMIN_TOKEN = self.idm.getToken("admin_domain",
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
-            if not DOMAIN_ID:
+            if not DOMAIN_ID and DOMAIN_NAME:
                 DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-                                                 DOMAIN_NAME)
+                                                 DOMAIN_NAME,
+                                                 False)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
@@ -330,10 +331,34 @@ class Domains(FlowBase):
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Get Role ID
-            if not ROLE_ID:
-                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                                   SERVICE_ID,
-                                                   ROLE_NAME)
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    # Get KEYSTONE CONF from base idm class
+                    roles_flow = Roles(self.idm.KEYSTONE_PROTOCOL,
+                                       self.idm.KEYSTONE_HOST,
+                                       self.idm.KEYSTONE_PORT)
+                    roles = roles_flow.roles_assignments(SERVICE_ID,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         SERVICE_ADMIN_ID,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         SERVICE_ADMIN_TOKEN,
+                                                         True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             # Get policies in Access Control

@@ -12,7 +12,7 @@ python ./createNewService.py http               \
                                  admin_domain   \
                                  cloud_admin    \
                                  password       \
-                                 repsol         \
+                                 repsolglp      \
                                  Repsol_GLP     \
                                  repsol_admin   \
                                  password       \

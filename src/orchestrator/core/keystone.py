@@ -165,7 +165,7 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        assert 'domain' in json_body_response, "domain not found"
+        assert 'domain' in json_body_response, "domain %s not found" % NEW_SERVICE_NAME
         assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
@@ -409,7 +409,7 @@ class IdMKeystoneOperations(IdMOperations):
             for project in projects['projects']:
                 if project['name'] == '/' + PROJECT_NAME:
                     return project['id']
-            assert False, "Project not found"
+            assert False, "Project %s not found" % PROJECT_NAME
 
     def getDomainRoleId(self,
                         SERVICE_ADMIN_TOKEN,
@@ -427,7 +427,43 @@ class IdMKeystoneOperations(IdMOperations):
         for role in json_body_response['Resources']:
             if role['name'] == ROLE_NAME:
                 return role['id']
-        assert False, "Role name not found"
+        assert False, "Role %s name not found" % ROLE_NAME
+
+    def getUserRoleId(self, SERVICE_ADMIN_TOKEN, DOMAIN_ID, PROJECT_ID, ROLE_NAME):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                        ],
+                    "token": {
+                        "id": SERVICE_ADMIN_TOKEN
+                    }
+                },
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        },
+                        "id": PROJECT_ID
+                    }
+                }
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        if 'roles' in json_body_response['token']:
+            for role in json_body_response['token']['roles']:
+                if DOMAIN_ID + '#' + ROLE_NAME == role['name']:
+                    return role['id']
+        assert False, "Role %s not found" % ROLE_NAME
 
     def getUserId(self,
                   SERVICE_USER_TOKEN,
@@ -454,7 +490,11 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        return json_body_response['token']['user']['id']
+        if json_body_response['token']['user']['name'] == USER_NAME:
+            return json_body_response['token']['user']['id']
+        else:
+            assert False, "user %s not Found" % USER_NAME
+
 
     def getDomainUserId(self,
                         SERVICE_ADMIN_TOKEN,
@@ -473,7 +513,7 @@ class IdMKeystoneOperations(IdMOperations):
         for user in json_body_response['Resources']:
             if user['userName'] == USER_NAME:
                 return user['id']
-        assert False, "user name not Found"
+        assert False, "user name %s not Found" % USER_NAME
 
     def grantProjectRole(self,
                          SERVICE_ADMIN_TOKEN,

@@ -76,7 +76,7 @@ class AccCKeypassOperations(AccCOperations):
                                  POLICY_CONTENT):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
             method='POST',
             json_data=False,
             data=POLICY_CONTENT,
@@ -91,7 +91,7 @@ class AccCKeypassOperations(AccCOperations):
                              SERVICE_ADMIN_TOKEN):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1',
+            url='/pap/v1',
             method='DELETE',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,
@@ -105,7 +105,7 @@ class AccCKeypassOperations(AccCOperations):
                         SUB_SERVICE_ROLE_ID):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
             method='GET',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,
@@ -121,7 +121,7 @@ class AccCKeypassOperations(AccCOperations):
                            SUB_SERVICE_ROLE_ID):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
             method='DELETE',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,
