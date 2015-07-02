@@ -4,7 +4,7 @@ CHANGES
 
 0.5.0
 
-task/log_format_change: add op name to each trace
+task/log_format_change: add operation name to each trace and add banner version
 
 
 0.4.9
