@@ -226,3 +226,8 @@ PEP = {
     "user": "pep",
     "password": "pep"
 }
+
+IOTAGENT = {
+    "user": "iotagent",
+    "password": "iotagent"
+}
