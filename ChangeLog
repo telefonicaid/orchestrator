@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.4.9
+
+task/OIOTP-30_create_trust_token_by_user_id
+bug/servicecustomer_role_policies_sth_iotagent
+
 0.4.8
 
 task/OIOTP-66_sth_XACML_policies
