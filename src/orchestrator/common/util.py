@@ -40,7 +40,7 @@ class RestOperations(object):
         self.HOST = HOST
         self.PORT = PORT
         if PROTOCOL and HOST and PORT:
-            self.base_url = PROTOCOL+'://'+HOST+':'+PORT+'/'
+            self.base_url = PROTOCOL+'://'+HOST+':'+PORT
         else:
             self.base_url = None
 
