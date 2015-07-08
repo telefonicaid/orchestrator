@@ -701,7 +701,7 @@ class Test_NewServiceTrust_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok5)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/trust/" % service_id,
+            url="/v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok5)
 
@@ -712,7 +712,7 @@ class Test_NewServiceTrust_RestView(object):
         token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok5b)
         auth_token = token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % (service_id),
+                                            url="/v1.0/service/%s" % (service_id),
                                             json_data=True,
                                             auth_token=auth_token,
                                             data=None)
@@ -723,7 +723,7 @@ class Test_NewServiceTrust_RestView(object):
         token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok5b)
         auth_token = token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % (service_id),
+                                            url="/v1.0/service/%s" % (service_id),
                                             json_data=True,
                                             auth_token=auth_token,
                                             data=None)
@@ -738,7 +738,7 @@ class Test_NewServiceTrust_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok6)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/trust/" % service_id,
+            url="/v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok6)
 
@@ -750,7 +750,7 @@ class Test_NewServiceTrust_RestView(object):
         # Another TrustID for the same data user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/trust/" % service_id,
+            url="/v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok6)
 
@@ -764,7 +764,7 @@ class Test_NewServiceTrust_RestView(object):
         # token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok7)
         # auth_token = token_res.headers.get('X-Subject-Token')
         # res = self.TestRestOps.rest_request(method="GET",
-        #                                     url="v1.0/service/%s" % service_id,
+        #                                     url="/v1.0/service/%s" % service_id,
         #                                     json_data=True,
         #                                     auth_token=auth_token,
         #                                     data=self.payload_data_ok7)
@@ -775,7 +775,7 @@ class Test_NewServiceTrust_RestView(object):
         token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok7)
         auth_token = token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             auth_token=auth_token,
                                             data=self.payload_data_ok7)
@@ -786,7 +786,7 @@ class Test_NewServiceTrust_RestView(object):
         token_res2 = self.TestRestOps.getTrustScopedToken(self.payload_data_ok7)
         auth_token2 = token_res2.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             auth_token=auth_token2,
                                             data=self.payload_data_ok7)
