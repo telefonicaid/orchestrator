@@ -48,10 +48,10 @@ start() {
     echo -n "Starting $PNAME : "
     #daemon ${exe} # Not working ...
     if [ -s ${PIDFILE} ]; then
-RETVAL=1
-       echo -n "Already running !" && warning
+        RETVAL=1
+        echo -n "Already running !" && warning
     else
-touch $PIDFILE
+        touch $PIDFILE
         chown $USER $PIDFILE
         su -s /bin/sh $USER -c "
 cd $ORCHESTRATOR_DIR
@@ -69,13 +69,13 @@ echo
 stop() {
     echo -n "Shutting down $PNAME : "
     if [ -f $PIDFILE ]; then
-PID=`cat $PIDFILE`
+        PID=`cat $PIDFILE`
         kill -9 $PID
         RETVAL=$?
         [ $RETVAL -eq 0 ] && success || failure
         rm -f $PIDFILE
     else
-echo -n "Not running" && failure
+        echo -n "Not running" && failure
     fi
 echo
 }
