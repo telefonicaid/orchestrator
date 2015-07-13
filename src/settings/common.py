@@ -209,7 +209,6 @@ LOGGING = {
 }
 
 REST_FRAMEWORK = {
-    #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'PAGINATE_BY': 10,
 
@@ -217,9 +216,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '1/sec',
+        'anon': '200/sec',
     }
-    #'PAGINATE_BY': 10
 }
 
 

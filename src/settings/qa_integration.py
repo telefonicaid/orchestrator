@@ -25,4 +25,4 @@ KEYPASS = {
     "protocol":"http"
 }
 
-REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
