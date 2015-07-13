@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.core.flow.Roles import Roles
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -114,7 +115,7 @@ class Domains(FlowBase):
                 if DOMAIN_ID:
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
-                                                     ADMIN_PASSWORD)
+                                                     ADMIN_PASSWORD, False)
                 else:
                     ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                     ADMIN_USER,
@@ -171,16 +172,16 @@ class Domains(FlowBase):
         }
         logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
                                                                   indent=3))
-
         try:
             if not ADMIN_TOKEN:
                 # UpdateDomain can be only done by cloud_admin
                 ADMIN_TOKEN = self.idm.getToken("admin_domain",
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
-            if not DOMAIN_ID:
+            if not DOMAIN_ID and DOMAIN_NAME:
                 DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-                                                 DOMAIN_NAME)
+                                                 DOMAIN_NAME,
+                                                 False)
 
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
@@ -272,3 +273,106 @@ class Domains(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAIN
+
+
+    def getDomainRolePolicies(self,
+                              SERVICE_ID,
+                              SERVICE_NAME,
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD,
+                              SERVICE_ADMIN_TOKEN,
+                              ROLE_NAME,
+                              ROLE_ID):
+
+        '''Get domain role policies
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_ID:
+        - SERVICE_NAME:
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME
+        - ROLE_ID
+        Return:
+        - XACML policies
+        '''
+        data_log = {
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+        }
+        logger.debug("get_domain_role_policies invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+
+        try:
+
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            # Get Role ID
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    # Get KEYSTONE CONF from base idm class
+                    roles_flow = Roles(self.idm.KEYSTONE_PROTOCOL,
+                                       self.idm.KEYSTONE_HOST,
+                                       self.idm.KEYSTONE_PORT)
+                    roles = roles_flow.roles_assignments(SERVICE_ID,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         SERVICE_ADMIN_ID,
+                                                         None,
+                                                         None,
+                                                         None,
+                                                         SERVICE_ADMIN_TOKEN,
+                                                         True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
+            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            # Get policies in Access Control
+            policies = self.ac.getRolePolicies(SERVICE_NAME, SERVICE_ADMIN_TOKEN, ROLE_ID)
+
+            logger.debug("POLICIES=%s" % policies)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "POLICIES": policies
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
+        return policies

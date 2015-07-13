@@ -1,6 +1,69 @@
 CHANGES
 =======
 
+
+0.5.0
+
+task/log_format_change: add operation name to each trace and add banner version
+
+
+0.4.9
+
+task/OIOTP-30_create_trust_token_by_user_id
+bug/servicecustomer_role_policies_sth_iotagent
+
+
+0.4.8
+
+task/OIOTP-66_sth_XACML_policies
+
+
+0.4.7
+
+task/OIOTP-68_deploy_vagrant
+bug/OIOTP-69_rpm_install_dir_permissions
+
+
+0.4.6
+
+task/get_admin_role_from_assignments_to_get_domain_role_policies
+bug/edit_service_with_non_scoped_token
+bug/remove_role
+bug/delete_subservice_without_id_in_url
+
+
+0.4.5
+
+task/OIOTP-30_trust_token_pep_config
+bug/get_role_assignments_in_set_policy_for_admin
+bug/bad_effective_arg_value_in_scripts
+
+
+0.4.4
+
+bug/bug_update_policy_role_script
+
+
+0.4.3
+
+bug/python26_script_commands_logging_conf
+
+
+0.4.2
+
+feature/OIOTP-63_iota_policies
+
+
+0.4.1
+
+feature/OIOTP-38_change_user_password_by_himself
+feature/OIOTP-63_set_acc_policy_for_role
+feature/OIOTP-57_release_as_open_source
+task/OIOTP-52_trust_token_withoutservice
+task/OIOTP-64_naming_convention_restriction
+bug/return_error_if_non_found_entity
+
+
 0.3.0
 
 feature/OIOTP-30_trust_token
@@ -9,7 +72,6 @@ feature/OIOTP-51_subserviceadmin_to_admin_after_create
 task/OIOTP-15_script_commands
 bug/OIOTP-53_modify_user_name
 bug/OIOTP-55_bug_create_new_role
-
 
 
 0.2.0

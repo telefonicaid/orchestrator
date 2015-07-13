@@ -7,6 +7,8 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 # Group Orchestrator
 
+All requests can be performed providing a 'x-auth-token' header instead of X_USER / X_PASSWORD payload fields
+
 ## Services query [/v1.0/service]
 ### Listado de Services [GET]
 
@@ -440,6 +442,16 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 + Response 200
 
+### change user password by himself [POST]
+
++ Request (application/json)
+
+        {
+             "NEW_USER_PASSWORD": "new_password"
+        }
+
++ Response 200
+
 ### delete an user[DELETE]
 
 + Response 204
@@ -455,13 +467,12 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
             "SUBSERVICE_ID":"234234234234",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"sadfasdfasdfas",
-            "TRUSTEE_USER_NAME":"user_nameX",
-            "TRUSTEE_USER_ID":"asdfasdf",
-            "TRUSTOR_USER_NAME":"user_nameX",
-            "TRUSTOR_USER_ID":"asdfasdf",
+            "ROLE_ID":"SDFG930J34534K5",
+            "TRUSTEE_USER_NAME":"iotagent",
+            "TRUSTEE_USER_ID":"345635ASDFASD6347",
+            "TRUSTOR_USER_NAME":"adm1",
+            "TRUSTOR_USER_ID":"45674ASDFASDF5674567",
         }
 
 + Response 201 (application/json)

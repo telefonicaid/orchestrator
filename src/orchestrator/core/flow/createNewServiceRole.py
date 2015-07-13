@@ -106,13 +106,19 @@ class CreateNewServiceRole(FlowBase):
                                                  XACML_POLICY)
 
             if NEW_ROLE_NAME == 'ServiceCustomer':
-                logger.debug("set default XACML policy for role %s" % NEW_ROLE_NAME)
+                logger.debug("set default XACML policies for role %s" % NEW_ROLE_NAME)
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-orion-customer2.xml')
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-perseo-customer2.xml')
+                self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
+                                        ID_ROLE,
+                                        POLICY_FILE_NAME='policy-iotagent-customer2.xml')
+                self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
+                                        ID_ROLE,
+                                        POLICY_FILE_NAME='policy-sth-customer2.xml')
 
         except Exception, ex:
             logger.error(ex)

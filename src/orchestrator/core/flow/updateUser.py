@@ -110,3 +110,84 @@ class UpdateUser(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": USER_ID}
+
+
+    def changeUserPassword(self,
+                           SERVICE_NAME,
+                           SERVICE_ID,
+                           USER_ID,
+                           SERVICE_USER_NAME,
+                           SERVICE_USER_PASSWORD,
+                           SERVICE_USER_TOKEN,
+                           NEW_USER_PASSWORD):
+
+        '''Change user password.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - USER_ID: user id
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - NEW_USER_PASSWORD: new user password
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "USER_ID": "%s" % USER_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD
+        }
+        logger.debug("change password invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
+
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_USER_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SCOPED=False)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SCOPED=False)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SCOPED=False)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            #
+            # 2. Get user ID
+            #
+            if not USER_ID and SERVICE_USER_NAME:
+                USER_ID = self.idm.getUserId(SERVICE_USER_TOKEN,
+                                             SERVICE_USER_NAME)
+                logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, USER_ID))
+
+            #
+            # 3. ChangeUserPassword
+            #
+            self.idm.changeUserPassword(SERVICE_USER_TOKEN,
+                                        USER_ID,
+                                        SERVICE_USER_PASSWORD,
+                                        NEW_USER_PASSWORD)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "USER_ID": USER_ID,
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return {"id": USER_ID}

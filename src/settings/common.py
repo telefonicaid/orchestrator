@@ -158,7 +158,7 @@ LOGGING = {
         'standard': {
             #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             #'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
-            'format' : 'time=%(asctime)s | lvl=%(levelname)s | component=Orchestrator | msg=%(message)s',
+            'format' : 'time=%(asctime)s | lvl=%(levelname)s | component=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
     },
@@ -232,3 +232,12 @@ REST_FRAMEWORK = {
 KEYSTONE = {}
 KEYPASS = {}
 
+PEP = {
+    "user": "pep",
+    "password": "pep"
+}
+
+IOTAGENT = {
+    "user": "iotagent",
+    "password": "iotagent"
+}

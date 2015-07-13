@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 #
@@ -25,12 +27,17 @@ import sys
 import pprint
 from jsonschema import validate
 import logging.config
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
 from orchestrator.core.flow.createTrustToken import CreateTrustToken
 from orchestrator.api import schemas
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 
 def main():
@@ -59,7 +66,7 @@ def main():
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 Electricidad   \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
@@ -114,6 +121,8 @@ def main():
         None)
 
     pprint.pprint(res)
+    if 'error' in res:
+        sys.exit(res['code'])
 
 if __name__ == '__main__':
 

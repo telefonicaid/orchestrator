@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 #
@@ -24,15 +26,19 @@
 import sys
 import pprint
 import logging.config
-
 from jsonschema import validate
 from jsonschema import Draft4Validator
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.api import schemas
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 
 def main():
@@ -69,7 +75,7 @@ def main():
         print "                                 admin_domain   \\"
         print "                                 cloud_admin    \\"
         print "                                 password       \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 smartvalencia  \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
@@ -136,6 +142,9 @@ def main():
         None)
 
     pprint.pprint(res)
+
+    if 'error' in res:
+        sys.exit(res['code'])
 
 if __name__ == '__main__':
 

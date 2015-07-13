@@ -12,7 +12,7 @@ python ./createNewService.py http               \
                                  admin_domain   \
                                  cloud_admin    \
                                  password       \
-                                 ThinkingThings \
+                                 thinkingthings \
                                  Thinking_things\
                                  admin_tt       \
                                  password       \
@@ -24,7 +24,7 @@ python ./createNewService.py http               \
 python ./createNewSubService.py  http                \
                                       localhost      \
                                       5000           \
-                                      ThinkingThings \
+                                      thinkingthings \
                                       admin_tt       \
                                       password       \
                                       user_x         \
@@ -33,7 +33,7 @@ python ./createNewSubService.py  http                \
 python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
-                                       ThinkingThings \
+                                       thinkingthings \
                                        adm_tt         \
                                        password       \
                                        user_x         \
@@ -42,7 +42,7 @@ python  ./createNewServiceUser.py  http               \
 python ./assignRoleSubServiceUser.py http              \
                                        localhost      \
                                        5000           \
-                                       ThinkingThings \
+                                       thinkingthings \
                                        user_x         \
                                        admin_tt       \
                                        password       \
@@ -52,7 +52,7 @@ python ./assignRoleSubServiceUser.py http              \
 python ./assignRoleSubServiceUser.py http              \
                                        localhost      \
                                        5000           \
-                                       ThinkingThings \
+                                       thinkingthings \
                                        user_x         \
                                        admin_tt       \
                                        password       \

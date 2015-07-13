@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 #
@@ -24,20 +26,25 @@
 import sys
 import pprint
 import logging.config
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
 from orchestrator.core.flow.Roles import Roles
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 
 def main():
 
-    print "This script prints roles in a service"
+    print "This script prints role assignments in a service"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 6
+    NUM_ARGS_EXPECTED = 8
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -49,21 +56,21 @@ def main():
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         # print "  <SUBSERVICE_NAME>               SubService name (optional)"
-        # print "  <ROLE_NAME>                     Role Name (optional)"
+        print "  <ROLE_NAME>                     Role Name"
         # print "  <USER_NAME>                     User Name (optional)"
-        # print "  <EFFECTIVE>                     Effective roles (optional)"
+        print "  <EFFECTIVE>                     Effective roles: True of False"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
         # print "                                 Electricidad   \\"
-        # print "                                 SubServiceAdmin\\"
+        print "                                 SubServiceAdmin\\"
         # print "                                 Alice          \\"
-        # print "                                 True           \\"
+        print "                                 True           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -76,9 +83,9 @@ def main():
     SERVICE_ADMIN_USER = sys.argv[5]
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
     # SUBSERVICE_NAME=sys.argv[7]
-    # ROLE_NAME=sys.argv[8]
+    ROLE_NAME = sys.argv[7]
     # USER_NAME=sys.argv[9]
-    # EFFECTIVE=sys.argv[10]
+    EFFECTIVE = sys.argv[8] in ["True", "true", "TRUE"]
 
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
@@ -90,10 +97,13 @@ def main():
         None,
         None,
         None,
+        ROLE_NAME,
+        None,
+        None,
         SERVICE_ADMIN_USER,
         SERVICE_ADMIN_PASSWORD,
         None,
-        True)
+        EFFECTIVE)
 
     pprint.pprint(roles)
 

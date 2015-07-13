@@ -206,6 +206,7 @@ class Projects(FlowBase):
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
                                                    PROJECT_NAME)
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
@@ -276,6 +277,7 @@ class Projects(FlowBase):
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
                                                    PROJECT_NAME)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,

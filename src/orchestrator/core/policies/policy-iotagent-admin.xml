@@ -1,0 +1,43 @@
+<Policy xsi:schemaLocation="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17
+    http://docs.oasis-open.org/xacml/3.0/xacml-core-v3-schema-wd-17.xsd"
+        PolicyId="IotagentSubServiceAdmin"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit"
+        Version="1.0" xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <Target>
+    <AnyOf>
+      <AllOf>
+        <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
+          <AttributeValue
+              DataType="http://www.w3.org/2001/XMLSchema#string"
+              >fiware:iotagent:.*</AttributeValue>
+          <AttributeDesignator
+              AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"
+              MustBePresent="true"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" />
+        </Match>
+      </AllOf>
+    </AnyOf>
+  </Target>
+
+  <Rule RuleId="IotagentSubServiceAdminRule1" Effect="Permit">
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-at-least-one-member-of">
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">create</AttributeValue>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">update</AttributeValue>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">delete</AttributeValue>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
+        </Apply>
+          <AttributeDesignator
+              AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"
+              MustBePresent="true"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action"/>
+      </Apply>
+    </Condition>
+  </Rule>
+
+</Policy>

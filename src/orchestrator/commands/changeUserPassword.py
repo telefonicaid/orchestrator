@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #
 # Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
 #
@@ -25,12 +27,17 @@ import sys
 import pprint
 from jsonschema import validate
 import logging.config
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
 from orchestrator.core.flow.updateUser import UpdateUser
 from orchestrator.api import schemas
 
-logging.config.dictConfig(LOGGING)
+try: logging.config.dictConfig(LOGGING)
+except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 
 def main():
@@ -50,14 +57,14 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <USER_NAME>                 User name"
+        print "  <USER_NAME>                     User name"
         print "  <NEW_USER_PASSWORD>             New user password"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
-        print "                                 SmartValencia  \\"
+        print "                                 smartcity      \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
         print "                                 bob            \\"
@@ -103,6 +110,8 @@ def main():
         USER_DATA_VALUE)
 
     pprint.pprint(res)
+    if 'error' in res:
+        sys.exit(res['code'])
 
 if __name__ == '__main__':
 

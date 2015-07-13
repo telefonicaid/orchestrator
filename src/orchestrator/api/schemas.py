@@ -57,7 +57,7 @@ json = {
             "NEW_SERVICE_NAME": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9_]+)$",
+                "pattern": "^([a-z0-9_]+)$",
             },
             "NEW_SERVICE_DESCRIPTION": {
                 "type": "string",
@@ -321,9 +321,9 @@ json = {
         # "required": [ ],
     },
     #######
-    "Role": {
+    "RoleList": {
     #######
-        "name": "Role",
+        "name": "RoleList",
         "dependencies": {
             "SERVICE_ADMIN_USER": [
                 "SERVICE_ADMIN_PASSWORD"
@@ -360,6 +360,44 @@ json = {
         "required": [
             "NEW_ROLE_NAME"
         ],
+    },
+    #######
+    "Role": {
+    #######
+        "name": "Role",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "NEW_ROLE_NAME": {
+                "type": "string",
+                "maxLength": 50,
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "XACML_POLICY": {
+                "type": "string",
+            },
+        },
     },
     ####################
     "RoleAssignmentList": {
@@ -506,14 +544,3 @@ json = {
 
 }
 
-# The JSON Schema above can be used to test the validity of the JSON code below:
-example_data = {
-    "DOMAIN_NAME": "admin_domain",
-    "DOMAIN_ADMIN_USER": "cloud_admin",
-    "DOMAIN_ADMIN_PASSWORD": "password",
-    "DOMAIN_ADMIN_TOKEN": "",
-    "NEW_SERVICE_NAME": "SmartValencia",
-    "NEW_SERVICE_DESCRIPTION": "SmartValencia city",
-    "NEW_SERVICE_ADMIN_USER": "adm1",
-    "NEW_SERVICE_ADMIN_PASSWORD": "password",
-}

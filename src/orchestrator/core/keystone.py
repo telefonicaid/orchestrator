@@ -57,7 +57,8 @@ class IdMKeystoneOperations(IdMOperations):
     def getToken(self,
                  DOMAIN_NAME,
                  DOMAIN_ADMIN_USER,
-                 DOMAIN_ADMIN_PASSWORD):
+                 DOMAIN_ADMIN_PASSWORD,
+                 SCOPED=True):
 
         auth_data = {
             "auth": {
@@ -82,15 +83,15 @@ class IdMKeystoneOperations(IdMOperations):
                         "name": DOMAIN_NAME
                     }
                 })
-
-            scope_domain = {
-                "scope": {
-                    "domain": {
-                        "name": DOMAIN_NAME
+            if SCOPED:
+                scope_domain = {
+                    "scope": {
+                        "domain": {
+                            "name": DOMAIN_NAME
+                        }
                     }
                 }
-            }
-            auth_data['auth'].update(scope_domain)
+                auth_data['auth'].update(scope_domain)
 
         res = self.IdMRestOperations.rest_request(
             url='/v3/auth/tokens',
@@ -102,7 +103,8 @@ class IdMKeystoneOperations(IdMOperations):
     def getToken2(self,
                   DOMAIN_ID,
                   DOMAIN_ADMIN_USER,
-                  DOMAIN_ADMIN_PASSWORD):
+                  DOMAIN_ADMIN_PASSWORD,
+                  SCOPED=True):
         auth_data = {
             "auth": {
                 "identity": {
@@ -126,15 +128,15 @@ class IdMKeystoneOperations(IdMOperations):
                         "id": DOMAIN_ID
                     }
                 })
-
-            scope_domain = {
-                "scope": {
-                    "domain": {
-                        "id": DOMAIN_ID
+            if SCOPED:
+                scope_domain = {
+                    "scope": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        }
                     }
                 }
-            }
-            auth_data['auth'].update(scope_domain)
+                auth_data['auth'].update(scope_domain)
 
         res = self.IdMRestOperations.rest_request(
             url='/v3/auth/tokens',
@@ -163,6 +165,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'domain' in json_body_response, "domain %s not found" % NEW_SERVICE_NAME
+        assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
     def updateDomain(self,
@@ -183,6 +187,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'domain' in json_body_response, "domain not found"
+        assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
     def getRoleId(self,
@@ -279,7 +285,7 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         return json_body_response['project']['id']
 
-    def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME):
+    def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME, SCOPED=True):
 
         auth_data = {
             "auth": {
@@ -291,13 +297,18 @@ class IdMKeystoneOperations(IdMOperations):
                             "id": SERVICE_ADMIN_TOKEN
                     }
                 },
+            }
+        }
+        if SCOPED:
+            scope = {
                 "scope": {
                     "domain": {
                         "name": DOMAIN_NAME
                     }
                 }
             }
-        }
+            auth_data['auth'].update(scope)
+
         res = self.IdMRestOperations.rest_request(
             url='/v3/auth/tokens',
             method='POST',
@@ -398,7 +409,7 @@ class IdMKeystoneOperations(IdMOperations):
             for project in projects['projects']:
                 if project['name'] == '/' + PROJECT_NAME:
                     return project['id']
-            assert False, "Project not found"
+            assert False, "Project %s not found" % PROJECT_NAME
 
     def getDomainRoleId(self,
                         SERVICE_ADMIN_TOKEN,
@@ -416,12 +427,80 @@ class IdMKeystoneOperations(IdMOperations):
         for role in json_body_response['Resources']:
             if role['name'] == ROLE_NAME:
                 return role['id']
-        assert False, "Role name not found"
+        assert False, "Role %s name not found" % ROLE_NAME
+
+    def getUserRoleId(self, SERVICE_ADMIN_TOKEN, DOMAIN_ID, PROJECT_ID, ROLE_NAME):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                        ],
+                    "token": {
+                        "id": SERVICE_ADMIN_TOKEN
+                    }
+                },
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        },
+                        "id": PROJECT_ID
+                    }
+                }
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        if 'roles' in json_body_response['token']:
+            for role in json_body_response['token']['roles']:
+                if DOMAIN_ID + '#' + ROLE_NAME == role['name']:
+                    return role['id']
+        assert False, "Role %s not found" % ROLE_NAME
+
+    def getUserId(self,
+                  SERVICE_USER_TOKEN,
+                  USER_NAME):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                        ],
+                    "token": {
+                        "id": SERVICE_USER_TOKEN
+                    }
+                }
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        if json_body_response['token']['user']['name'] == USER_NAME:
+            return json_body_response['token']['user']['id']
+        else:
+            assert False, "user %s not Found" % USER_NAME
+
 
     def getDomainUserId(self,
                         SERVICE_ADMIN_TOKEN,
                         DOMAIN_ID,
                         USER_NAME):
+
         res = self.IdMRestOperations.rest_request(
             url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
             method='GET',
@@ -434,7 +513,7 @@ class IdMKeystoneOperations(IdMOperations):
         for user in json_body_response['Resources']:
             if user['userName'] == USER_NAME:
                 return user['id']
-        assert False, "user name not Found"
+        assert False, "user name %s not Found" % USER_NAME
 
     def grantProjectRole(self,
                          SERVICE_ADMIN_TOKEN,
@@ -652,6 +731,24 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         return {"projects": json_body_response['projects']}
 
+    def changeUserPassword(self,
+                           SERVICE_USER_TOKEN,
+                           USER_ID,
+                           USER_PASSWORD,
+                           NEW_USER_PASSWORD):
+
+        body_data = {
+            'user': {
+                'original_password': USER_PASSWORD,
+                'password': NEW_USER_PASSWORD
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/users/%s/password' % USER_ID,
+            method='POST', data=body_data,
+            auth_token=SERVICE_USER_TOKEN)
+        assert res.code == 204, (res.code, res.msg)
+
     def getProject(self,
                    SERVICE_ADMIN_TOKEN,
                    PROJECT_ID):
@@ -748,6 +845,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'domain' in json_body_response, "domain not found"
+        assert 'id' in json_body_response['domain'], "domain id not found"        
         return json_body_response['domain']['id']
 
     def disableProject(self,
@@ -767,6 +866,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        assert 'project' in json_body_response, "project not found"
+        assert 'id' in json_body_response['project'], "project id not found"
         return json_body_response['project']['id']
 
     def revokeDomainRole(self,
@@ -848,16 +949,19 @@ class IdMKeystoneOperations(IdMOperations):
         trust_data = {
             "trust": {
                 "impersonation": False,
-                "project_id": SUBSERVICE_ID,
-                "roles": [
-                    {
-                        "id": ROLE_ID
-                        }
-                    ],
                 "trustee_user_id": TRUSTEE_USER_ID,
                 "trustor_user_id": TRUSTOR_USER_ID
                 }
             }
+
+
+        # According with:
+        # https://github.com/openstack-attic/identity-api/blob/master/v3/src/markdown/identity-api-v3-os-trust-ext.md
+        # A project_id may not be specified without at least one role, and vice versa. In other words, there is no way of implicitly delegating all roles to a trustee, in order to prevent users accidentally creating trust that are much more broad in scope than intended. A trust without a project_id or any delegated roles is unscoped, and therefore does not represent authorization on a specific resource
+        if SUBSERVICE_ID and ROLE_ID:
+            trust_data['trust'].update({"project_id": SUBSERVICE_ID})
+            trust_data['trust'].update({"roles": [{"id": ROLE_ID}]})
+
         res = self.IdMRestOperations.rest_request(
             url='/v3/OS-TRUST/trusts',
             method='POST',
@@ -868,3 +972,19 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         return json_body_response['trust']['id']
+
+
+    def getTrustsTrustee(self,
+                         SERVICE_ADMIN_TOKEN,
+                         USER_ID):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-TRUST/trusts?trustee_user_id=%s' % USER_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        return { "trusts": json_body_response['trusts'] }
+            

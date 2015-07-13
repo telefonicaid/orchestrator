@@ -9,14 +9,13 @@ KEYPASS_PORT=8080
 
 
 function checkResult() {
-  RESULT=$(( ! $1 && $RESULT ))
-
-  if [ $RESULT -eq 1 ]; then
-    echo -e "\t- $2 .............................. OK"
-  else
-    echo -e "Error found while $2. Code: $1. Aborting"
-    exit $RESULT
-  fi
+    if [ $1 -eq 0 ]; then
+        echo -n
+        echo -e "- $2 ....... OK"
+    else
+        echo -e "Error found while $2. Code: $1. Aborting"
+        exit $1
+    fi
 }
 
 cd ../../orchestrator/commands/
@@ -27,7 +26,7 @@ python ./createNewService.py $KEYSTONE_PROTOCOL \
                                  admin_domain   \
                                  cloud_admin    \
                                  password       \
-                                 SmartCity      \
+                                 smartcity      \
                                  smartcity      \
                                  adm1           \
                                  password       \
@@ -39,7 +38,7 @@ checkResult $? "Creating service"
 python ./assignInheritRoleServiceUser.py $KEYSTONE_PROTOCOL \
                                     $KEYSTONE_HOST   \
                                     $KEYSTONE_PORT   \
-                                    SmartCity        \
+                                    smartcity        \
                                     adm1             \
                                     password         \
                                     adm1             \
@@ -52,7 +51,7 @@ checkResult $? "assignInheritRole to admin"
 python ./createNewSubService.py  $KEYSTONE_PROTOCOL  \
                                       $KEYSTONE_HOST \
                                       $KEYSTONE_PORT \
-                                      SmartCity      \
+                                      smartcity      \
                                       adm1           \
                                       password       \
                                       Electricidad   \
@@ -62,7 +61,7 @@ checkResult $? "Creating sub service Electricidad"
 python ./createNewServiceUser.py  $KEYSTONE_PROTOCOL \
                                       $KEYSTONE_HOST \
                                       $KEYSTONE_PORT \
-                                      SmartCity      \
+                                      smartcity      \
                                       adm1           \
                                       password       \
                                       Alice          \
@@ -72,7 +71,7 @@ checkResult $? "Creating user Alice"
 python ./assignRoleSubServiceUser.py $KEYSTONE_PROTOCOL  \
                                        $KEYSTONE_HOST \
                                        $KEYSTONE_PORT \
-                                       SmartCity      \
+                                       smartcity      \
                                        Electricidad   \
                                        adm1           \
                                        password       \
@@ -83,7 +82,7 @@ checkResult $? "Assing role SubServiceAdmin to user Alice"
 python ./createNewSubService.py  $KEYSTONE_PROTOCOL  \
                                       $KEYSTONE_HOST \
                                       $KEYSTONE_PORT \
-                                      SmartCity      \
+                                      smartcity      \
                                       adm1           \
                                       password       \
                                       Basuras        \
@@ -93,7 +92,7 @@ checkResult $? "Creating subservice Basuras"
 python ./createNewServiceUser.py  $KEYSTONE_PROTOCOL  \
                                        $KEYSTONE_HOST \
                                        $KEYSTONE_PORT \
-                                       SmartCity      \
+                                       smartcity      \
                                        adm1           \
                                        password       \
                                        bob            \
@@ -103,7 +102,7 @@ checkResult $? "Creating user bob"
 python ./assignRoleSubServiceUser.py $KEYSTONE_PROTOCOL  \
                                        $KEYSTONE_HOST \
                                        $KEYSTONE_PORT \
-                                       SmartCity      \
+                                       smartcity      \
                                        Basuras        \
                                        adm1           \
                                        password       \
@@ -114,7 +113,7 @@ checkResult $? "Assign subServiceAdmin role to user bob"
 python ./createNewServiceUser.py  $KEYSTONE_PROTOCOL \
                                       $KEYSTONE_HOST \
                                       $KEYSTONE_PORT \
-                                      SmartCity      \
+                                      smartcity      \
                                       adm1           \
                                       password       \
                                       Carl           \
@@ -124,7 +123,7 @@ checkResult $? "Creating user Carl"
 python ./createNewServiceRole.py  $KEYSTONE_PROTOCOL \
                                       $KEYSTONE_HOST \
                                       $KEYSTONE_PORT \
-                                      SmartCity      \
+                                      smartcity      \
                                       adm1           \
                                       password       \
                                       ServiceCustomer\
@@ -136,7 +135,7 @@ checkResult $? "creating new ServiceCustomer role"
 python ./assignRoleServiceUser.py $KEYSTONE_PROTOCOL  \
                                        $KEYSTONE_HOST \
                                        $KEYSTONE_PORT \
-                                       SmartCity      \
+                                       smartcity      \
                                        adm1           \
                                        password       \
                                        ServiceCustomer\
@@ -146,7 +145,7 @@ checkResult $? "Assign ServiceCustomer role to user Carl"
 python ./assignInheritRoleServiceUser.py $KEYSTONE_PROTOCOL \
                                     $KEYSTONE_HOST    \
                                     $KEYSTONE_PORT    \
-                                    SmartCity         \
+                                    smartcity         \
                                     adm1              \
                                     password          \
                                     Carl              \

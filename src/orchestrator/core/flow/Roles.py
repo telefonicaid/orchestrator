@@ -109,8 +109,11 @@ class Roles(FlowBase):
                           DOMAIN_ID,
                           DOMAIN_NAME,
                           PROJECT_ID,
+                          PROJECT_NAME,
                           ROLE_ID,
+                          ROLE_NAME,
                           USER_ID,
+                          USER_NAME,
                           ADMIN_USER,
                           ADMIN_PASSWORD,
                           ADMIN_TOKEN,
@@ -124,8 +127,11 @@ class Roles(FlowBase):
         - DOMAIN_ID: id of domain
         - DOMAIN_NAME: Name of domain
         - PROJECT_ID: id of project (optional)
+        - PROJECT_NAME: name of project (optional)
         - ROLE_ID: id of role (optional)
+        - ROLE_NAME: name of role (optional)
         - USER_ID: id of user (optional)
+        - USER_NAME: name of user (optional)
         - ADMIN_USER: Service admin username
         - ADMIN_PASSWORD: Service admin password
         - ADMIN_TOKEN: Service admin token
@@ -137,8 +143,11 @@ class Roles(FlowBase):
             "DOMAIN_ID": "%s" % DOMAIN_ID,
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
+            "ROLE_NAME": "%s" % ROLE_NAME,
             "USER_ID": "%s" % USER_ID,
+            "USER_NAME": "%s" % USER_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
@@ -161,6 +170,19 @@ class Roles(FlowBase):
                                                      ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Extract PROJECT, USER, ROLE IDs from NAME
+            if not PROJECT_ID and PROJECT_NAME:
+                PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+            if not USER_ID and USER_NAME:
+                USER_ID = self.idm.getDomainUserId(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   USER_NAME)
+            if not ROLE_ID and ROLE_NAME:
+                ROLE_ID = self.idm.getDomainRoleId(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   ROLE_NAME)
             # if USER_ID:
             #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
             #                                                  USER_ID,
@@ -319,10 +341,31 @@ class Roles(FlowBase):
             #
             # 2.  Get role
             #
-            if not ROLE_ID:
-                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                                   SERVICE_ID,
-                                                   ROLE_NAME)
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    # Get KEYSTONE CONF from base idm class
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
@@ -947,11 +990,11 @@ class Roles(FlowBase):
             #
             # 2. Get Role ID
             #
-            if not ROLE_ID:
+            if not ROLE_ID and ROLE_NAME:
                 ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                    SERVICE_ID,
                                                    ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+                logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 3. Remove role ID
@@ -968,5 +1011,100 @@ class Roles(FlowBase):
             "ROLE_ID": ROLE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return {}
+
+    def setPolicyRole(self,
+                      SERVICE_NAME,
+                      SERVICE_ID,
+                      SERVICE_ADMIN_USER,
+                      SERVICE_ADMIN_PASSWORD,
+                      SERVICE_ADMIN_TOKEN,
+                      ROLE_NAME,
+                      ROLE_ID,
+                      POLICY_FILE_NAME):
+
+        '''Set a new XACML policy for a role in Access Control.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service name
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role ID
+        - POLICY_FILE_NAME:
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "POLICY_FILE_NAME": "%s" % POLICY_FILE_NAME
+        }
+        logger.debug("set policy role invoked with: %s" % json.dumps(data_log,
+                                                                indent=3))
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 2. Get Role ID
+            #
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
+                logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 3. Set Policy Role
+            #
+            self.ac.provisionPolicy(SERVICE_NAME,
+                                    SERVICE_ADMIN_TOKEN,
+                                    ROLE_ID,
+                                    POLICY_FILE_NAME)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
 
         return {}

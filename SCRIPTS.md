@@ -14,22 +14,30 @@ These are current command line availables:
 * [createNewServiceRole.py](SCRIPTS.md#createnewservicerolepy)
 * [createNewServiceUser.py](SCRIPTS.md#createnewserviceuserpy)
 * [createNewSubService.py](SCRIPTS.md#createnewsubservicepy)
+* [printServices.py](SCRIPTS.md#printservicespy)
+* [printSubServices.py](SCRIPTS.md#printsubservicespy)
+* [printServiceUsers.py](SCRIPTS.md#printserviceuserspy)
+* [printServiceRoles.py](SCRIPTS.md#printservicerolespy)
+* [printServiceRolePolicies.py](SCRIPTS.md#printservicerolepoliciespy)
+* [removeService.py](SCRIPTS.md#removeservicepy)
+* [removeSubService.py](SCRIPTS.md#removesubservicepy)
+* [removeServiceRole.py](SCRIPTS.md#removeservicerolepy)
+* [removeServiceUser.py](SCRIPTS.md#removeserviceuserpy)
+* [changeUserPassword.py](SCRIPTS.md#changeuserpasswordpy)
 * [assignRoleServiceUser.py](SCRIPTS.md#assignroleserviceuserpy)
 * [assignRoleSubServiceUser.py](SCRIPTS.md#assignrolesubserviceuserpy)
 * [assignInheritRoleServiceUser.py](SCRIPTS.md#assigninheritroleserviceuserpy)
-* [printServices.py](SCRIPTS.md#printservicespy)
-* [printSubServices.py](SCRIPTS.md#printsubservicespy)
-* [printServiceUsers.py](SCRIPTS.md#printservicerolespy)
-* [printServiceRoless.py](SCRIPTS.md#printserviceuserspy)
+* [listRoleAssignments.py](SCRIPTS.md#listroleassignmentspy)
+* [listAllRoleAssignments.py](SCRIPTS.md#listallroleassignmentspy)
+* [listUserRoleAssignments.py](SCRIPTS.md#listuserroleassignmentspy)
+* [listSubServiceRoleAssignments.py](SCRIPTS.md#listsubserviceroleassignmentspy)
+* [setRolePolicy.py](SCRIPTS.md#setrolepolicypy)
 * [unassignInheritRoleServiceUser.py](SCRIPTS.md#unassigninheritroleserviceuserpy)
 * [unassignRoleServiceUser.py](SCRIPTS.md#unassignroleserviceuserpy)
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
 * [createTrustToken.py](SCRIPTS.md#createtrusttokenpy)
-* [listRoleAssignments.py](SCRIPTS.md#listRoleAssignmentspy)
-* [removeService.py](SCRIPTS.md#removeServicepy)
-* [removeSubService.py](SCRIPTS.md#removeSubServicepy)
-* [removeServiceRole.py](SCRIPTS.md#removeServiceRolepy)
-* [changeUserPassword.py](SCRIPTS.md#changeUserPasswordpy)
+* [printServiceUserTrusts.py](SCRIPTS.md#printserviceusertrustspy)
+
 
 ### createNewService.py
 This script creates a new service in IoT keystone
@@ -59,8 +67,8 @@ Args:
                                  admin_domain   \
                                  cloud_admin    \
                                  password       \
-                                 SmartValencia  \
-                                 smartvalencia  \
+                                 smartcity      \
+                                 smartcity      \
                                  adm1           \
                                  password       \
                                  http           \
@@ -85,7 +93,7 @@ Args:
      ./createNewServiceRole.py http             \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -109,7 +117,7 @@ Args:
      ./createNewServiceUser.py http             \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -135,7 +143,7 @@ Args:
      ./createNewSubService.py http              \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  Electricidad   \
@@ -160,7 +168,7 @@ Args:
      ./assignRoleServiceUser.py http            \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -186,7 +194,7 @@ Args:
      ./assignRoleSubServiceUser.py http         \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -212,7 +220,7 @@ Args:
      ./assignInheritRoleServiceUser.py http     \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -235,7 +243,7 @@ Args:
      ./printServices.py http                    \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -256,7 +264,7 @@ Args:
      ./printSubServices.py http                 \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
 ```
@@ -279,7 +287,7 @@ Args:
      ./unassignInheritRoleServiceUser.py http   \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  adm1           \
@@ -304,7 +312,7 @@ Args:
      ./unassignRoleServiceUser.py http          \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
@@ -330,14 +338,13 @@ Args:
      ./unassignRoleSubServiceUser.py http       \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
                                  ServiceCustomer\
                                  Carl           \
 ```
-
 
 ### createTrustToken.py
 This script creates a new Trust Token in IoT keystone
@@ -360,7 +367,7 @@ Args:
      ./src/orchestrator/commands/createTrustToken.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  Electricidad   \
                                  adm1           \
                                  password       \
@@ -369,16 +376,11 @@ Args:
                                  adm1           \
 ```
 
-
-
-
-
-
-### listRoleAssignments.py
+### listAllRoleAssignments.py
 This script prints roles in a service
 ```
-Usage: ./listRoleAssignments.py [args]
-Args: 
+Usage: ./listAllRoleAssignments.py [args]
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -390,20 +392,89 @@ Args:
      ./listRoleAssignments.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
+### listRoleAssignments.py
+This script prints role assignments in a service
+```
+Usage: ./listRoleAssignments.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Role Name
+  <EFFECTIVE>                     Effective roles: True of False
+
+  Typical usage:
+     ./listRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity  \
+                                 adm1           \
+                                 password       \
+                                 SubServiceAdmin\
+                                 True           \
+```
+
+### listUserRoleAssignments.py
+This script prints user roles assignments in a service
+```
+Usage: ./listUserRoleAssignments.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <USER_NAME>                     User Name
+  <EFFECTIVE>                     Effective roles: True or False
+
+  Typical usage:
+     ./listUserRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity  \
+                                 adm1           \
+                                 password       \
+                                 Alice          \
+```
+
+### listSubServiceRoleAssignments.py
+This script prints user roles assignments in a service
+```
+Usage: ./listSubServiceRoleAssignments.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <SUBSERVICE_NAME>               SubService name
+  <EFFECTIVE>                     Effective roles: True or False
+
+  Typical usage:
+     ./listSubServiceRoleAssignments.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity  \
+                                 adm1           \
+                                 password       \
+                                 Electricidad   \
+```
 
 ### removeService.py
 This script removes a Service (aka keystone domain) in IoT Platform
 ```
 Usage: ./removeService.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -418,22 +489,19 @@ Args:
      ./removeService.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValenciaB \
+                                 smartcityB \
                                  cloud_admin    \
                                  password       \
                                  http           \
                                  localhost      \
                                  8080           \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
 ### removeSubService.py
 This script removes a SubService (aka keystone domain) in IoT Platform
 ```
 Usage: ./removeSubService.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -446,44 +514,65 @@ Args:
      ./removeSubService.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
+                                 Electricidad   \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
-### removeSubService.py
-This script removes a SubService (aka keystone domain) in IoT Platform
+### removeServiceRole.py
+This script removes a Role Service (aka keystone domain) in IoT Platform
 ```
-Usage: ./removeSubService.py [args]
-Args: 
+Usage: ./removeServiceRole.py [args]
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
   <SERVICE_NAME>                  Service name
-  <SUBSERVICE_NAME>               SubService name
+  <ROLE_NAME>                     Role name
   <SERVICE_ADMIN_USER>            Service Admin username
   <SERVICE_ADMIN_PASSWORD>        Service Admin password
 
   Typical usage:
-     ./removeSubService.py http           \
+     ./removeServiceRole.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
+                                 SubServiceCustomer\
                                  adm1           \
                                  password       \
 
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
+
+### removeServiceUser.py
+This script removes a User Service (aka keystone domain) in IoT Platform
+```
+Usage: ./removeServiceUser.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <USER_NAME>                     User name
+  <SERVICE_ADMIN_USER>            Service Admin username
+  <SERVICE_ADMIN_PASSWORD>        Service Admin password
+
+  Typical usage:
+     ./removeServiceUser.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 Carl           \
+                                 adm1           \
+                                 password       \
+```
+
 
 ### changeUserPassword.py
 This script changes service user password in IoT keystone
 ```
 Usage: ./changeUserPassword.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -497,21 +586,18 @@ Args:
      ./changeUserPassword.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
                                  bob            \
                                  new_password   \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
 ```
 
 ### printServiceRoles.py
 This script prints roles in a service
-
+```
 Usage: ./printServiceRoles.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -523,19 +609,16 @@ Args:
      ./printServiceRoles.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
-
-For bug reporting, please contact with:
-<iot_support@tid.es>
-
+```
 
 ### printServiceUsers.py
 This script prints users in a service
-
+```
 Usage: ./printServiceUsers.py [args]
-Args: 
+Args:
   <KEYSTONE_PROTOCOL>             HTTP or HTTPS
   <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
   <KEYSTONE_PORT>                 Keystone PORT
@@ -547,9 +630,92 @@ Args:
      ./printServiceUsers.py http           \
                                  localhost      \
                                  5000           \
-                                 SmartValencia  \
+                                 smartcity  \
                                  adm1           \
                                  password       \
+```
 
-For bug reporting, please contact with:
-<iot_support@tid.es>
+### printServiceUserTrusts.py
+This script prints all user trusts in IoT keystone
+```
+Usage: ./printServiceUserTrusts.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Name of role
+  <TRUSTEE_USER_NAME>             Trustee user name
+
+  Typical usage:
+     ./printServiceUserTrusts.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity  \
+                                 adm1           \
+                                 password       \
+                                 adm1           \
+```
+
+### printServiceRolePolicies.py
+This script prints service role XACML policies
+```
+Usage: ./printServiceRolePolicies.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Role name
+  <KEYPASS_PROTOCOL>              HTTP or HTTPS
+  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP
+  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT
+
+  Typical usage:
+     ./printServiceRolePolicies.py http         \
+                                 localhost      \
+                                 5000           \
+                                 smartcity  \
+                                 adm1           \
+                                 password       \
+                                 SubServiceAdmin\
+                                 http           \
+                                 localhost      \
+                                 8080           \
+```
+
+### setRolePolicy.py
+This script set a XACML policy to a role in Access Control
+```
+Usage: ./setRolePolicy.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <ROLE_NAME>                     Name of role
+  <SERVICE_USER>                  Service username
+  <POLICY_FILE>                   Policy XACML file name
+  <KEYPASS_PROTOCOL>              HTTP or HTTPS
+  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP
+  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT
+
+  Typical usage:
+     ./setRolePolicy.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 adm1           \
+                                 password       \
+                                 ServiceCustomer\
+                                 mypolicy.xml   \
+                                 http           \
+                                 localhost      \
+                                 8080           \
+```

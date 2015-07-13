@@ -298,6 +298,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None, subservice_id=None):
+        self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # request.DATA # json validation
@@ -333,6 +334,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id=None, subservice_id=None):
+        self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # request.DATA # json validation
@@ -340,7 +342,6 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT)
             if service_id:
-                if subservice_id:
                     result = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_NAME", None),
@@ -500,6 +501,36 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    def post(self, request, service_id, user_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            #request.DATA  # json validation
+            flow = UpdateUser(self.KEYSTONE_PROTOCOL,
+                              self.KEYSTONE_HOST,
+                              self.KEYSTONE_PORT)
+
+            result = flow.changeUserPassword(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("USER_ID", user_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN",
+                                 HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_USER_PASSWORD", None),
+                )
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
 class UserList_RESTView(APIView, IoTConf):
     """
@@ -620,14 +651,14 @@ class RoleList_RESTView(APIView, IoTConf):
     Creates or returns a Role into a service
 
     """
-    schema_name = "Role"
+    schema_name = "RoleList"
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        self.schema_name = "Role"
+        self.schema_name = "RoleList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -710,10 +741,13 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                      self.KEYSTONE_PORT)
         result = flow.roles_assignments(
             request.DATA.get("SERVICE_ID", service_id),
-            None,
+            request.DATA.get("SERVICE_NAME",None),
             request.DATA.get("SUBSERVICE_ID", subservice_id),
+            request.DATA.get("SUBSERVICE_NAME", None),
             request.DATA.get("ROLE_ID", role_id),
+            request.DATA.get("ROLE_NAME", None),
             request.DATA.get("USER_ID", user_id),
+            request.DATA.get("USER_NAME", None),
             request.DATA.get("SERVICE_ADMIN_USER", None),
             request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
             request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),

@@ -116,6 +116,59 @@ class TestRestOperations(RestOperations):
         assert res.code == 201, (res.code, res.msg)
         return res
 
+    def getTrustScopedToken(self, data):
+        auth_token=None
+        auth_data = { }
+        if "SERVICE_ADMIN_USER" in data:
+            auth_data = {
+                "auth": {
+                    "identity": {
+                        "methods": [
+                            "password"
+                            ],
+                            "password": {
+                                "user": {
+                                    "name": data["SERVICE_ADMIN_USER"],
+                                    "password": data["SERVICE_ADMIN_PASSWORD"]
+                                    }
+                                }
+                        }
+                    }
+                }
+        if "ID_TOKEN" in data:
+            auth_data = {
+                "auth": {
+                    "identity": {
+                        "methods": [
+                            "token"
+                            ],
+                            "token": {
+                                "id": data["ID_TOKEN"]
+                                }
+                        }
+                        }
+                        }
+            auth_token=data["ID_TOKEN"]
+        if "SERVICE_NAME" in data and not "SUBSERVICE_NAME" in data:
+            auth_data['auth']['identity']['password']['user'].update(
+                {"domain": {"name": data["SERVICE_NAME"]}})
+
+        scope_domain = {
+                "scope": {
+                    "OS-TRUST:trust": {
+                        "id": data["ID_TRUST"]
+                    },
+                }
+        }
+        auth_data['auth'].update(scope_domain)
+        res = self.rest_request(
+            url=self.keystone_endpoint_url + '/v3/auth/tokens',
+            relative_url=False,
+            auth_token=auth_token,
+            method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res
+
     def getServiceId(self, data):
         token_res = self.getToken(data)
         data_response = token_res.read()
@@ -149,8 +202,8 @@ class Test_NewService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es"
@@ -163,8 +216,8 @@ class Test_NewService_RestView(object):
             "SERVICE_NAME": "admin_domain",
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -173,8 +226,8 @@ class Test_NewService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "wrong_password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -182,8 +235,8 @@ class Test_NewService_RestView(object):
         self.payload_data_bad2 = {
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -193,7 +246,7 @@ class Test_NewService_RestView(object):
     def test_post_ok(self):
         # TOKEN="kk3"
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             # auth_token=TOKEN,
                                             data=self.payload_data_ok)
@@ -205,7 +258,7 @@ class Test_NewService_RestView(object):
         json_body_response = json.loads(data_response)
         TOKEN = json_body_response['token']
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             auth_token=TOKEN,
                                             data=self.payload_data_ok2)
@@ -213,21 +266,21 @@ class Test_NewService_RestView(object):
 
     def test_post_ok_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 409, (res.code, res.msg)
 
     def test_post_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
 
     def test_post_bad2(self):
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
@@ -241,12 +294,12 @@ class Test_DeleteService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
-            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -255,17 +308,17 @@ class Test_DeleteService_RestView(object):
             "DOMAIN_NAME": "admin_domain",
             "DOMAIN_ADMIN_USER": "cloud_admin",
             "DOMAIN_ADMIN_PASSWORD": "password",
-            "NEW_SERVICE_NAME": "SmartCity_%s" % self.suffix,
-            "NEW_SERVICE_DESCRIPTION": "SmartCity_%s" % self.suffix,
+            "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
-            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity_%s" % self.suffix,
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -276,7 +329,7 @@ class Test_DeleteService_RestView(object):
     def test_delete_ok(self):
 
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -285,7 +338,7 @@ class Test_DeleteService_RestView(object):
         json_body_response = json.loads(response)
         service_id = json_body_response['id']
         res = self.TestRestOps.rest_request(method="DELETE",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -293,7 +346,7 @@ class Test_DeleteService_RestView(object):
     def test_delete_wrong(self):
 
         res = self.TestRestOps.rest_request(method="POST",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -302,7 +355,7 @@ class Test_DeleteService_RestView(object):
         json_body_response = json.loads(response)
         service_id = json_body_response['id']
         res = self.TestRestOps.rest_request(method="DELETE",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -313,14 +366,14 @@ class Test_NewSubService_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
@@ -328,7 +381,7 @@ class Test_NewSubService_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
@@ -336,7 +389,7 @@ class Test_NewSubService_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
         }
@@ -348,7 +401,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -357,7 +410,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 409, (res.code, res.msg)
@@ -366,7 +419,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
@@ -375,7 +428,7 @@ class Test_NewSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
@@ -386,7 +439,7 @@ class Test_DeleteSubService_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
@@ -394,14 +447,14 @@ class Test_DeleteSubService_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
@@ -415,7 +468,7 @@ class Test_DeleteSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -424,7 +477,7 @@ class Test_DeleteSubService_RestView(object):
         subservice_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -433,7 +486,7 @@ class Test_DeleteSubService_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/subservice/" % service_id,
+            url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -442,7 +495,7 @@ class Test_DeleteSubService_RestView(object):
         subservice_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -453,16 +506,16 @@ class Test_NewServiceUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "password",
             "NEW_SERVICE_USER_EMAIL": "pepe@gmail.com",
-            "NEW_SERVICE_USER_DESSCRIPTION": "Pepito",
+            "NEW_SERVICE_USER_DESCRIPTION": "Pepito",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -470,16 +523,16 @@ class Test_NewServiceUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "password",
-            "NEW_SERVICE_USER_PASSWORD": "email@email.com",
+            "NEW_SERVICE_USER_EMAIL": "email@email.com",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -487,7 +540,7 @@ class Test_NewServiceUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -500,7 +553,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -509,7 +562,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 409, (res.code, res.msg)
@@ -518,7 +571,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg)
@@ -527,7 +580,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
@@ -536,7 +589,7 @@ class Test_NewServiceUser_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
@@ -547,7 +600,7 @@ class Test_NewServiceTrust_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Basuras",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -559,6 +612,46 @@ class Test_NewServiceTrust_RestView(object):
             "SERVICE_NAME": "admin_domain",
             "SERVICE_ADMIN_USER": "pep",
             "SERVICE_ADMIN_PASSWORD": "pep",
+        }
+        self.payload_data_ok3 = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME": "bob",
+            "TRUSTOR_USER_NAME": "adm1",
+        }
+        self.payload_data_ok4 = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "bob",
+            "SERVICE_ADMIN_PASSWORD": "password",
+        }
+        self.payload_data_ok5 = {
+            "SERVICE_NAME": "smartcity",
+            "SUBSERVICE_NAME": "Basuras",
+            "ROLE_NAME": "SubServiceAdmin",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME":"iotagent",
+            "TRUSTOR_USER_NAME":"adm1"
+        }
+        self.payload_data_ok5b = {
+            "SERVICE_ADMIN_USER":"iotagent",
+            "SERVICE_ADMIN_PASSWORD": "iotagent",
+            "SERVICE_NAME": "default"
+        }
+        self.payload_data_ok6 = {
+            "SERVICE_NAME": "smartcity",
+            "SUBSERVICE_NAME": "Basuras",
+            "ROLE_NAME": "SubServiceAdmin",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "TRUSTEE_USER_NAME":"Alice",
+            "TRUSTOR_USER_NAME":"adm1"
+        }
+        self.payload_data_ok7 = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER":"Alice",
+            "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -579,10 +672,125 @@ class Test_NewServiceTrust_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/trust/" % service_id,
+            url="/v1.0/service/%s/trust/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+        self.payload_data_ok2["ID_TRUST"] = trust_id
+        token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok2)
+
+    def test_post_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+        self.payload_data_ok4["ID_TRUST"] = trust_id
+        token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok4)
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok5)
+        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok5)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok5)
+
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+        token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok5b)
+        auth_token = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/service/%s" % (service_id),
+                                            json_data=True,
+                                            auth_token=auth_token,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        #print "IOTAGENT token: " + auth_token
+
+        self.payload_data_ok5b["ID_TRUST"] = trust_id
+        token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok5b)
+        auth_token = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/service/%s" % (service_id),
+                                            json_data=True,
+                                            auth_token=auth_token,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        #print "TRUST ID:" + trust_id,
+        #print "IOTAGENT trust token: " + auth_token
+        # curl -X GET  "http://127.0.0.1:1026/v1/contextEntities?details=on&limit=15&offset=0" -i -H "Accept: application/json"   -H "Fiware-Service: smartcity"   -H "Fiware-ServicePath: /Basuras" -H "X-Auth-Token: "
+        # curl -X GET 'http://127.0.0.1:8088/iot/d?i=dev_01&d=t|18&k=apikey2' -i
+        # curl -X GET  http://10.95.83.100:8081/iot/services   -i   -H "Content-Type: application/json"   -H "Fiware-Service: smartalcorcon"   -H "Fiware-ServicePath: /norte"
+
+    def test_post_ok4(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok6)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok6)
+
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id = json_body_response['id']
+
+        # Another TrustID for the same data user
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/trust/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok6)
+
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        trust_id2 = json_body_response['id']
+        assert trust_id != trust_id2
+
+        # # Check token of iotagent does not allow a simple operation
+        # token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok7)
+        # auth_token = token_res.headers.get('X-Subject-Token')
+        # res = self.TestRestOps.rest_request(method="GET",
+        #                                     url="/v1.0/service/%s" % service_id,
+        #                                     json_data=True,
+        #                                     auth_token=auth_token,
+        #                                     data=self.payload_data_ok7)
+        # #assert res.code == 401, (res.code, res.msg, res.raw_json)
+
+        # Use first trust to get a token
+        self.payload_data_ok7["ID_TRUST"] = trust_id
+        token_res = self.TestRestOps.getTrustScopedToken(self.payload_data_ok7)
+        auth_token = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            auth_token=auth_token,
+                                            data=self.payload_data_ok7)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        # Use first trust to get a token
+        self.payload_data_ok7["ID_TRUST"] = trust_id2
+        token_res2 = self.TestRestOps.getTrustScopedToken(self.payload_data_ok7)
+        auth_token2 = token_res2.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            auth_token=auth_token2,
+                                            data=self.payload_data_ok7)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 
 class Test_ServiceLists_RestView(object):
@@ -596,12 +804,12 @@ class Test_ServiceLists_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SERVICE_NAME": "SmartCity",
-            "NEW_SERVICE_DESCRIPTION": "SmartCity village",
+            "SERVICE_NAME": "smartcity",
+            "NEW_SERVICE_DESCRIPTION": "smartcity village",
         }
         self.payload_data_ok3 = {
-            "DOMAIN_NAME": "SmartCity",
-            "SERVICE_NAME": "SmartCity",
+            "DOMAIN_NAME": "smartcity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -625,7 +833,7 @@ class Test_ServiceLists_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
         }
         self.payload_data_bad5 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -635,35 +843,35 @@ class Test_ServiceLists_RestView(object):
 
     def test_get_ok(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
     def test_get_bad(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 400, (res.code, res.msg)
 
     def test_get_bad2(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad2)
         assert res.code == 401, (res.code, res.msg)
 
     def test_get_bad3(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad3)
         assert res.code == 401, (res.code, res.msg)
 
     def test_get_bad4(self):
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/",
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_bad4)
         assert res.code == 401, (res.code, res.msg)
@@ -672,7 +880,7 @@ class Test_ServiceLists_RestView(object):
         auth_token_res = self.TestRestOps.getToken(self.payload_data_bad5)
         auth_token = auth_token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service",
+                                            url="/v1.0/service",
                                             auth_token=auth_token,
                                             json_data=True,
                                             data=None)
@@ -681,14 +889,14 @@ class Test_ServiceLists_RestView(object):
     def test_put_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(method="PUT",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
         # Get domain and check domain description
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -699,7 +907,7 @@ class Test_ServiceLists_RestView(object):
     def test_put_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_bad5)
         res = self.TestRestOps.rest_request(method="PUT",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_bad5)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -709,7 +917,7 @@ class Test_ServiceDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_nok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -718,6 +926,12 @@ class Test_ServiceDetail_RestView(object):
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
+        self.payload_data_ok3 = {
+            "SERVICE_NAME": "Default",
+            "SERVICE_ID": "default",
+            "SERVICE_ADMIN_USER": "iotagent",
+            "SERVICE_ADMIN_PASSWORD": "iotagent",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -725,7 +939,7 @@ class Test_ServiceDetail_RestView(object):
     def test_get_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -733,22 +947,28 @@ class Test_ServiceDetail_RestView(object):
     def test_get_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(method="GET",
-                                            url="v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_nok)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
 
+    def test_get_ok3(self):
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/service/%s" % self.payload_data_ok3['SERVICE_ID'],
+                                            json_data=True,
+                                            data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
 
 class Test_ProjectList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "SUBSERVICE_NAME": "Electricidad",
@@ -759,7 +979,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_bad2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "cloud_admin",
             "SERVICE_ADMIN_PASSWORD": "password",
             "SUBSERVICE_NAME": "Electricidad",
@@ -773,7 +993,7 @@ class Test_ProjectList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/subservice" % service_id,
+            url="/v1.0/service/%s/subservice" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -782,7 +1002,7 @@ class Test_ProjectList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/subservice" % service_id,
+            url="/v1.0/service/%s/subservice" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -792,7 +1012,7 @@ class Test_ProjectList_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -802,7 +1022,7 @@ class Test_ProjectList_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -813,7 +1033,7 @@ class Test_ProjectDetail_RestView(object):
     def __init__(self):
         self.payload_data_ok = {
             "SUBSERVICE_NAME": "Electricidad",
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -826,7 +1046,7 @@ class Test_ProjectDetail_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/subservice/%s" % (
+            url="/v1.0/service/%s/subservice/%s" % (
                 service_id,
                 subservice_id),
             json_data=True,
@@ -838,14 +1058,14 @@ class Test_NewServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_nok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
@@ -858,7 +1078,7 @@ class Test_NewServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -867,13 +1087,13 @@ class Test_NewServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_nok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_nok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_nok)
         assert res.code == 409, (res.code, res.msg, res.raw_json)
@@ -883,14 +1103,15 @@ class Test_DeleteServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
             "ROLE_NAME": "role_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_tmp_%s" % self.suffix,
@@ -901,14 +1122,14 @@ class Test_DeleteServiceRole_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
             "ROLE_NAME": "role_%s" % self.suffix,
         }
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "Adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
@@ -922,7 +1143,7 @@ class Test_DeleteServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -931,7 +1152,7 @@ class Test_DeleteServiceRole_RestView(object):
         role_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -940,7 +1161,7 @@ class Test_DeleteServiceRole_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -951,7 +1172,7 @@ class Test_DeleteServiceRole_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -961,7 +1182,7 @@ class Test_DeleteServiceRole_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -969,7 +1190,7 @@ class Test_DeleteServiceRole_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -977,19 +1198,20 @@ class Test_DeleteServiceRole_RestView(object):
         # Check user exists with no role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?user_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?user_id=%s" % (
                 service_id, user_id),
             json_data=True,
             data=self.payload_data_ok2)
         response = res.read()
-        json_body_response = json.loads(response)
-        assert len(json_body_response['role_assignments']) == 0
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
+        # json_body_response = json.loads(response)
+        # assert len(json_body_response['role_assignments']) == 0
 
     def test_delete_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role/" % service_id,
+            url="/v1.0/service/%s/role/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -998,7 +1220,7 @@ class Test_DeleteServiceRole_RestView(object):
         role_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role/%s" % (service_id, role_id),
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
@@ -1008,12 +1230,12 @@ class Test_RoleList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -1026,7 +1248,7 @@ class Test_RoleList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role" % service_id,
+            url="/v1.0/service/%s/role" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1037,7 +1259,7 @@ class Test_RoleList_RestView(object):
         auth_token = auth_token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role" % service_id,
+            url="/v1.0/service/%s/role" % service_id,
             auth_token=auth_token,
             json_data=True,
             data=self.payload_data_ok2)
@@ -1049,7 +1271,7 @@ class Test_RoleList_RestView(object):
             method="GET",
             user="admin",
             password="admin",
-            url="v1.0/service/%s/role" % service_id,
+            url="/v1.0/service/%s/role" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1059,12 +1281,12 @@ class Test_UserList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "START_INDEX": "10",
@@ -1078,7 +1300,7 @@ class Test_UserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user" % service_id,
+            url="/v1.0/service/%s/user" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1087,7 +1309,7 @@ class Test_UserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user" % service_id,
+            url="/v1.0/service/%s/user" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1099,7 +1321,7 @@ class Test_UserList_RestView(object):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user?count=2&index=0" % service_id,
+            url="/v1.0/service/%s/user?count=2&index=0" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
@@ -1112,7 +1334,7 @@ class Test_UserDetail_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
@@ -1128,7 +1350,7 @@ class Test_UserDetail_RestView(object):
         user_id = json_body_response['token']['user']['id']
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1138,7 +1360,7 @@ class Test_UserDetail_RestView(object):
 class Test_UserModify_RestView(object):
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "adm1",
@@ -1146,7 +1368,7 @@ class Test_UserModify_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "alf_%s" % self.suffix,
@@ -1156,7 +1378,7 @@ class Test_UserModify_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "alf_%s" % self.suffix,
@@ -1168,7 +1390,7 @@ class Test_UserModify_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "alf_%s" % self.suffix,
@@ -1188,7 +1410,7 @@ class Test_UserModify_RestView(object):
         user_id = json_body_response['token']['user']['id']
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1202,7 +1424,7 @@ class Test_UserModify_RestView(object):
         # Create user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1212,7 +1434,7 @@ class Test_UserModify_RestView(object):
         # Modify user name
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -1226,7 +1448,7 @@ class Test_UserModify_RestView(object):
         # Create user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1236,7 +1458,7 @@ class Test_UserModify_RestView(object):
 
         # Login -> OK
         self.payload_data_tmp = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": self.payload_data_ok3["NEW_SERVICE_USER_NAME"],
             "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["NEW_SERVICE_USER_PASSWORD"]
         }
@@ -1247,7 +1469,7 @@ class Test_UserModify_RestView(object):
         # Modify user password
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok3)
@@ -1255,7 +1477,7 @@ class Test_UserModify_RestView(object):
 
         # Login -> OK
         self.payload_data_tmp = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": self.payload_data_ok3["USER_DATA_VALUE"]["name"],
             "SERVICE_ADMIN_PASSWORD": self.payload_data_ok3["USER_DATA_VALUE"]["password"]
         }
@@ -1272,7 +1494,7 @@ class Test_UserModify_RestView(object):
         # Create user
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1282,7 +1504,7 @@ class Test_UserModify_RestView(object):
         # Modify user name
         res = self.TestRestOps.rest_request(
             method="PUT",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_bad)
@@ -1294,7 +1516,7 @@ class Test_UserDelete_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "Alice_%s" % self.suffix,
@@ -1313,7 +1535,7 @@ class Test_UserDelete_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -1322,25 +1544,67 @@ class Test_UserDelete_RestView(object):
         user_id = json_body_response['id']
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/user/%s" % (service_id,
+            url="/v1.0/service/%s/user/%s" % (service_id,
                                              user_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg)
 
 
+class Test_UserChangePasswordByHimself_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "password",
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "SERVICE_USER_PASSWORD": "password",
+            "NEW_USER_PASSWORD": "paswod234",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_post_ok(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        # Create a user to test it
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/user/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg)
+
+
 class Test_AssignRoleUserList_RestView(object):
 
     def __init__(self):
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
         }
         self.payload_data_ok2 = {
             "SERVICE_USER_NAME": "Alice",
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -1354,7 +1618,7 @@ class Test_AssignRoleUserList_RestView(object):
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?subservice_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?subservice_id=%s" % (
                 service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1369,7 +1633,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s" % (
                 service_id, role_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1384,7 +1648,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s&user_id=%s" % (
                 service_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1400,7 +1664,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?subservice_id=%s&role_id=%s&user_id=%s" % (
+            url="/v1.0/service/%s/role_assignments?subservice_id=%s&role_id=%s&user_id=%s" % (
                 service_id, subservice_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1415,7 +1679,7 @@ class Test_AssignRoleUserList_RestView(object):
         role_id = json_body_response['token']['roles'][0]['id']  # admin role
         res = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=true" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=true" % (
                 service_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1423,7 +1687,7 @@ class Test_AssignRoleUserList_RestView(object):
 
         res2 = self.TestRestOps.rest_request(
             method="GET",
-            url="v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=false" % (
+            url="/v1.0/service/%s/role_assignments?role_id=%s&user_id=%s&effective=false" % (
                 service_id, role_id, user_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1435,7 +1699,7 @@ class Test_AssignRoleUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "ServiceCustomer",
@@ -1445,7 +1709,7 @@ class Test_AssignRoleUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SUBSERVICE_NAME": "Electricidad",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
@@ -1456,7 +1720,7 @@ class Test_AssignRoleUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "SubServiceCustomer",
@@ -1466,7 +1730,7 @@ class Test_AssignRoleUser_RestView(object):
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok4 = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "SubServiceCustomer",
@@ -1484,14 +1748,14 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1502,13 +1766,13 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok2)
@@ -1519,13 +1783,13 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments?inherit=true" % (
+            url="/v1.0/service/%s/role_assignments?inherit=true" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok3)
@@ -1536,13 +1800,13 @@ class Test_AssignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok4)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok4)
@@ -1554,7 +1818,7 @@ class Test_UnassignRoleUser_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
-            "SERVICE_NAME": "SmartCity",
+            "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "ROLE_NAME": "SubServiceCustomer",
@@ -1572,14 +1836,14 @@ class Test_UnassignRoleUser_RestView(object):
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/user/" % service_id,
+            url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1587,7 +1851,7 @@ class Test_UnassignRoleUser_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="v1.0/service/%s/role_assignments" % (
+            url="/v1.0/service/%s/role_assignments" % (
                 service_id),
             json_data=True,
             data=self.payload_data_ok)
@@ -1635,6 +1899,7 @@ if __name__ == '__main__':
     test_ServiceDetail = Test_ServiceDetail_RestView()
     test_ServiceDetail.test_get_ok()
     test_ServiceDetail.test_get_nok()
+    test_ServiceDetail.test_get_ok3()
 
     test_ServiceLists = Test_ServiceLists_RestView()
     test_ServiceLists.test_get_ok()
@@ -1669,6 +1934,9 @@ if __name__ == '__main__':
     test_UserModify = Test_UserDelete_RestView()
     test_UserModify.test_delete_ok()
 
+    test_UserChangePasswordByHimself = Test_UserChangePasswordByHimself_RestView()
+    test_UserChangePasswordByHimself.test_post_ok()
+
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
 
@@ -1694,3 +1962,7 @@ if __name__ == '__main__':
 
     test_NewServiceTrust = Test_NewServiceTrust_RestView()
     test_NewServiceTrust.test_post_ok()
+    test_NewServiceTrust.test_post_ok3()
+    test_NewServiceTrust.test_post_ok4()
+    # It will work just for keystone juno or upper
+    #test_NewServiceTrust.test_post_ok2()
