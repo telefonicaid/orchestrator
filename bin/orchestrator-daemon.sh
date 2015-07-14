@@ -32,8 +32,7 @@ USER="orchestrator"
 exe="$UWGSI --http :${PORT} \
 --chdir $ORCHESTRATOR_DIR \
 --wsgi-file wsgi.py \
---env  $ENVIRONMENT \
---virtualenv $VIRTUALENV \
+--env $ENVIRONMENT \
 --master \
 --processes $PROCESSES \
 --threads $THREADS \
