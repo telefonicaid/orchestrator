@@ -57,6 +57,12 @@ class FlowBase(object):
         if isinstance(ex.args, tuple) and (
             not isinstance(ex.args[0], tuple)):  # Python 2.6
             res['code'] = ex.args[0]
+            if res['code'] == 400 and len(ex.args) > 1 and \
+               ex.args[1].startswith('SPASSWORD'):
+                res['error'] = ex.args[1]
         elif isinstance(ex.message, tuple):  # Python 2.7
             res['code'] = ex.message[0]
+            if res['code'] == 400 and len(ex.message) > 1 and \
+               ex.message[1].startswith('SPASSWORD'):
+                res['error'] = ex.message[1]
         return res

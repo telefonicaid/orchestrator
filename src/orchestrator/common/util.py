@@ -100,6 +100,9 @@ class RestOperations(object):
                 res.raw_json = data_json
                 if data_json and 'detail' in data_json:
                     res.msg = data_json['detail']
+                if data_json and 'error' in data_json:
+                    if 'message' in data_json['error']:
+                        res.msg = data_json['error']['message']
             except ValueError:
                 res.msg = data
             except Exception, e:
