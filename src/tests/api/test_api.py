@@ -781,7 +781,7 @@ class Test_NewServiceTrust_RestView(object):
                                             data=self.payload_data_ok7)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
-        # Use first trust to get a token
+        # Use second trust to get a token
         self.payload_data_ok7["ID_TRUST"] = trust_id2
         token_res2 = self.TestRestOps.getTrustScopedToken(self.payload_data_ok7)
         auth_token2 = token_res2.headers.get('X-Subject-Token')
