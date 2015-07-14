@@ -781,7 +781,7 @@ class Test_NewServiceTrust_RestView(object):
                                             data=self.payload_data_ok7)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
-        # Use first trust to get a token
+        # Use second trust to get a token
         self.payload_data_ok7["ID_TRUST"] = trust_id2
         token_res2 = self.TestRestOps.getTrustScopedToken(self.payload_data_ok7)
         auth_token2 = token_res2.headers.get('X-Subject-Token')
@@ -1565,6 +1565,11 @@ class Test_UserChangePasswordByHimself_RestView(object):
             "SERVICE_USER_PASSWORD": "password",
             "NEW_USER_PASSWORD": "paswod234",
         }
+        self.payload_data_ok2 = {
+            "SERVICE_ADMIN_USER": "user_%s" % self.suffix,
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_NAME": "smartcity",
+        }        
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -1574,6 +1579,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
         data_response = token_res.read()
         json_body_response = json.loads(data_response)
         service_id = json_body_response['token']['user']['domain']['id']
+        
         # Create a user to test it
         res = self.TestRestOps.rest_request(
             method="POST",
@@ -1584,6 +1590,17 @@ class Test_UserChangePasswordByHimself_RestView(object):
         data_response = res.read()
         json_body_response = json.loads(data_response)
         user_id = json_body_response['id']
+
+        token_res = self.TestRestOps.getUnScopedToken(self.payload_data_ok2)
+        data_response = token_res.read()
+        token = token_res.headers.get('X-Subject-Token')
+
+        res = self.TestRestOps.rest_request(
+            url=self.TestRestOps.keystone_endpoint_url + '/v3/projects?domain_id=%s' % service_id,
+            relative_url=False,
+            method='GET',
+            auth_token=token)
+        assert res.code == 403, (res.code, res.msg)  # 403 just authorization not authentication
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/user/%s" % (service_id,
@@ -1591,7 +1608,13 @@ class Test_UserChangePasswordByHimself_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg)
-
+        # Use original token
+        res = self.TestRestOps.rest_request(
+            url=self.TestRestOps.keystone_endpoint_url + '/v3/projects?domain_id=%s' % service_id,
+            relative_url=False,
+            method='GET',
+            auth_token=token)
+        assert res.code == 401, (res.code, res.msg)        
 
 class Test_AssignRoleUserList_RestView(object):
 

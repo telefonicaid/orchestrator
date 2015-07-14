@@ -1,0 +1,12 @@
+# Orchestrator Daemon service config file
+VIRTUALENV=/var/env-orchestrator
+ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
+UWGSI=uwsgi
+PORT=8084
+STATS_PORT=8085
+PROCESSES=1
+THREADS=4
+ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
+PIDFILE="/var/run/orchestrator.pid"
+PNAME="orchestrator"
+USER="orchestrator"

@@ -428,7 +428,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
-### update an user[PUT]
+### update an user (by his admin) [PUT]
 
 + Request (application/json)
 
@@ -447,6 +447,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
         {
+             "SERVICE_USER_PASSWORD": "old_password",
              "NEW_USER_PASSWORD": "new_password"
         }
 
