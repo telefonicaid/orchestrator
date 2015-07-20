@@ -18,7 +18,7 @@ RUN git fetch && git checkout develop && pip install -r requirements.txt
 EXPOSE 8084
 
 WORKDIR /github/telefonicaid/orchestrator/bin
-CMD ["orchestrator-daemon", "start"]
+CMD ["orchestrator-daemon.sh", "start"]
 
 
 
