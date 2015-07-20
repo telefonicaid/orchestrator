@@ -34,7 +34,7 @@ python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        thinkingthings \
-                                       adm_tt         \
+                                       admin_tt         \
                                        password       \
                                        user_x         \
                                        password

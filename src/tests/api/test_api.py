@@ -1741,6 +1741,14 @@ class Test_AssignRoleUser_RestView(object):
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
         }
+        self.payload_data_ok2b = {
+            "SERVICE_NAME": "smartcity",
+            "SUBSERVICE_NAME": "Electricidad",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            #"SERVICE_ADMIN_USER": "user_%s" % self.suffix,
+            #"SERVICE_ADMIN_PASSWORD": "user_%s" % self.suffix,
+        }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
             "SERVICE_NAME": "smartcity",
@@ -1800,6 +1808,14 @@ class Test_AssignRoleUser_RestView(object):
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
+        # Get Scoped Token in their project
+        auth_token_res = self.TestRestOps.getScopedToken(self.payload_data_ok2b)
+        auth_token = auth_token_res.headers.get('X-Subject-Token')
+        # Try to get scoped token in forener project
+        self.payload_data_ok2b["SUBSERVICE_NAME"] = "Basuras"
+        auth_token_res = self.TestRestOps.getScopedToken(self.payload_data_ok2b)
+        auth_token = auth_token_res.headers.get('X-Subject-Token')
+
 
     def test_post_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
@@ -1977,7 +1993,7 @@ if __name__ == '__main__':
 
     test_AssignRoleUser = Test_AssignRoleUser_RestView()
     test_AssignRoleUser.test_post_ok()
-    # test_AssignRoleUser.test_post_ok2()
+    test_AssignRoleUser.test_post_ok2()
     test_AssignRoleUser.test_post_ok3()
 
     test_UnassignRoleUser = Test_UnassignRoleUser_RestView()
