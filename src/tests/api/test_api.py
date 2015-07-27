@@ -1568,7 +1568,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
 
         self.payload_data_ok2 = {
             "SERVICE_ADMIN_USER": "user_%s" % self.suffix,
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
             "SERVICE_NAME": "smartcity",
         }        
 
