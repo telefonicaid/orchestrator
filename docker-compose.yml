@@ -1,0 +1,16 @@
+orchestrator:
+  build: .
+  links:
+    - keystone
+    - keypass 
+  ports:
+    - "5001:5001"
+
+  #/etc/keystone/keystone.conf:
+  #   connection = mysql://keystone:keystone@localhost/keystone
+
+keypass:
+  image: fiwareiot/keypass
+
+keystone:
+  image: fiwareiot/keystone
