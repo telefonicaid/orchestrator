@@ -10,7 +10,7 @@ orchestrator:
   #   connection = mysql://keystone:keystone@localhost/keystone
 
 keypass:
-  image: fiwareiot/keypass
+  image: telefonicaiot/keypass
 
 keystone:
-  image: fiwareiot/keystone
+  image: telefonicaiot/keystone
