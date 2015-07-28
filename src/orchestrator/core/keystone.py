@@ -144,6 +144,92 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         return res.headers.get('X-Subject-Token')
 
+
+    def getScopedProjectToken(self,
+                              DOMAIN_NAME,
+                              PROJECT_NAME,
+                              DOMAIN_ADMIN_USER,
+                              DOMAIN_ADMIN_PASSWORD):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": SERVICE_ADMIN_USER,
+                            "password": SERVICE_ADMIN_PASSWORD
+                        }
+                    }
+                }
+            }
+        }
+        if DOMAIN_NAME and PROJECT_NAME:
+            auth_data['auth']['identity']['password']['user'].update(
+                {"domain": {"name": DOMAIN_NAME}})
+
+            scope_domain = {
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "name": DOMAIN_NAME
+                        },
+                        "name": "/" + PROJECT_NAME
+                    }
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        res = self.rest_request(
+            url=self.keystone_endpoint_url + '/v3/auth/tokens',
+            relative_url=False,
+            method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res
+
+    def getScopedProjectToken2(self,
+                              DOMAIN_ID,
+                              PROJECT_ID,
+                              DOMAIN_ADMIN_USER,
+                              DOMAIN_ADMIN_PASSWORD):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": SERVICE_ADMIN_USER,
+                            "password": SERVICE_ADMIN_PASSWORD
+                        }
+                    }
+                }
+            }
+        }
+        if DOMAIN_ID and PROJECT_ID:
+            auth_data['auth']['identity']['password']['user'].update(
+                {"domain": {"id": DOMAIN_ID}})
+
+            scope_domain = {
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        },
+                        "id": "/" + PROJECT_ID
+                    }
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        res = self.rest_request(
+            url=self.keystone_endpoint_url + '/v3/auth/tokens',
+            relative_url=False,
+            method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res
+
+
     # aka createService
     def createDomain(self,
                      CLOUD_ADMIN_TOKEN,
@@ -987,4 +1073,4 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         return { "trusts": json_body_response['trusts'] }
-            
+

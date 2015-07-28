@@ -299,3 +299,96 @@ class Projects(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return PROJECT
+
+
+
+    def register_iota_service(self,
+                       DOMAIN_ID,
+                       DOMAIN_NAME,
+                       PROJECT_ID,
+                       PROJECT_NAME,
+                       SERVICE_USER_NAME,
+                       SERVICE_USER_PASSWORD,
+                       SERVICE_USER_TOKEN):
+
+        '''Register Service in IOTA
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN
+        }
+        logger.debug("register_service invoked with: %s" % json.dumps(data_log,
+                                                                 indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(DOMAIN_NAME,
+                                                                        PROJECT_NAME,
+                                                                        SERVICE_USER_NAME,
+                                                                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                                                        DOMAIN_NAME,
+                                                        ROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(DOMAIN_ID,
+                                                                         PROJECT_ID,
+                                                                         SERVICE_USER_NAME,
+                                                                         SERVICE_USER_PASSWORD)
+                    #DOMAIN_NAME =
+                    #PROJECT_NAME =
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+
+            # TODO: CREATE TRUSTOKENID
+
+            self.iota.registerService(SERVICE_USER_TOKEN,
+                                      SERVICE_NAME,
+                                      SUBSERVICE_NAME,
+                                      PROTOCOL,
+                                      ENTITY_TYPE,
+                                      APIKEY,
+                                      TRUSTOKENID,
+                                      CBROKER_ENDPOINT,
+                                      MAPPING_ATTRIBUTES,
+                                      STATIC_ATTRIBUTES)
+
+
+
+            #logger.debug("PROJECT=%s" % PROJECT)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "PROJECT": PROJECT
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
+        return PROJECT
