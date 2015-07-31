@@ -23,10 +23,13 @@
 #
 import json
 import os
+import logging
 
 from orchestrator.common.util import RestOperations
 from orchestrator.core import policies
 from orchestrator.core.idm import IdMOperations
+
+logger = logging.getLogger('orchestrator_core')
 
 
 class IdMKeystoneOperations(IdMOperations):
@@ -165,6 +168,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         assert 'domain' in json_body_response, "domain %s not found" % NEW_SERVICE_NAME
         assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
@@ -187,6 +192,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         assert 'domain' in json_body_response, "domain not found"
         assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
@@ -202,6 +209,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         # TODO ensure ADMIN_ROLE_ID?
         if len(json_body_response['roles']) > 0:
             return json_body_response['roles'][0]['id']
@@ -239,6 +248,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['id']
 
     # aka createSubService
@@ -263,6 +274,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['project']['id']
 
     def updateProject(self,
@@ -283,6 +296,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['project']['id']
 
     def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME, SCOPED=True):
@@ -317,6 +332,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['token']['user']['domain']['id']
 
     def createUserDomain(self,
@@ -348,6 +365,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['user']['id']
 
     def createRoleDomain(self,
@@ -369,6 +388,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['id']
 
     def getProjectId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME, PROJECT_NAME):
@@ -398,6 +419,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         if 'projects' in json_body_response:
             for project in json_body_response['projects']:
                 if project['name'] == PROJECT_NAME:
@@ -423,7 +446,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         for role in json_body_response['Resources']:
             if role['name'] == ROLE_NAME:
                 return role['id']
@@ -459,6 +483,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         if 'roles' in json_body_response['token']:
             for role in json_body_response['token']['roles']:
                 if DOMAIN_ID + '#' + ROLE_NAME == role['name']:
@@ -490,6 +516,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         if json_body_response['token']['user']['name'] == USER_NAME:
             return json_body_response['token']['user']['id']
         else:
@@ -509,7 +537,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         for user in json_body_response['Resources']:
             if user['userName'] == USER_NAME:
                 return user['id']
@@ -540,6 +569,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def removeUser(self,
@@ -576,6 +607,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def getDomains(self,
@@ -589,7 +622,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         domains = []
         for domain in json_body_response['domains']:
             domain_data = {
@@ -614,6 +648,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def getDomainRoles(self,
@@ -632,7 +668,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         # Group each role by name and id
         roles = []
         for role in json_body_response['Resources']:
@@ -667,7 +704,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         # Group each user by name and id
         users = []
         for user in json_body_response['Resources']:
@@ -702,7 +740,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         # Group each role by name and id
         projects = []
         for project in json_body_response['projects']:
@@ -729,6 +768,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return {"projects": json_body_response['projects']}
 
     def changeUserPassword(self,
@@ -760,7 +801,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def getProjectRoleAssignments(self,
@@ -777,6 +819,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def getDomainRoleAssignments(self,
@@ -793,6 +837,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def grantInheritRole(self,
@@ -845,8 +891,10 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         assert 'domain' in json_body_response, "domain not found"
-        assert 'id' in json_body_response['domain'], "domain id not found"        
+        assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
     def disableProject(self,
@@ -866,6 +914,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         assert 'project' in json_body_response, "project not found"
         assert 'id' in json_body_response['project'], "project id not found"
         return json_body_response['project']['id']
@@ -925,6 +975,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response
 
     def removeRole(self,
@@ -971,6 +1023,8 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return json_body_response['trust']['id']
 
 
@@ -986,5 +1040,7 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
         return { "trusts": json_body_response['trusts'] }
             
