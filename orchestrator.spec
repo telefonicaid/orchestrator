@@ -55,11 +55,14 @@ find $RPM_BUILD_ROOT/%{python_lib}/iotp-orchestrator -name "*.pyc" -delete
 
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 cp -a %{_root}/bin/orchestrator-daemon.sh $RPM_BUILD_ROOT/etc/init.d/orchestrator
+mkdir -p $RPM_BUILD_ROOT/etc/default
+cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-daemon
 
 %files
 "/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator"
 %defattr(755,%{_project_user},%{_project_user},755)
 %config /etc/init.d/%{_service_name}
+%config /etc/default/%{_service_name}-daemon
 %{_install_dir}
 
 # -------------------------------------------------------------------------------------------- #
