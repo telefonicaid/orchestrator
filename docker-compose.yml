@@ -4,10 +4,7 @@ orchestrator:
     - keystone
     - keypass 
   ports:
-    - "5001:5001"
-
-  #/etc/keystone/keystone.conf:
-  #   connection = mysql://keystone:keystone@localhost/keystone
+    - "8084:8084"
 
 keypass:
   image: telefonicaiot/keypass
