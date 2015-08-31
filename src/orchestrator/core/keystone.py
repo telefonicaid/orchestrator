@@ -148,8 +148,8 @@ class IdMKeystoneOperations(IdMOperations):
     def getScopedProjectToken(self,
                               DOMAIN_NAME,
                               PROJECT_NAME,
-                              DOMAIN_ADMIN_USER,
-                              DOMAIN_ADMIN_PASSWORD):
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD):
         auth_data = {
             "auth": {
                 "identity": {
@@ -180,12 +180,11 @@ class IdMKeystoneOperations(IdMOperations):
                 }
             }
             auth_data['auth'].update(scope_domain)
-        res = self.rest_request(
-            url=self.keystone_endpoint_url + '/v3/auth/tokens',
-            relative_url=False,
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
             method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
-        return res
+        return res.headers.get('X-Subject-Token')
 
     def getScopedProjectToken2(self,
                               DOMAIN_ID,
@@ -222,12 +221,11 @@ class IdMKeystoneOperations(IdMOperations):
                 }
             }
             auth_data['auth'].update(scope_domain)
-        res = self.rest_request(
-            url=self.keystone_endpoint_url + '/v3/auth/tokens',
-            relative_url=False,
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
             method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
-        return res
+        return res.headers.get('X-Subject-Token')
 
 
     # aka createService
@@ -932,7 +930,7 @@ class IdMKeystoneOperations(IdMOperations):
         data = res.read()
         json_body_response = json.loads(data)
         assert 'domain' in json_body_response, "domain not found"
-        assert 'id' in json_body_response['domain'], "domain id not found"        
+        assert 'id' in json_body_response['domain'], "domain id not found"
         return json_body_response['domain']['id']
 
     def disableProject(self,

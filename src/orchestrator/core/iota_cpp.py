@@ -59,23 +59,23 @@ class IoTACppOperations(object):
                         SERVICE_USER_TOKEN,
                         SERVICE_NAME,
                         SUBSERVICE_NAME,
-                        protocol,
-                        entity_type,
-                        apikey,
-                        trustokenid,
-                        cbroker_endpoint,
-                        mapping_attributes=[],
-                        static_attributes=[]):
+                        PROTOCOL,
+                        ENTITY_TYPE,
+                        APIKEY,
+                        TRUSTTOKENID,
+                        CBROKER_ENDPOINT,
+                        MAPPING_ATTRIBUTES=[],
+                        STATIC_ATTRIBUTES=[]):
         body_data = {
             services : [
                 {
-                    "protocol": [protocol],
-                    "entity_type": entity_type,
-                    "apikey": apikey,
-                    "token": trusttokenid,
-                    "cbroker": cbroker_endpoint,
-                    "attributes": mapping_attributes,
-                    "static_attributes": static_attributes,
+                    "protocol": [PROTOCOL],
+                    "entity_type": ENTITY_TYPE,
+                    "apikey": APIKEY,
+                    "token": TRUSTOKENID,
+                    "cbroker": CBROKER_ENDPOINT,
+                    "attributes": MAPPING_ATTRIBUTES,
+                    "static_attributes": STATIC_ATTRIBUTES,
                 }
             ]
         }
@@ -84,7 +84,7 @@ class IoTACppOperations(object):
             url='/iot/services',
             method='POST',
             data=body_data,
-            auth_token=SERVICE_ADMIN_TOKEN,
+            auth_token=SERVICE_USER_TOKEN,
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
@@ -111,7 +111,7 @@ class IoTACppOperations(object):
             url='/iot/services',
             method='POST',
             data=body_data,
-            auth_token=SERVICE_ADMIN_TOKEN,
+            auth_token=SERVICE_USER_TOKEN,
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 

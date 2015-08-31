@@ -27,7 +27,7 @@ import os
 from orchestrator.common.util import RestOperations
 from orchestrator.core.cb import CBOperations
 
-class OrionOperations(object):
+class CBOrionOperations(object):
     '''
        IoT platform: Orion Context Broker
     '''
@@ -42,13 +42,13 @@ class OrionOperations(object):
         self.CB_PORT = CB_PORT
 
         self.CBRestOperations = RestOperations(CB_PROTOCOL,
-                                                    CB_HOST,
-                                                    CB_PORT)
+                                               CB_HOST,
+                                               CB_PORT)
 
 
     def checkCB(self):
         res = self.CBRestOperations.rest_request(
-            url='/iot/',
+            url='/v1/contextEntities',
             method='GET',
             data=None)
         assert res.code == 404, (res.code, res.msg)
@@ -60,7 +60,7 @@ class OrionOperations(object):
     #                     SERVICE_NAME,
     #                     SUBSERVICE_NAME):
     #     body_data = {
-    #         # TODO: fill 
+    #         # TODO: fill
     #     }
 
     #     res = self.CBRestOperations.rest_request(
@@ -71,7 +71,42 @@ class OrionOperations(object):
     #         fiware_service=SERVICE_NAME,
     #         fiware_service_path='/'+SUBSERVICE_NAME)
 
-    #     assert res.code == 201 (res.code, res.msg)
+    #     assert res.code == 201, (res.code, res.msg)
+
+
+
+    def updateContext(self,
+                      SERVICE_USER_TOKEN,
+                      SERVICE_NAME,
+                      SUBSERVICE_NAME,
+                      ENTITY_TYPE,
+                      ENTITY_ID,
+                      ATTRIBUTES=[]):
+
+        body_data = {
+            "contextElements": [
+                {
+                    "type": ENTITY_TYPE,
+                    "isPattern": "false",
+                    "id": ENTITY_ID,
+                    "attributes": ATTRIBUTES
+                }
+            ],
+            "updateAction": "UPDATE"
+        }
+
+        res = self.CBRestOperations.rest_request(
+            url='/v1/updateContext',
+            method='POST',
+            data=body_data,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        # TODO: return res ?
+        data = res.read()
+        return data
 
 
     def getContextTypes(self,
@@ -87,8 +122,10 @@ class OrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        #assert res.code == 201 (res.code, res.msg)    
-
+        assert res.code == 200, (res.code, res.msg)
+        # TODO: return res ?
+        data = res.read()
+        return data
 
 
     def subscribeContext(self,
@@ -96,9 +133,8 @@ class OrionOperations(object):
                          SERVICE_NAME,
                          SUBSERVICE_NAME,
                          ENTITY_TYPE,
-                         ATTRIBUTES,
-                         REFERENCE_URL
-                         ):
+                         REFERENCE_URL,
+                         ATTRIBUTES=[]):
         body_data = {
             "entities": [
                {
@@ -107,12 +143,11 @@ class OrionOperations(object):
                 "id": ".*",
                }
             ],
-            "attributes": [
-                ATTRIBUTES  # Puede ser vacio?
-            ],
-            "reference": REFERENCE_URL, : # like http://<sth.host>:<sth.port>/notify
+            "attributes": ATTRIBUTES,
+            "reference": REFERENCE_URL, # like http://<sth.host>:<sth.port>/notify
             "duration": "P50Y",
         }
+
         #TODO: v1/registry/subscribeContextAvailability ?
         res = self.CBRestOperations.rest_request(
             url='/v1/subscribeContext',
@@ -122,8 +157,10 @@ class OrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 201 (res.code, res.msg)
-
+        assert res.code == 201, (res.code, res.msg)
+        # TODO: return res ?
+        data = res.read()
+        return data
 
 
     def unsubscribeContext(self,
@@ -143,4 +180,7 @@ class OrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 201 (res.code, res.msg)
+        assert res.code == 201, (res.code, res.msg)
+        # TODO: return res ?
+        data = res.read()
+        return data
