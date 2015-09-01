@@ -104,7 +104,6 @@ class CBOrionOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        # TODO: return res ?
         data = res.read()
         return data
 
@@ -123,7 +122,6 @@ class CBOrionOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        # TODO: return res ?
         data = res.read()
         return data
 
@@ -157,8 +155,7 @@ class CBOrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 201, (res.code, res.msg)
-        # TODO: return res ?
+        assert res.code == 200, (res.code, res.msg)
         data = res.read()
         return data
 
@@ -180,7 +177,6 @@ class CBOrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 201, (res.code, res.msg)
-        # TODO: return res ?
+        assert res.code == 200, (res.code, res.msg)
         data = res.read()
         return data

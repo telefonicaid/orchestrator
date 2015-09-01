@@ -93,26 +93,29 @@ class Context(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             # Invoke to ContextBroker
-            self.cb.updateContext(SERVICE_USER_TOKEN,
-                                  SERVICE_NAME,
-                                  SUBSERVICE_NAME,
-                                  ENTITY_TYPE,
-                                  ENTITY_ID,
-                                  ATTRIBUTES)
+            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+                                           SERVICE_NAME,
+                                           SUBSERVICE_NAME,
+                                           ENTITY_TYPE,
+                                           ENTITY_ID,
+                                           ATTRIBUTES)
+            logger.debug("UPDATE_CONTEXT=%s" % json.dumps(cb_res, indent=3))
+            import ipdb
+            ipdb.set_trace()
 
-            self.cb.subscribeContext(SERVICE_USER_TOKEN,
-                                     SERVICE_NAME,
-                                     SUBSERVICE_NAME,
-                                     ENTITY_TYPE,
-                                     REFERENCE_URL,
-                                     ATTRIBUTES)
+            cb_res = self.cb.subscribeContext(SERVICE_USER_TOKEN,
+                                              SERVICE_NAME,
+                                              SUBSERVICE_NAME,
+                                              ENTITY_TYPE,
+                                              REFERENCE_URL,
+                                              ATTRIBUTES)
+            logger.debug("SUBSCRIBE_CONTEXT=%s" % json.dumps(cb_res, indent=3))
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        data_log = {
+        data_log = cb_res
 
-        }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        #return ?
+        return cb_res

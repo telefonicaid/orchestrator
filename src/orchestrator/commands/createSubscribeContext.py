@@ -65,7 +65,7 @@ def main():
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 smartcity      \\"
-        print "                                 basuras        \\"        
+        print "                                 Basuras        \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
         print "                                 http           \\"
@@ -73,8 +73,8 @@ def main():
         print "                                 1026           \\"
         print "                                 entity_test    \\"
         print "                                 entity_test_id \\"
-        print "                                 []             \\"        
-        print "                                 test_url       \\"        
+        print "                                 []             \\"
+        print "                                 test_url       \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -84,7 +84,7 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SUBSERVICE_NAME = sys.argv[5]    
+    SUBSERVICE_NAME = sys.argv[5]
     SERVICE_USER_NAME = sys.argv[6]
     SERVICE_USER_PASSWORD = sys.argv[7]
     ORION_PROTOCOL = sys.argv[8]
@@ -95,7 +95,7 @@ def main():
     ATTRIBUTES = sys.argv[13]
     REFERENCE_URL = sys.argv[14]
 
-    
+
     flow = Context(KEYSTONE_PROTOCOL,
                    KEYSTONE_HOST,
                    KEYSTONE_PORT,
