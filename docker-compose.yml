@@ -1,0 +1,13 @@
+orchestrator:
+  build: .
+  links:
+    - keystone
+    - keypass 
+  ports:
+    - "8084:8084"
+
+keypass:
+  image: telefonicaiot/keypass
+
+keystone:
+  image: telefonicaiot/keystone

@@ -205,7 +205,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es"
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -219,7 +219,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
@@ -229,7 +229,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
@@ -297,7 +297,7 @@ class Test_DeleteService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
             "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "cloud_admin",
@@ -311,7 +311,7 @@ class Test_DeleteService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
             "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "cloud_admin",
@@ -510,7 +510,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_USER_EMAIL": "pepe@gmail.com",
             "NEW_SERVICE_USER_DESCRIPTION": "Pepito",
         }
@@ -519,7 +519,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
@@ -527,7 +527,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_USER_EMAIL": "email@email.com",
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -536,7 +536,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
@@ -1521,7 +1521,7 @@ class Test_UserDelete_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "password",
             "USER_NAME": "Alice_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -1559,17 +1559,36 @@ class Test_UserChangePasswordByHimself_RestView(object):
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "password",
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "SERVICE_NAME": "smartcity",
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "SERVICE_USER_PASSWORD": "password",
+            "SERVICE_USER_PASSWORD": "4pass1w0rd",
             "NEW_USER_PASSWORD": "paswod234",
         }
+
         self.payload_data_ok2 = {
             "SERVICE_ADMIN_USER": "user_%s" % self.suffix,
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
             "SERVICE_NAME": "smartcity",
         }        
+
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad = {
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_USER_NAME": "user_%s" % self.suffix,
+            "SERVICE_USER_PASSWORD": "bad_password",
+            "NEW_USER_PASSWORD": "new_paswod234",
+        }
+        self.payload_data_bad2 = {
+            "SERVICE_ADMIN_USER": "user_%s" % self.suffix,
+            "SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "SERVICE_NAME": "smartcity"
+        }                
+
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -1608,6 +1627,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg)
+
         # Use original token
         res = self.TestRestOps.rest_request(
             url=self.TestRestOps.keystone_endpoint_url + '/v3/projects?domain_id=%s' % service_id,
@@ -1615,6 +1635,39 @@ class Test_UserChangePasswordByHimself_RestView(object):
             method='GET',
             auth_token=token)
         assert res.code == 401, (res.code, res.msg)        
+
+
+    def test_post_bad(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_bad)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        service_id = json_body_response['token']['user']['domain']['id']
+        # Create a user to test it
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/user/" % service_id,
+            json_data=True,
+            data=self.payload_data_bad)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+        
+        # Get user token
+        token_res = self.TestRestOps.getUnScopedToken(self.payload_data_bad2)
+        data_response = token_res.read()
+        USER_TOKEN = token_res.headers.get('X-Subject-Token')
+        self.payload_data_bad["SERVICE_USER_TOKEN"] = USER_TOKEN
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_bad)
+        assert res.code == 401, (res.code, res.msg)        
+
+
 
 class Test_AssignRoleUserList_RestView(object):
 
@@ -1975,6 +2028,7 @@ if __name__ == '__main__':
 
     test_UserChangePasswordByHimself = Test_UserChangePasswordByHimself_RestView()
     test_UserChangePasswordByHimself.test_post_ok()
+    test_UserChangePasswordByHimself.test_post_bad()
 
     test_ProjectDetail = Test_ProjectDetail_RestView()
     test_ProjectDetail.test_get_ok()
