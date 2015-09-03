@@ -55,24 +55,36 @@ class CBOrionOperations(object):
         pass
 
 
-    # def registerContext(self,
-    #                     SERVICE_USER_TOKEN,
-    #                     SERVICE_NAME,
-    #                     SUBSERVICE_NAME):
-    #     body_data = {
-    #         # TODO: fill
-    #     }
+    def registerContext(self,
+                        SERVICE_USER_TOKEN,
+                        SERVICE_NAME,
+                        SUBSERVICE_NAME,
+                        ENTITIES=[],
+                        ATTRIBUTES=[],
+                        APP="",
+                        DURATION="P1M"):
+        body_data = {
+            "contextRegistrations": [
+                {
+                    "entities": ENTITIES,
+                    "attributes": ATTRIBUTES,
+                    "providingApplication": APP
+                }
+            ],
+            "duration": DURATION
+        }
 
-    #     res = self.CBRestOperations.rest_request(
-    #         url='/v1/registerContext',
-    #         method='POST',
-    #         data=body_data,
-    #         auth_token=SERVICE_USER_TOKEN,
-    #         fiware_service=SERVICE_NAME,
-    #         fiware_service_path='/'+SUBSERVICE_NAME)
+        res = self.CBRestOperations.rest_request(
+            url='/v1/registerContext',
+            method='POST',
+            data=body_data,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
 
-    #     assert res.code == 201, (res.code, res.msg)
-
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        return data
 
 
     def updateContext(self,
