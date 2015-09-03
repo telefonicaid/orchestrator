@@ -302,7 +302,7 @@ class Projects(FlowBase):
 
 
 
-    def register_iota_service(self,
+    def register_service(self,
                        DOMAIN_ID,
                        DOMAIN_NAME,
                        PROJECT_ID,
@@ -364,31 +364,135 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            # call CB
+            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+                                           SERVICE_NAME,
+                                           SUBSERVICE_NAME,
+                                           ENTITY_TYPE,
+                                           ENTITY_ID,
+                                           ATTRIBUTES=[],
 
-            # TODO: CREATE TRUSTOKENID
+                                           # ID: S-001
+                                           # TYPE: service
+                                           # isPattern: false
+                                           # name: TheService
+                                           # provider: ThirdParty
+                                           # endpint: http://thirdparty
+                                           # method: GET
+                                           # authentication: context-adapter | third-party
+                                           # mapping: [...]
+                                           # timeout: 120
+                                           )
 
-            self.iota.registerService(SERVICE_USER_TOKEN,
-                                      SERVICE_NAME,
-                                      SUBSERVICE_NAME,
-                                      PROTOCOL,
-                                      ENTITY_TYPE,
-                                      APIKEY,
-                                      TRUSTOKENID,
-                                      CBROKER_ENDPOINT,
-                                      MAPPING_ATTRIBUTES,
-                                      STATIC_ATTRIBUTES)
+            DEVICE_ID = cb_res # TODO: extract DeviceID from ContextBroker response
 
-
-
-            #logger.debug("PROJECT=%s" % PROJECT)
+            logger.debug("DEVICE_ID=%s" % DEVICE_ID)
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-            "PROJECT": PROJECT
+            "DEVICE_ID": DEVICE_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return PROJECT
+        return DEVICE_ID
+
+
+    def register_device(self,
+                        SERVICE_NAME,
+                        SERVICE_ID,
+                        SUBSERVICE_NAME,
+                        SUBSERVICE_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        DEVICE_ID,
+                        PROTOCOL
+                        ):
+
+        '''Register Device.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service id
+        - SUBSERVICE_NAME: SubService name
+        - SUBSERVICE_ID: SubService name
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+
+        '''
+
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,
+            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+        }
+        logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
+
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        SERVICE_NAME,
+                        SUBSERVICE_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                      SERVICE_NAME)
+
+                    SUBSERVICE_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                          SERVICE_NAME,
+                                                          SUBSERVICE_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        SERVICE_ID,
+                        SUBSERVICE_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            # Check that protocol exists in IOTA ?
+
+            # call IOTA
+            self.iota.registerDevice(SERVICE_USER_TOKEN,
+                                     SERVICE_NAME,
+                                     SUBSERVICE_NAME,
+                                     DEVICE_ID,
+                                     PROTOCOL)
+
+            # call CB
+            self.cb.updateContext(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME,
+                                  ENTITY_TYPE,
+                                  ENTITY_ID,
+                                  ATTRIBUTES=[]
+                                  )
+
+            # call CB
+            self.cb.registerContext(SERVICE_USER_TOKEN,
+                                    SERVICE_NAME,
+                                    SUBSERVICE_NAME,
+                                    ENTITIES=[],
+                                    ATTRIBUTES=[],
+                                    APP="",
+                                    DURATION="")
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        # return  ?

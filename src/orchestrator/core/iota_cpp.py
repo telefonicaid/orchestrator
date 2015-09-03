@@ -98,6 +98,16 @@ class IoTACppOperations(object):
                        DEVICE_ID,
                        PROTOCOL):
 
+        # TODO: register sends follow data
+        
+            # resource
+            # service
+            # service_path
+            # entity_name
+            # entity_type
+            # timezone
+            # lazy
+        
         body_data = {
             [
                 {
@@ -108,7 +118,7 @@ class IoTACppOperations(object):
         }
 
         res = self.IoTACppRestOperations.rest_request(
-            url='/iot/services',
+            url='/iot/devices',
             method='POST',
             data=body_data,
             auth_token=SERVICE_USER_TOKEN,

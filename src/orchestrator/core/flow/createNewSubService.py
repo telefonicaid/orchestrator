@@ -95,6 +95,32 @@ class CreateNewSubService(FlowBase):
                                              NEW_SUBSERVICE_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
 
+
+            #
+            # 3. Service Configuration (optional if ThridParty is provided)
+            #
+
+            # Check if ThirdParty data is provided
+
+            logger.debug("Configure Service In Context Broker %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
+            self.cb.updateContext(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME,
+                                  ENTITY_TYPE,
+                                  ENTITY_ID,
+                                  ATTRIBUTES=[],
+                                  # ID: S-001
+                                  # TYPE: service
+                                  # isPattern: false
+                                  # name: TheService
+                                  # provider: ThirdParty
+                                  # endpint: http://thirdparty
+                                  # method: GET
+                                  # authentication: context-adapter | third-party
+                                  # mapping: [...]
+                                  # timeout: 120
+                                  )
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
