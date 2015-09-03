@@ -57,7 +57,10 @@ class Context(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-
+        - ENTITY_TYPE: Orion Entity Type
+        - ENTITY_ID: Orion Entity ID
+        - ATTRIBUTES: Orion Entity attributes
+        - REFERENCE_URL: Orion reference_url
         '''
         data_log = {
             "SERVICE_NAME": "%s" % SERVICE_NAME,
@@ -67,6 +70,10 @@ class Context(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ENTITY_ID": "%s" % ENTITY_ID,
+            "ATTRIBUTES": "%s" % ATTRIBUTES,
+            "REFERENCE_URL": "%s" % REFERENCE_URL
         }
         logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -100,8 +107,6 @@ class Context(FlowBase):
                                            ENTITY_ID,
                                            ATTRIBUTES)
             logger.debug("UPDATE_CONTEXT=%s" % json.dumps(cb_res, indent=3))
-            import ipdb
-            ipdb.set_trace()
 
             cb_res = self.cb.subscribeContext(SERVICE_USER_TOKEN,
                                               SERVICE_NAME,
