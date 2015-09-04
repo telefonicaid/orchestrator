@@ -380,7 +380,17 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
             request.DATA  # json validation
             flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
-                                       self.KEYSTONE_PORT)
+                                       self.KEYSTONE_PORT,
+                                       None,
+                                       None,
+                                       None,
+                                       self.IOTA_PROTOCOL,
+                                       self.IOTA_HOST,
+                                       self.IOTA_PORT,
+                                       self.ORION_PROTOCOL,
+                                       self.ORION_HOST,
+                                       self.ORION_PORT)
+
             result = flow.createNewSubService(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -390,6 +400,28 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                  HTTP_X_AUTH_TOKEN),
                 request.DATA.get("NEW_SUBSERVICE_NAME", None),
                 request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
+
+            # TODO: see optional values for register device:
+            result = flow.register_device(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("DEVICE_ID", None)
+
+                        # INTERNAL_ID,
+                        # EXTERNAL_ID,
+                        # CCID,
+                        # IMEI,
+                        # IMSI,
+                        # INTERACTION_TYPE,
+                        # SERVICE_ID,
+                        # GEOLOCATION
+                
+            )
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -946,17 +978,17 @@ class SubServiceDevice_RESTView(APIView, IoTConf):
             request.DATA  # json validation
 
             flow = Projects(self.KEYSTONE_PROTOCOL,
-                           self.KEYSTONE_HOST,
-                           self.KEYSTONE_PORT,
-                           None,
-                           None,
-                           None,
-                           self.IOTA_PROTOCOL,
-                           self.IOTA_HOST,
-                           self.IOTA_PORT,
-                           self.ORION_PROTOCOL,
-                           self.ORION_HOST,
-                           self.ORION_PORT)
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT)
             result = flow.register_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -966,6 +998,14 @@ class SubServiceDevice_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("DEVICE_ID", None)
+                        # INTERNAL_ID,
+                        # EXTERNAL_ID,
+                        # CCID,
+                        # IMEI,
+                        # IMSI,
+                        # INTERACTION_TYPE,
+                        # SERVICE_ID,
+                        # GEOLOCATION                
             )
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
