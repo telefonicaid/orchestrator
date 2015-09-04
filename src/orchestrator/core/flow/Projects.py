@@ -530,19 +530,18 @@ class Projects(FlowBase):
             # call IOTA
 
             res_iota = self.iota.registerDevice(SERVICE_USER_TOKEN,
-                                     SERVICE_NAME,
-                                     SUBSERVICE_NAME,
-                                     DEVICE_ID,
-                                     PROTOCOL,
-                                    # resource: ???
-                                    # service: client_a
-                                    # service_path: /some_area
-                                    # entity_name: <device_id> XXX
-                                    # entity_type: button
-                                    # timeozne: America/Santiago
-                                    # lazy: lazy_op_status: string
-
-                                     )
+                                                SERVICE_NAME,
+                                                SUBSERVICE_NAME,
+                                                DEVICE_ID,
+                                                PROTOCOL,
+                                                # resource: ???
+                                                # service: client_a
+                                                # service_path: /some_area
+                                                # entity_name: <device_id> XXX
+                                                # entity_type: button
+                                                # timeozne: America/Santiago
+                                                # lazy: lazy_op_status: string
+                                        )
 
             # call CB
             res_cb = self.cb.updateContext(SERVICE_USER_TOKEN,
@@ -605,20 +604,46 @@ class Projects(FlowBase):
                                            },
                                                ]
                                                )
+            # TODO: extract info from res_cb
 
             # call CB
-            self.cb.registerContext(SERVICE_USER_TOKEN,
+            res_cb = self.cb.registerContext(SERVICE_USER_TOKEN,
                                     SERVICE_NAME,
                                     SUBSERVICE_NAME,
-                                    ENTITIES=[],
                                     # entities: <device_id>XXX:button
-                                    ATTRIBUTES=[],
-                                    # attributes: aux_external_id, aux_op_action, aux_op_extra: aux_op_status
-                                    APP="",
-                                    DURATION="",
+                                    ENTITIES= DEVICE_ID + 'button',
+                                    ATTRIBUTES=[
+                                            # aux_external_id,
+                                            # aux_op_action,
+                                            # aux_op_extra:
+                                            # aux_op_status
+                                           {
+                                               "name": "aux_external_id",
+                                               "type": "string",
+                                               "value": AUX_EXTERNAL_ID
+                                           },
+                                           {
+                                               "name": "aux_op_action",
+                                               "type": "string",
+                                               "value": AUX_OP_ACTION
+                                           },
+                                           {
+                                               "name": "aux_op_extra",
+                                               "type": "string",
+                                               "value": AUX_OP_EXTRA
+                                           },
+                                           {
+                                               "name": "aux_op_status",
+                                               "type": "string",
+                                               "value": AUX_OP_STATUS
+                                           },
+                                    ],
                                     # providin_appligation: http://the_context_adapter.com
+                                    APP,
                                     # duration: P1M
+                                    DURATION
                                     )
+            # TODO: extract info from res_cb
 
         except Exception, ex:
             logger.error(ex)
