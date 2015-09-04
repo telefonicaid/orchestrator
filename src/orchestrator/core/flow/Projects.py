@@ -363,7 +363,7 @@ class Projects(FlowBase):
             "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
         logger.debug("register_service invoked with: %s" % json.dumps(data_log,
-                                                                 indent=3))
+        indent=3))
 
         try:
 
@@ -474,7 +474,14 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
                         DEVICE_ID,
-                        PROTOCOL
+                        INTERNAL_ID,
+                        EXTERNAL_ID,
+                        CCID,
+                        IMEI,
+                        IMSI,
+                        INTERACTION_TYPE,
+                        SERVICE_ID,
+                        GEOLOCATION
                         ):
 
         '''Register Device.
@@ -489,6 +496,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
+        - DEVICE_ID: Device ID
 
         '''
 
@@ -500,6 +508,7 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "DEVICE_ID": "%s" % DEVICE_ID,
         }
         logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
 
@@ -525,15 +534,16 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
-            # Check that protocol exists in IOTA ?
-
             # call IOTA
+            ENTITY_TYPE = "button"
+            ENTITY_NAME = DEVICE_ID
+            TIMEZONE = "Europe/Madrid" # TODO: get from django conf
+            LAZY = [ { "name": "op_result", "type": "string" } ]
+
 
             res_iota = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 SERVICE_NAME,
                                                 SUBSERVICE_NAME,
-                                                DEVICE_ID,
-                                                PROTOCOL,
                                                 # resource: ???
                                                 # service: client_a
                                                 # service_path: /some_area
@@ -541,27 +551,34 @@ class Projects(FlowBase):
                                                 # entity_type: button
                                                 # timeozne: America/Santiago
                                                 # lazy: lazy_op_status: string
+                                                DEVICE_ID,
+                                                ENTITY_NAME,
+                                                ENTITY_TYPE,
+                                                TIMEZONE,
+                                                LAZY
                                         )
+            # TODO extract info from res_iota
+
 
             # call CB
             res_cb = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            SERVICE_NAME,
                                            SUBSERVICE_NAME,
-                                           ENTITY_TYPE,
-                                           ENTITY_ID,
-                                           IS_PATTERN,
-                                           # id: <device_id>XXX
                                            # type: button
-                                           # isPattern: flase
+                                           ENTITY_TYPE = "button",
+                                           # id: <device_id>XXX
+                                           ENTITY_ID = DEVICE_ID,
+                                           # isPattern: false
+                                           IS_PATTERN = "False",
                                            ATTRIBUTES=[
-                                           # internal_id: <device_id>
-                                           # external_id: ZZZZ
-                                           # ccid: AAA
-                                           # imei: 1234567789
-                                           # imsi: 4566789034
-                                           # interaction_tupe: synchronous
-                                           # service_id: S-001
-                                           # geolocation: 44.0,-3.34
+                                               # internal_id: <device_id>
+                                               # external_id: ZZZZ
+                                               # ccid: AAA
+                                               # imei: 1234567789
+                                               # imsi: 4566789034
+                                               # interaction_tupe: synchronous
+                                               # service_id: S-001
+                                               # geolocation: 44.0,-3.34
                                            {
                                                "name": "internal_id",
                                                "type": "string",
@@ -603,46 +620,53 @@ class Projects(FlowBase):
                                                "value": GEOLOCATION
                                            },
                                                ]
-                                               )
+                                            )
             # TODO: extract info from res_cb
+
+            APP
+            DURATION
+            AUX_EXTERNAL_ID
+            AUX_OP_ACTION
+            AUX_OP_EXTRA
+            AUX_OP_STATUS
 
             # call CB
             res_cb = self.cb.registerContext(SERVICE_USER_TOKEN,
-                                    SERVICE_NAME,
-                                    SUBSERVICE_NAME,
-                                    # entities: <device_id>XXX:button
-                                    ENTITIES= DEVICE_ID + 'button',
-                                    ATTRIBUTES=[
-                                            # aux_external_id,
-                                            # aux_op_action,
-                                            # aux_op_extra:
-                                            # aux_op_status
-                                           {
-                                               "name": "aux_external_id",
-                                               "type": "string",
-                                               "value": AUX_EXTERNAL_ID
-                                           },
-                                           {
-                                               "name": "aux_op_action",
-                                               "type": "string",
-                                               "value": AUX_OP_ACTION
-                                           },
-                                           {
-                                               "name": "aux_op_extra",
-                                               "type": "string",
-                                               "value": AUX_OP_EXTRA
-                                           },
-                                           {
-                                               "name": "aux_op_status",
-                                               "type": "string",
-                                               "value": AUX_OP_STATUS
-                                           },
-                                    ],
-                                    # providin_appligation: http://the_context_adapter.com
-                                    APP,
-                                    # duration: P1M
-                                    DURATION
-                                    )
+                                             SERVICE_NAME,
+                                             SUBSERVICE_NAME,
+                                             # entities: <device_id>XXX:button
+                                             ENTITIES= DEVICE_ID + 'button',
+                                             ATTRIBUTES=[
+                                               # aux_external_id,
+                                               # aux_op_action,
+                                               # aux_op_extra:
+                                               # aux_op_status
+                                               {
+                                                   "name": "aux_external_id",
+                                                   "type": "string",
+                                                   "value": AUX_EXTERNAL_ID
+                                               },
+                                               {
+                                                   "name": "aux_op_action",
+                                                   "type": "string",
+                                                   "value": AUX_OP_ACTION
+                                               },
+                                               {
+                                                   "name": "aux_op_extra",
+                                                   "type": "string",
+                                                   "value": AUX_OP_EXTRA
+                                               },
+                                               {
+                                                   "name": "aux_op_status",
+                                                   "type": "string",
+                                                   "value": AUX_OP_STATUS
+                                               },
+                                             ],
+                                             # providin_appligation: http://the_context_adapter.com
+                                             APP,
+                                             # duration: P1M
+                                             DURATION
+                                             )
             # TODO: extract info from res_cb
 
         except Exception, ex:

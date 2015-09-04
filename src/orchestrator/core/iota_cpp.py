@@ -96,23 +96,43 @@ class IoTACppOperations(object):
                        SEVICE_NAME,
                        SUBSERVICE_NAME,
                        DEVICE_ID,
-                       PROTOCOL):
+                       #PROTOCOL,
+                       #RESOURCE,                       
+                       ENTITY_NAME,
+                       ENTITY_TYPE,
+                       TIMEZONE,
+                       LAZY):
 
-        # TODO: register sends follow data
-        
-            # resource
-            # service
-            # service_path
-            # entity_name
-            # entity_type
-            # timezone
-            # lazy
-        
+        # TODO: Cpp IoTA and Node IoTA are going to converge with the same payload/args
         body_data = {
-            [
+            "devices": [
                 {
+                     # resource: ???
+                     # service: client_a
+                     # service_path: /some_area
+                     # entity_name: <device_id> XXX
+                     # entity_type: button
+                     # timeozne: America/Santiago
+                     # lazy: lazy_op_status: string                         
                     "device_id": DEVICE_ID,
-                    "protocol": PROTOCOL
+                    "entity_name": ENTITY_NAME,
+                    "entity_type": ENTITY_PATH,
+                    "timezone": TIMEZONE,
+                    # "attributes": [
+                    #     {
+                    #         "object_id": "source_data",
+                    #         "name": "attr_name",
+                    #         "type": "int"
+                    #     }
+                    # ],
+                    # "static_attributes": [
+                    #     {
+                    #         "name": "att_name",
+                    #         "type": "string",
+                    #         "value": "value"
+                    #     }
+                    # ],
+                    "lazy": LAZY
                 }
             ]
         }
@@ -126,4 +146,6 @@ class IoTACppOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 201 (res.code, res.msg)
-        
+
+        # TODO get Location ?
+        # TODO return something?
