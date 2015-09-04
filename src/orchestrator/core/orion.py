@@ -99,8 +99,8 @@ class CBOrionOperations(object):
             "contextElements": [
                 {
                     "type": ENTITY_TYPE,
-                    "isPattern": "false",
                     "id": ENTITY_ID,
+                    "isPattern": IS_PATTERN,
                     "attributes": ATTRIBUTES
                 }
             ],
