@@ -301,15 +301,25 @@ class Projects(FlowBase):
         return PROJECT
 
 
-
     def register_service(self,
-                       DOMAIN_ID,
-                       DOMAIN_NAME,
-                       PROJECT_ID,
-                       PROJECT_NAME,
-                       SERVICE_USER_NAME,
-                       SERVICE_USER_PASSWORD,
-                       SERVICE_USER_TOKEN):
+                         DOMAIN_ID,
+                         DOMAIN_NAME,
+                         PROJECT_ID,
+                         PROJECT_NAME,
+                         SERVICE_USER_NAME,
+                         SERVICE_USER_PASSWORD,
+                         SERVICE_USER_TOKEN,
+                         ENTITY_TYPE=None,
+                         ENTITY_ID=None
+                         IS_PATTERN=None,
+                         ATT_NAME=None,
+                         ATT_PROVIDER=None,
+                         ATT_ENDPOINT=None,
+                         ATT_METHOD=None,
+                         ATT_AUTHENTICATION=None,
+                         ATT_MAPPING=None,
+                         ATT_TIMEOUT=None
+                       ):
 
         '''Register Service in IOTA
 
@@ -323,6 +333,16 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
+        - ENTITY_TYPE:   (optional, just for Device configuration)
+        - ENTITY_ID:
+        - IS_PATTERN
+        - ATT_NAME=
+        - ATT_PROVIDER
+        - ATT_ENDPOINT
+        - ATT_METHOD
+        - ATT_AUTHENTICATION
+        - ATT_MAPPING
+        - ATT_TIMEOUT
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -332,6 +352,15 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ENTITY_ID": "%s" % ENTITY_ID,
+            "IS_PATTERN": "%s" % IS_PATTERN,
+            "ATT_NAME": "%s" % ATT_NAME,
+            "ATT_PROVIDER": "%s" % ATT_PROVIDER,
+            "ATT_METHOD": "%s" % ATT_METHOD,
+            "ATT_AUTHENTICATION": "%s" % ATT_AUTHENTICATION,
+            "ATT_MAPPING": "%s" % ATT_MAPPING,
+            "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
         logger.debug("register_service invoked with: %s" % json.dumps(data_log,
                                                                  indent=3))
@@ -368,13 +397,13 @@ class Projects(FlowBase):
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            SERVICE_NAME,
                                            SUBSERVICE_NAME,
-                                           ENTITY_TYPE,
-                                           ENTITY_ID,
-                                           ATTRIBUTES=[],
-
                                            # ID: S-001
                                            # TYPE: service
                                            # isPattern: false
+                                           ENTITY_TYPE,
+                                           ENTITY_ID,
+                                           IS_PATTERN,
+                                           ATTRIBUTES=[
                                            # name: TheService
                                            # provider: ThirdParty
                                            # endpint: http://thirdparty
@@ -382,7 +411,43 @@ class Projects(FlowBase):
                                            # authentication: context-adapter | third-party
                                            # mapping: [...]
                                            # timeout: 120
-                                           )
+                                           {
+                                               "name": "name",
+                                               "type": "string",
+                                               "value": NAME
+                                           },
+                                           {
+                                               "name": "provider",
+                                               "type": "string",
+                                               "value": PROVIDER
+                                           },
+                                           {
+                                               "name": "endpoint",
+                                               "type": "string",
+                                               "value": ENDPOINT
+                                           },
+                                           {
+                                               "name": "method",
+                                               "type": "string",
+                                               "value": METHOD
+                                           },
+                                           {
+                                               "name": "authentication",
+                                               "type": "string",
+                                               "value": AUTHENTICATION
+                                           },
+                                           {
+                                               "name": "mapping",
+                                               "type": "string",
+                                               "value": MAPPING
+                                           },
+                                           {
+                                               "name": "timeout",
+                                               "type": "integer",
+                                               "value": TIMEOUT
+                                           },
+                                               ],
+                                        )
 
             DEVICE_ID = cb_res # TODO: extract DeviceID from ContextBroker response
 
@@ -463,29 +528,97 @@ class Projects(FlowBase):
             # Check that protocol exists in IOTA ?
 
             # call IOTA
-            self.iota.registerDevice(SERVICE_USER_TOKEN,
+
+            res_iota = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                      SERVICE_NAME,
                                      SUBSERVICE_NAME,
                                      DEVICE_ID,
-                                     PROTOCOL)
+                                     PROTOCOL,
+                                    # resource: ???
+                                    # service: client_a
+                                    # service_path: /some_area
+                                    # entity_name: <device_id> XXX
+                                    # entity_type: button
+                                    # timeozne: America/Santiago
+                                    # lazy: lazy_op_status: string
+
+                                     )
 
             # call CB
-            self.cb.updateContext(SERVICE_USER_TOKEN,
-                                  SERVICE_NAME,
-                                  SUBSERVICE_NAME,
-                                  ENTITY_TYPE,
-                                  ENTITY_ID,
-                                  ATTRIBUTES=[]
-                                  )
+            res_cb = self.cb.updateContext(SERVICE_USER_TOKEN,
+                                           SERVICE_NAME,
+                                           SUBSERVICE_NAME,
+                                           ENTITY_TYPE,
+                                           ENTITY_ID,
+                                           IS_PATTERN,
+                                           # id: <device_id>XXX
+                                           # type: button
+                                           # isPattern: flase
+                                           ATTRIBUTES=[
+                                           # internal_id: <device_id>
+                                           # external_id: ZZZZ
+                                           # ccid: AAA
+                                           # imei: 1234567789
+                                           # imsi: 4566789034
+                                           # interaction_tupe: synchronous
+                                           # service_id: S-001
+                                           # geolocation: 44.0,-3.34
+                                           {
+                                               "name": "internal_id",
+                                               "type": "string",
+                                               "value": INTERNAL_ID
+                                           },
+                                           {
+                                               "name": "external_id",
+                                               "type": "string",
+                                               "value": EXTERNAL_ID
+                                           },
+                                           {
+                                               "name": "ccid",
+                                               "type": "string",
+                                               "value": CCID
+                                           },
+                                           {
+                                               "name": "imei",
+                                               "type": "string",
+                                               "value": IMEI
+                                           },
+                                           {
+                                               "name": "imsi",
+                                               "type": "string",
+                                               "value": IMSI
+                                           },
+                                           {
+                                               "name": "interaction_type",
+                                               "type": "string",
+                                               "value": INTERACTION_TYPE
+                                           },
+                                           {
+                                               "name": "service_id",
+                                               "type": "string",
+                                               "value": SERVICE_ID
+                                           },
+                                           {
+                                               "name": "geolocation",
+                                               "type": "string",
+                                               "value": GEOLOCATION
+                                           },
+                                               ]
+                                               )
 
             # call CB
             self.cb.registerContext(SERVICE_USER_TOKEN,
                                     SERVICE_NAME,
                                     SUBSERVICE_NAME,
                                     ENTITIES=[],
+                                    # entities: <device_id>XXX:button
                                     ATTRIBUTES=[],
+                                    # attributes: aux_external_id, aux_op_action, aux_op_extra: aux_op_status
                                     APP="",
-                                    DURATION="")
+                                    DURATION="",
+                                    # providin_appligation: http://the_context_adapter.com
+                                    # duration: P1M
+                                    )
 
         except Exception, ex:
             logger.error(ex)

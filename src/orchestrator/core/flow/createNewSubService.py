@@ -38,7 +38,18 @@ class CreateNewSubService(FlowBase):
                             SERVICE_ADMIN_PASSWORD,
                             SERVICE_ADMIN_TOKEN,
                             NEW_SUBSERVICE_NAME,
-                            NEW_SUBSERVICE_DESCRIPTION):
+                            NEW_SUBSERVICE_DESCRIPTION,
+                            ENTITY_TYPE=None,
+                            ENTITY_ID=None
+                            IS_PATTERN=None,
+                            ATT_NAME=None,
+                            ATT_PROVIDER=None,
+                            ATT_ENDPOINT=None,
+                            ATT_METHOD=None,
+                            ATT_AUTHENTICATION=None,
+                            ATT_MAPPING=None,
+                            ATT_TIMEOUT=None
+                            ):
 
         '''Creates a new SubService (aka project keystone).
 
@@ -52,6 +63,16 @@ class CreateNewSubService(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - SUBSERVICE_NAME: New subservice name (required)
         - SUBSERVICE_DESCRIPTION: New subservice description
+        - ENTITY_TYPE:   (optional, just for Device configuration)
+        - ENTITY_ID:
+        - IS_PATTERN
+        - ATT_NAME=
+        - ATT_PROVIDER
+        - ATT_ENDPOINT
+        - ATT_METHOD
+        - ATT_AUTHENTICATION
+        - ATT_MAPPING
+        - ATT_TIMEOUT
         Return:
         - ID: New subservice id
         '''
@@ -63,7 +84,16 @@ class CreateNewSubService(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
             "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
-            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION
+            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ENTITY_ID": "%s" % ENTITY_ID,
+            "IS_PATTERN": "%s" % IS_PATTERN,
+            "ATT_NAME": "%s" % ATT_NAME,
+            "ATT_PROVIDER": "%s" % ATT_PROVIDER,
+            "ATT_METHOD": "%s" % ATT_METHOD,
+            "ATT_AUTHENTICATION": "%s" % ATT_AUTHENTICATION,
+            "ATT_MAPPING": "%s" % ATT_MAPPING,
+            "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
         logger.debug("createNewSubService invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -103,23 +133,60 @@ class CreateNewSubService(FlowBase):
             # Check if ThirdParty data is provided
 
             logger.debug("Configure Service In Context Broker %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
-            self.cb.updateContext(SERVICE_USER_TOKEN,
-                                  SERVICE_NAME,
-                                  SUBSERVICE_NAME,
-                                  ENTITY_TYPE,
-                                  ENTITY_ID,
-                                  ATTRIBUTES=[],
-                                  # ID: S-001
-                                  # TYPE: service
-                                  # isPattern: false
-                                  # name: TheService
-                                  # provider: ThirdParty
-                                  # endpint: http://thirdparty
-                                  # method: GET
-                                  # authentication: context-adapter | third-party
-                                  # mapping: [...]
-                                  # timeout: 120
-                                  )
+            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+                                           SERVICE_NAME,
+                                           SUBSERVICE_NAME,
+                                           # ID: S-001
+                                           # TYPE: service
+                                           # isPattern: false
+                                           ENTITY_TYPE,
+                                           ENTITY_ID,
+                                           IS_PATTERN,
+                                           ATTRIBUTES=[
+                                           # name: TheService
+                                           # provider: ThirdParty
+                                           # endpint: http://thirdparty
+                                           # method: GET
+                                           # authentication: context-adapter | third-party
+                                           # mapping: [...]
+                                           # timeout: 120
+                                           {
+                                               "name": "name",
+                                               "type": "string",
+                                               "value": NAME
+                                           },
+                                           {
+                                               "name": "provider",
+                                               "type": "string",
+                                               "value": PROVIDER
+                                           },
+                                           {
+                                               "name": "endpoint",
+                                               "type": "string",
+                                               "value": ENDPOINT
+                                           },
+                                           {
+                                               "name": "method",
+                                               "type": "string",
+                                               "value": METHOD
+                                           },
+                                           {
+                                               "name": "authentication",
+                                               "type": "string",
+                                               "value": AUTHENTICATION
+                                           },
+                                           {
+                                               "name": "mapping",
+                                               "type": "string",
+                                               "value": MAPPING
+                                           },
+                                           {
+                                               "name": "timeout",
+                                               "type": "integer",
+                                               "value": TIMEOUT
+                                           },
+                                               ],
+                                        )
 
         except Exception, ex:
             logger.error(ex)
