@@ -141,7 +141,7 @@ class CreateNewSubService(FlowBase):
                                            # isPattern: false
                                            ENTITY_TYPE,
                                            ENTITY_ID,
-                                           IS_PATTERN,
+                                           IS_PATTERN="false",
                                            ATTRIBUTES=[
                                            # name: TheService
                                            # provider: ThirdParty

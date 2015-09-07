@@ -311,7 +311,7 @@ class Projects(FlowBase):
                          SERVICE_USER_TOKEN,
                          ENTITY_TYPE=None,
                          ENTITY_ID=None,
-                         IS_PATTERN=None,
+                         IS_PATTERN="false",
                          ATT_NAME=None,
                          ATT_PROVIDER=None,
                          ATT_ENDPOINT=None,
@@ -414,37 +414,37 @@ class Projects(FlowBase):
                                            {
                                                "name": "name",
                                                "type": "string",
-                                               "value": NAME
+                                               "value": ATT_NAME
                                            },
                                            {
                                                "name": "provider",
                                                "type": "string",
-                                               "value": PROVIDER
+                                               "value": ATT_PROVIDER
                                            },
                                            {
                                                "name": "endpoint",
                                                "type": "string",
-                                               "value": ENDPOINT
+                                               "value": ATT_ENDPOINT
                                            },
                                            {
                                                "name": "method",
                                                "type": "string",
-                                               "value": METHOD
+                                               "value": ATT_METHOD
                                            },
                                            {
                                                "name": "authentication",
                                                "type": "string",
-                                               "value": AUTHENTICATION
+                                               "value": ATT_AUTHENTICATION
                                            },
                                            {
                                                "name": "mapping",
                                                "type": "string",
-                                               "value": MAPPING
+                                               "value": ATT_MAPPING
                                            },
                                            {
                                                "name": "timeout",
                                                "type": "integer",
-                                               "value": TIMEOUT
+                                               "value": ATT_TIMEOUT
                                            },
                                                ],
                                         )
@@ -474,14 +474,15 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
                         DEVICE_ID,
-                        INTERNAL_ID,
-                        EXTERNAL_ID,
-                        CCID,
-                        IMEI,
-                        IMSI,
-                        INTERACTION_TYPE,
-                        SERVICE_ID,
-                        GEOLOCATION
+                        ENTITY_TYPE,
+                        ATT_INTERNAL_ID,
+                        ATT_EXTERNAL_ID,
+                        ATT_CCID,
+                        ATT_IMEI,
+                        ATT_IMSI,
+                        ATT_INTERACTION_TYPE,
+                        ATT_SERVICE_ID,
+                        ATT_GEOLOCATION
                         ):
 
         '''Register Device.
@@ -497,10 +498,16 @@ class Projects(FlowBase):
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
         - DEVICE_ID: Device ID
-
+        - ENTITY_TYPE: Entity Type
+        - ATT_INTERNAL_ID
+        - ATT_EXTERNAL_ID
+        - ATT_CCID
+        - ATT_IMEI
+        - ATT_IMSI
+        - ATT_INTERACTION_TYPE
+        - ATT_SERVICE_ID
+        - ATT_GEOLOCATION
         '''
-        import ipdb
-        ipdb.set_trace()
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -510,9 +517,17 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ATT_INTERNAL_ID": "%s" % ATT_INTERNAL_ID,
+            "ATT_EXTERNAL_ID": "%s" % ATT_EXTERNAL_ID,
+            "ATT_CCID": "%s" % ATT_CCID,
+            "ATT_IMEI": "%s" % ATT_IMEI,
+            "ATT_IMSI": "%s" % ATT_IMSI,
+            "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
+            "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
+            "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
         logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
-
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -537,6 +552,9 @@ class Projects(FlowBase):
 
 
             # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
 
             # call IOTA
             ENTITY_TYPE = "button"
@@ -573,7 +591,7 @@ class Projects(FlowBase):
                                            # id: <device_id>XXX
                                            ENTITY_ID = DEVICE_ID,
                                            # isPattern: false
-                                           IS_PATTERN = "False",
+                                           IS_PATTERN="false",
                                            ATTRIBUTES=[
                                                # internal_id: <device_id>
                                                # external_id: ZZZZ
@@ -586,42 +604,42 @@ class Projects(FlowBase):
                                            {
                                                "name": "internal_id",
                                                "type": "string",
-                                               "value": INTERNAL_ID
+                                               "value": ATT_INTERNAL_ID
                                            },
                                            {
                                                "name": "external_id",
                                                "type": "string",
-                                               "value": EXTERNAL_ID
+                                               "value": ATT_EXTERNAL_ID
                                            },
                                            {
                                                "name": "ccid",
                                                "type": "string",
-                                               "value": CCID
+                                               "value": ATT_CCID
                                            },
                                            {
                                                "name": "imei",
                                                "type": "string",
-                                               "value": IMEI
+                                               "value": ATT_IMEI
                                            },
                                            {
                                                "name": "imsi",
                                                "type": "string",
-                                               "value": IMSI
+                                               "value": ATT_IMSI
                                            },
                                            {
                                                "name": "interaction_type",
                                                "type": "string",
-                                               "value": INTERACTION_TYPE
+                                               "value": ATT_INTERACTION_TYPE
                                            },
                                            {
                                                "name": "service_id",
                                                "type": "string",
-                                               "value": SERVICE_ID
+                                               "value": ATT_SERVICE_ID
                                            },
                                            {
                                                "name": "geolocation",
                                                "type": "string",
-                                               "value": GEOLOCATION
+                                               "value": ATT_GEOLOCATION
                                            },
                                                ]
                                             )
