@@ -88,7 +88,7 @@ class IoTACppOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 201 (res.code, res.msg)
+        assert res.code == 201, (res.code, res.msg)
 
 
     def registerDevice(self,
@@ -145,7 +145,7 @@ class IoTACppOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 201 (res.code, res.msg)
+        assert res.code == 201, (res.code, res.msg)
 
         # TODO get Location ?
         # TODO return something?
