@@ -432,16 +432,16 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-
                     request.DATA.get("DEVICE_ID", None),
-                    request.DATA.get("INTERNAL_ID", None),
-                    request.DATA.get("EXTERNAL_ID", None),
-                    request.DATA.get("CCID", None),
-                    request.DATA.get("IMEI", None),
-                    request.DATA.get("IMSI", None),
-                    request.DATA.get("INTERACTION_TYPE", None),
-                    request.DATA.get("SERVICE_ID", None),
-                    request.DATA.get("GEOLOCATION", None)
+                    request.DATA.get("ENTITY_TYPE", None),
+                    request.DATA.get("ATT_INTERNAL_ID", None),
+                    request.DATA.get("ATT_EXTERNAL_ID", None),
+                    request.DATA.get("ATT_CCID", None),
+                    request.DATA.get("ATT_IMEI", None),
+                    request.DATA.get("ATT_IMSI", None),
+                    request.DATA.get("ATT_INTERACTION_TYPE", None),
+                    request.DATA.get("ATT_SERVICE_ID", None),
+                    request.DATA.get("ATT_GEOLOCATION", None)
                     )
 
             if 'id' in result:
@@ -981,19 +981,19 @@ class Trust_RESTView(APIView, IoTConf):
             )
 
 
-class SubServiceDevice_RESTView(APIView, IoTConf):
+class SubServiceIoTADevice_RESTView(APIView, IoTConf):
     """
     SubService Device
 
     """
-    schema_name = "Device"
+    schema_name = "IoTADevice"
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        self.schema_name = "Device"
+        self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -1019,15 +1019,77 @@ class SubServiceDevice_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_PASSWORD", None),
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("DEVICE_ID", None),
+                request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("ATT_INTERNAL_ID", None),
+                request.DATA.get("ATT_EXTERNAL_ID", None),
+                request.DATA.get("ATT_CCID", None),
+                request.DATA.get("ATT_IMEI", None),
+                request.DATA.get("ATT_IMSI", None),
+                request.DATA.get("ATT_INTERACTION_TYPE", None),
+                request.DATA.get("ATT_SERVICE_ID", None),
+                request.DATA.get("ATT_GEOLOCATION", None)
+            )
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
 
-                request.DATA.get("INTERNAL_ID", None),
-                request.DATA.get("EXTERNAL_ID", None),
-                request.DATA.get("CCID", None),
-                request.DATA.get("IMEI", None),
-                request.DATA.get("IMSI", None),
-                request.DATA.get("INTERACTION_TYPE", None),
-                request.DATA.get("SERVICE_ID", None),
-                request.DATA.get("GEOLOCATION", None)
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class SubServiceIoTAService_RESTView(APIView, IoTConf):
+    """
+    SubService Service
+
+    """
+    schema_name = "IoTAService"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request, service_id, subservice_id):
+        self.schema_name = "IoTAService"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT)
+            result = flow.register_service(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("ENTITY_ID", None),
+                request.DATA.get("IS_PATTERN", None),
+                request.DATA.get("ATT_NAME", None),
+                request.DATA.get("ATT_PROVIDER", None),
+                request.DATA.get("ATT_ENDPOINT", None),
+                request.DATA.get("ATT_METHOD", None),
+                request.DATA.get("ATT_AUTHENTICATION", None),
+                request.DATA.get("ATT_MAPPING", None),
+                request.DATA.get("ATT_TIMEOUT", None),
 
             )
             if 'error' not in result:

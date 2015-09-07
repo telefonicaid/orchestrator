@@ -434,7 +434,7 @@ class Test_NewSubService_RestView(object):
         assert res.code == 400, (res.code, res.msg)
 
 
-class Test_SubServiceDevice_RestView(object):
+class Test_SubServiceIoTADevice_RestView(object):
 
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
@@ -442,11 +442,31 @@ class Test_SubServiceDevice_RestView(object):
             "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER": "adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
-            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "adm1",
             "SERVICE_USER_PASSWORD": "password",
-            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+        }
+        self.payload_data2_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
+            "SERVICE_USER_NAME": "adm1",
+            "SERVICE_USER_PASSWORD": "password",
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "DEVICE_ID": "button_dev_%s" % self.suffix,
+            "ENTITY_TYPE": "button",
+            "ATT_INTERNAL_ID": "ZZZZ",
+            "ATT_EXTERNAL_ID": "EXTERNAL_ID",
+            "ATT_CCID": "AAA",
+            "ATT_IMEI": "1234567890",
+            "ATT_IMSI": "0987654321",
+            "ATT_INTERACTION_TYPE": "synchronous",
+            "ATT_SERVICE_ID": "S-001",
+            "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -470,8 +490,69 @@ class Test_SubServiceDevice_RestView(object):
             method="POST",
             url="/v1.0/service/%s/subservice/%s/register_device" % (service_id, subservice_id),
             json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+
+class Test_SubServiceIoTAService_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
+            "SERVICE_USER_NAME": "adm1",
+            "SERVICE_USER_PASSWORD": "password",
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+        }
+        self.payload_data2_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
+            "SERVICE_USER_NAME": "adm1",
+            "SERVICE_USER_PASSWORD": "password",
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "DEVICE_ID": "button_dev_%s" % self.suffix,
+            "ENTITY_TYPE": "button",
+            "ATT_INTERNAL_ID": "ZZZZ",
+            "ATT_EXTERNAL_ID": "EXTERNAL_ID",
+            "ATT_CCID": "AAA",
+            "ATT_IMEI": "1234567890",
+            "ATT_IMSI": "0987654321",
+            "ATT_INTERACTION_TYPE": "synchronous",
+            "ATT_SERVICE_ID": "S-001",
+            "ATT_GEOLOCATION": "40.4188,-3.6919",
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_post_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+
+        # Create SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
+
+        # Create Device in SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/%s/register_service" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
 
 class Test_DeleteSubService_RestView(object):
 
@@ -2007,8 +2088,11 @@ if __name__ == '__main__':
     test_NewSubService.test_post_bad()
     test_NewSubService.test_post_bad2()
 
-    test_SubServiceDevice = Test_SubServiceDevice_RestView()
-    test_SubServiceDevice.test_post_ok()
+    test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
+    test_SubServiceIoTADevice.test_post_ok()
+
+    test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
+    test_SubServiceIoTAService.test_post_ok()
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
     test_DeleteSubService.test_delete_ok()
