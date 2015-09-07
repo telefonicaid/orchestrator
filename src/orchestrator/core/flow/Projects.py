@@ -310,7 +310,7 @@ class Projects(FlowBase):
                          SERVICE_USER_PASSWORD,
                          SERVICE_USER_TOKEN,
                          ENTITY_TYPE=None,
-                         ENTITY_ID=None
+                         ENTITY_ID=None,
                          IS_PATTERN=None,
                          ATT_NAME=None,
                          ATT_PROVIDER=None,
@@ -351,7 +351,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ENTITY_ID": "%s" % ENTITY_ID,
             "IS_PATTERN": "%s" % IS_PATTERN,
@@ -384,8 +384,8 @@ class Projects(FlowBase):
                                                                          PROJECT_ID,
                                                                          SERVICE_USER_NAME,
                                                                          SERVICE_USER_PASSWORD)
-                    #DOMAIN_NAME =
-                    #PROJECT_NAME =
+            # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
+
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             if not PROJECT_ID:
@@ -466,10 +466,10 @@ class Projects(FlowBase):
 
 
     def register_device(self,
-                        SERVICE_NAME,
-                        SERVICE_ID,
-                        SUBSERVICE_NAME,
-                        SUBSERVICE_ID,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
@@ -489,22 +489,23 @@ class Projects(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - SERVICE_NAME: Service name
-        - SERVICE_ID: Service id
-        - SUBSERVICE_NAME: SubService name
-        - SUBSERVICE_ID: SubService name
+        - DOMAIN_NAME: Service name
+        - DOMAIN_ID: Service id
+        - PROJECT_NAME: SubService name
+        - PROJECT_ID: SubService name
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
         - DEVICE_ID: Device ID
 
         '''
-
+        import ipdb
+        ipdb.set_trace()
         data_log = {
-            "SERVICE_NAME": "%s" % SERVICE_NAME,
-            "SERVICE_ID": "%s" % SERVICE_ID,
-            "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,
-            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
@@ -514,25 +515,28 @@ class Projects(FlowBase):
 
         try:
             if not SERVICE_USER_TOKEN:
-                if not SERVICE_ID:
+                if not DOMAIN_ID:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
-                        SERVICE_NAME,
-                        SUBSERVICE_NAME,
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
-                    SERVICE_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
-                                                      SERVICE_NAME)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
 
-                    SUBSERVICE_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
-                                                          SERVICE_NAME,
-                                                          SUBSERVICE_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
                 else:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
-                        SERVICE_ID,
-                        SUBSERVICE_ID,
+                        DOMAIN_ID,
+                        PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
 
             # call IOTA
             ENTITY_TYPE = "button"
@@ -542,8 +546,8 @@ class Projects(FlowBase):
 
 
             res_iota = self.iota.registerDevice(SERVICE_USER_TOKEN,
-                                                SERVICE_NAME,
-                                                SUBSERVICE_NAME,
+                                                DOMAIN_NAME,
+                                                PROJECT_NAME,
                                                 # resource: ???
                                                 # service: client_a
                                                 # service_path: /some_area
@@ -562,8 +566,8 @@ class Projects(FlowBase):
 
             # call CB
             res_cb = self.cb.updateContext(SERVICE_USER_TOKEN,
-                                           SERVICE_NAME,
-                                           SUBSERVICE_NAME,
+                                           DOMAIN_NAME,
+                                           PROJECT_NAME,
                                            # type: button
                                            ENTITY_TYPE = "button",
                                            # id: <device_id>XXX
@@ -622,24 +626,19 @@ class Projects(FlowBase):
                                                ]
                                             )
             # TODO: extract info from res_cb
+            APP="http://localhost"
+            DURATION="P1M"
+            AUX_EXTERNAL_ID=None
+            AUX_OP_ACTION=None
+            AUX_OP_EXTRA=None
+            AUX_OP_STATUS=None
+            #
 
-            APP
-            DURATION
-            AUX_EXTERNAL_ID
-            AUX_OP_ACTION
-            AUX_OP_EXTRA
-            AUX_OP_STATUS
-
-            # call CB
-            res_cb = self.cb.registerContext(SERVICE_USER_TOKEN,
-                                             SERVICE_NAME,
-                                             SUBSERVICE_NAME,
-                                             # entities: <device_id>XXX:button
-                                             ENTITIES= DEVICE_ID + 'button',
-                                             ATTRIBUTES=[
-                                               # aux_external_id,
-                                               # aux_op_action,
-                                               # aux_op_extra:
+            ENTITIES=[DEVICE_ID + 'button']
+            ATTRIBUTES=[
+                                               # aux_external_id
+                                               # aux_op_action
+                                               # aux_op_extra
                                                # aux_op_status
                                                {
                                                    "name": "aux_external_id",
@@ -660,11 +659,17 @@ class Projects(FlowBase):
                                                    "name": "aux_op_status",
                                                    "type": "string",
                                                    "value": AUX_OP_STATUS
-                                               },
-                                             ],
-                                             # providin_appligation: http://the_context_adapter.com
+                                               }
+                                             ]
+
+            # call CB
+            res_cb = self.cb.registerContext(SERVICE_USER_TOKEN,
+                                             DOMAIN_NAME,
+                                             PROJECT_NAME,
+                                             # entities: <device_id>XXX:button
+                                             ENTITIES,
+                                             ATTRIBUTES,
                                              APP,
-                                             # duration: P1M
                                              DURATION
                                              )
             # TODO: extract info from res_cb

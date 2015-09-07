@@ -34,6 +34,7 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     RoleList_RESTView,
                                     AssignRoleUser_RESTView,
                                     Trust_RESTView,
+                                    SubServiceDevice_RESTView,
                                     )
 
 
