@@ -302,10 +302,10 @@ class Projects(FlowBase):
 
 
     def register_service(self,
-                         DOMAIN_ID,
                          DOMAIN_NAME,
-                         PROJECT_ID,
+                         DOMAIN_ID,
                          PROJECT_NAME,
+                         PROJECT_ID,
                          SERVICE_USER_NAME,
                          SERVICE_USER_PASSWORD,
                          SERVICE_USER_TOKEN,
@@ -386,7 +386,10 @@ class Projects(FlowBase):
                                                                          SERVICE_USER_PASSWORD)
             # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
 
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
@@ -395,8 +398,8 @@ class Projects(FlowBase):
 
             # call CB
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
-                                           SERVICE_NAME,
-                                           SUBSERVICE_NAME,
+                                           DOMAIN_NAME,
+                                           PROJECT_NAME,
                                            # ID: S-001
                                            # TYPE: service
                                            # isPattern: false
@@ -449,7 +452,16 @@ class Projects(FlowBase):
                                                ],
                                         )
 
-            DEVICE_ID = cb_res # TODO: extract DeviceID from ContextBroker response
+            res = json.loads(cb_res)
+            logger.debug("updateContext res=%s" % res)
+
+            for r in res['contextResponses']:
+                # Check ContextBroker status response
+                if r['statusCode']['code'] != '200':
+                    raise Exception(r['statusCode']['reasonPhrase'])
+                else:
+                    # TODO: extract DeviceID from ContextBroker response
+                    DEVICE_ID = cb_res
 
             logger.debug("DEVICE_ID=%s" % DEVICE_ID)
 
@@ -562,8 +574,7 @@ class Projects(FlowBase):
             TIMEZONE = "Europe/Madrid" # TODO: get from django conf
             LAZY = [ { "name": "op_result", "type": "string" } ]
 
-
-            res_iota = self.iota.registerDevice(SERVICE_USER_TOKEN,
+            iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
                                                 # resource: ???
@@ -580,10 +591,11 @@ class Projects(FlowBase):
                                                 LAZY
                                         )
             # TODO extract info from res_iota
-
+            res = json.loads(iota_res)
+            logger.debug("registerDevice res=%s" % res)
 
             # call CB
-            res_cb = self.cb.updateContext(SERVICE_USER_TOKEN,
+            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
                                            PROJECT_NAME,
                                            # type: button
@@ -643,7 +655,19 @@ class Projects(FlowBase):
                                            },
                                                ]
                                             )
-            # TODO: extract info from res_cb
+
+            res = json.loads(cb_res)
+            logger.debug("updateContext res=%s" % res)
+            for r in res['contextResponses']:
+                # Check ContextBroker status response
+                if r['statusCode']['code'] != '200':
+                    raise Exception(r['statusCode']['reasonPhrase'])
+                else:
+                    # TODO: extract Info from ContextBroker response
+                    None
+
+
+            # TODO: extract info from cb_res
             APP="http://localhost"
             DURATION="P1M"
             AUX_EXTERNAL_ID=None
@@ -681,7 +705,7 @@ class Projects(FlowBase):
                                              ]
 
             # call CB
-            res_cb = self.cb.registerContext(SERVICE_USER_TOKEN,
+            cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
                                              DOMAIN_NAME,
                                              PROJECT_NAME,
                                              # entities: <device_id>XXX:button
@@ -690,7 +714,10 @@ class Projects(FlowBase):
                                              APP,
                                              DURATION
                                              )
-            # TODO: extract info from res_cb
+            res = json.loads(cb_res)
+            logger.debug("registerContext res=%s" % res)
+            # TODO: extract info from cb_res
+            None
 
         except Exception, ex:
             logger.error(ex)
