@@ -40,7 +40,7 @@ class CreateNewSubService(FlowBase):
                             NEW_SUBSERVICE_NAME,
                             NEW_SUBSERVICE_DESCRIPTION,
                             ENTITY_TYPE=None,
-                            ENTITY_ID=None
+                            ENTITY_ID=None,
                             IS_PATTERN=None,
                             ATT_NAME=None,
                             ATT_PROVIDER=None,
@@ -133,9 +133,9 @@ class CreateNewSubService(FlowBase):
             # Check if ThirdParty data is provided
 
             logger.debug("Configure Service In Context Broker %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
-            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+            cb_res = self.cb.updateContext(SERVICE_ADMIN_TOKEN,
                                            SERVICE_NAME,
-                                           SUBSERVICE_NAME,
+                                           NEW_SUBSERVICE_NAME,
                                            # ID: S-001
                                            # TYPE: service
                                            # isPattern: false
@@ -153,37 +153,37 @@ class CreateNewSubService(FlowBase):
                                            {
                                                "name": "name",
                                                "type": "string",
-                                               "value": NAME
+                                               "value": ATT_NAME
                                            },
                                            {
                                                "name": "provider",
                                                "type": "string",
-                                               "value": PROVIDER
+                                               "value": ATT_PROVIDER
                                            },
                                            {
                                                "name": "endpoint",
                                                "type": "string",
-                                               "value": ENDPOINT
+                                               "value": ATT_ENDPOINT
                                            },
                                            {
                                                "name": "method",
                                                "type": "string",
-                                               "value": METHOD
+                                               "value": ATT_METHOD
                                            },
                                            {
                                                "name": "authentication",
                                                "type": "string",
-                                               "value": AUTHENTICATION
+                                               "value": ATT_AUTHENTICATION
                                            },
                                            {
                                                "name": "mapping",
                                                "type": "string",
-                                               "value": MAPPING
+                                               "value": ATT_MAPPING
                                            },
                                            {
                                                "name": "timeout",
                                                "type": "integer",
-                                               "value": TIMEOUT
+                                               "value": ATT_TIMEOUT
                                            },
                                                ],
                                         )

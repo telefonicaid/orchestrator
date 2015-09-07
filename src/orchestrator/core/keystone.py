@@ -192,8 +192,8 @@ class IdMKeystoneOperations(IdMOperations):
     def getScopedProjectToken2(self,
                               DOMAIN_ID,
                               PROJECT_ID,
-                              DOMAIN_ADMIN_USER,
-                              DOMAIN_ADMIN_PASSWORD):
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD):
         auth_data = {
             "auth": {
                 "identity": {
@@ -219,7 +219,7 @@ class IdMKeystoneOperations(IdMOperations):
                         "domain": {
                             "id": DOMAIN_ID
                         },
-                        "id": "/" + PROJECT_ID
+                        "id": PROJECT_ID
                     }
                 }
             }
@@ -1127,4 +1127,3 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return { "trusts": json_body_response['trusts'] }
-

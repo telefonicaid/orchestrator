@@ -547,21 +547,21 @@ json = {
     ########
         "name": "Device",
         "dependencies": {
-            "SERVICE_ADMIN_USER": [
-                "SERVICE_ADMIN_PASSWORD"
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
             ],
-            "SERVICE_ADMIN_PASSWORD": [
-                "SERVICE_ADMIN_USER",
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
             ]
         },
         "properties": {
-            "SERVICE_ADMIN_USER": {
+            "SERVICE_USER_NAME": {
                 "type": "string",
             },
-            "SERVICE_ADMIN_PASSWORD": {
+            "SERVICE_USER_PASSWORD": {
                 "type": "string",
             },
-            "SERVICE_ADMIN_TOKEN": {
+            "SERVICE_USER_TOKEN": {
                 "type": "string",
             },
             "SERVICE_ID": {
@@ -583,4 +583,3 @@ json = {
 
 
 }
-

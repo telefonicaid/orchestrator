@@ -93,11 +93,11 @@ class IoTACppOperations(object):
 
     def registerDevice(self,
                        SERVICE_USER_TOKEN,
-                       SEVICE_NAME,
+                       SERVICE_NAME,
                        SUBSERVICE_NAME,
                        DEVICE_ID,
                        #PROTOCOL,
-                       #RESOURCE,                       
+                       #RESOURCE,
                        ENTITY_NAME,
                        ENTITY_TYPE,
                        TIMEZONE,
@@ -113,10 +113,10 @@ class IoTACppOperations(object):
                      # entity_name: <device_id> XXX
                      # entity_type: button
                      # timeozne: America/Santiago
-                     # lazy: lazy_op_status: string                         
+                     # lazy: lazy_op_status: string
                     "device_id": DEVICE_ID,
                     "entity_name": ENTITY_NAME,
-                    "entity_type": ENTITY_PATH,
+                    "entity_type": ENTITY_TYPE,
                     "timezone": TIMEZONE,
                     # "attributes": [
                     #     {
