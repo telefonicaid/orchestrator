@@ -983,7 +983,7 @@ class Trust_RESTView(APIView, IoTConf):
 
 class SubServiceIoTADevice_RESTView(APIView, IoTConf):
     """
-    SubService Device
+    SubService IoTA Device
 
     """
     schema_name = "IoTADevice"
@@ -1045,7 +1045,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
 
 class SubServiceIoTAService_RESTView(APIView, IoTConf):
     """
-    SubService Service
+    SubService IoTA Service
 
     """
     schema_name = "IoTAService"
@@ -1090,7 +1090,6 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_AUTHENTICATION", None),
                 request.DATA.get("ATT_MAPPING", None),
                 request.DATA.get("ATT_TIMEOUT", None),
-
             )
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)

@@ -459,10 +459,8 @@ class Projects(FlowBase):
                 # Check ContextBroker status response
                 if r['statusCode']['code'] != '200':
                     raise Exception(r['statusCode']['reasonPhrase'])
-                else:
-                    # TODO: extract DeviceID from ContextBroker response
-                    DEVICE_ID = cb_res
 
+            DEVICE_ID = ENTITY_ID
             logger.debug("DEVICE_ID=%s" % DEVICE_ID)
 
         except Exception, ex:
@@ -568,7 +566,10 @@ class Projects(FlowBase):
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
 
-            # call IOTA
+
+            #
+            # 1. Call IOTA for register button
+            #
             ENTITY_TYPE = "button"
             ENTITY_NAME = DEVICE_ID
             TIMEZONE = "Europe/Madrid" # TODO: get from django conf
@@ -594,7 +595,9 @@ class Projects(FlowBase):
             res = json.loads(iota_res)
             logger.debug("registerDevice res=%s" % res)
 
-            # call CB
+            #
+            # 2. Call ContextBroekr for create entity button
+            #
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
                                            PROJECT_NAME,
@@ -662,19 +665,18 @@ class Projects(FlowBase):
                 # Check ContextBroker status response
                 if r['statusCode']['code'] != '200':
                     raise Exception(r['statusCode']['reasonPhrase'])
-                else:
-                    # TODO: extract Info from ContextBroker response
-                    None
 
 
-            # TODO: extract info from cb_res
+            #
+            # 3. Call ContextBroker for register Context Adapter
+            #
             APP="http://localhost"
             DURATION="P1M"
+            # Args for Context Adapter ?
             AUX_EXTERNAL_ID=None
             AUX_OP_ACTION=None
             AUX_OP_EXTRA=None
             AUX_OP_STATUS=None
-            #
 
             ENTITIES=[DEVICE_ID + 'button']
             ATTRIBUTES=[
@@ -704,7 +706,7 @@ class Projects(FlowBase):
                                                }
                                              ]
 
-            # call CB
+
             cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
                                              DOMAIN_NAME,
                                              PROJECT_NAME,
@@ -714,17 +716,17 @@ class Projects(FlowBase):
                                              APP,
                                              DURATION
                                              )
-            res = json.loads(cb_res)
             logger.debug("registerContext res=%s" % res)
-            # TODO: extract info from cb_res
-            None
+            res = json.loads(cb_res)
+            registrationid = res['registrationid']
+            logger.debug("registration id=%s" % registrationid)
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-
+            "registrationid": registrationid
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        # return  ?
+         return  registrationid
