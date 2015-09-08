@@ -221,6 +221,8 @@ REST_FRAMEWORK = {
 # ---------------
 KEYSTONE = {}
 KEYPASS = {}
+IOTA = {}
+ORION = {}
 
 PEP = {
     "user": "pep",

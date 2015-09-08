@@ -34,7 +34,7 @@ logger = logging.getLogger('orchestrator_core')
 
 class IdMKeystoneOperations(IdMOperations):
     '''
-       IoT IdM: Kkeystone
+       IoT IdM: Keystone
     '''
 
     def __init__(self,
@@ -146,6 +146,90 @@ class IdMKeystoneOperations(IdMOperations):
             method='POST', data=auth_data)
         assert res.code == 201, (res.code, res.msg)
         return res.headers.get('X-Subject-Token')
+
+
+    def getScopedProjectToken(self,
+                              DOMAIN_NAME,
+                              PROJECT_NAME,
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": SERVICE_ADMIN_USER,
+                            "password": SERVICE_ADMIN_PASSWORD
+                        }
+                    }
+                }
+            }
+        }
+        if DOMAIN_NAME and PROJECT_NAME:
+            auth_data['auth']['identity']['password']['user'].update(
+                {"domain": {"name": DOMAIN_NAME}})
+
+            scope_domain = {
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "name": DOMAIN_NAME
+                        },
+                        "name": "/" + PROJECT_NAME
+                    }
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res.headers.get('X-Subject-Token')
+
+    def getScopedProjectToken2(self,
+                              DOMAIN_ID,
+                              PROJECT_ID,
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "password"
+                    ],
+                    "password": {
+                        "user": {
+                            "name": SERVICE_ADMIN_USER,
+                            "password": SERVICE_ADMIN_PASSWORD
+                        }
+                    }
+                }
+            }
+        }
+        if DOMAIN_ID and PROJECT_ID:
+            auth_data['auth']['identity']['password']['user'].update(
+                {"domain": {"id": DOMAIN_ID}})
+
+            scope_domain = {
+                "scope": {
+                    "project": {
+                        "domain": {
+                            "id": DOMAIN_ID
+                        },
+                        "id": PROJECT_ID
+                    }
+                }
+            }
+            auth_data['auth'].update(scope_domain)
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST', data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res.headers.get('X-Subject-Token')
+
 
     # aka createService
     def createDomain(self,
@@ -1043,4 +1127,3 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return { "trusts": json_body_response['trusts'] }
-            

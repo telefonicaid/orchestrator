@@ -9,11 +9,12 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 All requests can be performed providing a 'x-auth-token' header instead of X_USER / X_PASSWORD payload fields
 
+
 ## Services query [/v1.0/service]
 ### Listado de Services [GET]
 
 + Request (application/json)
-        
+
             {
                 "DOMAIN_NAME":"admin_domain",
                 "SERVICE_ADMIN_USER":"cloud_admin",
@@ -69,7 +70,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
     + serviceId (required, `string`) ... Service Id
 
 + Request (application/json)
-        
+
             {
                 "SERVICE_NAME":"SmartValencia",
                 "SERVICE_ADMIN_USER":"adm1",
@@ -122,7 +123,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 ### edicion de subservicio [PUT]
 
 + Request (application/json)
-        
+
             {
                 "SERVICE_NAME":"SmartValencia",
                 "SERVICE_ADMIN_USER":"adm1",
@@ -135,7 +136,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Response 201 (application/json)
 
     + Body
-        
+
             {
                    "id" : 0000
             }
@@ -172,6 +173,72 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 'id': '1119023a10064570a2a3de0b5b286500',
                 'name': '/Electricidad'}
             }
+
+
+
+## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
+### registar dispositivo en IoTA [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "DEVICE_ID":"",
+                "ENTITY_TYPE":""button,
+                "ATT_INTERNAL_ID":"",
+                "ATT_EXTERNAL_ID":"",
+                "ATT_CCID":"",
+                "ATT_IMEI":"",
+                "ATT_IMSI":"",
+                "ATT_INTERACTION_TYPE":"",
+                "ATT_SERVICE_ID":"",
+                "ATT_GEOLOCATION":"",
+            }
+
++ Response 201 (application/json)
+
+            {
+                 "registrationid" : "1234"
+            }
+
+## Register IoTA service in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
+### registar servicio  en IoTA [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "ENTITY_TYPE":"button",
+                "ENTITY_ID":"buttonXXX",
+                "IS_PATTERN":"false",
+                "ATT_NAME":"blackbutton",
+                "ATT_PROVIDER":"telepizza",
+                "ATT_ENDPOINT":"http://localhost",
+                "ATT_METHOD":"GET",
+                "ATT_AUTHENTICATION":"context_adapter",
+                "ATT_MAPPING":"xxx",
+                "ATT_TIMEOUT":"120",
+
+            }
+
++ Response 201 (application/json)
+
+            {
+                 "??" : ???
+            }
+
 
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
 ### List Roles[GET]
