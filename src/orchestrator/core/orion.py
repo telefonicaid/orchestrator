@@ -27,6 +27,8 @@ import os
 from orchestrator.common.util import RestOperations
 from orchestrator.core.cb import CBOperations
 
+logger = logging.getLogger('orchestrator_core')
+
 class CBOrionOperations(object):
     '''
        IoT platform: Orion Context Broker
@@ -84,7 +86,10 @@ class CBOrionOperations(object):
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
-        return data
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
 
 
     def updateContext(self,
@@ -118,7 +123,10 @@ class CBOrionOperations(object):
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
-        return data
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
 
 
     def getContextTypes(self,
@@ -136,7 +144,10 @@ class CBOrionOperations(object):
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
-        return data
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
 
 
     def subscribeContext(self,
@@ -170,7 +181,10 @@ class CBOrionOperations(object):
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
-        return data
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
 
 
     def unsubscribeContext(self,
@@ -192,4 +206,7 @@ class CBOrionOperations(object):
 
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
-        return data
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response

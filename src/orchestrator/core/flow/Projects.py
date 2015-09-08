@@ -452,10 +452,9 @@ class Projects(FlowBase):
                                                ],
                                         )
 
-            res = json.loads(cb_res)
-            logger.debug("updateContext res=%s" % res)
+            logger.debug("updateContext res=%s" % cb_res)
 
-            for r in res['contextResponses']:
+            for r in cb_res['contextResponses']:
                 # Check ContextBroker status response
                 if r['statusCode']['code'] != '200':
                     raise Exception(r['statusCode']['reasonPhrase'])
@@ -592,8 +591,7 @@ class Projects(FlowBase):
                                                 LAZY
                                         )
             # TODO extract info from res_iota
-            res = json.loads(iota_res)
-            logger.debug("registerDevice res=%s" % res)
+            logger.debug("registerDevice res=%s" % iota_res)
 
             #
             # 2. Call ContextBroekr for create entity button
@@ -659,9 +657,8 @@ class Projects(FlowBase):
                                                ]
                                             )
 
-            res = json.loads(cb_res)
-            logger.debug("updateContext res=%s" % res)
-            for r in res['contextResponses']:
+            logger.debug("updateContext res=%s" % cb_res)
+            for r in cb_res['contextResponses']:
                 # Check ContextBroker status response
                 if r['statusCode']['code'] != '200':
                     raise Exception(r['statusCode']['reasonPhrase'])
@@ -716,9 +713,8 @@ class Projects(FlowBase):
                                              APP,
                                              DURATION
                                              )
-            logger.debug("registerContext res=%s" % res)
-            res = json.loads(cb_res)
-            registrationid = res['registrationid']
+            logger.debug("registerContext res=%s" % cb_res)
+            registrationid = cb_res['registrationid']
             logger.debug("registration id=%s" % registrationid)
 
         except Exception, ex:

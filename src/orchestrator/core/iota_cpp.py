@@ -89,6 +89,11 @@ class IoTACppOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
 
 
     def registerDevice(self,
@@ -149,3 +154,8 @@ class IoTACppOperations(object):
 
         # TODO get Location ?
         # TODO return something?
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
