@@ -34,7 +34,7 @@ logger = logging.getLogger('orchestrator_core')
 
 class IdMKeystoneOperations(IdMOperations):
     '''
-       IoT IdM: Kkeystone
+       IoT IdM: Keystone
     '''
 
     def __init__(self,
