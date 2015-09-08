@@ -299,3 +299,430 @@ class Projects(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return PROJECT
+
+
+    def register_service(self,
+                         DOMAIN_NAME,
+                         DOMAIN_ID,
+                         PROJECT_NAME,
+                         PROJECT_ID,
+                         SERVICE_USER_NAME,
+                         SERVICE_USER_PASSWORD,
+                         SERVICE_USER_TOKEN,
+                         ENTITY_TYPE=None,
+                         ENTITY_ID=None,
+                         IS_PATTERN="false",
+                         ATT_NAME=None,
+                         ATT_PROVIDER=None,
+                         ATT_ENDPOINT=None,
+                         ATT_METHOD=None,
+                         ATT_AUTHENTICATION=None,
+                         ATT_MAPPING=None,
+                         ATT_TIMEOUT=None
+                       ):
+
+        '''Register Service in IOTA
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - ENTITY_TYPE:   (optional, just for Device configuration)
+        - ENTITY_ID:
+        - IS_PATTERN
+        - ATT_NAME=
+        - ATT_PROVIDER
+        - ATT_ENDPOINT
+        - ATT_METHOD
+        - ATT_AUTHENTICATION
+        - ATT_MAPPING
+        - ATT_TIMEOUT
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ENTITY_ID": "%s" % ENTITY_ID,
+            "IS_PATTERN": "%s" % IS_PATTERN,
+            "ATT_NAME": "%s" % ATT_NAME,
+            "ATT_PROVIDER": "%s" % ATT_PROVIDER,
+            "ATT_METHOD": "%s" % ATT_METHOD,
+            "ATT_AUTHENTICATION": "%s" % ATT_AUTHENTICATION,
+            "ATT_MAPPING": "%s" % ATT_MAPPING,
+            "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
+        }
+        logger.debug("register_service invoked with: %s" % json.dumps(data_log,
+        indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(DOMAIN_NAME,
+                                                                        PROJECT_NAME,
+                                                                        SERVICE_USER_NAME,
+                                                                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                                                        DOMAIN_NAME,
+                                                        ROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(DOMAIN_ID,
+                                                                         PROJECT_ID,
+                                                                         SERVICE_USER_NAME,
+                                                                         SERVICE_USER_PASSWORD)
+            # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+            # call CB
+            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+                                           DOMAIN_NAME,
+                                           PROJECT_NAME,
+                                           # ID: S-001
+                                           # TYPE: service
+                                           # isPattern: false
+                                           ENTITY_TYPE,
+                                           ENTITY_ID,
+                                           IS_PATTERN,
+                                           ATTRIBUTES=[
+                                           # name: TheService
+                                           # provider: ThirdParty
+                                           # endpint: http://thirdparty
+                                           # method: GET
+                                           # authentication: context-adapter | third-party
+                                           # mapping: [...]
+                                           # timeout: 120
+                                           {
+                                               "name": "name",
+                                               "type": "string",
+                                               "value": ATT_NAME
+                                           },
+                                           {
+                                               "name": "provider",
+                                               "type": "string",
+                                               "value": ATT_PROVIDER
+                                           },
+                                           {
+                                               "name": "endpoint",
+                                               "type": "string",
+                                               "value": ATT_ENDPOINT
+                                           },
+                                           {
+                                               "name": "method",
+                                               "type": "string",
+                                               "value": ATT_METHOD
+                                           },
+                                           {
+                                               "name": "authentication",
+                                               "type": "string",
+                                               "value": ATT_AUTHENTICATION
+                                           },
+                                           {
+                                               "name": "mapping",
+                                               "type": "string",
+                                               "value": ATT_MAPPING
+                                           },
+                                           {
+                                               "name": "timeout",
+                                               "type": "integer",
+                                               "value": ATT_TIMEOUT
+                                           },
+                                               ],
+                                        )
+
+            logger.debug("updateContext res=%s" % cb_res)
+
+            for r in cb_res['contextResponses']:
+                # Check ContextBroker status response
+                if r['statusCode']['code'] != '200':
+                    raise Exception(r['statusCode']['reasonPhrase'])
+
+            DEVICE_ID = ENTITY_ID
+            logger.debug("DEVICE_ID=%s" % DEVICE_ID)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "DEVICE_ID": DEVICE_ID
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log,
+                                                       indent=3))
+        return DEVICE_ID
+
+
+    def register_device(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        DEVICE_ID,
+                        ENTITY_TYPE,
+                        ATT_INTERNAL_ID,
+                        ATT_EXTERNAL_ID,
+                        ATT_CCID,
+                        ATT_IMEI,
+                        ATT_IMSI,
+                        ATT_INTERACTION_TYPE,
+                        ATT_SERVICE_ID,
+                        ATT_GEOLOCATION
+                        ):
+
+        '''Register Device.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_NAME: Service name
+        - DOMAIN_ID: Service id
+        - PROJECT_NAME: SubService name
+        - PROJECT_ID: SubService name
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - DEVICE_ID: Device ID
+        - ENTITY_TYPE: Entity Type
+        - ATT_INTERNAL_ID
+        - ATT_EXTERNAL_ID
+        - ATT_CCID
+        - ATT_IMEI
+        - ATT_IMSI
+        - ATT_INTERACTION_TYPE
+        - ATT_SERVICE_ID
+        - ATT_GEOLOCATION
+        '''
+        data_log = {
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "DEVICE_ID": "%s" % DEVICE_ID,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ATT_INTERNAL_ID": "%s" % ATT_INTERNAL_ID,
+            "ATT_EXTERNAL_ID": "%s" % ATT_EXTERNAL_ID,
+            "ATT_CCID": "%s" % ATT_CCID,
+            "ATT_IMEI": "%s" % ATT_IMEI,
+            "ATT_IMSI": "%s" % ATT_IMSI,
+            "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
+            "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
+            "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
+        }
+        logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+
+
+            #
+            # 1. Call IOTA for register button
+            #
+            ENTITY_TYPE = "button"
+            ENTITY_NAME = DEVICE_ID
+            TIMEZONE = "Europe/Madrid" # TODO: get from django conf
+            LAZY = [ { "name": "op_result", "type": "string" } ]
+
+            iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
+                                                DOMAIN_NAME,
+                                                PROJECT_NAME,
+                                                # resource: ???
+                                                # service: client_a
+                                                # service_path: /some_area
+                                                # entity_name: <device_id> XXX
+                                                # entity_type: button
+                                                # timeozne: America/Santiago
+                                                # lazy: lazy_op_status: string
+                                                DEVICE_ID,
+                                                ENTITY_NAME,
+                                                ENTITY_TYPE,
+                                                TIMEZONE,
+                                                LAZY
+                                        )
+            # TODO extract info from res_iota
+            logger.debug("registerDevice res=%s" % iota_res)
+
+            #
+            # 2. Call ContextBroekr for create entity button
+            #
+            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+                                           DOMAIN_NAME,
+                                           PROJECT_NAME,
+                                           # type: button
+                                           ENTITY_TYPE = "button",
+                                           # id: <device_id>XXX
+                                           ENTITY_ID = DEVICE_ID,
+                                           # isPattern: false
+                                           IS_PATTERN="false",
+                                           ATTRIBUTES=[
+                                               # internal_id: <device_id>
+                                               # external_id: ZZZZ
+                                               # ccid: AAA
+                                               # imei: 1234567789
+                                               # imsi: 4566789034
+                                               # interaction_tupe: synchronous
+                                               # service_id: S-001
+                                               # geolocation: 44.0,-3.34
+                                           {
+                                               "name": "internal_id",
+                                               "type": "string",
+                                               "value": ATT_INTERNAL_ID
+                                           },
+                                           {
+                                               "name": "external_id",
+                                               "type": "string",
+                                               "value": ATT_EXTERNAL_ID
+                                           },
+                                           {
+                                               "name": "ccid",
+                                               "type": "string",
+                                               "value": ATT_CCID
+                                           },
+                                           {
+                                               "name": "imei",
+                                               "type": "string",
+                                               "value": ATT_IMEI
+                                           },
+                                           {
+                                               "name": "imsi",
+                                               "type": "string",
+                                               "value": ATT_IMSI
+                                           },
+                                           {
+                                               "name": "interaction_type",
+                                               "type": "string",
+                                               "value": ATT_INTERACTION_TYPE
+                                           },
+                                           {
+                                               "name": "service_id",
+                                               "type": "string",
+                                               "value": ATT_SERVICE_ID
+                                           },
+                                           {
+                                               "name": "geolocation",
+                                               "type": "string",
+                                               "value": ATT_GEOLOCATION
+                                           },
+                                               ]
+                                            )
+
+            logger.debug("updateContext res=%s" % cb_res)
+            for r in cb_res['contextResponses']:
+                # Check ContextBroker status response
+                if r['statusCode']['code'] != '200':
+                    raise Exception(r['statusCode']['reasonPhrase'])
+
+
+            #
+            # 3. Call ContextBroker for register Context Adapter
+            #
+            APP="http://localhost"
+            DURATION="P1M"
+            # Args for Context Adapter ?
+            AUX_EXTERNAL_ID=None
+            AUX_OP_ACTION=None
+            AUX_OP_EXTRA=None
+            AUX_OP_STATUS=None
+
+            ENTITIES=[DEVICE_ID + 'button']
+            ATTRIBUTES=[
+                                               # aux_external_id
+                                               # aux_op_action
+                                               # aux_op_extra
+                                               # aux_op_status
+                                               {
+                                                   "name": "aux_external_id",
+                                                   "type": "string",
+                                                   "value": AUX_EXTERNAL_ID
+                                               },
+                                               {
+                                                   "name": "aux_op_action",
+                                                   "type": "string",
+                                                   "value": AUX_OP_ACTION
+                                               },
+                                               {
+                                                   "name": "aux_op_extra",
+                                                   "type": "string",
+                                                   "value": AUX_OP_EXTRA
+                                               },
+                                               {
+                                                   "name": "aux_op_status",
+                                                   "type": "string",
+                                                   "value": AUX_OP_STATUS
+                                               }
+                                             ]
+
+
+            cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
+                                             DOMAIN_NAME,
+                                             PROJECT_NAME,
+                                             # entities: <device_id>XXX:button
+                                             ENTITIES,
+                                             ATTRIBUTES,
+                                             APP,
+                                             DURATION
+                                             )
+            logger.debug("registerContext res=%s" % cb_res)
+            registrationid = cb_res['registrationid']
+            logger.debug("registration id=%s" % registrationid)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "registrationid": registrationid
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+         return  registrationid

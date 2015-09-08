@@ -242,7 +242,7 @@ json = {
                     "userName": {
                         "type": "string",
                         "pattern": "^([A-Za-z0-9_]+)$",
-                        },                    
+                        },
                     "password": {
                         "type": "string",
                         "minLength": 6,
@@ -542,5 +542,146 @@ json = {
         # ],
     },
 
-}
+    #############
+    "IoTADevice": {
+    #############
+        "name": "IoTADevice",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "DEVICE_ID": {
+                "type": "string",
+            },
+            "ENTITY_TYPE": {
+                "type": "string",
+            },
+            "ATT_INTERNAL_ID": {
+                "type": "string",
+            },
+            "ATT_EXTERNAL_ID": {
+                "type": "string",
+            },
+            "ATT_CCID": {
+                "type": "string",
+            },
+            "ATT_IMEI": {
+                "type": "string",
+            },
+            "ATT_IMSI": {
+                "type": "string",
+            },
+            "ATT_INTERACTION_TYPE": {
+                "type": "string",
+            },
+            "ATT_SERVICE_ID": {
+                "type": "string",
+            },
+            "ATT_GEOLOCATION": {
+                "type": "string",
+            },
+        },
+        # "required": [
+        # ],
+    },
 
+
+    ##############
+    "IoTAService": {
+    ##############
+        "name": "IoTAService",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+
+            "ENTITY_TYPE": {
+                "type": "string",
+            },
+            "ENTITY_ID": {
+                "type": "string",
+            },
+            "IS_PATTERN": {
+                "type": "string",
+            },
+            "ATT_NAME": {
+                "type": "string",
+            },
+            "ATT_PROVIDER": {
+                "type": "string",
+            },
+            "ATT_ENDPOINT": {
+                "type": "string",
+            },
+            "ATT_METHOD": {
+                "type": "string",
+            },
+            "ATT_AUTHENTICATION": {
+                "type": "string",
+            },
+            "ATT_MAPPING": {
+                "type": "string",
+            },
+            "ATT_TIMEOUT": {
+                "type": "string",
+            },
+
+        },
+        # "required": [
+        # ],
+    },
+
+
+}

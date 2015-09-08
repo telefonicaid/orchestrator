@@ -124,7 +124,7 @@ class CreateNewService(FlowBase):
             #
             ADMIN_ROLE_ID = self.idm.getRoleId(DOMAIN_ADMIN_TOKEN,
                                                ROLE_NAME="admin")
-            logger.debug("ID of role  %s: %s" % (ROLE_NAME="admin",
+            logger.debug("ID of role  %s: %s" % ("admin",
                                                  ID_ADM1))
 
             self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,

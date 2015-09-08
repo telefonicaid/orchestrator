@@ -25,6 +25,8 @@ import logging
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
+from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
+from orchestrator.core.orion import CBOrionOperations as CBOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -36,7 +38,13 @@ class FlowBase(object):
                  KEYSTONE_PORT,
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,
-                 KEYPASS_PORT=None):
+                 KEYPASS_PORT=None,
+                 IOTA_PROTOCOL=None,
+                 IOTA_HOST=None,
+                 IOTA_PORT=None,
+                 ORION_PROTOCOL=None,
+                 ORION_HOST=None,
+                 ORION_PORT=None):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -44,6 +52,14 @@ class FlowBase(object):
         self.ac = AccCOperations(KEYPASS_PROTOCOL,
                                  KEYPASS_HOST,
                                  KEYPASS_PORT)
+
+        self.iota = IoTAOperations(IOTA_PROTOCOL,
+                                   IOTA_HOST,
+                                   IOTA_PORT)
+
+        self.cb = CBOperations(ORION_PROTOCOL,
+                               ORION_HOST,
+                               ORION_PORT)
 
     def composeErrorCode(self, ex):
         '''
