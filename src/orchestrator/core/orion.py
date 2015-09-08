@@ -23,6 +23,7 @@
 #
 import json
 import os
+import logging
 
 from orchestrator.common.util import RestOperations
 from orchestrator.core.cb import CBOperations
