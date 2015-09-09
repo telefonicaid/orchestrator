@@ -440,21 +440,21 @@ class Test_SubServiceIoTADevice_RestView(object):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
             "SERVICE_NAME": "blackbutton",
-            "SERVICE_ADMIN_USER": "admin_tt",
+            "SERVICE_ADMIN_USER": "admin_bb",
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
-            "SERVICE_USER_NAME": "admin_tt",
+            "SERVICE_USER_NAME": "admin_bb",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
         }
         self.payload_data2_ok = {
             "SERVICE_NAME": "blackbutton",
-            "SERVICE_ADMIN_USER": "admin_tt",
+            "SERVICE_ADMIN_USER": "admin_bb",
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
-            "SERVICE_USER_NAME": "admin_tt",
+            "SERVICE_USER_NAME": "admin_bb",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "DEVICE_ID": "button_dev_%s" % self.suffix,
@@ -500,21 +500,21 @@ class Test_SubServiceIoTAService_RestView(object):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
             "SERVICE_NAME": "blackbutton",
-            "SERVICE_ADMIN_USER": "admin_tt",
+            "SERVICE_ADMIN_USER": "admin_bb",
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
-            "SERVICE_USER_NAME": "admin_tt",
+            "SERVICE_USER_NAME": "admin_bb",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
         }
         self.payload_data2_ok = {
             "SERVICE_NAME": "blackbutton",
-            "SERVICE_ADMIN_USER": "admin_tt",
+            "SERVICE_ADMIN_USER": "admin_bb",
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
-            "SERVICE_USER_NAME": "admin_tt",
+            "SERVICE_USER_NAME": "admin_bb",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "DEVICE_ID": "button00", #"button_dev_%s" % self.suffix,
