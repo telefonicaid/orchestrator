@@ -710,36 +710,24 @@ class Projects(FlowBase):
             APP="http://localhost"
             DURATION="P1M"
             # TODO: fix real Args for Context Adapter ?
-            AUX_EXTERNAL_ID=None
-            AUX_OP_ACTION=None
-            AUX_OP_EXTRA=None
-            AUX_OP_STATUS=None
-
+            # entities: <device_id>XXX:button
             ENTITIES=[DEVICE_ID + 'button']
             ATTRIBUTES=[
-                                               # aux_external_id
-                                               # aux_op_action
-                                               # aux_op_extra
-                                               # aux_op_status
                                                {
                                                    "name": "aux_external_id",
                                                    "type": "string",
-                                                   "value": AUX_EXTERNAL_ID
                                                },
                                                {
                                                    "name": "aux_op_action",
                                                    "type": "string",
-                                                   "value": AUX_OP_ACTION
                                                },
                                                {
                                                    "name": "aux_op_extra",
                                                    "type": "string",
-                                                   "value": AUX_OP_EXTRA
                                                },
                                                {
                                                    "name": "aux_op_status",
                                                    "type": "string",
-                                                   "value": AUX_OP_STATUS
                                                }
                                              ]
 
@@ -747,7 +735,6 @@ class Projects(FlowBase):
             cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
                                              DOMAIN_NAME,
                                              PROJECT_NAME,
-                                             # entities: <device_id>XXX:button
                                              ENTITIES,
                                              ATTRIBUTES,
                                              APP,
