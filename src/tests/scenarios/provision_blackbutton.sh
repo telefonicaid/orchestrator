@@ -14,7 +14,7 @@ python ./createNewService.py http               \
                                  password       \
                                  blackbutton    \
                                  BlackButton    \
-                                 admin_tt       \
+                                 admin_bb       \
                                  4passw0rd      \
                                  http           \
                                  localhost      \
@@ -24,9 +24,9 @@ python ./assignInheritRoleServiceUser.py http        \
                                     localhost        \
                                     5000             \
                                     blackbutton      \
-                                    admin_tt         \
+                                    admin_bb         \
                                     4passw0rd        \
-                                    admin_tt         \
+                                    admin_bb         \
                                     SubServiceAdmin  \
                                     http             \
                                     localhost        \
@@ -36,9 +36,9 @@ python ./assignInheritRoleServiceUser.py http        \
                                     localhost        \
                                     5000             \
                                     blackbutton      \
-                                    admin_tt         \
+                                    admin_bb         \
                                     4passw0rd        \
-                                    admin_tt         \
+                                    admin_bb         \
                                     SubServiceCustomer  \
                                     http             \
                                     localhost        \
@@ -48,7 +48,7 @@ python ./createNewSubService.py  http                \
                                       localhost      \
                                       5000           \
                                       blackbutton    \
-                                      admin_tt       \
+                                      admin_bb       \
                                       4passw0rd      \
                                       telepizza      \
                                       TelePizza
@@ -57,7 +57,7 @@ python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        blackbutton    \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        admin_telepizza \
                                        4passw0rd
@@ -67,7 +67,7 @@ python ./assignRoleSubServiceUser.py http             \
                                        5000           \
                                        blackbutton    \
                                        telepizza      \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        SubServiceAdmin\
                                        admin_telepizza
@@ -77,7 +77,7 @@ python ./assignRoleSubServiceUser.py http             \
                                        5000           \
                                        blackbutton    \
                                        telepizza      \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        SubServiceCustomer\
                                        admin_telepizza
@@ -86,7 +86,7 @@ python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        blackbutton    \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        client_telepizza \
                                        4passw0rd
@@ -96,7 +96,7 @@ python ./assignRoleSubServiceUser.py http             \
                                        5000           \
                                        blackbutton    \
                                        telepizza      \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        SubServiceCustomer\
                                        client_telepizza
@@ -106,7 +106,7 @@ python ./createNewSubService.py  http                \
                                       localhost      \
                                       5000           \
                                       blackbutton    \
-                                      admin_tt       \
+                                      admin_bb       \
                                       4passw0rd      \
                                       carrefour      \
                                       Carrefour
@@ -115,7 +115,7 @@ python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        blackbutton    \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        admin_carrefour \
                                        4passw0rd
@@ -125,7 +125,7 @@ python ./assignRoleSubServiceUser.py http             \
                                        5000           \
                                        blackbutton    \
                                        carrefour      \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        SubServiceAdmin\
                                        admin_carrefour
@@ -135,7 +135,7 @@ python ./assignRoleSubServiceUser.py http             \
                                        5000           \
                                        blackbutton    \
                                        carrefour      \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        SubServiceCustomer\
                                        admin_carrefour
@@ -144,7 +144,7 @@ python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        blackbutton    \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        client_carrefour \
                                        4passw0rd
@@ -154,7 +154,7 @@ python ./assignRoleSubServiceUser.py http             \
                                        5000           \
                                        blackbutton    \
                                        carrefour      \
-                                       admin_tt       \
+                                       admin_bb       \
                                        4passw0rd      \
                                        SubServiceCustomer\
                                        client_carrefour
