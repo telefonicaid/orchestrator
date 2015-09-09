@@ -484,7 +484,6 @@ class Projects(FlowBase):
                         SERVICE_USER_TOKEN,
                         DEVICE_ID,
                         PROTOCOL,
-                        MODE,
                         ENTITY_TYPE,
                         ATT_INTERNAL_ID,
                         ATT_EXTERNAL_ID,
@@ -510,7 +509,6 @@ class Projects(FlowBase):
         - SERVICE_USER_TOKEN: Service admin token
         - DEVICE_ID: Device ID
         - PROTOCOL: Protocol of the device
-        - MODE: Communication model: sync or async
         - ENTITY_TYPE: Entity Type
         - ATT_INTERNAL_ID
         - ATT_EXTERNAL_ID
@@ -531,7 +529,6 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
             "PROTOCOL": "%s" % PROTOCOL,
-            "MODE": "%s" % MODE,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ATT_INTERNAL_ID": "%s" % ATT_INTERNAL_ID,
             "ATT_EXTERNAL_ID": "%s" % ATT_EXTERNAL_ID,
@@ -605,7 +602,7 @@ class Projects(FlowBase):
                     }
                     ]
                 # TODO: LAZY si es sincrono
-                if MODE == "SYNC":
+                if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [ { "name": "op_result", "type": "string" } ]
 
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
