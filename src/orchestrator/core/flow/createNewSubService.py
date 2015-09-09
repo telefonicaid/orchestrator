@@ -131,9 +131,10 @@ class CreateNewSubService(FlowBase):
             #
 
             # Check if ThirdParty data is provided
-
-            logger.debug("Configure Service In Context Broker %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
-            cb_res = self.cb.updateContext(SERVICE_ADMIN_TOKEN,
+            if ENTITY_TYPE != None:
+                logger.debug("Configure Service In Context Broker %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
+                cb_res = self.cb.updateContext(
+                                           SERVICE_ADMIN_TOKEN,
                                            SERVICE_NAME,
                                            NEW_SUBSERVICE_NAME,
                                            # ID: S-001
