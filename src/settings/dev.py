@@ -24,3 +24,15 @@ KEYPASS = {
     "port": "7070",
     "protocol":"http"
 }
+
+IOTA = {
+    "host": "localhost",
+    "port": "4041",
+    "protocol":"http"
+}
+
+ORION = {
+    "host": "localhost",
+    "port": "1026",
+    "protocol":"http"
+}

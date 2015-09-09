@@ -28,6 +28,8 @@ import logging
 from orchestrator.common.util import RestOperations
 from orchestrator.core.iota import IoTAOperations
 
+logger = logging.getLogger('orchestrator_core')
+
 class IoTACppOperations(object):
     '''
        IoT platform: IoTAgent
@@ -102,12 +104,16 @@ class IoTACppOperations(object):
                        SERVICE_NAME,
                        SUBSERVICE_NAME,
                        DEVICE_ID,
-                       #PROTOCOL,
+                       PROTOCOL,
                        #RESOURCE,
                        ENTITY_NAME,
                        ENTITY_TYPE,
                        TIMEZONE,
-                       LAZY):
+                       ATTRIBUTES=[],
+                       STATIC_ATTRIBUTES=[],
+                       COMMANDS=[],
+                       INTERNAL_ATTRIBUTES=[],
+                       LAZY=[]):
 
         # TODO: Cpp IoTA and Node IoTA are going to converge with the same payload/args
         body_data = {
@@ -121,23 +127,16 @@ class IoTACppOperations(object):
                      # timeozne: America/Santiago
                      # lazy: lazy_op_status: string
                     "device_id": DEVICE_ID,
+                    "protocol": PROTOCOL,
+                    "service": SERVICE_NAME,
+                    "service_path": SUBSERVICE_NAME,
                     "entity_name": ENTITY_NAME,
                     "entity_type": ENTITY_TYPE,
                     "timezone": TIMEZONE,
-                    # "attributes": [
-                    #     {
-                    #         "object_id": "source_data",
-                    #         "name": "attr_name",
-                    #         "type": "int"
-                    #     }
-                    # ],
-                    # "static_attributes": [
-                    #     {
-                    #         "name": "att_name",
-                    #         "type": "string",
-                    #         "value": "value"
-                    #     }
-                    # ],
+                    "attributes": ATTRIBUTES,
+                    "static_attributes": STATIC_ATTRIBUTES,
+                    "commands": COMMANDS,
+                    "internal_attributes": INTERNAL_ATTRIBUTES,
                     "lazy": LAZY
                 }
             ]

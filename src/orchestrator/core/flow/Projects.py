@@ -483,6 +483,8 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
                         DEVICE_ID,
+                        PROTOCOL,
+                        MODE,
                         ENTITY_TYPE,
                         ATT_INTERNAL_ID,
                         ATT_EXTERNAL_ID,
@@ -507,6 +509,8 @@ class Projects(FlowBase):
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
         - DEVICE_ID: Device ID
+        - PROTOCOL: Protocol of the device
+        - MODE: Communication model: sync or async
         - ENTITY_TYPE: Entity Type
         - ATT_INTERNAL_ID
         - ATT_EXTERNAL_ID
@@ -526,6 +530,8 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
+            "PROTOCOL": "%s" % PROTOCOL,
+            "MODE": "%s" % MODE,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ATT_INTERNAL_ID": "%s" % ATT_INTERNAL_ID,
             "ATT_EXTERNAL_ID": "%s" % ATT_EXTERNAL_ID,
@@ -569,10 +575,38 @@ class Projects(FlowBase):
             #
             # 1. Call IOTA for register button
             #
-            ENTITY_TYPE = "button"
-            ENTITY_NAME = DEVICE_ID
+            #ENTITY_TYPE = "BlackButton"
+            #PROTOCOL = "TT_BLACKBUTTON"
             TIMEZONE = "Europe/Madrid" # TODO: get from django conf
-            LAZY = [ { "name": "op_result", "type": "string" } ]
+            ENTITY_NAME = DEVICE_ID
+            LAZY=[]
+            ATTRIBUTES=[]
+            STATIC_ATTRIBUTES = []
+            INTERNAL_ATTRIBUTES = []
+            COMMANDS = []
+
+            if PROTOCOL == "TT_BLACKBUTTON":
+                ATTRIBUTES = [
+                    {
+                        "name": "internalId",
+                        "type": "string"
+                    },
+                    {
+                        "name": "last_operation",
+                        "type": "string"
+                    },
+                    {
+                        "name": "op_action",
+                        "type": "string"
+                    },
+                    {
+                        "name": "op_extra",
+                        "type": "string"
+                    }
+                    ]
+                # TODO: LAZY si es sincrono
+                if MODE == "SYNC":
+                    LAZY = [ { "name": "op_result", "type": "string" } ]
 
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
@@ -585,22 +619,28 @@ class Projects(FlowBase):
                                                 # timeozne: America/Santiago
                                                 # lazy: lazy_op_status: string
                                                 DEVICE_ID,
+                                                PROTOCOL,
                                                 ENTITY_NAME,
                                                 ENTITY_TYPE,
                                                 TIMEZONE,
+                                                ATTRIBUTES,
+                                                STATIC_ATTRIBUTES,
+                                                COMMANDS,
+                                                INTERNAL_ATTRIBUTES,
                                                 LAZY
                                         )
             # TODO extract info from res_iota
             logger.debug("registerDevice res=%s" % iota_res)
+            #
+            # 2. Call ContextBroker for create entity button.
+            #
 
-            #
-            # 2. Call ContextBroekr for create entity button
-            #
+            # (Esto lo hace el IOTA de CPP?)
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
                                            PROJECT_NAME,
                                            # type: button
-                                           ENTITY_TYPE = "button",
+                                           ENTITY_TYPE,
                                            # id: <device_id>XXX
                                            ENTITY_ID = DEVICE_ID,
                                            # isPattern: false
@@ -669,37 +709,25 @@ class Projects(FlowBase):
             #
             APP="http://localhost"
             DURATION="P1M"
-            # Args for Context Adapter ?
-            AUX_EXTERNAL_ID=None
-            AUX_OP_ACTION=None
-            AUX_OP_EXTRA=None
-            AUX_OP_STATUS=None
-
+            # TODO: fix real Args for Context Adapter ?
+            # entities: <device_id>XXX:button
             ENTITIES=[DEVICE_ID + 'button']
             ATTRIBUTES=[
-                                               # aux_external_id
-                                               # aux_op_action
-                                               # aux_op_extra
-                                               # aux_op_status
                                                {
                                                    "name": "aux_external_id",
                                                    "type": "string",
-                                                   "value": AUX_EXTERNAL_ID
                                                },
                                                {
                                                    "name": "aux_op_action",
                                                    "type": "string",
-                                                   "value": AUX_OP_ACTION
                                                },
                                                {
                                                    "name": "aux_op_extra",
                                                    "type": "string",
-                                                   "value": AUX_OP_EXTRA
                                                },
                                                {
                                                    "name": "aux_op_status",
                                                    "type": "string",
-                                                   "value": AUX_OP_STATUS
                                                }
                                              ]
 
@@ -707,7 +735,6 @@ class Projects(FlowBase):
             cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
                                              DOMAIN_NAME,
                                              PROJECT_NAME,
-                                             # entities: <device_id>XXX:button
                                              ENTITIES,
                                              ATTRIBUTES,
                                              APP,
