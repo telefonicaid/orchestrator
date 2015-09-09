@@ -160,4 +160,29 @@ python ./assignRoleSubServiceUser.py http             \
                                        client_carrefour
 
 
+python ./registerSubServiceDevice.py  http             \
+                                      localhost        \
+                                      5000             \
+                                      blackbutton      \
+                                      telepizza        \
+                                      admin_bb         \
+                                      4passw0rd        \
+                                      button_dev_01    \
+                                      BlackButton      \
+                                      TT_BLACKBUTTON   \
+                                      button_dev_01    \
+                                      ZZZZ             \
+                                      AAA              \
+                                      1234567890       \
+                                      0987654321       \
+                                      synchronous      \
+                                      S-001            \
+                                      40.4188,-3.6919  \
+                                      http             \
+                                      localhost        \
+                                      4041             \
+                                      http             \
+                                      localhost        \
+                                      1026
+
 cd -
