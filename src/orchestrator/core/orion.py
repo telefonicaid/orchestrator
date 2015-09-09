@@ -99,7 +99,7 @@ class CBOrionOperations(object):
                       SUBSERVICE_NAME,
                       ENTITY_TYPE,
                       ENTITY_ID,
-                      IS_PATTERN="False",
+                      IS_PATTERN="false",
                       ATTRIBUTES=[]):
 
         body_data = {
