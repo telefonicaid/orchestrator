@@ -582,6 +582,12 @@ json = {
             "ENTITY_TYPE": {
                 "type": "string",
             },
+            "PROTOCOL": {
+                "type": "string",
+            },
+            "MODE": {
+                "type": "string",
+            },
             "ATT_INTERNAL_ID": {
                 "type": "string",
             },
