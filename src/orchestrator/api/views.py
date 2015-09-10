@@ -424,11 +424,11 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.ORION_HOST,
                                 self.ORION_PORT)
 
-                result = flow.register_device(
+                result2 = flow.register_device(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
-                    request.DATA.get("SUBSERVICE_NAME", None),
-                    request.DATA.get("SUBSERVICE_ID", None),
+                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                    result['id'],
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
@@ -444,6 +444,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_SERVICE_ID", None),
                     request.DATA.get("ATT_GEOLOCATION", None)
                     )
+                # accumulate previous result
+                result['registrationid'] = result2
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)

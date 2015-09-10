@@ -539,7 +539,7 @@ class Projects(FlowBase):
             "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
             "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
-        logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("register_device with: %s" % json.dumps(data_log, indent=3))
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
