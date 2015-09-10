@@ -115,17 +115,10 @@ class IoTACppOperations(object):
                        INTERNAL_ATTRIBUTES=[],
                        LAZY=[]):
 
-        # TODO: Cpp IoTA and Node IoTA are going to converge with the same payload/args
         body_data = {
             "devices": [
                 {
                      # resource: ???
-                     # service: client_a
-                     # service_path: /some_area
-                     # entity_name: <device_id> XXX
-                     # entity_type: button
-                     # timeozne: America/Santiago
-                     # lazy: lazy_op_status: string
                     "device_id": DEVICE_ID,
                     "protocol": PROTOCOL,
                     "service": SERVICE_NAME,
