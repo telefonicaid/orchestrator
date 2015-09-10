@@ -603,14 +603,6 @@ class Projects(FlowBase):
                     ]
 
                 STATIC_ATTRIBUTES=[
-                    # internal_id: <device_id>
-                    # external_id: ZZZZ
-                    # ccid: AAA
-                    # imei: 1234567789
-                    # imsi: 4566789034
-                    # interaction_tupe: synchronous
-                    # service_id: S-001
-                    # geolocation: 44.0,-3.34
                     {
                         "name": "internal_id",
                         "type": "string",
@@ -660,12 +652,6 @@ class Projects(FlowBase):
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
                                                 # resource: ???
-                                                # service: client_a
-                                                # service_path: /some_area
-                                                # entity_name: <device_id> XXX
-                                                # entity_type: button
-                                                # timeozne: America/Santiago
-                                                # lazy: lazy_op_status: string
                                                 DEVICE_ID,
                                                 PROTOCOL,
                                                 ENTITY_NAME,
@@ -694,14 +680,6 @@ class Projects(FlowBase):
             #                                # isPattern: false
             #                                IS_PATTERN="false",
             #                                ATTRIBUTES=[
-            #                                    # internal_id: <device_id>
-            #                                    # external_id: ZZZZ
-            #                                    # ccid: AAA
-            #                                    # imei: 1234567789
-            #                                    # imsi: 4566789034
-            #                                    # interaction_tupe: synchronous
-            #                                    # service_id: S-001
-            #                                    # geolocation: 44.0,-3.34
             #                                {
             #                                    "name": "internal_id",
             #                                    "type": "string",
