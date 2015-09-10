@@ -115,8 +115,8 @@ def main():
     SERVICE_USER_PASSWORD = sys.argv[7]
 
     DEVICE_ID = sys.argv[8]
-    PROTOCOL = sys.argv[9]
-    ENTITY_TYPE = sys.argv[10]
+    ENTITY_TYPE = sys.argv[9]
+    PROTOCOL = sys.argv[10]
     ATT_INTERNAL_ID = sys.argv[11]
     ATT_EXTERNAL_ID = sys.argv[12]
     ATT_CCID = sys.argv[13]
@@ -183,8 +183,8 @@ def main():
         SERVICE_USER_PASSWORD,
         None,
         DEVICE_ID,
-        PROTOCOL,
         ENTITY_TYPE,
+        PROTOCOL,
         ATT_INTERNAL_ID,
         ATT_EXTERNAL_ID,
         ATT_CCID,

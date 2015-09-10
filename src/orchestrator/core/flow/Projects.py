@@ -483,8 +483,8 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
                         DEVICE_ID,
-                        PROTOCOL,
                         ENTITY_TYPE,
+                        PROTOCOL,
                         ATT_INTERNAL_ID,
                         ATT_EXTERNAL_ID,
                         ATT_CCID,
@@ -508,8 +508,8 @@ class Projects(FlowBase):
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
         - DEVICE_ID: Device ID
-        - PROTOCOL: Protocol of the device
         - ENTITY_TYPE: Entity Type
+        - PROTOCOL: Protocol of the device
         - ATT_INTERNAL_ID
         - ATT_EXTERNAL_ID
         - ATT_CCID
@@ -601,7 +601,58 @@ class Projects(FlowBase):
                         "type": "string"
                     }
                     ]
-                # TODO: LAZY si es sincrono
+
+                STATIC_ATTRIBUTES=[
+                    # internal_id: <device_id>
+                    # external_id: ZZZZ
+                    # ccid: AAA
+                    # imei: 1234567789
+                    # imsi: 4566789034
+                    # interaction_tupe: synchronous
+                    # service_id: S-001
+                    # geolocation: 44.0,-3.34
+                    {
+                        "name": "internal_id",
+                        "type": "string",
+                        "value": ATT_INTERNAL_ID
+                    },
+                    {
+                        "name": "external_id",
+                        "type": "string",
+                        "value": ATT_EXTERNAL_ID
+                    },
+                    {
+                        "name": "ccid",
+                        "type": "string",
+                        "value": ATT_CCID
+                    },
+                    {
+                        "name": "imei",
+                        "type": "string",
+                        "value": ATT_IMEI
+                    },
+                    {
+                        "name": "imsi",
+                        "type": "string",
+                        "value": ATT_IMSI
+                    },
+                    {
+                        "name": "interaction_type",
+                        "type": "string",
+                        "value": ATT_INTERACTION_TYPE
+                    },
+                    {
+                        "name": "service_id",
+                        "type": "string",
+                        "value": ATT_SERVICE_ID
+                    },
+                    {
+                        "name": "geolocation",
+                        "type": "string",
+                        "value": ATT_GEOLOCATION
+                    }
+                    ]
+
                 if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [ { "name": "op_result", "type": "string" } ]
 
@@ -628,105 +679,120 @@ class Projects(FlowBase):
                                         )
             # TODO extract info from res_iota
             logger.debug("registerDevice res=%s" % iota_res)
-            #
-            # 2. Call ContextBroker for create entity button.
-            #
+            # #
+            # # 2. Call ContextBroker for create entity button.
+            # #
 
-            # (Esto lo hace el IOTA de CPP?)
-            cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
-                                           DOMAIN_NAME,
-                                           PROJECT_NAME,
-                                           # type: button
-                                           ENTITY_TYPE,
-                                           # id: <device_id>XXX
-                                           ENTITY_ID = DEVICE_ID,
-                                           # isPattern: false
-                                           IS_PATTERN="false",
-                                           ATTRIBUTES=[
-                                               # internal_id: <device_id>
-                                               # external_id: ZZZZ
-                                               # ccid: AAA
-                                               # imei: 1234567789
-                                               # imsi: 4566789034
-                                               # interaction_tupe: synchronous
-                                               # service_id: S-001
-                                               # geolocation: 44.0,-3.34
-                                           {
-                                               "name": "internal_id",
-                                               "type": "string",
-                                               "value": ATT_INTERNAL_ID
-                                           },
-                                           {
-                                               "name": "external_id",
-                                               "type": "string",
-                                               "value": ATT_EXTERNAL_ID
-                                           },
-                                           {
-                                               "name": "ccid",
-                                               "type": "string",
-                                               "value": ATT_CCID
-                                           },
-                                           {
-                                               "name": "imei",
-                                               "type": "string",
-                                               "value": ATT_IMEI
-                                           },
-                                           {
-                                               "name": "imsi",
-                                               "type": "string",
-                                               "value": ATT_IMSI
-                                           },
-                                           {
-                                               "name": "interaction_type",
-                                               "type": "string",
-                                               "value": ATT_INTERACTION_TYPE
-                                           },
-                                           {
-                                               "name": "service_id",
-                                               "type": "string",
-                                               "value": ATT_SERVICE_ID
-                                           },
-                                           {
-                                               "name": "geolocation",
-                                               "type": "string",
-                                               "value": ATT_GEOLOCATION
-                                           },
-                                               ]
-                                            )
+            # # (Esto lo hace el IOTA de CPP?)
+            # cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
+            #                                DOMAIN_NAME,
+            #                                PROJECT_NAME,
+            #                                # type: button
+            #                                ENTITY_TYPE,
+            #                                # id: <device_id>XXX
+            #                                ENTITY_ID = DEVICE_ID,
+            #                                # isPattern: false
+            #                                IS_PATTERN="false",
+            #                                ATTRIBUTES=[
+            #                                    # internal_id: <device_id>
+            #                                    # external_id: ZZZZ
+            #                                    # ccid: AAA
+            #                                    # imei: 1234567789
+            #                                    # imsi: 4566789034
+            #                                    # interaction_tupe: synchronous
+            #                                    # service_id: S-001
+            #                                    # geolocation: 44.0,-3.34
+            #                                {
+            #                                    "name": "internal_id",
+            #                                    "type": "string",
+            #                                    "value": ATT_INTERNAL_ID
+            #                                },
+            #                                {
+            #                                    "name": "external_id",
+            #                                    "type": "string",
+            #                                    "value": ATT_EXTERNAL_ID
+            #                                },
+            #                                {
+            #                                    "name": "ccid",
+            #                                    "type": "string",
+            #                                    "value": ATT_CCID
+            #                                },
+            #                                {
+            #                                    "name": "imei",
+            #                                    "type": "string",
+            #                                    "value": ATT_IMEI
+            #                                },
+            #                                {
+            #                                    "name": "imsi",
+            #                                    "type": "string",
+            #                                    "value": ATT_IMSI
+            #                                },
+            #                                {
+            #                                    "name": "interaction_type",
+            #                                    "type": "string",
+            #                                    "value": ATT_INTERACTION_TYPE
+            #                                },
+            #                                {
+            #                                    "name": "service_id",
+            #                                    "type": "string",
+            #                                    "value": ATT_SERVICE_ID
+            #                                },
+            #                                {
+            #                                    "name": "geolocation",
+            #                                    "type": "string",
+            #                                    "value": ATT_GEOLOCATION
+            #                                },
+            #                                    ]
+            #                                 )
 
-            logger.debug("updateContext res=%s" % cb_res)
-            for r in cb_res['contextResponses']:
-                # Check ContextBroker status response
-                if r['statusCode']['code'] != '200':
-                    raise Exception(r['statusCode']['reasonPhrase'])
+            #logger.debug("updateContext res=%s" % cb_res)
+            # for r in cb_res['contextResponses']:
+            #     # Check ContextBroker status response
+            #     if r['statusCode']['code'] != '200':
+            #         raise Exception(r['statusCode']['reasonPhrase'])
 
 
             #
             # 3. Call ContextBroker for register Context Adapter
             #
+
+            ATTRIBUTES = []
             APP="http://localhost"
             DURATION="P1M"
             # TODO: fix real Args for Context Adapter ?
             # entities: <device_id>XXX:button
-            ENTITIES=[DEVICE_ID + 'button']
-            ATTRIBUTES=[
-                                               {
-                                                   "name": "aux_external_id",
-                                                   "type": "string",
-                                               },
-                                               {
-                                                   "name": "aux_op_action",
-                                                   "type": "string",
-                                               },
-                                               {
-                                                   "name": "aux_op_extra",
-                                                   "type": "string",
-                                               },
-                                               {
-                                                   "name": "aux_op_status",
-                                                   "type": "string",
-                                               }
-                                             ]
+            ENTITIES=[DEVICE_ID]
+
+            if PROTOCOL == "TT_BLACKBUTTON":
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern":"false",
+                        "id": DEVICE_ID
+                    }
+                ]
+                ATTRIBUTES=[
+                    {
+                        "name": "aux_external_id",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_op_action",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_op_extra",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_op_status",
+                        "type": "string",
+                        "isDomain": "false"
+                    }
+                ]
 
 
             cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
@@ -738,7 +804,7 @@ class Projects(FlowBase):
                                              DURATION
                                              )
             logger.debug("registerContext res=%s" % cb_res)
-            registrationid = cb_res['registrationid']
+            registrationid = cb_res['registrationId']
             logger.debug("registration id=%s" % registrationid)
 
         except Exception, ex:
