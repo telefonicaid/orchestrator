@@ -410,6 +410,41 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
 
             # TODO: see optional values for register device:
+            if request.DATA.get("ENTITY_ID", None):
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT)
+
+                result_rs = flow.register_service(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                    result['id'],
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("ENTITY_TYPE", None),
+                    request.DATA.get("ENTITY_ID", None),                    
+                    request.DATA.get("ATT_NAME", None),
+                    request.DATA.get("ATT_PROVIDER", None),
+                    request.DATA.get("ATT_ENDPOINT", None),
+                    request.DATA.get("ATT_METHOD", None),
+                    request.DATA.get("ATT_AUTHENTICATION", None),
+                    request.DATA.get("ATT_MAPPING", None),
+                    request.DATA.get("ATT_TIMEOUT", None)
+                    )
+                # TODO: save some from result_rs ?
+                
+            
             if request.DATA.get("DEVICE_ID", None):
                 flow = Projects(self.KEYSTONE_PROTOCOL,
                                 self.KEYSTONE_HOST,
@@ -424,11 +459,11 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.ORION_HOST,
                                 self.ORION_PORT)
 
-                result = flow.register_device(
+                result_rd = flow.register_device(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
-                    request.DATA.get("SUBSERVICE_NAME", None),
-                    request.DATA.get("SUBSERVICE_ID", None),
+                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                    result['id'],
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
@@ -444,6 +479,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_SERVICE_ID", None),
                     request.DATA.get("ATT_GEOLOCATION", None)
                     )
+                # accumulate previous result
+                result['registrationid'] = result_rd
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -1084,14 +1121,13 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("ENTITY_TYPE", None),
                 request.DATA.get("ENTITY_ID", None),
-                request.DATA.get("IS_PATTERN", None),
                 request.DATA.get("ATT_NAME", None),
                 request.DATA.get("ATT_PROVIDER", None),
                 request.DATA.get("ATT_ENDPOINT", None),
                 request.DATA.get("ATT_METHOD", None),
                 request.DATA.get("ATT_AUTHENTICATION", None),
                 request.DATA.get("ATT_MAPPING", None),
-                request.DATA.get("ATT_TIMEOUT", None),
+                request.DATA.get("ATT_TIMEOUT", None)
             )
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)

@@ -469,6 +469,27 @@ class Test_SubServiceIoTADevice_RestView(object):
             "ATT_SERVICE_ID": "S-001",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data3_ok = {
+            "SERVICE_NAME": "blackbutton",
+            "SERVICE_ADMIN_USER": "admin_bb",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
+            "SERVICE_USER_NAME": "admin_bb",
+            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "DEVICE_ID": "button_dev_%s" % self.suffix,
+            "ENTITY_TYPE": "BlackButton",
+            "PROTOCOL": "TT_BLACKBUTTON",
+            "ATT_INTERNAL_ID": "button_dev_%s"% self.suffix,
+            "ATT_EXTERNAL_ID": "ZZZZ",
+            "ATT_CCID": "AAA",
+            "ATT_IMEI": "1234567890",
+            "ATT_IMSI": "0987654321",
+            "ATT_INTERACTION_TYPE": "synchronous",
+            "ATT_SERVICE_ID": "S-001",
+            "ATT_GEOLOCATION": "40.4188,-3.6919",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -486,13 +507,26 @@ class Test_SubServiceIoTADevice_RestView(object):
 
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
 
-        # Create Device in SubService
+        # Register Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/%s/register_device" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data2_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+
+    def test_post_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
+
+        # Create SubService and Register Device in SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
 
 
 class Test_SubServiceIoTAService_RestView(object):
@@ -528,7 +562,25 @@ class Test_SubServiceIoTAService_RestView(object):
             "ATT_METHOD": "GET",
             "ATT_AUTHENTICATION": "context_adapter",
             "ATT_MAPPING": "xxx",
-            "ATT_TIMEOUT": "120",
+            "ATT_TIMEOUT": "120"
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data3_ok = {
+            "SERVICE_NAME": "blackbutton",
+            "SERVICE_ADMIN_USER": "admin_bb",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
+            "DEVICE_ID": "button_dev_%s" % self.suffix,
+            "ENTITY_TYPE": "BlackButton",
+            "ENTITY_ID": "button_dev_%s" % self.suffix,
+            "ATT_NAME": "blackbutton",
+            "ATT_PROVIDER": "telepizza",
+            "ATT_ENDPOINT": "Http://demo.telepizza.es",
+            "ATT_METHOD": "GET",
+            "ATT_AUTHENTICATION": "context_adapter",
+            "ATT_MAPPING": "xxx",
+            "ATT_TIMEOUT": "120"
 
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -548,12 +600,24 @@ class Test_SubServiceIoTAService_RestView(object):
 
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
 
-        # Create Device in SubService
+        # Register Service Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/%s/register_service" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+
+    def test_post_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
+
+        # Create SubService and register Service in SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data3_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
 
@@ -2093,9 +2157,11 @@ if __name__ == '__main__':
 
     test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
     test_SubServiceIoTADevice.test_post_ok()
+    test_SubServiceIoTADevice.test_post_ok2()
 
-    test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
-    test_SubServiceIoTAService.test_post_ok()
+    # test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
+    # test_SubServiceIoTAService.test_post_ok()
+    # test_SubServiceIoTAService.test_post_ok2()
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
     test_DeleteSubService.test_delete_ok()
