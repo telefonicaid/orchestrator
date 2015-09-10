@@ -311,7 +311,6 @@ class Projects(FlowBase):
                          SERVICE_USER_TOKEN,
                          ENTITY_TYPE=None,
                          ENTITY_ID=None,
-                         IS_PATTERN="false",
                          ATT_NAME=None,
                          ATT_PROVIDER=None,
                          ATT_ENDPOINT=None,
@@ -335,8 +334,7 @@ class Projects(FlowBase):
         - SERVICE_USER_TOKEN: Service admin token
         - ENTITY_TYPE:   (optional, just for Device configuration)
         - ENTITY_ID:
-        - IS_PATTERN
-        - ATT_NAME=
+        - ATT_NAME
         - ATT_PROVIDER
         - ATT_ENDPOINT
         - ATT_METHOD
@@ -354,7 +352,6 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ENTITY_ID": "%s" % ENTITY_ID,
-            "IS_PATTERN": "%s" % IS_PATTERN,
             "ATT_NAME": "%s" % ATT_NAME,
             "ATT_PROVIDER": "%s" % ATT_PROVIDER,
             "ATT_METHOD": "%s" % ATT_METHOD,
@@ -396,6 +393,52 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            IS_PATTERN="false"
+            ATTRIBUTES=[
+                # name: TheService
+                # provider: ThirdParty
+                # endpint: http://thirdparty
+                # method: GET
+                # authentication: context-adapter | third-party
+                # mapping: [...]
+                # timeout: 120
+                {
+                    "name": "name",
+                    "type": "string",
+                    "value": ATT_NAME
+                },
+                {
+                    "name": "provider",
+                    "type": "string",
+                    "value": ATT_PROVIDER
+                },
+                {
+                    "name": "endpoint",
+                    "type": "string",
+                    "value": ATT_ENDPOINT
+                },
+                {
+                    "name": "method",
+                    "type": "string",
+                    "value": ATT_METHOD
+                },
+                {
+                    "name": "authentication",
+                    "type": "string",
+                    "value": ATT_AUTHENTICATION
+                },
+                {
+                    "name": "mapping",
+                    "type": "string",
+                    "value": ATT_MAPPING
+                },
+                {
+                    "name": "timeout",
+                    "type": "integer",
+                    "value": ATT_TIMEOUT
+                }
+            ]
+
             # call CB
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
@@ -406,50 +449,7 @@ class Projects(FlowBase):
                                            ENTITY_TYPE,
                                            ENTITY_ID,
                                            IS_PATTERN,
-                                           ATTRIBUTES=[
-                                           # name: TheService
-                                           # provider: ThirdParty
-                                           # endpint: http://thirdparty
-                                           # method: GET
-                                           # authentication: context-adapter | third-party
-                                           # mapping: [...]
-                                           # timeout: 120
-                                           {
-                                               "name": "name",
-                                               "type": "string",
-                                               "value": ATT_NAME
-                                           },
-                                           {
-                                               "name": "provider",
-                                               "type": "string",
-                                               "value": ATT_PROVIDER
-                                           },
-                                           {
-                                               "name": "endpoint",
-                                               "type": "string",
-                                               "value": ATT_ENDPOINT
-                                           },
-                                           {
-                                               "name": "method",
-                                               "type": "string",
-                                               "value": ATT_METHOD
-                                           },
-                                           {
-                                               "name": "authentication",
-                                               "type": "string",
-                                               "value": ATT_AUTHENTICATION
-                                           },
-                                           {
-                                               "name": "mapping",
-                                               "type": "string",
-                                               "value": ATT_MAPPING
-                                           },
-                                           {
-                                               "name": "timeout",
-                                               "type": "integer",
-                                               "value": ATT_TIMEOUT
-                                           },
-                                               ],
+                                           ATTRIBUTES
                                         )
 
             logger.debug("updateContext res=%s" % cb_res)
@@ -663,75 +663,12 @@ class Projects(FlowBase):
                                                 INTERNAL_ATTRIBUTES,
                                                 LAZY
                                         )
-            # TODO extract info from res_iota
+            # TODO extract info from res_iota?
             logger.debug("registerDevice res=%s" % iota_res)
-            # #
-            # # 2. Call ContextBroker for create entity button.
-            # #
-
-            # # (Esto lo hace el IOTA de CPP?)
-            # cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
-            #                                DOMAIN_NAME,
-            #                                PROJECT_NAME,
-            #                                # type: button
-            #                                ENTITY_TYPE,
-            #                                # id: <device_id>XXX
-            #                                ENTITY_ID = DEVICE_ID,
-            #                                # isPattern: false
-            #                                IS_PATTERN="false",
-            #                                ATTRIBUTES=[
-            #                                {
-            #                                    "name": "internal_id",
-            #                                    "type": "string",
-            #                                    "value": ATT_INTERNAL_ID
-            #                                },
-            #                                {
-            #                                    "name": "external_id",
-            #                                    "type": "string",
-            #                                    "value": ATT_EXTERNAL_ID
-            #                                },
-            #                                {
-            #                                    "name": "ccid",
-            #                                    "type": "string",
-            #                                    "value": ATT_CCID
-            #                                },
-            #                                {
-            #                                    "name": "imei",
-            #                                    "type": "string",
-            #                                    "value": ATT_IMEI
-            #                                },
-            #                                {
-            #                                    "name": "imsi",
-            #                                    "type": "string",
-            #                                    "value": ATT_IMSI
-            #                                },
-            #                                {
-            #                                    "name": "interaction_type",
-            #                                    "type": "string",
-            #                                    "value": ATT_INTERACTION_TYPE
-            #                                },
-            #                                {
-            #                                    "name": "service_id",
-            #                                    "type": "string",
-            #                                    "value": ATT_SERVICE_ID
-            #                                },
-            #                                {
-            #                                    "name": "geolocation",
-            #                                    "type": "string",
-            #                                    "value": ATT_GEOLOCATION
-            #                                },
-            #                                    ]
-            #                                 )
-
-            #logger.debug("updateContext res=%s" % cb_res)
-            # for r in cb_res['contextResponses']:
-            #     # Check ContextBroker status response
-            #     if r['statusCode']['code'] != '200':
-            #         raise Exception(r['statusCode']['reasonPhrase'])
 
 
             #
-            # 3. Call ContextBroker for register Context Adapter
+            # 2. Call ContextBroker for register Context Adapter
             #
 
             ATTRIBUTES = []
