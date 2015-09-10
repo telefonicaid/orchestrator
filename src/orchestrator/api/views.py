@@ -1121,14 +1121,13 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("ENTITY_TYPE", None),
                 request.DATA.get("ENTITY_ID", None),
-                request.DATA.get("IS_PATTERN", None),
                 request.DATA.get("ATT_NAME", None),
                 request.DATA.get("ATT_PROVIDER", None),
                 request.DATA.get("ATT_ENDPOINT", None),
                 request.DATA.get("ATT_METHOD", None),
                 request.DATA.get("ATT_AUTHENTICATION", None),
                 request.DATA.get("ATT_MAPPING", None),
-                request.DATA.get("ATT_TIMEOUT", None),
+                request.DATA.get("ATT_TIMEOUT", None)
             )
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
