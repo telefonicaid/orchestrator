@@ -517,6 +517,8 @@ class Test_SubServiceIoTADevice_RestView(object):
 
 
     def test_post_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
+
         # Create SubService and Register Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
@@ -608,7 +610,7 @@ class Test_SubServiceIoTAService_RestView(object):
 
 
     def test_post_ok2(self):
-        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
 
         # Create SubService
         res = self.TestRestOps.rest_request(
@@ -2157,9 +2159,9 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice.test_post_ok()
     test_SubServiceIoTADevice.test_post_ok2()
 
-    test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
-    test_SubServiceIoTAService.test_post_ok()
-    test_SubServiceIoTAService.test_post_ok2()    
+    # test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
+    # test_SubServiceIoTAService.test_post_ok()
+    # test_SubServiceIoTAService.test_post_ok2()
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
     test_DeleteSubService.test_delete_ok()
