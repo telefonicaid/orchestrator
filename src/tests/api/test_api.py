@@ -600,7 +600,7 @@ class Test_SubServiceIoTAService_RestView(object):
 
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
 
-        # Create Device in SubService
+        # Register Service Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/%s/register_service" % (service_id, subservice_id),
@@ -612,7 +612,7 @@ class Test_SubServiceIoTAService_RestView(object):
     def test_post_ok2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
 
-        # Create SubService
+        # Create SubService and register Service in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/" % service_id,
