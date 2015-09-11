@@ -115,7 +115,7 @@ class Domains(FlowBase):
                 if DOMAIN_ID:
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
-                                                     ADMIN_PASSWORD)
+                                                     ADMIN_PASSWORD, False)
                 else:
                     ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                     ADMIN_USER,

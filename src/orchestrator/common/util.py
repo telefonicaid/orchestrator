@@ -40,13 +40,13 @@ class RestOperations(object):
         self.HOST = HOST
         self.PORT = PORT
         if PROTOCOL and HOST and PORT:
-            self.base_url = PROTOCOL+'://'+HOST+':'+PORT+'/'
+            self.base_url = PROTOCOL+'://'+HOST+':'+PORT
         else:
             self.base_url = None
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
-                     auth_token=None, fiware_service=None):
+                     auth_token=None, fiware_service=None, fiware_service_path=None):
         '''Does an (optionally) authorized REST request with optional JSON data.
 
         In case of HTTP error, the exception is returned normally instead of
@@ -88,6 +88,9 @@ class RestOperations(object):
         if fiware_service:
             request.add_header('Fiware-Service', fiware_service)
 
+        if fiware_service_path:
+            request.add_header('Fiware-ServicePath', fiware_service_path)
+
         res = None
 
         try:
@@ -98,8 +101,15 @@ class RestOperations(object):
             try:
                 data_json = json.loads(data)
                 res.raw_json = data_json
-                if data_json and 'detail' in data_json:
+                if data_json and isinstance(data_json, dict) and \
+                    'detail' in data_json:
                     res.msg = data_json['detail']
+                if data_json and isinstance(data_json, dict) and \
+                    'error' in data_json:
+                    if data_json['error'] and \
+                        isinstance(data_json['error'], dict) and \
+                        'message' in data_json['error']:
+                        res.msg = data_json['error']['message']
             except ValueError:
                 res.msg = data
             except Exception, e:
