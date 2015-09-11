@@ -309,15 +309,15 @@ class Projects(FlowBase):
                          SERVICE_USER_NAME,
                          SERVICE_USER_PASSWORD,
                          SERVICE_USER_TOKEN,
-                         ENTITY_TYPE=None,
-                         ENTITY_ID=None,
-                         ATT_NAME=None,
-                         ATT_PROVIDER=None,
-                         ATT_ENDPOINT=None,
-                         ATT_METHOD=None,
-                         ATT_AUTHENTICATION=None,
-                         ATT_MAPPING=None,
-                         ATT_TIMEOUT=None
+                         ENTITY_TYPE,
+                         ENTITY_ID,
+                         ATT_NAME,
+                         ATT_PROVIDER,
+                         ATT_ENDPOINT,
+                         ATT_METHOD,
+                         ATT_AUTHENTICATION,
+                         ATT_MAPPING,
+                         ATT_TIMEOUT
                        ):
 
         '''Register Service in IOTA
@@ -583,6 +583,8 @@ class Projects(FlowBase):
             COMMANDS = []
 
             if PROTOCOL == "TT_BLACKBUTTON":
+                if ATT_INTERACTION_TYPE == None:
+                    ATT_INTERACTION_TYPE = "synchronous"
                 ATTRIBUTES = [
                     {
                         "name": "internalId",
