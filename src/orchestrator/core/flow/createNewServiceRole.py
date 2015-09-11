@@ -119,6 +119,9 @@ class CreateNewServiceRole(FlowBase):
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-sth-customer2.xml')
+                self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
+                                        ID_ROLE,
+                                        POLICY_FILE_NAME='policy-keypass-customer2.xml')                
 
         except Exception, ex:
             logger.error(ex)
