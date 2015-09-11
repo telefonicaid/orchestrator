@@ -78,7 +78,7 @@ class CBOrionOperations(object):
         }
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/registerContext',
+            url='/v1/registry/registerContext',
             method='POST',
             data=body_data,
             auth_token=SERVICE_USER_TOKEN,
@@ -99,7 +99,7 @@ class CBOrionOperations(object):
                       SUBSERVICE_NAME,
                       ENTITY_TYPE,
                       ENTITY_ID,
-                      IS_PATTERN="False",
+                      IS_PATTERN="false",
                       ATTRIBUTES=[]):
 
         body_data = {
