@@ -560,7 +560,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "ATT_PROVIDER": "telepizza",
             "ATT_ENDPOINT": "Http://demo.telepizza.es",
             "ATT_METHOD": "GET",
-            "ATT_AUTHENTICATION": "context_adapter",
+            "ATT_AUTHENTICATION": "context-adapter",
             "ATT_MAPPING": "xxx",
             "ATT_TIMEOUT": "120"
         }
@@ -578,7 +578,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "ATT_PROVIDER": "telepizza",
             "ATT_ENDPOINT": "Http://demo.telepizza.es",
             "ATT_METHOD": "GET",
-            "ATT_AUTHENTICATION": "context_adapter",
+            "ATT_AUTHENTICATION": "context-adapter",
             "ATT_MAPPING": "xxx",
             "ATT_TIMEOUT": "120"
 
