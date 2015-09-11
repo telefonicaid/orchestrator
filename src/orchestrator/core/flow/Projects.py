@@ -676,13 +676,16 @@ class Projects(FlowBase):
             DURATION="P1M"
             # TODO: fix real Args for Context Adapter ?
             # entities: <device_id>XXX:button
-            ENTITIES=[DEVICE_ID]
+            ENTITIES=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
+                APP="http://localhost:9999"
+                IS_PATTERN="false"
+                DURATION="P1M"
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
-                        "isPattern":"false",
+                        "isPattern": IS_PATTERN,
                         "id": DEVICE_ID
                     }
                 ]
