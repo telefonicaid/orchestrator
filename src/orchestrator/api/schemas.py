@@ -602,6 +602,7 @@ json = {
             },
             "ATT_INTERACTION_TYPE": {
                 "type": "string",
+                "enum": ["synchronous", "asynchronous"]
             },
             "ATT_SERVICE_ID": {
                 "type": "string",
@@ -610,8 +611,11 @@ json = {
                 "type": "string",
             },
         },
-        # "required": [
-        # ],
+        "required": [
+            "DEVICE_ID",
+            "ENTITY_TYPE",
+            "PROTOCOL"
+        ],
     },
 
 
@@ -649,7 +653,6 @@ json = {
             "SUBSERVICE_NAME": {
                 "type": "string",
             },
-
             "ENTITY_TYPE": {
                 "type": "string",
             },
@@ -670,17 +673,20 @@ json = {
             },
             "ATT_AUTHENTICATION": {
                 "type": "string",
+                "enum": ["context-adapter", "third-party"]
             },
             "ATT_MAPPING": {
                 "type": "string",
             },
             "ATT_TIMEOUT": {
-                "type": "string",
+                "type": "number",
             },
 
         },
-        # "required": [
-        # ],
+        "required": [
+            "ENTITY_TYPE",
+            "ENTITY_ID"
+        ],
     },
 
 
