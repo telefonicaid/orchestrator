@@ -656,9 +656,6 @@ json = {
             "ENTITY_ID": {
                 "type": "string",
             },
-            "IS_PATTERN": {
-                "type": "string",
-            },
             "ATT_NAME": {
                 "type": "string",
             },
