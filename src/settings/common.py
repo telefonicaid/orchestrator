@@ -156,17 +156,17 @@ LOGGING = {
         'standard': {
             #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             #'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
-            'format' : 'time=%(asctime)s | lvl=%(levelname)s | component=Orchestrator | msg=%(message)s',
+            'format' : 'time=%(asctime)s | lvl=%(levelname)s | component=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
     },
     'handlers': {
         'null': {
-            'level':'DEBUG',
+            'level':'INFO',
             'class':'django.utils.log.NullHandler',
         },
         'logfile': {
-            'level':'DEBUG',
+            'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/orchestrator/' + "/orchestrator.log",
             'maxBytes': 25*1024*1024,  # 25 Mb
@@ -192,16 +192,16 @@ LOGGING = {
         },
         'django.request': {
             'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'orchestrator_api': {
             'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
         'orchestrator_core': {
             'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
     }
 }
@@ -221,8 +221,15 @@ REST_FRAMEWORK = {
 # ---------------
 KEYSTONE = {}
 KEYPASS = {}
+IOTA = {}
+ORION = {}
 
 PEP = {
     "user": "pep",
     "password": "pep"
+}
+
+IOTAGENT = {
+    "user": "iotagent",
+    "password": "iotagent"
 }

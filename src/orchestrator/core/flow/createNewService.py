@@ -99,13 +99,22 @@ class CreateNewService(FlowBase):
             #
             # 2. Create user admin for new service (aka domain)
             #
-            ID_ADM1 = self.idm.createUserDomain(DOMAIN_ADMIN_TOKEN,
+            try:
+                ID_ADM1 = self.idm.createUserDomain(DOMAIN_ADMIN_TOKEN,
                                                 ID_DOM1,
                                                 NEW_SERVICE_NAME,
                                                 NEW_SERVICE_ADMIN_USER,
                                                 NEW_SERVICE_ADMIN_PASSWORD,
                                                 NEW_SERVICE_ADMIN_EMAIL,
                                                 None)
+            except Exception, ex:
+                logger.debug("ERROR creating user %s: %s" % (
+                    NEW_SERVICE_ADMIN_USER,
+                    ex))
+                logger.debug("removing uncomplete created domain %s" % ID_DOM1)
+                self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                return self.composeErrorCode(ex)
 
             logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER,
                                                 ID_ADM1))
@@ -115,7 +124,7 @@ class CreateNewService(FlowBase):
             #
             ADMIN_ROLE_ID = self.idm.getRoleId(DOMAIN_ADMIN_TOKEN,
                                                ROLE_NAME="admin")
-            logger.debug("ID of role  %s: %s" % (NEW_SERVICE_ADMIN_USER,
+            logger.debug("ID of role  %s: %s" % ("admin",
                                                  ID_ADM1))
 
             self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,

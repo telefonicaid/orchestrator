@@ -42,10 +42,7 @@ python ./assignInheritRoleServiceUser.py $KEYSTONE_PROTOCOL \
                                     adm1             \
                                     password         \
                                     adm1             \
-                                    SubServiceAdmin  \
-                                    $KEYPASS_PROTOCOL\
-                                    $KEYPASS_HOST    \
-                                    $KEYPASS_PORT
+                                    SubServiceAdmin
 checkResult $? "assignInheritRole to admin"
 
 python ./createNewSubService.py  $KEYSTONE_PROTOCOL  \

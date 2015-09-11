@@ -23,11 +23,13 @@
 #
 import json
 import os
+import logging
 
 from orchestrator.common.util import RestOperations
 from orchestrator.core import policies
 from orchestrator.core.ac import AccCOperations
 
+logger = logging.getLogger('orchestrator_core')
 
 class AccCKeypassOperations(AccCOperations):
     '''
@@ -63,6 +65,7 @@ class AccCKeypassOperations(AccCOperations):
 
         xml_data = open(self.policy_dir + '/' + POLICY_FILE_NAME)
         body_data = xml_data.read()
+        logger.debug("data response: %s" % body_data)
         xml_data.close()
         self.provisionPolicyByContent(SERVICE_NAME,
                                       SERVICE_ADMIN_TOKEN,
@@ -76,7 +79,7 @@ class AccCKeypassOperations(AccCOperations):
                                  POLICY_CONTENT):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
             method='POST',
             json_data=False,
             data=POLICY_CONTENT,
@@ -91,7 +94,7 @@ class AccCKeypassOperations(AccCOperations):
                              SERVICE_ADMIN_TOKEN):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1',
+            url='/pap/v1',
             method='DELETE',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,
@@ -105,15 +108,16 @@ class AccCKeypassOperations(AccCOperations):
                         SUB_SERVICE_ROLE_ID):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
             method='GET',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,
             fiware_service=SERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        data = res.read()          
-        return data
+        body_data = res.read()
+        logger.debug("data response: %s" % body_data)
+        return body_data
 
     def deleteRolePolicies(self,
                            SERVICE_NAME,
@@ -121,7 +125,7 @@ class AccCKeypassOperations(AccCOperations):
                            SUB_SERVICE_ROLE_ID):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
             method='DELETE',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,

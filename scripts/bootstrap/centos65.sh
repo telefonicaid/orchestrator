@@ -34,8 +34,7 @@ cd updates
 
 GIT_SSL_NO_VERIFY=true git clone https://github.com/telefonicaid/orchestrator.git iotp-orchestrator
 cd iotp-orchestrator
-#git checkcout master
-git checkout bug/rpm_install_dir_permissions
+git checkout develop
 sudo pip install -r requirements.txt
 sudo pip install repoze.lru
 

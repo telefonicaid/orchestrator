@@ -4,64 +4,83 @@
 # chkconfig: 12345 12 88
 # description: orchestrator
 # processname: orchestrator
-# pidfile: /var/run/orchestrator.pid
+# PIDFILE: /var/run/orchestrator.pid
 
 # Source function library.
 
 . /etc/rc.d/init.d/functions
 
-CURR="$( cd "$( dirname "$( readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
-ORCHESTRATOR_DIR=/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator
-pname="orchestrator"
-user="orchestrator"
+# DEFAULT SETTINGS
 
-#exe="/usr/bin/python ./manage.py runserver 0.0.0.0:8084 --settings=settings.dev"
-exe="uwsgi --http :8084 --chdir $ORCHESTRATOR_DIR --wsgi-file wsgi.py  --env DJANGO_SETTINGS_MODULE=settings.dev"
+CURR="$( cd "$( dirname "$( readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
+VIRTUALENV=/var/env-orchestrator
+ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
+UWGSI=/var/env-orchestrator/bin/uwsgi
+PORT=8084
+STATS_PORT=8085
+PROCESSES=1
+THREADS=4
+ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
+PIDFILE="/var/run/orchestrator.pid"
+PNAME="orchestrator"
+USER="orchestrator"
+
+
+# LOAD CUSTOMIZED SETTINGS
+[ -f /etc/default/orchestrator-daemon ] && . /etc/default/orchestrator-daemon
+
+exe="$UWGSI --http :${PORT} \
+--chdir $ORCHESTRATOR_DIR \
+--wsgi-file wsgi.py \
+--env $ENVIRONMENT \
+--master \
+--processes $PROCESSES \
+--threads $THREADS \
+--stats localhost:$STATS_PORT"
 
 server="$exe"
 
-pidfile="/var/run/orchestrator.pid"
 
 RETVAL=0
 
 start() {
-    echo -n "Starting $pname : "
+    echo -n "Starting $PNAME : "
     #daemon ${exe} # Not working ...
-    if [ -s ${pidfile} ]; then
-       RETVAL=1
-       echo -n "Already running !" && warning
+    if [ -s ${PIDFILE} ]; then
+        RETVAL=1
+        echo -n "Already running !" && warning
     else
-        touch $pidfile
-        chown $user $pidfile
-        su -s /bin/sh $user -c "
-                cd $ORCHESTRATOR_DIR
-                exec setsid ${server}   \
-                </dev/null >/dev/null 2>&1 &
-                echo \$! >${pidfile}
-                disown \$!
-                "
-        PID=`cat $pidfile`
+        touch $PIDFILE
+        chown $USER $PIDFILE
+        su -s /bin/sh $USER -c "
+cd $ORCHESTRATOR_DIR
+exec setsid ${server} \
+</dev/null >/dev/null 2>&1 &
+echo \$! >${PIDFILE}
+disown \$!
+"
+        PID=`cat $PIDFILE`
         [ $PID ] && success || failure
     fi
-    echo
+echo
 }
 
 stop() {
-    echo -n "Shutting down $pname : "
-    if [ -f $pidfile ]; then
-        PID=`cat $pidfile`
-        kill $PID
+    echo -n "Shutting down $PNAME : "
+    if [ -f $PIDFILE ]; then
+        PID=`cat $PIDFILE`
+        kill -9 $PID
         RETVAL=$?
         [ $RETVAL -eq 0 ] && success || failure
-        rm -f $pidfile
+        rm -f $PIDFILE
     else
         echo -n "Not running" && failure
     fi
-    echo
+echo
 }
 
 restart() {
-    echo -n "Restarting $pname : "
+    echo -n "Restarting $PNAME : "
     stop
     sleep 5
     start
@@ -75,7 +94,7 @@ case "$1" in
         stop
     ;;
     status)
-        status ${pname}
+        status ${PNAME}
     ;;
     restart)
         restart
