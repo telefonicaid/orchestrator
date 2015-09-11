@@ -645,6 +645,7 @@ class Projects(FlowBase):
                     }
                     ]
 
+
                 if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [ { "name": "op_result", "type": "string" } ]
 
