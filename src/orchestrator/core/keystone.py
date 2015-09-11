@@ -53,9 +53,9 @@ class IdMKeystoneOperations(IdMOperations):
         try:
             from settings.common import SCIM_API_VERSION
         except AttributeError:
-            SCIM_VERSION="1.1"
+            SCIM_API_VERSION="1.1"
 
-        self.SCIM_URI="/v3/OS-SCIM/v1" if  SCIM_VERSION=="2.0" else "/v3/OS-SCIM"
+        self.SCIM_URI="/v3/OS-SCIM/v1" if  SCIM_API_VERSION=="2.0" else "/v3/OS-SCIM"
 
 
     def checkIdM(self):
