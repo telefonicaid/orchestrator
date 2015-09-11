@@ -50,6 +50,14 @@ class IdMKeystoneOperations(IdMOperations):
                                                 KEYSTONE_HOST,
                                                 KEYSTONE_PORT)
 
+        try:
+            from settings.common import SCIM_API_VERSION
+        except AttributeError:
+            SCIM_API_VERSION="1.1"
+
+        self.SCIM_URI="/v3/OS-SCIM/v1" if  SCIM_API_VERSION=="2.0" else "/v3/OS-SCIM"
+
+
     def checkIdM(self):
         res = self.IdMRestOperations.rest_request(
             url='/v3/',
@@ -325,7 +333,7 @@ class IdMKeystoneOperations(IdMOperations):
             "domain_id": "%s" % ID_DOM1
         }
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Roles',
+            url=self.SCIM_URI+'/Roles',
             method='POST', data=body_data,
             auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -465,7 +473,7 @@ class IdMKeystoneOperations(IdMOperations):
             "name": "%s" % NEW_ROLE_NAME,
         }
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Roles',
+            url=self.SCIM_URI+'/Roles',
             method='POST', data=body_data,
             auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -523,7 +531,7 @@ class IdMKeystoneOperations(IdMOperations):
                         DOMAIN_ID,
                         ROLE_NAME):
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Roles?domain_id=%s' % DOMAIN_ID,
+            url=self.SCIM_URI+'/Roles?domain_id=%s' % DOMAIN_ID,
             method='GET',
             auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -614,7 +622,7 @@ class IdMKeystoneOperations(IdMOperations):
                         USER_NAME):
 
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Users?domain_id=%s' % DOMAIN_ID,
+            url=self.SCIM_URI+'/Users?domain_id=%s' % DOMAIN_ID,
             method='GET',
             auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -647,7 +655,7 @@ class IdMKeystoneOperations(IdMOperations):
                    ID_USER):
 
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Users/%s' % ID_USER,
+            url=self.SCIM_URI+'/Users/%s' % ID_USER,
             method='GET', data=None,
             auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
@@ -662,7 +670,7 @@ class IdMKeystoneOperations(IdMOperations):
                    ID_USER):
 
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Users/%s' % ID_USER,
+            url=self.SCIM_URI+'/Users/%s' % ID_USER,
             method='DELETE', data=None,
             auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -685,7 +693,7 @@ class IdMKeystoneOperations(IdMOperations):
             USER_DATA['displayName'] = USER_DATA['description']
         body_data.update(USER_DATA)
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Users/%s' % ID_USER,
+            url=self.SCIM_URI+'/Users/%s' % ID_USER,
             method='PATCH', data=body_data,
             auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
@@ -743,7 +751,7 @@ class IdMKeystoneOperations(IdMOperations):
                        COUNT=None):
 
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Roles?domain_id=%s%s' % (
+            url=self.SCIM_URI+'/Roles?domain_id=%s%s' % (
                 DOMAIN_ID,
                 "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
             method='GET',
@@ -779,7 +787,7 @@ class IdMKeystoneOperations(IdMOperations):
                        START_INDEX=None,
                        COUNT=None):
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Users?domain_id=%s%s' % (
+            url=self.SCIM_URI+'/Users?domain_id=%s%s' % (
                 DOMAIN_ID,
                 "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
             method='GET',
@@ -1069,7 +1077,7 @@ class IdMKeystoneOperations(IdMOperations):
                    ID_ROLE):
 
         res = self.IdMRestOperations.rest_request(
-            url='/v3/OS-SCIM/Roles/%s?domain_id=%s' % (ID_ROLE, DOMAIN_ID),
+            url=self.SCIM_URI+'/Roles/%s?domain_id=%s' % (ID_ROLE, DOMAIN_ID),
             method='DELETE', data=None,
             auth_token=SERVICE_ADMIN_TOKEN)
 
