@@ -677,12 +677,11 @@ class Projects(FlowBase):
             ATTRIBUTES = []
             APP="http://localhost"
             DURATION="P1M"
-            # TODO: fix real Args for Context Adapter ?
-            # entities: <device_id>XXX:button
             ENTITIES=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
-                APP="http://localhost:9999/v1/updateContext"
+                # TODO: extract from config
+                APP="http://localhost:9999/v1"
                 IS_PATTERN="false"
                 DURATION="P1M"
                 ENTITIES = [
