@@ -682,7 +682,7 @@ class Projects(FlowBase):
             ENTITIES=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
-                APP="http://localhost:9999"
+                APP="http://localhost:9999/v1/updateContext"
                 IS_PATTERN="false"
                 DURATION="P1M"
                 ENTITIES = [
