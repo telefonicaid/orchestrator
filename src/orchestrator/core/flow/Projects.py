@@ -657,7 +657,16 @@ class Projects(FlowBase):
 
 
                 if ATT_INTERACTION_TYPE == "synchronous":
-                    LAZY = [ { "name": "op_result", "type": "string" } ]
+                    LAZY = [
+                        {
+                            "name": "lazy_op_result",
+                            "type": "string"
+                        },
+                        {
+                            "name": "lazy_op_status",
+                            "type": "string"
+                        }
+                    ]
 
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
