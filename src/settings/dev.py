@@ -36,3 +36,9 @@ ORION = {
     "port": "1026",
     "protocol":"http"
 }
+
+CA = {
+    "host": "localhost",
+    "port": "9999",
+    "protocol":"http"
+}
