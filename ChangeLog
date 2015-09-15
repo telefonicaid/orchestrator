@@ -4,6 +4,8 @@ CHANGES
 
 0.5.0
 
+task/keypass_policies
+task/scim_2_support
 task/log_format_change: add operation name to each trace and add banner version
 task/orion_and_iota_suppor_for_register_device
 

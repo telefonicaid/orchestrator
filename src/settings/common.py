@@ -223,6 +223,7 @@ KEYSTONE = {}
 KEYPASS = {}
 IOTA = {}
 ORION = {}
+CA = {}
 
 PEP = {
     "user": "pep",

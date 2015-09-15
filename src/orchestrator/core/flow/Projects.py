@@ -595,6 +595,14 @@ class Projects(FlowBase):
                         "type": "string"
                     },
                     {
+                        "name": "op_status",
+                        "type": "string"
+                    },
+                    {
+                        "name": "op_result",
+                        "type": "string"
+                    },
+                    {
                         "name": "op_action",
                         "type": "string"
                     },
@@ -680,8 +688,7 @@ class Projects(FlowBase):
             ENTITIES=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
-                # TODO: extract from config
-                APP="http://localhost:9999/v1"
+                APP=self.ca_endpoint
                 IS_PATTERN="false"
                 DURATION="P1M"
                 ENTITIES = [
