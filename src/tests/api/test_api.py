@@ -552,17 +552,16 @@ class Test_SubServiceIoTAService_RestView(object):
             "SERVICE_USER_NAME": "admin_bb",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
-            "DEVICE_ID": "button00", #"button_dev_%s" % self.suffix,
+            "DEVICE_ID": "button_dev_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
-            "ENTITY_ID": "button00",
-            "IS_PATTERN": "false",
+            "ENTITY_ID": "button_dev_%s" % self.suffix,
             "ATT_NAME": "blackbutton",
             "ATT_PROVIDER": "telepizza",
-            "ATT_ENDPOINT": "Http://demo.telepizza.es",
-            "ATT_METHOD": "GET",
+            "ATT_ENDPOINT": "http://localhost:6500/sync/request",
+            "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
             "ATT_MAPPING": "xxx",
-            "ATT_TIMEOUT": "120"
+            "ATT_TIMEOUT": 120
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data3_ok = {
@@ -576,11 +575,11 @@ class Test_SubServiceIoTAService_RestView(object):
             "ENTITY_ID": "button_dev_%s" % self.suffix,
             "ATT_NAME": "blackbutton",
             "ATT_PROVIDER": "telepizza",
-            "ATT_ENDPOINT": "Http://demo.telepizza.es",
-            "ATT_METHOD": "GET",
+            "ATT_ENDPOINT": "http://localhost:6500/sync/request",
+            "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
             "ATT_MAPPING": "xxx",
-            "ATT_TIMEOUT": "120"
+            "ATT_TIMEOUT": 120
 
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
@@ -2159,9 +2158,9 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice.test_post_ok()
     test_SubServiceIoTADevice.test_post_ok2()
 
-    # test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
-    # test_SubServiceIoTAService.test_post_ok()
-    # test_SubServiceIoTAService.test_post_ok2()
+    test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
+    test_SubServiceIoTAService.test_post_ok()
+    test_SubServiceIoTAService.test_post_ok2()
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
     test_DeleteSubService.test_delete_ok()
