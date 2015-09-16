@@ -661,10 +661,6 @@ class Projects(FlowBase):
                         {
                             "name": "lazy_op_result",
                             "type": "string"
-                        },
-                        {
-                            "name": "lazy_op_status",
-                            "type": "string"
                         }
                     ]
 
