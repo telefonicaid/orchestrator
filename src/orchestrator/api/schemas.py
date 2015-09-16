@@ -679,7 +679,7 @@ json = {
                 "type": "string",
             },
             "ATT_TIMEOUT": {
-                "type": "number",
+                "type": "integer",
             },
 
         },
