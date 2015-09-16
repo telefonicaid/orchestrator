@@ -555,14 +555,35 @@ class Test_SubServiceIoTAService_RestView(object):
             "DEVICE_ID": "button_dev_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
             "ENTITY_ID": "button_dev_%s" % self.suffix,
-            "ATT_NAME": "blackbutton",
-            "ATT_PROVIDER": "telepizza",
+            "ATT_INTERNAL_ID": "button_dev_async_%s"% self.suffix,
+            "PROTOCOL": "TT_BLACKBUTTON",            
+            "ATT_EXTERNAL_ID": "ZZZZ",
+            "ATT_CCID": "AAA",
+            "ATT_IMEI": "1234567890",
+            "ATT_IMSI": "0987654321",
+            "ATT_INTERACTION_TYPE": "asynchronous",
+            "ATT_SERVICE_ID": "S-%s" % self.suffix,
+            "ATT_GEOLOCATION": "40.4188,-3.6919",
+        }
+        self.payload_data2b_ok = {
+            "SERVICE_NAME": "blackbutton",
+            "SERVICE_ADMIN_USER": "admin_bb",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
+            "SERVICE_USER_NAME": "admin_bb",
+            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "ENTITY_TYPE": "service",
+            "ENTITY_ID": "S-%s" % self.suffix,
+            "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
+            "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
             "ATT_MAPPING": "xxx",
             "ATT_TIMEOUT": 120
-        }
+        }        
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data3_ok = {
             "SERVICE_NAME": "blackbutton",
@@ -571,10 +592,10 @@ class Test_SubServiceIoTAService_RestView(object):
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "DEVICE_ID": "button_dev_%s" % self.suffix,
-            "ENTITY_TYPE": "BlackButton",
-            "ENTITY_ID": "button_dev_%s" % self.suffix,
-            "ATT_NAME": "blackbutton",
-            "ATT_PROVIDER": "telepizza",
+            "ENTITY_TYPE": "service",
+            "ENTITY_ID": "S-%s" % self.suffix,
+            "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
+            "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
@@ -599,12 +620,22 @@ class Test_SubServiceIoTAService_RestView(object):
 
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
 
+
+        # Register Device in SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/%s/register_device" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        
+
         # Register Service Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/%s/register_service" % (service_id, subservice_id),
             json_data=True,
-            data=self.payload_data2_ok)
+            data=self.payload_data2b_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
 
