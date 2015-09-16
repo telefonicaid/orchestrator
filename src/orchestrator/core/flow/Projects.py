@@ -645,6 +645,11 @@ class Projects(FlowBase):
                         "value": ATT_INTERACTION_TYPE
                     },
                     {
+                        "name": "aux_interaction_type",
+                        "type": "string",
+                        "value": ATT_INTERACTION_TYPE
+                    },
+                    {
                         "name": "service_id",
                         "type": "string",
                         "value": ATT_SERVICE_ID
