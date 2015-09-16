@@ -591,7 +591,6 @@ class Test_SubServiceIoTAService_RestView(object):
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
-            "DEVICE_ID": "button_dev_%s" % self.suffix,
             "ENTITY_TYPE": "service",
             "ENTITY_ID": "S-%s" % self.suffix,
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
