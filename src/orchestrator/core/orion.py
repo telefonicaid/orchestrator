@@ -111,7 +111,7 @@ class CBOrionOperations(object):
                     "attributes": ATTRIBUTES
                 }
             ],
-            "updateAction": "UPDATE"
+            "updateAction": "APPEND"
         }
 
         res = self.CBRestOperations.rest_request(
