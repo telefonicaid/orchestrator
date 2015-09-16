@@ -44,7 +44,10 @@ class FlowBase(object):
                  IOTA_PORT=None,
                  ORION_PROTOCOL=None,
                  ORION_HOST=None,
-                 ORION_PORT=None):
+                 ORION_PORT=None,
+                 CA_PROTOCOL="http",
+                 CA_HOST="localhost",
+                 CA_PORT="9999"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -60,6 +63,9 @@ class FlowBase(object):
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
                                ORION_PORT)
+        if CA_PROTOCOL:
+            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+
 
     def composeErrorCode(self, ex):
         '''

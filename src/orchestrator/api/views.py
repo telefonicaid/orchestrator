@@ -73,6 +73,10 @@ class IoTConf(object):
             self.ORION_HOST = settings.ORION['host']
             self.ORION_PORT = settings.ORION['port']
 
+            self.CA_PROTOCOL = settings.CA['protocol']
+            self.CA_HOST = settings.CA['host']
+            self.CA_PORT = settings.CA['port']
+
         except KeyError:
             logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
@@ -422,7 +426,10 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.IOTA_PORT,
                                 self.ORION_PROTOCOL,
                                 self.ORION_HOST,
-                                self.ORION_PORT)
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT)
 
                 result_rs = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
@@ -433,7 +440,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.DATA.get("ENTITY_TYPE", None),
-                    request.DATA.get("ENTITY_ID", None),                    
+                    request.DATA.get("ENTITY_ID", None),
                     request.DATA.get("ATT_NAME", None),
                     request.DATA.get("ATT_PROVIDER", None),
                     request.DATA.get("ATT_ENDPOINT", None),
@@ -443,8 +450,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
                 # TODO: save some from result_rs ?
-                
-            
+
+
             if request.DATA.get("DEVICE_ID", None):
                 flow = Projects(self.KEYSTONE_PROTOCOL,
                                 self.KEYSTONE_HOST,
@@ -457,7 +464,10 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.IOTA_PORT,
                                 self.ORION_PROTOCOL,
                                 self.ORION_HOST,
-                                self.ORION_PORT)
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT)
 
                 result_rd = flow.register_device(
                     request.DATA.get("SERVICE_NAME", None),
@@ -1047,7 +1057,10 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.IOTA_PORT,
                             self.ORION_PROTOCOL,
                             self.ORION_HOST,
-                            self.ORION_PORT)
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
             result = flow.register_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1110,7 +1123,10 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.IOTA_PORT,
                             self.ORION_PROTOCOL,
                             self.ORION_HOST,
-                            self.ORION_PORT)
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
             result = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),

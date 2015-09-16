@@ -595,6 +595,14 @@ class Projects(FlowBase):
                         "type": "string"
                     },
                     {
+                        "name": "op_status",
+                        "type": "string"
+                    },
+                    {
+                        "name": "op_result",
+                        "type": "string"
+                    },
+                    {
                         "name": "op_action",
                         "type": "string"
                     },
@@ -649,7 +657,12 @@ class Projects(FlowBase):
 
 
                 if ATT_INTERACTION_TYPE == "synchronous":
-                    LAZY = [ { "name": "op_result", "type": "string" } ]
+                    LAZY = [
+                        {
+                            "name": "lazy_op_result",
+                            "type": "string"
+                        }
+                    ]
 
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
@@ -680,8 +693,7 @@ class Projects(FlowBase):
             ENTITIES=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
-                # TODO: extract from config
-                APP="http://localhost:9999/v1"
+                APP=self.ca_endpoint
                 IS_PATTERN="false"
                 DURATION="P1M"
                 ENTITIES = [
