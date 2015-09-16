@@ -395,8 +395,10 @@ class Projects(FlowBase):
 
             IS_PATTERN="false"
             ATTRIBUTES=[
-                # name: TheService
-                # provider: ThirdParty
+                # id: S-001
+                # type: service
+                # name: The Service
+                # provider: The Third Party
                 # endpint: http://thirdparty
                 # method: GET
                 # authentication: context-adapter | third-party
@@ -459,19 +461,18 @@ class Projects(FlowBase):
                 if r['statusCode']['code'] != '200':
                     raise Exception(r['statusCode']['reasonPhrase'])
 
-            DEVICE_ID = ENTITY_ID
-            logger.debug("DEVICE_ID=%s" % DEVICE_ID)
+            logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-            "DEVICE_ID": DEVICE_ID
+            "ENTITY_ID": ENTITY_ID
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return DEVICE_ID
+        return ENTITY_ID
 
 
     def register_device(self,
