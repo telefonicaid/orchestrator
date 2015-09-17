@@ -108,12 +108,20 @@ class Context(FlowBase):
                                            ATTRIBUTES)
             logger.debug("UPDATE_CONTEXT=%s" % json.dumps(cb_res, indent=3))
 
+            ENTITY_PATTERN="true"
+            ENTITY_ID=".*"
+            DURATION="P50Y"
+            NOTIFY_CONDITIONS=[]
             cb_res = self.cb.subscribeContext(SERVICE_USER_TOKEN,
                                               SERVICE_NAME,
                                               SUBSERVICE_NAME,
                                               ENTITY_TYPE,
+                                              ENTITY_PATTERN
+                                              ENTITY_ID,
                                               REFERENCE_URL,
-                                              ATTRIBUTES)
+                                              DURATION
+                                              ATTRIBUTES,
+                                              NOTIFY_CONDITIONS)
             logger.debug("SUBSCRIBE_CONTEXT=%s" % json.dumps(cb_res, indent=3))
 
         except Exception, ex:

@@ -705,6 +705,11 @@ class Projects(FlowBase):
                         "name": "aux_interaction_type",
                         "type": "string",
                         "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_service_id",
+                        "type": "string",
+                        "isDomain": "false"
                     }
                 ]
 
