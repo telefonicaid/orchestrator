@@ -572,7 +572,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
-            "ENTITY_ID": "blackbutton-telepizza_-%s" % self.suffix,
+            "ENTITY_ID": "blackbutton-telepizza_%s" % self.suffix,
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
