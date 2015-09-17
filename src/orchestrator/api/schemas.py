@@ -578,9 +578,11 @@ json = {
             },
             "DEVICE_ID": {
                 "type": "string",
+                "pattern": "^[^'\"=;()]*$",
             },
             "ENTITY_TYPE": {
                 "type": "string",
+                "pattern": "^[^'\"=;()]*$",
             },
             "PROTOCOL": {
                 "type": "string",
@@ -652,9 +654,11 @@ json = {
             },
             "ENTITY_TYPE": {
                 "type": "string",
+                "pattern": "^[^'\"=;()]*$",
             },
             "ENTITY_ID": {
                 "type": "string",
+                "pattern": "^[^'\"=;()]*$",
             },
             "ATT_NAME": {
                 "type": "string",
