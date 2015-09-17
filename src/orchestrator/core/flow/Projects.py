@@ -395,15 +395,6 @@ class Projects(FlowBase):
 
             IS_PATTERN="false"
             ATTRIBUTES=[
-                # id: S-001
-                # type: service
-                # name: The Service
-                # provider: The Third Party
-                # endpint: http://thirdparty
-                # method: GET
-                # authentication: context-adapter | third-party
-                # mapping: [...]
-                # timeout: 120
                 {
                     "name": "name",
                     "type": "string",
@@ -445,9 +436,6 @@ class Projects(FlowBase):
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
                                            PROJECT_NAME,
-                                           # ID: S-001
-                                           # TYPE: service
-                                           # isPattern: false
                                            ENTITY_TYPE,
                                            ENTITY_ID,
                                            IS_PATTERN,
@@ -487,7 +475,6 @@ class Projects(FlowBase):
                         ENTITY_TYPE,
                         PROTOCOL,
                         ATT_INTERNAL_ID,
-                        ATT_EXTERNAL_ID,
                         ATT_CCID,
                         ATT_IMEI,
                         ATT_IMSI,
@@ -512,7 +499,6 @@ class Projects(FlowBase):
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
         - ATT_INTERNAL_ID
-        - ATT_EXTERNAL_ID
         - ATT_CCID
         - ATT_IMEI
         - ATT_IMSI
@@ -532,7 +518,6 @@ class Projects(FlowBase):
             "PROTOCOL": "%s" % PROTOCOL,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ATT_INTERNAL_ID": "%s" % ATT_INTERNAL_ID,
-            "ATT_EXTERNAL_ID": "%s" % ATT_EXTERNAL_ID,
             "ATT_CCID": "%s" % ATT_CCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
@@ -573,8 +558,6 @@ class Projects(FlowBase):
             #
             # 1. Call IOTA for register button
             #
-            #ENTITY_TYPE = "BlackButton"
-            #PROTOCOL = "TT_BLACKBUTTON"
             TIMEZONE = "Europe/Madrid" # TODO: get from django conf
             ENTITY_NAME = DEVICE_ID
             LAZY=[]
@@ -618,11 +601,6 @@ class Projects(FlowBase):
                         "name": "internal_id",
                         "type": "string",
                         "value": ATT_INTERNAL_ID
-                    },
-                    {
-                        "name": "external_id",
-                        "type": "string",
-                        "value": ATT_EXTERNAL_ID
                     },
                     {
                         "name": "ccid",
@@ -673,7 +651,6 @@ class Projects(FlowBase):
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
-                                                # resource: ???
                                                 DEVICE_ID,
                                                 PROTOCOL,
                                                 ENTITY_NAME,
@@ -685,7 +662,6 @@ class Projects(FlowBase):
                                                 INTERNAL_ATTRIBUTES,
                                                 LAZY
                                         )
-            # TODO extract info from res_iota?
             logger.debug("registerDevice res=%s" % iota_res)
 
 
@@ -711,11 +687,6 @@ class Projects(FlowBase):
                 ]
                 ATTRIBUTES=[
                     {
-                        "name": "aux_external_id",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
                         "name": "aux_op_action",
                         "type": "string",
                         "isDomain": "false"
@@ -727,6 +698,11 @@ class Projects(FlowBase):
                     },
                     {
                         "name": "aux_op_status",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_interaction_type",
                         "type": "string",
                         "isDomain": "false"
                     }

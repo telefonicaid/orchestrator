@@ -171,7 +171,6 @@ python ./registerSubServiceDevice.py  http             \
                                       BlackButton      \
                                       TT_BLACKBUTTON   \
                                       button_dev_01    \
-                                      ZZZZ             \
                                       AAA              \
                                       1234567890       \
                                       0987654321       \
