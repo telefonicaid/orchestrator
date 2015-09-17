@@ -102,6 +102,29 @@ class IoTACppOperations(object):
         return json_body_response
 
 
+    def getServices(self,
+                    SERVICE_USER_TOKEN,
+                    SERVICE_NAME,
+                    SUBSERVICE_NAME):
+
+        logger.debug("GET to iot/services ")
+
+        res = self.IoTACppRestOperations.rest_request(
+            url='/iot/services',
+            method='GET',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
     def registerDevice(self,
                        SERVICE_USER_TOKEN,
                        SERVICE_NAME,
@@ -151,6 +174,30 @@ class IoTACppOperations(object):
 
         # TODO get Location ?
         # TODO return something?
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
+    def getDevices(self,
+                   SERVICE_USER_TOKEN,
+                   SERVICE_NAME,
+                   SUBSERVICE_NAME):
+
+        logger.debug("GET to iot/devices")
+
+        res = self.IoTACppRestOperations.rest_request(
+            url='/iot/devices',
+            method='GET',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+
         data = res.read()
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
