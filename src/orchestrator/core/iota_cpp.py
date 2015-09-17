@@ -83,6 +83,9 @@ class IoTACppOperations(object):
             ]
         }
 
+        logger.debug("POST to iot/services with: %s" % json.dumps(body_data,
+                                                                  indent=3))
+
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/services',
             method='POST',
@@ -105,7 +108,6 @@ class IoTACppOperations(object):
                        SUBSERVICE_NAME,
                        DEVICE_ID,
                        PROTOCOL,
-                       #RESOURCE,
                        ENTITY_NAME,
                        ENTITY_TYPE,
                        TIMEZONE,
@@ -118,7 +120,6 @@ class IoTACppOperations(object):
         body_data = {
             "devices": [
                 {
-                     # resource: ???
                     "device_id": DEVICE_ID,
                     "protocol": PROTOCOL,
                     "service": SERVICE_NAME,
@@ -134,6 +135,9 @@ class IoTACppOperations(object):
                 }
             ]
         }
+
+        logger.debug("POST to iot/devices with: %s" % json.dumps(body_data,
+                                                                 indent=3))
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/devices',

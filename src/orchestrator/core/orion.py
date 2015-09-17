@@ -77,6 +77,8 @@ class CBOrionOperations(object):
             "duration": DURATION
         }
 
+        logger.debug("POST to /v1/registry/registerContext with: %s" % json.dumps(body_data,
+                                                                                  indent=3))
         res = self.CBRestOperations.rest_request(
             url='/v1/registry/registerContext',
             method='POST',
@@ -114,6 +116,8 @@ class CBOrionOperations(object):
             "updateAction": "APPEND"
         }
 
+        logger.debug("POST to /v1/updateContext with: %s" % json.dumps(body_data,
+                                                                       indent=3))
         res = self.CBRestOperations.rest_request(
             url='/v1/updateContext',
             method='POST',
@@ -171,6 +175,9 @@ class CBOrionOperations(object):
             "duration": "P50Y",
         }
 
+        logger.debug("POST to /v1/subscribeContext with: %s" % json.dumps(body_data,
+                                                                          indent=3))
+
         #TODO: v1/registry/subscribeContextAvailability ?
         res = self.CBRestOperations.rest_request(
             url='/v1/subscribeContext',
@@ -196,6 +203,9 @@ class CBOrionOperations(object):
         body_data = {
             "subscriptionId": SUBSCRIPTION_ID
         }
+
+        logger.debug("POST to /v1/unsubscribeContext with : %s" % json.dumps(body_data,
+                                                                             indent=3))
 
         res = self.CBRestOperations.rest_request(
             url='/v1/unsubscribeContext',
