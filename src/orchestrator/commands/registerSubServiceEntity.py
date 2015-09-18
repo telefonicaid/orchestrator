@@ -42,11 +42,11 @@ except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 def main():
 
-    print "This script register a IOTA device for a IOT SubService (keystone project)"
+    print "This script register a service entity IOT SubService (keystone project)"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 23
+    NUM_ARGS_EXPECTED = 20
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -58,19 +58,17 @@ def main():
         print "  <SUBSERVICE_NAME>               Subservice name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <DEVICE_ID>                     IoTA Device Id"
-        print "  <PROTOCOL>                      IoTA Protocol"
         print "  <ENTITY_TYPE>                   Context Broker Entity Type"
-        print "  <ATT_INTERNAL_ID>               Context Broker attribute Internal Id"
-        print "  <ATT_CCID>                      Context Broker attribute CCID"
-        print "  <ATT_IMEI>                      Context Broker attribute IMEI"
-        print "  <ATT_IMSI>                      Context Broker attribute IMSI"
-        print "  <ATT_INTERACTION_TYPE>          Context Broker attribute Interaction Type: synchronous or asynchronous"
-        print "  <ATT_SERVICE_ID>                Context Broker attribute Service Id"
-        print "  <ATT_GEOLOCATION>               Context Broker attribute Geolocation"
-        print "  <IOTA_PROTOCOL>                 ioTA protocol: HTTP or HTTPS"
-        print "  <IOTA_HOST>                     IoTA HOSTNAME or IP"
-        print "  <IOTA_PORT>                     IotA PORT"
+        print "  <ENTITY_ID>                     Context Broker Entity Id"
+
+        print "  <ATT_NAME>                      Context Broker Name attribute"
+        print "  <ATT_PROVIDER>                  Context Broker Provider attribute"
+        print "  <ATT_ENDPOINT>                  Context Broker Endpoint attribute"
+        print "  <ATT_METHOD>                    Context Broker Method attribute"
+        print "  <ATT_AUTHENTICATION>            Context Broker Authentication attribute"
+        print "  <ATT_INTERACTION_TYPE>          Context Broker Interaction Type attribute"
+        print "  <ATT_MAPPING>                   Context Broker Mapping attribute"
+        print "  <ATT_TIMEOUT>                   Context Broker Timeout attribute"
         print "  <ORION_PROTOCOL>                ORION protocol: HTTP or HTTPS"
         print "  <ORION_HOST>                    ORION HOSTNAME or IP"
         print "  <ORION_PORT>                    ORION PORT"
@@ -84,18 +82,15 @@ def main():
         print "                                 admin_bb       \\"
         print "                                 4passw0rd      \\"
         print "                                 button_dev_00  \\"
-        print "                                 BlackButton    \\"
-        print "                                 TT_BLACKBUTTON \\"
-        print "                                 button_dev_00  \\"
-        print "                                 AAA            \\"
-        print "                                 1234567890     \\"
-        print "                                 0987654321     \\"
-        print "                                 synchronous    \\"
-        print "                                 S-001          \\"
-        print "                                 40.4188,-3.6919\\"
-        print "                                 http           \\"
-        print "                                 localhost      \\"
-        print "                                 4041           \\"
+        print "                                 service        \\"
+        print "                                 blackbutton-telepizza \\"
+        print "                                 blackbutton-telepizza \\"
+        print "                                 http://localhost:6500/sync/request \\"
+        print "                                 POST \\"
+        print "                                 thrid-party \\"
+        print "                                 synchronous \\"
+        print "                                 XXX \\"
+        print "                                 120X \\"
         print "                                 http           \\"
         print "                                 localhost      \\"
         print "                                 1026           \\"
@@ -112,23 +107,21 @@ def main():
     SERVICE_USER_NAME = sys.argv[6]
     SERVICE_USER_PASSWORD = sys.argv[7]
 
-    DEVICE_ID = sys.argv[8]
-    ENTITY_TYPE = sys.argv[9]
-    PROTOCOL = sys.argv[10]
-    ATT_INTERNAL_ID = sys.argv[11]
-    ATT_CCID = sys.argv[12]
-    ATT_IMEI = sys.argv[13]
-    ATT_IMSI = sys.argv[14]
-    ATT_INTERACTION_TYPE = sys.argv[15]
-    ATT_SERVICE_ID = sys.argv[16]
-    ATT_GEOLOCATION = sys.argv[17]
+    ENTITY_TYPE = sys.argv[8]
+    ENTITY_ID = sys.argv[9]
 
-    IOTA_PROTOCOL = sys.argv[18]
-    IOTA_HOST = sys.argv[19]
-    IOTA_PORT = sys.argv[20]
-    ORION_PROTOCOL = sys.argv[21]
-    ORION_HOST = sys.argv[22]
-    ORION_PORT = sys.argv[23]
+    ATT_NAME = sys.argv[10]
+    ATT_PROVIDER = sys.argv[11]
+    ATT_ENDPOINT = sys.argv[12]
+    ATT_METHOD = sys.argv[13]
+    ATT_AUTHENTICATION = sys.argv[14]
+    ATT_INTERACTION_TYPE = sys.argv[15]
+    ATT_MAPPING = sys.argv[16]
+    ATT_TIMEOUT = sys.argv[17]
+
+    ORION_PROTOCOL = sys.argv[18]
+    ORION_HOST = sys.argv[19]
+    ORION_PORT = sys.argv[20]
 
     validate(
         {
@@ -136,18 +129,18 @@ def main():
             "SUBSERVICE_NAME": SUBSERVICE_NAME,
             "SERVICE_USER_NAME": SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": SERVICE_USER_PASSWORD,
-            "DEVICE_ID": DEVICE_ID,
-            "PROTOCOL": PROTOCOL,
             "ENTITY_TYPE": ENTITY_TYPE,
-            "ATT_INTERNAL_ID,": ATT_INTERNAL_ID,
-            "ATT_CCID": ATT_CCID,
-            "ATT_IMEI": ATT_IMEI,
-            "ATT_IMSI": ATT_IMSI,
-            "ATT_INTERACTION_TYPE": ATT_INTERACTION_TYPE,
-            "ATT_SERVICE_ID": ATT_SERVICE_ID,
-            "ATT_GEOLOCATION": ATT_GEOLOCATION,
+            "ENTITY_ID": ENTITY_ID,
+            "ATT_NAME,": ATT_NAME,
+            "ATT_PROVIDER,": ATT_PROVIDER,
+            "ATT_ENDPOINT,": ATT_ENDPOINT,
+            "ATT_METHOD,": ATT_METHOD,
+            "ATT_AUTHENTICATION,": ATT_AUTHENTICATION,
+            "ATT_INTERACTION_TYPE,": ATT_INTERACTION_TYPE,
+            "ATT_MAPPING,": ATT_MAPPING,
+            "ATT_TIMEOUT,": ATT_TIMEOUT
         },
-        schemas.json["IoTADevice"])
+        schemas.json["IoTAService"])
 
     flow = Projects(KEYSTONE_PROTOCOL,
                     KEYSTONE_HOST,
@@ -155,14 +148,14 @@ def main():
                     None,
                     None,
                     None,
-                    IOTA_PROTOCOL,
-                    IOTA_HOST,
-                    IOTA_PORT,
+                    None,
+                    None,
+                    None,
                     ORION_PROTOCOL,
                     ORION_HOST,
                     ORION_PORT)
 
-    res = flow.register_device(
+    res = flow.register_service(
         SERVICE_NAME,
         None,
         SUBSERVICE_NAME,
@@ -170,16 +163,16 @@ def main():
         SERVICE_USER_NAME,
         SERVICE_USER_PASSWORD,
         None,
-        DEVICE_ID,
         ENTITY_TYPE,
-        PROTOCOL,
-        ATT_INTERNAL_ID,
-        ATT_CCID,
-        ATT_IMEI,
-        ATT_IMSI,
+        ENTITY_ID,
+        ATT_NAME,
+        ATT_PROVIDER,
+        ATT_ENDPOINT,
+        ATT_METHOD,
+        ATT_AUTHENTICATION,
         ATT_INTERACTION_TYPE,
-        ATT_SERVICE_ID,
-        ATT_GEOLOCATION
+        ATT_MAPPING,
+        ATT_TIMEOUT
         )
 
     pprint.pprint(res)

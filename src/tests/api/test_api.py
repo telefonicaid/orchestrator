@@ -554,7 +554,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "ENTITY_TYPE": "BlackButton",
             "ENTITY_ID": "button_dev_%s" % self.suffix,
             "ATT_INTERNAL_ID": "button_dev_async_%s"% self.suffix,
-            "PROTOCOL": "TT_BLACKBUTTON",            
+            "PROTOCOL": "TT_BLACKBUTTON",
             "ATT_CCID": "AAA",
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
@@ -572,15 +572,16 @@ class Test_SubServiceIoTAService_RestView(object):
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
-            "ENTITY_ID": "S-%s" % self.suffix,
+            "ENTITY_ID": "blackbutton-telepizza_%s" % self.suffix,
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
+            "ATT_INTERACTION_TYPE": "asynchronous",
             "ATT_MAPPING": "xxx",
             "ATT_TIMEOUT": 120
-        }        
+        }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data3_ok = {
             "SERVICE_NAME": "blackbutton",
@@ -589,12 +590,13 @@ class Test_SubServiceIoTAService_RestView(object):
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
-            "ENTITY_ID": "S-%s" % self.suffix,
+            "ENTITY_ID": "blackbutton-telepizza_%s" % self.suffix,
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
             "ATT_METHOD": "POST",
-            "ATT_AUTHENTICATION": "context-adapter",
+            "ATT_AUTHENTICATION": "third-party",
+            "ATT_INTERACTION_TYPE": "synchronous",
             "ATT_MAPPING": "xxx",
             "ATT_TIMEOUT": 120
 
