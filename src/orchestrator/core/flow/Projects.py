@@ -316,6 +316,7 @@ class Projects(FlowBase):
                          ATT_ENDPOINT,
                          ATT_METHOD,
                          ATT_AUTHENTICATION,
+                         ATT_INTERACTION_TYPE,
                          ATT_MAPPING,
                          ATT_TIMEOUT
                        ):
@@ -339,6 +340,7 @@ class Projects(FlowBase):
         - ATT_ENDPOINT
         - ATT_METHOD
         - ATT_AUTHENTICATION
+        - ATT_INTERACTION_TYPE
         - ATT_MAPPING
         - ATT_TIMEOUT
         '''
@@ -357,6 +359,7 @@ class Projects(FlowBase):
             "ATT_ENDPOINT": "%s" % ATT_ENDPOINT,
             "ATT_METHOD": "%s" % ATT_METHOD,
             "ATT_AUTHENTICATION": "%s" % ATT_AUTHENTICATION,
+            "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
             "ATT_MAPPING": "%s" % ATT_MAPPING,
             "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
@@ -421,6 +424,11 @@ class Projects(FlowBase):
                     "name": "authentication",
                     "type": "string",
                     "value": ATT_AUTHENTICATION
+                },
+                {
+                    "name": "interaction_type",
+                    "type": "string",
+                    "value": ATT_INTERACTION_TYPE
                 },
                 {
                     "name": "mapping",
