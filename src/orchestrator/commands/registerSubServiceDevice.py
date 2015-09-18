@@ -42,11 +42,11 @@ except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 def main():
 
-    print "This script register a IOTA device for a sub service in IoT keystone"
+    print "This script register a IOTA device for a IOT SubService (keystone project)"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 24
+    NUM_ARGS_EXPECTED = 23
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -62,11 +62,10 @@ def main():
         print "  <PROTOCOL>                      IoTA Protocol"
         print "  <ENTITY_TYPE>                   Context Broker Entity Type"
         print "  <ATT_INTERNAL_ID>               Context Broker attribute Internal Id"
-        print "  <ATT_EXTERNAL_ID>               Context Broker attribute External Id"
         print "  <ATT_CCID>                      Context Broker attribute CCID"
         print "  <ATT_IMEI>                      Context Broker attribute IMEI"
         print "  <ATT_IMSI>                      Context Broker attribute IMSI"
-        print "  <ATT_INTERACTION_TYPE>          Context Broker attribute Interaction Type: sync or async"
+        print "  <ATT_INTERACTION_TYPE>          Context Broker attribute Interaction Type: synchronous or asynchronous"
         print "  <ATT_SERVICE_ID>                Context Broker attribute Service Id"
         print "  <ATT_GEOLOCATION>               Context Broker attribute Geolocation"
         print "  <IOTA_PROTOCOL>                 ioTA protocol: HTTP or HTTPS"
@@ -88,7 +87,6 @@ def main():
         print "                                 BlackButton    \\"
         print "                                 TT_BLACKBUTTON \\"
         print "                                 button_dev_00  \\"
-        print "                                 ZZZZ           \\"
         print "                                 AAA            \\"
         print "                                 1234567890     \\"
         print "                                 0987654321     \\"
@@ -118,28 +116,19 @@ def main():
     ENTITY_TYPE = sys.argv[9]
     PROTOCOL = sys.argv[10]
     ATT_INTERNAL_ID = sys.argv[11]
-    ATT_EXTERNAL_ID = sys.argv[12]
-    ATT_CCID = sys.argv[13]
-    ATT_IMEI = sys.argv[14]
-    ATT_IMSI = sys.argv[15]
-    ATT_INTERACTION_TYPE = sys.argv[16]
-    ATT_SERVICE_ID = sys.argv[17]
-    ATT_GEOLOCATION = sys.argv[18]
+    ATT_CCID = sys.argv[12]
+    ATT_IMEI = sys.argv[13]
+    ATT_IMSI = sys.argv[14]
+    ATT_INTERACTION_TYPE = sys.argv[15]
+    ATT_SERVICE_ID = sys.argv[16]
+    ATT_GEOLOCATION = sys.argv[17]
 
-    IOTA_PROTOCOL = sys.argv[19]
-    IOTA_HOST = sys.argv[20]
-    IOTA_PORT = sys.argv[21]
-    ORION_PROTOCOL = sys.argv[22]
-    ORION_HOST = sys.argv[23]
-    ORION_PORT = sys.argv[24]
-
-    #parser = argparse.ArgumentParser(
-    #         description='Utilities to update API documentation from code')
-    # parser.add_argument('-p', '--path', dest='path', default=None,
-    #                    help='Path for UDo-wiki repository')
-    # parser.add_argument('--tables', dest='tables', action='store_true',
-    #                    help='Shows tables draft')
-    #args = parser.parse_args()
+    IOTA_PROTOCOL = sys.argv[18]
+    IOTA_HOST = sys.argv[19]
+    IOTA_PORT = sys.argv[20]
+    ORION_PROTOCOL = sys.argv[21]
+    ORION_HOST = sys.argv[22]
+    ORION_PORT = sys.argv[23]
 
     validate(
         {
@@ -151,7 +140,6 @@ def main():
             "PROTOCOL": PROTOCOL,
             "ENTITY_TYPE": ENTITY_TYPE,
             "ATT_INTERNAL_ID,": ATT_INTERNAL_ID,
-            "ATT_EXTERNAL_ID": ATT_EXTERNAL_ID,
             "ATT_CCID": ATT_CCID,
             "ATT_IMEI": ATT_IMEI,
             "ATT_IMSI": ATT_IMSI,
@@ -186,7 +174,6 @@ def main():
         ENTITY_TYPE,
         PROTOCOL,
         ATT_INTERNAL_ID,
-        ATT_EXTERNAL_ID,
         ATT_CCID,
         ATT_IMEI,
         ATT_IMSI,
