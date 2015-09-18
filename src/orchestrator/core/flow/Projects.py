@@ -643,6 +643,11 @@ class Projects(FlowBase):
                         "value": ATT_SERVICE_ID
                     },
                     {
+                        "name": "aux_service_id",
+                        "type": "string",
+                        "value": ATT_SERVICE_ID
+                    },
+                    {
                         "name": "geolocation",
                         "type": "string",
                         "value": ATT_GEOLOCATION
