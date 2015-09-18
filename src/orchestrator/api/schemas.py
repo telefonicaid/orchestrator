@@ -676,6 +676,10 @@ json = {
                 "type": "string",
                 "enum": ["context-adapter", "third-party"]
             },
+            "ATT_INTERACTION_TYPE": {
+                "type": "string",
+                "enum": ["synchronous", "asynchronous"]
+            },
             "ATT_MAPPING": {
                 "type": "string",
             },
