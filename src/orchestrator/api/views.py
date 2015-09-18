@@ -446,6 +446,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_ENDPOINT", None),
                     request.DATA.get("ATT_METHOD", None),
                     request.DATA.get("ATT_AUTHENTICATION", None),
+                    request.DATA.get("ATT_INTERACTION_TYPE", None),
                     request.DATA.get("ATT_MAPPING", None),
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
@@ -1140,6 +1141,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_ENDPOINT", None),
                 request.DATA.get("ATT_METHOD", None),
                 request.DATA.get("ATT_AUTHENTICATION", None),
+                request.DATA.get("ATT_INTERACTION_TYPE", None),
                 request.DATA.get("ATT_MAPPING", None),
                 request.DATA.get("ATT_TIMEOUT", None)
             )

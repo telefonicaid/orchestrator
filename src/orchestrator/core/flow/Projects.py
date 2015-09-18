@@ -316,11 +316,12 @@ class Projects(FlowBase):
                          ATT_ENDPOINT,
                          ATT_METHOD,
                          ATT_AUTHENTICATION,
+                         ATT_INTERACTION_TYPE,
                          ATT_MAPPING,
                          ATT_TIMEOUT
                        ):
 
-        '''Register Service in IOTA
+        '''Register entity Service (in CB)
 
         In case of HTTP error, return HTTP error
 
@@ -339,6 +340,7 @@ class Projects(FlowBase):
         - ATT_ENDPOINT
         - ATT_METHOD
         - ATT_AUTHENTICATION
+        - ATT_INTERACTION_TYPE
         - ATT_MAPPING
         - ATT_TIMEOUT
         '''
@@ -354,8 +356,10 @@ class Projects(FlowBase):
             "ENTITY_ID": "%s" % ENTITY_ID,
             "ATT_NAME": "%s" % ATT_NAME,
             "ATT_PROVIDER": "%s" % ATT_PROVIDER,
+            "ATT_ENDPOINT": "%s" % ATT_ENDPOINT,
             "ATT_METHOD": "%s" % ATT_METHOD,
             "ATT_AUTHENTICATION": "%s" % ATT_AUTHENTICATION,
+            "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
             "ATT_MAPPING": "%s" % ATT_MAPPING,
             "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
@@ -382,6 +386,7 @@ class Projects(FlowBase):
                                                                          SERVICE_USER_NAME,
                                                                          SERVICE_USER_PASSWORD)
             # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
+            # get DOMAIN_NAME from SERVICE_USER_TOKEN
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -419,6 +424,11 @@ class Projects(FlowBase):
                     "name": "authentication",
                     "type": "string",
                     "value": ATT_AUTHENTICATION
+                },
+                {
+                    "name": "interaction_type",
+                    "type": "string",
+                    "value": ATT_INTERACTION_TYPE
                 },
                 {
                     "name": "mapping",
@@ -483,7 +493,7 @@ class Projects(FlowBase):
                         ATT_GEOLOCATION
                         ):
 
-        '''Register Device.
+        '''Register Device in IOTA
 
         In case of HTTP error, return HTTP error
 
@@ -703,6 +713,11 @@ class Projects(FlowBase):
                     },
                     {
                         "name": "aux_interaction_type",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_service_id",
                         "type": "string",
                         "isDomain": "false"
                     }

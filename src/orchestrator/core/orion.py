@@ -160,19 +160,24 @@ class CBOrionOperations(object):
                          SERVICE_NAME,
                          SUBSERVICE_NAME,
                          ENTITY_TYPE,
+                         ENTITY_PATTERN, # "true"
+                         ENTITY_ID,    # ".*"
                          REFERENCE_URL,
-                         ATTRIBUTES=[]):
+                         DURATION="P50Y",
+                         ATTRIBUTES=[],
+                         NOTIFY_CONDITIONS=[]):
         body_data = {
             "entities": [
                {
-                "type": "", #ENTITY_TYPE, # device?
-                "isPattern": "true",
-                "id": ".*",
+                "type": ENTITY_TYPE,
+                "isPattern": ENTITY_PATTERN,
+                "id": ENTITY_ID
                }
             ],
             "attributes": ATTRIBUTES,
             "reference": REFERENCE_URL, # like http://<sth.host>:<sth.port>/notify
-            "duration": "P50Y",
+            "duration": DURATION,
+            "notifyConditions": NOTIFY_CONDITIONS
         }
 
         logger.debug("POST to /v1/subscribeContext with: %s" % json.dumps(body_data,
