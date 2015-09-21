@@ -483,7 +483,7 @@ class Projects(FlowBase):
 
             if PROTOCOL == "TT_BLACKBUTTON":
                 DURATION="PT5M"
-                REFERENCE_URL = self.ca_endpoint #"http://<ip_ca>:<port_ca>/"
+                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
