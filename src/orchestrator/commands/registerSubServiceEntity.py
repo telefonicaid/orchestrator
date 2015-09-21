@@ -60,7 +60,7 @@ def main():
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
         print "  <ENTITY_TYPE>                   Context Broker Entity Type"
         print "  <ENTITY_ID>                     Context Broker Entity Id"
-
+        print "  <PROTOCOL>                      Protocol"
         print "  <ATT_NAME>                      Context Broker Name attribute"
         print "  <ATT_PROVIDER>                  Context Broker Provider attribute"
         print "  <ATT_ENDPOINT>                  Context Broker Endpoint attribute"
@@ -84,6 +84,7 @@ def main():
         print "                                 button_dev_00  \\"
         print "                                 service        \\"
         print "                                 blackbutton-telepizza \\"
+        print "                                 TT_BlackButton \\"
         print "                                 blackbutton-telepizza \\"
         print "                                 http://localhost:6500/sync/request \\"
         print "                                 POST \\"
@@ -109,19 +110,20 @@ def main():
 
     ENTITY_TYPE = sys.argv[8]
     ENTITY_ID = sys.argv[9]
+    PROTOCOL = sys.argv[10]
 
-    ATT_NAME = sys.argv[10]
-    ATT_PROVIDER = sys.argv[11]
-    ATT_ENDPOINT = sys.argv[12]
-    ATT_METHOD = sys.argv[13]
-    ATT_AUTHENTICATION = sys.argv[14]
-    ATT_INTERACTION_TYPE = sys.argv[15]
-    ATT_MAPPING = sys.argv[16]
-    ATT_TIMEOUT = sys.argv[17]
+    ATT_NAME = sys.argv[11]
+    ATT_PROVIDER = sys.argv[12]
+    ATT_ENDPOINT = sys.argv[13]
+    ATT_METHOD = sys.argv[14]
+    ATT_AUTHENTICATION = sys.argv[15]
+    ATT_INTERACTION_TYPE = sys.argv[16]
+    ATT_MAPPING = sys.argv[17]
+    ATT_TIMEOUT = sys.argv[18]
 
-    ORION_PROTOCOL = sys.argv[18]
-    ORION_HOST = sys.argv[19]
-    ORION_PORT = sys.argv[20]
+    ORION_PROTOCOL = sys.argv[19]
+    ORION_HOST = sys.argv[20]
+    ORION_PORT = sys.argv[21]
 
     validate(
         {
@@ -131,6 +133,7 @@ def main():
             "SERVICE_USER_PASSWORD": SERVICE_USER_PASSWORD,
             "ENTITY_TYPE": ENTITY_TYPE,
             "ENTITY_ID": ENTITY_ID,
+            "PROTOCOL": PROTOCOL,
             "ATT_NAME,": ATT_NAME,
             "ATT_PROVIDER,": ATT_PROVIDER,
             "ATT_ENDPOINT,": ATT_ENDPOINT,
@@ -165,6 +168,7 @@ def main():
         None,
         ENTITY_TYPE,
         ENTITY_ID,
+        PROTOCOL,
         ATT_NAME,
         ATT_PROVIDER,
         ATT_ENDPOINT,
