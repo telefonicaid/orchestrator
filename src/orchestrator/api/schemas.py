@@ -587,9 +587,6 @@ json = {
             "PROTOCOL": {
                 "type": "string",
             },
-            "ATT_INTERNAL_ID": {
-                "type": "string",
-            },
             "ATT_CCID": {
                 "type": "string",
             },
