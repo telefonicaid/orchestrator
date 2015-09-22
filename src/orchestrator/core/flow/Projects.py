@@ -484,7 +484,6 @@ class Projects(FlowBase):
                         DEVICE_ID,
                         ENTITY_TYPE,
                         PROTOCOL,
-                        ATT_INTERNAL_ID,
                         ATT_CCID,
                         ATT_IMEI,
                         ATT_IMSI,
@@ -508,7 +507,6 @@ class Projects(FlowBase):
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
-        - ATT_INTERNAL_ID
         - ATT_CCID
         - ATT_IMEI
         - ATT_IMSI
@@ -527,7 +525,6 @@ class Projects(FlowBase):
             "DEVICE_ID": "%s" % DEVICE_ID,
             "PROTOCOL": "%s" % PROTOCOL,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
-            "ATT_INTERNAL_ID": "%s" % ATT_INTERNAL_ID,
             "ATT_CCID": "%s" % ATT_CCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
@@ -581,7 +578,7 @@ class Projects(FlowBase):
                     ATT_INTERACTION_TYPE = "synchronous"
                 ATTRIBUTES = [
                     {
-                        "name": "internalId",
+                        "name": "internal_id",
                         "type": "string"
                     },
                     {
@@ -608,11 +605,6 @@ class Projects(FlowBase):
 
                 STATIC_ATTRIBUTES=[
                     {
-                        "name": "internal_id",
-                        "type": "string",
-                        "value": ATT_INTERNAL_ID
-                    },
-                    {
                         "name": "ccid",
                         "type": "string",
                         "value": ATT_CCID
@@ -629,11 +621,6 @@ class Projects(FlowBase):
                     },
                     {
                         "name": "interaction_type",
-                        "type": "string",
-                        "value": ATT_INTERACTION_TYPE
-                    },
-                    {
-                        "name": "aux_interaction_type",
                         "type": "string",
                         "value": ATT_INTERACTION_TYPE
                     },
