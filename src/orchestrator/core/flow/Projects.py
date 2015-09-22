@@ -581,7 +581,7 @@ class Projects(FlowBase):
                     ATT_INTERACTION_TYPE = "synchronous"
                 ATTRIBUTES = [
                     {
-                        "name": "internalId",
+                        "name": "internal_id",
                         "type": "string"
                     },
                     {
@@ -607,11 +607,6 @@ class Projects(FlowBase):
                     ]
 
                 STATIC_ATTRIBUTES=[
-                    {
-                        "name": "internal_id",
-                        "type": "string",
-                        "value": ATT_INTERNAL_ID
-                    },
                     {
                         "name": "ccid",
                         "type": "string",
