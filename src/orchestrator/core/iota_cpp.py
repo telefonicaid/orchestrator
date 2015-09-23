@@ -229,3 +229,22 @@ class IoTACppOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def deleteAllDevices(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME):
+
+        # WIP
+        # 1. Get devices
+        devices = self.getDevices(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME)
+
+        for device in devices:
+            # 2. Unregister each device
+            self.unregisterDevices(SERVICE_USER_TOKEN,
+                                    SERVICE_NAME,
+                                    SUBSERVICE_NAME,
+                                    device['device_id'])
