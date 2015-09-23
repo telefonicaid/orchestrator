@@ -46,7 +46,7 @@ def main():
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 23
+    NUM_ARGS_EXPECTED = 22
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -61,7 +61,6 @@ def main():
         print "  <DEVICE_ID>                     IoTA Device Id"
         print "  <PROTOCOL>                      IoTA Protocol"
         print "  <ENTITY_TYPE>                   Context Broker Entity Type"
-        print "  <ATT_INTERNAL_ID>               Context Broker attribute Internal Id"
         print "  <ATT_CCID>                      Context Broker attribute CCID"
         print "  <ATT_IMEI>                      Context Broker attribute IMEI"
         print "  <ATT_IMSI>                      Context Broker attribute IMSI"
@@ -86,7 +85,6 @@ def main():
         print "                                 button_dev_00  \\"
         print "                                 BlackButton    \\"
         print "                                 TT_BLACKBUTTON \\"
-        print "                                 button_dev_00  \\"
         print "                                 AAA            \\"
         print "                                 1234567890     \\"
         print "                                 0987654321     \\"
@@ -115,20 +113,19 @@ def main():
     DEVICE_ID = sys.argv[8]
     ENTITY_TYPE = sys.argv[9]
     PROTOCOL = sys.argv[10]
-    ATT_INTERNAL_ID = sys.argv[11]
-    ATT_CCID = sys.argv[12]
-    ATT_IMEI = sys.argv[13]
-    ATT_IMSI = sys.argv[14]
-    ATT_INTERACTION_TYPE = sys.argv[15]
-    ATT_SERVICE_ID = sys.argv[16]
-    ATT_GEOLOCATION = sys.argv[17]
+    ATT_CCID = sys.argv[11]
+    ATT_IMEI = sys.argv[12]
+    ATT_IMSI = sys.argv[13]
+    ATT_INTERACTION_TYPE = sys.argv[14]
+    ATT_SERVICE_ID = sys.argv[15]
+    ATT_GEOLOCATION = sys.argv[16]
 
-    IOTA_PROTOCOL = sys.argv[18]
-    IOTA_HOST = sys.argv[19]
-    IOTA_PORT = sys.argv[20]
-    ORION_PROTOCOL = sys.argv[21]
-    ORION_HOST = sys.argv[22]
-    ORION_PORT = sys.argv[23]
+    IOTA_PROTOCOL = sys.argv[17]
+    IOTA_HOST = sys.argv[18]
+    IOTA_PORT = sys.argv[19]
+    ORION_PROTOCOL = sys.argv[20]
+    ORION_HOST = sys.argv[21]
+    ORION_PORT = sys.argv[22]
 
     validate(
         {
@@ -139,7 +136,6 @@ def main():
             "DEVICE_ID": DEVICE_ID,
             "PROTOCOL": PROTOCOL,
             "ENTITY_TYPE": ENTITY_TYPE,
-            "ATT_INTERNAL_ID,": ATT_INTERNAL_ID,
             "ATT_CCID": ATT_CCID,
             "ATT_IMEI": ATT_IMEI,
             "ATT_IMSI": ATT_IMSI,
@@ -173,7 +169,6 @@ def main():
         DEVICE_ID,
         ENTITY_TYPE,
         PROTOCOL,
-        ATT_INTERNAL_ID,
         ATT_CCID,
         ATT_IMEI,
         ATT_IMSI,
