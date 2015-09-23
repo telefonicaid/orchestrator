@@ -224,6 +224,7 @@ KEYPASS = {}
 IOTA = {}
 ORION = {}
 CA = {}
+CYGNUS = {}
 
 PEP = {
     "user": "pep",

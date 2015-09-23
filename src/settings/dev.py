@@ -42,3 +42,9 @@ CA = {
     "port": "9999",
     "protocol":"http"
 }
+
+CYGNUS = {
+    "host": "localhost",
+    "port": "5050",
+    "protocol":"http"
+}

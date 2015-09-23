@@ -47,7 +47,10 @@ class FlowBase(object):
                  ORION_PORT=None,
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
-                 CA_PORT="9999"):
+                 CA_PORT="9999",
+                 CYGNUS_PROTOCOL="http",
+                 CYGNUS_HOST="localhost",
+                 CYGNUS_PORT="5050"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -65,6 +68,9 @@ class FlowBase(object):
                                ORION_PORT)
         if CA_PROTOCOL:
             self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+
+        if CYGNUS_PROTOCOL:
+            self.cygnus_endpoint = CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+"/v1"            
 
 
     def composeErrorCode(self, ex):

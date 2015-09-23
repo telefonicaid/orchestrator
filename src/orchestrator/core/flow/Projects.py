@@ -461,6 +461,51 @@ class Projects(FlowBase):
 
             logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
+            #
+            # Subscribe Cygnus
+            #
+            DURATION="P1M"
+            REFERENCE_URL = self.cygnus_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+            ENTITIES = [
+                {
+                    "type": ENTITY_TYPE,
+                    "isPattern": "true",
+                    "id": "*"
+                }
+            ]
+            ATTRIBUTES=[
+                # TODO: put all attributes
+                "op_action",
+                "op_extra",
+                "op_status",
+                "interaction_type",
+                "service_id"
+            ]
+            NOTIFY_CONDITIONS = [
+                {
+                    "type": "ONCHANGE",
+                    "condValues": [
+                        "op_status"
+                    ]
+                }
+            ]
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
+
+
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
