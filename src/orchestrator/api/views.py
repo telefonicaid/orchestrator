@@ -441,6 +441,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.DATA.get("ENTITY_TYPE", None),
                     request.DATA.get("ENTITY_ID", None),
+                    request.DATA.get("PROTOCOL", None),
                     request.DATA.get("ATT_NAME", None),
                     request.DATA.get("ATT_PROVIDER", None),
                     request.DATA.get("ATT_ENDPOINT", None),
@@ -450,8 +451,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_MAPPING", None),
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
-                # TODO: save some from result_rs ?
-
+                # Accumulate previous result
+                result['subscriptionid'] = result_rs
 
             if request.DATA.get("DEVICE_ID", None):
                 flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -489,7 +490,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_GEOLOCATION", None)
                     )
                 # accumulate previous result
-                result['registrationid'] = result_rd
+                #result['registrationid'] = result_rd
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -1134,6 +1135,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("ENTITY_TYPE", None),
                 request.DATA.get("ENTITY_ID", None),
+                request.DATA.get("PROTOCOL", None),
                 request.DATA.get("ATT_NAME", None),
                 request.DATA.get("ATT_PROVIDER", None),
                 request.DATA.get("ATT_ENDPOINT", None),
