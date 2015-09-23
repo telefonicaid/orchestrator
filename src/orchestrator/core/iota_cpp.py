@@ -244,7 +244,7 @@ class IoTACppOperations(object):
 
         for device in devices:
             # 2. Unregister each device
-            self.unregisterDevices(SERVICE_USER_TOKEN,
-                                    SERVICE_NAME,
-                                    SUBSERVICE_NAME,
-                                    device['device_id'])
+            self.unregisterDevice(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME,
+                                  device['id'])
