@@ -662,6 +662,14 @@ class Projects(FlowBase):
                     {
                         "name": "op_extra",
                         "type": "string"
+                    },
+                    {
+                        "name": "sleepcondition",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sleeptime",
+                        "type": "string"
                     }
                     ]
 
