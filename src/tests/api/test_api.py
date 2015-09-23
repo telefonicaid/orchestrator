@@ -570,6 +570,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
             "ENTITY_ID": "blackbutton-telepizza_%s" % self.suffix,
+            "PROTOCOL": "TT_BLACKBUTTON",
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
@@ -588,6 +589,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
             "ENTITY_ID": "blackbutton-telepizza_%s" % self.suffix,
+            "PROTOCOL": "TT_BLACKBUTTON",
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
             "ATT_ENDPOINT": "http://localhost:6500/sync/request",
@@ -623,7 +625,7 @@ class Test_SubServiceIoTAService_RestView(object):
             json_data=True,
             data=self.payload_data2_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
-        
+
 
         # Register Service Device in SubService
         res = self.TestRestOps.rest_request(
