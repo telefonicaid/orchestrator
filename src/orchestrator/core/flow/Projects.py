@@ -525,6 +525,7 @@ class Projects(FlowBase):
             # Subscribe Cygnus
             #
             DURATION="P1M"
+            ENTITY_TYPE="BlackButton"
             REFERENCE_URL = self.cygnus_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
             ENTITIES = [
                 {
@@ -534,12 +535,21 @@ class Projects(FlowBase):
                 }
             ]
             ATTRIBUTES=[
-                # TODO: put all attributes
+                "internal_id",
+                "last_operation",
+                "op_status",
+                "op_result",
                 "op_action",
                 "op_extra",
-                "op_status",
+                "sleepcondition",
+                "sleeptime",
+                "ccid",
+                "imei",
+                "imsi",
                 "interaction_type",
-                "service_id"
+                "service_id",
+                "geolocation"
+
             ]
             NOTIFY_CONDITIONS = [
                 {
