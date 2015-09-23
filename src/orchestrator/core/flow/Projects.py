@@ -486,7 +486,7 @@ class Projects(FlowBase):
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*.*"
+                        "id": ".*"
                     }
                 ]
                 ATTRIBUTES=[
