@@ -373,10 +373,11 @@ class Projects(FlowBase):
 
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(DOMAIN_NAME,
-                                                                        PROJECT_NAME,
-                                                                        SERVICE_USER_NAME,
-                                                                        SERVICE_USER_PASSWORD)
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
                     PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
@@ -384,12 +385,23 @@ class Projects(FlowBase):
                                                         ROJECT_NAME)
 
                 else:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(DOMAIN_ID,
-                                                                         PROJECT_ID,
-                                                                         SERVICE_USER_NAME,
-                                                                         SERVICE_USER_PASSWORD)
-            # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
-            # get DOMAIN_NAME from SERVICE_USER_TOKEN
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -594,7 +606,8 @@ class Projects(FlowBase):
             "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
             "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
-        logger.debug("register_device with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("register_device with: %s" % json.dumps(data_log,
+                                                             indent=3))
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -618,7 +631,16 @@ class Projects(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
-            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
