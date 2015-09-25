@@ -101,6 +101,7 @@ class CBOrionOperations(object):
                       SUBSERVICE_NAME,
                       ENTITY_TYPE,
                       ENTITY_ID,
+                      ACTION="APPEND",
                       IS_PATTERN="false",
                       ATTRIBUTES=[]):
 
@@ -113,7 +114,7 @@ class CBOrionOperations(object):
                     "attributes": ATTRIBUTES
                 }
             ],
-            "updateAction": "APPEND"
+            "updateAction": ACTION
         }
 
         logger.debug("POST to /v1/updateContext with: %s" % json.dumps(body_data,
@@ -159,27 +160,18 @@ class CBOrionOperations(object):
                          SERVICE_USER_TOKEN,
                          SERVICE_NAME,
                          SUBSERVICE_NAME,
-                         ENTITY_TYPE,
-                         ENTITY_PATTERN, # "true"
-                         ENTITY_ID,    # ".*"
                          REFERENCE_URL,
                          DURATION="P50Y",
+                         ENTITIES=[],
                          ATTRIBUTES=[],
                          NOTIFY_CONDITIONS=[]):
         body_data = {
-            "entities": [
-               {
-                "type": ENTITY_TYPE,
-                "isPattern": ENTITY_PATTERN,
-                "id": ENTITY_ID
-               }
-            ],
+            "entities": ENTITIES,
             "attributes": ATTRIBUTES,
             "reference": REFERENCE_URL, # like http://<sth.host>:<sth.port>/notify
             "duration": DURATION,
             "notifyConditions": NOTIFY_CONDITIONS
         }
-
         logger.debug("POST to /v1/subscribeContext with: %s" % json.dumps(body_data,
                                                                           indent=3))
 
