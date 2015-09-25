@@ -692,4 +692,43 @@ json = {
     },
 
 
+    #############
+    "IoTADevices": {
+    #############
+        "name": "IoTADevices",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+        },
+        # "required": [
+        # ],
+    },
+    
 }

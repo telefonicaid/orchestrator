@@ -740,3 +740,231 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return  registrationid
+
+
+    def register_devices(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        CSV_DEVICES,
+                        # DEVICE_ID,
+                        # ENTITY_TYPE,
+                        # PROTOCOL,
+                        # ATT_CCID,
+                        # ATT_IMEI,
+                        # ATT_IMSI,
+                        # ATT_INTERACTION_TYPE,
+                        # ATT_SERVICE_ID,
+                        # ATT_GEOLOCATION
+                        ):
+
+        '''Register Device in IOTA
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_NAME: Service name
+        - DOMAIN_ID: Service id
+        - PROJECT_NAME: SubService name
+        - PROJECT_ID: SubService name
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - CSV_DEVICES: CSV content
+
+        '''
+        data_log = {
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "CSV_DEVICES": "%s" % CSV_DEVICES
+        }
+        logger.debug("register_devices with: %s" % json.dumps(data_log, indent=3))
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+
+
+            # Read CSV
+
+            # ######
+            import csv
+            import StringIO            
+            devices = {}
+            import ipdb
+            ipdb.set_trace()
+            #csvreader = csv.reader(['1997,Ford,E350,"Super, luxurious truck"'],
+            csvreader = csv.reader(StringIO.StringIO(CSV_DEVICES),                                   
+                                    delimiter=',',
+                                    #quotechar='"',
+                                    skipinitialspace=True)
+
+            header =  csvreader.next()
+            for name in header:
+                #device[name] = []
+                None
+            # for row in csvreader:
+            #     device  = {}
+            #     device['DEVICE_ID'] = row
+            #     devices.append(device)
+
+            for row in csvreader:
+                for i, value in enumerate(row):
+                    devices[header[i]].append(value)
+            import ipdb
+            ipdb.set_trace()
+            None
+            # ######
+            
+
+            # DEVICES
+
+            
+            # #
+            # # 1. Call IOTA for register button
+            # #
+            # TIMEZONE = "Europe/Madrid" # TODO: get from django conf
+            # ENTITY_NAME = DEVICE_ID
+            # LAZY=[]
+            # ATTRIBUTES=[]
+            # STATIC_ATTRIBUTES = []
+            # INTERNAL_ATTRIBUTES = []
+            # COMMANDS = []
+
+            # if PROTOCOL == "TT_BLACKBUTTON":
+            #     if ATT_INTERACTION_TYPE == None:
+            #         ATT_INTERACTION_TYPE = "synchronous"
+            #     ATTRIBUTES = [
+            #         {
+            #             "name": "internal_id",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "last_operation",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "op_status",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "op_result",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "op_action",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "op_extra",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "sleepcondition",
+            #             "type": "string"
+            #         },
+            #         {
+            #             "name": "sleeptime",
+            #             "type": "string"
+            #         }
+            #         ]
+
+            #     STATIC_ATTRIBUTES=[
+            #         {
+            #             "name": "ccid",
+            #             "type": "string",
+            #             "value": ATT_CCID
+            #         },
+            #         {
+            #             "name": "imei",
+            #             "type": "string",
+            #             "value": ATT_IMEI
+            #         },
+            #         {
+            #             "name": "imsi",
+            #             "type": "string",
+            #             "value": ATT_IMSI
+            #         },
+            #         {
+            #             "name": "interaction_type",
+            #             "type": "string",
+            #             "value": ATT_INTERACTION_TYPE
+            #         },
+            #         {
+            #             "name": "service_id",
+            #             "type": "string",
+            #             "value": ATT_SERVICE_ID
+            #         },
+            #         {
+            #             "name": "geolocation",
+            #             "type": "string",
+            #             "value": ATT_GEOLOCATION
+            #         }
+            #         ]
+
+
+            #     if ATT_INTERACTION_TYPE == "synchronous":
+            #         LAZY = [
+            #             {
+            #                 "name": "lazy_op_result",
+            #                 "type": "string"
+            #             }
+            #         ]
+
+            # iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
+            #                                     DOMAIN_NAME,
+            #                                     PROJECT_NAME,
+            #                                     DEVICE_ID,
+            #                                     PROTOCOL,
+            #                                     ENTITY_NAME,
+            #                                     ENTITY_TYPE,
+            #                                     TIMEZONE,
+            #                                     ATTRIBUTES,
+            #                                     STATIC_ATTRIBUTES,
+            #                                     COMMANDS,
+            #                                     INTERNAL_ATTRIBUTES,
+            #                                     LAZY
+            #                             )
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            #"registrationid": registrationid
+        }
+        #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return #registrationid
+
