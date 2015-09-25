@@ -225,6 +225,7 @@ IOTA = {}
 ORION = {}
 CA = {}
 CYGNUS = {}
+STH = {}
 
 PEP = {
     "user": "pep",
