@@ -490,7 +490,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_GEOLOCATION", None)
                     )
                 # accumulate previous result
-                #result['registrationid'] = result_rd
+                result['registrationid'] = result_rd
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
