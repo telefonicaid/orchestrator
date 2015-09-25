@@ -528,7 +528,7 @@ class Projects(FlowBase):
             ENTITIES = []
             ATTRIBUTES = []
             NOTIFY_CONDITIONS = []
-
+            REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
                 DURATION="P1M"
                 ENTITY_TYPE="BlackButton"
@@ -580,6 +580,24 @@ class Projects(FlowBase):
             logger.debug("subscribeContext res=%s" % cb_res)
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
             logger.debug("registration id=%s" % subscriptionid)
+
+            #
+            # Short Term Historic subscription
+            #
+            REFERENCE_URL = "http://localhost"
+            if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+                )
 
 
         except Exception, ex:

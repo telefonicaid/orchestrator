@@ -48,3 +48,9 @@ CYGNUS = {
     "port": "5050",
     "protocol":"http"
 }
+
+STH = {
+    "host": "localhost",
+    "port": "8666",
+    "protocol":"http"
+}
