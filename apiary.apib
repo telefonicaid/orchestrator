@@ -7,11 +7,14 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 # Group Orchestrator
 
+All requests can be performed providing a 'x-auth-token' header instead of X_USER / X_PASSWORD payload fields
+
+
 ## Services query [/v1.0/service]
 ### Listado de Services [GET]
 
 + Request (application/json)
-        
+
             {
                 "DOMAIN_NAME":"admin_domain",
                 "SERVICE_ADMIN_USER":"cloud_admin",
@@ -67,7 +70,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
     + serviceId (required, `string`) ... Service Id
 
 + Request (application/json)
-        
+
             {
                 "SERVICE_NAME":"SmartValencia",
                 "SERVICE_ADMIN_USER":"adm1",
@@ -120,7 +123,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 ### edicion de subservicio [PUT]
 
 + Request (application/json)
-        
+
             {
                 "SERVICE_NAME":"SmartValencia",
                 "SERVICE_ADMIN_USER":"adm1",
@@ -133,7 +136,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 + Response 201 (application/json)
 
     + Body
-        
+
             {
                    "id" : 0000
             }
@@ -170,6 +173,72 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
                 'id': '1119023a10064570a2a3de0b5b286500',
                 'name': '/Electricidad'}
             }
+
+
+
+## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
+### registar dispositivo en IoTA [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "DEVICE_ID":"buton_XXX",
+                "ENTITY_TYPE":""BlackButton,
+                "PROTOCOL":"TT_BLACKBUTTON",
+                "ATT_CCID":"AAA",
+                "ATT_IMEI":"123425345",
+                "ATT_IMSI":"4535656777",
+                "ATT_INTERACTION_TYPE":"asynchronous",
+                "ATT_SERVICE_ID":"S-blackbutton",
+                "ATT_GEOLOCATION":"40.4188,-36919",
+            }
+
++ Response 201 (application/json)
+
+            {
+                 "registrationid" : "1234"
+            }
+
+## Register IoTA service in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
+### registar servicio  en IoTA [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "ENTITY_TYPE":"BlackButton",
+                "ENTITY_ID":"buttonXXX",
+                "PROTOCOL":"TT_BLACKBUTTON",
+                "ATT_NAME":"blackbutton_telepizza",
+                "ATT_PROVIDER":"telepizza",
+                "ATT_ENDPOINT":"http://localhost:6500/sync/request",
+                "ATT_METHOD":"POST",
+                "ATT_AUTHENTICATION":"context-adapter",
+                "ATT_INTERACTION_TYPE":"synchronous",
+                "ATT_MAPPING":"[]",
+                "ATT_TIMEOUT":"120",
+
+            }
+
++ Response 201 (application/json)
+
+            {
+                 "??" : ???
+            }
+
 
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
 ### List Roles[GET]
@@ -426,7 +495,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
           ]
         }
 
-### update an user[PUT]
+### update an user (by his admin) [PUT]
 
 + Request (application/json)
 
@@ -445,6 +514,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 + Request (application/json)
 
         {
+             "SERVICE_USER_PASSWORD": "old_password",
              "NEW_USER_PASSWORD": "new_password"
         }
 
@@ -465,13 +535,12 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
             "SUBSERVICE_ID":"234234234234",
             "SERVICE_ADMIN_USER":"adm1",
             "SERVICE_ADMIN_PASSWORD": "password",
-            "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"sadfasdfasdfas",
-            "TRUSTEE_USER_NAME":"user_nameX",
-            "TRUSTEE_USER_ID":"asdfasdf",
-            "TRUSTOR_USER_NAME":"user_nameX",
-            "TRUSTOR_USER_ID":"asdfasdf",
+            "ROLE_ID":"SDFG930J34534K5",
+            "TRUSTEE_USER_NAME":"iotagent",
+            "TRUSTEE_USER_ID":"345635ASDFASD6347",
+            "TRUSTOR_USER_NAME":"adm1",
+            "TRUSTOR_USER_ID":"45674ASDFASDF5674567",
         }
 
 + Response 201 (application/json)

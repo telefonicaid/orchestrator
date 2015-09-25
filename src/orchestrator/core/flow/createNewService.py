@@ -99,13 +99,22 @@ class CreateNewService(FlowBase):
             #
             # 2. Create user admin for new service (aka domain)
             #
-            ID_ADM1 = self.idm.createUserDomain(DOMAIN_ADMIN_TOKEN,
+            try:
+                ID_ADM1 = self.idm.createUserDomain(DOMAIN_ADMIN_TOKEN,
                                                 ID_DOM1,
                                                 NEW_SERVICE_NAME,
                                                 NEW_SERVICE_ADMIN_USER,
                                                 NEW_SERVICE_ADMIN_PASSWORD,
                                                 NEW_SERVICE_ADMIN_EMAIL,
                                                 None)
+            except Exception, ex:
+                logger.debug("ERROR creating user %s: %s" % (
+                    NEW_SERVICE_ADMIN_USER,
+                    ex))
+                logger.debug("removing uncomplete created domain %s" % ID_DOM1)
+                self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                return self.composeErrorCode(ex)
 
             logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER,
                                                 ID_ADM1))
@@ -115,7 +124,7 @@ class CreateNewService(FlowBase):
             #
             ADMIN_ROLE_ID = self.idm.getRoleId(DOMAIN_ADMIN_TOKEN,
                                                ROLE_NAME="admin")
-            logger.debug("ID of role  %s: %s" % (NEW_SERVICE_ADMIN_USER,
+            logger.debug("ID of role  %s: %s" % ("admin",
                                                  ID_ADM1))
 
             self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
@@ -154,6 +163,8 @@ class CreateNewService(FlowBase):
             #
             # 5. Provision default platform roles AccessControl policies
             #
+
+            # SubServiceAdmin Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-orion-admin.xml')
@@ -167,6 +178,10 @@ class CreateNewService(FlowBase):
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-sth-admin.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-keypass-admin.xml')
+            # SubServiceCustomer Role
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-orion-customer.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
@@ -179,6 +194,10 @@ class CreateNewService(FlowBase):
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-sth-customer.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-keypass-customer.xml')
+            # Admin Role
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-orion-admin2.xml')
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
@@ -190,6 +209,9 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-sth-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-keypass-admin2.xml')
 
         except Exception, ex:
             logger.error(ex)

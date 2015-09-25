@@ -25,7 +25,6 @@
 #
 import sys
 import pprint
-from jsonschema import validate
 import logging.config
 import os
 
@@ -33,8 +32,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
-from orchestrator.core.flow.createNewSubService import CreateNewSubService
-from orchestrator.api import schemas
+from orchestrator.core.flow.Context import Context
 
 try: logging.config.dictConfig(LOGGING)
 except AttributeError: logging.basicConfig(level=logging.WARNING)
@@ -42,33 +40,41 @@ except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 def main():
 
-    print "This script creates a new sub service in IoT keystone"
+    print "This script creates a new context entity in IoT Context Broker"
+    print "and subscribe to it"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 8
+    NUM_ARGS_EXPECTED = 14
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
         print "Args: "
-        print "  <KEYSTONE_PROTOCOL>             HTTP or HTTPS"
+        print "  <KEYSTONE_PROTOCOL>             Keystone PROTOCOL: HTTP or HTTPS"
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SERVICE_ADMIN_USER>            Service admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <NEW_SUBSERVICE_NAME>           New subservice name"
-        print "  <NEW_SUBSERVICE_DESCRIPTION>    New subservice description"
+        print "  <SERVICE_USER_NAME>             Service user username"
+        print "  <SERVICE_USER_PASSWORD>         Service user password"
+        print "  <CB_PROTOCOL>                   ContextBroker (or PEPProxy) PROTOCOL: HTTP or HTTPS"
+        print "  <CB_HOST>                       ContextBroker (or PEPProxy) HOSTNAME or IP"
+        print "  <CB_PORT>                       ContextBroker (or PEPProxy) PORT"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
         print "                                 localhost      \\"
         print "                                 5000           \\"
         print "                                 smartcity      \\"
+        print "                                 Basuras        \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 Electricidad   \\"
-        print "                                 electricidad   \\"
+        print "                                 http           \\"
+        print "                                 localhost      \\"
+        print "                                 1026           \\"
+        print "                                 entity_test    \\"
+        print "                                 entity_test_id \\"
+        print "                                 []             \\"
+        print "                                 test_url       \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -78,35 +84,46 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
-    SERVICE_ADMIN_USER = sys.argv[5]
-    SERVICE_ADMIN_PASSWORD = sys.argv[6]
-    NEW_SUBSERVICE_NAME = sys.argv[7]
-    NEW_SUBSERVICE_DESCRIPTION = sys.argv[8]
+    SUBSERVICE_NAME = sys.argv[5]
+    SERVICE_USER_NAME = sys.argv[6]
+    SERVICE_USER_PASSWORD = sys.argv[7]
+    ORION_PROTOCOL = sys.argv[8]
+    ORION_HOST = sys.argv[9]
+    ORION_PORT = sys.argv[10]
+    ENTITY_TYPE = sys.argv[11]
+    ENTITY_ID = sys.argv[12]
+    ATTRIBUTES = sys.argv[13]
+    REFERENCE_URL = sys.argv[14]
 
-    validate(
-        {
-            "SERVICE_NAME": SERVICE_NAME,
-            "SERVICE_ADMIN_USER": SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": NEW_SUBSERVICE_NAME,
-            "NEW_SUBSERVICE_DESCRIPTION": NEW_SUBSERVICE_DESCRIPTION,
-        },
-        schemas.json["SubServiceCreate"])
 
-    flow = CreateNewSubService(KEYSTONE_PROTOCOL,
-                               KEYSTONE_HOST,
-                               KEYSTONE_PORT)
+    flow = Context(KEYSTONE_PROTOCOL,
+                   KEYSTONE_HOST,
+                   KEYSTONE_PORT,
+                   None,
+                   None,
+                   None,
+                   None,
+                   None,
+                   None,
+                   ORION_PROTOCOL,
+                   ORION_HOST,
+                   ORION_PORT)
 
-    res = flow.createNewSubService(
+    res = flow.createEntitySubscribe(
         SERVICE_NAME,
         None,
-        SERVICE_ADMIN_USER,
-        SERVICE_ADMIN_PASSWORD,
+        SUBSERVICE_NAME,
         None,
-        NEW_SUBSERVICE_NAME,
-        NEW_SUBSERVICE_DESCRIPTION)
+        SERVICE_USER_NAME,
+        SERVICE_USER_PASSWORD,
+        None,
+        ENTITY_TYPE,
+        ENTITY_ID,
+        ATTRIBUTES,
+        REFERENCE_URL)
 
     pprint.pprint(res)
+
     if 'error' in res:
         sys.exit(res['code'])
 

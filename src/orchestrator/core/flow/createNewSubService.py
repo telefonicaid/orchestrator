@@ -38,7 +38,8 @@ class CreateNewSubService(FlowBase):
                             SERVICE_ADMIN_PASSWORD,
                             SERVICE_ADMIN_TOKEN,
                             NEW_SUBSERVICE_NAME,
-                            NEW_SUBSERVICE_DESCRIPTION):
+                            NEW_SUBSERVICE_DESCRIPTION
+                            ):
 
         '''Creates a new SubService (aka project keystone).
 
@@ -94,6 +95,7 @@ class CreateNewSubService(FlowBase):
                                              NEW_SUBSERVICE_NAME,
                                              NEW_SUBSERVICE_DESCRIPTION)
             logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
+
 
         except Exception, ex:
             logger.error(ex)
