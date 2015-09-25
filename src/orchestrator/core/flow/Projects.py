@@ -416,7 +416,6 @@ class Projects(FlowBase):
             #
             # 1. Register Entity Service in CB
             #
-
             IS_PATTERN="false"
             ACTION="APPEND"
             ATTRIBUTES=[
@@ -483,32 +482,93 @@ class Projects(FlowBase):
             logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
 
-            #
-            # 2. Call ContextBroker for subscribe Context Adapter
-            #
+            # #
+            # # 2. Call ContextBroker for subscribe Context Adapter
+            # #
+            # DURATION="P1M"
+            # REFERENCE_URL="http://localhost"
+            # ENTITIES=[]
+            # ATTRIBUTES = []
+            # NOTIFY_CONDITIONS=[]
 
+            # if PROTOCOL == "TT_BLACKBUTTON":
+            #     DURATION="PT5M"
+            #     REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+            #     ENTITIES = [
+            #         {
+            #             "type": ENTITY_TYPE,
+            #             "isPattern": "true",
+            #             "id": ".*"
+            #         }
+            #     ]
+            #     ATTRIBUTES=[
+            #         "op_action",
+            #         "op_extra",
+            #         "op_status",
+            #         "interaction_type",
+            #         "service_id"
+            #     ]
+            #     NOTIFY_CONDITIONS = [
+            #         {
+            #             "type": "ONCHANGE",
+            #             "condValues": [
+            #                 "op_status"
+            #             ]
+            #         }
+            #     ]
+
+            # cb_res = self.cb.subscribeContext(
+            #     SERVICE_USER_TOKEN,
+            #     DOMAIN_NAME,
+            #     PROJECT_NAME,
+            #     REFERENCE_URL,
+            #     DURATION,
+            #     ENTITIES,
+            #     ATTRIBUTES,
+            #     NOTIFY_CONDITIONS
+            # )
+            # logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # logger.debug("subscription id=%s" % subscriptionid)
+
+
+
+            #
+            # 2/3 Subscribe Cygnus
+            #
             DURATION="P1M"
-            REFERENCE_URL="http://localhost"
-            ENTITIES=[]
+            ENTITIES = []
             ATTRIBUTES = []
-            NOTIFY_CONDITIONS=[]
-
+            NOTIFY_CONDITIONS = []
+            REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                DURATION="PT5M"
-                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+                DURATION="P1M"
+                ENTITY_TYPE="BlackButton"
+                #"http://<ip_ca>:<port_ca>/"
+                REFERENCE_URL = self.cygnus_endpoint + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*.*"
+                        "id": "*"
                     }
                 ]
                 ATTRIBUTES=[
-                    "op_action",
-                    "op_extra",
-                    "op_status",
-                    "interaction_type",
-                    "service_id"
+                        "internal_id",
+                        "last_operation",
+                        "op_status",
+                        "op_result",
+                        "op_action",
+                        "op_extra",
+                        "sleepcondition",
+                        "sleeptime",
+                        "ccid",
+                        "imei",
+                        "imsi",
+                        "interaction_type",
+                        "service_id",
+                        "geolocation"
+
                 ]
                 NOTIFY_CONDITIONS = [
                     {
@@ -532,6 +592,24 @@ class Projects(FlowBase):
             logger.debug("subscribeContext res=%s" % cb_res)
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
             logger.debug("registration id=%s" % subscriptionid)
+
+            #
+            # Short Term Historic subscription
+            #
+            REFERENCE_URL = "http://localhost"
+            if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+                )
 
 
         except Exception, ex:
@@ -752,13 +830,75 @@ class Projects(FlowBase):
                                         )
             logger.debug("registerDevice res=%s" % iota_res)
 
+
+            #
+            # 2. Call ContextBroker for register Context Adapter
+            #
+
+            ATTRIBUTES = []
+            APP="http://localhost"
+            DURATION="P1M"
+            ENTITIES=[]
+
+            if PROTOCOL == "TT_BLACKBUTTON":
+                APP=self.ca_endpoint
+                IS_PATTERN="false"
+                DURATION="P1M"
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": IS_PATTERN,
+                        "id": DEVICE_ID
+                    }
+                ]
+                ATTRIBUTES=[
+                    {
+                        "name": "aux_op_action",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_op_extra",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_op_status",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_interaction_type",
+                        "type": "string",
+                        "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_service_id",
+                        "type": "string",
+                        "isDomain": "false"
+                    }
+                ]
+
+
+            cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
+                                             DOMAIN_NAME,
+                                             PROJECT_NAME,
+                                             ENTITIES,
+                                             ATTRIBUTES,
+                                             APP,
+                                             DURATION
+                                             )
+            logger.debug("registerContext res=%s" % cb_res)
+            registrationid = cb_res['registrationId']
+            logger.debug("registration id=%s" % registrationid)
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-
+           "registrationid": registrationid
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-
-        return DEVICE_ID
+        return registrationid
+        #return DEVICE_ID
