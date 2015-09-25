@@ -19,6 +19,9 @@ BuildArch: noarch
 
 %define _target_os Linux
 %define python_lib /var/env-orchestrator/lib/python2.6/site-packages
+%if 0%{?with_python27}
+%define python_lib /var/env-orchestrator/lib/python2.7/site-packages
+%endif # if with_python27
 
 %description
 IoT Platform Orchestrator
@@ -52,11 +55,14 @@ find $RPM_BUILD_ROOT/%{python_lib}/iotp-orchestrator -name "*.pyc" -delete
 
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 cp -a %{_root}/bin/orchestrator-daemon.sh $RPM_BUILD_ROOT/etc/init.d/orchestrator
+mkdir -p $RPM_BUILD_ROOT/etc/default
+cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-daemon
 
 %files
 "/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator"
 %defattr(755,%{_project_user},%{_project_user},755)
 %config /etc/init.d/%{_service_name}
+%config /etc/default/%{_service_name}-daemon
 %{_install_dir}
 
 # -------------------------------------------------------------------------------------------- #
@@ -96,6 +102,10 @@ echo "[INFO] Configuring application"
     echo "[INFO] Link to /opt"
     ln -s %{_install_dir} %{_orchestrator_link_dir}
     ln -s %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
+
+    echo "[INFO] Fix version"
+    sed -i -e 's/\${project.version}/%{_version}/g' %{_install_dir}/orchestrator/core/banner.txt
+
 echo "Done"
 
 

@@ -24,3 +24,33 @@ KEYPASS = {
     "port": "7070",
     "protocol":"http"
 }
+
+IOTA = {
+    "host": "localhost",
+    "port": "4041",
+    "protocol":"http"
+}
+
+ORION = {
+    "host": "localhost",
+    "port": "1026",
+    "protocol":"http"
+}
+
+CA = {
+    "host": "localhost",
+    "port": "9999",
+    "protocol":"http"
+}
+
+CYGNUS = {
+    "host": "localhost",
+    "port": "5050",
+    "protocol":"http"
+}
+
+STH = {
+    "host": "localhost",
+    "port": "8666",
+    "protocol":"http"
+}

@@ -13,6 +13,7 @@ Due to its stateless behavior, iotp-orchestrator does not require any backup pro
  * Connectivity to http://pdihub.hi.inet
  * [Git](http://git-scm.com/)
  * Python 2.6 (or upper) and pip
+ * C and C++ compilation platform: gcc, g++, make and python headers
  * UNIX platforms but not mandatory
  * WSGI Web server (Apache2/Nginx) but not mandatory
 

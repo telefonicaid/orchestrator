@@ -242,7 +242,7 @@ json = {
                     "userName": {
                         "type": "string",
                         "pattern": "^([A-Za-z0-9_]+)$",
-                        },                    
+                        },
                     "password": {
                         "type": "string",
                         "minLength": 6,
@@ -542,5 +542,154 @@ json = {
         # ],
     },
 
-}
+    #############
+    "IoTADevice": {
+    #############
+        "name": "IoTADevice",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "DEVICE_ID": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ENTITY_TYPE": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "PROTOCOL": {
+                "type": "string",
+            },
+            "ATT_CCID": {
+                "type": "string",
+            },
+            "ATT_IMEI": {
+                "type": "string",
+            },
+            "ATT_IMSI": {
+                "type": "string",
+            },
+            "ATT_INTERACTION_TYPE": {
+                "type": "string",
+                "enum": ["synchronous", "asynchronous"]
+            },
+            "ATT_SERVICE_ID": {
+                "type": "string",
+            },
+            "ATT_GEOLOCATION": {
+                "type": "string",
+            },
+        },
+        "required": [
+            "DEVICE_ID",
+            "ENTITY_TYPE",
+            "PROTOCOL"
+        ],
+    },
 
+
+    ##############
+    "IoTAService": {
+    ##############
+        "name": "IoTAService",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "ENTITY_TYPE": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ENTITY_ID": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ATT_NAME": {
+                "type": "string",
+            },
+            "ATT_PROVIDER": {
+                "type": "string",
+            },
+            "ATT_ENDPOINT": {
+                "type": "string",
+            },
+            "ATT_METHOD": {
+                "type": "string",
+            },
+            "ATT_AUTHENTICATION": {
+                "type": "string",
+                "enum": ["context-adapter", "third-party"]
+            },
+            "ATT_INTERACTION_TYPE": {
+                "type": "string",
+                "enum": ["synchronous", "asynchronous"]
+            },
+            "ATT_MAPPING": {
+                "type": "string",
+            },
+            "ATT_TIMEOUT": {
+                "type": "integer",
+            },
+
+        },
+        "required": [
+            "ENTITY_TYPE",
+            "ENTITY_ID"
+        ],
+    },
+
+
+}

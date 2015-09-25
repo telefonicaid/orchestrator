@@ -48,7 +48,7 @@ python ./createNewServiceUser.py  http              \
 
 python ./createNewServiceRole.py  http              \
                                      localhost      \
-                                     5001           \
+                                     5000           \
                                      tecnoport      \
                                      tecnoport_admin\
                                      password       \
@@ -59,7 +59,7 @@ python ./createNewServiceRole.py  http              \
 
 python  ./assignRoleServiceUser.py http              \
                                       localhost      \
-                                      5001           \
+                                      5000           \
                                       tecnoport      \
                                       tecnoport_admin\
                                       password       \
