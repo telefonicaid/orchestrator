@@ -665,7 +665,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
-            "PROTOCOL": "%s" % PROTOCOL,            
+            "PROTOCOL": "%s" % PROTOCOL,
             "ATT_CCID": "%s" % ATT_CCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
@@ -954,23 +954,38 @@ class Projects(FlowBase):
 
             num_devices = len(devices[header[i]])
             for n in range(num_devices):
-                self.register_device(DOMAIN_NAME,
-                                     DOMAIN_ID,
-                                     PROJECT_NAME,
-                                     PROJECT_ID,
-                                     SERVICE_USER_NAME,
-                                     SERVICE_USER_PASSWORD,
-                                     SERVICE_USER_TOKEN,
-                                     devices['DEVICE_ID'][n],
-                                     devices['ENTITY_TYPE'][n],
-                                     devices['PROTOCOL'][n],
-                                     devices['ATT_CCID'][n],
-                                     devices['ATT_IMEI'][n],
-                                     devices['ATT_IMSI'][n],
-                                     devices['ATT_INTERACTION_TYPE'][n],
-                                     devices['ATT_SERVICE_ID'][n],
-                                     devices['ATT_GEOLOCATION'][n]
-                                     )
+
+                data_log = {
+                    "DEVICE_ID" : devices['DEVICE_ID'][n],
+                    "ENTITY_TYPE" : devices['ENTITY_TYPE'][n],
+                    "PROTOCOL": devices['PROTOCOL'][n],
+                    "ATT_CCID" : devices['ATT_CCID'][n],
+                    "ATT_IMEI" : devices['ATT_IMEI'][n],
+                    "ATT_IMSI" : devices['ATT_IMSI'][n],
+                    "ATT_INTERACTION_TYPE" : devices['ATT_INTERACTION_TYPE'][n],
+                    "ATT_SERVICE_ID" : devices['ATT_SERVICE_ID'][n],
+                    "ATT_GEOLOCATION" : devices['ATT_GEOLOCATION'][n]
+                }
+                logger.debug("data%s" % data_log)
+
+                res = self.register_device(
+                    DOMAIN_NAME,
+                    DOMAIN_ID,
+                    PROJECT_NAME,
+                    PROJECT_ID,
+                    SERVICE_USER_NAME,
+                    SERVICE_USER_PASSWORD,
+                    SERVICE_USER_TOKEN,
+                    devices['DEVICE_ID'][n],
+                    devices['ENTITY_TYPE'][n],
+                    devices['PROTOCOL'][n],
+                    devices['ATT_CCID'][n],
+                    devices['ATT_IMEI'][n],
+                    devices['ATT_IMSI'][n],
+                    devices['ATT_INTERACTION_TYPE'][n],
+                    devices['ATT_SERVICE_ID'][n],
+                    devices['ATT_GEOLOCATION'][n]
+                )
 
         except Exception, ex:
             logger.error(ex)
