@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.common.util import CSVOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -675,8 +676,8 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
-            "PROTOCOL": "%s" % PROTOCOL,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "PROTOCOL": "%s" % PROTOCOL,
             "ATT_CCID": "%s" % ATT_CCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
@@ -842,4 +843,120 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return DEVICE_ID
+        return DEVICE_ID        
+
+
+    def register_devices(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        CSV_DEVICES
+                        ):
+
+        '''Register Device in IOTA
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_NAME: Service name
+        - DOMAIN_ID: Service id
+        - PROJECT_NAME: SubService name
+        - PROJECT_ID: SubService name
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - CSV_DEVICES: CSV content
+
+        '''
+        data_log = {
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "CSV_DEVICES": "%s" % CSV_DEVICES
+        }
+        logger.debug("register_devices with: %s" % json.dumps(data_log, indent=3))
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+
+
+            # Read CSV
+            i, header, devices = CSVOperations.read_devices(CSV_DEVICES)
+
+            num_devices = len(devices[header[i]])
+            for n in range(num_devices):
+
+                data_log = {
+                    "DEVICE_ID" : devices['DEVICE_ID'][n],
+                    "ENTITY_TYPE" : devices['ENTITY_TYPE'][n],
+                    "PROTOCOL": devices['PROTOCOL'][n],
+                    "ATT_CCID" : devices['ATT_CCID'][n],
+                    "ATT_IMEI" : devices['ATT_IMEI'][n],
+                    "ATT_IMSI" : devices['ATT_IMSI'][n],
+                    "ATT_INTERACTION_TYPE" : devices['ATT_INTERACTION_TYPE'][n],
+                    "ATT_SERVICE_ID" : devices['ATT_SERVICE_ID'][n],
+                    "ATT_GEOLOCATION" : devices['ATT_GEOLOCATION'][n]
+                }
+                logger.debug("data%s" % data_log)
+
+                res = self.register_device(
+                    DOMAIN_NAME,
+                    DOMAIN_ID,
+                    PROJECT_NAME,
+                    PROJECT_ID,
+                    SERVICE_USER_NAME,
+                    SERVICE_USER_PASSWORD,
+                    SERVICE_USER_TOKEN,
+                    devices['DEVICE_ID'][n],
+                    devices['ENTITY_TYPE'][n],
+                    devices['PROTOCOL'][n],
+                    devices['ATT_CCID'][n],
+                    devices['ATT_IMEI'][n],
+                    devices['ATT_IMSI'][n],
+                    devices['ATT_INTERACTION_TYPE'][n],
+                    devices['ATT_SERVICE_ID'][n],
+                    devices['ATT_GEOLOCATION'][n]
+                )
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            #"registrationid": registrationid
+        }
+        #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return [DEVICE_ID]
+

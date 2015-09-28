@@ -499,7 +499,7 @@ class IdMKeystoneOperations(IdMOperations):
                 "enabled": True,
                 "domain_id": "%s" % ID_DOM1,
                 "name": "%s" % NEW_USER_NAME,
-                "password": "%s" % NEW_USER_PASSWORD,
+                "password": "%s" % NEW_USER_PASSWORD
             }
         }
         if NEW_USER_EMAIL:
