@@ -374,10 +374,11 @@ class Projects(FlowBase):
 
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(DOMAIN_NAME,
-                                                                        PROJECT_NAME,
-                                                                        SERVICE_USER_NAME,
-                                                                        SERVICE_USER_PASSWORD)
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
                     PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
@@ -385,12 +386,23 @@ class Projects(FlowBase):
                                                         ROJECT_NAME)
 
                 else:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(DOMAIN_ID,
-                                                                         PROJECT_ID,
-                                                                         SERVICE_USER_NAME,
-                                                                         SERVICE_USER_PASSWORD)
-            # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
-            # get DOMAIN_NAME from SERVICE_USER_TOKEN
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -471,54 +483,54 @@ class Projects(FlowBase):
             logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
 
-            # #
-            # # 2. Call ContextBroker for subscribe Context Adapter
-            # #
-            # DURATION="P1M"
-            # REFERENCE_URL="http://localhost"
-            # ENTITIES=[]
-            # ATTRIBUTES = []
-            # NOTIFY_CONDITIONS=[]
+            #
+            # 2. Call ContextBroker for subscribe Context Adapter
+            #
+            DURATION="P1M"
+            REFERENCE_URL="http://localhost"
+            ENTITIES=[]
+            ATTRIBUTES = []
+            NOTIFY_CONDITIONS=[]
 
-            # if PROTOCOL == "TT_BLACKBUTTON":
-            #     DURATION="PT5M"
-            #     REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
-            #     ENTITIES = [
-            #         {
-            #             "type": ENTITY_TYPE,
-            #             "isPattern": "true",
-            #             "id": ".*"
-            #         }
-            #     ]
-            #     ATTRIBUTES=[
-            #         "op_action",
-            #         "op_extra",
-            #         "op_status",
-            #         "interaction_type",
-            #         "service_id"
-            #     ]
-            #     NOTIFY_CONDITIONS = [
-            #         {
-            #             "type": "ONCHANGE",
-            #             "condValues": [
-            #                 "op_status"
-            #             ]
-            #         }
-            #     ]
+            if PROTOCOL == "TT_BLACKBUTTON":
+                DURATION="PT5M"
+                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": "true",
+                        "id": ".*"
+                    }
+                ]
+                ATTRIBUTES=[
+                    "op_action",
+                    "op_extra",
+                    "op_status",
+                    "interaction_type",
+                    "service_id"
+                ]
+                NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": [
+                            "op_status"
+                        ]
+                    }
+                ]
 
-            # cb_res = self.cb.subscribeContext(
-            #     SERVICE_USER_TOKEN,
-            #     DOMAIN_NAME,
-            #     PROJECT_NAME,
-            #     REFERENCE_URL,
-            #     DURATION,
-            #     ENTITIES,
-            #     ATTRIBUTES,
-            #     NOTIFY_CONDITIONS
-            # )
-            # logger.debug("subscribeContext res=%s" % cb_res)
-            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            # logger.debug("subscription id=%s" % subscriptionid)
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
 
 
 
@@ -673,7 +685,8 @@ class Projects(FlowBase):
             "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
             "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
-        logger.debug("register_device with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("register_device with: %s" % json.dumps(data_log,
+                                                             indent=3))
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -697,7 +710,16 @@ class Projects(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
-            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -810,77 +832,18 @@ class Projects(FlowBase):
             logger.debug("registerDevice res=%s" % iota_res)
 
 
-            #
-            # 2. Call ContextBroker for register Context Adapter
-            #
 
-            ATTRIBUTES = []
-            APP="http://localhost"
-            DURATION="P1M"
-            ENTITIES=[]
-
-            if PROTOCOL == "TT_BLACKBUTTON":
-                APP=self.ca_endpoint
-                IS_PATTERN="false"
-                DURATION="P1M"
-                ENTITIES = [
-                    {
-                        "type": ENTITY_TYPE,
-                        "isPattern": IS_PATTERN,
-                        "id": DEVICE_ID
-                    }
-                ]
-                ATTRIBUTES=[
-                    {
-                        "name": "aux_op_action",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_op_extra",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_op_status",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_interaction_type",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_service_id",
-                        "type": "string",
-                        "isDomain": "false"
-                    }
-                ]
-
-
-            cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
-                                             DOMAIN_NAME,
-                                             PROJECT_NAME,
-                                             ENTITIES,
-                                             ATTRIBUTES,
-                                             APP,
-                                             DURATION
-                                             )
-            logger.debug("registerContext res=%s" % cb_res)
-            registrationid = cb_res['registrationId']
-            logger.debug("registration id=%s" % registrationid)
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-           "registrationid": registrationid
+
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return  registrationid
+        return DEVICE_ID        
 
 
     def register_devices(self,
@@ -995,6 +958,5 @@ class Projects(FlowBase):
             #"registrationid": registrationid
         }
         #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return [] # registrationid DEVICE_ID
-
+        return [DEVICE_ID]
 
