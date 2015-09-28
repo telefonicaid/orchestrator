@@ -185,7 +185,10 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_PORT,
                            self.KEYPASS_PROTOCOL,
                            self.KEYPASS_HOST,
-                           self.KEYPASS_PORT)
+                           self.KEYPASS_PORT,
+                           self.IOTA_PROTOCOL,
+                           self.IOTA_HOST,
+                           self.IOTA_PORT)
             result = flow.delete_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
