@@ -203,3 +203,48 @@ class IoTACppOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+
+    def unregisterDevice(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME,
+                         DEVICE_ID):
+
+        logger.debug("DELETE to iot/devices with: %s" % DEVICE_ID)
+
+        res = self.IoTACppRestOperations.rest_request(
+            url='/iot/devices/%s' % DEVICE_ID,
+            method='DELETE',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 204, (res.code, res.msg)
+
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
+    def deleteAllDevices(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME):
+
+        # WIP
+        # 1. Get devices
+        devices = self.getDevices(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME)
+
+        for device in devices:
+            # 2. Unregister each device
+            self.unregisterDevice(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME,
+                                  device['id'])
