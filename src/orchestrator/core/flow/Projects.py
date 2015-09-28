@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.common.util import CSVOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -311,6 +312,7 @@ class Projects(FlowBase):
                          SERVICE_USER_TOKEN,
                          ENTITY_TYPE,
                          ENTITY_ID,
+                         PROTOCOL,
                          ATT_NAME,
                          ATT_PROVIDER,
                          ATT_ENDPOINT,
@@ -335,6 +337,7 @@ class Projects(FlowBase):
         - SERVICE_USER_TOKEN: Service admin token
         - ENTITY_TYPE:   (optional, just for Device configuration)
         - ENTITY_ID:
+        - PROTOCOL:
         - ATT_NAME
         - ATT_PROVIDER
         - ATT_ENDPOINT
@@ -354,6 +357,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ENTITY_ID": "%s" % ENTITY_ID,
+            "PROTOCOL": "%s" % PROTOCOL,
             "ATT_NAME": "%s" % ATT_NAME,
             "ATT_PROVIDER": "%s" % ATT_PROVIDER,
             "ATT_ENDPOINT": "%s" % ATT_ENDPOINT,
@@ -398,7 +402,11 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            #
+            # 1. Register Entity Service in CB
+            #
             IS_PATTERN="false"
+            ACTION="APPEND"
             ATTRIBUTES=[
                 {
                     "name": "name",
@@ -448,6 +456,7 @@ class Projects(FlowBase):
                                            PROJECT_NAME,
                                            ENTITY_TYPE,
                                            ENTITY_ID,
+                                           ACTION,
                                            IS_PATTERN,
                                            ATTRIBUTES
                                         )
@@ -461,16 +470,148 @@ class Projects(FlowBase):
 
             logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
+
+            # #
+            # # 2. Call ContextBroker for subscribe Context Adapter
+            # #
+            # DURATION="P1M"
+            # REFERENCE_URL="http://localhost"
+            # ENTITIES=[]
+            # ATTRIBUTES = []
+            # NOTIFY_CONDITIONS=[]
+
+            # if PROTOCOL == "TT_BLACKBUTTON":
+            #     DURATION="PT5M"
+            #     REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+            #     ENTITIES = [
+            #         {
+            #             "type": ENTITY_TYPE,
+            #             "isPattern": "true",
+            #             "id": ".*"
+            #         }
+            #     ]
+            #     ATTRIBUTES=[
+            #         "op_action",
+            #         "op_extra",
+            #         "op_status",
+            #         "interaction_type",
+            #         "service_id"
+            #     ]
+            #     NOTIFY_CONDITIONS = [
+            #         {
+            #             "type": "ONCHANGE",
+            #             "condValues": [
+            #                 "op_status"
+            #             ]
+            #         }
+            #     ]
+
+            # cb_res = self.cb.subscribeContext(
+            #     SERVICE_USER_TOKEN,
+            #     DOMAIN_NAME,
+            #     PROJECT_NAME,
+            #     REFERENCE_URL,
+            #     DURATION,
+            #     ENTITIES,
+            #     ATTRIBUTES,
+            #     NOTIFY_CONDITIONS
+            # )
+            # logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # logger.debug("subscription id=%s" % subscriptionid)
+
+
+
+            #
+            # 2/3 Subscribe Cygnus
+            #
+            DURATION="P1M"
+            ENTITIES = []
+            ATTRIBUTES = []
+            NOTIFY_CONDITIONS = []
+            REFERENCE_URL = "http://localhost"
+            if PROTOCOL == "TT_BLACKBUTTON":
+                DURATION="P1M"
+                ENTITY_TYPE="BlackButton"
+                #"http://<ip_ca>:<port_ca>/"
+                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": "true",
+                        "id": "*"
+                    }
+                ]
+                ATTRIBUTES=[
+                        "internal_id",
+                        "last_operation",
+                        "op_status",
+                        "op_result",
+                        "op_action",
+                        "op_extra",
+                        "sleepcondition",
+                        "sleeptime",
+                        "ccid",
+                        "imei",
+                        "imsi",
+                        "interaction_type",
+                        "service_id",
+                        "geolocation"
+
+                ]
+                NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": [
+                            "op_status"
+                        ]
+                    }
+                ]
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+                )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("registration id=%s" % subscriptionid)
+
+            #
+            # Short Term Historic subscription
+            #
+            REFERENCE_URL = "http://localhost"
+            if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+                )
+
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-            "ENTITY_ID": ENTITY_ID
+            "ENTITY_ID": ENTITY_ID,
+            "subscriptionid": subscriptionid
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return ENTITY_ID
+        return subscriptionid
 
 
     def register_device(self,
@@ -523,8 +664,8 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
-            "PROTOCOL": "%s" % PROTOCOL,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "PROTOCOL": "%s" % PROTOCOL,            
             "ATT_CCID": "%s" % ATT_CCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
@@ -652,7 +793,6 @@ class Projects(FlowBase):
                             "type": "string"
                         }
                     ]
-
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
@@ -736,9 +876,10 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            "registrationid": registrationid
+           "registrationid": registrationid
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
         return  registrationid
 
 
@@ -750,16 +891,7 @@ class Projects(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
-                        CSV_DEVICES,
-                        # DEVICE_ID,
-                        # ENTITY_TYPE,
-                        # PROTOCOL,
-                        # ATT_CCID,
-                        # ATT_IMEI,
-                        # ATT_IMSI,
-                        # ATT_INTERACTION_TYPE,
-                        # ATT_SERVICE_ID,
-                        # ATT_GEOLOCATION
+                        CSV_DEVICES
                         ):
 
         '''Register Device in IOTA
@@ -818,145 +950,27 @@ class Projects(FlowBase):
 
 
             # Read CSV
+            i, header, devices = CSVOperations.read_devices(CSV_DEVICES)
 
-            # ######
-            import csv
-            import StringIO            
-            devices = {}
-            import ipdb
-            ipdb.set_trace()
-            #csvreader = csv.reader(['1997,Ford,E350,"Super, luxurious truck"'],
-            csvreader = csv.reader(StringIO.StringIO(CSV_DEVICES),                                   
-                                    delimiter=',',
-                                    #quotechar='"',
-                                    skipinitialspace=True)
-
-            header =  csvreader.next()
-            for name in header:
-                #device[name] = []
-                None
-            # for row in csvreader:
-            #     device  = {}
-            #     device['DEVICE_ID'] = row
-            #     devices.append(device)
-
-            for row in csvreader:
-                for i, value in enumerate(row):
-                    devices[header[i]].append(value)
-            import ipdb
-            ipdb.set_trace()
-            None
-            # ######
-            
-
-            # DEVICES
-
-            
-            # #
-            # # 1. Call IOTA for register button
-            # #
-            # TIMEZONE = "Europe/Madrid" # TODO: get from django conf
-            # ENTITY_NAME = DEVICE_ID
-            # LAZY=[]
-            # ATTRIBUTES=[]
-            # STATIC_ATTRIBUTES = []
-            # INTERNAL_ATTRIBUTES = []
-            # COMMANDS = []
-
-            # if PROTOCOL == "TT_BLACKBUTTON":
-            #     if ATT_INTERACTION_TYPE == None:
-            #         ATT_INTERACTION_TYPE = "synchronous"
-            #     ATTRIBUTES = [
-            #         {
-            #             "name": "internal_id",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "last_operation",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "op_status",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "op_result",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "op_action",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "op_extra",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "sleepcondition",
-            #             "type": "string"
-            #         },
-            #         {
-            #             "name": "sleeptime",
-            #             "type": "string"
-            #         }
-            #         ]
-
-            #     STATIC_ATTRIBUTES=[
-            #         {
-            #             "name": "ccid",
-            #             "type": "string",
-            #             "value": ATT_CCID
-            #         },
-            #         {
-            #             "name": "imei",
-            #             "type": "string",
-            #             "value": ATT_IMEI
-            #         },
-            #         {
-            #             "name": "imsi",
-            #             "type": "string",
-            #             "value": ATT_IMSI
-            #         },
-            #         {
-            #             "name": "interaction_type",
-            #             "type": "string",
-            #             "value": ATT_INTERACTION_TYPE
-            #         },
-            #         {
-            #             "name": "service_id",
-            #             "type": "string",
-            #             "value": ATT_SERVICE_ID
-            #         },
-            #         {
-            #             "name": "geolocation",
-            #             "type": "string",
-            #             "value": ATT_GEOLOCATION
-            #         }
-            #         ]
-
-
-            #     if ATT_INTERACTION_TYPE == "synchronous":
-            #         LAZY = [
-            #             {
-            #                 "name": "lazy_op_result",
-            #                 "type": "string"
-            #             }
-            #         ]
-
-            # iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
-            #                                     DOMAIN_NAME,
-            #                                     PROJECT_NAME,
-            #                                     DEVICE_ID,
-            #                                     PROTOCOL,
-            #                                     ENTITY_NAME,
-            #                                     ENTITY_TYPE,
-            #                                     TIMEZONE,
-            #                                     ATTRIBUTES,
-            #                                     STATIC_ATTRIBUTES,
-            #                                     COMMANDS,
-            #                                     INTERNAL_ATTRIBUTES,
-            #                                     LAZY
-            #                             )
+            num_devices = len(devices[header[i]])
+            for n in range(num_devices):
+                self.register_device(DOMAIN_NAME,
+                                     DOMAIN_ID,
+                                     PROJECT_NAME,
+                                     PROJECT_ID,
+                                     SERVICE_USER_NAME,
+                                     SERVICE_USER_PASSWORD,
+                                     SERVICE_USER_TOKEN,
+                                     devices['DEVICE_ID'][n],
+                                     devices['ENTITY_TYPE'][n],
+                                     devices['PROTOCOL'][n],
+                                     devices['ATT_CCID'][n],
+                                     devices['ATT_IMEI'][n],
+                                     devices['ATT_IMSI'][n],
+                                     devices['ATT_INTERACTION_TYPE'][n],
+                                     devices['ATT_SERVICE_ID'][n],
+                                     devices['ATT_GEOLOCATION'][n]
+                                     )
 
         except Exception, ex:
             logger.error(ex)
@@ -966,5 +980,6 @@ class Projects(FlowBase):
             #"registrationid": registrationid
         }
         #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return #registrationid
+        return [] # registrationid DEVICE_ID
+
 
