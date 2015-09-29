@@ -352,7 +352,13 @@ class SubServiceList_RESTView(APIView, IoTConf):
             # request.DATA # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT)
+                            self.KEYSTONE_PORT,
+                            self.KEYPASS_PROTOCOL,
+                            self.KEYPASS_HOST,
+                            self.KEYPASS_PORT,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT)
             if service_id:
                     result = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
