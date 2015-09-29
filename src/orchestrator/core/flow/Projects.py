@@ -281,6 +281,22 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    ADMIN_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            # #
+            # # Delete all devices
+            # #
+            # self.iota.deleteAllDevices(
+            #     ADMIN_TOKEN,
+            #     DOMAIN_NAME,
+            #     PROJECT_NAME
+            # )
+
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
                                               PROJECT_ID)
@@ -289,6 +305,9 @@ class Projects(FlowBase):
                                    PROJECT_ID)
 
             logger.debug("PROJECT=%s" % PROJECT)
+
+
+
 
         except Exception, ex:
             logger.error(ex)
@@ -843,7 +862,7 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return DEVICE_ID        
+        return DEVICE_ID
 
 
     def register_devices(self,
@@ -914,7 +933,7 @@ class Projects(FlowBase):
 
             # Read CSV
             i, header, devices = CSVOperations.read_devices(CSV_DEVICES)
-
+            DEVICES_ID = []
             num_devices = len(devices[header[i]])
             for n in range(num_devices):
 
@@ -949,6 +968,7 @@ class Projects(FlowBase):
                     devices['ATT_SERVICE_ID'][n],
                     devices['ATT_GEOLOCATION'][n]
                 )
+                DEVICES_ID.append(res)
 
         except Exception, ex:
             logger.error(ex)
@@ -958,5 +978,5 @@ class Projects(FlowBase):
             #"registrationid": registrationid
         }
         #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return [DEVICE_ID]
+        return DEVICES_ID
 
