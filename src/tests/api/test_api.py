@@ -1751,6 +1751,14 @@ class Test_UserModify_RestView(object):
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
     def test_put_ok3(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok3)
@@ -1798,6 +1806,15 @@ class Test_UserModify_RestView(object):
         data_response = token_res.read()
         json_body_response = json.loads(data_response)
 
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
     def test_put_bad(self):
         token_res = self.TestRestOps.getToken(self.payload_data_bad)
         data_response = token_res.read()
@@ -1821,6 +1838,14 @@ class Test_UserModify_RestView(object):
             json_data=True,
             data=self.payload_data_bad)
         assert res.code == 400, (res.code, res.msg, res.raw_json)
+        # # Delete user
+        # res = self.TestRestOps.rest_request(
+        #     method="DELETE",
+        #     url="/v1.0/service/%s/user/%s" % (service_id,
+        #                                      user_id),
+        #     json_data=True,
+        #     data=self.payload_data_bad)
+        # assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_UserDelete_RestView(object):
@@ -1948,6 +1973,14 @@ class Test_UserChangePasswordByHimself_RestView(object):
             auth_token=token)
         assert res.code == 401, (res.code, res.msg)
 
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
     def test_post_bad(self):
         token_res = self.TestRestOps.getToken(self.payload_data_bad)
@@ -1979,6 +2012,14 @@ class Test_UserChangePasswordByHimself_RestView(object):
             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg)
 
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_bad)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_AssignRoleUserList_RestView(object):
@@ -2149,10 +2190,23 @@ class Test_AssignRoleUser_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/role_assignments" % (
                 service_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -2166,6 +2220,10 @@ class Test_AssignRoleUser_RestView(object):
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/role_assignments" % (
@@ -2181,7 +2239,14 @@ class Test_AssignRoleUser_RestView(object):
         auth_token_res = self.TestRestOps.getScopedToken(self.payload_data_ok2b)
         auth_token = auth_token_res.headers.get('X-Subject-Token')
 
-
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
     def test_post_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
         # Create a user to test it
