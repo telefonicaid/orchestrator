@@ -687,7 +687,8 @@ json = {
         },
         "required": [
             "ENTITY_TYPE",
-            "ENTITY_ID"
+            "ENTITY_ID",
+            "PROTOCOL",
         ],
     },
 
