@@ -464,7 +464,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
             "ATT_INTERACTION_TYPE": "synchronous",
-            "ATT_SERVICE_ID": "S-001",
+            "ATT_SERVICE_ID": "blackbutton",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -483,14 +483,14 @@ class Test_SubServiceIoTADevice_RestView(object):
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
             "ATT_INTERACTION_TYPE": "asynchronous",
-            "ATT_SERVICE_ID": "S-001",
+            "ATT_SERVICE_ID": "blackbutton",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
 
         self.suffix = str(uuid.uuid4())[:8]
         csv = """DEVICE_ID,ENTITY_TYPE,PROTOCOL,ATT_CCID,ATT_IMEI,ATT_IMSI,ATT_INTERACTION_TYPE,ATT_SERVICE_ID,ATT_GEOLOCATION
-                  button_dev_async_%s, BlackButton, TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, S-001, 0
-                  button_dev_sync_%s, BlackButton, TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, S-002, 0"""  % (self.suffix, self.suffix)
+                  button_dev_async_%s, BlackButton, TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, blackbutton, 0
+                  button_dev_sync_%s, BlackButton, TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, blackbutton, 0"""  % (self.suffix, self.suffix)
 
         self.payload_data4_ok = {
             "SERVICE_NAME": "blackbutton",
@@ -593,7 +593,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
             "ATT_INTERACTION_TYPE": "asynchronous",
-            "ATT_SERVICE_ID": "S-%s" % self.suffix,
+            "ATT_SERVICE_ID": "blackbutton",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
         self.payload_data2b_ok = {
