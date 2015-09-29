@@ -591,6 +591,14 @@ class Test_SubServiceIoTADevice_RestView(object):
             data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        # Delete SubSrvice
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data4_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
 class Test_SubServiceIoTAService_RestView(object):
 
     def __init__(self):
@@ -701,6 +709,14 @@ class Test_SubServiceIoTAService_RestView(object):
             data=self.payload_data2b_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        # Delete SubSrvice
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
 
     def test_post_ok2(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
@@ -712,6 +728,18 @@ class Test_SubServiceIoTAService_RestView(object):
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+
+        # Delete SubSrvice
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_DeleteSubService_RestView(object):
