@@ -16,7 +16,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "DOMAIN_NAME":"admin_domain",
+                "DOMAIN_NAME":"default_admin_domain",
                 "SERVICE_ADMIN_USER":"cloud_admin",
                 "SERVICE_ADMIN_PASSWORD": "password",
             }
@@ -30,14 +30,14 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                        "name": "SmartValencia",
-                        "description": "SmartValencia"
+                        "name": "defaultservice",
+                        "description": "defaultservice"
                     },
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
-                        "name": "SmartLogrono",
-                        "description": "SmartLogro�o"
+                        "name": "defaultservice2",
+                        "description": "defaultservice2"
                     }
                 ]
             }
@@ -49,12 +49,14 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "DOMAIN_NAME":"admin_domain",
                 "DOMAIN_ADMIN_USER":"cloud_admin",
                 "DOMAIN_ADMIN_PASSWORD": "password",
-                "NEW_SERVICE_NAME":"SmartValencia",
-                "NEW_SERVICE_DESCRIPTION":"SmartValencia desc",
+                "NEW_SERVICE_NAME":"defaultservice",
+                "NEW_SERVICE_DESCRIPTION":"defaultservice desc",
                 "NEW_SERVICE_ADMIN_USER":"adm1",
                 "NEW_SERVICE_ADMIN_PASSWORD":"password",
                 "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
             }
+
+       Required: ["NEW_SERVICE_NAME", "NEW_SERVICE_ADMIN_USER",  "NEW_SERVICE_ADMIN_PASSWORD"]
 
 + Response 201 (application/json)
 
@@ -72,7 +74,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
             }
@@ -83,8 +85,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             {
                 "enabled": true,
                 "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                "name": "SmartValencia",
-                "description": "SmartValencia"
+                "name": "defaultservice",
+                "description": "defaultservice"
             }
 
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
@@ -100,19 +102,19 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             {
               "projects": [
                 {
-                  "description": "SmartValencia Subservicio Electricidad",
+                  "description": "defaultservice Subservicio Electricidad",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aea",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02",
                   "name": "Electricidad"
                 },
                 {
-                  "description": "SmartValencia Subservicio Basuras",
+                  "description": "defaultservice Subservicio Basuras",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aeb",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc03",
                   "name": "Basuras"
                 },
                 {
-                  "description": "SmartValencia Subservicio Jardines",
+                  "description": "defaultservice Subservicio Jardines",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aec",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc04",
                   "name": "Jardines"
@@ -125,7 +127,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
                 "SUBSERVICE_NAME":"Electricidad",
@@ -148,12 +150,14 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
                 "NEW_SUBSERVICE_NAME":"Electricidad",
                 "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
             }
+
+       Required: ["NEW_SUBSERVICE_NAME" ]
 
 + Response 201 (application/json)
 
@@ -185,7 +189,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_USER_NAME":"adm1",
                 "SERVICE_USER_PASSWORD":"password",
                 "SUBSERVICE_NAME":"Electricidad",
@@ -199,6 +203,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "ATT_SERVICE_ID":"S-blackbutton",
                 "ATT_GEOLOCATION":"40.4188,-36919",
             }
+
+        Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
+
 
 + Response 201 (application/json)
 
@@ -215,7 +222,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_USER_NAME":"adm1",
                 "SERVICE_USER_PASSWORD":"password",
                 "SUBSERVICE_NAME":"Electricidad",
@@ -232,6 +239,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "ATT_TIMEOUT":"120",
 
             }
+
+        Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
 
 + Response 201 (application/json)
 
@@ -253,6 +262,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "START_INDEX":"10",
             "COUNT":"10",
         }
+
 
 + Response 200 (application/json)
 
@@ -281,11 +291,14 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD": "password",
                 "NEW_ROLE_NAME":"role_NameBlabla"
             }
+
+
+        Required: ["NEW_ROLE_NAME"]
 
 + Response 201 (application/json)
 
@@ -324,7 +337,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
               },
               "user": {
-                "description": "user of domain SmartValencia",
+                "description": "user of domain defaultservice",
                 "name": "Carl",
                 "enabled": true,
                 "id": "7ee5a828843945a79026d99ae0057bb9",
@@ -345,7 +358,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "name": "admin"
               },
               "user": {
-                "description": "Administrator of domain SmartValencia",
+                "description": "Administrator of domain defaultservice",
                 "name": "adm1",
                 "enabled": true,
                 "id": "a5c624a8402b48c3931d4600a7fe2be9",
@@ -376,6 +389,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "SERVICE_USER_ID":"asdfasdf",
             "INHERIT":true
         }
+
+        Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
+
 
 + Response 201
 

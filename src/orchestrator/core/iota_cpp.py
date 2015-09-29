@@ -48,7 +48,6 @@ class IoTACppOperations(object):
                                                     IOTA_HOST,
                                                     IOTA_PORT)
 
-
     def checkIoTA(self):
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/',
@@ -205,7 +204,6 @@ class IoTACppOperations(object):
         return json_body_response
 
 
-
     def unregisterDevice(self,
                          SERVICE_USER_TOKEN,
                          SERVICE_NAME,
@@ -235,16 +233,26 @@ class IoTACppOperations(object):
                          SERVICE_USER_TOKEN,
                          SERVICE_NAME,
                          SUBSERVICE_NAME):
-
-        # WIP
+        #
         # 1. Get devices
+        #
+        devices_deleted = []
+        logger.debug("Getting devices for %s / %s" % (SERVICE_NAME,
+                                                      SUBSERVICE_NAME))
         devices = self.getDevices(SERVICE_USER_TOKEN,
                                   SERVICE_NAME,
                                   SUBSERVICE_NAME)
 
         for device in devices:
+            #
             # 2. Unregister each device
+            #
+            logger.debug("Unregistering device: %s" % device['id'])
+
             self.unregisterDevice(SERVICE_USER_TOKEN,
                                   SERVICE_NAME,
                                   SUBSERVICE_NAME,
                                   device['id'])
+            devices_deleted.append(device['id'])
+
+        return devices_deleted
