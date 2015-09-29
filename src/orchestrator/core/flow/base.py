@@ -39,7 +39,7 @@ class FlowBase(object):
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,
                  KEYPASS_PORT=None,
-                 IOTA_PROTOCOL="http"
+                 IOTA_PROTOCOL="http",
                  IOTA_HOST="localhost",
                  IOTA_PORT="4041",
                  ORION_PROTOCOL="http",
