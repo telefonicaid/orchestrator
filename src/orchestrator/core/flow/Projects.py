@@ -914,7 +914,7 @@ class Projects(FlowBase):
 
             # Read CSV
             i, header, devices = CSVOperations.read_devices(CSV_DEVICES)
-
+            DEVICES_ID = []
             num_devices = len(devices[header[i]])
             for n in range(num_devices):
 
@@ -949,6 +949,7 @@ class Projects(FlowBase):
                     devices['ATT_SERVICE_ID'][n],
                     devices['ATT_GEOLOCATION'][n]
                 )
+                DEVICES_ID.append(res)
 
         except Exception, ex:
             logger.error(ex)
@@ -958,5 +959,5 @@ class Projects(FlowBase):
             #"registrationid": registrationid
         }
         #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return [DEVICE_ID]
+        return DEVICES_ID
 

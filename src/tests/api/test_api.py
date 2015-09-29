@@ -488,11 +488,10 @@ class Test_SubServiceIoTADevice_RestView(object):
         }
 
         self.suffix = str(uuid.uuid4())[:8]
-        #https://stackoverflow.com/questions/3305926/python-csv-string-to-array
         csv = """DEVICE_ID,ENTITY_TYPE,PROTOCOL,ATT_CCID,ATT_IMEI,ATT_IMSI,ATT_INTERACTION_TYPE,ATT_SERVICE_ID,ATT_GEOLOCATION
-                  button_dev_async_XXX, BlackButton, TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, S-001, 0
-                  button_dev_async_YYY, BlackButton, TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, S-002, 0"""
-        
+                  button_dev_async_%s, BlackButton, TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, S-001, 0
+                  button_dev_sync_%s, BlackButton, TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, S-002, 0"""  % (self.suffix, self.suffix)
+
         self.payload_data4_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
@@ -501,9 +500,10 @@ class Test_SubServiceIoTADevice_RestView(object):
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
             "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "CSV_DEVICES": csv
         }
-        
+
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -542,17 +542,17 @@ class Test_SubServiceIoTADevice_RestView(object):
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
     def test_post_ok3(self):
-        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        service_id = self.TestRestOps.getServiceId(self.payload_data4_ok)
 
         # Create SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
-            data=self.payload_data_ok)
+            data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
-        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data_ok)
+        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data4_ok)
 
         # Register Device in SubService
         res = self.TestRestOps.rest_request(
@@ -2222,7 +2222,7 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
     test_SubServiceIoTADevice.test_post_ok()
     test_SubServiceIoTADevice.test_post_ok2()
-    test_SubServiceIoTADevice.test_post_ok3()    
+    test_SubServiceIoTADevice.test_post_ok3()
 
     test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
     test_SubServiceIoTAService.test_post_ok()
