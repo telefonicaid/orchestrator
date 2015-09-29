@@ -838,14 +838,46 @@ class Test_NewServiceUser_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg)
+
     def test_post_ok_bad(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/user/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/user/" % service_id,
             json_data=True,
             data=self.payload_data_ok2)
         assert res.code == 409, (res.code, res.msg)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg)
 
     def test_post_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
