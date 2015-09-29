@@ -30,14 +30,14 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                        "name": "SmartCity",
-                        "description": "SmartCity"
+                        "name": "defaultservice",
+                        "description": "defaultservice"
                     },
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
-                        "name": "SmartCity2",
-                        "description": "SmartCity2"
+                        "name": "defaultservice2",
+                        "description": "defaultservice2"
                     }
                 ]
             }
@@ -49,8 +49,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "DOMAIN_NAME":"admin_domain",
                 "DOMAIN_ADMIN_USER":"cloud_admin",
                 "DOMAIN_ADMIN_PASSWORD": "password",
-                "NEW_SERVICE_NAME":"SmartCity",
-                "NEW_SERVICE_DESCRIPTION":"SmartCity desc",
+                "NEW_SERVICE_NAME":"defaultservice",
+                "NEW_SERVICE_DESCRIPTION":"defaultservice desc",
                 "NEW_SERVICE_ADMIN_USER":"adm1",
                 "NEW_SERVICE_ADMIN_PASSWORD":"password",
                 "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
@@ -74,7 +74,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartCity",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
             }
@@ -85,8 +85,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             {
                 "enabled": true,
                 "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                "name": "SmartCity",
-                "description": "SmartCity"
+                "name": "defaultservice",
+                "description": "defaultservice"
             }
 
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
@@ -102,19 +102,19 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             {
               "projects": [
                 {
-                  "description": "SmartCity Subservicio Electricidad",
+                  "description": "defaultservice Subservicio Electricidad",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aea",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02",
                   "name": "Electricidad"
                 },
                 {
-                  "description": "SmartCity Subservicio Basuras",
+                  "description": "defaultservice Subservicio Basuras",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aeb",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc03",
                   "name": "Basuras"
                 },
                 {
-                  "description": "SmartCity Subservicio Jardines",
+                  "description": "defaultservice Subservicio Jardines",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aec",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc04",
                   "name": "Jardines"
@@ -127,7 +127,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartCity",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
                 "SUBSERVICE_NAME":"Electricidad",
@@ -150,7 +150,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartCity",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
                 "NEW_SUBSERVICE_NAME":"Electricidad",
@@ -189,7 +189,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartCity",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_USER_NAME":"adm1",
                 "SERVICE_USER_PASSWORD":"password",
                 "SUBSERVICE_NAME":"Electricidad",
@@ -222,7 +222,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartCity",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_USER_NAME":"adm1",
                 "SERVICE_USER_PASSWORD":"password",
                 "SUBSERVICE_NAME":"Electricidad",
@@ -291,7 +291,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
 
             {
-                "SERVICE_NAME":"SmartCity",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD": "password",
                 "NEW_ROLE_NAME":"role_NameBlabla"
@@ -337,7 +337,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
               },
               "user": {
-                "description": "user of domain SmartCity",
+                "description": "user of domain defaultservice",
                 "name": "Carl",
                 "enabled": true,
                 "id": "7ee5a828843945a79026d99ae0057bb9",
@@ -358,7 +358,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "name": "admin"
               },
               "user": {
-                "description": "Administrator of domain SmartCity",
+                "description": "Administrator of domain defaultservice",
                 "name": "adm1",
                 "enabled": true,
                 "id": "a5c624a8402b48c3931d4600a7fe2be9",
