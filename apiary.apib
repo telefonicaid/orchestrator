@@ -56,6 +56,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
             }
 
+       Required: ["NEW_SERVICE_NAME", "NEW_SERVICE_ADMIN_USER",  "NEW_SERVICE_ADMIN_PASSWORD"]
+
 + Response 201 (application/json)
 
     + Body
@@ -155,6 +157,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
             }
 
+       Required: ["NEW_SUBSERVICE_NAME" ]
+
 + Response 201 (application/json)
 
             {
@@ -200,6 +204,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "ATT_GEOLOCATION":"40.4188,-36919",
             }
 
+        Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
+
+
 + Response 201 (application/json)
 
             {
@@ -233,6 +240,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 
             }
 
+        Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
+
 + Response 201 (application/json)
 
             {
@@ -253,6 +262,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "START_INDEX":"10",
             "COUNT":"10",
         }
+
 
 + Response 200 (application/json)
 
@@ -286,6 +296,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "SERVICE_ADMIN_PASSWORD": "password",
                 "NEW_ROLE_NAME":"role_NameBlabla"
             }
+
+
+        Required: ["NEW_ROLE_NAME"]
 
 + Response 201 (application/json)
 
@@ -376,6 +389,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "SERVICE_USER_ID":"asdfasdf",
             "INHERIT":true
         }
+
+        Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
+
 
 + Response 201
 
