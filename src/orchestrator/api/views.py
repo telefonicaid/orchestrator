@@ -1247,7 +1247,7 @@ class OrchVersion_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # TODO: extract version number
-            result = { "version": "0.5.0" }
+            result = { "version": settings.ORC_VERSION }
 
             # TOOD: extarct info about health
             if 'error' not in result:
