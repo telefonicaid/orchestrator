@@ -854,6 +854,11 @@ class Projects(FlowBase):
                         "name": "aux_service_id",
                         "type": "string",
                         "isDomain": "false"
+                    },
+                    {
+                        "name": "aux_last_operation",
+                        "type": "string",
+                        "isDomain": "false"
                     }
                 ]
 
