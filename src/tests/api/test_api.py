@@ -486,6 +486,18 @@ class Test_SubServiceIoTADevice_RestView(object):
             "ATT_SERVICE_ID": "S-001",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
+        self.payload_data3_ok = {
+            "SERVICE_NAME": "thinkingthings",
+            "SERVICE_ADMIN_USER": "admin_tt",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "NEW_SUBSERVICE_NAME": "iot_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "iot_%s" % self.suffix,
+            "SERVICE_USER_NAME": "admin_tt",
+            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "DEVICE_ID": "thing_%s" % self.suffix,
+            "ENTITY_TYPE": "thing",
+            "PROTOCOL": "PDI-IoTA-ThinkingThings",
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
