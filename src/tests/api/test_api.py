@@ -486,7 +486,8 @@ class Test_SubServiceIoTADevice_RestView(object):
             "ATT_SERVICE_ID": "S-001",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
-        self.payload_data3_ok = {
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data4_ok = {
             "SERVICE_NAME": "thinkingthings",
             "SERVICE_ADMIN_USER": "admin_tt",
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
@@ -533,6 +534,17 @@ class Test_SubServiceIoTADevice_RestView(object):
             url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data3_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data4_ok)
+
+        # Create SubService and Register Device in SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
 
@@ -2197,6 +2209,7 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
     test_SubServiceIoTADevice.test_post_ok()
     test_SubServiceIoTADevice.test_post_ok2()
+    test_SubServiceIoTADevice.test_post_ok3()
 
     test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
     test_SubServiceIoTAService.test_post_ok()
