@@ -439,6 +439,7 @@ class Projects(FlowBase):
             IS_PATTERN="false"
             ACTION="APPEND"
             ATTRIBUTES=[]
+            STATIC_ATTRIBUTES=[]
 
             if ATT_NAME and ATT_NAME != "":
                 STATIC_ATTRIBUTES.append(
