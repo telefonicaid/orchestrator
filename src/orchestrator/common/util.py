@@ -112,6 +112,9 @@ class RestOperations(object):
                         isinstance(data_json['error'], dict) and \
                         'message' in data_json['error']:
                         res.msg = data_json['error']['message']
+                if data_json and isinstance(data_json, dict) and \
+                    'message' in data_json:
+                    res.msg = data_json['message']
             except ValueError:
                 res.msg = data
             except Exception, e:
