@@ -587,7 +587,7 @@ json = {
             "PROTOCOL": {
                 "type": "string",
             },
-            "ATT_CCID": {
+            "ATT_ICCID": {
                 "type": "string",
             },
             "ATT_IMEI": {
