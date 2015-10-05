@@ -599,7 +599,7 @@ class Projects(FlowBase):
                         "op_extra",
                         "sleepcondition",
                         "sleeptime",
-                        "ccid",
+                        "iccid",
                         "imei",
                         "imsi",
                         "interaction_type",
@@ -673,12 +673,12 @@ class Projects(FlowBase):
                         DEVICE_ID,
                         ENTITY_TYPE,
                         PROTOCOL,
-                        ATT_CCID="",
-                        ATT_IMEI="",
-                        ATT_IMSI="",
-                        ATT_INTERACTION_TYPE="",
-                        ATT_SERVICE_ID="",
-                        ATT_GEOLOCATION=""
+                        ATT_ICCID,
+                        ATT_IMEI,
+                        ATT_IMSI,
+                        ATT_INTERACTION_TYPE,
+                        ATT_SERVICE_ID,
+                        ATT_GEOLOCATION
                         ):
 
         '''Register Device in IOTA
@@ -696,7 +696,7 @@ class Projects(FlowBase):
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
-        - ATT_CCID
+        - ATT_ICCID
         - ATT_IMEI
         - ATT_IMSI
         - ATT_INTERACTION_TYPE
@@ -714,7 +714,7 @@ class Projects(FlowBase):
             "DEVICE_ID": "%s" % DEVICE_ID,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "PROTOCOL": "%s" % PROTOCOL,
-            "ATT_CCID": "%s" % ATT_CCID,
+            "ATT_ICCID": "%s" % ATT_ICCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
             "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
@@ -811,12 +811,12 @@ class Projects(FlowBase):
                     ]
 
                 # Ensure attributes are not empty
-                if ATT_CCID and ATT_CCID != "":
+                if ATT_ICCID and ATT_ICCID != "":
                     STATIC_ATTRIBUTES.append(
                         {
                             "name": "ccid",
                             "type": "string",
-                            "value": ATT_CCID
+                            "value": ATT_ICCID
                         })
 
                 if ATT_IMEI and ATT_IMEI != "":
@@ -826,6 +826,7 @@ class Projects(FlowBase):
                             "type": "string",
                             "value": ATT_IMEI
                         })
+
 
                 if ATT_IMSI and ATT_IMSI != "":
                     STATIC_ATTRIBUTES.append(
@@ -972,7 +973,7 @@ class Projects(FlowBase):
                     "DEVICE_ID" : devices['DEVICE_ID'][n],
                     "ENTITY_TYPE" : devices['ENTITY_TYPE'][n],
                     "PROTOCOL": devices['PROTOCOL'][n],
-                    "ATT_CCID" : devices['ATT_CCID'][n],
+                    "ATT_ICCID" : devices['ATT_ICCID'][n],
                     "ATT_IMEI" : devices['ATT_IMEI'][n],
                     "ATT_IMSI" : devices['ATT_IMSI'][n],
                     "ATT_INTERACTION_TYPE" : devices['ATT_INTERACTION_TYPE'][n],
@@ -992,7 +993,7 @@ class Projects(FlowBase):
                     devices['DEVICE_ID'][n],
                     devices['ENTITY_TYPE'][n],
                     devices['PROTOCOL'][n],
-                    devices['ATT_CCID'][n],
+                    devices['ATT_ICCID'][n],
                     devices['ATT_IMEI'][n],
                     devices['ATT_IMSI'][n],
                     devices['ATT_INTERACTION_TYPE'][n],
