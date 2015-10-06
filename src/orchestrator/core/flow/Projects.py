@@ -25,6 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.common.util import CSVOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -280,6 +281,22 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    ADMIN_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            # #
+            # # Delete all devices
+            # #
+            # self.iota.deleteAllDevices(
+            #     ADMIN_TOKEN,
+            #     DOMAIN_NAME,
+            #     PROJECT_NAME
+            # )
+
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
                                               PROJECT_ID)
@@ -288,6 +305,9 @@ class Projects(FlowBase):
                                    PROJECT_ID)
 
             logger.debug("PROJECT=%s" % PROJECT)
+
+
+
 
         except Exception, ex:
             logger.error(ex)
@@ -373,10 +393,11 @@ class Projects(FlowBase):
 
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(DOMAIN_NAME,
-                                                                        PROJECT_NAME,
-                                                                        SERVICE_USER_NAME,
-                                                                        SERVICE_USER_PASSWORD)
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
                     PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
@@ -384,12 +405,23 @@ class Projects(FlowBase):
                                                         ROJECT_NAME)
 
                 else:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(DOMAIN_ID,
-                                                                         PROJECT_ID,
-                                                                         SERVICE_USER_NAME,
-                                                                         SERVICE_USER_PASSWORD)
-            # TODO: Ensure DOMAIN_NAME and PROJECT_NAME
-            # get DOMAIN_NAME from SERVICE_USER_TOKEN
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -406,48 +438,65 @@ class Projects(FlowBase):
             #
             IS_PATTERN="false"
             ACTION="APPEND"
-            ATTRIBUTES=[
-                {
-                    "name": "name",
-                    "type": "string",
-                    "value": ATT_NAME
-                },
-                {
-                    "name": "provider",
-                    "type": "string",
-                    "value": ATT_PROVIDER
-                },
-                {
-                    "name": "endpoint",
-                    "type": "string",
-                    "value": ATT_ENDPOINT
-                },
-                {
-                    "name": "method",
-                    "type": "string",
-                    "value": ATT_METHOD
-                },
-                {
-                    "name": "authentication",
-                    "type": "string",
-                    "value": ATT_AUTHENTICATION
-                },
-                {
-                    "name": "interaction_type",
-                    "type": "string",
-                    "value": ATT_INTERACTION_TYPE
-                },
-                {
-                    "name": "mapping",
-                    "type": "string",
-                    "value": ATT_MAPPING
-                },
-                {
-                    "name": "timeout",
-                    "type": "integer",
-                    "value": ATT_TIMEOUT
-                }
-            ]
+            ATTRIBUTES=[]
+            STATIC_ATTRIBUTES=[]
+
+            if ATT_NAME and ATT_NAME != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "value": ATT_NAME
+                    })
+            if ATT_PROVIDER and ATT_PROVIDER != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "provider",
+                        "type": "string",
+                        "value": ATT_PROVIDER
+                    })
+            if ATT_ENDPOINT and ATT_ENDPOINT != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "endpoint",
+                        "type": "string",
+                        "value": ATT_ENDPOINT
+                    })
+            if ATT_METHOD and ATT_METHOD != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "method",
+                        "type": "string",
+                        "value": ATT_METHOD
+                    })
+            if ATT_AUTHENTICATION and ATT_AUTHENTICATION != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "authentication",
+                        "type": "string",
+                        "value": ATT_AUTHENTICATION
+                    })
+            if ATT_INTERACTION_TYPE and ATT_INTERACTION_TYPE != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "interaction_type",
+                        "type": "string",
+                        "value": ATT_INTERACTION_TYPE
+                    })
+            if ATT_MAPPING and ATT_MAPPING != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "mapping",
+                        "type": "string",
+                        "value": ATT_MAPPING
+                    })
+            if ATT_TIMEOUT and ATT_TIMEOUT != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "timeout",
+                        "type": "integer",
+                        "value": ATT_TIMEOUT
+                    })
 
             # call CB
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
@@ -470,54 +519,54 @@ class Projects(FlowBase):
             logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
 
-            # #
-            # # 2. Call ContextBroker for subscribe Context Adapter
-            # #
-            # DURATION="P1M"
-            # REFERENCE_URL="http://localhost"
-            # ENTITIES=[]
-            # ATTRIBUTES = []
-            # NOTIFY_CONDITIONS=[]
+            #
+            # 2. Call ContextBroker for subscribe Context Adapter
+            #
+            DURATION="P1M"
+            REFERENCE_URL="http://localhost"
+            ENTITIES=[]
+            ATTRIBUTES = []
+            NOTIFY_CONDITIONS=[]
 
-            # if PROTOCOL == "TT_BLACKBUTTON":
-            #     DURATION="PT5M"
-            #     REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
-            #     ENTITIES = [
-            #         {
-            #             "type": ENTITY_TYPE,
-            #             "isPattern": "true",
-            #             "id": ".*"
-            #         }
-            #     ]
-            #     ATTRIBUTES=[
-            #         "op_action",
-            #         "op_extra",
-            #         "op_status",
-            #         "interaction_type",
-            #         "service_id"
-            #     ]
-            #     NOTIFY_CONDITIONS = [
-            #         {
-            #             "type": "ONCHANGE",
-            #             "condValues": [
-            #                 "op_status"
-            #             ]
-            #         }
-            #     ]
+            if PROTOCOL == "TT_BLACKBUTTON":
+                DURATION="PT5M"
+                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": "true",
+                        "id": ".*"
+                    }
+                ]
+                ATTRIBUTES=[
+                    "op_action",
+                    "op_extra",
+                    "op_status",
+                    "interaction_type",
+                    "service_id"
+                ]
+                NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": [
+                            "op_status"
+                        ]
+                    }
+                ]
 
-            # cb_res = self.cb.subscribeContext(
-            #     SERVICE_USER_TOKEN,
-            #     DOMAIN_NAME,
-            #     PROJECT_NAME,
-            #     REFERENCE_URL,
-            #     DURATION,
-            #     ENTITIES,
-            #     ATTRIBUTES,
-            #     NOTIFY_CONDITIONS
-            # )
-            # logger.debug("subscribeContext res=%s" % cb_res)
-            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            # logger.debug("subscription id=%s" % subscriptionid)
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
 
 
 
@@ -550,7 +599,7 @@ class Projects(FlowBase):
                         "op_extra",
                         "sleepcondition",
                         "sleeptime",
-                        "ccid",
+                        "iccid",
                         "imei",
                         "imsi",
                         "interaction_type",
@@ -667,7 +716,7 @@ class Projects(FlowBase):
                         DEVICE_ID,
                         ENTITY_TYPE,
                         PROTOCOL,
-                        ATT_CCID,
+                        ATT_ICCID,
                         ATT_IMEI,
                         ATT_IMSI,
                         ATT_INTERACTION_TYPE,
@@ -690,7 +739,7 @@ class Projects(FlowBase):
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
-        - ATT_CCID
+        - ATT_ICCID
         - ATT_IMEI
         - ATT_IMSI
         - ATT_INTERACTION_TYPE
@@ -706,16 +755,17 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
-            "PROTOCOL": "%s" % PROTOCOL,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
-            "ATT_CCID": "%s" % ATT_CCID,
+            "PROTOCOL": "%s" % PROTOCOL,
+            "ATT_ICCID": "%s" % ATT_ICCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
             "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
             "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
             "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
-        logger.debug("register_device with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("register_device with: %s" % json.dumps(data_log,
+                                                             indent=3))
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -739,7 +789,16 @@ class Projects(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
-            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -794,39 +853,55 @@ class Projects(FlowBase):
                     }
                     ]
 
-                STATIC_ATTRIBUTES=[
-                    {
-                        "name": "ccid",
-                        "type": "string",
-                        "value": ATT_CCID
-                    },
-                    {
-                        "name": "imei",
-                        "type": "string",
-                        "value": ATT_IMEI
-                    },
-                    {
-                        "name": "imsi",
-                        "type": "string",
-                        "value": ATT_IMSI
-                    },
-                    {
-                        "name": "interaction_type",
-                        "type": "string",
-                        "value": ATT_INTERACTION_TYPE
-                    },
-                    {
-                        "name": "service_id",
-                        "type": "string",
-                        "value": ATT_SERVICE_ID
-                    },
-                    {
-                        "name": "geolocation",
-                        "type": "string",
-                        "value": ATT_GEOLOCATION
-                    }
-                    ]
+                # Ensure attributes are not empty
+                if ATT_ICCID and ATT_ICCID != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "ccid",
+                            "type": "string",
+                            "value": ATT_ICCID
+                        })
 
+                if ATT_IMEI and ATT_IMEI != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "imei",
+                            "type": "string",
+                            "value": ATT_IMEI
+                        })
+
+
+                if ATT_IMSI and ATT_IMSI != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "imsi",
+                            "type": "string",
+                            "value": ATT_IMSI
+                        })
+
+                if ATT_INTERACTION_TYPE and ATT_INTERACTION_TYPE != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "interaction_type",
+                            "type": "string",
+                            "value": ATT_INTERACTION_TYPE
+                        })
+
+                if ATT_SERVICE_ID and ATT_SERVICE_ID != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "service_id",
+                            "type": "string",
+                            "value": ATT_SERVICE_ID
+                        })
+
+                if ATT_GEOLOCATION and ATT_GEOLOCATION != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "geolocation",
+                            "type": "string",
+                            "value": ATT_GEOLOCATION
+                        })
 
                 if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [
@@ -932,74 +1007,130 @@ class Projects(FlowBase):
             logger.debug("registerDevice res=%s" % iota_res)
 
 
-            #
-            # 2. Call ContextBroker for register Context Adapter
-            #
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
 
-            ATTRIBUTES = []
-            APP="http://localhost"
-            DURATION="P1M"
-            ENTITIES=[]
+        data_log = {
 
-            if PROTOCOL == "TT_BLACKBUTTON":
-                APP=self.ca_endpoint
-                IS_PATTERN="false"
-                DURATION="P1M"
-                ENTITIES = [
-                    {
-                        "type": ENTITY_TYPE,
-                        "isPattern": IS_PATTERN,
-                        "id": DEVICE_ID
-                    }
-                ]
-                ATTRIBUTES=[
-                    {
-                        "name": "aux_op_action",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_op_extra",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_op_status",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_interaction_type",
-                        "type": "string",
-                        "isDomain": "false"
-                    },
-                    {
-                        "name": "aux_service_id",
-                        "type": "string",
-                        "isDomain": "false"
-                    }
-                ]
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return DEVICE_ID
 
 
-            cb_res = self.cb.registerContext(SERVICE_USER_TOKEN,
-                                             DOMAIN_NAME,
-                                             PROJECT_NAME,
-                                             ENTITIES,
-                                             ATTRIBUTES,
-                                             APP,
-                                             DURATION
-                                             )
-            logger.debug("registerContext res=%s" % cb_res)
-            registrationid = cb_res['registrationId']
-            logger.debug("registration id=%s" % registrationid)
+    def register_devices(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        CSV_DEVICES
+                        ):
+
+        '''Register Device in IOTA
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_NAME: Service name
+        - DOMAIN_ID: Service id
+        - PROJECT_NAME: SubService name
+        - PROJECT_ID: SubService name
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - CSV_DEVICES: CSV content
+
+        '''
+        data_log = {
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "CSV_DEVICES": "%s" % CSV_DEVICES
+        }
+        logger.debug("register_devices with: %s" % json.dumps(data_log, indent=3))
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+
+
+            # Read CSV
+            i, header, devices = CSVOperations.read_devices(CSV_DEVICES)
+            DEVICES_ID = []
+            num_devices = len(devices[header[i]])
+            for n in range(num_devices):
+
+                data_log = {
+                    "DEVICE_ID" : devices['DEVICE_ID'][n],
+                    "ENTITY_TYPE" : devices['ENTITY_TYPE'][n],
+                    "PROTOCOL": devices['PROTOCOL'][n],
+                    "ATT_ICCID" : devices['ATT_ICCID'][n],
+                    "ATT_IMEI" : devices['ATT_IMEI'][n],
+                    "ATT_IMSI" : devices['ATT_IMSI'][n],
+                    "ATT_INTERACTION_TYPE" : devices['ATT_INTERACTION_TYPE'][n],
+                    "ATT_SERVICE_ID" : devices['ATT_SERVICE_ID'][n],
+                    "ATT_GEOLOCATION" : devices['ATT_GEOLOCATION'][n]
+                }
+                logger.debug("data%s" % data_log)
+
+                res = self.register_device(
+                    DOMAIN_NAME,
+                    DOMAIN_ID,
+                    PROJECT_NAME,
+                    PROJECT_ID,
+                    SERVICE_USER_NAME,
+                    SERVICE_USER_PASSWORD,
+                    SERVICE_USER_TOKEN,
+                    devices['DEVICE_ID'][n],
+                    devices['ENTITY_TYPE'][n],
+                    devices['PROTOCOL'][n],
+                    devices['ATT_ICCID'][n],
+                    devices['ATT_IMEI'][n],
+                    devices['ATT_IMSI'][n],
+                    devices['ATT_INTERACTION_TYPE'][n],
+                    devices['ATT_SERVICE_ID'][n],
+                    devices['ATT_GEOLOCATION'][n]
+                )
+                DEVICES_ID.append(res)
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
-           "registrationid": registrationid
+            #"registrationid": registrationid
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return registrationid
-        #return DEVICE_ID
+        #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return DEVICES_ID
+

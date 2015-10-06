@@ -23,6 +23,7 @@
 #
 import logging
 import os
+import json
 
 from django.conf import settings
 from django.utils.importlib import import_module
@@ -62,12 +63,21 @@ def check_endpoints():
     try:
         ac.checkAccC()
     except Exception, ex:
-        logger.error("keyspass endpoint not found")
+        logger.error("keypass endpoint not found")
         return "ERROR keypass endpoint not found"
 
     return "OK"
 
+def show_conf():
+    conf = {}
+    from django.conf import settings
+    custom_settings_entries = ['KEYSTONE', 'KEYPASS', 'IOTA', 'ORION', 'CA',
+                               'PEP', 'IOTAGENT', 'SCIM_API_VERSION']
+    for name in custom_settings_entries:
+        conf[name] = getattr(settings, name)
+    return conf
 
 def run():
     logger.info("Starting Service %s " % read_banner())
     logger.info("Checking endpoints %s " % check_endpoints())
+    logger.info("Using custom conf: %s " % json.dumps(show_conf(), indent=3))
