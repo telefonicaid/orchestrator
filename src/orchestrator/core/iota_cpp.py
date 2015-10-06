@@ -48,7 +48,6 @@ class IoTACppOperations(object):
                                                     IOTA_HOST,
                                                     IOTA_PORT)
 
-
     def checkIoTA(self):
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/',
@@ -203,3 +202,57 @@ class IoTACppOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def unregisterDevice(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME,
+                         DEVICE_ID):
+
+        logger.debug("DELETE to iot/devices with: %s" % DEVICE_ID)
+
+        res = self.IoTACppRestOperations.rest_request(
+            url='/iot/devices/%s' % DEVICE_ID,
+            method='DELETE',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 204, (res.code, res.msg)
+
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
+    def deleteAllDevices(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME):
+        #
+        # 1. Get devices
+        #
+        devices_deleted = []
+        logger.debug("Getting devices for %s / %s" % (SERVICE_NAME,
+                                                      SUBSERVICE_NAME))
+        devices = self.getDevices(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME)
+
+        for device in devices:
+            #
+            # 2. Unregister each device
+            #
+            logger.debug("Unregistering device: %s" % device['id'])
+
+            self.unregisterDevice(SERVICE_USER_TOKEN,
+                                  SERVICE_NAME,
+                                  SUBSERVICE_NAME,
+                                  device['id'])
+            devices_deleted.append(device['id'])
+
+        return devices_deleted

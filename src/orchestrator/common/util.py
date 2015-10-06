@@ -24,7 +24,8 @@
 import urllib2
 import base64
 import json
-
+import csv
+import StringIO
 
 class RestOperations(object):
     '''
@@ -46,7 +47,8 @@ class RestOperations(object):
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
-                     auth_token=None, fiware_service=None, fiware_service_path=None):
+                     auth_token=None, fiware_service=None,
+                     fiware_service_path=None):
         '''Does an (optionally) authorized REST request with optional JSON data.
 
         In case of HTTP error, the exception is returned normally instead of
@@ -110,9 +112,39 @@ class RestOperations(object):
                         isinstance(data_json['error'], dict) and \
                         'message' in data_json['error']:
                         res.msg = data_json['error']['message']
+                if data_json and isinstance(data_json, dict) and \
+                    'message' in data_json:
+                    res.msg = data_json['message']
             except ValueError:
                 res.msg = data
             except Exception, e:
                 print e
 
         return res
+
+
+class CSVOperations(object):
+    '''
+
+    '''
+
+    def __init__(self):
+        None
+
+    @staticmethod
+    def read_devices(CSV):
+        devices = {}
+        csvreader = csv.reader(StringIO.StringIO(CSV),
+                               delimiter=',',
+                               #quotechar='"',
+                               skipinitialspace=True)
+
+        header =  csvreader.next()
+        for name in header:
+            devices[name] = []
+
+        for row in csvreader:
+            for i, value in enumerate(row):
+                devices[header[i]].append(value)
+
+        return i, header, devices

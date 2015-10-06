@@ -156,6 +156,62 @@ class IdMKeystoneOperations(IdMOperations):
         return res.headers.get('X-Subject-Token')
 
 
+    def getTokenFromToken(self,
+                 DOMAIN_ADMIN_TOKEN,
+                 DOMAIN_ID,
+                 PROJECT_ID,
+                 SCOPED=True):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                    ],
+                    "token": {
+                        "id": DOMAIN_ADMIN_TOKEN
+                    }
+                }
+            }
+        }
+
+        if DOMAIN_ID:
+            if SCOPED:
+                if PROJECT_ID:
+                    scope_domain = {
+                        "scope": {
+                            "project": {
+                                "domain": {
+                                    "id": DOMAIN_ID
+                                    },
+                                    "id": PROJECT_ID
+                                }
+                            }
+                        }
+                else:
+                    scope_domain = {
+                        "scope": {
+                            "domain": {
+                                "id": DOMAIN_ID
+                            }
+                        }
+                    }
+                auth_data['auth'].update(scope_domain)
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        #return res.headers.get('X-Subject-Token')
+
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
     def getScopedProjectToken(self,
                               DOMAIN_NAME,
                               PROJECT_NAME,
@@ -443,7 +499,7 @@ class IdMKeystoneOperations(IdMOperations):
                 "enabled": True,
                 "domain_id": "%s" % ID_DOM1,
                 "name": "%s" % NEW_USER_NAME,
-                "password": "%s" % NEW_USER_PASSWORD,
+                "password": "%s" % NEW_USER_PASSWORD
             }
         }
         if NEW_USER_EMAIL:
@@ -744,6 +800,23 @@ class IdMKeystoneOperations(IdMOperations):
                                                       indent=3))
         return json_body_response
 
+
+    def getDomain(self,
+                  SERVICE_ADMIN_TOKEN,
+                  DOMAIN_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s' % DOMAIN_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
     def getDomainRoles(self,
                        SERVICE_ADMIN_TOKEN,
                        DOMAIN_ID,
@@ -896,6 +969,33 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def getDomainNameFromToken(self,
+                               SERVICE_ADMIN_TOKEN,
+                               DOMAIN_ID):
+
+        token_data = self.getTokenFromToken(SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            None,
+                                            True)
+        logger.debug("json response: %s" % json.dumps(token_data,
+                                                      indent=3))
+        return token_data['token']['domain']['name']
+
+
+    def getProjectNameFromToken(self,
+                            SERVICE_ADMIN_TOKEN,
+                            DOMAIN_ID,
+                            PROJECT_ID):
+
+        token_data = self.getTokenFromToken(SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            PROJECT_ID,
+                                            True)
+        logger.debug("json response: %s" % json.dumps(token_data,
+                                                      indent=3))
+        return token_data['token']['project']['name']
 
     def getProjectRoleAssignments(self,
                                   SERVICE_ADMIN_TOKEN,
