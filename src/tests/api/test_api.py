@@ -670,7 +670,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "PROTOCOL": "TT_BLACKBUTTON",
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
-            "ATT_ENDPOINT": "http://localhost:6500/sync/request",
+            "ATT_ENDPOINT": "http://localhost:6500/async/create",
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
             "ATT_INTERACTION_TYPE": "asynchronous",
