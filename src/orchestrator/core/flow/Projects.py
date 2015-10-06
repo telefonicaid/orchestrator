@@ -567,6 +567,46 @@ class Projects(FlowBase):
                     }
                 ]
 
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
+                DURATION="P1M"
+                ENTITY_TYPE="Thing"
+                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": "true",
+                        "id": "*"
+                    }
+                ]
+                ATTRIBUTES=[
+                    "mcc",
+                    "mnc"
+                    "lac"
+                    "cellid",
+                    "dbm",
+                    "temperature",
+                    "humidity",
+                    "luminance",
+                    "voltage",
+                    "state",
+                    "charger"
+                    "charging",
+                    "mode",
+                    "desconnection",
+                    "sleepcondition",
+                    "color",
+                    "melody",
+                    "sleeptime",
+                ]
+                NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": [
+                            "humidity"
+                        ]
+                    }
+                ]
+
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -586,6 +626,9 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.sth_endpoint + '/notify'
 
             cb_res = self.cb.subscribeContext(
@@ -792,6 +835,86 @@ class Projects(FlowBase):
                             "type": "string"
                         }
                     ]
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
+                if ATT_INTERACTION_TYPE == None:
+                    ATT_INTERACTION_TYPE = "synchronous"
+                ATTRIBUTES = [
+                    {
+                        "name": "mcc",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "mnc",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "lac",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "cellid",
+                        "type": "string"
+                    },
+                    {
+                        "name": "dbm",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "float"
+                    },
+                    {
+                        "name": "humidity",
+                        "type": "float"
+                    },
+                    {
+                        "name": "luminance",
+                        "type": "float"
+                    },
+                    {
+                        "name": "voltage",
+                        "type": "float"
+                    },
+                    {
+                        "name": "state",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "charger",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "charging",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "mode",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "desconnection",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "sleepcondition",
+                        "type": "string"
+                    },
+                    {
+                        "name": "color",
+                        "type": "string"
+                    },
+                    {
+                        "name": "melody",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sleeptime",
+                        "type": "string"
+                    }
+                ]
+
+
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
