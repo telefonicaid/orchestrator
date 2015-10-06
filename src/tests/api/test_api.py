@@ -601,7 +601,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             method="POST",
             url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
-            data=self.payload_data4_ok)
+            data=self.payload_data5_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         subservice_id = self.TestRestOps.getSubServiceId(self.payload_data5_ok)
