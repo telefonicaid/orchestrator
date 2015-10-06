@@ -836,6 +836,12 @@ class Projects(FlowBase):
                         }
                     ]
 
+                if ATT_INTERACTION_TYPE == "asynchronous":
+                    ATTRIBUTES.append({
+                            "name": "req_internal_id",
+                            "type": "string"
+                        })
+
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 if ATT_INTERACTION_TYPE == None:
                     ATT_INTERACTION_TYPE = "synchronous"
