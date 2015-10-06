@@ -288,14 +288,14 @@ class Projects(FlowBase):
                     DOMAIN_ID,
                     PROJECT_ID)
 
-            # #
-            # # Delete all devices
-            # #
-            # self.iota.deleteAllDevices(
-            #     ADMIN_TOKEN,
-            #     DOMAIN_NAME,
-            #     PROJECT_NAME
-            # )
+            #
+            # Delete all devices
+            #
+            devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
+                                                         DOMAIN_NAME,
+                                                         PROJECT_NAME)
+            if (len(devices_deleted) > 0):
+                logger.info("devices deleted %s", devices_deleted)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
@@ -893,7 +893,6 @@ class Projects(FlowBase):
 
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-
         return DEVICE_ID
 
 
@@ -905,8 +904,7 @@ class Projects(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
-                        CSV_DEVICES
-                        ):
+                        CSV_DEVICES):
 
         '''Register Device in IOTA
 
@@ -933,7 +931,8 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "CSV_DEVICES": "%s" % CSV_DEVICES
         }
-        logger.debug("register_devices with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("register_devices with: %s" % json.dumps(data_log,
+                                                              indent=3))
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -1007,8 +1006,8 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            #"registrationid": registrationid
+            "devices": DEVICES_ID
         }
-        #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DEVICES_ID
 
