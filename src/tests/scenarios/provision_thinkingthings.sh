@@ -15,7 +15,7 @@ python ./createNewService.py http               \
                                  thinkingthings \
                                  Thinking_things\
                                  admin_tt       \
-                                 password       \
+                                 4passw0rd      \
                                  http           \
                                  localhost      \
                                  8080
@@ -26,7 +26,7 @@ python ./createNewSubService.py  http                \
                                       5000           \
                                       thinkingthings \
                                       admin_tt       \
-                                      password       \
+                                      4passw0rd      \
                                       user_x         \
                                       user_x
 
@@ -34,28 +34,28 @@ python  ./createNewServiceUser.py  http               \
                                        localhost      \
                                        5000           \
                                        thinkingthings \
-                                       admin_tt         \
-                                       password       \
+                                       admin_tt       \
+                                       4passw0rd      \
                                        user_x         \
-                                       password
+                                       4passw0rd
 
-python ./assignRoleSubServiceUser.py http              \
+python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        thinkingthings \
                                        user_x         \
                                        admin_tt       \
-                                       password       \
+                                       4passw0rd      \
                                        SubServiceAdmin\
                                        user_x
 
-python ./assignRoleSubServiceUser.py http              \
+python ./assignRoleSubServiceUser.py http             \
                                        localhost      \
                                        5000           \
                                        thinkingthings \
                                        user_x         \
                                        admin_tt       \
-                                       password       \
+                                       4passw0rd      \
                                        SubServiceCustomer\
                                        user_x
 

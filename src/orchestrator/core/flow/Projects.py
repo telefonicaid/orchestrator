@@ -288,14 +288,14 @@ class Projects(FlowBase):
                     DOMAIN_ID,
                     PROJECT_ID)
 
-            # #
-            # # Delete all devices
-            # #
-            # self.iota.deleteAllDevices(
-            #     ADMIN_TOKEN,
-            #     DOMAIN_NAME,
-            #     PROJECT_NAME
-            # )
+            #
+            # Delete all devices
+            #
+            devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
+                                                         DOMAIN_NAME,
+                                                         PROJECT_NAME)
+            if (len(devices_deleted) > 0):
+                logger.info("devices deleted %s", devices_deleted)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
@@ -438,48 +438,65 @@ class Projects(FlowBase):
             #
             IS_PATTERN="false"
             ACTION="APPEND"
-            ATTRIBUTES=[
-                {
-                    "name": "name",
-                    "type": "string",
-                    "value": ATT_NAME
-                },
-                {
-                    "name": "provider",
-                    "type": "string",
-                    "value": ATT_PROVIDER
-                },
-                {
-                    "name": "endpoint",
-                    "type": "string",
-                    "value": ATT_ENDPOINT
-                },
-                {
-                    "name": "method",
-                    "type": "string",
-                    "value": ATT_METHOD
-                },
-                {
-                    "name": "authentication",
-                    "type": "string",
-                    "value": ATT_AUTHENTICATION
-                },
-                {
-                    "name": "interaction_type",
-                    "type": "string",
-                    "value": ATT_INTERACTION_TYPE
-                },
-                {
-                    "name": "mapping",
-                    "type": "string",
-                    "value": ATT_MAPPING
-                },
-                {
-                    "name": "timeout",
-                    "type": "integer",
-                    "value": ATT_TIMEOUT
-                }
-            ]
+            ATTRIBUTES=[]
+            STATIC_ATTRIBUTES=[]
+
+            if ATT_NAME and ATT_NAME != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "value": ATT_NAME
+                    })
+            if ATT_PROVIDER and ATT_PROVIDER != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "provider",
+                        "type": "string",
+                        "value": ATT_PROVIDER
+                    })
+            if ATT_ENDPOINT and ATT_ENDPOINT != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "endpoint",
+                        "type": "string",
+                        "value": ATT_ENDPOINT
+                    })
+            if ATT_METHOD and ATT_METHOD != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "method",
+                        "type": "string",
+                        "value": ATT_METHOD
+                    })
+            if ATT_AUTHENTICATION and ATT_AUTHENTICATION != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "authentication",
+                        "type": "string",
+                        "value": ATT_AUTHENTICATION
+                    })
+            if ATT_INTERACTION_TYPE and ATT_INTERACTION_TYPE != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "interaction_type",
+                        "type": "string",
+                        "value": ATT_INTERACTION_TYPE
+                    })
+            if ATT_MAPPING and ATT_MAPPING != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "mapping",
+                        "type": "string",
+                        "value": ATT_MAPPING
+                    })
+            if ATT_TIMEOUT and ATT_TIMEOUT != "":
+                STATIC_ATTRIBUTES.append(
+                    {
+                        "name": "timeout",
+                        "type": "integer",
+                        "value": ATT_TIMEOUT
+                    })
 
             # call CB
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
@@ -582,7 +599,7 @@ class Projects(FlowBase):
                         "op_extra",
                         "sleepcondition",
                         "sleeptime",
-                        "ccid",
+                        "iccid",
                         "imei",
                         "imsi",
                         "interaction_type",
@@ -595,6 +612,46 @@ class Projects(FlowBase):
                         "type": "ONCHANGE",
                         "condValues": [
                             "op_status"
+                        ]
+                    }
+                ]
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
+                DURATION="P1M"
+                ENTITY_TYPE="Thing"
+                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": "true",
+                        "id": "*"
+                    }
+                ]
+                ATTRIBUTES=[
+                    "mcc",
+                    "mnc"
+                    "lac"
+                    "cellid",
+                    "dbm",
+                    "temperature",
+                    "humidity",
+                    "luminance",
+                    "voltage",
+                    "state",
+                    "charger"
+                    "charging",
+                    "mode",
+                    "desconnection",
+                    "sleepcondition",
+                    "color",
+                    "melody",
+                    "sleeptime",
+                ]
+                NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": [
+                            "humidity"
                         ]
                     }
                 ]
@@ -618,6 +675,9 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.sth_endpoint + '/notify'
 
             cb_res = self.cb.subscribeContext(
@@ -656,7 +716,7 @@ class Projects(FlowBase):
                         DEVICE_ID,
                         ENTITY_TYPE,
                         PROTOCOL,
-                        ATT_CCID,
+                        ATT_ICCID,
                         ATT_IMEI,
                         ATT_IMSI,
                         ATT_INTERACTION_TYPE,
@@ -679,7 +739,7 @@ class Projects(FlowBase):
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
-        - ATT_CCID
+        - ATT_ICCID
         - ATT_IMEI
         - ATT_IMSI
         - ATT_INTERACTION_TYPE
@@ -697,7 +757,7 @@ class Projects(FlowBase):
             "DEVICE_ID": "%s" % DEVICE_ID,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "PROTOCOL": "%s" % PROTOCOL,
-            "ATT_CCID": "%s" % ATT_CCID,
+            "ATT_ICCID": "%s" % ATT_ICCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
             "ATT_IMSI": "%s" % ATT_IMSI,
             "ATT_INTERACTION_TYPE": "%s" % ATT_INTERACTION_TYPE,
@@ -793,39 +853,55 @@ class Projects(FlowBase):
                     }
                     ]
 
-                STATIC_ATTRIBUTES=[
-                    {
-                        "name": "ccid",
-                        "type": "string",
-                        "value": ATT_CCID
-                    },
-                    {
-                        "name": "imei",
-                        "type": "string",
-                        "value": ATT_IMEI
-                    },
-                    {
-                        "name": "imsi",
-                        "type": "string",
-                        "value": ATT_IMSI
-                    },
-                    {
-                        "name": "interaction_type",
-                        "type": "string",
-                        "value": ATT_INTERACTION_TYPE
-                    },
-                    {
-                        "name": "service_id",
-                        "type": "string",
-                        "value": ATT_SERVICE_ID
-                    },
-                    {
-                        "name": "geolocation",
-                        "type": "string",
-                        "value": ATT_GEOLOCATION
-                    }
-                    ]
+                # Ensure attributes are not empty
+                if ATT_ICCID and ATT_ICCID != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "ccid",
+                            "type": "string",
+                            "value": ATT_ICCID
+                        })
 
+                if ATT_IMEI and ATT_IMEI != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "imei",
+                            "type": "string",
+                            "value": ATT_IMEI
+                        })
+
+
+                if ATT_IMSI and ATT_IMSI != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "imsi",
+                            "type": "string",
+                            "value": ATT_IMSI
+                        })
+
+                if ATT_INTERACTION_TYPE and ATT_INTERACTION_TYPE != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "interaction_type",
+                            "type": "string",
+                            "value": ATT_INTERACTION_TYPE
+                        })
+
+                if ATT_SERVICE_ID and ATT_SERVICE_ID != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "service_id",
+                            "type": "string",
+                            "value": ATT_SERVICE_ID
+                        })
+
+                if ATT_GEOLOCATION and ATT_GEOLOCATION != "":
+                    STATIC_ATTRIBUTES.append(
+                        {
+                            "name": "geolocation",
+                            "type": "string",
+                            "value": ATT_GEOLOCATION
+                        })
 
                 if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [
@@ -834,6 +910,86 @@ class Projects(FlowBase):
                             "type": "string"
                         }
                     ]
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
+                if ATT_INTERACTION_TYPE == None:
+                    ATT_INTERACTION_TYPE = "synchronous"
+                ATTRIBUTES = [
+                    {
+                        "name": "mcc",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "mnc",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "lac",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "cellid",
+                        "type": "string"
+                    },
+                    {
+                        "name": "dbm",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "float"
+                    },
+                    {
+                        "name": "humidity",
+                        "type": "float"
+                    },
+                    {
+                        "name": "luminance",
+                        "type": "float"
+                    },
+                    {
+                        "name": "voltage",
+                        "type": "float"
+                    },
+                    {
+                        "name": "state",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "charger",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "charging",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "mode",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "desconnection",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "sleepcondition",
+                        "type": "string"
+                    },
+                    {
+                        "name": "color",
+                        "type": "string"
+                    },
+                    {
+                        "name": "melody",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sleeptime",
+                        "type": "string"
+                    }
+                ]
+
+
             iota_res = self.iota.registerDevice(SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
@@ -851,8 +1007,6 @@ class Projects(FlowBase):
             logger.debug("registerDevice res=%s" % iota_res)
 
 
-
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -861,7 +1015,6 @@ class Projects(FlowBase):
 
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-
         return DEVICE_ID
 
 
@@ -873,8 +1026,7 @@ class Projects(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
-                        CSV_DEVICES
-                        ):
+                        CSV_DEVICES):
 
         '''Register Device in IOTA
 
@@ -901,7 +1053,8 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "CSV_DEVICES": "%s" % CSV_DEVICES
         }
-        logger.debug("register_devices with: %s" % json.dumps(data_log, indent=3))
+        logger.debug("register_devices with: %s" % json.dumps(data_log,
+                                                              indent=3))
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -941,7 +1094,7 @@ class Projects(FlowBase):
                     "DEVICE_ID" : devices['DEVICE_ID'][n],
                     "ENTITY_TYPE" : devices['ENTITY_TYPE'][n],
                     "PROTOCOL": devices['PROTOCOL'][n],
-                    "ATT_CCID" : devices['ATT_CCID'][n],
+                    "ATT_ICCID" : devices['ATT_ICCID'][n],
                     "ATT_IMEI" : devices['ATT_IMEI'][n],
                     "ATT_IMSI" : devices['ATT_IMSI'][n],
                     "ATT_INTERACTION_TYPE" : devices['ATT_INTERACTION_TYPE'][n],
@@ -961,7 +1114,7 @@ class Projects(FlowBase):
                     devices['DEVICE_ID'][n],
                     devices['ENTITY_TYPE'][n],
                     devices['PROTOCOL'][n],
-                    devices['ATT_CCID'][n],
+                    devices['ATT_ICCID'][n],
                     devices['ATT_IMEI'][n],
                     devices['ATT_IMSI'][n],
                     devices['ATT_INTERACTION_TYPE'][n],
@@ -975,8 +1128,8 @@ class Projects(FlowBase):
             return self.composeErrorCode(ex)
 
         data_log = {
-            #"registrationid": registrationid
+            "devices": DEVICES_ID
         }
-        #logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DEVICES_ID
 

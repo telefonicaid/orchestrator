@@ -489,7 +489,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             "DEVICE_ID": "button_dev_sync_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
             "PROTOCOL": "TT_BLACKBUTTON",
-            "ATT_CCID": "AAA",
+            "ATT_ICCID": "AAA",
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
             "ATT_INTERACTION_TYPE": "synchronous",
@@ -508,20 +508,32 @@ class Test_SubServiceIoTADevice_RestView(object):
             "DEVICE_ID": "button_dev_async_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
             "PROTOCOL": "TT_BLACKBUTTON",
-            "ATT_CCID": "AAA",
+            "ATT_ICCID": "AAA",
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
             "ATT_INTERACTION_TYPE": "asynchronous",
             "ATT_SERVICE_ID": "blackbutton",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
-
         self.suffix = str(uuid.uuid4())[:8]
-        csv = """DEVICE_ID,ENTITY_TYPE,PROTOCOL,ATT_CCID,ATT_IMEI,ATT_IMSI,ATT_INTERACTION_TYPE,ATT_SERVICE_ID,ATT_GEOLOCATION
+        self.payload_data4_ok = {
+            "SERVICE_NAME": "thinkingthings",
+            "SERVICE_ADMIN_USER": "admin_tt",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "NEW_SUBSERVICE_NAME": "iot_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "iot_%s" % self.suffix,
+            "SERVICE_USER_NAME": "admin_tt",
+            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "DEVICE_ID": "thing_%s" % self.suffix,
+            "ENTITY_TYPE": "thing",
+            "PROTOCOL": "PDI-IoTA-ThinkingThings",
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        csv = """DEVICE_ID,ENTITY_TYPE,PROTOCOL,ATT_ICCID,ATT_IMEI,ATT_IMSI,ATT_INTERACTION_TYPE,ATT_SERVICE_ID,ATT_GEOLOCATION
                   button_dev_async_%s, BlackButton, TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, blackbutton, 0
                   button_dev_sync_%s, BlackButton, TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, blackbutton, 0"""  % (self.suffix, self.suffix)
 
-        self.payload_data4_ok = {
+        self.payload_data5_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
             "SERVICE_ADMIN_PASSWORD": "4passw0rd",
@@ -573,7 +585,7 @@ class Test_SubServiceIoTADevice_RestView(object):
     def test_post_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data4_ok)
 
-        # Create SubService
+        # Create SubService and Register Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/" % service_id,
@@ -581,14 +593,25 @@ class Test_SubServiceIoTADevice_RestView(object):
             data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
-        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data4_ok)
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data5_ok)
+
+        # Create SubService
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data5_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        subservice_id = self.TestRestOps.getSubServiceId(self.payload_data5_ok)
 
         # Register Device in SubService
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/%s/register_devices" % (service_id, subservice_id),
             json_data=True,
-            data=self.payload_data4_ok)
+            data=self.payload_data5_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         # Delete SubSrvice
@@ -596,7 +619,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             method="DELETE",
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
-            data=self.payload_data4_ok)
+            data=self.payload_data5_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 class Test_SubServiceIoTAService_RestView(object):
@@ -626,7 +649,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "ENTITY_TYPE": "BlackButton",
             "ENTITY_ID": "button_dev_%s" % self.suffix,
             "PROTOCOL": "TT_BLACKBUTTON",
-            "ATT_CCID": "AAA",
+            "ATT_ICCID": "AAA",
             "ATT_IMEI": "1234567890",
             "ATT_IMSI": "0987654321",
             "ATT_INTERACTION_TYPE": "asynchronous",
@@ -647,7 +670,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "PROTOCOL": "TT_BLACKBUTTON",
             "ATT_NAME": "blackbutton_telepizza_%s" % self.suffix,
             "ATT_PROVIDER": "telepizza_%s" % self.suffix,
-            "ATT_ENDPOINT": "http://localhost:6500/sync/request",
+            "ATT_ENDPOINT": "http://localhost:6500/async/create",
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
             "ATT_INTERACTION_TYPE": "asynchronous",
