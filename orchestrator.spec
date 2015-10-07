@@ -104,6 +104,7 @@ echo "[INFO] Configuring application"
     ln -s %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
 
     echo "[INFO] Fix version"
+    sed -i -e 's/ORC_version/%{_version}/g' %{_install_dir}/settings/common.py
     sed -i -e 's/\${project.version}/%{_version}/g' %{_install_dir}/orchestrator/core/banner.txt
 
 echo "Done"

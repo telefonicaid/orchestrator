@@ -1230,3 +1230,34 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+
+class OrchVersion_RESTView(APIView, IoTConf):
+    """
+
+    """
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request, service_id=None):
+
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # TODO: extract version number
+            result = { "version": settings.ORC_VERSION }
+
+            # TOOD: extarct info about health
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
