@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: *
+HOST: orchestrator_host:8084
 
 # Orchestrator
 
@@ -89,11 +89,24 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "description": "defaultservice"
             }
 
-## Sub-services in service [/v1.0/service/{serviceId}/subservice]
-### listado de subservicio [GET]
+
+### Delete a Service [DELETE]
 + Parameters
     + serviceId (required, `string`) ... Service Id
++ Request (application/json)
 
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
+
++ Response 204
+
+## Sub-services in service [/v1.0/service/{serviceId}/subservice]
+### List subservices [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
 
 + Response 200 (application/json)
 
@@ -122,26 +135,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
               ]
             }
 
-### edicion de subservicio [PUT]
 
-+ Request (application/json)
-
-            {
-                "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
-            }
-
-
-+ Response 201 (application/json)
-
-    + Body
-
-            {
-                   "id" : 0000
-            }
 
 ### Create SubService [POST]
 + Parameters
@@ -166,9 +160,12 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             }
 
 ## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
-### listado de subservicio [GET]
-+ Response 200 (application/json)
+### List of SubServices [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... Service Id
 
++ Response 200 (application/json)
     + Body
 
             {
@@ -178,6 +175,45 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 'name': '/Electricidad'}
             }
 
+### Modify SubService [PUT]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... Service Id
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
+            }
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                   "id" : 0000
+            }
+
+
+### Delete a SubService [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SUBSERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
+
++ Response 204
 
 
 ## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
