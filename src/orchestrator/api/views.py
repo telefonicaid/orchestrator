@@ -422,8 +422,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 request.DATA.get("NEW_SUBSERVICE_NAME", None),
                 request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
 
-            # TODO: see optional values for register device:
-            if request.DATA.get("ENTITY_ID", None):
+            # TODO: see optional values for register entity service
+            if 'id' in result and request.DATA.get("ENTITY_ID", None):
                 flow = Projects(self.KEYSTONE_PROTOCOL,
                                 self.KEYSTONE_HOST,
                                 self.KEYSTONE_PORT,
@@ -461,9 +461,11 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
                 # Accumulate previous result
-                result['subscriptionid'] = result_rs
+                if 'subscriptionid' in result:
+                    result['subscriptionid'] = result_rs
 
-            if request.DATA.get("DEVICE_ID", None):
+            # TODO: see optional values for register device
+            if 'id' in result and request.DATA.get("DEVICE_ID", None):
                 flow = Projects(self.KEYSTONE_PROTOCOL,
                                 self.KEYSTONE_HOST,
                                 self.KEYSTONE_PORT,
@@ -479,7 +481,6 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
                                 self.CA_PORT)
-
                 result_rd = flow.register_device(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -491,15 +492,13 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("DEVICE_ID", None),
                     request.DATA.get("ENTITY_TYPE", None),
                     request.DATA.get("PROTOCOL", None),
-                    request.DATA.get("ATT_CCID", None),
+                    request.DATA.get("ATT_ICCID", None),
                     request.DATA.get("ATT_IMEI", None),
                     request.DATA.get("ATT_IMSI", None),
                     request.DATA.get("ATT_INTERACTION_TYPE", None),
                     request.DATA.get("ATT_SERVICE_ID", None),
                     request.DATA.get("ATT_GEOLOCATION", None)
                     )
-                # accumulate previous result
-                result['registrationid'] = result_rd
 
             if 'id' in result:
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -1081,7 +1080,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 request.DATA.get("DEVICE_ID", None),
                 request.DATA.get("ENTITY_TYPE", None),
                 request.DATA.get("PROTOCOL", None),
-                request.DATA.get("ATT_CCID", None),
+                request.DATA.get("ATT_ICCID", None),
                 request.DATA.get("ATT_IMEI", None),
                 request.DATA.get("ATT_IMSI", None),
                 request.DATA.get("ATT_INTERACTION_TYPE", None),
@@ -1146,7 +1145,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                 # request.DATA.get("DEVICE_ID", None),
                 # request.DATA.get("ENTITY_TYPE", None),
                 # request.DATA.get("PROTOCOL", None),
-                # request.DATA.get("ATT_CCID", None),
+                # request.DATA.get("ATT_ICCID", None),
                 # request.DATA.get("ATT_IMEI", None),
                 # request.DATA.get("ATT_IMSI", None),
                 # request.DATA.get("ATT_INTERACTION_TYPE", None),

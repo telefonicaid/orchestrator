@@ -248,11 +248,14 @@ class IoTACppOperations(object):
             # 2. Unregister each device
             #
             logger.debug("Unregistering device: %s" % device['id'])
-
-            self.unregisterDevice(SERVICE_USER_TOKEN,
-                                  SERVICE_NAME,
-                                  SUBSERVICE_NAME,
-                                  device['id'])
-            devices_deleted.append(device['id'])
+            try:
+                self.unregisterDevice(SERVICE_USER_TOKEN,
+                                      SERVICE_NAME,
+                                      SUBSERVICE_NAME,
+                                      device['id'])
+                devices_deleted.append(device['id'])
+            except Exception, ex:
+                logger.error("%s trying to unregister device: %s" % (ex,
+                                                            device['id']))
 
         return devices_deleted
