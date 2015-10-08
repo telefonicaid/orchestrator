@@ -238,3 +238,5 @@ IOTAGENT = {
 }
 
 SCIM_API_VERSION = "1.1"  # Supported v1.1 (1.1) and v2.0 (2.0) (by UPM)
+
+ORC_VERSION = "ORC_version"
