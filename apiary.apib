@@ -11,7 +11,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 
 
 ## Services query [/v1.0/service]
-### Listado de Services [GET]
+### List of Services [GET]
 
 + Request (application/json)
 
@@ -90,7 +90,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             }
 
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
-### listado de subservicio [GET]
+### List of subservices [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
 
@@ -122,7 +122,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
               ]
             }
 
-### edicion de subservicio [PUT]
+### Modify a subservice [PUT]
 
 + Request (application/json)
 
@@ -166,7 +166,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             }
 
 ## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
-### listado de subservicio [GET]
+### List of subservices [GET]
 + Response 200 (application/json)
 
     + Body
@@ -234,8 +234,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Response 204 (application/json)
 
 
-## Register IoTA service in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
-### registar servicio  en IoTA [POST]
+## Register entity service for IOTA [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
+### Register entity service for IoTA [POST]
 + Parameters
     + serviceId (required, `string`) ... Service
     + subserviceId (required, `string`) ... SubService
@@ -333,7 +333,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Response 204
 
 ## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
-### listado de roles asignados [GET]
+### List of assignment roles [GET]
 + Parameters
     + service_id (required, `string`) ... Domain
     + user_id (optional, `string`) ... User
@@ -392,7 +392,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
-### asignacion de rol a usuario [POST]
+### Assign role to user [POST]
 + Parameters
     + service_id (required, `string`) ... Domain
 
