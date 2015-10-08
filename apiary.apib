@@ -181,7 +181,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 
 
 ## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
-### registar dispositivo en IoTA [POST]
+### register device in IoTA [POST]
 + Parameters
     + serviceId (required, `string`) ... Service
     + subserviceId (required, `string`) ... SubService
@@ -212,6 +212,27 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             {
                  "registrationid" : "1234"
             }
+
+### unregister device in IoTA [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "DEVICE_ID":"buton_XXX"
+            }
+
+        Required: [ "DEVICE_ID" ]
+
+
++ Response 204 (application/json)
+
 
 ## Register IoTA service in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
 ### registar servicio  en IoTA [POST]
