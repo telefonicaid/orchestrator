@@ -609,8 +609,8 @@ json = {
         },
         "required": [
             "DEVICE_ID",
-            "ENTITY_TYPE",
-            "PROTOCOL"
+            # "ENTITY_TYPE",
+            # "PROTOCOL"
         ],
     },
 
