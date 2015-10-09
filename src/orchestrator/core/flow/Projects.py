@@ -571,18 +571,18 @@ class Projects(FlowBase):
 
 
             #
-            # 2/3 Subscribe Cygnus
+            # 3.1 Subscribe Cygnus
             #
             DURATION="P1M"
-            ENTITIES = []
-            ATTRIBUTES = []
-            NOTIFY_CONDITIONS = []
-            REFERENCE_URL = "http://localhost"
+            ENTITIES=[]
+            ATTRIBUTES=[]
+            NOTIFY_CONDITIONS=[]
+            REFERENCE_URL="http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
                 DURATION="P1M"
                 ENTITY_TYPE="BlackButton"
                 #"http://<ip_ca>:<port_ca>/"
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+                REFERENCE_URL=self.cygnus_endpoint + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -656,22 +656,23 @@ class Projects(FlowBase):
                     }
                 ]
 
-            cb_res = self.cb.subscribeContext(
-                SERVICE_USER_TOKEN,
-                DOMAIN_NAME,
-                PROJECT_NAME,
-                REFERENCE_URL,
-                DURATION,
-                ENTITIES,
-                ATTRIBUTES,
-                NOTIFY_CONDITIONS
-                )
-            logger.debug("subscribeContext res=%s" % cb_res)
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("registration id=%s" % subscriptionid)
+            if len(ENTITIES) > 0:
+                cb_res = self.cb.subscribeContext(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_NAME,
+                    PROJECT_NAME,
+                    REFERENCE_URL,
+                    DURATION,
+                    ENTITIES,
+                    ATTRIBUTES,
+                    NOTIFY_CONDITIONS
+                    )
+                logger.debug("subscribeContext res=%s" % cb_res)
+                subscriptionid_cyg = cb_res['subscribeResponse']['subscriptionId']
+                logger.debug("registration id cygnus=%s" % subscriptionid_cyg)
 
             #
-            # Short Term Historic subscription
+            # 3.2 Subscribe Short Term Historic (STH)
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
@@ -680,16 +681,20 @@ class Projects(FlowBase):
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.sth_endpoint + '/notify'
 
-            cb_res = self.cb.subscribeContext(
-                SERVICE_USER_TOKEN,
-                DOMAIN_NAME,
-                PROJECT_NAME,
-                REFERENCE_URL,
-                DURATION,
-                ENTITIES,
-                ATTRIBUTES,
-                NOTIFY_CONDITIONS
-                )
+            if len(ENTITIES) > 0:
+                cb_res = self.cb.subscribeContext(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_NAME,
+                    PROJECT_NAME,
+                    REFERENCE_URL,
+                    DURATION,
+                    ENTITIES,
+                    ATTRIBUTES,
+                    NOTIFY_CONDITIONS
+                    )
+                logger.debug("subscribeContext res=%s" % cb_res)
+                subscriptionid_sth = cb_res['subscribeResponse']['subscriptionId']
+                logger.debug("registration id sth=%s" % subscriptionid_sth)
 
 
         except Exception, ex:
@@ -698,11 +703,12 @@ class Projects(FlowBase):
 
         data_log = {
             "ENTITY_ID": ENTITY_ID,
-            "subscriptionid": subscriptionid
+            "subscriptionid_cyg": subscriptionid_cyg,
+            "subscriptionid_sth": subscriptionid_sth
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return subscriptionid
+        return subscriptionid_cyg, subscriptionid_sth
 
 
     def register_device(self,
