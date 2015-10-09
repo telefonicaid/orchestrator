@@ -496,6 +496,15 @@ class Test_SubServiceIoTADevice_RestView(object):
             "ATT_SERVICE_ID": "blackbutton",
             "ATT_GEOLOCATION": "40.4188,-3.6919",
         }
+        self.payload_data2b_ok = {
+            "SERVICE_NAME": "blackbutton",
+            "SERVICE_ADMIN_USER": "admin_bb",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_USER_NAME": "admin_bb",
+            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
+            "DEVICE_ID": "button_dev_sync_%s" % self.suffix,
+        }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data3_ok = {
             "SERVICE_NAME": "blackbutton",
@@ -569,6 +578,14 @@ class Test_SubServiceIoTADevice_RestView(object):
             json_data=True,
             data=self.payload_data2_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        # Unregister Device in SubService
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s/register_device" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data2b_ok)
+        #assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
     def test_post_ok2(self):

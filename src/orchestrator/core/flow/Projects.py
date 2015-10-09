@@ -1108,7 +1108,7 @@ class Projects(FlowBase):
                     "ATT_GEOLOCATION" : devices['ATT_GEOLOCATION'][n]
                 }
                 logger.debug("data%s" % data_log)
-
+                # TODO: use IOTA bulk API
                 res = self.register_device(
                     DOMAIN_NAME,
                     DOMAIN_ID,
@@ -1139,3 +1139,94 @@ class Projects(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DEVICES_ID
 
+    def unregister_device(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        DEVICE_ID,
+                        ):
+
+        '''Unregister Device in IOTA
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_NAME: Service name
+        - DOMAIN_ID: Service id
+        - PROJECT_NAME: SubService name
+        - PROJECT_ID: SubService name
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - DEVICE_ID: Device ID
+        '''
+        data_log = {
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "DEVICE_ID": "%s" % DEVICE_ID,
+        }
+        logger.debug("unregister_device with: %s" % json.dumps(data_log,
+                                                             indent=3))
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+
+            iota_res = self.iota.unregisterDevice(
+                                                SERVICE_USER_TOKEN,
+                                                DOMAIN_NAME,
+                                                PROJECT_NAME,
+                                                DEVICE_ID)
+            logger.debug("unregisterDevice res=%s" % iota_res)
+
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        #return DEVICE_ID
