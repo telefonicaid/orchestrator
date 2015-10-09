@@ -440,7 +440,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_HOST,
                                 self.CA_PORT)
 
-                result_rs = flow.register_service(
+                sub1, sub2 = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("NEW_SUBSERVICE_NAME", None),
@@ -461,8 +461,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
                 # Accumulate previous result
-                if 'subscriptionid' in result:
-                    result['subscriptionid'] = result_rs
+                result['subscriptionid_cyg'] = sub1
+                result['subscriptionid_cyg'] = sub2
 
             # TODO: see optional values for register device
             if 'id' in result and request.DATA.get("DEVICE_ID", None):
@@ -500,7 +500,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_GEOLOCATION", None)
                     )
 
-            if 'id' in result:
+            if 'id' in result and ('error' not in result):
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
                 return Response(result['error'],
@@ -1198,7 +1198,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT)
-            result = flow.register_service(
+            sub1, sub2 = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -1218,6 +1218,9 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_MAPPING", None),
                 request.DATA.get("ATT_TIMEOUT", None)
             )
+            result = {}
+            result['subscriptionid_cyg'] = sub1
+            result['subscriptionid_cyg'] = sub2
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
