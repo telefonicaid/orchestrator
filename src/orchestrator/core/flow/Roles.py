@@ -460,6 +460,11 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+            # Ensure SERVICE_NAME
+            if not SERVICE_NAME:
+                SERVICE_NAME = self.idm.getDomainNameFromToken(ADMIN_TOKEN,
+                                                               SERVICE_ID)
+
             #
             # 1. Get service (aka domain)
             #
@@ -472,6 +477,11 @@ class Roles(FlowBase):
                 SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME,
                                                       SUBSERVICE_NAME)
+            # Ensure SUBSERVICE_NAME
+            if not SUBSERVICE_NAME:
+                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(ADMIN_TOKEN,
+                                                                   SERVICE_ID,
+                                                                   SUBSERVICE_ID)
 
             logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
                                                           SUBSERVICE_ID))
