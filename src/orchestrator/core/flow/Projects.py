@@ -859,7 +859,7 @@ class Projects(FlowBase):
                 if ATT_ICCID and ATT_ICCID != "":
                     STATIC_ATTRIBUTES.append(
                         {
-                            "name": "ccid",
+                            "name": "iccid",
                             "type": "string",
                             "value": ATT_ICCID
                         })
