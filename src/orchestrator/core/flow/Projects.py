@@ -529,7 +529,7 @@ class Projects(FlowBase):
             NOTIFY_CONDITIONS=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
-                DURATION="PT5M"
+                ENTITY_TYPE="BlackButton"
                 REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
                 ENTITIES = [
                     {
@@ -579,7 +579,6 @@ class Projects(FlowBase):
             NOTIFY_CONDITIONS=[]
             REFERENCE_URL="http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                DURATION="P1M"
                 ENTITY_TYPE="BlackButton"
                 #"http://<ip_ca>:<port_ca>/"
                 REFERENCE_URL=self.cygnus_endpoint + '/notify'
@@ -587,7 +586,7 @@ class Projects(FlowBase):
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*"
+                        "id": ".*"
                     }
                 ]
                 ATTRIBUTES=[
@@ -617,7 +616,6 @@ class Projects(FlowBase):
                 ]
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                DURATION="P1M"
                 ENTITY_TYPE="Thing"
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
                 ENTITIES = [
