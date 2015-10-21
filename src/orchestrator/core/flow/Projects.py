@@ -529,6 +529,7 @@ class Projects(FlowBase):
             NOTIFY_CONDITIONS=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
+                ENTITY_TYPE="BlackButton"
                 REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
                 ENTITIES = [
                     {
@@ -585,7 +586,7 @@ class Projects(FlowBase):
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*"
+                        "id": ".*"
                     }
                 ]
                 ATTRIBUTES=[
