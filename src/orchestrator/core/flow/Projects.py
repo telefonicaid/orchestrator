@@ -838,10 +838,6 @@ class Projects(FlowBase):
                         "type": "string"
                     },
                     {
-                        "name": "op_result",
-                        "type": "string"
-                    },
-                    {
                         "name": "op_action",
                         "type": "string"
                     },
@@ -912,10 +908,16 @@ class Projects(FlowBase):
                 if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [
                         {
-                            "name": "lazy_op_result",
+                            "name": "op_result",
                             "type": "string"
                         }
                     ]
+                if ATT_INTERACTION_TYPE == "asynchronous":
+                    ATTRIBUTES.append(
+                        {
+                            "name": "op_result",
+                            "type": "string"
+                        })
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 if ATT_INTERACTION_TYPE == None:
