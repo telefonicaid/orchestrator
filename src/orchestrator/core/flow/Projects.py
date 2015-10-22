@@ -506,7 +506,7 @@ class Projects(FlowBase):
                                            ENTITY_ID,
                                            ACTION,
                                            IS_PATTERN,
-                                           ATTRIBUTES
+                                           STATIC_ATTRIBUTES
                                         )
 
             logger.debug("updateContext res=%s" % cb_res)
@@ -622,7 +622,7 @@ class Projects(FlowBase):
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*"
+                        "id": ".*"
                     }
                 ]
                 ATTRIBUTES=[
@@ -649,7 +649,9 @@ class Projects(FlowBase):
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "humidity"
+                            "humidity",
+                            "temperature",
+                            "state"
                         ]
                     }
                 ]
