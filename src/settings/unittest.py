@@ -41,6 +41,7 @@ INSTALLED_APPS += (
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+PROJECT_ROOT= '.'
 COBERTURA_DIR = os.path.join(PROJECT_ROOT, 'target', 'site', 'cobertura')
 UNIT_TESTS_DIR = os.path.join(PROJECT_ROOT, 'target', 'surefire-reports')
 if not os.path.exists(COBERTURA_DIR):
@@ -65,13 +66,13 @@ NOSE_ARGS = [
 
 KEYSTONE = {
     "host": "localhost",
-    "port": "5001",
+    "port": "5000",
     "protocol":"http"
 }
 
 KEYPASS = {
     "host": "localhost",
-    "port": "7070",
+    "port": "8080",
     "protocol":"http"
 }
 
