@@ -543,13 +543,15 @@ class Projects(FlowBase):
                     "op_extra",
                     "op_status",
                     "interaction_type",
-                    "service_id"
+                    "service_id",
+                    "TimeInstant"
                 ]
                 NOTIFY_CONDITIONS = [
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "op_status"
+                            "op_status",
+                            "TimeInstant"
                         ]
                     }
                 ]
