@@ -612,7 +612,8 @@ class Projects(FlowBase):
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "op_status"
+                            "op_status",
+                            "TimeInstant"
                         ]
                     }
                 ]
