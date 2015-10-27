@@ -854,6 +854,10 @@ class Projects(FlowBase):
                     {
                         "name": "sleeptime",
                         "type": "string"
+                    },
+                    {
+                        "name": "TimeInstant",
+                        "type": "string"
                     }
                     ]
 
