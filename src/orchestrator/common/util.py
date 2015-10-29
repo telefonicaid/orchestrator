@@ -73,10 +73,12 @@ class RestOperations(object):
 
         if json_data:
             request.add_header('Accept', 'application/json')
-            request.add_header('Content-Type', 'application/json')
+            if data:
+                request.add_header('Content-Type', 'application/json')
         else:
             request.add_header('Accept', 'application/xml')
-            request.add_header('Content-Type', 'application/xml')
+            if data:
+                request.add_header('Content-Type', 'application/xml')
 
         if user and password:
             base64string = base64.encodestring(
@@ -141,15 +143,18 @@ class RestOperations(object):
             url = self.base_url + url
 
         headers = {}
+        rdata = None
 
         if json_data:
             headers.update({'Accept': 'application/json'})
-            headers.update({'Content-Type': 'application/json'})
-            rdata = json.dumps(data)
+            if data:
+                headers.update({'Content-Type': 'application/json'})
+                rdata = json.dumps(data)
         else:
             headers.update({'Accept': 'application/xml'})
-            headers.update({'Content-Type': 'application/xml'})
-            rdata = data
+            if data:
+                headers.update({'Content-Type': 'application/xml'})
+                rdata = data
 
 
         if user and password:
