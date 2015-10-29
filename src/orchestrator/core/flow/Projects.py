@@ -526,7 +526,7 @@ class Projects(FlowBase):
             REFERENCE_URL="http://localhost"
             ENTITIES=[]
             ATTRIBUTES = []
-            NOTIFY_CONDITIONS=[]
+            NOTIFY_CONDITIONS = []
 
             if PROTOCOL == "TT_BLACKBUTTON":
                 ENTITY_TYPE="BlackButton"
@@ -1234,3 +1234,234 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         #return DEVICE_ID
+
+
+    def register_subscription(self,
+                              DOMAIN_NAME,
+                              DOMAIN_ID,
+                              PROJECT_NAME,
+                              PROJECT_ID,
+                              SERVICE_USER_NAME,
+                              SERVICE_USER_PASSWORD,
+                              SERVICE_USER_TOKEN,
+                              ENTITY_ID,
+                              ENTITY_TYPE
+                              ):
+
+        '''Register Subscription
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - ENTITY_ID:
+        - ENTITY_TYPE:
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "ENTITY_ID": "%s" % ENTITY_ID,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+        }
+        logger.debug("register_subscription invoked with: %s" % json.dumps(data_log,
+        indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                                                        DOMAIN_NAME,
+                                                        ROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+
+            # TODO: set default values for ATTRIBUTES and NOTIFY_CONDITIONS
+            # 1. List EntityType?
+            # 2. ATTRIBUTES =
+
+            #
+            # Set default ATTRIBUTES for subscription
+            #
+            db_res = self.cb.getContextTypes(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                ENTITY_TYPE)
+
+            ATTRIBUTES = cb_res['attributes']
+            ENTITIES = [
+                {
+                    "type": ENTITY_TYPE,
+                    "isPattern": "false",
+                    "id": ENTITY_ID
+                }
+            ]
+
+            #
+            # Set dDefault Notify conditions
+            #
+            NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": ATTRIBUTES
+                    }
+            ]
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
+
+            return subscriptionid
+
+
+    def list_subscriptions(self,
+                           DOMAIN_NAME,
+                           DOMAIN_ID,
+                           PROJECT_NAME,
+                           PROJECT_ID,
+                           SERVICE_USER_NAME,
+                           SERVICE_USER_PASSWORD,
+                           SERVICE_USER_TOKEN,
+                           ENTITY_ID,
+                           ):
+
+        '''Register Subscription
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - ENTITY_ID:
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "ENTITY_ID": "%s" % ENTITY_ID,
+        }
+        logger.debug("register_subscription invoked with: %s" % json.dumps(data_log,
+        indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                                                        DOMAIN_NAME,
+                                                        ROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                ENTITY_ID
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
+
+            return subscriptionid
