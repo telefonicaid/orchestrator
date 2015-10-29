@@ -226,6 +226,7 @@ ORION = {}
 CA = {}
 CYGNUS = {}
 STH = {}
+PERSEO = {}
 
 PEP = {
     "user": "pep",
