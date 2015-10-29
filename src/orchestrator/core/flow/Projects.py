@@ -612,7 +612,7 @@ class Projects(FlowBase):
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "op_status",
+                            "op_status",  # reduntant?
                             "TimeInstant"
                         ]
                     }
@@ -700,6 +700,32 @@ class Projects(FlowBase):
                 logger.debug("registration id sth=%s" % subscriptionid_sth)
 
 
+            #
+            # 3.3 Perseo
+            #
+            REFERENCE_URL = "http://localhost"
+            if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.perseo_endpoint + '/notify'
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
+                REFERENCE_URL = self.perseo_endpoint + '/notify'
+
+            if len(ENTITIES) > 0:
+                cb_res = self.cb.subscribeContext(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_NAME,
+                    PROJECT_NAME,
+                    REFERENCE_URL,
+                    DURATION,
+                    ENTITIES,
+                    ATTRIBUTES,
+                    NOTIFY_CONDITIONS
+                    )
+                logger.debug("subscribeContext res=%s" % cb_res)
+                subscriptionid_perseo = cb_res['subscribeResponse']['subscriptionId']
+                logger.debug("registration id perseo=%s" % subscriptionid_perseo)
+
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -707,7 +733,8 @@ class Projects(FlowBase):
         data_log = {
             "ENTITY_ID": ENTITY_ID,
             "subscriptionid_cyg": subscriptionid_cyg,
-            "subscriptionid_sth": subscriptionid_sth
+            "subscriptionid_sth": subscriptionid_sth,
+            "subscriptionid_perseo": subscriptionid_perseo
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
