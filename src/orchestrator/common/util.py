@@ -123,6 +123,72 @@ class RestOperations(object):
         return res
 
 
+    def rest_request2(self, url, method, user=None, password=None,
+                     data=None, json_data=True, relative_url=True,
+                     auth_token=None, fiware_service=None,
+                     fiware_service_path=None):
+        '''Does an (optionally) authorized REST request with optional JSON data.
+
+        In case of HTTP error, the exception is returned normally instead of
+        raised and, if JSON error data is present in the response, .msg will
+        contain the error detail.'''
+        user = user or None
+        password = password or None
+        auth = None
+
+        if relative_url:
+            # Create real url
+            url = self.base_url + url
+
+        headers = {}
+
+        if json_data:
+            headers.update({'Accept': 'application/json'})
+            headers.update({'Content-Type': 'application/json'})
+            rdata = json.dumps(data)
+        else:
+            headers.update({'Accept': 'application/xml'})
+            headers.update({'Content-Type': 'application/xml'})
+            rdata = data
+
+
+        if user and password:
+            # base64string = base64.encodestring(
+            #     '%s:%s' % (user, password))[:-1]
+            # authheader = "Basic %s" % base64string
+            # headers.update({'Authorization': authheader})
+            auth=(user, password)
+
+        if auth_token:
+            headers.update({'X-Auth-Token': auth_token })
+
+        if fiware_service:
+            headers.update({'Fiware-Service': fiware_service})
+
+        if fiware_service_path:
+            headers.update({'Fiware-ServicePath': fiware_service_path})
+
+        res = None
+
+        try:
+            if not auth:
+                res = requests.post(url,
+                                    headers=headers,
+                                    data=rdata,
+                                    verify=False)
+            else:
+                res = requests.post(url,
+                                    auth=auth,
+                                    headers=headers,
+                                    data=rdata,
+                                    verify=False)
+
+        except Exception, e:
+            print e
+
+        return res
+
+
 class CSVOperations(object):
     '''
 
