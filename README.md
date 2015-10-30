@@ -26,7 +26,7 @@ Orchestrator interacts mainly with Identity Manager [Keystone](https://github.co
 
 In this README document you will find how to get started with the application and basic concepts. For a more detailed information you can read the following docs:
 
-* [API](http://docs.piotp.apiary.io/#orchestrator)
+* [API](http://docs.orchestrator2.apiary.io)
 * [scripts](SCRIPTS.md)
 * [Logs and Alarms](TROUBLESHOOTING.md)
 * [Installation guide](INSTALL.md)
