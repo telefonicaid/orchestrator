@@ -534,7 +534,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             "SERVICE_USER_NAME": "admin_tt",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "DEVICE_ID": "thing_%s" % self.suffix,
-            "ENTITY_TYPE": "thing",
+            "ENTITY_TYPE": "thinkingthing",
             "PROTOCOL": "PDI-IoTA-ThinkingThings",
         }
         self.suffix = str(uuid.uuid4())[:8]
