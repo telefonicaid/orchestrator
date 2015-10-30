@@ -506,7 +506,7 @@ class Projects(FlowBase):
                                            ENTITY_ID,
                                            ACTION,
                                            IS_PATTERN,
-                                           ATTRIBUTES
+                                           STATIC_ATTRIBUTES
                                         )
 
             logger.debug("updateContext res=%s" % cb_res)
@@ -529,7 +529,7 @@ class Projects(FlowBase):
             NOTIFY_CONDITIONS=[]
 
             if PROTOCOL == "TT_BLACKBUTTON":
-                DURATION="PT5M"
+                ENTITY_TYPE="BlackButton"
                 REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
                 ENTITIES = [
                     {
@@ -543,13 +543,15 @@ class Projects(FlowBase):
                     "op_extra",
                     "op_status",
                     "interaction_type",
-                    "service_id"
+                    "service_id",
+                    "TimeInstant"
                 ]
                 NOTIFY_CONDITIONS = [
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "op_status"
+                            "op_status",
+                            "TimeInstant"
                         ]
                     }
                 ]
@@ -579,7 +581,6 @@ class Projects(FlowBase):
             NOTIFY_CONDITIONS=[]
             REFERENCE_URL="http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                DURATION="P1M"
                 ENTITY_TYPE="BlackButton"
                 #"http://<ip_ca>:<port_ca>/"
                 REFERENCE_URL=self.cygnus_endpoint + '/notify'
@@ -587,7 +588,7 @@ class Projects(FlowBase):
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*"
+                        "id": ".*"
                     }
                 ]
                 ATTRIBUTES=[
@@ -617,14 +618,13 @@ class Projects(FlowBase):
                 ]
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                DURATION="P1M"
                 ENTITY_TYPE="Thing"
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
                         "isPattern": "true",
-                        "id": "*"
+                        "id": ".*"
                     }
                 ]
                 ATTRIBUTES=[
@@ -651,7 +651,9 @@ class Projects(FlowBase):
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "humidity"
+                            "humidity",
+                            "temperature",
+                            "state"
                         ]
                     }
                 ]
@@ -838,10 +840,6 @@ class Projects(FlowBase):
                         "type": "string"
                     },
                     {
-                        "name": "op_result",
-                        "type": "string"
-                    },
-                    {
                         "name": "op_action",
                         "type": "string"
                     },
@@ -863,7 +861,7 @@ class Projects(FlowBase):
                 if ATT_ICCID and ATT_ICCID != "":
                     STATIC_ATTRIBUTES.append(
                         {
-                            "name": "ccid",
+                            "name": "iccid",
                             "type": "string",
                             "value": ATT_ICCID
                         })
@@ -912,10 +910,16 @@ class Projects(FlowBase):
                 if ATT_INTERACTION_TYPE == "synchronous":
                     LAZY = [
                         {
-                            "name": "lazy_op_result",
+                            "name": "op_result",
                             "type": "string"
                         }
                     ]
+                if ATT_INTERACTION_TYPE == "asynchronous":
+                    ATTRIBUTES.append(
+                        {
+                            "name": "op_result",
+                            "type": "string"
+                        })
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 if ATT_INTERACTION_TYPE == None:
