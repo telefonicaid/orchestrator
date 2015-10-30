@@ -164,11 +164,11 @@ LOGGING = {
     },
     'handlers': {
         'null': {
-            'level':'DEBUG',
+            'level':'INFO',
             'class':'django.utils.log.NullHandler',
         },
         'logfile': {
-            'level':'DEBUG',
+            'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/orchestrator/' + "/orchestrator.log",
             'maxBytes': 25*1024*1024,  # 25 Mb
@@ -194,16 +194,16 @@ LOGGING = {
         },
         'django.request': {
             'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'orchestrator_api': {
             'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
         'orchestrator_core': {
             'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
     }
 }
@@ -229,6 +229,11 @@ REST_FRAMEWORK = {
 # ---------------
 KEYSTONE = {}
 KEYPASS = {}
+IOTA = {}
+ORION = {}
+CA = {}
+CYGNUS = {}
+STH = {}
 
 PEP = {
     "user": "pep",
@@ -239,3 +244,7 @@ IOTAGENT = {
     "user": "iotagent",
     "password": "iotagent"
 }
+
+SCIM_API_VERSION = "1.1"  # Supported v1.1 (1.1) and v2.0 (2.0) (by UPM)
+
+ORC_VERSION = "ORC_version"

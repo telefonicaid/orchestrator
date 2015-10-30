@@ -34,6 +34,10 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     RoleList_RESTView,
                                     AssignRoleUser_RESTView,
                                     Trust_RESTView,
+                                    SubServiceIoTADevice_RESTView,
+                                    SubServiceIoTADevices_RESTView,                                    
+                                    SubServiceIoTAService_RESTView,
+                                    OrchVersion_RESTView
                                     )
 
 
@@ -42,10 +46,14 @@ urlpatterns = patterns('',
      url(r'^service/(?P<service_id>\w+)[/]?$', ServiceList_RESTView.as_view(), name='service_rest_view'),
      url(r'^service/(?P<service_id>\w+)/subservice[/]?$', SubServiceCreate_RESTView.as_view(), name='new_subservice_rest_view'),
      url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)?$', SubServiceList_RESTView.as_view(), name='subservice_rest_view'),
+     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/register_device[/]?$', SubServiceIoTADevice_RESTView.as_view(), name='subserviceiotadevice_rest_view'),
+     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/register_devices[/]?$', SubServiceIoTADevices_RESTView.as_view(), name='subserviceiotadevices_rest_view'),     
+     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/register_service[/]?$', SubServiceIoTAService_RESTView.as_view(), name='subserviceiotaservice_rest_view'),
      url(r'^service/(?P<service_id>\w+)/user[/]?$', UserList_RESTView.as_view(), name='new_user_rest_view'),
      url(r'^service/(?P<service_id>\w+)/user/(?P<user_id>\w+)?$', User_RESTView.as_view(), name='user_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role[/]?$', RoleList_RESTView.as_view(), name='new_role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role/(?P<role_id>\w+)?$', Role_RESTView.as_view(), name='role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role_assignments[/]?$', AssignRoleUser_RESTView.as_view(), name='assign_role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/trust[/]?$', Trust_RESTView.as_view(), name='new_trust_rest_view'),
+     url(r'^version[/]?$', OrchVersion_RESTView.as_view(), name='orch_version_rest_view'),
 )

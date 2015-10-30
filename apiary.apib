@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: *
+HOST: orchestrator_host:8084
 
 # Orchestrator
 
@@ -9,19 +9,18 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 All requests can be performed providing a 'x-auth-token' header instead of X_USER / X_PASSWORD payload fields
 
-## Services query [/v1.0/service]
-### Listado de Services [GET]
 
+## Services query [/v1.0/service]
+### List of Services [GET]
 + Request (application/json)
-        
+
             {
-                "DOMAIN_NAME":"admin_domain",
+                "DOMAIN_NAME":"default_admin_domain",
                 "SERVICE_ADMIN_USER":"cloud_admin",
                 "SERVICE_ADMIN_PASSWORD": "password",
             }
 
 + Response 200 (application/json)
-
     + Body
 
             {
@@ -29,36 +28,34 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                        "name": "SmartValencia",
-                        "description": "SmartValencia"
+                        "name": "defaultservice",
+                        "description": "defaultservice"
                     },
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
-                        "name": "SmartLogrono",
-                        "description": "SmartLogro�o"
+                        "name": "defaultservice2",
+                        "description": "defaultservice2"
                     }
                 ]
             }
 
 ### Create Service [POST]
 + Request (application/json)
-
             {
                 "DOMAIN_NAME":"admin_domain",
                 "DOMAIN_ADMIN_USER":"cloud_admin",
                 "DOMAIN_ADMIN_PASSWORD": "password",
-                "NEW_SERVICE_NAME":"SmartValencia",
-                "NEW_SERVICE_DESCRIPTION":"SmartValencia desc",
+                "NEW_SERVICE_NAME":"defaultservice",
+                "NEW_SERVICE_DESCRIPTION":"defaultservice desc",
                 "NEW_SERVICE_ADMIN_USER":"adm1",
                 "NEW_SERVICE_ADMIN_PASSWORD":"password",
                 "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
             }
+       Required: ["NEW_SERVICE_NAME", "NEW_SERVICE_ADMIN_USER",  "NEW_SERVICE_ADMIN_PASSWORD"]
 
 + Response 201 (application/json)
-
     + Body
-
             {
              "id" : 0000
             }
@@ -67,51 +64,50 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 ### Get data [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
-
 + Request (application/json)
-        
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
             }
 + Response 200 (application/json)
-
     + Body
-
             {
                 "enabled": true,
                 "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                "name": "SmartValencia",
-                "description": "SmartValencia"
+                "name": "defaultservice",
+                "description": "defaultservice"
             }
 
+
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
-### listado de subservicio [GET]
+### List of subservices [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
-
-
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
 + Response 200 (application/json)
-
     + Body
-
             {
               "projects": [
                 {
-                  "description": "SmartValencia Subservicio Electricidad",
+                  "description": "defaultservice Subservicio Electricidad",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aea",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02",
                   "name": "Electricidad"
                 },
                 {
-                  "description": "SmartValencia Subservicio Basuras",
+                  "description": "defaultservice Subservicio Basuras",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aeb",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc03",
                   "name": "Basuras"
                 },
                 {
-                  "description": "SmartValencia Subservicio Jardines",
+                  "description": "defaultservice Subservicio Jardines",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aec",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc04",
                   "name": "Jardines"
@@ -119,53 +115,58 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
               ]
             }
 
-### edicion de subservicio [PUT]
 
+### Delete a Service [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
 + Request (application/json)
-        
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
             }
++ Response 204
 
-
-+ Response 201 (application/json)
-
-    + Body
-        
-            {
-                   "id" : 0000
-            }
 
 ### Create SubService [POST]
 + Parameters
     + serviceId (required, `string`) ... Service Id
-
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD":"password",
                 "NEW_SUBSERVICE_NAME":"Electricidad",
                 "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
             }
-
+       Required: ["NEW_SUBSERVICE_NAME" ]
 + Response 201 (application/json)
-
+    + Body
             {
                  "id" : 0000
             }
 
+### Modify a subservice [PUT]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
+            }
+       Required: ["NEW_SUBSERVICE_DESCRIPTION" ]
++ Response 200
+
 ## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
-### listado de subservicio [GET]
+### List of SubServices [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... Service Id
 + Response 200 (application/json)
-
     + Body
-
             {
                 'description': 'electricidad',
                 'domain_id': '06b9a460f5c343b3bc8b43f8533f7ab4',
@@ -173,22 +174,157 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 'name': '/Electricidad'}
             }
 
+### Modify SubService [PUT]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... Service Id
+
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
+            }
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                   "id" : 0000
+            }
+
+
+## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
+### List of subservices [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SUBSERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
++ Response 200 (application/json)
+
+### Delete a SubService [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SUBSERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"adm1",
+                "SERVICE_ADMIN_PASSWORD":"password",
+            }
++ Response 204
+
+
+## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
+### register device in IoTA [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "DEVICE_ID":"buton_XXX",
+                "ENTITY_TYPE":""BlackButton,
+                "PROTOCOL":"TT_BLACKBUTTON",
+                "ATT_CCID":"AAA",
+                "ATT_IMEI":"123425345",
+                "ATT_IMSI":"4535656777",
+                "ATT_INTERACTION_TYPE":"asynchronous",
+                "ATT_SERVICE_ID":"S-blackbutton",
+                "ATT_GEOLOCATION":"40.4188,-36919",
+            }
+        Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
++ Response 201 (application/json)
+    + Body
+            {
+                 "registrationid" : "1234"
+            }
+
+### unregister device in IoTA [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "DEVICE_ID":"buton_XXX"
+            }
+
+        Required: [ "DEVICE_ID" ]
+
+
++ Response 204 (application/json)
+
+
+## Register entity service for IOTA [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
+### Register entity service for IoTA [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+
++ Request (application/json)
+
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"adm1",
+                "SERVICE_USER_PASSWORD":"password",
+                "SUBSERVICE_NAME":"Electricidad",
+                "ENTITY_TYPE":"BlackButton",
+                "ENTITY_ID":"buttonXXX",
+                "PROTOCOL":"TT_BLACKBUTTON",
+                "ATT_NAME":"blackbutton_telepizza",
+                "ATT_PROVIDER":"telepizza",
+                "ATT_ENDPOINT":"http://localhost:6500/sync/request",
+                "ATT_METHOD":"POST",
+                "ATT_AUTHENTICATION":"context-adapter",
+                "ATT_INTERACTION_TYPE":"synchronous",
+                "ATT_MAPPING":"[]",
+                "ATT_TIMEOUT":"120",
+
+            }
+
+        Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
+
++ Response 201 (application/json)
+    + Body
+            {
+                 "subscriptionid" : "13234"
+            }
+
+
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
 ### List Roles[GET]
 + Parameters
     + serviceId (required, `string`) ... Service
     + index (optional, `number`) ... Start index for pagination
     + count (optional, `number`) ...  Number of results for pagination
-
 + Request (application/json)
-
         {
             "START_INDEX":"10",
             "COUNT":"10",
         }
-
 + Response 200 (application/json)
-
+    + Body
         {
             "roles": [
                 {
@@ -212,16 +348,16 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 
 ### Create a Role[POST]
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
+                "SERVICE_NAME":"defaultservice",
                 "SERVICE_ADMIN_USER":"adm1",
                 "SERVICE_ADMIN_PASSWORD": "password",
                 "NEW_ROLE_NAME":"role_NameBlabla"
             }
+        Required: ["NEW_ROLE_NAME"]
 
 + Response 201 (application/json)
-
+    + Body
             {
                  "id" : 0000
             }
@@ -232,7 +368,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Response 204
 
 ## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
-### listado de roles asignados [GET]
+### List of assignment roles [GET]
 + Parameters
     + service_id (required, `string`) ... Domain
     + user_id (optional, `string`) ... User
@@ -242,7 +378,6 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
     + inherit (optional, `boolean`) ... all inherit roles
 
 + Response 200 (application/json)
-
         {
           "role_assignments": [
             {
@@ -257,7 +392,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
               },
               "user": {
-                "description": "user of domain SmartValencia",
+                "description": "user of domain defaultservice",
                 "name": "Carl",
                 "enabled": true,
                 "id": "7ee5a828843945a79026d99ae0057bb9",
@@ -278,7 +413,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "name": "admin"
               },
               "user": {
-                "description": "Administrator of domain SmartValencia",
+                "description": "Administrator of domain defaultservice",
                 "name": "adm1",
                 "enabled": true,
                 "id": "a5c624a8402b48c3931d4600a7fe2be9",
@@ -291,12 +426,10 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
-### asignacion de rol a usuario [POST]
+### Assign role to user [POST]
 + Parameters
     + service_id (required, `string`) ... Domain
-
 + Request (application/json)
-
         {
             "SUBSERVICE_NAME":"Electricidad",
             "SUBSERVICE_ID":"234234234234",
@@ -309,16 +442,13 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "SERVICE_USER_ID":"asdfasdf",
             "INHERIT":true
         }
-
+        Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
 + Response 201
 
-
-### rovocar rol a usuario [DELETE]
+### Revoke Role user [DELETE]
 + Parameters
     + service_id (required, `string`) ... Domain
-
 + Request (application/json)
-
         {
             "SUBSERVICE_NAME":"Electricidad",
             "SUBSERVICE_ID":"234234234234",
@@ -331,7 +461,6 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "SERVICE_USER_ID":"asdfasdf",
             "INHERIT":true
         }
-
 + Response 204
 
 
@@ -341,16 +470,13 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
     + serviceId (required, `string`) ... Service Id
     + index (optional, `number`) ... Start index for pagination
     + count (optional, `number`) ...  Number of results for pagination
-
 + Request (application/json)
-
         {
             "START_INDEX":"10",
             "COUNT":"10",
         }
-
 + Response 200 (application/json)
-
+    + Body
         {
             "users" : [
                 {
@@ -385,31 +511,24 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
         }
 
 ### Create Users [POST]
-
 + Request (application/json)
-
         {
             "NEW_SERVICE_USER_NAME":"user_name_new",
             "NEW_SERVICE_USER_PASSWORD":"password",
             "NEW_SERVICE_USER_EMAIL":"email@email.com",
             "NEW_SERVICE_USER_DESCRIPTION":"user description"
         }
-
 + Response 201 (application/json)
-
         {
             "id": 00000
         }
-
 
 ## User in Service [/v1.0/service/{serviceId}/user/{userId}]
 ### detail of user[GET]
 + Parameters
     + userId (required, `string`) ... User
     + serviceId (required, `string`) ... Service
-
 + Response 200 (application/json)
-
         {
           "userName": "alice",
           "urn:scim:schemas:extension:keystone:1.0": {
@@ -428,10 +547,10 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
-### update an user[PUT]
+### update an user (by his admin) [PUT]
 
 + Request (application/json)
-
+    + Body
         {
              "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}],
                                   "name": "new name user",
@@ -439,14 +558,13 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                                   "password": "new description password"
              }
         }
-
 + Response 200
 
 ### change user password by himself [POST]
 
 + Request (application/json)
-
         {
+             "SERVICE_USER_PASSWORD": "old_password",
              "NEW_USER_PASSWORD": "new_password"
         }
 
@@ -461,7 +579,6 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 ### Create Trust Token [POST]
 
 + Request (application/json)
-
         {
             "SUBSERVICE_NAME":"Electricidad",
             "SUBSERVICE_ID":"234234234234",
@@ -474,9 +591,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "TRUSTOR_USER_NAME":"adm1",
             "TRUSTOR_USER_ID":"45674ASDFASDF5674567",
         }
-
 + Response 201 (application/json)
-
+    + Body
         {
             "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
         }
