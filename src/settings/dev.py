@@ -13,6 +13,8 @@ from common import *  # noqa
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
+
 KEYSTONE = {
     "host": "localhost",
     "port": "5001",
@@ -24,4 +26,34 @@ KEYPASS = {
     "port": "7070",
     "protocol":"http"
 }
-REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
+
+IOTA = {
+    "host": "localhost",
+    "port": "4041",
+    "protocol":"http"
+}
+
+ORION = {
+    "host": "localhost",
+    "port": "1026",
+    "protocol":"http"
+}
+
+CA = {
+    "host": "localhost",
+    "port": "9999",
+    "protocol":"http"
+}
+
+CYGNUS = {
+    "host": "localhost",
+    "port": "5050",
+    "protocol":"http"
+}
+
+STH = {
+    "host": "localhost",
+    "port": "8666",
+    "protocol":"http"
+}
+

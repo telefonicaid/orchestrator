@@ -67,6 +67,18 @@ class IoTConf(object):
             self.KEYPASS_HOST = settings.KEYPASS['host']
             self.KEYPASS_PORT = settings.KEYPASS['port']
 
+            self.IOTA_PROTOCOL = settings.IOTA['protocol']
+            self.IOTA_HOST = settings.IOTA['host']
+            self.IOTA_PORT = settings.IOTA['port']
+
+            self.ORION_PROTOCOL = settings.ORION['protocol']
+            self.ORION_HOST = settings.ORION['host']
+            self.ORION_PORT = settings.ORION['port']
+
+            self.CA_PROTOCOL = settings.CA['protocol']
+            self.CA_HOST = settings.CA['host']
+            self.CA_PORT = settings.CA['port']
+
         except KeyError:
             logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
@@ -176,7 +188,10 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_PORT,
                            self.KEYPASS_PROTOCOL,
                            self.KEYPASS_HOST,
-                           self.KEYPASS_PORT)
+                           self.KEYPASS_PORT,
+                           self.IOTA_PROTOCOL,
+                           self.IOTA_HOST,
+                           self.IOTA_PORT)
             result = flow.delete_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -340,7 +355,13 @@ class SubServiceList_RESTView(APIView, IoTConf):
             # request.DATA # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT)
+                            self.KEYSTONE_PORT,
+                            self.KEYPASS_PROTOCOL,
+                            self.KEYPASS_HOST,
+                            self.KEYPASS_PORT,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT)
             if service_id:
                     result = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
@@ -383,7 +404,17 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
             request.DATA  # json validation
             flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
                                        self.KEYSTONE_HOST,
-                                       self.KEYSTONE_PORT)
+                                       self.KEYSTONE_PORT,
+                                       None,
+                                       None,
+                                       None,
+                                       self.IOTA_PROTOCOL,
+                                       self.IOTA_HOST,
+                                       self.IOTA_PORT,
+                                       self.ORION_PROTOCOL,
+                                       self.ORION_HOST,
+                                       self.ORION_PORT)
+
             result = flow.createNewSubService(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -394,7 +425,85 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 request.DATA.get("NEW_SUBSERVICE_NAME", None),
                 request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None))
 
-            if 'id' in result:
+            # TODO: see optional values for register entity service
+            if 'id' in result and request.DATA.get("ENTITY_ID", None):
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT)
+
+                sub1, sub2 = flow.register_service(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                    result['id'],
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("ENTITY_TYPE", None),
+                    request.DATA.get("ENTITY_ID", None),
+                    request.DATA.get("PROTOCOL", None),
+                    request.DATA.get("ATT_NAME", None),
+                    request.DATA.get("ATT_PROVIDER", None),
+                    request.DATA.get("ATT_ENDPOINT", None),
+                    request.DATA.get("ATT_METHOD", None),
+                    request.DATA.get("ATT_AUTHENTICATION", None),
+                    request.DATA.get("ATT_INTERACTION_TYPE", None),
+                    request.DATA.get("ATT_MAPPING", None),
+                    request.DATA.get("ATT_TIMEOUT", None)
+                    )
+                # Accumulate previous result
+                result['subscriptionid_cyg'] = sub1
+                result['subscriptionid_cyg'] = sub2
+
+            # TODO: see optional values for register device
+            if 'id' in result and request.DATA.get("DEVICE_ID", None):
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT)
+                result_rd = flow.register_device(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
+                    result['id'],
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("DEVICE_ID", None),
+                    request.DATA.get("ENTITY_TYPE", None),
+                    request.DATA.get("PROTOCOL", None),
+                    request.DATA.get("ATT_ICCID", None),
+                    request.DATA.get("ATT_IMEI", None),
+                    request.DATA.get("ATT_IMSI", None),
+                    request.DATA.get("ATT_INTERACTION_TYPE", None),
+                    request.DATA.get("ATT_SERVICE_ID", None),
+                    request.DATA.get("ATT_GEOLOCATION", None)
+                    )
+
+            if 'id' in result and ('error' not in result):
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
                 return Response(result['error'],
@@ -919,6 +1028,279 @@ class Trust_RESTView(APIView, IoTConf):
             )
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class SubServiceIoTADevice_RESTView(APIView, IoTConf):
+    """
+    SubService IoTA Device
+
+    """
+    schema_name = "IoTADevice"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request, service_id, subservice_id):
+        self.schema_name = "IoTADevice"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
+            result = flow.register_device(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("DEVICE_ID", None),
+                request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("PROTOCOL", None),
+                request.DATA.get("ATT_ICCID", None),
+                request.DATA.get("ATT_IMEI", None),
+                request.DATA.get("ATT_IMSI", None),
+                request.DATA.get("ATT_INTERACTION_TYPE", None),
+                request.DATA.get("ATT_SERVICE_ID", None),
+                request.DATA.get("ATT_GEOLOCATION", None)
+            )
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def delete(self, request, service_id, subservice_id):
+        self.schema_name = "IoTADevice"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            #request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
+            result = flow.unregister_device(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("DEVICE_ID", None)
+            )
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_204_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class SubServiceIoTADevices_RESTView(APIView, IoTConf):
+    """
+    SubService IoTA Devices CSV
+
+    """
+    schema_name = "IoTADevices"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request, service_id, subservice_id):
+        self.schema_name = "IoTADevices"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
+            result = flow.register_devices(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("CSV_DEVICES", None),
+                # request.DATA.get("DEVICE_ID", None),
+                # request.DATA.get("ENTITY_TYPE", None),
+                # request.DATA.get("PROTOCOL", None),
+                # request.DATA.get("ATT_ICCID", None),
+                # request.DATA.get("ATT_IMEI", None),
+                # request.DATA.get("ATT_IMSI", None),
+                # request.DATA.get("ATT_INTERACTION_TYPE", None),
+                # request.DATA.get("ATT_SERVICE_ID", None),
+                # request.DATA.get("ATT_GEOLOCATION", None)
+            )
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class SubServiceIoTAService_RESTView(APIView, IoTConf):
+    """
+    SubService IoTA Service
+
+    """
+    schema_name = "IoTAService"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request, service_id, subservice_id):
+        self.schema_name = "IoTAService"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
+            sub1, sub2 = flow.register_service(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("ENTITY_ID", None),
+                request.DATA.get("PROTOCOL", None),
+                request.DATA.get("ATT_NAME", None),
+                request.DATA.get("ATT_PROVIDER", None),
+                request.DATA.get("ATT_ENDPOINT", None),
+                request.DATA.get("ATT_METHOD", None),
+                request.DATA.get("ATT_AUTHENTICATION", None),
+                request.DATA.get("ATT_INTERACTION_TYPE", None),
+                request.DATA.get("ATT_MAPPING", None),
+                request.DATA.get("ATT_TIMEOUT", None)
+            )
+            result = {}
+            result['subscriptionid_cyg'] = sub1
+            result['subscriptionid_cyg'] = sub2
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+
+class OrchVersion_RESTView(APIView, IoTConf):
+    """
+
+    """
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request, service_id=None):
+
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            # TODO: extract version number
+            result = { "version": settings.ORC_VERSION }
+
+            # TOOD: extarct info about health
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))

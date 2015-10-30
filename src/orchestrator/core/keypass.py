@@ -23,11 +23,13 @@
 #
 import json
 import os
+import logging
 
 from orchestrator.common.util import RestOperations
 from orchestrator.core import policies
 from orchestrator.core.ac import AccCOperations
 
+logger = logging.getLogger('orchestrator_core')
 
 class AccCKeypassOperations(AccCOperations):
     '''
@@ -63,6 +65,7 @@ class AccCKeypassOperations(AccCOperations):
 
         xml_data = open(self.policy_dir + '/' + POLICY_FILE_NAME)
         body_data = xml_data.read()
+        logger.debug("data response: %s" % body_data)
         xml_data.close()
         self.provisionPolicyByContent(SERVICE_NAME,
                                       SERVICE_ADMIN_TOKEN,
@@ -112,8 +115,9 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        data = res.read()          
-        return data
+        body_data = res.read()
+        logger.debug("data response: %s" % body_data)
+        return body_data
 
     def deleteRolePolicies(self,
                            SERVICE_NAME,

@@ -25,6 +25,8 @@ import logging
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
+from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
+from orchestrator.core.orion import CBOrionOperations as CBOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -36,7 +38,22 @@ class FlowBase(object):
                  KEYSTONE_PORT,
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,
-                 KEYPASS_PORT=None):
+                 KEYPASS_PORT=None,
+                 IOTA_PROTOCOL="http",
+                 IOTA_HOST="localhost",
+                 IOTA_PORT="4041",
+                 ORION_PROTOCOL="http",
+                 ORION_HOST="localhost",
+                 ORION_PORT="1026",
+                 CA_PROTOCOL="http",
+                 CA_HOST="localhost",
+                 CA_PORT="9999",
+                 CYGNUS_PROTOCOL="http",
+                 CYGNUS_HOST="localhost",
+                 CYGNUS_PORT="5050",
+                 STH_PROTOCOL="http",
+                 STH_HOST="localhost",
+                 STH_PORT="8666"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -44,6 +61,22 @@ class FlowBase(object):
         self.ac = AccCOperations(KEYPASS_PROTOCOL,
                                  KEYPASS_HOST,
                                  KEYPASS_PORT)
+
+        self.iota = IoTAOperations(IOTA_PROTOCOL,
+                                   IOTA_HOST,
+                                   IOTA_PORT)
+
+        self.cb = CBOperations(ORION_PROTOCOL,
+                               ORION_HOST,
+                               ORION_PORT)
+        if CA_PROTOCOL:
+            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+
+        if CYGNUS_PROTOCOL:
+            self.cygnus_endpoint = CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
+        if STH_PROTOCOL:
+            self.sth_endpoint = STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
+
 
     def composeErrorCode(self, ex):
         '''
@@ -57,6 +90,12 @@ class FlowBase(object):
         if isinstance(ex.args, tuple) and (
             not isinstance(ex.args[0], tuple)):  # Python 2.6
             res['code'] = ex.args[0]
+            if res['code'] == 400 and len(ex.args) > 1 and \
+               ex.args[1].startswith('SPASSWORD'):
+                res['error'] = ex.args[1]
         elif isinstance(ex.message, tuple):  # Python 2.7
             res['code'] = ex.message[0]
+            if res['code'] == 400 and len(ex.message) > 1 and \
+               ex.message[1].startswith('SPASSWORD'):
+                res['error'] = ex.message[1]
         return res
