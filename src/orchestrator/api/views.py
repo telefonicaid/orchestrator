@@ -35,6 +35,7 @@ from rest_framework import views
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from datetime import datetime
 
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
@@ -56,6 +57,7 @@ logger = logging.getLogger('orchestrator_api')
 class Stats(object):
 
     # Start Time
+    uptime = datetime.utcnow()
 
     # All stats
     num_post_service = 0
@@ -90,7 +92,6 @@ class Stats(object):
     num_delete_device = 0
 
     num_post_devices = 0
-
     num_post_entity_service = 0
 
 
@@ -1364,8 +1365,11 @@ class OrchVersion_RESTView(APIView, IoTConf):
 
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            # TODO: extract version number
-            result = { "version": settings.ORC_VERSION }
+            # Extract version and stats data
+            result = {
+                "version": settings.ORC_VERSION,
+                "uptime": self.uptime
+            }
 
             # TOOD: extarct info about health
             if 'error' not in result:
