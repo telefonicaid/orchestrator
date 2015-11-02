@@ -747,12 +747,12 @@ class Projects(FlowBase):
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
-        - ATT_ICCID
-        - ATT_IMEI
-        - ATT_IMSI
-        - ATT_INTERACTION_TYPE
-        - ATT_SERVICE_ID
-        - ATT_GEOLOCATION
+        - ATT_ICCID: device attribute iccid
+        - ATT_IMEI: device attribute imei
+        - ATT_IMSI: device attribute imsi
+        - ATT_INTERACTION_TYPE: device attribute interaction_type
+        - ATT_SERVICE_ID: device attribute service_id
+        - ATT_GEOLOCATION: device attribute geolocation
         '''
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
@@ -1244,8 +1244,8 @@ class Projects(FlowBase):
                               SERVICE_USER_NAME,
                               SERVICE_USER_PASSWORD,
                               SERVICE_USER_TOKEN,
-                              ENTITY_ID,
-                              ENTITY_TYPE
+                              ENTITY_TYPE,
+                              ENTITY_ID
                               ):
 
         '''Register Subscription
@@ -1260,8 +1260,8 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - ENTITY_ID:
-        - ENTITY_TYPE:
+        - ENTITY_ID: CB entity
+        - ENTITY_TYPE: CB entity type
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1321,21 +1321,18 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
-
-            # TODO: set default values for ATTRIBUTES and NOTIFY_CONDITIONS
-            # 1. List EntityType?
-            # 2. ATTRIBUTES =
-
             #
             # Set default ATTRIBUTES for subscription
             #
-            db_res = self.cb.getContextTypes(
-                SERVICE_USER_TOKEN,
-                DOMAIN_NAME,
-                PROJECT_NAME,
-                ENTITY_TYPE)
+            if not ATTRIBUTES:
+                db_res = self.cb.getContextTypes(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_NAME,
+                    PROJECT_NAME,
+                    ENTITY_TYPE)
 
-            ATTRIBUTES = cb_res['attributes']
+                ATTRIBUTES = cb_res['attributes']
+
             ENTITIES = [
                 {
                     "type": ENTITY_TYPE,
@@ -1347,12 +1344,13 @@ class Projects(FlowBase):
             #
             # Set dDefault Notify conditions
             #
-            NOTIFY_CONDITIONS = [
+            if not NOTIFY_CONDITIONS:
+                NOTIFY_CONDITIONS = [
                     {
                         "type": "ONCHANGE",
                         "condValues": ATTRIBUTES
                     }
-            ]
+                ]
 
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
@@ -1379,6 +1377,7 @@ class Projects(FlowBase):
                            SERVICE_USER_NAME,
                            SERVICE_USER_PASSWORD,
                            SERVICE_USER_TOKEN,
+                           ENTITY_TYPE,
                            ENTITY_ID,
                            ):
 
