@@ -53,7 +53,10 @@ class FlowBase(object):
                  CYGNUS_PORT="5050",
                  STH_PROTOCOL="http",
                  STH_HOST="localhost",
-                 STH_PORT="8666"):
+                 STH_PORT="8666",
+                 PERSEO_PROTOCOL="http",
+                 PERSEO_HOST="localhost",
+                 PERSEO_PORT="9090"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -71,11 +74,12 @@ class FlowBase(object):
                                ORION_PORT)
         if CA_PROTOCOL:
             self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
-
         if CYGNUS_PROTOCOL:
             self.cygnus_endpoint = CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
         if STH_PROTOCOL:
             self.sth_endpoint = STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
+        if PERSEO_PROTOCOL:
+            self.perseo_endpoint = PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""
 
 
     def composeErrorCode(self, ex):
