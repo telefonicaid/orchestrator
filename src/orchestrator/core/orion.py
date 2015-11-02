@@ -248,7 +248,7 @@ class CBOrionOperations(object):
                              ENTITY_ID):
 
         res = self.CBRestOperations.rest_request(
-            url='/v2/entities/%s/subscriptions' % ENTITY_ID ,
+            url='/v2/subscriptions',
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
@@ -258,6 +258,15 @@ class CBOrionOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
+        subscription_related = []
+        # Filter over list of subscriptions returned
+        for subscription in json_body_response:
+            for entity in subscription['subject']['entities']:
+                if not entity['ispattern'] and entity['id'] == ENTITY_ID:
+                    subscriptions_related.append(subscription)
+                if entity['ispattern'] and entity['id'] in [".*", "*"]:
+                    subscriptions_related.append(subscription)
+
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response

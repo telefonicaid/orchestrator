@@ -1279,6 +1279,113 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             )
 
 
+class SubServiceSubscription_RESTView(APIView, IoTConf):
+    """
+    SubService CB Subscriptions
+
+    """
+    #schema_name = "CBSubscription"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request, service_id, subservice_id):
+        #self.schema_name = "CBSubscription"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            #request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
+            sub = flow.list_subscriptions(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("ENTITY_ID", None),
+                #request.DATA.get("PROTOCOL", None),
+            )
+            result = {}
+            result['subscriptionid'] = sub
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def post(self, request, service_id, subservice_id):
+        #self.schema_name = "CBSubscription"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Projects(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            self.IOTA_PROTOCOL,
+                            self.IOTA_HOST,
+                            self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT)
+            sub = flow.register_subscription(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                request.DATA.get("SERVICE_USER_NAME", None),
+                request.DATA.get("SERVICE_USER_PASSWORD", None),
+                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("ENTITY_ID", None),
+                #request.DATA.get("PROTOCOL", None),
+            )
+            result = {}
+            result['subscriptionid'] = sub
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
 class OrchVersion_RESTView(APIView, IoTConf):
     """
