@@ -494,7 +494,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_HOST,
                                 self.CA_PORT)
 
-                sub1, sub2 = flow.register_service(
+                sub_ca, sub_cyg, sub_sth, sub_perseo = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("NEW_SUBSERVICE_NAME", None),
@@ -515,8 +515,10 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
                 # Accumulate previous result
-                result['subscriptionid_cyg'] = sub1
-                result['subscriptionid_cyg'] = sub2
+                result['subscriptionid_ca'] = sub_ca
+                result['subscriptionid_cyg'] = sub_cyg
+                result['subscriptionid_sth'] = sub_sth
+                result['subscriptionid_perseo'] = sub_perseo
 
             # TODO: see optional values for register device
             if 'id' in result and request.DATA.get("DEVICE_ID", None):
@@ -1315,7 +1317,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT)
-            sub1, sub2 = flow.register_service(
+            sub_ca, sub_cyg, sub_sth, sub_perseo = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -1336,8 +1338,10 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_TIMEOUT", None)
             )
             result = {}
-            result['subscriptionid_cyg'] = sub1
-            result['subscriptionid_cyg'] = sub2
+            result['subscriptionid_ca'] = sub_ca
+            result['subscriptionid_cyg'] = sub_cyg
+            result['subscriptionid_sth'] = sub_sth
+            result['subscriptionid_perseo'] = sub_perseo
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
