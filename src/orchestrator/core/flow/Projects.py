@@ -520,7 +520,7 @@ class Projects(FlowBase):
 
 
             #
-            # 2. Call ContextBroker for subscribe Context Adapter
+            # 2. Subscribe Context Adapter in ContextBroker
             #
             DURATION="P1M"
             REFERENCE_URL="http://localhost"
@@ -567,8 +567,8 @@ class Projects(FlowBase):
                 NOTIFY_CONDITIONS
             )
             logger.debug("subscribeContext res=%s" % cb_res)
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id=%s" % subscriptionid)
+            subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id ca=%s" % subscriptionid_ca)
 
 
 
@@ -732,13 +732,14 @@ class Projects(FlowBase):
 
         data_log = {
             "ENTITY_ID": ENTITY_ID,
+            "subscriptionid_ca": subscriptionid_ca,
             "subscriptionid_cyg": subscriptionid_cyg,
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return subscriptionid_cyg, subscriptionid_sth
+        return subscriptionid_ca, subscriptionid_cyg, subscriptionid_sth, subscriptionid_perseo
 
 
     def register_device(self,
