@@ -520,7 +520,7 @@ class Projects(FlowBase):
 
 
             #
-            # 2. Call ContextBroker for subscribe Context Adapter
+            # 2. Subscribe Context Adapter in ContextBroker
             #
             DURATION="P1M"
             REFERENCE_URL="http://localhost"
@@ -567,8 +567,8 @@ class Projects(FlowBase):
                 NOTIFY_CONDITIONS
             )
             logger.debug("subscribeContext res=%s" % cb_res)
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id=%s" % subscriptionid)
+            subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id ca=%s" % subscriptionid_ca)
 
 
 
@@ -612,7 +612,8 @@ class Projects(FlowBase):
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "op_status"
+                            "op_status",  # reduntant?
+                            "TimeInstant"
                         ]
                     }
                 ]
@@ -699,18 +700,46 @@ class Projects(FlowBase):
                 logger.debug("registration id sth=%s" % subscriptionid_sth)
 
 
+            #
+            # 3.3 Perseo
+            #
+            REFERENCE_URL = "http://localhost"
+            if PROTOCOL == "TT_BLACKBUTTON":
+                REFERENCE_URL = self.perseo_endpoint + '/notify'
+
+            if PROTOCOL == "PDI-IoTA-ThinkingThings":
+                REFERENCE_URL = self.perseo_endpoint + '/notify'
+
+            if len(ENTITIES) > 0:
+                cb_res = self.cb.subscribeContext(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_NAME,
+                    PROJECT_NAME,
+                    REFERENCE_URL,
+                    DURATION,
+                    ENTITIES,
+                    ATTRIBUTES,
+                    NOTIFY_CONDITIONS
+                    )
+                logger.debug("subscribeContext res=%s" % cb_res)
+                subscriptionid_perseo = cb_res['subscribeResponse']['subscriptionId']
+                logger.debug("registration id perseo=%s" % subscriptionid_perseo)
+
+
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "ENTITY_ID": ENTITY_ID,
+            "subscriptionid_ca": subscriptionid_ca,
             "subscriptionid_cyg": subscriptionid_cyg,
-            "subscriptionid_sth": subscriptionid_sth
+            "subscriptionid_sth": subscriptionid_sth,
+            "subscriptionid_perseo": subscriptionid_perseo
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return subscriptionid_cyg, subscriptionid_sth
+        return subscriptionid_ca, subscriptionid_cyg, subscriptionid_sth, subscriptionid_perseo
 
 
     def register_device(self,
