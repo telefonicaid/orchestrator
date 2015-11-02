@@ -5,24 +5,24 @@ HOST: orchestrator_host:8084
 
 Component to expose an API to automatise provisioning in all the IoT Platform modules.
 
+
 # Group Orchestrator
 
-All requests can be performed providing a 'x-auth-token' header instead of X_USER / X_PASSWORD payload fields
+All requests can be performed providing a 'x-auth-token' header instead of SERVICE_X_USER / SERVICE_X_PASSWORD or SERVICE_X_TOKEN payload fields. But one of these three auth ways should be present.
 
 
 ## Services query [/v1.0/service]
+
 ### List of Services [GET]
 + Request (application/json)
-
             {
                 "DOMAIN_NAME":"default_admin_domain",
                 "SERVICE_ADMIN_USER":"cloud_admin",
-                "SERVICE_ADMIN_PASSWORD": "password",
+                "SERVICE_ADMIN_PASSWORD": "pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
             }
-
 + Response 200 (application/json)
     + Body
-
             {
                 "domains": [
                     {
@@ -40,35 +40,39 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 ]
             }
 
+
 ### Create Service [POST]
 + Request (application/json)
             {
                 "DOMAIN_NAME":"admin_domain",
                 "DOMAIN_ADMIN_USER":"cloud_admin",
-                "DOMAIN_ADMIN_PASSWORD": "password",
+                "DOMAIN_ADMIN_PASSWORD": "pwd",
+                "DOMAIN_ADMIN_TOKEN": "token",
                 "NEW_SERVICE_NAME":"defaultservice",
-                "NEW_SERVICE_DESCRIPTION":"defaultservice desc",
-                "NEW_SERVICE_ADMIN_USER":"adm1",
-                "NEW_SERVICE_ADMIN_PASSWORD":"password",
-                "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
+                "NEW_SERVICE_DESCRIPTION":"defaultservice description",
+                "NEW_SERVICE_ADMIN_USER":"admin",
+                "NEW_SERVICE_ADMIN_PASSWORD":"pwd",
+                "NEW_SERVICE_ADMIN_EMAIL":"pepe at site dot com",
             }
        Required: ["NEW_SERVICE_NAME", "NEW_SERVICE_ADMIN_USER",  "NEW_SERVICE_ADMIN_PASSWORD"]
-
 + Response 201 (application/json)
     + Body
             {
-             "id" : 0000
+             "id" : 000a345gserg345t0
             }
 
+
 ## Service manager [/v1.0/service/{serviceId}]
-### Get data [GET]
+
+### Detail of Service [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
             }
 + Response 200 (application/json)
     + Body
@@ -81,24 +85,26 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 
 
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
+
 ### List of subservices [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
             }
 + Response 200 (application/json)
     + Body
             {
               "projects": [
                 {
-                  "description": "defaultservice Subservicio Electricidad",
+                  "description": "defaultservice Subservicio DemoSubService",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aea",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                  "name": "Electricidad"
+                  "name": "DemoSubService"
                 },
                 {
                   "description": "defaultservice Subservicio Basuras",
@@ -122,8 +128,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
             }
 + Response 204
 
@@ -134,17 +141,19 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-                "NEW_SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "NEW_SUBSERVICE_NAME":"DemoSubService",
+                "NEW_SUBSERVICE_DESCRIPTION":"demosubservice desc",
             }
        Required: ["NEW_SUBSERVICE_NAME" ]
 + Response 201 (application/json)
     + Body
             {
-                 "id" : 0000
+                 "id" : 000234sdgstr45rh0
             }
+
 
 ### Modify a subservice [PUT]
 + Parameters
@@ -152,66 +161,59 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "NEW_SUBSERVICE_DESCRIPTION":"demosubservice desc",
             }
        Required: ["NEW_SUBSERVICE_DESCRIPTION" ]
 + Response 200
 
+
 ## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
-### List of SubServices [GET]
+
+### Detail of SubService [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
+            }
 + Response 200 (application/json)
     + Body
             {
-                'description': 'electricidad',
+                'description': 'demosubservice',
                 'domain_id': '06b9a460f5c343b3bc8b43f8533f7ab4',
                 'id': '1119023a10064570a2a3de0b5b286500',
-                'name': '/Electricidad'}
+                'name': '/DemoSubService'}
             }
+
 
 ### Modify SubService [PUT]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... Service Id
-
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "NEW_SUBSERVICE_DESCRIPTION":"demosubservice new desc",
             }
-
-
 + Response 200 (application/json)
-
     + Body
-
             {
-                   "id" : 0000
+                   "id" : 00002342342werge353
             }
 
-
-## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
-### List of subservices [GET]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-
-            {
-                "SERVICE_NAME":"defaultservice",
-                "SUBSERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-            }
-+ Response 200 (application/json)
 
 ### Delete a SubService [DELETE]
 + Parameters
@@ -221,8 +223,9 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             {
                 "SERVICE_NAME":"defaultservice",
                 "SUBSERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN":"token",
             }
 + Response 204
 
@@ -235,9 +238,10 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_USER_NAME":"adm1",
-                "SERVICE_USER_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
                 "DEVICE_ID":"buton_XXX",
                 "ENTITY_TYPE":""BlackButton,
                 "PROTOCOL":"TT_BLACKBUTTON",
@@ -252,27 +256,24 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Response 201 (application/json)
     + Body
             {
-                 "registrationid" : "1234"
+                 "registrationid" : "1234asdfw433245g"
             }
+
 
 ### unregister device in IoTA [DELETE]
 + Parameters
     + serviceId (required, `string`) ... Service
     + subserviceId (required, `string`) ... SubService
-
 + Request (application/json)
-
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_USER_NAME":"adm1",
-                "SERVICE_USER_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
                 "DEVICE_ID":"buton_XXX"
             }
-
         Required: [ "DEVICE_ID" ]
-
-
 + Response 204 (application/json)
 
 
@@ -281,14 +282,13 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
 + Parameters
     + serviceId (required, `string`) ... Service
     + subserviceId (required, `string`) ... SubService
-
 + Request (application/json)
-
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_USER_NAME":"adm1",
-                "SERVICE_USER_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
                 "ENTITY_TYPE":"BlackButton",
                 "ENTITY_ID":"buttonXXX",
                 "PROTOCOL":"TT_BLACKBUTTON",
@@ -300,19 +300,17 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "ATT_INTERACTION_TYPE":"synchronous",
                 "ATT_MAPPING":"[]",
                 "ATT_TIMEOUT":"120",
-
             }
-
         Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
-
 + Response 201 (application/json)
     + Body
             {
-                 "subscriptionid" : "13234"
+                 "subscriptionid" : "1323423gsdfbb35tergs"
             }
 
 
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
+
 ### List Roles[GET]
 + Parameters
     + serviceId (required, `string`) ... Service
@@ -320,6 +318,10 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
     + count (optional, `number`) ...  Number of results for pagination
 + Request (application/json)
         {
+            "SERVICE_NAME":"defaultservice",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD":"pwd",
+            "SERVICE_ADMIN_TOKEN":"token",
             "START_INDEX":"10",
             "COUNT":"10",
         }
@@ -346,37 +348,62 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             ]
         }
 
-### Create a Role[POST]
+
+### Create a Role [POST]
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD": "password",
-                "NEW_ROLE_NAME":"role_NameBlabla"
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD": "pwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "NEW_ROLE_NAME":"DemoRole"
             }
         Required: ["NEW_ROLE_NAME"]
-
 + Response 201 (application/json)
     + Body
             {
-                 "id" : 0000
+                 "id" : 00342234ergdfy54600
             }
 
-## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
-### Delete a Role[DELETE]
 
+## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
+
+### Delete a Role [DELETE]
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD": "pwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole"
+            }
+        Required: ["ROLE_NAME"]
 + Response 204
 
 ## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
+
 ### List of assignment roles [GET]
 + Parameters
     + service_id (required, `string`) ... Domain
     + user_id (optional, `string`) ... User
     + subservice_id (optional, `string`) ... Subservice (aka Project)
     + role_id (optional, `string`) ... Role
-    + effective (optional, `boolean`) ... effective
-    + inherit (optional, `boolean`) ... all inherit roles
-
+    + effective (optional, `boolean`) ... effective in subservice or not
++ Request (application/json)
+        {
+            "SERVICE_NAME":"defaultservice",
+            "SUBSERVICE_NAME":"DemoSubService",
+            "SUBSERVICE_ID":"2342342asdgdsfh34234",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD": "pwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"s2345567ad678fasdfasdfas",
+            "SERVICE_USER_NAME":"user_name",
+            "SERVICE_USER_ID":"asdfas52345346sdf",
+            "EFFECTIVE":true
+        }
+        Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
 + Response 200 (application/json)
         {
           "role_assignments": [
@@ -414,7 +441,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
               },
               "user": {
                 "description": "Administrator of domain defaultservice",
-                "name": "adm1",
+                "name": "admin",
                 "enabled": true,
                 "id": "a5c624a8402b48c3931d4600a7fe2be9",
                 "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
@@ -426,52 +453,67 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
+
 ### Assign role to user [POST]
 + Parameters
     + service_id (required, `string`) ... Domain
+    + user_id (optional, `string`) ... User
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor    
 + Request (application/json)
         {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SUBSERVICE_ID":"234234234234",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SUBSERVICE_NAME":"DemoSubService",
+            "SUBSERVICE_ID":"234234234234sdfgdfghdfgh",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD": "pwd",
             "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"sadfasdfasdfas",
+            "ROLE_ID":"sadfasdfasdfae456457567567s",
             "SERVICE_USER_NAME":"user_nameX",
-            "SERVICE_USER_ID":"asdfasdf",
+            "SERVICE_USER_ID":"asdfa34563457756sdf",
             "INHERIT":true
         }
         Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
 + Response 201
 
+
 ### Revoke Role user [DELETE]
 + Parameters
     + service_id (required, `string`) ... Domain
+    + user_id (optional, `string`) ... User
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor        
 + Request (application/json)
         {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SUBSERVICE_ID":"234234234234",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SUBSERVICE_NAME":"DemoSubService",
+            "SUBSERVICE_ID":"23423423423fghfgh4",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD": "pwd",
             "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"sadfasdfasdfas",
+            "ROLE_ID":"sadfasdfasd5674567fas",
             "SERVICE_USER_NAME":"user_nameX",
-            "SERVICE_USER_ID":"asdfasdf",
+            "SERVICE_USER_ID":"asd54634574567fasdf",
             "INHERIT":true
         }
 + Response 204
 
 
 ## Users in Service [/v1.0/service/{serviceId}/user{?index}{?count}]
-### Users list [GET]
+
+### User Service list [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + index (optional, `number`) ... Start index for pagination
     + count (optional, `number`) ...  Number of results for pagination
 + Request (application/json)
         {
+            "SERVICE_NAME":"defaultservice",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD":"pwd",
+            "SERVICE_ADMIN_TOKEN":"token",
             "START_INDEX":"10",
             "COUNT":"10",
         }
@@ -481,7 +523,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "users" : [
                 {
                   "description": "Administrator of domain dom1",
-                  "name": "adm1",
+                  "name": "admin",
                   "enabled": true,
                   "id": "8ac8aa6470c64b5083a6778fc2cd7828",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
@@ -510,11 +552,16 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             ]
         }
 
+
 ### Create Users [POST]
 + Request (application/json)
         {
+            "SERVICE_NAME":"defaultservice",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD":"pwd",
+            "SERVICE_ADMIN_TOKEN":"token",
             "NEW_SERVICE_USER_NAME":"user_name_new",
-            "NEW_SERVICE_USER_PASSWORD":"password",
+            "NEW_SERVICE_USER_PASSWORD":"pwd",
             "NEW_SERVICE_USER_EMAIL":"email@email.com",
             "NEW_SERVICE_USER_DESCRIPTION":"user description"
         }
@@ -523,11 +570,20 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             "id": 00000
         }
 
+
 ## User in Service [/v1.0/service/{serviceId}/user/{userId}]
-### detail of user[GET]
+
+### detail of user [GET]
 + Parameters
     + userId (required, `string`) ... User
     + serviceId (required, `string`) ... Service
++ Request (application/json)
+        {
+            "SERVICE_NAME":"defaultservice",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD":"pwd",
+            "SERVICE_ADMIN_TOKEN":"token"
+        }
 + Response 200 (application/json)
         {
           "userName": "alice",
@@ -547,52 +603,108 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
-### update an user (by his admin) [PUT]
 
+### update an user (by his admin) [PUT]
 + Request (application/json)
-    + Body
         {
+             "SERVICE_NAME":"defaultservice",
+             "SERVICE_ADMIN_USER":"admin",
+             "SERVICE_ADMIN_PASSWORD":"pwd",
+             "SERVICE_ADMIN_TOKEN":"token",
+             "USER_NAME":"user_name",
              "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}],
-                                  "name": "new name user",
-                                  "description": "new description user",
-                                  "password": "new description password"
-             }
+                                  "name": "new user name",
+                                  "description": "new user description",
+                                  "password": "new user password"
+                                 }
         }
 + Response 200
+
 
 ### change user password by himself [POST]
-
 + Request (application/json)
         {
-             "SERVICE_USER_PASSWORD": "old_password",
-             "NEW_USER_PASSWORD": "new_password"
+             "SERVICE_NAME": "defaultservice",
+             "SERVICE_USER_TOKEN": "token",
+             "SERVICE_USER_NAME": "username",
+             "SERVICE_USER_PASSWORD": "old_pwd",
+             "NEW_USER_PASSWORD": "new_pwd"
         }
-
 + Response 200
 
-### delete an user[DELETE]
 
-+ Response 204
-
-## Trust Token [/orc/service/{serviceId}/trust]
-
-### Create Trust Token [POST]
-
+### delete an user [DELETE]
 + Request (application/json)
         {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SUBSERVICE_ID":"234234234234",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_NAME":"defaultservice",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD":"pwd",
+            "SERVICE_ADMIN_TOKEN":"token",
+            "USER_NAME":"user_name"
+
+        }
++ Response 204
+
+
+## Trust Token [/v1.0/service/{serviceId}/trust]
+
+### Create Trust Token [POST]
++ Request (application/json)
+        {
+            "SERVICE_NAME":"defaultservice",
+            "SUBSERVICE_NAME":"DemoSubService",
+            "SUBSERVICE_ID":"2342342342dfhjghjty34",
+            "SERVICE_ADMIN_USER":"admin",
+            "SERVICE_ADMIN_PASSWORD": "pwd",
+            "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"SDFG930J34534K5",
+            "ROLE_ID":"SDFG93hdg350J34534K5",
             "TRUSTEE_USER_NAME":"iotagent",
-            "TRUSTEE_USER_ID":"345635ASDFASD6347",
-            "TRUSTOR_USER_NAME":"adm1",
-            "TRUSTOR_USER_ID":"45674ASDFASDF5674567",
+            "TRUSTEE_USER_ID":"34563fghfgh5ASDFASD6347",
+            "TRUSTOR_USER_NAME":"admin",
+            "TRUSTOR_USER_ID":"45674ASDFAghjghjSDF5674567",
         }
 + Response 201 (application/json)
     + Body
         {
             "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
         }
+
+
+## Stats [/v1.0/version]
+
+### Get Version, Uptime and API stats [GET]
++ Response 201 (application/json)
+    + Body
+      {
+         "uptime": "2015-11-02T08:15:35.166",
+         "version": "0.5.1",
+         "API_stats": {
+            "num_post_device": 3,
+            "num_delete_user": 40,
+            "num_get_role": 20,
+            "num_delete_subservice": 330,
+            "num_get_service": 30,
+            "num_post_trust": 30,
+            "num_put_service": 30,
+            "num_post_roleassignment": 50,
+            "num_post_userlist": 203,
+            "num_delete_service": 20,
+            "num_delete_role": 30,
+            "num_post_subservice": 30,
+            "num_post_entity_service": 10,
+            "num_get_subservice": 30,
+            "num_post_devices": 30,
+            "num_post_user": 40,
+            "num_get_user ": 20,
+            "num_put_user": 10,
+            "num_get_roleassignment": 20,
+            "num_get_userlist": 20,
+            "num_post_service": 20,
+            "num_delete_roleassignment": 10,
+            "num_post_role": 10,
+            "num_delete_device": 10,
+            "num_put_subservice": 10
+          }
+       }
+
