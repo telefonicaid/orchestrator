@@ -35,6 +35,7 @@ from rest_framework import views
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from datetime import datetime
 
 from orchestrator.core.flow.createNewService import CreateNewService
 from orchestrator.core.flow.createNewSubService import CreateNewSubService
@@ -53,7 +54,52 @@ from orchestrator.api import negotiators, parsers
 logger = logging.getLogger('orchestrator_api')
 
 
-class IoTConf(object):
+class Stats(object):
+
+    # Start Time
+    uptime = datetime.utcnow()
+
+    # All stats
+    num_post_service = 0
+    num_get_service = 0
+    num_put_service = 0
+    num_delete_service = 0
+
+    num_post_subservice = 0
+    num_get_subservice = 0
+    num_put_subservice = 0
+    num_delete_subservice = 0
+
+    num_delete_user = 0
+    num_put_user = 0
+    num_get_user = 0
+    num_post_user = 0
+
+    num_get_userlist = 0
+    num_post_userlist = 0
+
+    num_delete_role = 0
+    num_post_role = 0
+    num_get_role = 0
+
+    num_delete_roleassignment = 0
+    num_post_roleassignment = 0
+    num_get_roleassignment = 0
+
+    num_post_trust = 0
+
+    num_post_device = 0
+    num_delete_device = 0
+
+    num_post_devices = 0
+    num_post_entity_service = 0
+
+
+
+
+
+class IoTConf(Stats):
+
     # Class to extract Keystone/Keypass conf from django settings
     def __init__(self):
         try:
@@ -111,6 +157,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None):
+        Stats.num_get_service += 1
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -149,6 +196,7 @@ class ServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None):
+        Stats.num_put_service += 1
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -176,6 +224,7 @@ class ServiceList_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id=None):
+        Stats.num_delete_service += 1
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -220,6 +269,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
         ServiceList_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
+        Stats.num_post_service += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -266,6 +316,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None, subservice_id=None):
+        Stats.num_get_subservice += 1
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -310,6 +361,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None, subservice_id=None):
+        Stats.num_put_subservice += 1
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -346,6 +398,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id=None, subservice_id=None):
+        Stats.num_delete_subservice += 1
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -396,6 +449,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
         SubServiceList_RESTView.__init__(self)
 
     def post(self, request, service_id):
+        Stats.num_post_subservice += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -527,6 +581,7 @@ class User_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, user_id):
+        Stats.num_delete_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -555,6 +610,7 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id, user_id):
+        Stats.num_put_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -583,6 +639,7 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def get(self, request, service_id, user_id):
+        Stats.num_get_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -608,6 +665,7 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, user_id):
+        Stats.num_post_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             #request.DATA  # json validation
@@ -651,6 +709,7 @@ class UserList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
+        Stats.num_get_userlist += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
@@ -683,6 +742,7 @@ class UserList_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id):
+        Stats.num_post_userlist += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -725,6 +785,7 @@ class Role_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, role_id):
+        Stats.num_delete_role += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -764,6 +825,7 @@ class RoleList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
+        Stats.num_post_role += 1
         self.schema_name = "RoleList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -794,6 +856,7 @@ class RoleList_RESTView(APIView, IoTConf):
             )
 
     def get(self, request, service_id=None):
+        Stats.num_get_role += 1
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         index = request.GET.get('index', None)
@@ -835,6 +898,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
+        Stats.num_get_roleassignment += 1
         self.schema_name = "RoleAssignmentList"
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
@@ -866,6 +930,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                             status=self.getStatusFromCode(result['code']))
 
     def post(self, request, service_id):
+        Stats.num_post_roleassignment += 1
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         inherit = (request.GET.get('inherit', False) is True or
@@ -928,6 +993,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id):
+        Stats.num_delete_roleassignment += 1
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         inherit = (request.GET.get('inherit', False) is True or
@@ -946,7 +1012,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
                         request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                        request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME"),
                         request.DATA.get("ROLE_ID", None),
                         request.DATA.get("SERVICE_USER_NAME", None),
@@ -957,7 +1024,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
                         request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                        request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME"),
                         request.DATA.get("ROLE_ID", None),
                         request.DATA.get("SERVICE_USER_NAME", None),
@@ -1000,6 +1068,7 @@ class Trust_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
+        Stats.num_post_trust += 1
         self.schema_name = "Trust"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1049,6 +1118,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
+        Stats.num_post_device += 1
         self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1101,6 +1171,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id, subservice_id):
+        Stats.num_delete_device += 1
         self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1157,6 +1228,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
+        Stats.num_post_devices += 1
         self.schema_name = "IoTADevices"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1222,6 +1294,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
+        Stats.num_post_entity_service += 1
         self.schema_name = "IoTAService"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1292,8 +1365,46 @@ class OrchVersion_RESTView(APIView, IoTConf):
 
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            # TODO: extract version number
-            result = { "version": settings.ORC_VERSION }
+            # Extract version and stats data
+            result = {
+                "version": settings.ORC_VERSION,
+                "uptime": self.uptime,
+                "API_stats": {
+                    "num_post_service": self.num_post_service,
+                    "num_get_service": self.num_get_service,
+                    "num_put_service": self.num_put_service,
+                    "num_delete_service": self.num_delete_service,
+
+                    "num_post_subservice": self.num_post_subservice,
+                    "num_get_subservice": self.num_get_subservice,
+                    "num_put_subservice": self.num_put_subservice,
+                    "num_delete_subservice": self.num_delete_subservice,
+
+                    "num_delete_user": self.num_delete_user,
+                    "num_put_user": self.num_put_user,
+                    "num_get_user ": self.num_get_user,
+                    "num_post_user": self.num_post_user,
+
+                    "num_get_userlist": self.num_get_userlist,
+                    "num_post_userlist": self.num_post_userlist,
+
+                    "num_delete_role": self.num_delete_role,
+                    "num_post_role": self.num_post_role,
+                    "num_get_role": self.num_get_role,
+
+                    "num_delete_roleassignment": self.num_delete_roleassignment,
+                    "num_post_roleassignment": self.num_post_roleassignment,
+                    "num_get_roleassignment": self.num_get_roleassignment,
+
+                    "num_post_trust": self.num_post_trust,
+
+                    "num_post_device": self.num_post_device,
+                    "num_delete_device": self.num_delete_device,
+
+                    "num_post_devices": self.num_post_devices,
+                    "num_post_entity_service": self.num_post_entity_service
+                }
+            }
 
             # TOOD: extarct info about health
             if 'error' not in result:
