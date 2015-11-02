@@ -54,3 +54,9 @@ STH = {
     "port": "8666",
     "protocol":"http"
 }
+
+PERSEO = {
+    "host": "localhost",
+    "port": "9090",
+    "protocol":"http"
+}
