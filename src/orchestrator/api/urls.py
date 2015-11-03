@@ -35,8 +35,9 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     AssignRoleUser_RESTView,
                                     Trust_RESTView,
                                     SubServiceIoTADevice_RESTView,
-                                    SubServiceIoTADevices_RESTView,                                    
+                                    SubServiceIoTADevices_RESTView,
                                     SubServiceIoTAService_RESTView,
+                                    SubServiceSubscription_RESTView,
                                     OrchVersion_RESTView
                                     )
 

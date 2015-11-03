@@ -1400,7 +1400,11 @@ class Projects(FlowBase):
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
             logger.debug("subscription id=%s" % subscriptionid)
 
-            return subscriptionid
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return subscriptionid
 
 
     def list_subscriptions(self,
@@ -1412,7 +1416,7 @@ class Projects(FlowBase):
                            SERVICE_USER_PASSWORD,
                            SERVICE_USER_TOKEN,
                            ENTITY_TYPE,
-                           ENTITY_ID,
+                           ENTITY_ID
                            ):
 
         '''Register Subscription
@@ -1427,6 +1431,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
+        - ENTITY_TYPE:
         - ENTITY_ID:
         '''
         data_log = {
@@ -1437,6 +1442,7 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ENTITY_ID": "%s" % ENTITY_ID,
         }
         logger.debug("register_subscription invoked with: %s" % json.dumps(data_log,
@@ -1493,8 +1499,14 @@ class Projects(FlowBase):
                 PROJECT_NAME,
                 ENTITY_ID
             )
-            logger.debug("subscribeContext res=%s" % cb_res)
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id=%s" % subscriptionid)
+            # logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # logger.debug("subscription id=%s" % subscriptionid)
 
-            return subscriptionid
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        #return subscriptionid
+        None
