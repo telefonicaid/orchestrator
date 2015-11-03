@@ -387,7 +387,7 @@ class Projects(FlowBase):
             "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
         logger.debug("register_service invoked with: %s" % json.dumps(data_log,
-        indent=3))
+                                                                      indent=3))
 
         try:
 
@@ -739,6 +739,7 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
+
         return subscriptionid_ca, subscriptionid_cyg, subscriptionid_sth, subscriptionid_perseo
 
 
