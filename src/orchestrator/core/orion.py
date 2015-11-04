@@ -277,7 +277,7 @@ class CBOrionOperations(object):
                                SERVICE_NAME,
                                SUBSERVICE_NAME):
 
-        subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN
+        subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN,
                                                   SERVICE_NAME,
                                                   SUBSERVICE_NAME)
         for subscription in subscriptions:
