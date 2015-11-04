@@ -1439,7 +1439,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                             self.CYGNUS_PORT,
                             self.STH_PROTOCOL,
                             self.STH_HOST,
-                            self.STH_PORT
+                            self.STH_PORT,
                             self.PERSEO_PROTOCOL,
                             self.PERSEO_HOST,
                             self.PERSEO_PORT)
