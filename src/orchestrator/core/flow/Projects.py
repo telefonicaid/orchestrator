@@ -1476,7 +1476,7 @@ class Projects(FlowBase):
                     SERVICE_USER_TOKEN,
                     DOMAIN_ID)
             if not PROJECT_NAME:
-                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
                 PROJECT_NAME = self.idm.getProjectNameFromToken(
                     SERVICE_USER_TOKEN,
                     DOMAIN_ID,
