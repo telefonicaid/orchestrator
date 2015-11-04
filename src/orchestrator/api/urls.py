@@ -37,7 +37,7 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     SubServiceIoTADevice_RESTView,
                                     SubServiceIoTADevices_RESTView,
                                     SubServiceIoTAService_RESTView,
-                                    SubServiceSubscription_RESTView,
+                                    SubServiceModuleActivation_RESTView,
                                     OrchVersion_RESTView
                                     )
 
@@ -50,7 +50,7 @@ urlpatterns = patterns('',
      url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/register_device[/]?$', SubServiceIoTADevice_RESTView.as_view(), name='subserviceiotadevice_rest_view'),
      url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/register_devices[/]?$', SubServiceIoTADevices_RESTView.as_view(), name='subserviceiotadevices_rest_view'),
      url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/register_service[/]?$', SubServiceIoTAService_RESTView.as_view(), name='subserviceiotaservice_rest_view'),
-     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/subscription[/]?$', SubServiceSubscription_RESTView.as_view(), name='subservicesubscription_rest_view'),
+     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>\w+)/subscription[/]?$', SubServiceModuleActivation_RESTView.as_view(), name='subservicemodule_rest_view'),
      url(r'^service/(?P<service_id>\w+)/user[/]?$', UserList_RESTView.as_view(), name='new_user_rest_view'),
      url(r'^service/(?P<service_id>\w+)/user/(?P<user_id>\w+)?$', User_RESTView.as_view(), name='user_rest_view'),
      url(r'^service/(?P<service_id>\w+)/role[/]?$', RoleList_RESTView.as_view(), name='new_role_rest_view'),

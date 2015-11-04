@@ -1356,23 +1356,24 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             )
 
 
-class SubServiceSubscription_RESTView(APIView, IoTConf):
+class SubServiceModuleActivation_RESTView(APIView, IoTConf):
     """
-    SubService CB Subscriptions
+    SubService Module Activation
 
     """
-    #schema_name = "CBSubscription"
+    #schema_name = "ModuleActivation"
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
         IoTConf.__init__(self)
 
-    def get(self, request, service_id, subservice_id):
-        #self.schema_name = "CBSubscription"
+    def get(self, request, service_id, subservice_id=None):
+        #self.schema_name = "ModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             #request.DATA  # json validation
 
+            # TODO: for Domains instead of Projects also
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
@@ -1388,7 +1389,7 @@ class SubServiceSubscription_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT)
-            sub = flow.list_subscriptions(
+            modules = flow.list_modules_actives(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -1396,12 +1397,9 @@ class SubServiceSubscription_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_NAME", None),
                 request.DATA.get("SERVICE_USER_PASSWORD", None),
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("ENTITY_TYPE", None),
-                request.DATA.get("ENTITY_ID", None),
-                #request.DATA.get("PROTOCOL", None),
             )
             result = {}
-            result['subscriptionid'] = sub
+            result['modules_actives'] = modules
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -1416,7 +1414,7 @@ class SubServiceSubscription_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, subservice_id):
-        #self.schema_name = "CBSubscription"
+        #self.schema_name = "ModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -1436,7 +1434,7 @@ class SubServiceSubscription_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT)
-            sub = flow.register_subscription(
+            flow.activate_module(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -1444,12 +1442,10 @@ class SubServiceSubscription_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_NAME", None),
                 request.DATA.get("SERVICE_USER_PASSWORD", None),
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("ENTITY_TYPE", None),
-                request.DATA.get("ENTITY_ID", None),
-                #request.DATA.get("PROTOCOL", None),
+                request.DATA.get("MODULE", None),
             )
             result = {}
-            result['subscriptionid'] = sub
+
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
