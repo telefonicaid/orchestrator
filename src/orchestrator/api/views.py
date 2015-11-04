@@ -1433,7 +1433,16 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                             self.ORION_PORT,
                             self.CA_PROTOCOL,
                             self.CA_HOST,
-                            self.CA_PORT)
+                            self.CA_PORT,
+                            self.CYGNUS_PROTOCOL,
+                            self.CYGNUS_HOST,
+                            self.CYGNUS_PORT,
+                            self.STH_PROTOCOL,
+                            self.STH_HOST,
+                            self.STH_PORT
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT)
             flow.activate_module(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
