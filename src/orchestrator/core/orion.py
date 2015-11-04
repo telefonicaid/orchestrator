@@ -139,10 +139,10 @@ class CBOrionOperations(object):
                         SERVICE_USER_TOKEN,
                         SERVICE_NAME,
                         SUBSERVICE_NAME,
-                        ENTITY_TYPE):
+                        ENTITY_TYPE=None):
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/contextTypes/%s' % ENTITY_TYPE,
+            url='/v1/contextTypes/%s' % ENTITY_TYPE if ENTITY_TYPE else "",
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
@@ -245,7 +245,7 @@ class CBOrionOperations(object):
                              SERVICE_USER_TOKEN,
                              SERVICE_NAME,
                              SUBSERVICE_NAME,
-                             ENTITY_ID):
+                             ENTITY_ID=None):
 
         res = self.CBRestOperations.rest_request(
             url='/v2/subscriptions',
@@ -270,3 +270,18 @@ class CBOrionOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def deleteAllSubscriptions(self,
+                               SERVICE_USER_TOKEN,
+                               SERVICE_NAME,
+                               SUBSERVICE_NAME):
+
+        subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN
+                                                  SERVICE_NAME,
+                                                  SUBSERVICE_NAME)
+        for subscription in subscriptions:
+            self.unsubscribeContext(SERVICE_USER_TOKEN,
+                                    SERVICE_NAME,
+                                    SUBSERVICE_NAME,
+                                    subscription['id'])

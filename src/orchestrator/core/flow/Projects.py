@@ -297,6 +297,16 @@ class Projects(FlowBase):
             if (len(devices_deleted) > 0):
                 logger.info("devices deleted %s", devices_deleted)
 
+            #
+            # Delete all subscriptions
+            #
+            subscriptions_deleted = self.orion.deleteAllSubscriptions(
+                                                              ADMIN_TOKEN,
+                                                              DOMAIN_NAME,
+                                                              PROJECT_NAME)
+            if (len(subscriptions_deleted) > 0):
+                logger.info("subscriptions deleted %s", subscriptions_deleted)
+
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
                                               PROJECT_ID)
@@ -1270,19 +1280,17 @@ class Projects(FlowBase):
         #return DEVICE_ID
 
 
-    def register_subscription(self,
-                              DOMAIN_NAME,
-                              DOMAIN_ID,
-                              PROJECT_NAME,
-                              PROJECT_ID,
-                              SERVICE_USER_NAME,
-                              SERVICE_USER_PASSWORD,
-                              SERVICE_USER_TOKEN,
-                              ENTITY_TYPE,
-                              ENTITY_ID
-                              ):
+    def activate_module(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        MODULE_NAME):
 
-        '''Register Subscription
+        '''Activate Module
 
         In case of HTTP error, return HTTP error
 
@@ -1294,8 +1302,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - ENTITY_ID: CB entity
-        - ENTITY_TYPE: CB entity type
+        - MODULE_NAME: Module to activate: STH, CYGNUS, CKAN, CEP
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1305,11 +1312,10 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
-            "ENTITY_ID": "%s" % ENTITY_ID,
-            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "MODULE_NAME": "%s" % MODULE_NAME,
         }
-        logger.debug("register_subscription invoked with: %s" % json.dumps(data_log,
-        indent=3))
+        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
 
         try:
 
@@ -1355,36 +1361,39 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
-            #
+            if MODULE_NAME in ["STH", "sth"]:
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+            if MODULE_NAME in ["CYGNUS", "cygnus"]:
+                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+            if MODULE_NAME in ["CEP", "cep"]:
+                REFERENCE_URL = self.cep_endpoint + '/notify'
+
+            #if not REFERENCE_URL:
+            #    return self.composeErrorCode(ex)
+
             # Set default ATTRIBUTES for subscription
-            #
-            if not ATTRIBUTES:
-                db_res = self.cb.getContextTypes(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_NAME,
-                    PROJECT_NAME,
-                    ENTITY_TYPE)
+            ATTRIBUTES = []
+            db_res = self.cb.getContextTypes(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                ENTITY_TYPE)
+            for entity_type in cb_res:
+                ATTRIBUTES.append(entity_type["attributes"])
 
-                ATTRIBUTES = cb_res['attributes']
+            # Set default ENTITIES for subscription
+            ENTITIES = [ {
+                "isPattern": "true",
+                "id": ".*"
+            } ]
 
-            ENTITIES = [
-                {
-                    "type": ENTITY_TYPE,
-                    "isPattern": "false",
-                    "id": ENTITY_ID
-                }
-            ]
-
-            #
-            # Set dDefault Notify conditions
-            #
-            if not NOTIFY_CONDITIONS:
-                NOTIFY_CONDITIONS = [
-                    {
-                        "type": "ONCHANGE",
-                        "condValues": ATTRIBUTES
-                    }
-                ]
+            # Set default Notify conditions
+            NOTIFY_ATTRIBUTES = ATTRIBUTES
+            NOTIFY_ATTRIBUTES.append("TimeInstant")
+            NOTIFY_CONDITIONS = [ {
+                "type": "ONCHANGE",
+                "condValues": NOTIFY_ATTRIBUTES
+            } ]
 
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
@@ -1407,19 +1416,16 @@ class Projects(FlowBase):
         return subscriptionid
 
 
-    def list_subscriptions(self,
-                           DOMAIN_NAME,
-                           DOMAIN_ID,
-                           PROJECT_NAME,
-                           PROJECT_ID,
-                           SERVICE_USER_NAME,
-                           SERVICE_USER_PASSWORD,
-                           SERVICE_USER_TOKEN,
-                           ENTITY_TYPE,
-                           ENTITY_ID
-                           ):
+    def list_modules_actives(self,
+                             DOMAIN_NAME,
+                             DOMAIN_ID,
+                             PROJECT_NAME,
+                             PROJECT_ID,
+                             SERVICE_USER_NAME,
+                             SERVICE_USER_PASSWORD,
+                             SERVICE_USER_TOKEN):
 
-        '''Register Subscription
+        '''List Modules Actives
 
         In case of HTTP error, return HTTP error
 
@@ -1431,8 +1437,6 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - ENTITY_TYPE:
-        - ENTITY_ID:
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1442,11 +1446,9 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
-            "ENTITY_TYPE": "%s" % ENTITY_TYPE,
-            "ENTITY_ID": "%s" % ENTITY_ID,
         }
-        logger.debug("register_subscription invoked with: %s" % json.dumps(data_log,
-        indent=3))
+        logger.debug("list_modules_actives invoked with: %s" % json.dumps(data_log,
+                                                                          indent=3))
 
         try:
 
@@ -1493,20 +1495,26 @@ class Projects(FlowBase):
                                                    PROJECT_NAME)
 
 
+            # TODO: Search for subscriptions about: STH, CKAN, CYGNUS, CEP
+
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
-                PROJECT_NAME,
-                ENTITY_ID
+                PROJECT_NAME
             )
-            # logger.debug("subscribeContext res=%s" % cb_res)
-            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            # logger.debug("subscription id=%s" % subscriptionid)
+            modules = []
+            for sub in cb_res:
+                if sub["notification"]["callback"].startswith(self.sth_endpoint):
+                    modules.append({"module": "sth"})
+                if sub["notification"]["callback"].startswith(self.cygnus_endpoint):
+                    modules.append({"module": "cygnus"})
+                if sub["notification"]["callback"].startswith(self.cep_endpoint):
+                    modules.append({"module": "cep"})
 
+            logger.debug("modules=%s" % modules)
 
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
 
-        #return subscriptionid
-        None
+        return modules
