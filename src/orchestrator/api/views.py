@@ -492,7 +492,17 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.ORION_PORT,
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
-                                self.CA_PORT)
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT
+                                )
 
                 sub_ca, sub_cyg, sub_sth, sub_perseo = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
@@ -1316,7 +1326,16 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.ORION_PORT,
                             self.CA_PROTOCOL,
                             self.CA_HOST,
-                            self.CA_PORT)
+                            self.CA_PORT,
+                            self.CYGNUS_PROTOCOL,
+                            self.CYGNUS_HOST,
+                            self.CYGNUS_PORT,
+                            self.STH_PROTOCOL,
+                            self.STH_HOST,
+                            self.STH_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT)
             sub_ca, sub_cyg, sub_sth, sub_perseo = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
