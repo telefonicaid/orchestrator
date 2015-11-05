@@ -258,10 +258,12 @@ class Domains(FlowBase):
             projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
             for project in projects['projects']:
                 # Delete all devices
+
                 devices_deleted = self.iota.deleteAllDevices(
                     ADMIN_TOKEN,
                     DOMAIN_NAME,
                     project['name'].split('/')[1])
+
                 if (len(devices_deleted) > 0):
                     logger.info("devices deleted %s", devices_deleted)
 

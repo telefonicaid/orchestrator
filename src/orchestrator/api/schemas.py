@@ -731,5 +731,37 @@ json = {
         # "required": [
         # ],
     },
-    
+
+    ##################
+    "ModuleActivation": {
+    ##################
+        "name": "ModuleActivation",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+        },
+        # "required": [ ],
+    },
+
 }

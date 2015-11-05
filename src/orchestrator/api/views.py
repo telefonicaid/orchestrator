@@ -94,7 +94,9 @@ class Stats(object):
     num_post_devices = 0
     num_post_entity_service = 0
 
-
+    num_get_module_activation = 0
+    num_post_module_activation = 0
+    num_delete_module_activation = 0
 
 
 
@@ -1392,17 +1394,17 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
     SubService Module Activation
 
     """
-    #schema_name = "ModuleActivation"
+    schema_name = "ModuleActivation"
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
         IoTConf.__init__(self)
 
     def get(self, request, service_id, subservice_id=None):
-        #self.schema_name = "ModuleActivation"
+        Stats.num_get_module_activation += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            #request.DATA  # json validation
+            request.DATA  # json validation
 
             if not subservice_id:
                 # TODO: for Domains instead of Projects also
@@ -1487,6 +1489,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, subservice_id=None):
+        Stats.num_post_module_activation += 1
         #self.schema_name = "ModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1576,6 +1579,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
 
 
     def delete(self, request, service_id, subservice_id=None):
+        Stats.num_delete_module_activation += 1
         #self.schema_name = "ModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1713,7 +1717,11 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_delete_device": self.num_delete_device,
 
                     "num_post_devices": self.num_post_devices,
-                    "num_post_entity_service": self.num_post_entity_service
+                    "num_post_entity_service": self.num_post_entity_service,
+
+                    "num_get_module_activation": self.num_get_module_activation,
+                    "num_post_module_activation": self.num_post_module_activation,
+                    "num_delete_module_activation": self.num_delete_module_activation
                 }
             }
 
