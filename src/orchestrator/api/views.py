@@ -1388,7 +1388,16 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                             self.ORION_PORT,
                             self.CA_PROTOCOL,
                             self.CA_HOST,
-                            self.CA_PORT)
+                            self.CA_PORT,
+                            self.CYGNUS_PROTOCOL,
+                            self.CYGNUS_HOST,
+                            self.CYGNUS_PORT,
+                            self.STH_PROTOCOL,
+                            self.STH_HOST,
+                            self.STH_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT)
             modules = flow.list_modules_actives(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1401,7 +1410,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
             result = {}
             result['modules_actives'] = modules
             if 'error' not in result:
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_200_OK)
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
