@@ -123,6 +123,18 @@ class IoTConf(Stats):
             self.CA_HOST = settings.CA['host']
             self.CA_PORT = settings.CA['port']
 
+            self.CYGNUS_PROTOCOL = settings.CYGNUS['protocol']
+            self.CYGNUS_HOST = settings.CYGNUS['host']
+            self.CYGNUS_PORT = settings.CYGNUS['port']
+
+            self.STH_PROTOCOL = settings.STH['protocol']
+            self.STH_HOST = settings.STH['host']
+            self.STH_PORT = settings.STH['port']
+
+            self.PERSEO_PROTOCOL = settings.PERSEO['protocol']
+            self.PERSEO_HOST = settings.PERSEO['host']
+            self.PERSEO_PORT = settings.PERSEO['port']
+
         except KeyError:
             logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
@@ -492,7 +504,17 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.ORION_PORT,
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
-                                self.CA_PORT)
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT
+                                )
 
                 sub_ca, sub_cyg, sub_sth, sub_perseo = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
@@ -1316,7 +1338,16 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.ORION_PORT,
                             self.CA_PROTOCOL,
                             self.CA_HOST,
-                            self.CA_PORT)
+                            self.CA_PORT,
+                            self.CYGNUS_PROTOCOL,
+                            self.CYGNUS_HOST,
+                            self.CYGNUS_PORT,
+                            self.STH_PROTOCOL,
+                            self.STH_HOST,
+                            self.STH_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT)
             sub_ca, sub_cyg, sub_sth, sub_perseo = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
