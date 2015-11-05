@@ -237,11 +237,18 @@ class IoTACppOperations(object):
         # 1. Get devices
         #
         devices_deleted = []
-        logger.debug("Getting devices for %s  %s" % (SERVICE_NAME,
-                                                     SUBSERVICE_NAME))
-        devices = self.getDevices(SERVICE_USER_TOKEN,
-                                  SERVICE_NAME,
-                                  SUBSERVICE_NAME)
+
+        logger.debug("Getting devices for %s %s" % (SERVICE_NAME,
+                                                    SUBSERVICE_NAME))
+        try:
+            devices = self.getDevices(SERVICE_USER_TOKEN,
+                                      SERVICE_NAME,
+                                      SUBSERVICE_NAME)
+        except Exception, ex:
+            logger.error("%s trying getDevices from IOTA: %s/%s" % (ex,
+                                                            SERVICE_NAME,
+                                                            SUBSERVICE_NAME))
+            return devices_deleted
 
         for device in devices:
             #
