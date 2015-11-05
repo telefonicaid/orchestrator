@@ -2419,6 +2419,51 @@ class Test_UnassignRoleUser_RestView(object):
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
+class Test_ModuleActivation_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_list_module_activation_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
+                                                                      subservice_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
 if __name__ == '__main__':
 
     test_NewService = Test_NewService_RestView()
@@ -2537,3 +2582,6 @@ if __name__ == '__main__':
     test_NewServiceTrust.test_post_ok4()
     # It will work just for keystone juno or upper
     #test_NewServiceTrust.test_post_ok2()
+
+    test_ModuleActivation = Test_ModuleActivation_RestView()
+    test_ModuleActivation.test_list_module_activation_ok()
