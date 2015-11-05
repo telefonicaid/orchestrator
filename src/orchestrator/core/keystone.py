@@ -995,7 +995,8 @@ class IdMKeystoneOperations(IdMOperations):
                                             True)
         logger.debug("json response: %s" % json.dumps(token_data,
                                                       indent=3))
-        return token_data['token']['project']['name']
+
+        return token_data['token']['project']['name'].split('/')[1]
 
     def getProjectRoleAssignments(self,
                                   SERVICE_ADMIN_TOKEN,
