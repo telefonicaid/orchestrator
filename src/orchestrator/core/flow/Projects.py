@@ -1303,7 +1303,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - MODULE_NAME: Module to activate: STH, CYGNUS, CKAN, CEP
+        - MODULE_NAME: IoT Module to activate: STH, CYGNUS, CKAN, CEP
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1416,17 +1416,131 @@ class Projects(FlowBase):
 
         return subscriptionid
 
+    def deactivate_module(self,
+                          DOMAIN_NAME,
+                          DOMAIN_ID,
+                          PROJECT_NAME,
+                          PROJECT_ID,
+                          SERVICE_USER_NAME,
+                          SERVICE_USER_PASSWORD,
+                          SERVICE_USER_TOKEN,
+                          MODULE_NAME):
 
-    def list_modules_actives(self,
-                             DOMAIN_NAME,
-                             DOMAIN_ID,
-                             PROJECT_NAME,
-                             PROJECT_ID,
-                             SERVICE_USER_NAME,
-                             SERVICE_USER_PASSWORD,
-                             SERVICE_USER_TOKEN):
+        ''' Deactivate IoT Module
 
-        '''List Modules Actives
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - MODULE_NAME: IoT Module to activate: STH, CYGNUS, CKAN, CEP
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "MODULE_NAME": "%s" % MODULE_NAME,
+        }
+        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                                                        DOMAIN_NAME,
+                                                        ROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+
+            # TODO: check MODULE_NAME against settings.MODULES conf
+            if MODULE_NAME in ["STH", "sth"]:
+                REFERENCE_URL = self.sth_endpoint + '/notify'
+            if MODULE_NAME in ["CYGNUS", "cygnus"]:
+                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+            if MODULE_NAME in ["CEP", "cep"]:
+                REFERENCE_URL = self.cep_endpoint + '/notify'
+
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME
+            )
+
+            for sub in cb_res:
+                subs_url = sub["notification"]["callback"]
+                if subs_url.startswith(REFERENCE_URL)
+
+                self.cb.unsubcribeContext(SERVICE_USER_TOKEN,
+                                          SERVICE_NAME,
+                                          SUSBSERVICE_NAME,
+                                          sub['id'])
+                break
+
+            # logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return subscriptionid
+
+
+    def list_activated_modules(self,
+                               DOMAIN_NAME,
+                               DOMAIN_ID,
+                               PROJECT_NAME,
+                               PROJECT_ID,
+                               SERVICE_USER_NAME,
+                               SERVICE_USER_PASSWORD,
+                               SERVICE_USER_TOKEN):
+
+        '''List Activated IoT Modules
 
         In case of HTTP error, return HTTP error
 

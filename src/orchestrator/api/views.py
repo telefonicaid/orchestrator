@@ -1373,40 +1373,73 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
         try:
             #request.DATA  # json validation
 
-            # TODO: for Domains instead of Projects also
-            flow = Projects(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT,
-                            None,
-                            None,
-                            None,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
-                            self.ORION_PROTOCOL,
-                            self.ORION_HOST,
-                            self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
-                            self.CYGNUS_PROTOCOL,
-                            self.CYGNUS_HOST,
-                            self.CYGNUS_PORT,
-                            self.STH_PROTOCOL,
-                            self.STH_HOST,
-                            self.STH_PORT,
-                            self.PERSEO_PROTOCOL,
-                            self.PERSEO_HOST,
-                            self.PERSEO_PORT)
-            modules = flow.list_modules_actives(
-                request.DATA.get("SERVICE_NAME", None),
-                request.DATA.get("SERVICE_ID", service_id),
-                request.DATA.get("SUBSERVICE_NAME", None),
-                request.DATA.get("SUBSERVICE_ID",  subservice_id),
-                request.DATA.get("SERVICE_USER_NAME", None),
-                request.DATA.get("SERVICE_USER_PASSWORD", None),
-                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-            )
+            if not subservice_id:
+                # TODO: for Domains instead of Projects also
+                flow = Domains(self.KEYSTONE_PROTOCOL,
+                               self.KEYSTONE_HOST,
+                               self.KEYSTONE_PORT,
+                               None,
+                               None,
+                               None,
+                               self.IOTA_PROTOCOL,
+                               self.IOTA_HOST,
+                               self.IOTA_PORT,
+                               self.ORION_PROTOCOL,
+                               self.ORION_HOST,
+                               self.ORION_PORT,
+                               self.CA_PROTOCOL,
+                               self.CA_HOST,
+                               self.CA_PORT,
+                               self.CYGNUS_PROTOCOL,
+                               self.CYGNUS_HOST,
+                               self.CYGNUS_PORT,
+                               self.STH_PROTOCOL,
+                               self.STH_HOST,
+                               self.STH_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT)
+                modules = flow.list_activated_modules(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN)
+                )
+            else:
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT)
+                modules = flow.list_activated_modules(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN)
+                )
             result = {}
             result['modules_actives'] = modules
             if 'error' not in result:
@@ -1422,46 +1455,168 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    def post(self, request, service_id, subservice_id):
+    def post(self, request, service_id, subservice_id=None):
         #self.schema_name = "ModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
+            if not subservice_id:
+                flow = Domains(self.KEYSTONE_PROTOCOL,
+                               self.KEYSTONE_HOST,
+                               self.KEYSTONE_PORT,
+                               None,
+                               None,
+                               None,
+                               self.IOTA_PROTOCOL,
+                               self.IOTA_HOST,
+                               self.IOTA_PORT,
+                               self.ORION_PROTOCOL,
+                               self.ORION_HOST,
+                               self.ORION_PORT,
+                               self.CA_PROTOCOL,
+                               self.CA_HOST,
+                               self.CA_PORT,
+                               self.CYGNUS_PROTOCOL,
+                               self.CYGNUS_HOST,
+                               self.CYGNUS_PORT,
+                               self.STH_PROTOCOL,
+                               self.STH_HOST,
+                               self.STH_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT)
+                flow.activate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("MODULE", None),
+                )
+            else:
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT)
+                flow.activate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("MODULE", None),
+                )
+            result = {}
 
-            flow = Projects(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT,
-                            None,
-                            None,
-                            None,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
-                            self.ORION_PROTOCOL,
-                            self.ORION_HOST,
-                            self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
-                            self.CYGNUS_PROTOCOL,
-                            self.CYGNUS_HOST,
-                            self.CYGNUS_PORT,
-                            self.STH_PROTOCOL,
-                            self.STH_HOST,
-                            self.STH_PORT,
-                            self.PERSEO_PROTOCOL,
-                            self.PERSEO_HOST,
-                            self.PERSEO_PORT)
-            flow.activate_module(
-                request.DATA.get("SERVICE_NAME", None),
-                request.DATA.get("SERVICE_ID", service_id),
-                request.DATA.get("SUBSERVICE_NAME", None),
-                request.DATA.get("SUBSERVICE_ID",  subservice_id),
-                request.DATA.get("SERVICE_USER_NAME", None),
-                request.DATA.get("SERVICE_USER_PASSWORD", None),
-                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("MODULE", None),
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
             )
+
+
+    def delete(self, request, service_id, subservice_id=None):
+        #self.schema_name = "ModuleActivation"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+            if not subservice_id:
+                flow = Domains(self.KEYSTONE_PROTOCOL,
+                               self.KEYSTONE_HOST,
+                               self.KEYSTONE_PORT,
+                               None,
+                               None,
+                               None,
+                               self.IOTA_PROTOCOL,
+                               self.IOTA_HOST,
+                               self.IOTA_PORT,
+                               self.ORION_PROTOCOL,
+                               self.ORION_HOST,
+                               self.ORION_PORT,
+                               self.CA_PROTOCOL,
+                               self.CA_HOST,
+                               self.CA_PORT,
+                               self.CYGNUS_PROTOCOL,
+                               self.CYGNUS_HOST,
+                               self.CYGNUS_PORT,
+                               self.STH_PROTOCOL,
+                               self.STH_HOST,
+                               self.STH_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT)
+                flow.deactivate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("MODULE", None),
+                )
+            else:
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT)
+                flow.deactivate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("MODULE", None),
+                )
             result = {}
 
             if 'error' not in result:
