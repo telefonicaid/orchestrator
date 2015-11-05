@@ -646,7 +646,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
              "NEW_USER_PASSWORD": "new_pwd"
         }
 + Response 200
+    {
 
+    }
 
 ### delete an user [DELETE]
 + Request (application/json)
@@ -684,6 +686,55 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
         {
             "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
         }
+
+
+## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation]
+
+### list activated IoT Module [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+            }
++ Response 200 (application/json)
+
+### activate an IoT Module [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "MODULE":"STH"
+            }
+        Required: [ "MODULE" ]
++ Response 201 (application/json)
+
+### deactivate an IoT Module [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "MODULE":"STH"
+            }
+        Required: [ "MODULE" ]
++ Response 204 (application/json)
 
 
 ## Stats [/v1.0/version]
