@@ -1289,7 +1289,7 @@ class Projects(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
-                        MODULE_NAME):
+                        MODULE):
 
         '''Activate Module
 
@@ -1303,7 +1303,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - MODULE_NAME: IoT Module to activate: STH, CYGNUS, CKAN, CEP
+        - MODULE: IoT Module to activate: STH, CYGNUS, CKAN, CEP
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1313,7 +1313,7 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
-            "MODULE_NAME": "%s" % MODULE_NAME,
+            "MODULE": "%s" % MODULE,
         }
         logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
                                                                      indent=3))
@@ -1362,11 +1362,11 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
-            if MODULE_NAME in ["STH", "sth"]:
+            if MODULE in ["STH", "sth"]:
                 REFERENCE_URL = self.sth_endpoint + '/notify'
-            if MODULE_NAME in ["CYGNUS", "cygnus"]:
+            if MODULE in ["CYGNUS", "cygnus"]:
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if MODULE_NAME in ["CEP", "cep"]:
+            if MODULE in ["CEP", "cep"]:
                 REFERENCE_URL = self.cep_endpoint + '/notify'
 
             #if not REFERENCE_URL:
@@ -1424,7 +1424,7 @@ class Projects(FlowBase):
                           SERVICE_USER_NAME,
                           SERVICE_USER_PASSWORD,
                           SERVICE_USER_TOKEN,
-                          MODULE_NAME):
+                          MODULE):
 
         ''' Deactivate IoT Module
 
@@ -1438,7 +1438,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - MODULE_NAME: IoT Module to activate: STH, CYGNUS, CKAN, CEP
+        - MODULE: IoT Module to activate: STH, CYGNUS, CKAN, CEP
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1448,7 +1448,7 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
-            "MODULE_NAME": "%s" % MODULE_NAME,
+            "MODULE": "%s" % MODULE,
         }
         logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
                                                                      indent=3))
@@ -1496,12 +1496,12 @@ class Projects(FlowBase):
                                                    PROJECT_NAME)
 
 
-            # TODO: check MODULE_NAME against settings.MODULES conf
-            if MODULE_NAME in ["STH", "sth"]:
+            # TODO: check MODULE against settings.MODULES conf
+            if MODULE in ["STH", "sth"]:
                 REFERENCE_URL = self.sth_endpoint + '/notify'
-            if MODULE_NAME in ["CYGNUS", "cygnus"]:
+            if MODULE in ["CYGNUS", "cygnus"]:
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if MODULE_NAME in ["CEP", "cep"]:
+            if MODULE in ["CEP", "cep"]:
                 REFERENCE_URL = self.cep_endpoint + '/notify'
 
             cb_res = self.cb.getListSubscriptions(
