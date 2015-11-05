@@ -2431,6 +2431,16 @@ class Test_ModuleActivation_RestView(object):
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
             "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data2_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "MODULE_NAME": "CYGNUS"
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -2451,16 +2461,58 @@ class Test_ModuleActivation_RestView(object):
         res = self.TestRestOps.rest_request(
             method="GET",
             url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
-                                                                      subservice_id),
+                                                                subservice_id),
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        # TODO: check json_body_response['modules_activated'] is empty
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+    def test_set_module_activation_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data2_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
+                                                                subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
+                                                                subservice_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        # TODO: check json_body_response['modules_activated'] is not empty
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
