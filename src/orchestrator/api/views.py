@@ -123,6 +123,18 @@ class IoTConf(Stats):
             self.CA_HOST = settings.CA['host']
             self.CA_PORT = settings.CA['port']
 
+            self.CYGNUS_PROTOCOL = settings.CYGNUS['protocol']
+            self.CYGNUS_HOST = settings.CYGNUS['host']
+            self.CYGNUS_PORT = settings.CYGNUS['port']
+
+            self.STH_PROTOCOL = settings.STH['protocol']
+            self.STH_HOST = settings.STH['host']
+            self.STH_PORT = settings.STH['port']
+
+            self.PERSEO_PROTOCOL = settings.PERSEO['protocol']
+            self.PERSEO_HOST = settings.PERSEO['host']
+            self.PERSEO_PORT = settings.PERSEO['port']
+
         except KeyError:
             logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
