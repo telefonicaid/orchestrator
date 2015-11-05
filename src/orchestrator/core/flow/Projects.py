@@ -1512,13 +1512,13 @@ class Projects(FlowBase):
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
-                if subs_url.startswith(REFERENCE_URL)
+                if subs_url.startswith(REFERENCE_URL):
 
-                self.cb.unsubcribeContext(SERVICE_USER_TOKEN,
-                                          SERVICE_NAME,
-                                          SUSBSERVICE_NAME,
-                                          sub['id'])
-                break
+                    self.cb.unsubcribeContext(SERVICE_USER_TOKEN,
+                                              SERVICE_NAME,
+                                              SUSBSERVICE_NAME,
+                                              sub['id'])
+                    break
 
             # logger.debug("subscribeContext res=%s" % cb_res)
             # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
