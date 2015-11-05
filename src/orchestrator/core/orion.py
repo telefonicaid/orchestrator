@@ -277,11 +277,27 @@ class CBOrionOperations(object):
                                SERVICE_NAME,
                                SUBSERVICE_NAME):
 
-        subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN,
-                                                  SERVICE_NAME,
-                                                  SUBSERVICE_NAME)
+        subscriptions_deleted = []
+        logger.debug("Getting subscriptions for %s  %s" % (SERVICE_NAME,
+                                                           SUBSERVICE_NAME))
+        try:
+            subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
+        except Exception, ex:
+            logger.error("%s trying getListSubscriptions from CB: %s/%s" % (ex,
+                                SERVICE_NAME,
+                                SUBSERVICE_NAME))
+            return subscriptions_deleted
+
         for subscription in subscriptions:
-            self.unsubscribeContext(SERVICE_USER_TOKEN,
-                                    SERVICE_NAME,
-                                    SUBSERVICE_NAME,
-                                    subscription['id'])
+            try:
+                self.unsubscribeContext(SERVICE_USER_TOKEN,
+                                        SERVICE_NAME,
+                                        SUBSERVICE_NAME,
+                                        subscription['id'])
+                subscriptions_deleted.append(subscription['id'])
+            except Exception, ex:
+                logger.error("%s trying to unsubscribe context: %s" % (ex,
+                                                        subscription['id']))
+        return subscriptions_deleted

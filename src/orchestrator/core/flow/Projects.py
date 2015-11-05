@@ -297,10 +297,11 @@ class Projects(FlowBase):
             if (len(devices_deleted) > 0):
                 logger.info("devices deleted %s", devices_deleted)
 
+
             #
             # Delete all subscriptions
             #
-            subscriptions_deleted = self.orion.deleteAllSubscriptions(
+            subscriptions_deleted = self.cb.deleteAllSubscriptions(
                                                               ADMIN_TOKEN,
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
