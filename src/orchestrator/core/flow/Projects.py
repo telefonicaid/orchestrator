@@ -1361,24 +1361,25 @@ class Projects(FlowBase):
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
-
             if MODULE in ["STH", "sth"]:
                 REFERENCE_URL = self.sth_endpoint + '/notify'
             if MODULE in ["CYGNUS", "cygnus"]:
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
             if MODULE in ["CEP", "cep"]:
-                REFERENCE_URL = self.cep_endpoint + '/notify'
+                REFERENCE_URL = self.perseo_endpoint + '/notify'
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
+            DURATION="P1M"
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
-            db_res = self.cb.getContextTypes(
+            cb_res = self.cb.getContextTypes(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 PROJECT_NAME,
-                ENTITY_TYPE)
+                None)
+
             for entity_type in cb_res:
                 ATTRIBUTES.append(entity_type["attributes"])
 
@@ -1502,7 +1503,7 @@ class Projects(FlowBase):
             if MODULE in ["CYGNUS", "cygnus"]:
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
             if MODULE in ["CEP", "cep"]:
-                REFERENCE_URL = self.cep_endpoint + '/notify'
+                REFERENCE_URL = self.perseo_endpoint + '/notify'
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
@@ -1562,7 +1563,7 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
         }
-        logger.debug("list_modules_actives invoked with: %s" % json.dumps(data_log,
+        logger.debug("list_activated_modules invoked with: %s" % json.dumps(data_log,
                                                                           indent=3))
 
         try:
@@ -1620,11 +1621,11 @@ class Projects(FlowBase):
             modules = []
             for sub in cb_res:
                 if sub["notification"]["callback"].startswith(self.sth_endpoint):
-                    modules.append({"module": "sth"})
+                    modules.append({"module": "STH"})
                 if sub["notification"]["callback"].startswith(self.cygnus_endpoint):
-                    modules.append({"module": "cygnus"})
-                if sub["notification"]["callback"].startswith(self.cep_endpoint):
-                    modules.append({"module": "cep"})
+                    modules.append({"module": "CYGNUS"})
+                if sub["notification"]["callback"].startswith(self.perseo_endpoint):
+                    modules.append({"module": "PERSEO"})
 
             logger.debug("modules=%s" % modules)
 

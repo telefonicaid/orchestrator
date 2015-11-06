@@ -760,6 +760,9 @@ json = {
             "SUBSERVICE_ID": {
                 "type": "string",
             },
+            "MODULE": {
+                "type": "string",
+            },
         },
         # "required": [ ],
     },
