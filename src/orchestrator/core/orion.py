@@ -142,7 +142,7 @@ class CBOrionOperations(object):
                         ENTITY_TYPE=None):
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/contextTypes/%s' % ENTITY_TYPE if ENTITY_TYPE else "",
+            url='/v1/contextTypes/%s' % (ENTITY_TYPE if ENTITY_TYPE else ""),
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
@@ -154,7 +154,10 @@ class CBOrionOperations(object):
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
-        return json_body_response
+        if 'statusCode' in json_body_response:
+            return []
+        else:
+            return json_body_response
 
 
     def subscribeContext(self,
@@ -258,18 +261,18 @@ class CBOrionOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        subscription_related = []
+        subscriptions_related = []
         # Filter over list of subscriptions returned
         for subscription in json_body_response:
             for entity in subscription['subject']['entities']:
-                if not entity['ispattern'] and entity['id'] == ENTITY_ID:
+                if not entity['idPattern'] and entity['id'] == ENTITY_ID:
                     subscriptions_related.append(subscription)
-                if entity['ispattern'] and entity['id'] in [".*", "*"]:
+                if entity['idPattern'] and entity['idPattern'] in [".*", "*"]:
                     subscriptions_related.append(subscription)
 
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
-        return json_body_response
+        return subscriptions_related
 
 
     def deleteAllSubscriptions(self,

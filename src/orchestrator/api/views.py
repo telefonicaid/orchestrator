@@ -1474,7 +1474,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN)
                 )
             result = {}
-            result['modules_actives'] = modules
+            result['actived_modules'] = modules
             if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
