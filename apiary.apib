@@ -95,6 +95,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_ADMIN_TOKEN": "token"
                 "NEW_SERVICE_DESCRIPTION":"new defaultservice description"
             }
+       Required: ["NEW_SERVICE_DESCRIPTION"]
 + Response 200
 
 
@@ -169,22 +170,6 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
             }
 
 
-### Modify a subservice [PUT]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"admin",
-                "SERVICE_ADMIN_PASSWORD":"pwd",
-                "SERVICE_ADMIN_TOKEN": "token",
-                "SUBSERVICE_NAME":"DemoSubService",
-                "NEW_SUBSERVICE_DESCRIPTION":"demosubservice desc"
-            }
-       Required: ["NEW_SUBSERVICE_DESCRIPTION" ]
-+ Response 200
-
-
 ## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
 
 ### Detail of SubService [GET]
@@ -222,11 +207,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SUBSERVICE_NAME":"DemoSubService",
                 "NEW_SUBSERVICE_DESCRIPTION":"demosubservice new desc"
             }
-+ Response 200 (application/json)
-    + Body
-            {
-                   "id" : 00002342342werge353
-            }
+       Required: ["NEW_SUBSERVICE_DESCRIPTION"]
++ Response 200
 
 
 ### Delete a SubService [DELETE]
@@ -475,7 +457,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
     + user_id (optional, `string`) ... User
     + subservice_id (optional, `string`) ... Subservice (aka Project)
     + role_id (optional, `string`) ... Role
-    + inherit (optional, `boolean`) ... assign role in all subservices or nor    
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
 + Request (application/json)
         {
             "SUBSERVICE_NAME":"DemoSubService",
@@ -499,7 +481,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
     + user_id (optional, `string`) ... User
     + subservice_id (optional, `string`) ... Subservice (aka Project)
     + role_id (optional, `string`) ... Role
-    + inherit (optional, `boolean`) ... assign role in all subservices or nor        
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
 + Request (application/json)
         {
             "SUBSERVICE_NAME":"DemoSubService",
