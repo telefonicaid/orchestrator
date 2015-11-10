@@ -26,6 +26,7 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import CSVOperations
+from settings.common import IOTMODULES
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -1289,7 +1290,7 @@ class Projects(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SERVICE_USER_TOKEN,
-                        MODULE):
+                        IOTMODULE):
 
         '''Activate Module
 
@@ -1303,7 +1304,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - MODULE: IoT Module to activate: STH, CYGNUS, CKAN, CEP
+        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1313,7 +1314,7 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
-            "MODULE": "%s" % MODULE,
+            "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
                                                                      indent=3))
@@ -1361,11 +1362,13 @@ class Projects(FlowBase):
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
-            if MODULE in ["STH", "sth"]:
+            assert IOTMODULE in IOTMODULES
+            
+            if IOTMODULE in ["STH", "sth"]:
                 REFERENCE_URL = self.sth_endpoint + '/notify'
-            if MODULE in ["CYGNUS", "cygnus"]:
+            if IOTMODULE in ["CYGNUS", "cygnus"]:
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if MODULE in ["CEP", "cep"]:
+            if IOTMODULE in ["PERSEO", "perseo"]:
                 REFERENCE_URL = self.perseo_endpoint + '/notify'
 
             #if not REFERENCE_URL:
@@ -1425,7 +1428,7 @@ class Projects(FlowBase):
                           SERVICE_USER_NAME,
                           SERVICE_USER_PASSWORD,
                           SERVICE_USER_TOKEN,
-                          MODULE):
+                          IOTMODULE):
 
         ''' Deactivate IoT Module
 
@@ -1439,7 +1442,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - MODULE: IoT Module to activate: STH, CYGNUS, CKAN, CEP
+        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1449,7 +1452,7 @@ class Projects(FlowBase):
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
-            "MODULE": "%s" % MODULE,
+            "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
                                                                      indent=3))
@@ -1496,13 +1499,13 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            assert IOTMODULE in IOTMODULES
 
-            # TODO: check MODULE against settings.MODULES conf
-            if MODULE in ["STH", "sth"]:
+            if IOTMODULE in ["STH", "sth"]:
                 REFERENCE_URL = self.sth_endpoint + '/notify'
-            if MODULE in ["CYGNUS", "cygnus"]:
+            if IOTMODULE in ["CYGNUS", "cygnus"]:
                 REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if MODULE in ["CEP", "cep"]:
+            if IOTMODULE in ["PERSEO", "perseo"]:
                 REFERENCE_URL = self.perseo_endpoint + '/notify'
 
             cb_res = self.cb.getListSubscriptions(
@@ -1609,9 +1612,6 @@ class Projects(FlowBase):
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
-
-
-            # TODO: Search for subscriptions about: STH, CKAN, CYGNUS, CEP
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,

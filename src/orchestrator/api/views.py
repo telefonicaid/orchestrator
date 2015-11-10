@@ -1525,7 +1525,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("MODULE", None),
+                    request.DATA.get("IOTMODULE", None),
                 )
             else:
                 flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1560,7 +1560,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("MODULE", None),
+                    request.DATA.get("IOTMODULE", None),
                 )
             result = {}
 
@@ -1615,7 +1615,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("MODULE", None),
+                    request.DATA.get("IOTMODULE", None),
                 )
             else:
                 flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1650,7 +1650,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("MODULE", None),
+                    request.DATA.get("IOTMODULE", None),
                 )
             result = {}
 
@@ -1676,14 +1676,15 @@ class OrchVersion_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
-    def get(self, request, service_id=None):
+    def get(self, request):
 
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        #HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # Extract version and stats data
             result = {
                 "version": settings.ORC_VERSION,
                 "uptime": self.uptime,
+                "IoTModules": settings.IOTMODULES,
                 "API_stats": {
                     "num_post_service": self.num_post_service,
                     "num_get_service": self.num_get_service,
