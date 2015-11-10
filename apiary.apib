@@ -98,6 +98,18 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
        Required: ["NEW_SERVICE_DESCRIPTION"]
 + Response 200
 
+### Delete a Service [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
+            }
++ Response 204
+
 
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
 
@@ -135,19 +147,6 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 }
               ]
             }
-
-
-### Delete a Service [DELETE]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"admin",
-                "SERVICE_ADMIN_PASSWORD":"pwd",
-                "SERVICE_ADMIN_TOKEN": "token"
-            }
-+ Response 204
 
 
 ### Create SubService [POST]
