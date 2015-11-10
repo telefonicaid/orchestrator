@@ -1389,12 +1389,12 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             )
 
 
-class SubServiceModuleActivation_RESTView(APIView, IoTConf):
+class IOTModuleActivation_RESTView(APIView, IoTConf):
     """
-    SubService Module Activation
+    IOT Module Activation
 
     """
-    schema_name = "ModuleActivation"
+    schema_name = "IOTModuleActivation"
     parser_classes = (parsers.JSONSchemaParser,)
 
     def __init__(self):
@@ -1490,7 +1490,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id, subservice_id=None):
         Stats.num_post_module_activation += 1
-        #self.schema_name = "ModuleActivation"
+        #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -1580,7 +1580,7 @@ class SubServiceModuleActivation_RESTView(APIView, IoTConf):
 
     def delete(self, request, service_id, subservice_id=None):
         Stats.num_delete_module_activation += 1
-        #self.schema_name = "ModuleActivation"
+        #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
