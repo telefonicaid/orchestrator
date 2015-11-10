@@ -2,7 +2,14 @@ CHANGES
 =======
 
 0.5.1
-subscriptions instead of register context for IOTA handling	
+subscriptions instead of register context for IOTA handling
+feature/OIOTP-81_orchestrator_kpis
+bug/remove_service_without_iota
+bug/get_enpoints_from_config_not_default
+bug/use_service_name_without_resolve_it
+bug/apiary_doc
+bug/iccid_entity_attribute
+bug/empty_orion_attribute
 
 0.5.0
 
