@@ -760,7 +760,7 @@ json = {
             "SUBSERVICE_ID": {
                 "type": "string",
             },
-            "MODULE": {
+            "IOTMODULE": {
                 "type": "string",
             },
         },

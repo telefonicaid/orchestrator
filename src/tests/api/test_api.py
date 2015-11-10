@@ -1,6 +1,6 @@
 import uuid
 import json
-from settings import custom_dev as settings
+from settings import dev as settings
 
 from orchestrator.common.util import RestOperations
 
@@ -2441,7 +2441,7 @@ class Test_ModuleActivation_RestView(object):
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
             "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
-            "MODULE": "CYGNUS",
+            "IOTMODULE": "CYGNUS",
             "SERVICE_USER_NAME": "adm1",
             "SERVICE_USER_PASSWORD": "password"
         }
@@ -2453,7 +2453,7 @@ class Test_ModuleActivation_RestView(object):
             "NEW_SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "gardens_%s" % self.suffix,
             "SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
-            "MODULE": "STH",
+            "IOTMODULE": "STH",
             "SERVICE_USER_NAME": "adm1",
             "SERVICE_USER_PASSWORD": "password"
         }

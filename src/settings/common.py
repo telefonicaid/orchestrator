@@ -228,6 +228,8 @@ CYGNUS = {}
 STH = {}
 PERSEO = {}
 
+IOTMODULES = [ "STH", "CYGNUS", "PERSEO" ]
+
 PEP = {
     "user": "pep",
     "password": "pep"
