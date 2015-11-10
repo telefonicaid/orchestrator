@@ -346,6 +346,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### Create a Role [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
@@ -365,6 +367,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 ## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
 
 ### Delete a Role [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + roleId (required, `string`) ... Role
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
@@ -550,6 +555,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### Create Users [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
             "SERVICE_NAME":"defaultservice",
@@ -601,6 +608,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### update an user (by his admin) [PUT]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
              "SERVICE_NAME":"defaultservice",
@@ -618,6 +628,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### change user password by himself [POST]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
              "SERVICE_NAME": "defaultservice",
@@ -630,6 +643,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### delete an user [DELETE]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
             "SERVICE_NAME":"defaultservice",
@@ -645,6 +661,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 ## Trust Token [/v1.0/service/{serviceId}/trust]
 
 ### Create Trust Token [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
             "SERVICE_NAME":"defaultservice",
@@ -681,10 +699,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"DemoSubService",
             }
-+ Response 200 (application/json)
-    {
-
-    }
++ Response 200
 
 ### activate an IoT Module [POST]
 + Parameters
@@ -716,7 +731,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "MODULE":"STH"
             }
         Required: [ "MODULE" ]
-+ Response 204 (application/json)
++ Response 204
 
 
 ## Stats [/v1.0/version]
