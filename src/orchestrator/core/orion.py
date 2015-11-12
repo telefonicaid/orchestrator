@@ -252,7 +252,7 @@ class CBOrionOperations(object):
                              ENTITY_ID=None):
 
         res = self.CBRestOperations.rest_request(
-            url='/v2/subscriptions',
+            url='/v2/subscriptions?offset=0&limit=1000',
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
