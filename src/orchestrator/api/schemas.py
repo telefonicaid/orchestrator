@@ -584,6 +584,10 @@ json = {
                 "type": "string",
                 "pattern": "^[^'\"=;()]*$",
             },
+            "ENTITY_NAME": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
             "PROTOCOL": {
                 "type": "string",
             },
