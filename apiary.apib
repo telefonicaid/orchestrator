@@ -685,7 +685,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
         }
 
 
-## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation]
+## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation/{iot_module}]
 
 ### list activated IoT Modules [POST]
 + Parameters
@@ -705,6 +705,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 + Parameters
     + serviceId (required, `string`) ... Service
     + subserviceId (required, `string`) ... SubService
+    + iot_module (optional, 'string') ... IOTModule
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
@@ -712,15 +713,16 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_USER_PASSWORD":"pwd",
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"DemoSubService",
-                "MODULE":"STH"
+                "IOTMODULE":"STH"
             }
-        Required: [ "MODULE" ]
+        Required: [ "iot_module/IOTMODULE" ]
 + Response 201 (application/json)
 
 ### deactivate an IoT Module [DELETE]
 + Parameters
     + serviceId (required, `string`) ... Service
     + subserviceId (required, `string`) ... SubService
+    + iot_module (optional, 'string') ... IOTModule
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
@@ -728,9 +730,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_USER_PASSWORD":"pwd",
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"DemoSubService",
-                "MODULE":"STH"
+                "IOTMODULE":"STH"
             }
-        Required: [ "MODULE" ]
+        Required: [ "iot_module/IOTMODULE" ]
 + Response 204
 
 
