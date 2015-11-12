@@ -412,9 +412,9 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
-                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                         DOMAIN_NAME,
-                                                        ROJECT_NAME)
+                                                        PROJECT_NAME)
 
                 else:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
@@ -1330,9 +1330,9 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
-                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                         DOMAIN_NAME,
-                                                        ROJECT_NAME)
+                                                        PROJECT_NAME)
 
                 else:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
@@ -1467,9 +1467,9 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
-                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                         DOMAIN_NAME,
-                                                        ROJECT_NAME)
+                                                        PROJECT_NAME)
 
                 else:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
@@ -1570,7 +1570,6 @@ class Projects(FlowBase):
                                                                           indent=3))
 
         try:
-
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
@@ -1580,9 +1579,9 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
-                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                         DOMAIN_NAME,
-                                                        ROJECT_NAME)
+                                                        PROJECT_NAME)
 
                 else:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
