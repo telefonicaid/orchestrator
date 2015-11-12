@@ -142,7 +142,8 @@ class CBOrionOperations(object):
                         ENTITY_TYPE=None):
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/contextTypes/%s' % (ENTITY_TYPE if ENTITY_TYPE else ""),
+            url='/v1/contextTypes/%s?offset=0&limit=1000' % (
+                ENTITY_TYPE if ENTITY_TYPE else ""),            
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
