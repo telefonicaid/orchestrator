@@ -569,6 +569,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.DATA.get("DEVICE_ID", None),
                     request.DATA.get("ENTITY_TYPE", None),
+                    request.DATA.get("ENTITY_NAME", request.DATA.get("DEVICE_ID", None)),
                     request.DATA.get("PROTOCOL", None),
                     request.DATA.get("ATT_ICCID", None),
                     request.DATA.get("ATT_IMEI", None),
@@ -1173,6 +1174,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("DEVICE_ID", None),
                 request.DATA.get("ENTITY_TYPE", None),
+                request.DATA.get("ENTITY_NAME", request.DATA.get("DEVICE_ID", None)),
                 request.DATA.get("PROTOCOL", None),
                 request.DATA.get("ATT_ICCID", None),
                 request.DATA.get("ATT_IMEI", None),
@@ -1282,15 +1284,6 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_USER_PASSWORD", None),
                 request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("CSV_DEVICES", None),
-                # request.DATA.get("DEVICE_ID", None),
-                # request.DATA.get("ENTITY_TYPE", None),
-                # request.DATA.get("PROTOCOL", None),
-                # request.DATA.get("ATT_ICCID", None),
-                # request.DATA.get("ATT_IMEI", None),
-                # request.DATA.get("ATT_IMSI", None),
-                # request.DATA.get("ATT_INTERACTION_TYPE", None),
-                # request.DATA.get("ATT_SERVICE_ID", None),
-                # request.DATA.get("ATT_GEOLOCATION", None)
             )
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
