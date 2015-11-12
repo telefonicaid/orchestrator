@@ -1031,7 +1031,7 @@ class Test_NewServiceTrust_RestView(object):
         self.payload_data_ok7 = {
             "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER":"Alice",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -2453,7 +2453,6 @@ class Test_ModuleActivation_RestView(object):
             "NEW_SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "gardens_%s" % self.suffix,
             "SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
-            "IOTMODULE": "STH",
             "SERVICE_USER_NAME": "adm1",
             "SERVICE_USER_PASSWORD": "password"
         }
@@ -2546,16 +2545,18 @@ class Test_ModuleActivation_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
-                                                                      subservice_id),
+            url="/v1.0/service/%s/subservice/%s/module_activation/%s" % (service_id,
+                                                                         subservice_id,
+                                                                         'STH'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
-                                                                      subservice_id),
+            url="/v1.0/service/%s/subservice/%s/module_activation/%s" % (service_id,
+                                                                         subservice_id,
+                                                                         'STH'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
