@@ -732,10 +732,10 @@ json = {
         # ],
     },
 
-    ##################
-    "ModuleActivation": {
-    ##################
-        "name": "ModuleActivation",
+    #####################
+    "IOTModuleActivation": {
+    #####################
+        "name": "IOTModuleActivation",
         "dependencies": {
             "SERVICE_USER_NAME": [
                 "SERVICE_ADMIN_PASSWORD"

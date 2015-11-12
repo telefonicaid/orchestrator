@@ -1488,7 +1488,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    def post(self, request, service_id, subservice_id=None):
+    def post(self, request, service_id, subservice_id=None, iot_module=None):
         Stats.num_post_module_activation += 1
         #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
@@ -1525,7 +1525,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("IOTMODULE", None),
+                    request.DATA.get("IOTMODULE", iot_module),
                 )
             else:
                 flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1560,7 +1560,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("IOTMODULE", None),
+                    request.DATA.get("IOTMODULE", iot_module),
                 )
             result = {}
 
@@ -1578,7 +1578,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             )
 
 
-    def delete(self, request, service_id, subservice_id=None):
+    def delete(self, request, service_id, subservice_id=None, iot_module=None):
         Stats.num_delete_module_activation += 1
         #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
@@ -1615,7 +1615,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("IOTMODULE", None),
+                    request.DATA.get("IOTMODULE", iot_module),
                 )
             else:
                 flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1650,7 +1650,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_PASSWORD", None),
                     request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("IOTMODULE", None),
+                    request.DATA.get("IOTMODULE", iot_module),
                 )
             result = {}
 
