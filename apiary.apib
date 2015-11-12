@@ -237,14 +237,14 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_USER_PASSWORD":"pwd",
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"DemoSubService",
-                "DEVICE_ID":"device_id",
+                "DEVICE_ID":"device_id_XXX",
                 "ENTITY_TYPE":""BlackButton,
                 "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_CCID":"AAA",
+                "ATT_ICCID":"12345667",
                 "ATT_IMEI":"123425345",
                 "ATT_IMSI":"4535656777",
                 "ATT_INTERACTION_TYPE":"asynchronous",
-                "ATT_SERVICE_ID":"S-blackbutton",
+                "ATT_SERVICE_ID":"defaultservice",
                 "ATT_GEOLOCATION":"40.4188,-36919"
             }
         Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
@@ -285,7 +285,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "ENTITY_TYPE":"entity_type",
                 "ENTITY_ID":"entity_id",
                 "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_NAME":"blackbutton_telepizza",
+                "ATT_NAME":"defaultservice_demosubservice",
                 "ATT_PROVIDER":"telepizza",
                 "ATT_ENDPOINT":"http://localhost:6500/sync/request",
                 "ATT_METHOD":"POST",
