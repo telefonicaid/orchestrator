@@ -663,11 +663,12 @@ class Domains(FlowBase):
             modules = []
             for sub in cb_res:
                 if sub["notification"]["callback"].startswith(self.sth_endpoint):
-                    modules.append({"module": "STH"})
+                    # TODO: check also that entitiy idPattern is '.*'
+                    modules.append("STH")
                 if sub["notification"]["callback"].startswith(self.cygnus_endpoint):
-                    modules.append({"module": "CYGNUS"})
+                    modules.append("CYGNUS")
                 if sub["notification"]["callback"].startswith(self.perseo_endpoint):
-                    modules.append({"module": "PERSEO"})
+                    modules.append("PERSEO")
 
             logger.debug("modules=%s" % modules)
 
