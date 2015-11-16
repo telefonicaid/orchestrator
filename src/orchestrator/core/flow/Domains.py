@@ -572,10 +572,10 @@ class Domains(FlowBase):
                 subs_url = sub["notification"]["callback"]
                 if subs_url.startswith(REFERENCE_URL):
 
-                    self.cb.unsubcribeContext(SERVICE_USER_TOKEN,
-                                              SERVICE_NAME,
-                                              "",
-                                              sub['id'])
+                    self.cb.unsubscribeContext(SERVICE_USER_TOKEN,
+                                               DOMAIN_NAME,
+                                               "",
+                                               sub['id'])
                     break
 
             # logger.debug("subscribeContext res=%s" % cb_res)
