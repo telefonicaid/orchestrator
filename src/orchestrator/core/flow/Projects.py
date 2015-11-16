@@ -595,7 +595,7 @@ class Projects(FlowBase):
             if PROTOCOL == "TT_BLACKBUTTON":
                 ENTITY_TYPE="BlackButton"
                 #"http://<ip_ca>:<port_ca>/"
-                REFERENCE_URL=self.cygnus_endpoint + '/notify'
+                REFERENCE_URL=self.endpoints['CYGNUS'] + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -632,7 +632,7 @@ class Projects(FlowBase):
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 ENTITY_TYPE="Thing"
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['CYGNUS'] + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -691,10 +691,10 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.sth_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['STH'] + '/notify'
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.sth_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['STH'] + '/notify'
 
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
@@ -717,10 +717,10 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
 
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
@@ -1363,13 +1363,8 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
             assert IOTMODULE in IOTMODULES
-            
-            if IOTMODULE in ["STH", "sth"]:
-                REFERENCE_URL = self.sth_endpoint + '/notify'
-            if IOTMODULE in ["CYGNUS", "cygnus"]:
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if IOTMODULE in ["PERSEO", "perseo"]:
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
@@ -1501,12 +1496,7 @@ class Projects(FlowBase):
 
             assert IOTMODULE in IOTMODULES
 
-            if IOTMODULE in ["STH", "sth"]:
-                REFERENCE_URL = self.sth_endpoint + '/notify'
-            if IOTMODULE in ["CYGNUS", "cygnus"]:
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if IOTMODULE in ["PERSEO", "perseo"]:
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
@@ -1606,7 +1596,6 @@ class Projects(FlowBase):
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
-
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
@@ -1620,12 +1609,15 @@ class Projects(FlowBase):
             # all returned subscriptions are about service, not subservice
             modules = []
             for sub in cb_res:
-                if sub["notification"]["callback"].startswith(self.sth_endpoint):
-                    modules.append("STH")
-                if sub["notification"]["callback"].startswith(self.cygnus_endpoint):
-                    modules.append("CYGNUS")
-                if sub["notification"]["callback"].startswith(self.perseo_endpoint):
-                    modules.append("PERSEO")
+                sub_callback = sub["notification"]["callback"]
+                for iotmodule in IOTMODULES:
+                    if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
+                        # Check All entities:
+                        if ((len(sub['subject']['entities']) == 1) and
+                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            (sub['subject']['entities'][0]['type'] == '')):
+                            modules.append(iotmodule)
+                            break
 
             logger.debug("modules=%s" % modules)
 

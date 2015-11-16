@@ -452,13 +452,7 @@ class Domains(FlowBase):
 
 
             assert IOTMODULE in IOTMODULES
-
-            if IOTMODULE in ["STH", "sth"]:
-                REFERENCE_URL = self.sth_endpoint + '/notify'
-            if IOTMODULE in ["CYGNUS", "cygnus"]:
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if IOTMODULE in ["PERSEO", "perseo"]:
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
@@ -566,13 +560,7 @@ class Domains(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             assert IOTMODULE in IOTMODULES
-
-            if IOTMODULE in ["STH", "sth"]:
-                REFERENCE_URL = self.sth_endpoint + '/notify'
-            if IOTMODULE in ["CYGNUS", "cygnus"]:
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
-            if IOTMODULE in ["PERSEO", "perseo"]:
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
@@ -662,13 +650,11 @@ class Domains(FlowBase):
             )
             modules = []
             for sub in cb_res:
-                if sub["notification"]["callback"].startswith(self.sth_endpoint):
-                    # TODO: check also that entitiy idPattern is '.*'
-                    modules.append("STH")
-                if sub["notification"]["callback"].startswith(self.cygnus_endpoint):
-                    modules.append("CYGNUS")
-                if sub["notification"]["callback"].startswith(self.perseo_endpoint):
-                    modules.append("PERSEO")
+                sub_callback = sub["notification"]["callback"]
+                for iotmodule in IOTMODULES:
+                    if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
+                        modules.append(iotmodule)
+                        break
 
             logger.debug("modules=%s" % modules)
 
