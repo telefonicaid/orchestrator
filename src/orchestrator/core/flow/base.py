@@ -74,12 +74,16 @@ class FlowBase(object):
                                ORION_PORT)
         if CA_PROTOCOL:
             self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+
+        self.endpoints = {}
+
         if CYGNUS_PROTOCOL:
-            self.cygnus_endpoint = CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
+            self.endpoints['CYGNUS'] = CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
         if STH_PROTOCOL:
-            self.sth_endpoint = STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
+            self.endpoints['STH'] = STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
         if PERSEO_PROTOCOL:
-            self.perseo_endpoint = PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""
+            self.endpoints['PERSEO'] = PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""
+
 
 
     def composeErrorCode(self, ex):
