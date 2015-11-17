@@ -653,8 +653,13 @@ class Domains(FlowBase):
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
                     if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
-                        modules.append(iotmodule)
-                        break
+                        # Check All entities and and servicePath /
+                        if ((len(sub['subject']['entities']) == 1) and
+                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            (sub['subject']['entities'][0]['type'] == '')):
+                            #(sub['subject']['condition']['servicePath'] == '/')):
+                            modules.append(iotmodule)
+                            break
 
             logger.debug("modules=%s" % modules)
 
