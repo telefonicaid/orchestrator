@@ -137,6 +137,10 @@ class IoTConf(Stats):
             self.PERSEO_HOST = settings.PERSEO['host']
             self.PERSEO_PORT = settings.PERSEO['port']
 
+            self.CKAN_PROTOCOL = settings.CKAN['protocol']
+            self.CKAN_HOST = settings.CKAN['host']
+            self.CKAN_PORT = settings.CKAN['port']
+
         except KeyError:
             logger.error("keystone or keypass conf error")
             raise ImproperlyConfigured("keystone or keypass conf")
@@ -1431,7 +1435,10 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.STH_PORT,
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
-                               self.PERSEO_PORT)
+                               self.PERSEO_PORT,
+                               self.CKAN_PROTOCOL,
+                               self.CKAN_HOST,
+                               self.CKAN_PORT)
                 modules = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1463,7 +1470,10 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.STH_PORT,
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
-                                self.PERSEO_PORT)
+                                self.PERSEO_PORT,
+                                self.CKAN_PROTOCOL,
+                                self.CKAN_HOST,
+                                self.CKAN_PORT)
                 modules = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1518,7 +1528,10 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.STH_PORT,
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
-                               self.PERSEO_PORT)
+                               self.PERSEO_PORT,
+                               self.CKAN_PROTOCOL,
+                               self.CKAN_HOST,
+                               self.CKAN_PORT)
                 flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1551,7 +1564,10 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.STH_PORT,
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
-                                self.PERSEO_PORT)
+                                self.PERSEO_PORT,
+                                self.CKAN_PROTOCOL,
+                                self.CKAN_HOST,
+                                self.CKAN_PORT)
                 flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1608,7 +1624,10 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.STH_PORT,
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
-                               self.PERSEO_PORT)
+                               self.PERSEO_PORT,
+                               self.CKAN_PROTOCOL,
+                               self.CKAN_HOST,
+                               self.CKAN_PORT)
                 flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1641,7 +1660,10 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.STH_PORT,
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
-                                self.PERSEO_PORT)
+                                self.PERSEO_PORT,
+                                self.CKAN_PROTOCOL,
+                                self.CKAN_HOST,
+                                self.CKAN_PORT)
                 flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
