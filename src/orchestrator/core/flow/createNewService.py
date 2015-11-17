@@ -57,7 +57,7 @@ class CreateNewService(FlowBase):
         - NEW_SERVICE_DESCRIPTION: New service description
         - NEW_SERVICE_ADMIN_USER: New service admin username
         - NEW_SERVICE_ADMIN_PASSWORD: New service admin password
-        - NEW_SERVICE_ADMIN_EMAIL: New service admin password (optional)
+        - NEW_SERVICE_ADMIN_EMAIL: New service admin email (optional)
         Return:
         - token: service admin token
         - id: service Id
@@ -73,7 +73,9 @@ class CreateNewService(FlowBase):
             "DOMAIN_ADMIN_TOKEN": "%s" % DOMAIN_ADMIN_TOKEN,
             "NEW_SERVICE_NAME": "%s" % NEW_SERVICE_NAME,
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
-            "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_PASSWORD
+            "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_USER,
+            "NEW_SERVICE_ADMIN_PASSWORD": "%s" % NEW_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_ADMIN_EMAIL": "%s" % NEW_SERVICE_ADMIN_EMAIL
         }
         logger.debug("createNewService invoked with: %s" % json.dumps(
             data_log,
@@ -125,7 +127,7 @@ class CreateNewService(FlowBase):
             ADMIN_ROLE_ID = self.idm.getRoleId(DOMAIN_ADMIN_TOKEN,
                                                ROLE_NAME="admin")
             logger.debug("ID of role  %s: %s" % ("admin",
-                                                 ID_ADM1))
+                                                 ADMIN_ROLE_ID))
 
             self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
                                      ADMIN_ROLE_ID)

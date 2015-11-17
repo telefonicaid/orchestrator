@@ -38,8 +38,10 @@ class CreateNewSubService(FlowBase):
                             SERVICE_ADMIN_PASSWORD,
                             SERVICE_ADMIN_TOKEN,
                             NEW_SUBSERVICE_NAME,
-                            NEW_SUBSERVICE_DESCRIPTION
-                            ):
+                            NEW_SUBSERVICE_DESCRIPTION,
+                            NEW_SUBSERVICE_ADMIN_USER=None,
+                            NEW_SUBSERVICE_ADMIN_PASSWORD=None,
+                            NEW_SUBSERVICE_ADMIN_EMAIL=None):
 
         '''Creates a new SubService (aka project keystone).
 
@@ -51,8 +53,11 @@ class CreateNewSubService(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - SUBSERVICE_NAME: New subservice name (required)
-        - SUBSERVICE_DESCRIPTION: New subservice description
+        - NEW_SUBSERVICE_NAME: New subservice name (required)
+        - NEW_SUBSERVICE_DESCRIPTION: New subservice description
+        - NEW_SUBSERVICE_ADMIN_USER: New subservice admin username
+        - NEW_SUBSERVICE_ADMIN_PASSWORD: New subservice admin password
+        - NEW_SUBSERVICE_ADMIN_EMAIL: New subservice admin email (optional)
         Return:
         - ID: New subservice id
         '''
@@ -64,7 +69,10 @@ class CreateNewSubService(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
             "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
-            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION
+            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
+            "NEW_SUBSERVICE_ADMIN_USER": "%s" % NEW_SUBSERVICE_ADMIN_USER,
+            "NEW_SUBSERVICE_ADMIN_PASSWORD": "%s" % NEW_SUBSERVICE_ADMIN_PASSWORD,
+            "NEW_SUBSERVICE_ADMIN_EMAIL": "%s" % NEW_SUBSERVICE_ADMIN_EMAIL
         }
         logger.debug("createNewSubService invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -94,8 +102,44 @@ class CreateNewSubService(FlowBase):
                                              SERVICE_ID,
                                              NEW_SUBSERVICE_NAME,
                                              NEW_SUBSERVICE_DESCRIPTION)
-            logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
+            logger.debug("ID of new subservice %s: %s" % (NEW_SUBSERVICE_NAME,
+                                                          ID_PRO1))
 
+
+            #
+            # 3. Create SubService Admin user (optional)
+            #
+            if NEW_SUBSERVICE_ADMIN_USER and NEW_SUBSERVICE_ADMIN_PASSWORD:
+                try:
+                    ID_USER = self.idm.createUserDomain(
+                        SERVICE_ADMIN_TOKEN,
+                        SERVICE_ID,
+                        SERVICE_NAME,
+                        NEW_SUBSERVICE_ADMIN_USER,
+                        NEW_SUBSERVICE_ADMIN_PASSWORD,
+                        NEW_SUBSERVICE_ADMIN_EMAIL,
+                        None)
+            except Exception, ex:
+                logger.debug("ERROR creating user %s: %s" % (
+                    NEW_SERVICE_ADMIN_USER,
+                    ex))
+                logger.debug("removing uncomplete created domain %s" % SERVICE_ID)
+                return self.composeErrorCode(ex)
+
+            logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_ADMIN_USER,
+                                                ID_USER))
+
+            ROLE_NAME = 'SubServiceAdmin'
+            ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                               SERVICE_ID,
+                                               ROLE_NAME)
+            logger.debug("ID of role  %s: %s" % (ROLE_NAME,
+                                                 ID_ROLE))
+
+            self.idm.grantProjectRole(SERVICE_ADMIN_TOKEN,
+                                      ID_PRO1,
+                                      ID_USER,
+                                      ID_ROLE)
 
         except Exception, ex:
             logger.error(ex)
