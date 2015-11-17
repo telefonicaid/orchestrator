@@ -486,7 +486,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 request.DATA.get("SERVICE_ADMIN_TOKEN",
                                  HTTP_X_AUTH_TOKEN),
                 request.DATA.get("NEW_SUBSERVICE_NAME", None),
-                request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None)
+                request.DATA.get("NEW_SUBSERVICE_DESCRIPTION", None),
                 request.DATA.get("NEW_SUBSERVICE_ADMIN_USER", None),
                 request.DATA.get("NEW_SUBSERVICE_ADMIN_PASSWORD", None),
                 request.DATA.get("NEW_SUBSERVICE_ADMIN_EMAIL", None)
