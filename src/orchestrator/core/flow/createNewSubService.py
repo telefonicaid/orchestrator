@@ -119,27 +119,26 @@ class CreateNewSubService(FlowBase):
                         NEW_SUBSERVICE_ADMIN_PASSWORD,
                         NEW_SUBSERVICE_ADMIN_EMAIL,
                         None)
-            except Exception, ex:
-                logger.debug("ERROR creating user %s: %s" % (
-                    NEW_SERVICE_ADMIN_USER,
-                    ex))
-                logger.debug("removing uncomplete created domain %s" % SERVICE_ID)
-                return self.composeErrorCode(ex)
+                except Exception, ex:
+                    logger.debug("ERROR creating user %s: %s" % (
+                        NEW_SERVICE_ADMIN_USER,
+                        ex))
+                    return self.composeErrorCode(ex)
 
-            logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_ADMIN_USER,
-                                                ID_USER))
+                logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_ADMIN_USER,
+                                                    ID_USER))
 
-            ROLE_NAME = 'SubServiceAdmin'
-            ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                               SERVICE_ID,
-                                               ROLE_NAME)
-            logger.debug("ID of role  %s: %s" % (ROLE_NAME,
-                                                 ID_ROLE))
+                ROLE_NAME = 'SubServiceAdmin'
+                ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+                logger.debug("ID of role  %s: %s" % (ROLE_NAME,
+                                                     ID_ROLE))
 
-            self.idm.grantProjectRole(SERVICE_ADMIN_TOKEN,
-                                      ID_PRO1,
-                                      ID_USER,
-                                      ID_ROLE)
+                self.idm.grantProjectRole(SERVICE_ADMIN_TOKEN,
+                                          ID_PRO1,
+                                          ID_USER,
+                                          ID_ROLE)
 
         except Exception, ex:
             logger.error(ex)

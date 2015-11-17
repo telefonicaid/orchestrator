@@ -393,6 +393,17 @@ class Test_NewSubService_RestView(object):
             "SERVICE_ADMIN_USER": "adm1",
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
         }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok3 = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "garden_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "garden_%s" % self.suffix,
+            "NEW_SUBSERVICE_ADMIN_USER": "adm1_%s"% self.suffix,
+            "NEW_SUBSERVICE_ADMIN_PASSWORD": "password_%s"% self.suffix,
+            "NEW_SUBSERVICE_ADMIN_EMAIL": "adm1_%s@test.com"% self.suffix,
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
                                               PORT="8084")
@@ -461,6 +472,25 @@ class Test_NewSubService_RestView(object):
             json_data=True,
             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_SubServiceIoTADevice_RestView(object):
@@ -2436,6 +2466,7 @@ if __name__ == '__main__':
     test_NewSubService.test_post_ok_bad()
     test_NewSubService.test_post_bad()
     test_NewSubService.test_post_bad2()
+    test_NewSubService.test_post_ok3()
 
     test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
     test_SubServiceIoTADevice.test_post_ok()
