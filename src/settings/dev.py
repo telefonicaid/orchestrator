@@ -60,3 +60,9 @@ PERSEO = {
     "port": "9090",
     "protocol":"http"
 }
+
+CKAN = {
+    "host": "localhost",
+    "port": "5050",
+    "protocol":"http"
+}

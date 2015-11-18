@@ -258,10 +258,12 @@ class Domains(FlowBase):
             projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
             for project in projects['projects']:
                 # Delete all devices
+
                 devices_deleted = self.iota.deleteAllDevices(
                     ADMIN_TOKEN,
                     DOMAIN_NAME,
                     project['name'].split('/')[1])
+
                 if (len(devices_deleted) > 0):
                     logger.info("devices deleted %s", devices_deleted)
 
@@ -373,7 +375,9 @@ class Domains(FlowBase):
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             # Get policies in Access Control
-            policies = self.ac.getRolePolicies(SERVICE_NAME, SERVICE_ADMIN_TOKEN, ROLE_ID)
+            policies = self.ac.getRolePolicies(SERVICE_NAME,
+                                               SERVICE_ADMIN_TOKEN,
+                                               ROLE_ID)
 
             logger.debug("POLICIES=%s" % policies)
 
@@ -387,3 +391,280 @@ class Domains(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return policies
+
+    def activate_module(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        IOTMODULE):
+
+        '''Activate Module
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "IOTMODULE": "%s" % IOTMODULE,
+        }
+        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            assert IOTMODULE in IOTMODULES
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+
+            #if not REFERENCE_URL:
+            #    return self.composeErrorCode(ex)
+            DURATION="P1M"
+
+            # Set default ATTRIBUTES for subscription
+            ATTRIBUTES = []
+            cb_res = self.cb.getContextTypes(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                "",
+                None)
+
+            for entity_type in cb_res:
+                ATTRIBUTES.append(entity_type["attributes"])
+
+            # Set default ENTITIES for subscription
+            ENTITIES = [ {
+                "isPattern": "true",
+                "id": ".*"
+            } ]
+
+            # Set default Notify conditions
+            NOTIFY_ATTRIBUTES = ATTRIBUTES
+            NOTIFY_ATTRIBUTES.append("TimeInstant")
+            NOTIFY_CONDITIONS = [ {
+                "type": "ONCHANGE",
+                "condValues": NOTIFY_ATTRIBUTES
+            } ]
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                "",
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return subscriptionid
+
+    def deactivate_module(self,
+                          DOMAIN_NAME,
+                          DOMAIN_ID,
+                          SERVICE_USER_NAME,
+                          SERVICE_USER_PASSWORD,
+                          SERVICE_USER_TOKEN,
+                          IOTMODULE):
+
+        ''' Deactivate IoT Module
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "IOTMODULE": "%s" % IOTMODULE,
+        }
+        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            assert IOTMODULE in IOTMODULES
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                ""
+            )
+
+            for sub in cb_res:
+                subs_url = sub["notification"]["callback"]
+                if subs_url.startswith(REFERENCE_URL):
+
+                    self.cb.unsubscribeContext(SERVICE_USER_TOKEN,
+                                               DOMAIN_NAME,
+                                               "",
+                                               sub['id'])
+                    break
+
+            # logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return subscriptionid
+
+
+    def list_activated_modules(self,
+                               DOMAIN_NAME,
+                               DOMAIN_ID,
+                               SERVICE_USER_NAME,
+                               SERVICE_USER_PASSWORD,
+                               SERVICE_USER_TOKEN):
+
+        '''List Activated IoT Modules
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+        }
+        logger.debug("list_activated_modules invoked with: %s" % json.dumps(data_log,
+                                                                            indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                ""
+            )
+            modules = []
+            for sub in cb_res:
+                sub_callback = sub["notification"]["callback"]
+                for iotmodule in IOTMODULES:
+                    if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
+                        # Check All entities and and servicePath /
+                        if ((len(sub['subject']['entities']) == 1) and
+                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            (sub['subject']['entities'][0]['type'] == '')):
+                            #(sub['subject']['condition']['servicePath'] == '/')):
+                            modules.append(iotmodule)
+                            break
+
+            logger.debug("modules=%s" % modules)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return modules

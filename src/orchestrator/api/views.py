@@ -94,7 +94,9 @@ class Stats(object):
     num_post_devices = 0
     num_post_entity_service = 0
 
-
+    num_get_module_activation = 0
+    num_post_module_activation = 0
+    num_delete_module_activation = 0
 
 
 
@@ -134,6 +136,10 @@ class IoTConf(Stats):
             self.PERSEO_PROTOCOL = settings.PERSEO['protocol']
             self.PERSEO_HOST = settings.PERSEO['host']
             self.PERSEO_PORT = settings.PERSEO['port']
+
+            self.CKAN_PROTOCOL = settings.CKAN['protocol']
+            self.CKAN_HOST = settings.CKAN['host']
+            self.CKAN_PORT = settings.CKAN['port']
 
         except KeyError:
             logger.error("keystone or keypass conf error")
@@ -1387,6 +1393,302 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             )
 
 
+class IOTModuleActivation_RESTView(APIView, IoTConf):
+    """
+    IOT Module Activation
+
+    """
+    schema_name = "IOTModuleActivation"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request, service_id, subservice_id=None):
+        Stats.num_get_module_activation += 1
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            if not subservice_id:
+                # TODO: for Domains instead of Projects also
+                flow = Domains(self.KEYSTONE_PROTOCOL,
+                               self.KEYSTONE_HOST,
+                               self.KEYSTONE_PORT,
+                               None,
+                               None,
+                               None,
+                               self.IOTA_PROTOCOL,
+                               self.IOTA_HOST,
+                               self.IOTA_PORT,
+                               self.ORION_PROTOCOL,
+                               self.ORION_HOST,
+                               self.ORION_PORT,
+                               self.CA_PROTOCOL,
+                               self.CA_HOST,
+                               self.CA_PORT,
+                               self.CYGNUS_PROTOCOL,
+                               self.CYGNUS_HOST,
+                               self.CYGNUS_PORT,
+                               self.STH_PROTOCOL,
+                               self.STH_HOST,
+                               self.STH_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT,
+                               self.CKAN_PROTOCOL,
+                               self.CKAN_HOST,
+                               self.CKAN_PORT)
+                modules = flow.list_activated_modules(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN)
+                )
+            else:
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
+                                self.CKAN_PROTOCOL,
+                                self.CKAN_HOST,
+                                self.CKAN_PORT)
+                modules = flow.list_activated_modules(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN)
+                )
+            result = {}
+            result['actived_modules'] = modules
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def post(self, request, service_id, subservice_id=None, iot_module=None):
+        Stats.num_post_module_activation += 1
+        #self.schema_name = "IOTModuleActivation"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+            if not subservice_id:
+                flow = Domains(self.KEYSTONE_PROTOCOL,
+                               self.KEYSTONE_HOST,
+                               self.KEYSTONE_PORT,
+                               None,
+                               None,
+                               None,
+                               self.IOTA_PROTOCOL,
+                               self.IOTA_HOST,
+                               self.IOTA_PORT,
+                               self.ORION_PROTOCOL,
+                               self.ORION_HOST,
+                               self.ORION_PORT,
+                               self.CA_PROTOCOL,
+                               self.CA_HOST,
+                               self.CA_PORT,
+                               self.CYGNUS_PROTOCOL,
+                               self.CYGNUS_HOST,
+                               self.CYGNUS_PORT,
+                               self.STH_PROTOCOL,
+                               self.STH_HOST,
+                               self.STH_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT,
+                               self.CKAN_PROTOCOL,
+                               self.CKAN_HOST,
+                               self.CKAN_PORT)
+                flow.activate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("IOTMODULE", iot_module),
+                )
+            else:
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
+                                self.CKAN_PROTOCOL,
+                                self.CKAN_HOST,
+                                self.CKAN_PORT)
+                flow.activate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("IOTMODULE", iot_module),
+                )
+            result = {}
+
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+    def delete(self, request, service_id, subservice_id=None, iot_module=None):
+        Stats.num_delete_module_activation += 1
+        #self.schema_name = "IOTModuleActivation"
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+            if not subservice_id:
+                flow = Domains(self.KEYSTONE_PROTOCOL,
+                               self.KEYSTONE_HOST,
+                               self.KEYSTONE_PORT,
+                               None,
+                               None,
+                               None,
+                               self.IOTA_PROTOCOL,
+                               self.IOTA_HOST,
+                               self.IOTA_PORT,
+                               self.ORION_PROTOCOL,
+                               self.ORION_HOST,
+                               self.ORION_PORT,
+                               self.CA_PROTOCOL,
+                               self.CA_HOST,
+                               self.CA_PORT,
+                               self.CYGNUS_PROTOCOL,
+                               self.CYGNUS_HOST,
+                               self.CYGNUS_PORT,
+                               self.STH_PROTOCOL,
+                               self.STH_HOST,
+                               self.STH_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT,
+                               self.CKAN_PROTOCOL,
+                               self.CKAN_HOST,
+                               self.CKAN_PORT)
+                flow.deactivate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("IOTMODULE", iot_module),
+                )
+            else:
+                flow = Projects(self.KEYSTONE_PROTOCOL,
+                                self.KEYSTONE_HOST,
+                                self.KEYSTONE_PORT,
+                                None,
+                                None,
+                                None,
+                                self.IOTA_PROTOCOL,
+                                self.IOTA_HOST,
+                                self.IOTA_PORT,
+                                self.ORION_PROTOCOL,
+                                self.ORION_HOST,
+                                self.ORION_PORT,
+                                self.CA_PROTOCOL,
+                                self.CA_HOST,
+                                self.CA_PORT,
+                                self.CYGNUS_PROTOCOL,
+                                self.CYGNUS_HOST,
+                                self.CYGNUS_PORT,
+                                self.STH_PROTOCOL,
+                                self.STH_HOST,
+                                self.STH_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
+                                self.CKAN_PROTOCOL,
+                                self.CKAN_HOST,
+                                self.CKAN_PORT)
+                flow.deactivate_module(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID",  subservice_id),
+                    request.DATA.get("SERVICE_USER_NAME", None),
+                    request.DATA.get("SERVICE_USER_PASSWORD", None),
+                    request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("IOTMODULE", iot_module),
+                )
+            result = {}
+
+            if 'error' not in result:
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
 class OrchVersion_RESTView(APIView, IoTConf):
     """
@@ -1396,14 +1698,15 @@ class OrchVersion_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
-    def get(self, request, service_id=None):
+    def get(self, request):
 
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        #HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             # Extract version and stats data
             result = {
                 "version": settings.ORC_VERSION,
                 "uptime": self.uptime,
+                "IoTModules": settings.IOTMODULES,
                 "API_stats": {
                     "num_post_service": self.num_post_service,
                     "num_get_service": self.num_get_service,
@@ -1437,7 +1740,11 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_delete_device": self.num_delete_device,
 
                     "num_post_devices": self.num_post_devices,
-                    "num_post_entity_service": self.num_post_entity_service
+                    "num_post_entity_service": self.num_post_entity_service,
+
+                    "num_get_module_activation": self.num_get_module_activation,
+                    "num_post_module_activation": self.num_post_module_activation,
+                    "num_delete_module_activation": self.num_delete_module_activation
                 }
             }
 
