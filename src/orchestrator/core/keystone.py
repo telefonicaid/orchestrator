@@ -26,7 +26,7 @@ import os
 import logging
 
 from orchestrator.common.util import RestOperations
-from orchestrator.core import policies
+#from orchestrator.core import policies
 from orchestrator.core.idm import IdMOperations
 
 logger = logging.getLogger('orchestrator_core')
@@ -995,7 +995,8 @@ class IdMKeystoneOperations(IdMOperations):
                                             True)
         logger.debug("json response: %s" % json.dumps(token_data,
                                                       indent=3))
-        return token_data['token']['project']['name']
+
+        return token_data['token']['project']['name'].split('/')[1]
 
     def getProjectRoleAssignments(self,
                                   SERVICE_ADMIN_TOKEN,
@@ -1235,3 +1236,126 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return { "trusts": json_body_response['trusts'] }
+
+
+    def getAuthorizeOauth2(self,
+                           SERVICE_USER_TOKEN,
+                           URL_PARAMS):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-OAUTH2/authorize?%s' % URL_PARAMS,
+            method='GET',
+            auth_token=SERVICE_USER_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+
+    def getAuthorizeCodeOauth2(self,
+                               SERVICE_USER_TOKEN,
+                               CLIENT_ID,
+                               SCOPES):
+
+        user_auth_data = {
+            "user_auth": {
+                "client_id": CLIENT_ID,
+                "scopes": SCOPES
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request2(
+            url='/v3/OS-OAUTH2/authorize',
+            method='POST',
+            data=user_auth_data,
+            auth_token=SERVICE_USER_TOKEN)
+
+        #assert res.code == 201, (res.code, res.msg)
+        return res.history[0].headers.get('location').split('code=')[1]
+
+
+    def requestAccessToken(self,
+                           USER,
+                           PASSWORD,
+                           GRANT_TYPE,
+                           CODE,
+                           REDIRECT_URL):
+
+        data = {
+            "token_request": {
+                "grant_type": GRANT_TYPE,
+                "code": CODE,
+                "redirect_uri": REDIRECT_URL
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request2(
+            user=USER,
+            password=PASSWORD,
+            url='/v3/OS-OAUTH2/access_token',
+            method='POST',
+            data=data)
+
+        assert res.status_code == 200, (res.code, res.reason)
+
+        json_body_response = json.loads(res.content)
+        return json_body_response['access_token'], json_body_response['refresh_token']
+
+    def requestRefreshAccessToken(self,
+                           USER,
+                           PASSWORD,
+                           GRANT_TYPE,
+                           REFRESH_TOKEN):
+
+        data = {
+            "token_request": {
+                "grant_type": GRANT_TYPE,
+                "refresh_token": REFRESH_TOKEN
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request2(
+            user=USER,
+            password=PASSWORD,
+            url='/v3/OS-OAUTH2/access_token',
+            method='POST',
+            data=data)
+
+        assert res.status_code == 200, (res.code, res.reason)
+
+        json_body_response = json.loads(res.content)
+        return json_body_response['access_token']
+
+
+
+    def getTokenFromAccessToken(self,
+                                DOMAIN_NAME,
+                                ACCESS_TOKEN_ID,
+                                SCOPED=True):
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "oauth2"
+                    ],
+                    "oauth2": {
+                        "access_token_id": ACCESS_TOKEN_ID
+                    }
+                }
+            }
+        }
+
+        if DOMAIN_NAME:
+            if SCOPED:
+                scope_domain = {
+                    "scope": {
+                        "domain": {
+                            "name": DOMAIN_NAME
+                        }
+                    }
+                }
+                auth_data['auth'].update(scope_domain)
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res.headers.get('X-Subject-Token')

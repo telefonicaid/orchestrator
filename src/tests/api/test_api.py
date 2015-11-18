@@ -534,7 +534,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             "SERVICE_USER_NAME": "admin_tt",
             "SERVICE_USER_PASSWORD": "4passw0rd",
             "DEVICE_ID": "thing_%s" % self.suffix,
-            "ENTITY_TYPE": "thing",
+            "ENTITY_TYPE": "thinkingthing",
             "PROTOCOL": "PDI-IoTA-ThinkingThings",
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -1031,7 +1031,7 @@ class Test_NewServiceTrust_RestView(object):
         self.payload_data_ok7 = {
             "SERVICE_NAME": "smartcity",
             "SERVICE_ADMIN_USER":"Alice",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL="http",
                                               HOST="localhost",
@@ -2419,6 +2419,156 @@ class Test_UnassignRoleUser_RestView(object):
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
+class Test_ModuleActivation_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "SERVICE_USER_NAME": "adm1",
+            "SERVICE_USER_PASSWORD": "password"
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data2_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "IOTMODULE": "CYGNUS",
+            "SERVICE_USER_NAME": "adm1",
+            "SERVICE_USER_PASSWORD": "password"
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data3_ok = {
+            "SERVICE_NAME": "smartcity",
+            "SERVICE_ADMIN_USER": "adm1",
+            "SERVICE_ADMIN_PASSWORD": "password",
+            "NEW_SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
+            "NEW_SUBSERVICE_DESCRIPTION": "gardens_%s" % self.suffix,
+            "SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
+            "SERVICE_USER_NAME": "adm1",
+            "SERVICE_USER_PASSWORD": "password"
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL="http",
+                                              HOST="localhost",
+                                              PORT="8084")
+
+    def test_list_module_activation_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
+                                                                subservice_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert len(json_body_response['actived_modules']) == 0
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+    def test_set_module_activation_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data2_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
+                                                                subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/subservice/%s/module_activation" % (service_id,
+                                                                subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert len(json_body_response['actived_modules']) > 0
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+    def test_set_module_deactivation_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/%s/module_activation/%s" % (service_id,
+                                                                         subservice_id,
+                                                                         'STH'),
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s/module_activation/%s" % (service_id,
+                                                                         subservice_id,
+                                                                         'STH'),
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
 if __name__ == '__main__':
 
     test_NewService = Test_NewService_RestView()
@@ -2537,3 +2687,8 @@ if __name__ == '__main__':
     test_NewServiceTrust.test_post_ok4()
     # It will work just for keystone juno or upper
     #test_NewServiceTrust.test_post_ok2()
+
+    test_ModuleActivation = Test_ModuleActivation_RestView()
+    test_ModuleActivation.test_list_module_activation_ok()
+    test_ModuleActivation.test_set_module_activation_ok()
+    test_ModuleActivation.test_set_module_deactivation_ok()

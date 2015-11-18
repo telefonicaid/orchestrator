@@ -237,8 +237,9 @@ class IoTACppOperations(object):
         # 1. Get devices
         #
         devices_deleted = []
-        logger.debug("Getting devices for %s / %s" % (SERVICE_NAME,
-                                                      SUBSERVICE_NAME))
+
+        logger.debug("Getting devices for %s %s" % (SERVICE_NAME,
+                                                    SUBSERVICE_NAME))
         try:
             devices = self.getDevices(SERVICE_USER_TOKEN,
                                       SERVICE_NAME,

@@ -227,6 +227,9 @@ CA = {}
 CYGNUS = {}
 STH = {}
 PERSEO = {}
+CKAN = {}
+
+IOTMODULES = [ "STH", "CYGNUS", "PERSEO", "CKAN" ]
 
 PEP = {
     "user": "pep",

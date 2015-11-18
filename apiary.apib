@@ -98,6 +98,18 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
        Required: ["NEW_SERVICE_DESCRIPTION"]
 + Response 200
 
+### Delete a Service [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_ADMIN_USER":"admin",
+                "SERVICE_ADMIN_PASSWORD":"pwd",
+                "SERVICE_ADMIN_TOKEN": "token"
+            }
++ Response 204
+
 
 ## Sub-services in service [/v1.0/service/{serviceId}/subservice]
 
@@ -135,19 +147,6 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 }
               ]
             }
-
-
-### Delete a Service [DELETE]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"defaultservice",
-                "SERVICE_ADMIN_USER":"admin",
-                "SERVICE_ADMIN_PASSWORD":"pwd",
-                "SERVICE_ADMIN_TOKEN": "token"
-            }
-+ Response 204
 
 
 ### Create SubService [POST]
@@ -238,14 +237,14 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_USER_PASSWORD":"pwd",
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"DemoSubService",
-                "DEVICE_ID":"device_id",
+                "DEVICE_ID":"device_id_XXX",
                 "ENTITY_TYPE":""BlackButton,
                 "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_CCID":"AAA",
+                "ATT_ICCID":"12345667",
                 "ATT_IMEI":"123425345",
                 "ATT_IMSI":"4535656777",
                 "ATT_INTERACTION_TYPE":"asynchronous",
-                "ATT_SERVICE_ID":"S-blackbutton",
+                "ATT_SERVICE_ID":"defaultservice",
                 "ATT_GEOLOCATION":"40.4188,-36919"
             }
         Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
@@ -286,7 +285,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "ENTITY_TYPE":"entity_type",
                 "ENTITY_ID":"entity_id",
                 "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_NAME":"blackbutton_telepizza",
+                "ATT_NAME":"defaultservice_demosubservice",
                 "ATT_PROVIDER":"telepizza",
                 "ATT_ENDPOINT":"http://localhost:6500/sync/request",
                 "ATT_METHOD":"POST",
@@ -347,6 +346,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### Create a Role [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
@@ -366,6 +367,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 ## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
 
 ### Delete a Role [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + roleId (required, `string`) ... Role
 + Request (application/json)
             {
                 "SERVICE_NAME":"defaultservice",
@@ -551,6 +555,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### Create Users [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
             "SERVICE_NAME":"defaultservice",
@@ -602,6 +608,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### update an user (by his admin) [PUT]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
              "SERVICE_NAME":"defaultservice",
@@ -619,6 +628,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### change user password by himself [POST]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
              "SERVICE_NAME": "defaultservice",
@@ -631,6 +643,9 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 
 
 ### delete an user [DELETE]
++ Parameters
+    + userId (required, `string`) ... User
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
             "SERVICE_NAME":"defaultservice",
@@ -646,6 +661,8 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
 ## Trust Token [/v1.0/service/{serviceId}/trust]
 
 ### Create Trust Token [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
 + Request (application/json)
         {
             "SERVICE_NAME":"defaultservice",
@@ -668,6 +685,57 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
         }
 
 
+## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation/{iot_module}]
+
+### list activated IoT Modules [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+            }
++ Response 200
+
+### activate an IoT Module [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+    + iot_module (optional, 'string') ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 201 (application/json)
+
+### deactivate an IoT Module [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service
+    + subserviceId (required, `string`) ... SubService
+    + iot_module (optional, 'string') ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"defaultservice",
+                "SERVICE_USER_NAME":"admin",
+                "SERVICE_USER_PASSWORD":"pwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"DemoSubService",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 204
+
+
 ## Stats [/v1.0/version]
 
 ### Get Version, Uptime and API stats [GET]
@@ -675,6 +743,11 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
     + Body
       {
          "uptime": "2015-11-02T08:15:35.166",
+         "IoTModules": [
+             "STH",
+             "CYGNUS",
+             "PERSEO"
+         ],
          "version": "0.5.1",
          "API_stats": {
             "num_post_device": 3,

@@ -26,6 +26,7 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import CSVOperations
+from settings.common import IOTMODULES
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -297,6 +298,17 @@ class Projects(FlowBase):
             if (len(devices_deleted) > 0):
                 logger.info("devices deleted %s", devices_deleted)
 
+
+            #
+            # Delete all subscriptions
+            #
+            subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                                                              ADMIN_TOKEN,
+                                                              DOMAIN_NAME,
+                                                              PROJECT_NAME)
+            if (len(subscriptions_deleted) > 0):
+                logger.info("subscriptions deleted %s", subscriptions_deleted)
+
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
                                               PROJECT_ID)
@@ -400,9 +412,9 @@ class Projects(FlowBase):
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
-                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEM,
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                         DOMAIN_NAME,
-                                                        ROJECT_NAME)
+                                                        PROJECT_NAME)
 
                 else:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
@@ -526,7 +538,7 @@ class Projects(FlowBase):
             REFERENCE_URL="http://localhost"
             ENTITIES=[]
             ATTRIBUTES = []
-            NOTIFY_CONDITIONS=[]
+            NOTIFY_CONDITIONS = []
 
             if PROTOCOL == "TT_BLACKBUTTON":
                 ENTITY_TYPE="BlackButton"
@@ -583,7 +595,7 @@ class Projects(FlowBase):
             if PROTOCOL == "TT_BLACKBUTTON":
                 ENTITY_TYPE="BlackButton"
                 #"http://<ip_ca>:<port_ca>/"
-                REFERENCE_URL=self.cygnus_endpoint + '/notify'
+                REFERENCE_URL=self.endpoints['CYGNUS'] + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -620,7 +632,7 @@ class Projects(FlowBase):
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 ENTITY_TYPE="Thing"
-                REFERENCE_URL = self.cygnus_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['CYGNUS'] + '/notify'
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -679,10 +691,10 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.sth_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['STH'] + '/notify'
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.sth_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['STH'] + '/notify'
 
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
@@ -705,10 +717,10 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.perseo_endpoint + '/notify'
+                REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
 
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
@@ -777,12 +789,12 @@ class Projects(FlowBase):
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
         - PROTOCOL: Protocol of the device
-        - ATT_ICCID
-        - ATT_IMEI
-        - ATT_IMSI
-        - ATT_INTERACTION_TYPE
-        - ATT_SERVICE_ID
-        - ATT_GEOLOCATION
+        - ATT_ICCID: device attribute iccid
+        - ATT_IMEI: device attribute imei
+        - ATT_IMSI: device attribute imsi
+        - ATT_INTERACTION_TYPE: device attribute interaction_type
+        - ATT_SERVICE_ID: device attribute service_id
+        - ATT_GEOLOCATION: device attribute geolocation
         '''
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
@@ -1268,3 +1280,351 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         #return DEVICE_ID
+
+
+    def activate_module(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        PROJECT_NAME,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        IOTMODULE):
+
+        '''Activate Module
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "IOTMODULE": "%s" % IOTMODULE,
+        }
+        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
+
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                        DOMAIN_NAME,
+                                                        PROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+            assert IOTMODULE in IOTMODULES
+
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+
+            #if not REFERENCE_URL:
+            #    return self.composeErrorCode(ex)
+            DURATION="P1M"
+
+            # Set default ATTRIBUTES for subscription
+            ATTRIBUTES = []
+            cb_res = self.cb.getContextTypes(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                None)
+
+            for entity_type in cb_res:
+                ATTRIBUTES.append(entity_type["attributes"])
+
+            # Set default ENTITIES for subscription
+            ENTITIES = [ {
+                "isPattern": "true",
+                "id": ".*"
+            } ]
+
+            # Set default Notify conditions
+            NOTIFY_ATTRIBUTES = ATTRIBUTES
+            NOTIFY_ATTRIBUTES.append("TimeInstant")
+            NOTIFY_CONDITIONS = [ {
+                "type": "ONCHANGE",
+                "condValues": NOTIFY_ATTRIBUTES
+            } ]
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return subscriptionid
+
+    def deactivate_module(self,
+                          DOMAIN_NAME,
+                          DOMAIN_ID,
+                          PROJECT_NAME,
+                          PROJECT_ID,
+                          SERVICE_USER_NAME,
+                          SERVICE_USER_PASSWORD,
+                          SERVICE_USER_TOKEN,
+                          IOTMODULE):
+
+        ''' Deactivate IoT Module
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "IOTMODULE": "%s" % IOTMODULE,
+        }
+        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
+                                                                     indent=3))
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                        DOMAIN_NAME,
+                                                        PROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+            assert IOTMODULE in IOTMODULES
+
+            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME
+            )
+
+            for sub in cb_res:
+                subs_url = sub["notification"]["callback"]
+                subscriptionid = sub['id']
+                if subs_url.startswith(REFERENCE_URL):
+
+                    self.cb.unsubscribeContext(SERVICE_USER_TOKEN,
+                                               DOMAIN_NAME,
+                                               PROJECT_NAME,
+                                               sub['id'])
+                    break
+
+            # logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return subscriptionid
+
+
+    def list_activated_modules(self,
+                               DOMAIN_NAME,
+                               DOMAIN_ID,
+                               PROJECT_NAME,
+                               PROJECT_ID,
+                               SERVICE_USER_NAME,
+                               SERVICE_USER_PASSWORD,
+                               SERVICE_USER_TOKEN):
+
+        '''List Activated IoT Modules
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+        }
+        logger.debug("list_activated_modules invoked with: %s" % json.dumps(data_log,
+                                                                          indent=3))
+
+        try:
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                        DOMAIN_NAME,
+                        PROJECT_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                    PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                        DOMAIN_NAME,
+                                                        PROJECT_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken2(
+                        DOMAIN_ID,
+                        PROJECT_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME
+            )
+            # TODO: all returned subscriptions are about service, not subservice (*)
+            modules = []
+            for sub in cb_res:
+                sub_callback = sub["notification"]["callback"]
+                for iotmodule in IOTMODULES:
+                    if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
+                        # Check All entities and servicePath
+                        if ((len(sub['subject']['entities']) == 1) and
+                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            (sub['subject']['entities'][0]['type'] == '')):
+                            #(sub['subject']['condition']['servicePath'] == '/'+PROJECT_NAME)):
+                            modules.append(iotmodule)
+                            break
+
+            logger.debug("modules=%s" % modules)
+
+        except Exception, ex:
+            logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return modules
