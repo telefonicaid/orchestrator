@@ -765,6 +765,7 @@ class Projects(FlowBase):
                         SERVICE_USER_TOKEN,
                         DEVICE_ID,
                         ENTITY_TYPE,
+                        ENTITY_NAME,
                         PROTOCOL,
                         ATT_ICCID,
                         ATT_IMEI,
@@ -788,6 +789,7 @@ class Projects(FlowBase):
         - SERVICE_USER_TOKEN: Service admin token
         - DEVICE_ID: Device ID
         - ENTITY_TYPE: Entity Type
+        - ENTITY_NAME: Entity Name
         - PROTOCOL: Protocol of the device
         - ATT_ICCID: device attribute iccid
         - ATT_IMEI: device attribute imei
@@ -806,6 +808,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
+            "ENTITY_NAME": "%s" % ENTITY_NAME,
             "PROTOCOL": "%s" % PROTOCOL,
             "ATT_ICCID": "%s" % ATT_ICCID,
             "ATT_IMEI": "%s" % ATT_IMEI,
@@ -858,7 +861,6 @@ class Projects(FlowBase):
             # 1. Call IOTA for register button
             #
             TIMEZONE = "Europe/Madrid" # TODO: get from django conf
-            ENTITY_NAME = DEVICE_ID
             LAZY=[]
             ATTRIBUTES=[]
             STATIC_ATTRIBUTES = []
@@ -1149,6 +1151,7 @@ class Projects(FlowBase):
                 data_log = {
                     "DEVICE_ID" : devices['DEVICE_ID'][n],
                     "ENTITY_TYPE" : devices['ENTITY_TYPE'][n],
+                    "ENTITY_NAME" : devices['ENTITY_NAME'][n],
                     "PROTOCOL": devices['PROTOCOL'][n],
                     "ATT_ICCID" : devices['ATT_ICCID'][n],
                     "ATT_IMEI" : devices['ATT_IMEI'][n],
@@ -1169,6 +1172,7 @@ class Projects(FlowBase):
                     SERVICE_USER_TOKEN,
                     devices['DEVICE_ID'][n],
                     devices['ENTITY_TYPE'][n],
+                    devices['ENTITY_NAME'][n],
                     devices['PROTOCOL'][n],
                     devices['ATT_ICCID'][n],
                     devices['ATT_IMEI'][n],
