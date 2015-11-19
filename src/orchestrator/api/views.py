@@ -963,6 +963,9 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         Stats.num_post_roleassignment += 1
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        user_id = request.GET.get('user_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
+        role_id = request.GET.get('role_id', None)
         inherit = (request.GET.get('inherit', False) is True or
                    request.DATA.get('INHERIT', False) is True)
         try:
@@ -972,7 +975,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT)
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
-                    request.DATA.get("SUBSERVICE_ID", None)):
+                    request.DATA.get("SUBSERVICE_NAME", subservice_id)):
                 if inherit:
                     result = flow.assignInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
@@ -982,9 +985,9 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME", None),
-                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("ROLE_ID", role_id),
                         request.DATA.get("SERVICE_USER_NAME", None),
-                        request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_USER_ID", user_id))
                 else:
                     result = flow.assignRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
@@ -994,22 +997,22 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME", None),
-                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("ROLE_ID", role_id,
                         request.DATA.get("SERVICE_USER_NAME", None),
-                        request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_USER_ID", user_id))
             else:
                 result = flow.assignRoleSubServiceUser(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
-                    request.DATA.get("SUBSERVICE_ID", None),
+                    request.DATA.get("SUBSERVICE_ID", subservice_id),
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.DATA.get("ROLE_NAME", None),
-                    request.DATA.get("ROLE_ID", None),
+                    request.DATA.get("ROLE_ID", role_id),
                     request.DATA.get("SERVICE_USER_NAME", None),
-                    request.DATA.get("SERVICE_USER_ID", None))
+                    request.DATA.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
@@ -1026,6 +1029,9 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         Stats.num_delete_roleassignment += 1
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        user_id = request.GET.get('user_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
+        role_id = request.GET.get('role_id', None)
         inherit = (request.GET.get('inherit', False) is True or
                    request.DATA.get('INHERIT', False) is True)
         try:
@@ -1035,7 +1041,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT)
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
-                    request.DATA.get("SUBSERVICE_ID", None)):
+                    request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
                     result = flow.revokeInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
@@ -1045,9 +1051,9 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME"),
-                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("ROLE_ID", role_id),
                         request.DATA.get("SERVICE_USER_NAME", None),
-                        request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_USER_ID", user_id))
                 else:
                     result = flow.revokeRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
@@ -1057,22 +1063,22 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME"),
-                        request.DATA.get("ROLE_ID", None),
+                        request.DATA.get("ROLE_ID", role_id),
                         request.DATA.get("SERVICE_USER_NAME", None),
-                        request.DATA.get("SERVICE_USER_ID", None))
+                        request.DATA.get("SERVICE_USER_ID", user_id))
             else:
                 result = flow.revokeRoleSubServiceUser(
                     request.DATA.get("SERVICE_NAME"),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME"),
-                    request.DATA.get("SUBSERVICE_ID", None),
+                    request.DATA.get("SUBSERVICE_ID", subservice_id),
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                     request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.DATA.get("ROLE_NAME", None),
-                    request.DATA.get("ROLE_ID", None),
+                    request.DATA.get("ROLE_ID", role_id),
                     request.DATA.get("SERVICE_USER_NAME", None),
-                    request.DATA.get("SERVICE_USER_ID", None))
+                    request.DATA.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
