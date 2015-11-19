@@ -699,7 +699,12 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"DemoSubService",
             }
-+ Response 200
++ Response 200 (application/json)
+    + Body
+      {
+         "activated_modules": [ {"STH": { "subscriptionid": "23423435" }},
+                                {"CYGNUS": { "subscriptionid": "34243434"}} ]
+      }
 
 ### activate an IoT Module [POST]
 + Parameters
@@ -716,7 +721,7 @@ All requests can be performed providing a 'x-auth-token' header instead of SERVI
                 "IOTMODULE":"STH"
             }
         Required: [ "iot_module/IOTMODULE" ]
-+ Response 201 (application/json)
++ Response 201
 
 ### deactivate an IoT Module [DELETE]
 + Parameters
