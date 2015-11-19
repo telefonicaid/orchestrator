@@ -568,9 +568,9 @@ class Test_SubServiceIoTADevice_RestView(object):
             "PROTOCOL": "PDI-IoTA-ThinkingThings",
         }
         self.suffix = str(uuid.uuid4())[:8]
-        csv = """DEVICE_ID,ENTITY_TYPE,PROTOCOL,ATT_ICCID,ATT_IMEI,ATT_IMSI,ATT_INTERACTION_TYPE,ATT_SERVICE_ID,ATT_GEOLOCATION
-                  button_dev_async_%s, BlackButton, TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, blackbutton, 0
-                  button_dev_sync_%s, BlackButton, TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, blackbutton, 0"""  % (self.suffix, self.suffix)
+        csv = """DEVICE_ID,ENTITY_TYPE,ENTITY_NAME,PROTOCOL,ATT_ICCID,ATT_IMEI,ATT_IMSI,ATT_INTERACTION_TYPE,ATT_SERVICE_ID,ATT_GEOLOCATION
+                  button_dev_async_%s, BlackButton, button_dev_async_%s,TT_BLACKBUTTON, AAA, 1234567890, 0987654321, asynchronous, blackbutton, 0
+                  button_dev_sync_%s, BlackButton, button_dev_async_%s,TT_BLACKBUTTON, BBB, 2345678902, 2987654322, synchronous, blackbutton, 0"""  % (self.suffix, self.suffix, self.suffix, self.suffix)
 
         self.payload_data5_ok = {
             "SERVICE_NAME": "blackbutton",
