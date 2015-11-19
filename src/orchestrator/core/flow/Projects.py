@@ -1622,7 +1622,8 @@ class Projects(FlowBase):
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
                             #(sub['subject']['condition']['servicePath'] == '/'+PROJECT_NAME)):
-                            modules.append({ iotmodule: {"subscriptionid": sub['id']}})
+                            modules.append({ "name": iotmodule,
+                                             "subscriptionid": sub['id']})
                             break
 
             logger.debug("modules=%s" % modules)
