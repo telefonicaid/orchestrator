@@ -997,7 +997,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN),
                         request.DATA.get("ROLE_NAME", None),
-                        request.DATA.get("ROLE_ID", role_id,
+                        request.DATA.get("ROLE_ID", role_id),
                         request.DATA.get("SERVICE_USER_NAME", None),
                         request.DATA.get("SERVICE_USER_ID", user_id))
             else:
