@@ -2521,6 +2521,20 @@ class Test_ModuleActivation_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
+    def test_list_module_activation_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/module_activation" % (service_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert len(json_body_response['actived_modules']) == 0
+
+
     def test_set_module_activation_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data2_ok)
         res = self.TestRestOps.rest_request(
@@ -2560,6 +2574,26 @@ class Test_ModuleActivation_RestView(object):
             data=self.payload_data2_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
+    def test_set_module_activation_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data2_ok)
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/module_activation" % (service_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/module_activation" % (service_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert len(json_body_response['actived_modules']) > 0
+
     def test_set_module_deactivation_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
         res = self.TestRestOps.rest_request(
@@ -2594,6 +2628,23 @@ class Test_ModuleActivation_RestView(object):
         res = self.TestRestOps.rest_request(
             method="DELETE",
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+    def test_set_module_deactivation_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/module_activation/%s" % (service_id, 'STH'),
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/module_activation/%s" % (service_id, 'STH'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -2723,3 +2774,6 @@ if __name__ == '__main__':
     test_ModuleActivation.test_list_module_activation_ok()
     test_ModuleActivation.test_set_module_activation_ok()
     test_ModuleActivation.test_set_module_deactivation_ok()
+    test_ModuleActivation.test_list_module_activation_ok2()
+    test_ModuleActivation.test_set_module_activation_ok2()
+    test_ModuleActivation.test_set_module_deactivation_ok2()
