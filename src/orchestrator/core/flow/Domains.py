@@ -26,6 +26,7 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.core.flow.Roles import Roles
+from settings.common import IOTMODULES
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -570,6 +571,7 @@ class Domains(FlowBase):
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
+                subscriptionid = sub['id']
                 if subs_url.startswith(REFERENCE_URL):
 
                     self.cb.unsubscribeContext(SERVICE_USER_TOKEN,
