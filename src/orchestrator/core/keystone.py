@@ -1359,3 +1359,20 @@ class IdMKeystoneOperations(IdMOperations):
             data=auth_data)
         assert res.code == 201, (res.code, res.msg)
         return res.headers.get('X-Subject-Token')
+
+    def getTokenDetail(self,
+                       TOKEN):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='GET',
+            data=None,
+            auth_token=TOKEN,
+            subject_token=TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response

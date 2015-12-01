@@ -47,7 +47,7 @@ class RestOperations(object):
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
-                     auth_token=None, fiware_service=None,
+                     auth_token=None, subject_token=None, fiware_service=None,
                      fiware_service_path=None):
         '''Does an (optionally) authorized REST request with optional JSON data.
 
@@ -89,6 +89,9 @@ class RestOperations(object):
         if auth_token:
             request.add_header('X-Auth-Token', auth_token)
 
+        if subject_token:
+            request.add_header('X-Subject-Token', subject_token)
+
         if fiware_service:
             request.add_header('Fiware-Service', fiware_service)
 
@@ -127,13 +130,16 @@ class RestOperations(object):
 
     def rest_request2(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
-                     auth_token=None, fiware_service=None,
+                     auth_token=None, subject_token=None, fiware_service=None,
                      fiware_service_path=None):
         '''Does an (optionally) authorized REST request with optional JSON data.
 
         In case of HTTP error, the exception is returned normally instead of
         raised and, if JSON error data is present in the response, .msg will
-        contain the error detail.'''
+        contain the error detail.
+        Without SSL security
+
+        '''
         user = user or None
         password = password or None
         auth = None
@@ -166,6 +172,9 @@ class RestOperations(object):
 
         if auth_token:
             headers.update({'X-Auth-Token': auth_token })
+
+        if subject_token:
+            headers.update({'X-Subject-Token': subject_token })
 
         if fiware_service:
             headers.update({'Fiware-Service': fiware_service})

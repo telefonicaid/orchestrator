@@ -258,16 +258,50 @@ class Domains(FlowBase):
             # Get all subservices
             projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
             for project in projects['projects']:
-                # Delete all devices
 
+                PROJECT_NAME = project['name'].split('/')[1]
+                #
+                # Delete all devices in subservice
+                #
                 devices_deleted = self.iota.deleteAllDevices(
                     ADMIN_TOKEN,
                     DOMAIN_NAME,
-                    project['name'].split('/')[1])
+                    PROJECT_NAME)
 
                 if (len(devices_deleted) > 0):
                     logger.info("devices deleted %s", devices_deleted)
 
+                #
+                # Delete all subscriptions in subservice
+                #
+                subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                                                              ADMIN_TOKEN,
+                                                              DOMAIN_NAME,
+                                                              PROJECT_NAME)
+                if (len(subscriptions_deleted) > 0):
+                    logger.info("subscriptions deleted %s", subscriptions_deleted)
+
+
+            #
+            # Delete all devices
+            #
+
+            devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
+                                                         DOMAIN_NAME)
+
+            #
+            # Delete all subscriptions
+            #
+            subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                                                              ADMIN_TOKEN,
+                                                              DOMAIN_NAME)
+            if (len(subscriptions_deleted) > 0):
+                logger.info("subscriptions deleted %s", subscriptions_deleted)
+
+
+            #
+            # Disable Domain
+            #
             DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)

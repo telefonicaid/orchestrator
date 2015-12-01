@@ -279,7 +279,7 @@ class CBOrionOperations(object):
     def deleteAllSubscriptions(self,
                                SERVICE_USER_TOKEN,
                                SERVICE_NAME,
-                               SUBSERVICE_NAME):
+                               SUBSERVICE_NAME=""):
 
         subscriptions_deleted = []
         logger.debug("Getting subscriptions for %s  %s" % (SERVICE_NAME,
