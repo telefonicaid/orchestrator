@@ -232,7 +232,7 @@ class IoTACppOperations(object):
     def deleteAllDevices(self,
                          SERVICE_USER_TOKEN,
                          SERVICE_NAME,
-                         SUBSERVICE_NAME):
+                         SUBSERVICE_NAME=""):
         #
         # 1. Get devices
         #
