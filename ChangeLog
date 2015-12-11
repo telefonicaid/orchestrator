@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.6.1
+
+task/remove_subscriptions_at_remove_service
+
+
 0.6.0
 
 task/manage_module_activation
