@@ -1324,11 +1324,12 @@ class IdMKeystoneOperations(IdMOperations):
         return json_body_response['access_token']
 
 
-
     def getTokenFromAccessToken(self,
-                                DOMAIN_NAME,
                                 ACCESS_TOKEN_ID,
+                                DOMAIN_NAME,
+                                PROJECT_NAME=None,
                                 SCOPED=True):
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -1344,13 +1345,25 @@ class IdMKeystoneOperations(IdMOperations):
 
         if DOMAIN_NAME:
             if SCOPED:
-                scope_domain = {
-                    "scope": {
-                        "domain": {
-                            "name": DOMAIN_NAME
+                if PROJECT_NAME:
+                    scope_domain = {
+                        "scope": {
+                            "project": {
+                                "domain": {
+                                    "name": DOMAIN_NAME
+                                },
+                                "name": "/" + PROJECT_NAME
+                            }
                         }
                     }
-                }
+                else:
+                    scope_domain = {
+                        "scope": {
+                            "domain": {
+                                "name": DOMAIN_NAME
+                            }
+                        }
+                    }
                 auth_data['auth'].update(scope_domain)
 
         res = self.IdMRestOperations.rest_request(
