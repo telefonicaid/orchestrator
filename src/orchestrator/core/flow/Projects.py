@@ -568,7 +568,7 @@ class Projects(FlowBase):
                     {
                         "type": "ONCHANGE",
                         "condValues": [
-                            "op_status"
+                            "op_action"
                         ]
                     }
                 ]
@@ -1616,7 +1616,6 @@ class Projects(FlowBase):
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
-            # TODO: all returned subscriptions are about service, not subservice (*)
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
@@ -1626,7 +1625,6 @@ class Projects(FlowBase):
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
-                            #(sub['subject']['condition']['servicePath'] == '/'+PROJECT_NAME)):
                             modules.append({ "name": iotmodule,
                                              "subscriptionid": sub['id']})
                             break
