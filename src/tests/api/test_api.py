@@ -2594,6 +2594,14 @@ class Test_ModuleActivation_RestView(object):
         json_body_response = json.loads(response)
         assert len(json_body_response['actived_modules']) > 0
 
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/module_activation" % (service_id),
+            json_data=True,
+            data=self.payload_data2_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
     def test_set_module_deactivation_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data3_ok)
         res = self.TestRestOps.rest_request(
