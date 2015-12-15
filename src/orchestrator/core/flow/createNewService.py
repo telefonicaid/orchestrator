@@ -81,6 +81,7 @@ class CreateNewService(FlowBase):
             data_log,
             indent=3)
             )
+        ID_DOM1=None
         try:
 
             if not DOMAIN_ADMIN_TOKEN:
@@ -110,10 +111,10 @@ class CreateNewService(FlowBase):
                                                 NEW_SERVICE_ADMIN_EMAIL,
                                                 None)
             except Exception, ex:
-                logger.debug("ERROR creating user %s: %s" % (
+                logger.warn("ERROR creating user %s: %s" % (
                     NEW_SERVICE_ADMIN_USER,
                     ex))
-                logger.debug("removing uncomplete created domain %s" % ID_DOM1)
+                logger.info("removing uncomplete created domain %s" % ID_DOM1)
                 self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 return self.composeErrorCode(ex)
@@ -216,6 +217,10 @@ class CreateNewService(FlowBase):
                                     POLICY_FILE_NAME='policy-keypass-admin2.xml')
 
         except Exception, ex:
+            if ID_DOM1:
+                logger.info("removing uncomplete created domain %s" % ID_DOM1)
+                self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
             logger.error(ex)
             return self.composeErrorCode(ex)
 
