@@ -77,7 +77,7 @@ class CreateNewSubService(FlowBase):
         logger.debug("createNewSubService invoked with: %s" % json.dumps(
             data_log, indent=3)
             )
-
+        ID_PRO1=None
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
@@ -86,7 +86,7 @@ class CreateNewSubService(FlowBase):
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
-            # 1. Create service (aka domain)
+            # 1. Get service (aka domain)
             #
             if not SERVICE_ID:
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
@@ -120,9 +120,12 @@ class CreateNewSubService(FlowBase):
                         NEW_SUBSERVICE_ADMIN_EMAIL,
                         None)
                 except Exception, ex:
-                    logger.debug("ERROR creating user %s: %s" % (
+                    logger.warn("ERROR creating user %s: %s" % (
                         NEW_SERVICE_ADMIN_USER,
                         ex))
+                    logger.info("Removing uncomplete created project %s" % ID_PRO1)
+                    self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)
+                    self.idm.deleteProject(SERVICE_ADMIN_TOKEN, ID_PRO1)
                     return self.composeErrorCode(ex)
 
                 logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_ADMIN_USER,
@@ -141,6 +144,10 @@ class CreateNewSubService(FlowBase):
                                           ID_ROLE)
 
         except Exception, ex:
+            if ID_PRO1:
+                logger.info("removing uncomplete created project %s" % ID_PRO1)
+                self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)
+                self.idm.deleteProject(SERVICE_ADMIN_TOKEN, ID_PRO1)
             logger.error(ex)
             return self.composeErrorCode(ex)
 
