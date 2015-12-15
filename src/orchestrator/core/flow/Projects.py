@@ -973,6 +973,12 @@ class Projects(FlowBase):
                             "name": "op_result",
                             "type": "string"
                         })
+                    ATTRIBUTES.append(
+                        {
+                            "name": "req_internal_id",
+                            "type": "string"
+                        })
+
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 if ATT_INTERACTION_TYPE == None:
