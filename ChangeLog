@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.6.2
+
+task/recover_if_keypass_not_found
+task/bb_sync_request_internal_id
+
+
 0.6.1
 
 task/remove_subscriptions_at_remove_service

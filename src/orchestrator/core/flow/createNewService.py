@@ -81,6 +81,7 @@ class CreateNewService(FlowBase):
             data_log,
             indent=3)
             )
+        ID_DOM1=None
         try:
 
             if not DOMAIN_ADMIN_TOKEN:
@@ -216,10 +217,10 @@ class CreateNewService(FlowBase):
                                     POLICY_FILE_NAME='policy-keypass-admin2.xml')
 
         except Exception, ex:
-            logger.warn("ERROR %s provision AccC policies" % ex)
-            logger.info("removing uncomplete created domain %s" % ID_DOM1)
-            self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
-            self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+            if ID_DOM1:
+                logger.info("removing uncomplete created domain %s" % ID_DOM1)
+                self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
             logger.error(ex)
             return self.composeErrorCode(ex)
 
