@@ -451,8 +451,59 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+
             #
-            # 1. Register Entity Service in CB
+            # 1. Subscribe Context Adapter in ContextBroker
+            #
+            DURATION="P1M"
+            REFERENCE_URL="http://localhost"
+            ENTITIES=[]
+            ATTRIBUTES = []
+            NOTIFY_CONDITIONS = []
+
+            if PROTOCOL == "TT_BLACKBUTTON":
+                ENTITY_TYPE="BlackButton"
+                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+                ENTITIES = [
+                    {
+                        "type": ENTITY_TYPE,
+                        "isPattern": "true",
+                        "id": ".*"
+                    }
+                ]
+                ATTRIBUTES=[
+                    "op_action",
+                    "op_extra",
+                    "op_status",
+                    "interaction_type",
+                    "service_id",
+                    "TimeInstant"
+                ]
+                NOTIFY_CONDITIONS = [
+                    {
+                        "type": "ONCHANGE",
+                        "condValues": [
+                            "op_action"
+                        ]
+                    }
+                ]
+
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                PROJECT_NAME,
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
+            logger.debug("subscription id ca=%s" % subscriptionid_ca)
+
+            #
+            # 2. Register Entity Service in CB
             #
             IS_PATTERN="false"
             ACTION="APPEND"
@@ -535,58 +586,6 @@ class Projects(FlowBase):
                     raise Exception(r['statusCode']['reasonPhrase'])
 
             logger.debug("ENTITY_ID=%s" % ENTITY_ID)
-
-
-            #
-            # 2. Subscribe Context Adapter in ContextBroker
-            #
-            DURATION="P1M"
-            REFERENCE_URL="http://localhost"
-            ENTITIES=[]
-            ATTRIBUTES = []
-            NOTIFY_CONDITIONS = []
-
-            if PROTOCOL == "TT_BLACKBUTTON":
-                ENTITY_TYPE="BlackButton"
-                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
-                ENTITIES = [
-                    {
-                        "type": ENTITY_TYPE,
-                        "isPattern": "true",
-                        "id": ".*"
-                    }
-                ]
-                ATTRIBUTES=[
-                    "op_action",
-                    "op_extra",
-                    "op_status",
-                    "interaction_type",
-                    "service_id",
-                    "TimeInstant"
-                ]
-                NOTIFY_CONDITIONS = [
-                    {
-                        "type": "ONCHANGE",
-                        "condValues": [
-                            "op_action"
-                        ]
-                    }
-                ]
-
-            cb_res = self.cb.subscribeContext(
-                SERVICE_USER_TOKEN,
-                DOMAIN_NAME,
-                PROJECT_NAME,
-                REFERENCE_URL,
-                DURATION,
-                ENTITIES,
-                ATTRIBUTES,
-                NOTIFY_CONDITIONS
-            )
-            logger.debug("subscribeContext res=%s" % cb_res)
-            subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id ca=%s" % subscriptionid_ca)
-
 
 
             #
