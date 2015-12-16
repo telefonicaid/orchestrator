@@ -487,7 +487,7 @@ class Projects(FlowBase):
                         ]
                     }
                 ]
-
+            logger.debug("Trying to subscribe CA in CB...")
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -568,6 +568,7 @@ class Projects(FlowBase):
                     })
 
             # call CB
+            logger.debug("Trying to register service entity in CB...")
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
                                            PROJECT_NAME,
@@ -675,6 +676,7 @@ class Projects(FlowBase):
                     }
                 ]
 
+            logger.debug("Trying to subscribe CYGNUS...")
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
                     SERVICE_USER_TOKEN,
@@ -700,6 +702,7 @@ class Projects(FlowBase):
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.endpoints['STH'] + '/notify'
 
+            logger.debug("Trying to subscribe STH...")
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
                     SERVICE_USER_TOKEN,
@@ -726,6 +729,7 @@ class Projects(FlowBase):
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
 
+            logger.debug("Trying to subscribe PERSEO...")
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
                     SERVICE_USER_TOKEN,
