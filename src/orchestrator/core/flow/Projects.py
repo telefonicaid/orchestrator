@@ -455,7 +455,7 @@ class Projects(FlowBase):
             #
             # 1. Subscribe Context Adapter in ContextBroker
             #
-            DURATION="P1M"
+            DURATION="P1Y"
             REFERENCE_URL="http://localhost"
             ENTITIES=[]
             ATTRIBUTES = []
@@ -592,7 +592,7 @@ class Projects(FlowBase):
             #
             # 3.1 Subscribe Cygnus
             #
-            DURATION="P1M"
+            DURATION="P1Y"
             ENTITIES=[]
             ATTRIBUTES=[]
             NOTIFY_CONDITIONS=[]
@@ -1386,7 +1386,7 @@ class Projects(FlowBase):
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
-            DURATION="P1M"
+            DURATION="P1Y"
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
