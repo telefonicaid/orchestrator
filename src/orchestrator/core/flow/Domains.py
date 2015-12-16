@@ -292,6 +292,7 @@ class Domains(FlowBase):
             #
             # Delete all subscriptions
             #
+            # TODO: BUG: admin_domain (cloud_admin) can not delete a subsription in a service!!!!
             subscriptions_deleted = self.cb.deleteAllSubscriptions(
                                                               ADMIN_TOKEN,
                                                               DOMAIN_NAME)
@@ -491,7 +492,7 @@ class Domains(FlowBase):
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
-            DURATION="P1M"
+            DURATION="P1Y"
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
