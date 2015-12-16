@@ -21,7 +21,7 @@ KEYSTONE = {
 
 KEYPASS = {
     "host": "localhost",
-    "port": "7070",
+    "port": "17070",
     "protocol":"http"
 }
 
@@ -33,7 +33,7 @@ IOTA = {
 
 ORION = {
     "host": "localhost",
-    "port": "1026",
+    "port": "10026",
     "protocol":"http"
 }
 
@@ -51,13 +51,13 @@ CYGNUS = {
 
 STH = {
     "host": "localhost",
-    "port": "8666",
+    "port": "18666",
     "protocol":"http"
 }
 
 PERSEO = {
     "host": "localhost",
-    "port": "9090",
+    "port": "19090",
     "protocol":"http"
 }
 

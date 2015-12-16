@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+0.6.3
+task/subscribe_ca_before_register_service_entity
+
 0.6.2
 
 task/recover_if_keypass_not_found
