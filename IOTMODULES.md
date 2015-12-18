@@ -1,14 +1,15 @@
-IoT Platform allow to enable or disable some IoT Modules for each Service.
+IoT Platform allows to enable or disable some IoT Modules for each register Service.
 
-IoT Modules are optional features, like persistencia or GPS location service.
+IoT Modules are optional features, like persistence services or GPS location service.
 
-Orchestrator allows enable ir disable these IoT Modules per service (aka keystone domain) or subservice (aka keystone project). There are an API and commands to handle IoT Modules.
+Orchestrator allows enable ir disable these IoT Modules per service (aka keystone domain) or subservice (aka keystone project). There are an [API](http://docs.orchestrator2.apiary.io/#reference/orchestrator/activate-iot-module-in-a-sub-service-of-service) and a command to handle IoT Modules through Orchestrator.
 
-Enable or disable an IoT Modules implies subscribe or unsubscribe that IoTModule in Orion Context Broker for all entities.
+Enable or disable an IoT Module implies subscribe or unsubscribe IoTModule in Orion Context Broker for all entities.
 
 IoT Modules are defined in Orchestrator configuration files, typically a file like [that](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/dev.py) in this sense:
 
 There is a list of possible IoT Modules: 
+
 ```
 IOTMODULES = [ "STH", "CYGNUS", "PERSEO" ]
 ```
