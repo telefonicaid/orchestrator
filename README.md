@@ -21,6 +21,12 @@ Orchestrator is based mainly on:
 - Django / DjangoRestFramework
 - httplib
 
+Orchestrator relies on these other IoT parts:
+- Identity Manager (Keystone)
+- Access Control (Keypass)
+- Context Broker (Orion)
+- IoTAgent
+
 These are all dependencies [requirements.txt](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/requirements.txt)
 
 Orchestrator needs a WSGI server like Apache, Lighttpd or NGIX. [wsgi.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/wsgi.py)
