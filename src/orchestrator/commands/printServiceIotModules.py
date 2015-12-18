@@ -40,7 +40,7 @@ except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 def main():
 
-    print "This script prints roles in a service"
+    print "This script prints IoT Modules actived in a service or subservice"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
@@ -55,7 +55,7 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <SERVICE_NAME>                  Service name"
+        print "  <SUBSERVICE_NAME>               SubService name"
         print "  <ORION_PROTOCOL>                HTTP or HTTPS"
         print "  <ORION_HOST>                    Orion HOSTNAME or IP"
         print "  <ORION_PORT>                    Orion PORT"
