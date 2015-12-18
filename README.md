@@ -7,10 +7,14 @@ Orchestrator is used maninly by [IoT Portal](https://pdihub.hi.inet/fiware/iotp-
 
 A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.inet/ep/fiware-components/wiki/Keystone-scenario-test) or [these](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/tests/scenarios/SCENARIOS.md)
 
-- Create/list services
-- Create/list subservices
-- Create/list/modify/delete users
-- Assign/unassign roles to users
+- Create/List/Update/Delete services
+- Create/List/Update/Delete subservices
+- Create/List/Update/Delete users in a service
+- Create/List/Update/Delete roles in a service
+- Assign/unassign roles to users in a service
+- Create/List Trust Tokens
+- Activate / deactivate IoT Modules
+- Retrieve statistics about API usage
 
 Orchestrator is based mainly on:
 - Python
@@ -31,4 +35,5 @@ In this README document you will find how to get started with the application an
 * [Logs and Alarms](TROUBLESHOOTING.md)
 * [Installation guide](INSTALL.md)
 * [Configuration](CONFIG.md)
+* [IoTModules](IOTMODULES.md)
 
