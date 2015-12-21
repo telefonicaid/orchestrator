@@ -275,7 +275,13 @@ class Projects(FlowBase):
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    ADMIN_TOKEN,
+                    DOMAIN_ID)
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
@@ -294,10 +300,14 @@ class Projects(FlowBase):
                     PROJECT = self.idm.getProject(ADMIN_TOKEN,
                                                   PROJECT_ID)
                     PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
+
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
             #
             # Delete all devices
             #
-
             devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
                                                          DOMAIN_NAME,
                                                          PROJECT_NAME)
@@ -1150,7 +1160,16 @@ class Projects(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
-            # TODO: ensure DOMAIN_NAME and PROJECT_NAME
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            if not DOMAIN_NAME:
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID)
+            if not PROJECT_NAME:
+                PROJECT_NAME = self.idm.getProjectNameFromToken(
+                    SERVICE_USER_TOKEN,
+                    DOMAIN_ID,
+                    PROJECT_ID)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
