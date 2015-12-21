@@ -1,8 +1,15 @@
 CHANGES
 =======
 
+0.6.4
+
+task/iota_get_device_list_fields
+
+
 0.6.3
+
 task/subscribe_ca_before_register_service_entity
+
 
 0.6.2
 
