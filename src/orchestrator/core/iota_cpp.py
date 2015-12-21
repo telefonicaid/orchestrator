@@ -244,6 +244,9 @@ class IoTACppOperations(object):
             devices = self.getDevices(SERVICE_USER_TOKEN,
                                       SERVICE_NAME,
                                       SUBSERVICE_NAME)
+            # Check devices returned: IOTA returns devices into dict before some versions
+            if 'devices' in devices:
+                devices = devices['devices']
         except Exception, ex:
             logger.error("%s trying getDevices from IOTA: %s/%s" % (ex,
                                                             SERVICE_NAME,
@@ -254,15 +257,22 @@ class IoTACppOperations(object):
             #
             # 2. Unregister each device
             #
-            logger.debug("Unregistering device: %s" % device['id'])
+            # Get device_id: IOTA returns device_id in a field depending on version
+            device_id = None
+            if 'device_id' in device:
+                device_id = device['device_id']
+            if 'id' in device:
+                device_id = device['id']
+
+            logger.debug("Unregistering device: %s" % device_id)
             try:
                 self.unregisterDevice(SERVICE_USER_TOKEN,
                                       SERVICE_NAME,
                                       SUBSERVICE_NAME,
-                                      device['id'])
-                devices_deleted.append(device['id'])
+                                      device_id)
+                devices_deleted.append(device_id)
             except Exception, ex:
                 logger.error("%s trying to unregister device: %s" % (ex,
-                                                            device['id']))
+                                                            device_id))
 
         return devices_deleted
