@@ -1316,7 +1316,7 @@ class Projects(FlowBase):
 
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        #return DEVICE_ID
+        return {}
 
 
     def activate_module(self,
