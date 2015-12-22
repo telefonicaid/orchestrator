@@ -143,7 +143,7 @@ class CBOrionOperations(object):
 
         res = self.CBRestOperations.rest_request(
             url='/v1/contextTypes/%s?offset=0&limit=1000' % (
-                ENTITY_TYPE if ENTITY_TYPE else ""),            
+                ENTITY_TYPE if ENTITY_TYPE else ""),
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
@@ -262,17 +262,19 @@ class CBOrionOperations(object):
         assert res.code == 200, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
-        subscriptions_related = []
-        # Filter over list of subscriptions returned
-        for subscription in json_body_response:
-            for entity in subscription['subject']['entities']:
-                if not entity['idPattern'] and entity['id'] == ENTITY_ID:
-                    subscriptions_related.append(subscription)
-                if entity['idPattern'] and entity['idPattern'] in [".*", "*"]:
-                    subscriptions_related.append(subscription)
-
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
+        subscriptions_related = []
+
+        # ensure subcrtiptions is an array
+        if isinstance(json_body_response, list):
+            for subscription in json_body_response:
+                for entity in subscription['subject']['entities']:
+                    if not entity['idPattern'] and entity['id'] == ENTITY_ID:
+                        subscriptions_related.append(subscription)
+                    if entity['idPattern'] and entity['idPattern'] in [".*", "*"]:
+                        subscriptions_related.append(subscription)
+
         return subscriptions_related
 
 
