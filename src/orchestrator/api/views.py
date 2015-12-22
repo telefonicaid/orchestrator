@@ -1241,7 +1241,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 request.DATA.get("DEVICE_ID", None)
             )
             if 'error' not in result:
-                return Response(result, status=status.HTTP_204_CREATED)
+                return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
