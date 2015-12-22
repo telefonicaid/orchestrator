@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+0.6.6
+
+task/unregister_iota_response
+
+
+0.6.5
+
+task/orion_get_device_list_fields
+
+
 0.6.4
 
 task/iota_get_device_list_fields
