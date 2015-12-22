@@ -170,6 +170,13 @@ class Roles(FlowBase):
                                                      ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME
+            if not DOMAIN_NAME:
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                    ADMIN_TOKEN,
+                    DOMAIN_ID)
+
             # Extract PROJECT, USER, ROLE IDs from NAME
             if not PROJECT_ID and PROJECT_NAME:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
