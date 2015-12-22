@@ -56,10 +56,7 @@ class FlowBase(object):
                  STH_PORT="8666",
                  PERSEO_PROTOCOL="http",
                  PERSEO_HOST="localhost",
-                 PERSEO_PORT="9090",
-                 CKAN_PROTOCOL="http",
-                 CKAN_HOST="localhost",
-                 CKAN_PORT="5050"):
+                 PERSEO_PORT="9090"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -89,9 +86,6 @@ class FlowBase(object):
         if PERSEO_PROTOCOL:
             self.endpoints['PERSEO'] = \
               PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""
-        if CKAN_PROTOCOL:
-            self.endpoints['CKAN'] = \
-              CKAN_PROTOCOL + "://"+CKAN_HOST+":"+CKAN_PORT+""
 
 
     def composeErrorCode(self, ex):

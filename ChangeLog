@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.6.7
+
+task/remove_old_stuff_ckan_conf
+
+
 0.6.6
 
 task/unregister_iota_response
