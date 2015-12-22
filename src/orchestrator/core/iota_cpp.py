@@ -222,12 +222,6 @@ class IoTACppOperations(object):
 
         assert res.code == 204, (res.code, res.msg)
 
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
-
 
     def deleteAllDevices(self,
                          SERVICE_USER_TOKEN,
