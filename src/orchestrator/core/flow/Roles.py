@@ -176,20 +176,28 @@ class Roles(FlowBase):
                 DOMAIN_NAME = self.idm.getDomainNameFromToken(
                     ADMIN_TOKEN,
                     DOMAIN_ID)
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
 
             # Extract PROJECT, USER, ROLE IDs from NAME
             if not PROJECT_ID and PROJECT_NAME:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
+                logger.debug("PROJECT_ID=%s" % PROJECT_ID)
+
             if not USER_ID and USER_NAME:
                 USER_ID = self.idm.getDomainUserId(ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    USER_NAME)
+                logger.debug("USER_ID=%s" % USER_ID)
+
             if not ROLE_ID and ROLE_NAME:
                 ROLE_ID = self.idm.getDomainRoleId(ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    ROLE_NAME)
+                logger.debug("ROLE_ID=%s" % ROLE_ID)
+
+
             # if USER_ID:
             #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
             #                                                  USER_ID,
