@@ -1,7 +1,16 @@
 CHANGES
 =======
 
+0.6.9
+
+task/rpm_reuse_config
+bug/role_assignment_api_not_realise_subservice_id
+task/resolve_domain_name_role_assignment
+task/script_set_all_service_role_policies
+
+
 0.6.8
+
 bug/delete_service_wrong_code
 
 
