@@ -976,7 +976,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT)
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
-                    request.DATA.get("SUBSERVICE_NAME", subservice_id)):
+                    request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
                     result = flow.assignInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
