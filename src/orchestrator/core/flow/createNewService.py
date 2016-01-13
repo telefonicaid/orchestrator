@@ -65,6 +65,7 @@ class CreateNewService(FlowBase):
 
         SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
+        SERVICE_CUSTOMER_ROLE_NAME = "ServiceCustomer"
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
@@ -155,6 +156,15 @@ class CreateNewService(FlowBase):
                 ID_DOM1)
             logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
+            #
+            # 4.1 Create ServiceCustomer role
+            #
+            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER = self.idm.createDomainRole(
+                NEW_SERVICE_ADMIN_TOKEN,
+                SERVICE_CUSTOMER_ROLE_NAME,
+                ID_DOM1)
+            logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME,
+                                                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
 
             #
             # 4.5 Inherit subserviceadim
@@ -167,7 +177,7 @@ class CreateNewService(FlowBase):
             # 5. Provision default platform roles AccessControl policies
             #
 
-            # SubServiceAdmin Role
+            # Policies for SubServiceAdmin Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-orion-admin.xml')
@@ -183,7 +193,7 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-keypass-admin.xml')
-            # SubServiceCustomer Role
+            # Policies for SubServiceCustomer Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-orion-customer.xml')
@@ -199,7 +209,7 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-keypass-customer.xml')
-            # Admin Role
+            # Policies for Admin Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-orion-admin2.xml')
@@ -215,6 +225,22 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-keypass-admin2.xml')
+            # Policies for ServiceCustomer Role
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-orion-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-perseo-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-iotagent-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-sth-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
         except Exception, ex:
             if ID_DOM1:
@@ -228,7 +254,8 @@ class CreateNewService(FlowBase):
             "ID_DOM1": "%s" % ID_DOM1,
             "NEW_SERVICE_ADMIN_TOKEN": "%s" % NEW_SERVICE_ADMIN_TOKEN,
             "ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER
+            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+            "ID_NEW_SERVICE_ROLE_SERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SERVICECUSTOMER
         }
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
