@@ -2,7 +2,7 @@
 Name: iotp-orchestrator
 Version: %{_version}
 Release: %{_release}
-Summary: IoT Platform Orchestrator 
+Summary: IoT Platform Orchestrator
 License: AGPLv3
 Distribution: noarch
 Vendor: Telefonica I+D
@@ -80,7 +80,12 @@ if [ "$RET_VAL" != "0" ]; then
          echo "[ERROR] Unable create %{_project_user} user" \
          exit $RET_VAL
       fi
+else
+      mv %{_install_dir}/settings/dev.py /tmp
 fi
+#
+# TODO Check if there was a previous configuration
+#
 
 # -------------------------------------------------------------------------------------------- #
 # post-install section:
@@ -98,6 +103,13 @@ echo "[INFO] Configuring application"
     echo "[INFO] Configuring application service"
     cd /etc/init.d
     chkconfig --add %{_service_name}
+
+    ls /tmp/dev.py
+    RET_VAL=$?
+
+    if [ "$RET_VAL" == "0" ]; then
+        mv /tmp/dev.py %{_install_dir}/settings/dev.py
+    fi
 
     echo "[INFO] Link to /opt"
     ln -s %{_install_dir} %{_orchestrator_link_dir}
