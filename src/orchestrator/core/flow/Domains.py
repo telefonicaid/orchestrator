@@ -488,7 +488,7 @@ class Domains(FlowBase):
 
 
             assert IOTMODULE in IOTMODULES
-            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE]
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
@@ -596,7 +596,7 @@ class Domains(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             assert IOTMODULE in IOTMODULES
-            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE]
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
@@ -689,7 +689,7 @@ class Domains(FlowBase):
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
+                    if sub_callback.startswith(self.endpoints[iotmodule]):
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
