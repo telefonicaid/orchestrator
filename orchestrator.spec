@@ -81,7 +81,12 @@ if [ "$RET_VAL" != "0" ]; then
          exit $RET_VAL
       fi
 else
-      mv %{_install_dir}/settings/dev.py /tmp
+      ls %{_install_dir}/settings/dev.py
+      RET_VAL=$?
+
+      if [ "$RET_VAL" == "0" ]; then
+          cp %{_install_dir}/settings/dev.py /tmp
+      fi
 fi
 #
 # TODO Check if there was a previous configuration
