@@ -73,19 +73,24 @@ class FlowBase(object):
                                ORION_HOST,
                                ORION_PORT)
         if CA_PROTOCOL:
-            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+            # CA for Blackbutton notification flow
+            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"+"/notify"
 
         self.endpoints = {}
 
         if CYGNUS_PROTOCOL:
             self.endpoints['CYGNUS'] = \
-              CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
+              CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""+"/notify"
         if STH_PROTOCOL:
             self.endpoints['STH'] = \
-              STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
+              STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""+"/notify"
         if PERSEO_PROTOCOL:
             self.endpoints['PERSEO'] = \
-              PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""
+              PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""+"/notify"
+        if CA_PROTOCOL:
+            # CA for Geolocation
+            self.endpoints['CA'] = \
+              CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
 
 
     def composeErrorCode(self, ex):

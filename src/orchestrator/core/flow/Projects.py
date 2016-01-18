@@ -473,7 +473,7 @@ class Projects(FlowBase):
 
             if PROTOCOL == "TT_BLACKBUTTON":
                 DEVICE_ENTITY_TYPE="BlackButton"
-                REFERENCE_URL = self.ca_endpoint + '/notify' #"http://<ip_ca>:<port_ca>/"
+                REFERENCE_URL = self.ca_endpoint  #"http://<ip_ca>:<port_ca>/v1/notify"
                 ENTITIES = [
                     {
                         "type": DEVICE_ENTITY_TYPE,
@@ -610,7 +610,7 @@ class Projects(FlowBase):
             if PROTOCOL == "TT_BLACKBUTTON":
                 ENTITY_TYPE="BlackButton"
                 #"http://<ip_ca>:<port_ca>/"
-                REFERENCE_URL=self.endpoints['CYGNUS'] + '/notify'
+                REFERENCE_URL=self.endpoints['CYGNUS']
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -647,7 +647,7 @@ class Projects(FlowBase):
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 ENTITY_TYPE="Thing"
-                REFERENCE_URL = self.endpoints['CYGNUS'] + '/notify'
+                REFERENCE_URL = self.endpoints['CYGNUS']
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -707,10 +707,10 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.endpoints['STH'] + '/notify'
+                REFERENCE_URL = self.endpoints['STH']
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.endpoints['STH'] + '/notify'
+                REFERENCE_URL = self.endpoints['STH']
 
             logger.debug("Trying to subscribe STH...")
             if len(ENTITIES) > 0:
@@ -734,10 +734,10 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
+                REFERENCE_URL = self.endpoints['PERSEO']
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.endpoints['PERSEO'] + '/notify'
+                REFERENCE_URL = self.endpoints['PERSEO']
 
             logger.debug("Trying to subscribe PERSEO...")
             if len(ENTITIES) > 0:
@@ -1401,7 +1401,7 @@ class Projects(FlowBase):
                                                    PROJECT_NAME)
             assert IOTMODULE in IOTMODULES
 
-            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE]
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
@@ -1533,7 +1533,7 @@ class Projects(FlowBase):
 
             assert IOTMODULE in IOTMODULES
 
-            REFERENCE_URL = self.endpoints[IOTMODULE] + '/notify'
+            REFERENCE_URL = self.endpoints[IOTMODULE]
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
@@ -1648,7 +1648,7 @@ class Projects(FlowBase):
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(self.endpoints[iotmodule]+'/notify'):
+                    if sub_callback.startswith(self.endpoints[iotmodule]):
                         # Check All entities and servicePath
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
