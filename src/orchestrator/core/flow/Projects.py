@@ -279,9 +279,15 @@ class Projects(FlowBase):
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
                 logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    ADMIN_TOKEN,
-                    DOMAIN_ID)
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        ADMIN_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(ADMIN_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
@@ -441,15 +447,28 @@ class Projects(FlowBase):
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
                 logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID)
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
+
             if not PROJECT_NAME:
-                logger.debug("Not PROJECT_NAM provided, getting it from token")
-                PROJECT_NAME = self.idm.getProjectNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID,
-                    PROJECT_ID)
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
+                try:
+                    PROJECT_NAME = self.idm.getProjectNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID,
+                        PROJECT_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    PROJECT = self.idm.getProject(SERVICE_USER_TOKEN,
+                                                  PROJECT_ID)
+                    PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1380,15 +1399,28 @@ class Projects(FlowBase):
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
                 logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID)
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
+
             if not PROJECT_NAME:
                 logger.debug("Not PROJECT_NAM provided, getting it from token")
-                PROJECT_NAME = self.idm.getProjectNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID,
-                    PROJECT_ID)
+                try:
+                    PROJECT_NAME = self.idm.getProjectNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID,
+                        PROJECT_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    PROJECT = self.idm.getProject(SERVICE_USER_TOKEN,
+                                                  PROJECT_ID)
+                    PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1516,7 +1548,7 @@ class Projects(FlowBase):
                     SERVICE_USER_TOKEN,
                     DOMAIN_ID)
             if not PROJECT_NAME:
-                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
                 PROJECT_NAME = self.idm.getProjectNameFromToken(
                     SERVICE_USER_TOKEN,
                     DOMAIN_ID,
