@@ -4,6 +4,8 @@ CHANGES
 
 0.6.9
 
+bug/list_activated_iotmodules_by_admin_domain_user
+bug/delete_subservice_admin_domain_user
 bug/resolve_domain_name_role_assignments_as_cloudadmin
 task/rpm_reuse_config
 bug/role_assignment_api_not_realise_subservice_id
