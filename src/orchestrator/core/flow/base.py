@@ -28,6 +28,9 @@ from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 
+from settings.dev import IOTMODULES
+
+
 logger = logging.getLogger('orchestrator_core')
 
 
@@ -76,6 +79,7 @@ class FlowBase(object):
             # CA for Blackbutton notification flow
             self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"+"/notify"
 
+
         self.endpoints = {}
 
         if CYGNUS_PROTOCOL:
@@ -114,3 +118,18 @@ class FlowBase(object):
                ex.message[1].startswith('SPASSWORD'):
                 res['error'] = ex.message[1]
         return res
+
+
+    def get_endpoint_iot_module(self, iot_module):
+        assert IOTMODULE in IOTMODULES
+        if iot_module in self.endpoints:
+            return self.endpoints[iot_module]
+        else
+            if iot_module in IOTMODULES:
+                comppackage = __import__("settings.dev", fromlist=iot_module)
+                iot_module_conf = getattr(comppackage, iot_module)
+                iot_mddule_enpoint = iot_module_conf['protocol'] + "://" + \
+                  iot_module_conf['host'] + ":" + \
+                  iot_module_conf['port'] + "/notify"
+                self.endpoints[iot_module] = iot_mddule_enpoint
+                return iot_mddule_enpoint
