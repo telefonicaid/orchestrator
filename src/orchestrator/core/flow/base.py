@@ -121,13 +121,16 @@ class FlowBase(object):
 
 
     def get_endpoint_iot_module(self, iot_module):
-        assert IOTMODULE in IOTMODULES
+        assert iot_module in IOTMODULES
         if iot_module in self.endpoints:
             return self.endpoints[iot_module]
-        else
+        else:
             if iot_module in IOTMODULES:
                 comppackage = __import__("settings.dev", fromlist=iot_module)
                 iot_module_conf = getattr(comppackage, iot_module)
+                assert 'protocol' in iot_module_conf
+                assert 'host' in iot_module_conf
+                assert 'port' in iot_module_conf
                 iot_mddule_enpoint = iot_module_conf['protocol'] + "://" + \
                   iot_module_conf['host'] + ":" + \
                   iot_module_conf['port'] + "/notify"
