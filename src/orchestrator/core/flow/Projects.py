@@ -26,7 +26,7 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import CSVOperations
-from settings.common import IOTMODULES
+from settings.dev import IOTMODULES
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -1431,9 +1431,8 @@ class Projects(FlowBase):
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
-            assert IOTMODULE in IOTMODULES
 
-            REFERENCE_URL = self.endpoints[IOTMODULE]
+            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
@@ -1563,9 +1562,7 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
-            assert IOTMODULE in IOTMODULES
-
-            REFERENCE_URL = self.endpoints[IOTMODULE]
+            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
