@@ -26,7 +26,7 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.core.flow.Roles import Roles
-from settings.common import IOTMODULES
+from settings.dev import IOTMODULES
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -493,8 +493,7 @@ class Domains(FlowBase):
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
-            assert IOTMODULE in IOTMODULES
-            REFERENCE_URL = self.endpoints[IOTMODULE]
+            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
             #if not REFERENCE_URL:
             #    return self.composeErrorCode(ex)
@@ -607,8 +606,7 @@ class Domains(FlowBase):
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
-            assert IOTMODULE in IOTMODULES
-            REFERENCE_URL = self.endpoints[IOTMODULE]
+            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
