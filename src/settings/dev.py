@@ -37,7 +37,7 @@ IOTA = {
 # Context Broker enpodint (with or without pep, but recommended with)
 ORION = {
     "host": "localhost",
-    "port": "10026",
+    "port": "1026",
     "protocol":"http"
 }
 
