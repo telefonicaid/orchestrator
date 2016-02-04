@@ -22,6 +22,7 @@
 # Author: IoT team
 #
 import logging
+import json
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1523,7 +1524,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT)
-                flow.activate_module(
+                sub = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SERVICE_USER_NAME", None),
@@ -1556,7 +1557,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT)
-                flow.activate_module(
+                sub = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
@@ -1567,7 +1568,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                     request.DATA.get("IOTMODULE", iot_module),
                 )
             result = {}
-
+            result['subscriptionid'] = sub
             if 'error' not in result:
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
@@ -1687,7 +1688,7 @@ class OrchVersion_RESTView(APIView, IoTConf):
             # Extract version and stats data
             result = {
                 "version": settings.ORC_VERSION,
-                "uptime": self.uptime,
+                "uptime": str(self.uptime),
                 "IoTModules": settings.IOTMODULES,
                 "API_stats": {
                     "num_post_service": self.num_post_service,
@@ -1730,7 +1731,10 @@ class OrchVersion_RESTView(APIView, IoTConf):
                 }
             }
 
-            # TOOD: extarct info about health
+            # print it into a trace
+            logger.info("Orchestrator statistics: %s" % json.dumps(
+                result, indent=3))
+
             if 'error' not in result:
                 return Response(result, status=status.HTTP_200_OK)
             else:
