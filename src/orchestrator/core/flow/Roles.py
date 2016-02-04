@@ -47,9 +47,9 @@ class Roles(FlowBase):
         Params:
         - DOMAIN_NAME: name of domain
         - DOMAIN_ID: id of domain
-        - SERVICE_ADMIN_USER: Service admin username
-        - SERVICE_ADMIN_PASSWORD: Service admin password
-        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ADMIN_USER: Service admin username
+        - ADMIN_PASSWORD: Service admin password
+        - ADMIN_TOKEN: Service admin token
         - START_INDEX: Start index
         - COUNT: Count
         Return:
@@ -483,7 +483,7 @@ class Roles(FlowBase):
 
             # Ensure SERVICE_NAME
             if not SERVICE_NAME:
-                SERVICE_NAME = self.idm.getDomainNameFromToken(ADMIN_TOKEN,
+                SERVICE_NAME = self.idm.getDomainNameFromToken(SERVICE_ADMIN_TOKEN,
                                                                SERVICE_ID)
 
             #
@@ -500,7 +500,7 @@ class Roles(FlowBase):
                                                       SUBSERVICE_NAME)
             # Ensure SUBSERVICE_NAME
             if not SUBSERVICE_NAME:
-                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(ADMIN_TOKEN,
+                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(SERVICE_ADMIN_TOKEN,
                                                                    SERVICE_ID,
                                                                    SUBSERVICE_ID)
 
