@@ -28,6 +28,9 @@ from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 
+from settings.dev import IOTMODULES
+
+
 logger = logging.getLogger('orchestrator_core')
 
 
@@ -73,19 +76,25 @@ class FlowBase(object):
                                ORION_HOST,
                                ORION_PORT)
         if CA_PROTOCOL:
-            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+            # CA for Blackbutton notification flow
+            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"+"/notify"
+
 
         self.endpoints = {}
 
         if CYGNUS_PROTOCOL:
             self.endpoints['CYGNUS'] = \
-              CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
+              CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""+"/notify"
         if STH_PROTOCOL:
             self.endpoints['STH'] = \
-              STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
+              STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""+"/notify"
         if PERSEO_PROTOCOL:
             self.endpoints['PERSEO'] = \
-              PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""
+              PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""+"/notify"
+        if CA_PROTOCOL:
+            # CA for Geolocation
+            self.endpoints['CA'] = \
+              CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
 
 
     def composeErrorCode(self, ex):
@@ -109,3 +118,20 @@ class FlowBase(object):
                ex.message[1].startswith('SPASSWORD'):
                 res['error'] = ex.message[1]
         return res
+
+
+    def get_endpoint_iot_module(self, iot_module):
+        assert iot_module in IOTMODULES
+        if iot_module in self.endpoints:
+            return self.endpoints[iot_module]
+        else:
+            comppackage = __import__("settings.dev", fromlist=iot_module)
+            iot_module_conf = getattr(comppackage, iot_module)
+            assert 'protocol' in iot_module_conf
+            assert 'host' in iot_module_conf
+            assert 'port' in iot_module_conf
+            iot_mddule_enpoint = iot_module_conf['protocol'] + "://" + \
+              iot_module_conf['host'] + ":" + \
+              iot_module_conf['port'] + "/notify"
+            self.endpoints[iot_module] = iot_mddule_enpoint
+            return iot_mddule_enpoint
