@@ -3,6 +3,7 @@ CHANGES
 
 0.6.10
 
+task/att_timeout_as_string
 task/fix_ca_geolocation_endpoint
 
 
