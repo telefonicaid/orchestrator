@@ -737,7 +737,7 @@ class Test_SubServiceIoTAService_RestView(object):
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "context-adapter",
             "ATT_INTERACTION_TYPE": "asynchronous",
-            "ATT_MAPPING": "xxx",
+            "ATT_MAPPING": "",
             "ATT_TIMEOUT": "120"
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -756,8 +756,8 @@ class Test_SubServiceIoTAService_RestView(object):
             "ATT_METHOD": "POST",
             "ATT_AUTHENTICATION": "third-party",
             "ATT_INTERACTION_TYPE": "synchronous",
-            "ATT_MAPPING": "xxx",
-            "ATT_TIMEOUT": 120
+            "ATT_MAPPING": "",
+            "ATT_TIMEOUT": "120"
 
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
