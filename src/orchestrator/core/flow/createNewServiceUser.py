@@ -68,10 +68,10 @@ class CreateNewServiceUser(FlowBase):
             "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
             "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION
         }
-        logger.debug("createNewServiceUser invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        logger.debug("FLOW createNewServiceUser invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,

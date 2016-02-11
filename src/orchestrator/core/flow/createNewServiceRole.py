@@ -64,11 +64,10 @@ class CreateNewServiceRole(FlowBase):
             "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
             "XACML_POLICY": "%s" % XACML_POLICY
         }
-        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(
+        logger.debug("FLOW createNewServiceRole invoked with: %s" % json.dumps(
             data_log,
             indent=3)
-            )
-
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,

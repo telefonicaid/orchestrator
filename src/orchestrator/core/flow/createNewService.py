@@ -78,10 +78,10 @@ class CreateNewService(FlowBase):
             "NEW_SERVICE_ADMIN_PASSWORD": "%s" % NEW_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_ADMIN_EMAIL": "%s" % NEW_SERVICE_ADMIN_EMAIL
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(
+        logger.debug("FLOW createNewService invoked with: %s" % json.dumps(
             data_log,
             indent=3)
-            )
+        )
         ID_DOM1=None
         try:
 

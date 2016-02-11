@@ -60,10 +60,9 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(
+        logger.debug("FLOW createNewService invoked with: %s" % json.dumps(
             data_log, indent=3)
-            )
-
+        )
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:
@@ -122,9 +121,10 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("get_project invoked with: %s" % json.dumps(data_log,
-                                                                 indent=3))
-
+        logger.debug("FLOW get_project invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
@@ -188,10 +188,10 @@ class Projects(FlowBase):
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
             "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
         }
-        logger.debug("update_project invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        logger.debug("FLOW update_project invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:
@@ -259,9 +259,10 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("get_project invoked with: %s" % json.dumps(data_log,
-                                                                 indent=3))
-
+        logger.debug("FLOW get_project invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not ADMIN_TOKEN:
@@ -340,9 +341,6 @@ class Projects(FlowBase):
 
             logger.debug("PROJECT=%s" % PROJECT)
 
-
-
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
@@ -420,9 +418,10 @@ class Projects(FlowBase):
             "ATT_MAPPING": "%s" % ATT_MAPPING,
             "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
-        logger.debug("register_service invoked with: %s" % json.dumps(data_log,
-                                                                      indent=3))
-
+        logger.debug("FLOW register_service invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_USER_TOKEN:
@@ -833,8 +832,10 @@ class Projects(FlowBase):
             "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
             "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
-        logger.debug("register_device with: %s" % json.dumps(data_log,
-                                                             indent=3))
+        logger.debug("FLOW register_device with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -1133,8 +1134,10 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "CSV_DEVICES": "%s" % CSV_DEVICES
         }
-        logger.debug("register_devices with: %s" % json.dumps(data_log,
-                                                              indent=3))
+        logger.debug("FLOW register_devices with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -1259,8 +1262,10 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "DEVICE_ID": "%s" % DEVICE_ID,
         }
-        logger.debug("unregister_device with: %s" % json.dumps(data_log,
-                                                             indent=3))
+        logger.debug("FLOW unregister_device with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
@@ -1351,9 +1356,10 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
-                                                                     indent=3))
-
+        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_USER_TOKEN:
@@ -1496,8 +1502,10 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
-                                                                     indent=3))
+        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_USER_TOKEN:
@@ -1602,9 +1610,10 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
         }
-        logger.debug("list_activated_modules invoked with: %s" % json.dumps(data_log,
-                                                                          indent=3))
-
+        logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
