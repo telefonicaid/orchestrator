@@ -53,7 +53,8 @@ class CreateNewServiceUser(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - NEW_USER_NAME: New user name (required)
         - NEW_USER_PASSWORD: New user password (required)
-        - NEW_USER_EMAIL: New user password (optional)
+        - NEW_USER_EMAIL: New user email (optional)
+        - NEW_USER_DESCRIPTION: New user description (optional)
         Return:
         - id: New user Id
         '''
