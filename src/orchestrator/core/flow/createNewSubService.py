@@ -74,9 +74,9 @@ class CreateNewSubService(FlowBase):
             "NEW_SUBSERVICE_ADMIN_PASSWORD": "%s" % NEW_SUBSERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_ADMIN_EMAIL": "%s" % NEW_SUBSERVICE_ADMIN_EMAIL
         }
-        logger.debug("createNewSubService invoked with: %s" % json.dumps(
+        logger.debug("FLOW createNewSubService invoked with: %s" % json.dumps(
             data_log, indent=3)
-            )
+        )
         ID_PRO1=None
         try:
             if not SERVICE_ADMIN_TOKEN:
