@@ -64,8 +64,10 @@ class Roles(FlowBase):
             "START_INDEX": "%s" % START_INDEX,
             "COUNT": "%s" % COUNT,
         }
-        logger.debug("roles invoked with: %s" % json.dumps(data_log, indent=3))
-
+        logger.debug("FLOW roles invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:
@@ -153,9 +155,10 @@ class Roles(FlowBase):
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
             "EFFECTIVE:": "%s" % EFFECTIVE
         }
-        logger.debug("roles_assignments invoked with: %s" % json.dumps(data_log,
-                                                                       indent=3))
-
+        logger.debug("FLOW roles_assignments invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:

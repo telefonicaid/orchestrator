@@ -62,8 +62,10 @@ class Users(FlowBase):
             "START_INDEX": "%s" % START_INDEX,
             "COUNT": "%s" % COUNT,
         }
-        logger.debug("users invoked with: %s" % json.dumps(data_log, indent=3))
-
+        logger.debug("FLOW users invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 if not SERVICE_ID:
@@ -111,6 +113,7 @@ class Users(FlowBase):
         logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return SERVICE_USERS
 
+
     def user(self,
              SERVICE_ID,
              USER_ID,
@@ -137,8 +140,10 @@ class Users(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN
         }
-        logger.debug("user invoked with: %s" % json.dumps(data_log,
-                                                          indent=3))
+        logger.debug("FLOW user invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken2(

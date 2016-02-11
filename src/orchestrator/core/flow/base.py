@@ -119,6 +119,7 @@ class FlowBase(object):
             self.endpoints[iot_module] = iot_mddule_enpoint
             return iot_mddule_enpoint
 
+
     def get_alias_iot_module(self, iot_module):
         assert iot_module in IOTMODULES
         if iot_module in self.iotmodules_aliases:

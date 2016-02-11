@@ -82,7 +82,7 @@ class CreateTrustToken(FlowBase):
             "TRUSTOR_USER_NAME": "%s" % TRUSTOR_USER_NAME,
             "TRUSTOR_USER_ID": "%s" % TRUSTOR_USER_ID,
         }
-        logger.debug("createTrustToken invoked with: %s" % json.dumps(
+        logger.debug("FLOW createTrustToken invoked with: %s" % json.dumps(
             data_log, indent=3)
             )
 
@@ -222,10 +222,10 @@ class CreateTrustToken(FlowBase):
             "TRUSTEE_USER_NAME": "%s" % TRUSTEE_USER_NAME,
             "TRUSTEE_USER_ID": "%s" % TRUSTEE_USER_ID,
         }
-        logger.debug("getTrustsUserTrustee invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        logger.debug("FLOW getTrustsUserTrustee invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
