@@ -446,7 +446,7 @@ class Domains(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        - IOTMODULE: IoT Module to activate: STH,  PERSEO
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -562,7 +562,7 @@ class Domains(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        - IOTMODULE: IoT Module to activate: STH, PERSEO
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -705,12 +705,14 @@ class Domains(FlowBase):
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(self.endpoints[iotmodule]):
+                    if sub_callback.startswith(self.get_endpoint_iot_module(iotmodule)):
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
                             modules.append({ "name": iotmodule,
-                                             "subscriptionid": sub['id']})
+                                             "subscriptionid": sub['id'],
+                                             "alias": self.get_alias_iot_module(iotmodule)
+                                             })
                             break
 
             logger.debug("modules=%s" % modules)

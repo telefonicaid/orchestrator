@@ -50,16 +50,7 @@ class FlowBase(object):
                  ORION_PORT="1026",
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
-                 CA_PORT="9999",
-                 CYGNUS_PROTOCOL="http",
-                 CYGNUS_HOST="localhost",
-                 CYGNUS_PORT="5050",
-                 STH_PROTOCOL="http",
-                 STH_HOST="localhost",
-                 STH_PORT="8666",
-                 PERSEO_PROTOCOL="http",
-                 PERSEO_HOST="localhost",
-                 PERSEO_PORT="9090"):
+                 CA_PORT="9999"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -81,16 +72,8 @@ class FlowBase(object):
 
 
         self.endpoints = {}
+        self.iotmodules_aliases = {}
 
-        if CYGNUS_PROTOCOL:
-            self.endpoints['CYGNUS'] = \
-              CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""+"/notify"
-        if STH_PROTOCOL:
-            self.endpoints['STH'] = \
-              STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""+"/notify"
-        if PERSEO_PROTOCOL:
-            self.endpoints['PERSEO'] = \
-              PERSEO_PROTOCOL + "://"+PERSEO_HOST+":"+PERSEO_PORT+""+"/notify"
         if CA_PROTOCOL:
             # CA for Geolocation
             self.endpoints['CA'] = \
@@ -135,3 +118,15 @@ class FlowBase(object):
               iot_module_conf['port'] + "/notify"
             self.endpoints[iot_module] = iot_mddule_enpoint
             return iot_mddule_enpoint
+
+    def get_alias_iot_module(self, iot_module):
+        assert iot_module in IOTMODULES
+        if iot_module in self.iotmodules_aliases:
+            return self.alias[iot_module]
+        else:
+            comppackage = __import__("settings.dev", fromlist=iot_module)
+            iot_module_conf = getattr(comppackage, iot_module)
+            assert 'alias' in iot_module_conf
+            alias = iot_module_conf['alias']
+            self.iotmodules_aliases[iot_module] = alias
+            return alias
