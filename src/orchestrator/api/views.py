@@ -541,9 +541,12 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
                 # Accumulate previous result
-                result['subscriptionid_ca'] = result2['subscriptionid_ca']
-                result['subscriptionid_sth'] = result2['subscriptionid_sth']
-                result['subscriptionid_perseo'] = result2['subscriptionid_perseo']
+                if ('error' not in result2):
+                    result['subscriptionid_ca'] = result2['subscriptionid_ca']
+                    result['subscriptionid_sth'] = result2['subscriptionid_sth']
+                    result['subscriptionid_perseo'] = result2['subscriptionid_perseo']
+                else:
+                    result['error'] = result2['error']
 
             # TODO: see optional values for register device
             if 'id' in result and request.DATA.get("DEVICE_ID", None):
