@@ -423,7 +423,6 @@ class Projects(FlowBase):
             indent=3)
         )
         try:
-
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
                     SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
@@ -766,8 +765,12 @@ class Projects(FlowBase):
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-
-        return subscriptionid_ca, subscriptionid_sth, subscriptionid_perseo
+        result = {
+            "subscriptionid_ca": subscriptionid_ca,
+            "subscriptionid_sth": subscriptionid_sth,
+            "subscriptionid_perseo": subscriptionid_perseo
+        }
+        return result
 
 
     def register_device(self,
