@@ -124,6 +124,9 @@ echo "[INFO] Configuring application"
     sed -i -e 's/ORC_version/%{_version}/g' %{_install_dir}/settings/common.py
     sed -i -e 's/\${project.version}/%{_version}/g' %{_install_dir}/orchestrator/core/banner.txt
 
+    echo "[INFO] starting service %{_service_name}"
+    service %{_service_name} start &> /dev/null
+    
 echo "Done"
 
 
