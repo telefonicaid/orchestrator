@@ -127,8 +127,8 @@ class IoTConf(Stats):
             self.CA_PORT = settings.CA['port']
 
         except KeyError:
-            logger.error("keystone or keypass conf error")
-            raise ImproperlyConfigured("keystone or keypass conf")
+            logger.error("keystone / keypass or other endpoint conf error")
+            raise ImproperlyConfigured("keystone / Keypass or other endpoint conf")
 
     # Get Django status error from simple HTTP error code
     def getStatusFromCode(self, code):

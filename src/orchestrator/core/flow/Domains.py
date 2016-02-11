@@ -57,10 +57,9 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("domains invoked with: %s" % json.dumps(
+        logger.debug("FLOW domains invoked with: %s" % json.dumps(
             data_log, indent=3)
-            )
-
+        )
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
@@ -109,8 +108,10 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("get_domain invoked with: %s" % json.dumps(data_log,
-                                                                indent=3))
+        logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if DOMAIN_ID:
@@ -171,8 +172,10 @@ class Domains(FlowBase):
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
-        logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
-                                                                  indent=3))
+        logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 # UpdateDomain can be only done by cloud_admin
@@ -228,10 +231,10 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("delete_domain invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken("admin_domain",
@@ -357,10 +360,10 @@ class Domains(FlowBase):
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
         }
-        logger.debug("get_domain_role_policies invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        logger.debug("FLOW get_domain_role_policies invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_ADMIN_TOKEN:
@@ -456,9 +459,10 @@ class Domains(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
-                                                                     indent=3))
-
+        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_USER_TOKEN:
@@ -572,8 +576,10 @@ class Domains(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("activate_module invoked with: %s" % json.dumps(data_log,
-                                                                     indent=3))
+        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_USER_TOKEN:
@@ -661,9 +667,10 @@ class Domains(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
         }
-        logger.debug("list_activated_modules invoked with: %s" % json.dumps(data_log,
-                                                                            indent=3))
-
+        logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
 
             if not SERVICE_USER_TOKEN:
