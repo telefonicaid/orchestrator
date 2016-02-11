@@ -337,7 +337,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN))
                 else:
-                    # TODO: get detail of subservice
+                    # Get detail of subservice
                     result = flow.get_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -598,7 +598,6 @@ class User_RESTView(APIView, IoTConf):
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
-            # TODO: use user_id
             result = flow.removeUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -624,7 +623,6 @@ class User_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-            # TODO: el usuario se edita a si mismo? NO
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
@@ -1379,7 +1377,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             request.DATA  # json validation
 
             if not subservice_id:
-                # TODO: for Domains instead of Projects also
                 flow = Domains(self.KEYSTONE_PROTOCOL,
                                self.KEYSTONE_HOST,
                                self.KEYSTONE_PORT,
