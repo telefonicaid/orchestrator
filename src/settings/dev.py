@@ -45,28 +45,24 @@ ORION = {
 CA = {
     "host": "localhost",
     "port": "9999",
-    "protocol":"http"
-}
-
-# CYGNUS endpoint (just for use as reference in Orion Subscriptions)
-CYGNUS = {
-    "host": "localhost",
-    "port": "5050",
-    "protocol":"http"
+    "protocol":"http",
+    "alias": "GEO"
 }
 
 # STH endpoint (just for use as reference in Orion Subscriptions)
 STH = {
     "host": "localhost",
     "port": "18666",
-    "protocol":"http"
+    "protocol":"http",
+    "alias": "HISTORIC"
 }
 
 # PERSEO endpoint (just for use as reference in Orion Subscriptions)
 PERSEO = {
     "host": "localhost",
     "port": "19090",
-    "protocol":"http"
+    "protocol":"http",
+    "alias": "RULES"
 }
 
-#IOTMODULES = [ "STH", "CYGNUS", "PERSEO", "CA" ]
+#IOTMODULES = [ "CA", "STH", "PERSEO" ]

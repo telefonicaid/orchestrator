@@ -59,7 +59,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 201 (application/json)
     + Body
             {
-             "id" : 000a345gserg345t0
+             "id" : "000a345gserg345t0"
             }
 
 
@@ -169,7 +169,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 201 (application/json)
     + Body
             {
-                 "id" : 000234sdgstr45rh0
+                 "id" : "000234sdgstr45rh0"
             }
 
 
@@ -242,16 +242,19 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"test_subservice",
                 "DEVICE_ID":"device_id_XXX",
-                "ENTITY_TYPE":""BlackButton,
+                "ENTITY_TYPE":"BlackButton",
                 "PROTOCOL":"TT_BLACKBUTTON",
                 "ATT_ICCID":"",
                 "ATT_IMEI":"",
                 "ATT_IMSI":"",
-                "ATT_INTERACTION_TYPE":"asynchronous",
+                "ATT_INTERACTION_TYPE": "asynchronous",
                 "ATT_SERVICE_ID":"test_service",
                 "ATT_GEOLOCATION":""
             }
         Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
+        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"},
+                 PROTOCOL=  {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
+
 + Response 201 (application/json)
     + DEVICE_ID
 
@@ -275,7 +278,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 
 
 ## Register entity service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
-### Register entity service for IoTA and ca, cygnus, sth, perseo subscriptions [POST]
+### Register entity service for IoTA and ca, sth, perseo subscriptions [POST]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... SubService Id
@@ -299,11 +302,15 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "ATT_TIMEOUT":"120"
             }
         Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
+        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"}
+                 ATT_AUTHENTICATION = {"context-adapter", "third-party"}
+                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
+
+
 + Response 201 (application/json)
     + Body
             {
                  "subscriptionid_ca" : "1323423gsdfbb35tergs",
-                 "subscriptionid_cyg" : "1323423g23423sdfbb35tergs",
                  "subscriptionid_sth" : "1323423gsdfb4345b35tergs",
                  "subscriptionid_perseo" : "1323423gsdfb4sdb35tergs"
             }
@@ -364,7 +371,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 201 (application/json)
     + Body
             {
-                 "id" : 00342234ergdfy54600
+                 "id" : "00342234ergdfy54600"
             }
 
 
@@ -706,8 +713,8 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 200 (application/json)
     + Body
       {
-         "activated_modules": [ {"name": "STH", "subscriptionid": "23423435" },
-                                {"name":"CYGNUS", "subscriptionid": "34243434"} ]
+         "activated_modules": [ {"name": "STH", "subscriptionid": "23423435", "alias": "HISTORIC"},
+                                {"name": "PERSEO", "subscriptionid": "34243434", "alias": "RULES"} ]
       }
 
 ### activate an IoT Module [POST]
@@ -758,7 +765,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
          "uptime": "2015-11-02T08:15:35.166",
          "IoTModules": [
              "STH",
-             "CYGNUS",
              "PERSEO"
          ],
          "version": "0.5.1",
