@@ -479,8 +479,6 @@ class Projects(FlowBase):
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
-
-
             #
             # 1. Subscribe Context Adapter in ContextBroker
             #
@@ -619,7 +617,7 @@ class Projects(FlowBase):
 
 
             #
-            # 3.1 Subscribe Cygnus
+            # Subscribe commons
             #
             DURATION="P1Y"
             ENTITIES=[]
@@ -628,8 +626,6 @@ class Projects(FlowBase):
             REFERENCE_URL="http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
                 ENTITY_TYPE="BlackButton"
-                #"http://<ip_ca>:<port_ca>/"
-                REFERENCE_URL=self.endpoints['CYGNUS']
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -666,7 +662,6 @@ class Projects(FlowBase):
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 ENTITY_TYPE="Thing"
-                REFERENCE_URL = self.endpoints['CYGNUS']
                 ENTITIES = [
                     {
                         "type": ENTITY_TYPE,
@@ -705,31 +700,15 @@ class Projects(FlowBase):
                     }
                 ]
 
-            logger.debug("Trying to subscribe CYGNUS...")
-            if len(ENTITIES) > 0:
-                cb_res = self.cb.subscribeContext(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_NAME,
-                    PROJECT_NAME,
-                    REFERENCE_URL,
-                    DURATION,
-                    ENTITIES,
-                    ATTRIBUTES,
-                    NOTIFY_CONDITIONS
-                    )
-                logger.debug("subscribeContext res=%s" % cb_res)
-                subscriptionid_cyg = cb_res['subscribeResponse']['subscriptionId']
-                logger.debug("registration id cygnus=%s" % subscriptionid_cyg)
-
             #
             # 3.2 Subscribe Short Term Historic (STH)
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.endpoints['STH']
+                REFERENCE_URL = self.get_endpoint_iot_module('STH')
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.endpoints['STH']
+                REFERENCE_URL = self.get_endpoint_iot_module('STH')
 
             logger.debug("Trying to subscribe STH...")
             if len(ENTITIES) > 0:
@@ -753,10 +732,11 @@ class Projects(FlowBase):
             #
             REFERENCE_URL = "http://localhost"
             if PROTOCOL == "TT_BLACKBUTTON":
-                REFERENCE_URL = self.endpoints['PERSEO']
+                REFERENCE_URL = self.get_endpoint_iot_module('PERSEO')
+
 
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
-                REFERENCE_URL = self.endpoints['PERSEO']
+                REFERENCE_URL = self.get_endpoint_iot_module('PERSEO')
 
             logger.debug("Trying to subscribe PERSEO...")
             if len(ENTITIES) > 0:
@@ -782,14 +762,13 @@ class Projects(FlowBase):
         data_log = {
             "ENTITY_ID": ENTITY_ID,
             "subscriptionid_ca": subscriptionid_ca,
-            "subscriptionid_cyg": subscriptionid_cyg,
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
         logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
 
-        return subscriptionid_ca, subscriptionid_cyg, subscriptionid_sth, subscriptionid_perseo
+        return subscriptionid_ca, subscriptionid_sth, subscriptionid_perseo
 
 
     def register_device(self,
@@ -1360,7 +1339,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        - IOTMODULE: IoT Module to activate: STH, PERSEO
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1505,7 +1484,7 @@ class Projects(FlowBase):
         - SERVICE_USER_NAME: Service admin username
         - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
-        - IOTMODULE: IoT Module to activate: STH, CYGNUS, PERSEO
+        - IOTMODULE: IoT Module to activate: STH, PERSEO
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
@@ -1677,13 +1656,15 @@ class Projects(FlowBase):
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(self.endpoints[iotmodule]):
+                    if sub_callback.startswith(self.get_endpoint_iot_module(iotmodule)):
                         # Check All entities and servicePath
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
                             modules.append({ "name": iotmodule,
-                                             "subscriptionid": sub['id']})
+                                             "subscriptionid": sub['id'],
+                                             "alias": self.get_alias_iot_module(iotmodule)
+                                             })
                             break
 
             logger.debug("modules=%s" % modules)

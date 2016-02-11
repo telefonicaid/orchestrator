@@ -227,12 +227,11 @@ KEYPASS = {}
 IOTA = {}
 ORION = {}
 CA = {}
-CYGNUS = {}
 STH = {}
 PERSEO = {}
 
 # List of possible IoTModules: persistence services, etc
-IOTMODULES = [ "STH", "CYGNUS", "PERSEO", "CA"]
+IOTMODULES = [ "STH", "PERSEO", "CA"]
 
 # Pep user credencials. Pep is a user of admin_domain
 # Needed to for resolve pep user id
