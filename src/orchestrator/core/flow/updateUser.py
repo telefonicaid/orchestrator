@@ -131,7 +131,7 @@ class UpdateUser(FlowBase):
         - SERVICE_ID: Service Id
         - USER_ID: user id
         - SERVICE_USER_NAME: Service admin username
-        - SERVICE_USER_PASSWORD: admin password
+        - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
         - NEW_USER_PASSWORD: new user password
         '''

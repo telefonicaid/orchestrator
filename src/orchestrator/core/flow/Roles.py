@@ -1070,7 +1070,7 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - ROLE_NAME: Role name
         - ROLE_ID: Role ID
-        - POLICY_FILE_NAME:
+        - POLICY_FILE_NAME: XACML policy
         '''
         data_log = {
             "SERVICE_NAME": "%s" % SERVICE_NAME,
