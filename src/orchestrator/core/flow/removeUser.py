@@ -51,7 +51,7 @@ class RemoveUser(FlowBase):
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         - USER_NAME: User name
-        - USER_ID: User name
+        - USER_ID: User id
         '''
         data_log = {
             "SERVICE_NAME": "%s" % SERVICE_NAME,
