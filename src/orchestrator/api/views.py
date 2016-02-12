@@ -152,7 +152,7 @@ class IoTConf(Stats):
 
 class ServiceList_RESTView(APIView, IoTConf):
     """
-    Lists of modifies and existent service
+    { Read, Update, Delete } Service
 
     """
     schema_name = "ServiceList"
@@ -271,7 +271,7 @@ class ServiceList_RESTView(APIView, IoTConf):
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
     """
-    Creates a new service
+    { Create } Service
 
     """
 
@@ -320,7 +320,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
 
 class SubServiceList_RESTView(APIView, IoTConf):
     """
-    Modifies a SubService
+    { Read, Modify, Delete } SubService
+
     """
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
@@ -348,7 +349,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_ADMIN_TOKEN",
                                          HTTP_X_AUTH_TOKEN))
                 else:
-                    # TODO: get detail of subservice
+                    # Get detail of subservice
                     result = flow.get_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -463,7 +464,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
 class SubServiceCreate_RESTView(SubServiceList_RESTView):
     """
-    Creates a new SubService into a Service
+    { Create } SubService
     """
     schema_name = "SubServiceCreate"
 
@@ -604,7 +605,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
 class User_RESTView(APIView, IoTConf):
     """
-    Modifies an Users of a Service
+    { Read, Update, Delete } Users
 
     """
     schema_name = "User"
@@ -621,7 +622,6 @@ class User_RESTView(APIView, IoTConf):
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
-            # TODO: use user_id
             result = flow.removeUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -649,7 +649,6 @@ class User_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-            # TODO: el usuario se edita a si mismo? NO
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
@@ -740,7 +739,7 @@ class User_RESTView(APIView, IoTConf):
 
 class UserList_RESTView(APIView, IoTConf):
     """
-    Return a list of Users of a Service
+    { Read, Create } Users into a Service
 
     """
     schema_name = "UserList"
@@ -821,7 +820,7 @@ class UserList_RESTView(APIView, IoTConf):
 
 class Role_RESTView(APIView, IoTConf):
     """
-    Modifies an Roles of a Service
+    { Delete } Roles in a Service
 
     """
     schema_name = "Role"
@@ -863,7 +862,7 @@ class Role_RESTView(APIView, IoTConf):
 
 class RoleList_RESTView(APIView, IoTConf):
     """
-    Creates or returns a Role into a service
+    { Create, Read } Role into a Service
 
     """
     schema_name = "RoleList"
@@ -943,7 +942,7 @@ class RoleList_RESTView(APIView, IoTConf):
 
 class AssignRoleUser_RESTView(APIView, IoTConf):
     """
-    Assign or list assignments of a role to a user in a service or subservice
+   { Read, Update, Delete} User Role Assignments in a Service or Subservice
 
     """
     def __init__(self):
@@ -1121,7 +1120,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
 class Trust_RESTView(APIView, IoTConf):
     """
-    Creates a Trust Token
+    { Creates }  a Trust Token 
 
     """
     schema_name = "Trust"
@@ -1173,7 +1172,7 @@ class Trust_RESTView(APIView, IoTConf):
 
 class SubServiceIoTADevice_RESTView(APIView, IoTConf):
     """
-    SubService IoTA Device
+    { Create, Delete} Device in a Service or a Subservice
 
     """
     schema_name = "IoTADevice"
@@ -1289,7 +1288,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
 
 class SubServiceIoTADevices_RESTView(APIView, IoTConf):
     """
-    SubService IoTA Devices CSV
+    { Creates } Devices in a Service or SubService from a CSV
 
     """
     schema_name = "IoTADevices"
@@ -1348,7 +1347,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
 
 class SubServiceIoTAService_RESTView(APIView, IoTConf):
     """
-    SubService IoTA Service
+    { Create } Service Entity for  IoTA Service or SubService
 
     """
     schema_name = "IoTAService"
@@ -1421,7 +1420,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
 
 class IOTModuleActivation_RESTView(APIView, IoTConf):
     """
-    IOT Module Activation
+    { Create, Read, Delete } IOT Module Activation
 
     """
     schema_name = "IOTModuleActivation"
@@ -1436,7 +1435,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             request.DATA  # json validation
 
             if not subservice_id:
-                # TODO: for Domains instead of Projects also
                 flow = Domains(self.KEYSTONE_PROTOCOL,
                                self.KEYSTONE_HOST,
                                self.KEYSTONE_PORT,
@@ -1654,7 +1652,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
 
 class OrchVersion_RESTView(APIView, IoTConf):
     """
-
+     { Read } Orchestrator Statistics
     """
 
     def __init__(self):
