@@ -99,6 +99,9 @@ class Stats(object):
     num_post_module_activation = 0
     num_delete_module_activation = 0
 
+    num_api_errors = 0
+    num_flow_errors = 0
+
 
 
 class IoTConf(Stats):
@@ -160,7 +163,6 @@ class ServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None):
-        Stats.num_get_service += 1
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -186,12 +188,15 @@ class ServiceList_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_ADMIN_TOKEN",
                                      HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
+                Stats.num_get_service += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -199,7 +204,6 @@ class ServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None):
-        Stats.num_put_service += 1
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -215,11 +219,14 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
             if 'error' not in result:
+                Stats.num_put_service += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -227,7 +234,6 @@ class ServiceList_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id=None):
-        Stats.num_delete_service += 1
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -248,11 +254,14 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
+                Stats.num_delete_service += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -272,7 +281,6 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
         ServiceList_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
-        Stats.num_post_service += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -295,11 +303,14 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                 request.DATA.get("NEW_SERVICE_ADMIN_EMAIL", None))
 
             if 'token' in result:
+                Stats.num_post_service += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -319,7 +330,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id=None, subservice_id=None):
-        Stats.num_get_subservice += 1
+
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -351,12 +362,15 @@ class SubServiceList_RESTView(APIView, IoTConf):
                           "code": "400"}
 
             if 'error' not in result:
+                Stats.num_get_subservice += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -364,7 +378,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id=None, subservice_id=None):
-        Stats.num_put_subservice += 1
+
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -389,11 +403,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 result['error'] = "ERROR not service_id provided"
 
             if 'error' not in result:
+                Stats.num_put_subservice += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -401,7 +418,6 @@ class SubServiceList_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id=None, subservice_id=None):
-        Stats.num_delete_subservice += 1
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -430,11 +446,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 result['error'] = "ERROR not service_id provided"
 
             if 'error' not in result:
+                Stats.num_delete_subservice += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -452,7 +471,6 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
         SubServiceList_RESTView.__init__(self)
 
     def post(self, request, service_id):
-        Stats.num_post_subservice += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -502,7 +520,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_PORT
                                 )
 
-                sub_ca, sub_sth, sub_perseo = flow.register_service(
+                result2 = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("NEW_SUBSERVICE_NAME", None),
@@ -523,9 +541,12 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     request.DATA.get("ATT_TIMEOUT", None)
                     )
                 # Accumulate previous result
-                result['subscriptionid_ca'] = sub_ca
-                result['subscriptionid_sth'] = sub_sth
-                result['subscriptionid_perseo'] = sub_perseo
+                if ('error' not in result2):
+                    result['subscriptionid_ca'] = result2['subscriptionid_ca']
+                    result['subscriptionid_sth'] = result2['subscriptionid_sth']
+                    result['subscriptionid_perseo'] = result2['subscriptionid_perseo']
+                else:
+                    result['error'] = result2['error']
 
             # TODO: see optional values for register device
             if 'id' in result and request.DATA.get("DEVICE_ID", None):
@@ -565,12 +586,15 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                     )
 
             if 'id' in result and ('error' not in result):
+                Stats.num_post_subservice += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -591,7 +615,6 @@ class User_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, user_id):
-        Stats.num_delete_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -608,11 +631,14 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("USER_NAME", None),
                 request.DATA.get("USER_ID", user_id))
             if 'error' not in result:
+                Stats.num_delete_user += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -620,7 +646,6 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id, user_id):
-        Stats.num_put_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -638,18 +663,20 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("USER_ID", user_id),
                 request.DATA.get("USER_DATA_VALUE"))
             if 'error' not in result:
+                Stats.num_put_user += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0}'.format(error.message),
                 status=status.HTTP_400_BAD_REQUEST
             )
 
     def get(self, request, service_id, user_id):
-        Stats.num_get_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -663,11 +690,14 @@ class User_RESTView(APIView, IoTConf):
                                request.DATA.get("SERVICE_ADMIN_TOKEN",
                                                 HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
+                Stats.num_get_user += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -675,7 +705,6 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, user_id):
-        Stats.num_post_user += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             #request.DATA  # json validation
@@ -694,11 +723,14 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_USER_PASSWORD", None),
                 )
             if 'error' not in result:
+                Stats.num_post_user += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -719,7 +751,6 @@ class UserList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        Stats.num_get_userlist += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
@@ -740,11 +771,14 @@ class UserList_RESTView(APIView, IoTConf):
                 request.DATA.get("COUNT", count))
 
             if 'error' not in result:
+                Stats.num_get_userlist += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -752,7 +786,6 @@ class UserList_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id):
-        Stats.num_post_userlist += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -771,11 +804,14 @@ class UserList_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_SERVICE_USER_EMAIL", None),
                 request.DATA.get("NEW_SERVICE_USER_DESCRIPTION", None))
             if 'id' in result:
+                Stats.num_post_userlist += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -795,7 +831,6 @@ class Role_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, role_id):
-        Stats.num_delete_role += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -811,11 +846,14 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("ROLE_NAME", None),
                 request.DATA.get("ROLE_ID", role_id))
             if 'error' not in result:
+                Stats.num_delete_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -835,7 +873,6 @@ class RoleList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        Stats.num_post_role += 1
         self.schema_name = "RoleList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -853,12 +890,15 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_ROLE_NAME", None),
                 request.DATA.get("XACML_POLICY", None))
             if 'error' not in result:
+                Stats.num_post_role += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -866,7 +906,6 @@ class RoleList_RESTView(APIView, IoTConf):
             )
 
     def get(self, request, service_id=None):
-        Stats.num_get_role += 1
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         index = request.GET.get('index', None)
@@ -887,11 +926,14 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.DATA.get("COUNT", count))
 
             if 'error' not in result:
+                Stats.num_get_role += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -908,7 +950,6 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        Stats.num_get_roleassignment += 1
         self.schema_name = "RoleAssignmentList"
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
@@ -934,13 +975,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             request.DATA.get("EFFECTIVE", effective))
 
         if 'error' not in result:
+            Stats.num_get_roleassignment += 1
             return Response(result, status=status.HTTP_200_OK)
         else:
+            Stats.num_flow_errors += 1
             return Response(result['error'],
                             status=self.getStatusFromCode(result['code']))
 
     def post(self, request, service_id):
-        Stats.num_post_roleassignment += 1
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         user_id = request.GET.get('user_id', None)
@@ -994,11 +1036,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
+                Stats.num_post_roleassignment += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1006,7 +1051,6 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id):
-        Stats.num_delete_roleassignment += 1
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         user_id = request.GET.get('user_id', None)
@@ -1060,11 +1104,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_NAME", None),
                     request.DATA.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
+                Stats.num_delete_roleassignment += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1084,7 +1131,6 @@ class Trust_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        Stats.num_post_trust += 1
         self.schema_name = "Trust"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1109,12 +1155,15 @@ class Trust_RESTView(APIView, IoTConf):
                 request.DATA.get("TRUSTOR_USER_ID", None)
             )
             if 'error' not in result:
+                Stats.num_post_trust += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1134,7 +1183,6 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        Stats.num_post_device += 1
         self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1175,12 +1223,15 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_GEOLOCATION", None)
             )
             if 'error' not in result:
+                Stats.num_post_device += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1188,7 +1239,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id, subservice_id):
-        Stats.num_delete_device += 1
+
         self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1220,12 +1271,15 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 request.DATA.get("DEVICE_ID", None)
             )
             if 'error' not in result:
+                Stats.num_delete_device += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1245,7 +1299,6 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        Stats.num_post_devices += 1
         self.schema_name = "IoTADevices"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1277,12 +1330,15 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                 request.DATA.get("CSV_DEVICES", None),
             )
             if 'error' not in result:
+                Stats.num_post_devices += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1302,7 +1358,6 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        Stats.num_post_entity_service += 1
         self.schema_name = "IoTAService"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1323,7 +1378,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT)
-            sub_ca, sub_sth, sub_perseo = flow.register_service(
+            result = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -1343,17 +1398,20 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_MAPPING", None),
                 request.DATA.get("ATT_TIMEOUT", None)
             )
-            result = {}
-            result['subscriptionid_ca'] = sub_ca
-            result['subscriptionid_sth'] = sub_sth
-            result['subscriptionid_perseo'] = sub_perseo
+            # result = {}
+            # result['subscriptionid_ca'] = sub_ca
+            # result['subscriptionid_sth'] = sub_sth
+            # result['subscriptionid_perseo'] = sub_perseo
             if 'error' not in result:
+                Stats.num_post_entity_service += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1373,7 +1431,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id, subservice_id=None):
-        Stats.num_get_module_activation += 1
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -1430,13 +1487,16 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             result = {}
             if 'error' not in modules:
                 result['actived_modules'] = modules
+                Stats.num_get_module_activation += 1
                 return Response(result, status=status.HTTP_200_OK)
             else:
                 result = modules
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1444,7 +1504,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
-        Stats.num_post_module_activation += 1
+
         #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1502,12 +1562,15 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             result = {}
             result['subscriptionid'] = sub
             if 'error' not in result:
+                Stats.num_post_module_activation += 1
                 return Response(result, status=status.HTTP_201_CREATED)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1516,7 +1579,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
 
 
     def delete(self, request, service_id, subservice_id=None, iot_module=None):
-        Stats.num_delete_module_activation += 1
         #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
@@ -1574,12 +1636,15 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             result = {}
 
             if 'error' not in result:
+                Stats.num_delete_module_activation += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT)
             else:
+                Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
+            Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
@@ -1641,7 +1706,11 @@ class OrchVersion_RESTView(APIView, IoTConf):
 
                     "num_get_module_activation": self.num_get_module_activation,
                     "num_post_module_activation": self.num_post_module_activation,
-                    "num_delete_module_activation": self.num_delete_module_activation
+                    "num_delete_module_activation": self.num_delete_module_activation,
+
+                    "num_api_errors": self.num_api_errors,
+                    "num_flow_errors": self.num_flow_errors
+
                 }
             }
 
