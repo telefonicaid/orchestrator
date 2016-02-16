@@ -3,12 +3,15 @@ CHANGES
 
 0.7.0
 
+fix/api_schema_validation
+task/check_user_before_get_token
 task/start_service_after_install_rpm
 task/apiary_typo_type_parameter
 task/handle_errors_register_service
 task/identify_flow_traces
 task/remove_cygnus_moduleiot
 task/apiary_examples
+
 
 0.6.10
 
