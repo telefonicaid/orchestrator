@@ -26,7 +26,7 @@ json = {
     ###############
     "ServiceCreate": {
     ###############
-        "name": "Service",
+        "name": "ServiceCreate",
         "dependencies": {
             "DOMAIN_NAME": [
                 "DOMAIN_ADMIN_USER",
@@ -99,27 +99,36 @@ json = {
     #############
         "name": "ServiceList",
         "dependencies": {
-            "DOMAIN_ADMIN_USER": [
-                "DOMAIN_ADMIN_PASSWORD"
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
             ],
-            "DOMAIN_ADMIN_PASSWORD": [
-                "DOMAIN_ADMIN_USER",
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
             ]
         },
         "properties": {
             "DOMAIN_NAME": {
                 "type": "string",
             },
-            "DOMAIN_ADMIN_USER": {
+            "SERVICE_ADMIN_USER": {
                 "type": "string",
             },
-            "DOMAIN_ADMIN_PASSWORD": {
+            "SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
             },
-            "DOMAIN_ADMIN_TOKEN": {
+            "SERVICE_ADMIN_TOKEN": {
                 "type": "string",
             },
             "DOMAIN_ID": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "NEW_SERVICE_DESCRIPTION": {
                 "type": "string",
             },
         },
@@ -151,6 +160,15 @@ json = {
                 "type": "string",
             },
             "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
             },
         },
@@ -191,6 +209,19 @@ json = {
             },
             "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
+            },
+            "NEW_SUBSERVICE_ADMIN_USER": {
+                "type": "string",
+                "maxLength": 50,
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "NEW_SUBSERVICE_ADMIN_PASSWORD":{
+                "type": "string",
+                "minLength": 6,
+            },
+            "NEW_SUBSERVICE_ADMIN_EMAIL":{
+                "type": "string",
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
             },
         },
         "required": [
@@ -270,6 +301,10 @@ json = {
                 "additionalProperties": False,
                 # "required": ["user", "emails"]
             },
+            "NEW_USER_PASSWORD":{
+                "type": "string",
+                "minLength": 6,
+            },
         },
         # "required": [ ],
     },
@@ -320,9 +355,9 @@ json = {
         },
         # "required": [ ],
     },
-    #######
+    ###########
     "RoleList": {
-    #######
+    ###########
         "name": "RoleList",
         "dependencies": {
             "SERVICE_ADMIN_USER": [
@@ -389,12 +424,10 @@ json = {
             "SERVICE_NAME": {
                 "type": "string",
             },
-            "NEW_ROLE_NAME": {
+            "ROLE_NAME": {
                 "type": "string",
-                "maxLength": 50,
-                "pattern": "^([A-Za-z0-9_]+)$",
             },
-            "XACML_POLICY": {
+            "ROLE_ID": {
                 "type": "string",
             },
         },
@@ -427,7 +460,16 @@ json = {
             "SUBSERVICE_ID": {
                 "type": "string",
             },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
             "USER_ID": {
+                "type": "string",
+            },
+            "USER_NAME": {
                 "type": "string",
             },
         },
@@ -528,13 +570,13 @@ json = {
             "TRUSTEE_USER_NAME": {
                 "type": "string",
             },
-            "TRUSTEE_USER__ID": {
+            "TRUSTEE_USER_ID": {
                 "type": "string",
             },
             "TRUSTOR_USER_NAME": {
                 "type": "string",
             },
-            "TRUSTOR_USER__ID": {
+            "TRUSTOR_USER_ID": {
                 "type": "string",
             },
         },
