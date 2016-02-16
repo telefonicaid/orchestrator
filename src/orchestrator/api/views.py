@@ -157,7 +157,6 @@ class ServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -207,7 +206,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            # request.DATA # json validation
+            request.DATA # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT)
@@ -237,7 +236,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            # request.DATA  # json validation
+            request.DATA  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
@@ -325,7 +324,6 @@ class SubServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -610,7 +608,6 @@ class User_RESTView(APIView, IoTConf):
     """
     schema_name = "User"
     parser_classes = (parsers.JSONSchemaParser,)
-    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)
@@ -706,7 +703,7 @@ class User_RESTView(APIView, IoTConf):
     def post(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            #request.DATA  # json validation
+            request.DATA  # json validation
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT)
@@ -876,7 +873,6 @@ class RoleList_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-
             flow = CreateNewServiceRole(self.KEYSTONE_PROTOCOL,
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT)
@@ -911,7 +907,6 @@ class RoleList_RESTView(APIView, IoTConf):
         count = request.GET.get('count', None)
         try:
             request.DATA  # json validation
-
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT)
@@ -1130,11 +1125,9 @@ class Trust_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        self.schema_name = "Trust"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-
             flow = CreateTrustToken(self.KEYSTONE_PROTOCOL,
                                     self.KEYSTONE_HOST,
                                     self.KEYSTONE_PORT)
@@ -1182,11 +1175,9 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
@@ -1238,12 +1229,9 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id, subservice_id):
-
-        self.schema_name = "IoTADevice"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
-            #request.DATA  # json validation
-
+            request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
@@ -1298,11 +1286,9 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        self.schema_name = "IoTADevices"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
@@ -1357,11 +1343,9 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        self.schema_name = "IoTAService"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
@@ -1397,10 +1381,6 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 request.DATA.get("ATT_MAPPING", None),
                 request.DATA.get("ATT_TIMEOUT", None)
             )
-            # result = {}
-            # result['subscriptionid_ca'] = sub_ca
-            # result['subscriptionid_sth'] = sub_sth
-            # result['subscriptionid_perseo'] = sub_perseo
             if 'error' not in result:
                 Stats.num_post_entity_service += 1
                 return Response(result, status=status.HTTP_201_CREATED)
@@ -1433,7 +1413,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
-
             if not subservice_id:
                 flow = Domains(self.KEYSTONE_PROTOCOL,
                                self.KEYSTONE_HOST,
@@ -1502,8 +1481,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
-
-        #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
@@ -1577,7 +1554,6 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
 
 
     def delete(self, request, service_id, subservice_id=None, iot_module=None):
-        #self.schema_name = "IOTModuleActivation"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
             request.DATA  # json validation
