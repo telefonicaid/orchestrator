@@ -71,6 +71,11 @@ class IdMKeystoneOperations(IdMOperations):
                  DOMAIN_ADMIN_PASSWORD,
                  SCOPED=True):
 
+        assert DOMAIN_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert DOMAIN_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -116,6 +121,12 @@ class IdMKeystoneOperations(IdMOperations):
                   DOMAIN_ADMIN_USER,
                   DOMAIN_ADMIN_PASSWORD,
                   SCOPED=True):
+
+        assert DOMAIN_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert DOMAIN_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -161,6 +172,9 @@ class IdMKeystoneOperations(IdMOperations):
                  DOMAIN_ID,
                  PROJECT_ID,
                  SCOPED=True):
+
+        assert DOMAIN_ADMIN_TOKEN != None, (
+                401, "auth wrong: user token not provided")
 
         auth_data = {
             "auth": {
@@ -217,6 +231,12 @@ class IdMKeystoneOperations(IdMOperations):
                               PROJECT_NAME,
                               SERVICE_ADMIN_USER,
                               SERVICE_ADMIN_PASSWORD):
+
+        assert SERVICE_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert SERVICE_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -258,6 +278,12 @@ class IdMKeystoneOperations(IdMOperations):
                               PROJECT_ID,
                               SERVICE_ADMIN_USER,
                               SERVICE_ADMIN_PASSWORD):
+
+        assert SERVICE_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert SERVICE_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
