@@ -864,14 +864,29 @@ class Projects(FlowBase):
 
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID)
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
+
             if not PROJECT_NAME:
-                PROJECT_NAME = self.idm.getProjectNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID,
-                    PROJECT_ID)
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
+                try:
+                    PROJECT_NAME = self.idm.getProjectNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID,
+                        PROJECT_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    PROJECT = self.idm.getProject(SERVICE_USER_TOKEN,
+                                                  PROJECT_ID)
+                    PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1166,14 +1181,29 @@ class Projects(FlowBase):
 
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID)
+                logger.debug("Not DOMAIN_NAME provided, getting it from token")
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
+
             if not PROJECT_NAME:
-                PROJECT_NAME = self.idm.getProjectNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID,
-                    PROJECT_ID)
+                logger.debug("Not PROJECT_NAME provided, getting it from token")
+                try:
+                    PROJECT_NAME = self.idm.getProjectNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID,
+                        PROJECT_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    PROJECT = self.idm.getProject(SERVICE_USER_TOKEN,
+                                                  PROJECT_ID)
+                    PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1428,11 +1458,13 @@ class Projects(FlowBase):
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
+            logger.debug("Trying to getContextTypes...")
             cb_res = self.cb.getContextTypes(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 PROJECT_NAME,
                 None)
+            logger.debug("getContextTypes res=%s" % cb_res)
 
             for entity_type in cb_res:
                 ATTRIBUTES.append(entity_type["attributes"])
@@ -1451,6 +1483,7 @@ class Projects(FlowBase):
                 "condValues": NOTIFY_ATTRIBUTES
             } ]
 
+            logger.debug("Trying to subscribe moduleiot in CB...")
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -1469,6 +1502,10 @@ class Projects(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
+        data_log = {
+            "subscriptionid": subscriptionid
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return subscriptionid
 
     def deactivate_module(self,
@@ -1505,7 +1542,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+        logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -1530,18 +1567,32 @@ class Projects(FlowBase):
                         PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
+
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
                 logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID)
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
+
             if not PROJECT_NAME:
-                logger.debug("Not PROJECT_NAME provided, getting it from token")
-                PROJECT_NAME = self.idm.getProjectNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID,
-                    PROJECT_ID)
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                try:
+                    PROJECT_NAME = self.idm.getProjectNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID,
+                        PROJECT_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    PROJECT = self.idm.getProject(SERVICE_USER_TOKEN,
+                                                  PROJECT_ID)
+                    PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1554,11 +1605,13 @@ class Projects(FlowBase):
 
             REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
+            logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
+            logger.debug("getListSubscriptions res=%s" % cb_res)
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -1571,13 +1624,14 @@ class Projects(FlowBase):
                                                sub['id'])
                     break
 
-            # logger.debug("subscribeContext res=%s" % cb_res)
-            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            # logger.debug("subscription id=%s" % subscriptionid)
-
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
+
+        data_log = {
+            "subscriptionid": subscriptionid
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return subscriptionid
 
@@ -1637,18 +1691,32 @@ class Projects(FlowBase):
                         PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
+
             # Ensure DOMAIN_NAME and PROJECT_NAME
             if not DOMAIN_NAME:
                 logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID)
+                try:
+                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
+                                                DOMAIN_ID)
+                    DOMAIN_NAME = DOMAIN['domain']['name']
+
             if not PROJECT_NAME:
-                logger.debug("Not PROJECT_NAME provided, getting it from token")
-                PROJECT_NAME = self.idm.getProjectNameFromToken(
-                    SERVICE_USER_TOKEN,
-                    DOMAIN_ID,
-                    PROJECT_ID)
+                logger.debug("Not PROJECT_NAM provided, getting it from token")
+                try:
+                    PROJECT_NAME = self.idm.getProjectNameFromToken(
+                        SERVICE_USER_TOKEN,
+                        DOMAIN_ID,
+                        PROJECT_ID)
+                except Exception, ex:
+                    # This op could be executed by cloud_admin user
+                    PROJECT = self.idm.getProject(SERVICE_USER_TOKEN,
+                                                  PROJECT_ID)
+                    PROJECT_NAME = PROJECT['project']['name'].split('/')[1]
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1659,11 +1727,13 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
+            logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
+            logger.debug("getListSubscriptions res=%s" % cb_res)
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
@@ -1684,5 +1754,10 @@ class Projects(FlowBase):
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
+
+        data_log = {
+            "modules": modules
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return modules
