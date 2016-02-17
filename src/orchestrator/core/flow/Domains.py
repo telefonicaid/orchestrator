@@ -44,7 +44,7 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_NAME:
+        - DOMAIN_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -93,8 +93,8 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_ID:
-        - DOMAIN_NAME:
+        - DOMAIN_ID: Service Id
+        - DOMAIN_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -155,8 +155,8 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_ID:
-        - DOMAIN_NAME:
+        - DOMAIN_ID: Service Id
+        - DOMAIN_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -216,8 +216,8 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_ID:
-        - DOMAIN_NAME:
+        - DOMAIN_ID: Service Id
+        - DOMAIN_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -341,13 +341,13 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - SERVICE_ID:
-        - SERVICE_NAME:
+        - SERVICE_ID: Service Id
+        - SERVICE_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - ROLE_NAME
-        - ROLE_ID
+        - ROLE_NAME: Role Name
+        - ROLE_ID: Role Id
         Return:
         - XACML policies
         '''
@@ -499,17 +499,17 @@ class Domains(FlowBase):
 
             REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
-            #if not REFERENCE_URL:
-            #    return self.composeErrorCode(ex)
             DURATION="P1Y"
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
+            logger.debug("Trying to getContextTypes...")
             cb_res = self.cb.getContextTypes(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 "",
                 None)
+            logger.debug("getContextTypes res=%s" % cb_res)
 
             for entity_type in cb_res:
                 ATTRIBUTES.append(entity_type["attributes"])
@@ -527,7 +527,7 @@ class Domains(FlowBase):
                 "type": "ONCHANGE",
                 "condValues": NOTIFY_ATTRIBUTES
             } ]
-
+            logger.debug("Trying to subscribe moduleiot in CB...")
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -546,6 +546,10 @@ class Domains(FlowBase):
             logger.error(ex)
             return self.composeErrorCode(ex)
 
+        data_log = {
+            "subscriptionid": subscriptionid
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return subscriptionid
 
     def deactivate_module(self,
@@ -576,7 +580,7 @@ class Domains(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+        logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -614,11 +618,13 @@ class Domains(FlowBase):
 
             REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
+            logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 ""
             )
+            logger.debug("getListSubscriptions res=%s" % cb_res)
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -638,6 +644,11 @@ class Domains(FlowBase):
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
+
+        data_log = {
+            "subscriptionid": subscriptionid
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return subscriptionid
 
@@ -703,11 +714,13 @@ class Domains(FlowBase):
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
+            logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 ""
             )
+            logger.debug("getListSubscriptions res=%s" % cb_res)
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
@@ -727,5 +740,10 @@ class Domains(FlowBase):
         except Exception, ex:
             logger.error(ex)
             return self.composeErrorCode(ex)
+
+        data_log = {
+            "modules": modules
+        }
+        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return modules
