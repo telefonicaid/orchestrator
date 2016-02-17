@@ -243,6 +243,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "SUBSERVICE_NAME":"test_subservice",
                 "DEVICE_ID":"device_id_XXX",
                 "ENTITY_TYPE":"BlackButton",
+                "ENTITY_NAME":device_id_XXX",
                 "PROTOCOL":"TT_BLACKBUTTON",
                 "ATT_ICCID":"",
                 "ATT_IMEI":"",
@@ -253,7 +254,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             }
         Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
         Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"},
-                 PROTOCOL=  {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
+                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
 
 + Response 201 (application/json)
     + DEVICE_ID
