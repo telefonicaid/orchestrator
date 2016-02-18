@@ -60,7 +60,7 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
         }
-        logger.debug("FLOW createNewService invoked with: %s" % json.dumps(
+        logger.debug("FLOW projects invoked with: %s" % json.dumps(
             data_log, indent=3)
         )
         try:
