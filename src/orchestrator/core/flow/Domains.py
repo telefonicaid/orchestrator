@@ -510,9 +510,9 @@ class Domains(FlowBase):
                 "",
                 None)
             logger.debug("getContextTypes res=%s" % cb_res)
-
-            for entity_type in cb_res:
-                ATTRIBUTES.append(entity_type["attributes"])
+            for entity_type in cb_res['types']:
+                for att in entity_type["attributes"] :
+                    ATTRIBUTES.append(att)
 
             # Set default ENTITIES for subscription
             ENTITIES = [ {
