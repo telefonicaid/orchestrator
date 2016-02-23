@@ -223,7 +223,7 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
-        return json_body_response
+        return json_body_response, res.headers.get('X-Subject-Token')
 
 
     def getScopedProjectToken(self,
@@ -1001,7 +1001,8 @@ class IdMKeystoneOperations(IdMOperations):
                                SERVICE_ADMIN_TOKEN,
                                DOMAIN_ID):
 
-        token_data = self.getTokenFromToken(SERVICE_ADMIN_TOKEN,
+        token_data, token_value = self.getTokenFromToken(
+                                            SERVICE_ADMIN_TOKEN,
                                             DOMAIN_ID,
                                             None,
                                             True)
@@ -1015,7 +1016,8 @@ class IdMKeystoneOperations(IdMOperations):
                             DOMAIN_ID,
                             PROJECT_ID):
 
-        token_data = self.getTokenFromToken(SERVICE_ADMIN_TOKEN,
+        token_data, token_value = self.getTokenFromToken(
+                                            SERVICE_ADMIN_TOKEN,
                                             DOMAIN_ID,
                                             PROJECT_ID,
                                             True)
