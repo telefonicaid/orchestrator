@@ -3,6 +3,7 @@ CHANGES
 
 0.7.0
 
+task/remove_link_after_uninstall
 fix/api_schema_validation
 task/check_user_before_get_token
 task/start_service_after_install_rpm
