@@ -1136,7 +1136,7 @@ class Projects(FlowBase):
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
 
-            PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
+            PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
