@@ -91,7 +91,9 @@ class CreateNewServiceUser(FlowBase):
                                                        SERVICE_ID))
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN, SERVICE_ID, SERVICE_NAME)
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
             logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #
