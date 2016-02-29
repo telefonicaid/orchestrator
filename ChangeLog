@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+
+0.7.1
+
+task/resolve_service_name_for_service_user_service_role
+
+
 0.7.0
 
 task/remove_link_after_uninstall
