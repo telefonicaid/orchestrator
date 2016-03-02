@@ -69,12 +69,12 @@ class IoTACppOperations(object):
                         MAPPING_ATTRIBUTES=[],
                         STATIC_ATTRIBUTES=[]):
         body_data = {
-            services : [
+            "services" : [
                 {
                     "protocol": [PROTOCOL],
                     "entity_type": ENTITY_TYPE,
                     "apikey": APIKEY,
-                    "token": TRUSTOKENID,
+                    "token": TRUSTTOKENID,
                     "cbroker": CBROKER_ENDPOINT,
                     "attributes": MAPPING_ATTRIBUTES,
                     "static_attributes": STATIC_ATTRIBUTES,
