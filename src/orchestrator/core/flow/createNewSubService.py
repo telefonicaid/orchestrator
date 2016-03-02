@@ -127,7 +127,7 @@ class CreateNewSubService(FlowBase):
                         None)
                 except Exception, ex:
                     logger.warn("ERROR creating user %s: %s" % (
-                        NEW_SERVICE_ADMIN_USER,
+                        NEW_SUBSERVICE_ADMIN_USER,
                         ex))
                     logger.info("Removing uncomplete created project %s" % ID_PRO1)
                     self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)
