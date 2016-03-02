@@ -467,9 +467,8 @@ class Domains(FlowBase):
 
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                    SERVICE_USER_TOKEN = self.idm.getToken(
                         DOMAIN_NAME,
-                        PROJECT_NAME,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
@@ -580,9 +579,8 @@ class Domains(FlowBase):
 
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                    SERVICE_USER_TOKEN = self.idm.getToken(
                         DOMAIN_NAME,
-                        PROJECT_NAME,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
@@ -670,9 +668,8 @@ class Domains(FlowBase):
 
             if not SERVICE_USER_TOKEN:
                 if not DOMAIN_ID:
-                    SERVICE_USER_TOKEN = self.idm.getScopedProjectToken(
+                    SERVICE_USER_TOKEN = self.idm.getToken(
                         DOMAIN_NAME,
-                        PROJECT_NAME,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
