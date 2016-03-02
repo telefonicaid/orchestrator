@@ -174,17 +174,9 @@ class Roles(FlowBase):
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             # Ensure DOMAIN_NAME
-            if not DOMAIN_NAME:
-                logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                try:
-                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                        ADMIN_TOKEN,
-                        DOMAIN_ID)
-                except Exception, ex:
-                    # This op could be executed by cloud_admin user
-                    DOMAIN = self.idm.getDomain(ADMIN_TOKEN,
-                                                DOMAIN_ID)
-                    DOMAIN_NAME = DOMAIN['domain']['name']
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
 
             # Extract PROJECT, USER, ROLE IDs from NAME

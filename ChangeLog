@@ -5,6 +5,7 @@ CHANGES
 0.7.1
 
 task/resolve_service_name_for_service_user_service_role
+task/refactor_flow_ensure_service_name
 fix/attributes_module_iot_subscription
 
 

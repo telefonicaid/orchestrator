@@ -91,17 +91,9 @@ class CreateNewServiceUser(FlowBase):
                                                        SERVICE_ID))
 
             # Ensure SERVICE_NAME
-            if not SERVICE_NAME:
-                logger.debug("Not SERVICE_NAME provided, getting it from token")
-                try:
-                    SERVICE_NAME = self.idm.getDomainNameFromToken(
-                        SERVICE_ADMIN_TOKEN,
-                        SERVICE_ID)
-                except Exception, ex:
-                    # This op could be executed by admin_domain user
-                    SERVICE = self.idm.getDomain(SERVICE_ADMIN_TOKEN,
-                                                 SERVICE_ID)
-                    SERVICE_NAME = SERVICE['domain']['name']
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
             logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #

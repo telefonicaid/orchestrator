@@ -481,17 +481,9 @@ class Domains(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             # Ensure DOMAIN_NAME
-            if not DOMAIN_NAME:
-                logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                try:
-                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                        SERVICE_USER_TOKEN,
-                        DOMAIN_ID)
-                except Exception, ex:
-                    # This op could be executed by cloud_admin user
-                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
-                                                DOMAIN_ID)
-                    DOMAIN_NAME = DOMAIN['domain']['name']
+            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
@@ -601,17 +593,9 @@ class Domains(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             # Ensure DOMAIN_NAME
-            if not DOMAIN_NAME:
-                logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                try:
-                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                        SERVICE_USER_TOKEN,
-                        DOMAIN_ID)
-                except Exception, ex:
-                    # This op could be executed by cloud_admin user
-                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
-                                                DOMAIN_ID)
-                    DOMAIN_NAME = DOMAIN['domain']['name']
+            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
@@ -699,17 +683,9 @@ class Domains(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             # Ensure DOMAIN_NAME
-            if not DOMAIN_NAME:
-                logger.debug("Not DOMAIN_NAME provided, getting it from token")
-                try:
-                    DOMAIN_NAME = self.idm.getDomainNameFromToken(
-                        SERVICE_USER_TOKEN,
-                        DOMAIN_ID)
-                except Exception, ex:
-                    # This op could be executed by cloud_admin user
-                    DOMAIN = self.idm.getDomain(SERVICE_USER_TOKEN,
-                                                DOMAIN_ID)
-                    DOMAIN_NAME = DOMAIN['domain']['name']
+            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
 
             logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
