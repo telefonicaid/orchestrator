@@ -1395,7 +1395,7 @@ class Projects(FlowBase):
             } ]
 
             # Set default Notify conditions
-            NOTIFY_ATTRIBUTES = ATTRIBUTES
+            NOTIFY_ATTRIBUTES = []
             NOTIFY_ATTRIBUTES.append("TimeInstant")
             NOTIFY_CONDITIONS = [ {
                 "type": "ONCHANGE",
