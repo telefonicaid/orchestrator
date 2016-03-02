@@ -132,3 +132,35 @@ class FlowBase(object):
             alias = iot_module_conf['alias']
             self.iotmodules_aliases[iot_module] = alias
             return alias
+
+
+    def ensure_service_name(self, USER_TOKEN, SERVICE_ID, SERVICE_NAME):
+        if not SERVICE_NAME:
+            logger.debug("Not SERVICE_NAME provided, getting it from token")
+            try:
+                SERVICE_NAME = self.idm.getDomainNameFromToken(
+                    USER_TOKEN,
+                    SERVICE_ID)
+            except Exception, ex:
+                # This op could be executed by cloud_admin user
+                SERVICE = self.idm.getDomain(USER_TOKEN,
+                                             SERVICE_ID)
+                SERVICE_NAME = SERVICE['domain']['name']
+        return SERVICE_NAME
+
+
+    def ensure_subservice_name(self, USER_TOKEN, SERVICE_ID, SUBSERVICE_ID,
+                               SUBSERVICE_NAME):
+        if not SUBSERVICE_NAME:
+            logger.debug("Not SUBSERVICE_NAME provided, getting it from token")
+            try:
+                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(
+                     USER_TOKEN,
+                     SERVICE_ID,
+                     SUBSERVICE_ID)
+            except Exception, ex:
+                # This op could be executed by cloud_admin user
+                SUBSERVICE = self.idm.getProject(USER_TOKEN,
+                                                 SUBSERVICE_ID)
+                SUBSERVICE_NAME = SUBSERVICE['project']['name'].split('/')[1]
+        return SUBSERVICE_NAME
