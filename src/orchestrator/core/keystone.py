@@ -827,22 +827,6 @@ class IdMKeystoneOperations(IdMOperations):
         return json_body_response
 
 
-    def getDomain(self,
-                  SERVICE_ADMIN_TOKEN,
-                  DOMAIN_ID):
-        res = self.IdMRestOperations.rest_request(
-            url='/v3/domains/%s' % DOMAIN_ID,
-            method='GET',
-            auth_token=SERVICE_ADMIN_TOKEN)
-
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
-
-
     def getDomainRoles(self,
                        SERVICE_ADMIN_TOKEN,
                        DOMAIN_ID,
