@@ -25,7 +25,7 @@ import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-from settings.common import IOTAGENT
+from settings.common import IOTAGENT, PEP
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -103,7 +103,7 @@ class CreateTrustToken(FlowBase):
 
             if not SERVICE_NAME:
                 SERVICE = self.idm.getDomain(SERVICE_ADMIN_TOKEN, SERVICE_ID)
-                SERVICE_NAME = DOMAIN['domain']['name']
+                SERVICE_NAME = SERVICE['domain']['name']
                 logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                            SERVICE_ID))
 
