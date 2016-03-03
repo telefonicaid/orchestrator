@@ -28,6 +28,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ParseError
+from rest_framework.throttling import AnonRateThrottle
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -100,6 +101,7 @@ class Stats(object):
 
 
 class IoTConf(Stats):
+    throttle_classes = (AnonRateThrottle,)
 
     # Class to extract Keystone/Keypass conf from django settings
     def __init__(self):
@@ -152,6 +154,7 @@ class ServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
+
 
     def __init__(self):
         IoTConf.__init__(self)
