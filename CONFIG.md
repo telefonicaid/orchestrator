@@ -79,3 +79,27 @@ LOGGING = {
     }
 }
 ```
+
+
+## Throttling
+
+By default throlling is configured for all orchestrator API in [settings/common.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/common.py) to 200 request by second.
+
+```
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '200/sec',
+    }
+}
+```
+
+This value could be modified just adding to [settings/dev.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/dev.py)
+
+```
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
+```
