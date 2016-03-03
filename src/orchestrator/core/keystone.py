@@ -22,11 +22,9 @@
 # Author: IoT team
 #
 import json
-import os
 import logging
 
 from orchestrator.common.util import RestOperations
-#from orchestrator.core import policies
 from orchestrator.core.idm import IdMOperations
 
 logger = logging.getLogger('orchestrator_core')
