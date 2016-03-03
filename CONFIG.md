@@ -103,3 +103,24 @@ This value could be modified just adding to [settings/dev.py](https://pdihub.hi.
 ```
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
 ```
+
+
+### WSGI server options
+
+For an installation which uses Orchestrator RPM, there is a file in /etc/default/orchestrator-daemon to setup orchestrator port as well as number of process and threads sused by WSGI server.
+
+By default the content of that file is:
+
+```
+VIRTUALENV=/var/env-orchestrator
+ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
+UWGSI=uwsgi
+PORT=8084
+STATS_PORT=8085
+PROCESSES=1
+THREADS=4
+ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
+PIDFILE="/var/run/orchestrator.pid"
+PNAME="orchestrator"
+USER="orchestrator"
+```
