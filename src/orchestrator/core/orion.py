@@ -138,10 +138,12 @@ class CBOrionOperations(object):
     def getContextTypes(self,
                         SERVICE_USER_TOKEN,
                         SERVICE_NAME,
-                        SUBSERVICE_NAME):
+                        SUBSERVICE_NAME,
+                        ENTITY_TYPE=None):
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/contextTypes?details=on&limit=1000&offset=0',
+            url='/v1/contextTypes%s?details=on&offset=0&limit=1000' % (
+                '/' + ENTITY_TYPE if ENTITY_TYPE else ""),
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
@@ -153,6 +155,10 @@ class CBOrionOperations(object):
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
+        if 'statusCode' in json_body_response:
+            if (int(json_body_response['statusCode']['code']) != 200):
+                return []
+
         return json_body_response
 
 
@@ -218,3 +224,87 @@ class CBOrionOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+    def getContextEntity(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME,
+                         ENTITY_ID):
+
+        res = self.CBRestOperations.rest_request(
+            url='/v1/contextEntities/%s' % ENTITY_ID ,
+            method='GET',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+    def getListSubscriptions(self,
+                             SERVICE_USER_TOKEN,
+                             SERVICE_NAME,
+                             SUBSERVICE_NAME,
+                             ENTITY_ID=None):
+
+        res = self.CBRestOperations.rest_request(
+            url='/v2/subscriptions?offset=0&limit=1000',
+            method='GET',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        subscriptions_related = []
+
+        # ensure subcrtiptions is an array
+        if isinstance(json_body_response, list):
+            for subscription in json_body_response:
+                for entity in subscription['subject']['entities']:
+                    if not entity['idPattern'] and entity['id'] == ENTITY_ID:
+                        subscriptions_related.append(subscription)
+                    if entity['idPattern'] and entity['idPattern'] in [".*", "*"]:
+                        subscriptions_related.append(subscription)
+
+        return subscriptions_related
+
+
+    def deleteAllSubscriptions(self,
+                               SERVICE_USER_TOKEN,
+                               SERVICE_NAME,
+                               SUBSERVICE_NAME=""):
+
+        subscriptions_deleted = []
+        logger.debug("Getting subscriptions for %s  %s" % (SERVICE_NAME,
+                                                           SUBSERVICE_NAME))
+        try:
+            subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
+        except Exception, ex:
+            logger.error("%s trying getListSubscriptions from CB: %s/%s" % (ex,
+                                SERVICE_NAME,
+                                SUBSERVICE_NAME))
+            return subscriptions_deleted
+
+        for subscription in subscriptions:
+            try:
+                self.unsubscribeContext(SERVICE_USER_TOKEN,
+                                        SERVICE_NAME,
+                                        SUBSERVICE_NAME,
+                                        subscription['id'])
+                subscriptions_deleted.append(subscription['id'])
+            except Exception, ex:
+                logger.error("%s trying to unsubscribe context: %s" % (ex,
+                                                        subscription['id']))
+        return subscriptions_deleted

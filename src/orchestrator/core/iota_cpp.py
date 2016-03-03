@@ -69,12 +69,12 @@ class IoTACppOperations(object):
                         MAPPING_ATTRIBUTES=[],
                         STATIC_ATTRIBUTES=[]):
         body_data = {
-            services : [
+            "services" : [
                 {
                     "protocol": [PROTOCOL],
                     "entity_type": ENTITY_TYPE,
                     "apikey": APIKEY,
-                    "token": TRUSTOKENID,
+                    "token": TRUSTTOKENID,
                     "cbroker": CBROKER_ENDPOINT,
                     "attributes": MAPPING_ATTRIBUTES,
                     "static_attributes": STATIC_ATTRIBUTES,
@@ -222,40 +222,51 @@ class IoTACppOperations(object):
 
         assert res.code == 204, (res.code, res.msg)
 
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
-
 
     def deleteAllDevices(self,
                          SERVICE_USER_TOKEN,
                          SERVICE_NAME,
-                         SUBSERVICE_NAME):
+                         SUBSERVICE_NAME=""):
         #
         # 1. Get devices
         #
         devices_deleted = []
-        logger.debug("Getting devices for %s / %s" % (SERVICE_NAME,
-                                                      SUBSERVICE_NAME))
-        devices = self.getDevices(SERVICE_USER_TOKEN,
-                                  SERVICE_NAME,
-                                  SUBSERVICE_NAME)
+
+        logger.debug("Getting devices for %s %s" % (SERVICE_NAME,
+                                                    SUBSERVICE_NAME))
+        try:
+            devices = self.getDevices(SERVICE_USER_TOKEN,
+                                      SERVICE_NAME,
+                                      SUBSERVICE_NAME)
+            # Check devices returned: IOTA returns devices into dict before some versions
+            if 'devices' in devices:
+                devices = devices['devices']
+        except Exception, ex:
+            logger.error("%s trying getDevices from IOTA: %s/%s" % (ex,
+                                                            SERVICE_NAME,
+                                                            SUBSERVICE_NAME))
+            return devices_deleted
 
         for device in devices:
             #
             # 2. Unregister each device
             #
-            logger.debug("Unregistering device: %s" % device['id'])
+            # Get device_id: IOTA returns device_id in a field depending on version
+            device_id = None
+            if 'device_id' in device:
+                device_id = device['device_id']
+            if 'id' in device:
+                device_id = device['id']
+
+            logger.debug("Unregistering device: %s" % device_id)
             try:
                 self.unregisterDevice(SERVICE_USER_TOKEN,
                                       SERVICE_NAME,
                                       SUBSERVICE_NAME,
-                                      device['id'])
-                devices_deleted.append(device['id'])
+                                      device_id)
+                devices_deleted.append(device_id)
             except Exception, ex:
                 logger.error("%s trying to unregister device: %s" % (ex,
-                                                            device['id']))
+                                                            device_id))
 
         return devices_deleted

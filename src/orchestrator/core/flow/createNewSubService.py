@@ -38,8 +38,10 @@ class CreateNewSubService(FlowBase):
                             SERVICE_ADMIN_PASSWORD,
                             SERVICE_ADMIN_TOKEN,
                             NEW_SUBSERVICE_NAME,
-                            NEW_SUBSERVICE_DESCRIPTION
-                            ):
+                            NEW_SUBSERVICE_DESCRIPTION,
+                            NEW_SUBSERVICE_ADMIN_USER=None,
+                            NEW_SUBSERVICE_ADMIN_PASSWORD=None,
+                            NEW_SUBSERVICE_ADMIN_EMAIL=None):
 
         '''Creates a new SubService (aka project keystone).
 
@@ -51,8 +53,11 @@ class CreateNewSubService(FlowBase):
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - SUBSERVICE_NAME: New subservice name (required)
-        - SUBSERVICE_DESCRIPTION: New subservice description
+        - NEW_SUBSERVICE_NAME: New subservice name (required)
+        - NEW_SUBSERVICE_DESCRIPTION: New subservice description
+        - NEW_SUBSERVICE_ADMIN_USER: New subservice admin username
+        - NEW_SUBSERVICE_ADMIN_PASSWORD: New subservice admin password
+        - NEW_SUBSERVICE_ADMIN_EMAIL: New subservice admin email (optional)
         Return:
         - ID: New subservice id
         '''
@@ -64,12 +69,15 @@ class CreateNewSubService(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
             "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
-            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION
+            "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
+            "NEW_SUBSERVICE_ADMIN_USER": "%s" % NEW_SUBSERVICE_ADMIN_USER,
+            "NEW_SUBSERVICE_ADMIN_PASSWORD": "%s" % NEW_SUBSERVICE_ADMIN_PASSWORD,
+            "NEW_SUBSERVICE_ADMIN_EMAIL": "%s" % NEW_SUBSERVICE_ADMIN_EMAIL
         }
-        logger.debug("createNewSubService invoked with: %s" % json.dumps(
+        logger.debug("FLOW createNewSubService invoked with: %s" % json.dumps(
             data_log, indent=3)
-            )
-
+        )
+        ID_PRO1=None
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
@@ -78,7 +86,7 @@ class CreateNewSubService(FlowBase):
             logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
-            # 1. Create service (aka domain)
+            # 1. Get service (aka domain)
             #
             if not SERVICE_ID:
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
@@ -87,6 +95,12 @@ class CreateNewSubService(FlowBase):
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+
             #
             # 2.  Create subservice (aka project)
             #
@@ -94,10 +108,52 @@ class CreateNewSubService(FlowBase):
                                              SERVICE_ID,
                                              NEW_SUBSERVICE_NAME,
                                              NEW_SUBSERVICE_DESCRIPTION)
-            logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_NAME, ID_PRO1))
+            logger.debug("ID of new subservice %s: %s" % (NEW_SUBSERVICE_NAME,
+                                                          ID_PRO1))
 
+
+            #
+            # 3. Create SubService Admin user (optional)
+            #
+            if NEW_SUBSERVICE_ADMIN_USER and NEW_SUBSERVICE_ADMIN_PASSWORD:
+                try:
+                    ID_USER = self.idm.createUserDomain(
+                        SERVICE_ADMIN_TOKEN,
+                        SERVICE_ID,
+                        SERVICE_NAME,
+                        NEW_SUBSERVICE_ADMIN_USER,
+                        NEW_SUBSERVICE_ADMIN_PASSWORD,
+                        NEW_SUBSERVICE_ADMIN_EMAIL,
+                        None)
+                except Exception, ex:
+                    logger.warn("ERROR creating user %s: %s" % (
+                        NEW_SUBSERVICE_ADMIN_USER,
+                        ex))
+                    logger.info("Removing uncomplete created project %s" % ID_PRO1)
+                    self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)
+                    self.idm.deleteProject(SERVICE_ADMIN_TOKEN, ID_PRO1)
+                    return self.composeErrorCode(ex)
+
+                logger.debug("ID of user %s: %s" % (NEW_SUBSERVICE_ADMIN_USER,
+                                                    ID_USER))
+
+                ROLE_NAME = 'SubServiceAdmin'
+                ID_ROLE = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+                logger.debug("ID of role  %s: %s" % (ROLE_NAME,
+                                                     ID_ROLE))
+
+                self.idm.grantProjectRole(SERVICE_ADMIN_TOKEN,
+                                          ID_PRO1,
+                                          ID_USER,
+                                          ID_ROLE)
 
         except Exception, ex:
+            if ID_PRO1:
+                logger.info("removing uncomplete created project %s" % ID_PRO1)
+                self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)
+                self.idm.deleteProject(SERVICE_ADMIN_TOKEN, ID_PRO1)
             logger.error(ex)
             return self.composeErrorCode(ex)
 
