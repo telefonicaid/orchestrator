@@ -27,12 +27,7 @@ import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view, throttle_classes
-from rest_framework.renderers import JSONRenderer, YAMLRenderer
-from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.exceptions import ParseError
-from rest_framework.response import Response
-from rest_framework import views
 from rest_framework.throttling import AnonRateThrottle
 
 from django.conf import settings
@@ -50,7 +45,7 @@ from orchestrator.core.flow.Domains import Domains
 from orchestrator.core.flow.Projects import Projects
 from orchestrator.core.flow.Roles import Roles
 from orchestrator.core.flow.Users import Users
-from orchestrator.api import negotiators, parsers
+from orchestrator.api import parsers
 
 
 logger = logging.getLogger('orchestrator_api')
@@ -744,7 +739,6 @@ class UserList_RESTView(APIView, IoTConf):
     """
     schema_name = "UserList"
     parser_classes = (parsers.JSONSchemaParser,)
-    # content_negotiation_class = negotiators.IgnoreClientContentNegotiation
 
     def __init__(self):
         IoTConf.__init__(self)

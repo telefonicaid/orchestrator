@@ -21,12 +21,6 @@
 #
 # Author: IoT team
 #
-import json
-import os
-
-from orchestrator.common.util import RestOperations
-
-
 class IdMOperations(object):
 
     def getToken(self):
