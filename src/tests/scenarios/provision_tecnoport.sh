@@ -45,17 +45,17 @@ python ./createNewServiceUser.py  http              \
                                       password       \
                                       tecnoport_customer\
                                       password
-
-python ./createNewServiceRole.py  http              \
-                                     localhost      \
-                                     5000           \
-                                     tecnoport      \
-                                     tecnoport_admin\
-                                     password       \
-                                     ServiceCustomer\
-                                     http           \
-                                     localhost      \
-                                     8080
+# ServiceCustomer is already created at new service creation time
+# python ./createNewServiceRole.py  http              \
+#                                      localhost      \
+#                                      5000           \
+#                                      tecnoport      \
+#                                      tecnoport_admin\
+#                                      password       \
+#                                      ServiceCustomer\
+#                                      http           \
+#                                      localhost      \
+#                                      8080
 
 python  ./assignRoleServiceUser.py http              \
                                       localhost      \

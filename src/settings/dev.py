@@ -15,45 +15,56 @@ TEMPLATE_DEBUG = DEBUG
 
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
 
+# Keystone Endpoint
 KEYSTONE = {
     "host": "localhost",
     "port": "5001",
     "protocol":"http"
 }
 
+# Keypass endpoint (tipically without pep)
 KEYPASS = {
     "host": "localhost",
-    "port": "7070",
+    "port": "17070",
     "protocol":"http"
 }
 
+# IoTA endpoint
 IOTA = {
     "host": "localhost",
     "port": "4041",
     "protocol":"http"
 }
 
+# Context Broker enpodint (with or without pep, but recommended with)
 ORION = {
     "host": "localhost",
     "port": "1026",
     "protocol":"http"
 }
 
+# Context Adapter enpodint (BlackButton scenario)
 CA = {
     "host": "localhost",
     "port": "9999",
-    "protocol":"http"
+    "protocol":"http",
+    "alias": "GEO"
 }
 
-CYGNUS = {
-    "host": "localhost",
-    "port": "5050",
-    "protocol":"http"
-}
-
+# STH endpoint (just for use as reference in Orion Subscriptions)
 STH = {
     "host": "localhost",
-    "port": "8666",
-    "protocol":"http"
+    "port": "18666",
+    "protocol":"http",
+    "alias": "HISTORIC"
 }
 
+# PERSEO endpoint (just for use as reference in Orion Subscriptions)
+PERSEO = {
+    "host": "localhost",
+    "port": "19090",
+    "protocol":"http",
+    "alias": "RULES"
+}
+
+#IOTMODULES = [ "CA", "STH", "PERSEO" ]

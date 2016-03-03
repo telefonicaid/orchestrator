@@ -37,6 +37,7 @@ These are current command line availables:
 * [unassignRoleSubServiceUser.py](SCRIPTS.md#unassignrolesubserviceuserpy)
 * [createTrustToken.py](SCRIPTS.md#createtrusttokenpy)
 * [printServiceUserTrusts.py](SCRIPTS.md#printserviceusertrustspy)
+* [printServiceIotModules.py](SCRIPTS.md#printserviceiotmodulespy)
 
 
 ### createNewService.py
@@ -718,4 +719,33 @@ Args:
                                  http           \
                                  localhost      \
                                  8080           \
+```
+
+###  ./printServiceIotModules.py
+This script prints IoT Modules actived in a service or subservice
+```
+Usage: ./printServiceIotModules.py [args]
+Args:
+  <KEYSTONE_PROTOCOL>             HTTP or HTTPS
+  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP
+  <KEYSTONE_PORT>                 Keystone PORT
+  <SERVICE_NAME>                  Service name
+  <SERVICE_ADMIN_USER>            Service admin username
+  <SERVICE_ADMIN_PASSWORD>        Service admin password
+  <SUBSERVICE_NAME>               SubService name
+  <ORION_PROTOCOL>                HTTP or HTTPS
+  <ORION_HOST>                    Orion HOSTNAME or IP
+  <ORION_PORT>                    Orion PORT
+
+  Typical usage:
+     ./printServiceIotModules.py http           \
+                                 localhost      \
+                                 5000           \
+                                 smartcity      \
+                                 adm1           \
+                                 password       \
+                                 gardens        \
+                                 http           \
+                                 localhost      \
+                                 1026           \
 ```

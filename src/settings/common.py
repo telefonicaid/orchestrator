@@ -227,19 +227,29 @@ REST_FRAMEWORK = {
 
 # Custom settings
 # ---------------
+# The following values are tipically modified in custom config files, like dev.py
+
+
 KEYSTONE = {}
 KEYPASS = {}
 IOTA = {}
 ORION = {}
 CA = {}
-CYGNUS = {}
 STH = {}
+PERSEO = {}
 
+# List of possible IoTModules: persistence services, etc
+IOTMODULES = [ "STH", "PERSEO", "CA"]
+
+# Pep user credencials. Pep is a user of admin_domain
+# Needed to for resolve pep user id
 PEP = {
     "user": "pep",
     "password": "pep"
 }
 
+# IoTAgent user credentials. Iotagent is a user of default domain
+# Needed to for resolve iotagent user id
 IOTAGENT = {
     "user": "iotagent",
     "password": "iotagent"
@@ -247,4 +257,5 @@ IOTAGENT = {
 
 SCIM_API_VERSION = "1.1"  # Supported v1.1 (1.1) and v2.0 (2.0) (by UPM)
 
+# Internal version of Orchestrator
 ORC_VERSION = "ORC_version"

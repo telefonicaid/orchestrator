@@ -28,6 +28,9 @@ from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 
+from settings.dev import IOTMODULES
+
+
 logger = logging.getLogger('orchestrator_core')
 
 
@@ -47,13 +50,7 @@ class FlowBase(object):
                  ORION_PORT="1026",
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
-                 CA_PORT="9999",
-                 CYGNUS_PROTOCOL="http",
-                 CYGNUS_HOST="localhost",
-                 CYGNUS_PORT="5050",
-                 STH_PROTOCOL="http",
-                 STH_HOST="localhost",
-                 STH_PORT="8666"):
+                 CA_PORT="9999"):
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -70,12 +67,17 @@ class FlowBase(object):
                                ORION_HOST,
                                ORION_PORT)
         if CA_PROTOCOL:
-            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"
+            # CA for Blackbutton notification flow
+            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"+"/notify"
 
-        if CYGNUS_PROTOCOL:
-            self.cygnus_endpoint = CYGNUS_PROTOCOL + "://"+CYGNUS_HOST+":"+CYGNUS_PORT+""
-        if STH_PROTOCOL:
-            self.sth_endpoint = STH_PROTOCOL + "://"+STH_HOST+":"+STH_PORT+""
+
+        self.endpoints = {}
+        self.iotmodules_aliases = {}
+
+        if CA_PROTOCOL:
+            # CA for Geolocation
+            self.endpoints['CA'] = \
+              CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
 
 
     def composeErrorCode(self, ex):
@@ -86,8 +88,9 @@ class FlowBase(object):
         # exc_type, exc_obj, exc_tb = sys.exc_info()
         # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         # print(exc_type, fname, exc_tb.tb_lineno)
-        res = {"error": str(ex), "code": 400}
+        res = {"error": str(ex), "code": 500}
         if isinstance(ex.args, tuple) and (
+                (len(ex.args) > 0) and
             not isinstance(ex.args[0], tuple)):  # Python 2.6
             res['code'] = ex.args[0]
             if res['code'] == 400 and len(ex.args) > 1 and \
@@ -99,3 +102,65 @@ class FlowBase(object):
                ex.message[1].startswith('SPASSWORD'):
                 res['error'] = ex.message[1]
         return res
+
+
+    def get_endpoint_iot_module(self, iot_module):
+        assert iot_module in IOTMODULES
+        if iot_module in self.endpoints:
+            return self.endpoints[iot_module]
+        else:
+            comppackage = __import__("settings.dev", fromlist=iot_module)
+            iot_module_conf = getattr(comppackage, iot_module)
+            assert 'protocol' in iot_module_conf
+            assert 'host' in iot_module_conf
+            assert 'port' in iot_module_conf
+            iot_mddule_enpoint = iot_module_conf['protocol'] + "://" + \
+              iot_module_conf['host'] + ":" + \
+              iot_module_conf['port'] + "/notify"
+            self.endpoints[iot_module] = iot_mddule_enpoint
+            return iot_mddule_enpoint
+
+
+    def get_alias_iot_module(self, iot_module):
+        assert iot_module in IOTMODULES
+        if iot_module in self.iotmodules_aliases:
+            return self.alias[iot_module]
+        else:
+            comppackage = __import__("settings.dev", fromlist=iot_module)
+            iot_module_conf = getattr(comppackage, iot_module)
+            assert 'alias' in iot_module_conf
+            alias = iot_module_conf['alias']
+            self.iotmodules_aliases[iot_module] = alias
+            return alias
+
+
+    def ensure_service_name(self, USER_TOKEN, SERVICE_ID, SERVICE_NAME):
+        if not SERVICE_NAME:
+            logger.debug("Not SERVICE_NAME provided, getting it from token")
+            try:
+                SERVICE_NAME = self.idm.getDomainNameFromToken(
+                    USER_TOKEN,
+                    SERVICE_ID)
+            except Exception, ex:
+                # This op could be executed by cloud_admin user
+                SERVICE = self.idm.getDomain(USER_TOKEN,
+                                             SERVICE_ID)
+                SERVICE_NAME = SERVICE['domain']['name']
+        return SERVICE_NAME
+
+
+    def ensure_subservice_name(self, USER_TOKEN, SERVICE_ID, SUBSERVICE_ID,
+                               SUBSERVICE_NAME):
+        if not SUBSERVICE_NAME:
+            logger.debug("Not SUBSERVICE_NAME provided, getting it from token")
+            try:
+                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(
+                     USER_TOKEN,
+                     SERVICE_ID,
+                     SUBSERVICE_ID)
+            except Exception, ex:
+                # This op could be executed by cloud_admin user
+                SUBSERVICE = self.idm.getProject(USER_TOKEN,
+                                                 SUBSERVICE_ID)
+                SUBSERVICE_NAME = SUBSERVICE['project']['name'].split('/')[1]
+        return SUBSERVICE_NAME

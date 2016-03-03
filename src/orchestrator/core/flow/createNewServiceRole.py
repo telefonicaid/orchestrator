@@ -64,11 +64,10 @@ class CreateNewServiceRole(FlowBase):
             "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
             "XACML_POLICY": "%s" % XACML_POLICY
         }
-        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(
+        logger.debug("FLOW createNewServiceRole invoked with: %s" % json.dumps(
             data_log,
             indent=3)
-            )
-
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
@@ -85,6 +84,10 @@ class CreateNewServiceRole(FlowBase):
 
             logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
+
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN, SERVICE_ID, SERVICE_NAME)
+            logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #
             # 2. Create role
@@ -121,7 +124,7 @@ class CreateNewServiceRole(FlowBase):
                                         POLICY_FILE_NAME='policy-sth-customer2.xml')
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
-                                        POLICY_FILE_NAME='policy-keypass-customer2.xml')                
+                                        POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
         except Exception, ex:
             logger.error(ex)

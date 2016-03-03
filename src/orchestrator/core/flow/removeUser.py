@@ -51,7 +51,7 @@ class RemoveUser(FlowBase):
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
         - USER_NAME: User name
-        - USER_ID: User name
+        - USER_ID: User id
         '''
         data_log = {
             "SERVICE_NAME": "%s" % SERVICE_NAME,
@@ -62,9 +62,10 @@ class RemoveUser(FlowBase):
             "USER_NAME": "%s" % USER_NAME,
             "USER_ID": "%s" % USER_ID
         }
-        logger.debug("projects invoked with: %s" % json.dumps(data_log,
-                                                              indent=3))
-
+        logger.debug("FLOW projects invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 if not SERVICE_ID:

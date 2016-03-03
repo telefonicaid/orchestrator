@@ -47,9 +47,9 @@ class Roles(FlowBase):
         Params:
         - DOMAIN_NAME: name of domain
         - DOMAIN_ID: id of domain
-        - SERVICE_ADMIN_USER: Service admin username
-        - SERVICE_ADMIN_PASSWORD: Service admin password
-        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ADMIN_USER: Service admin username
+        - ADMIN_PASSWORD: Service admin password
+        - ADMIN_TOKEN: Service admin token
         - START_INDEX: Start index
         - COUNT: Count
         Return:
@@ -64,8 +64,10 @@ class Roles(FlowBase):
             "START_INDEX": "%s" % START_INDEX,
             "COUNT": "%s" % COUNT,
         }
-        logger.debug("roles invoked with: %s" % json.dumps(data_log, indent=3))
-
+        logger.debug("FLOW roles invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:
@@ -153,9 +155,10 @@ class Roles(FlowBase):
             "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
             "EFFECTIVE:": "%s" % EFFECTIVE
         }
-        logger.debug("roles_assignments invoked with: %s" % json.dumps(data_log,
-                                                                       indent=3))
-
+        logger.debug("FLOW roles_assignments invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if not DOMAIN_ID:
@@ -170,19 +173,32 @@ class Roles(FlowBase):
                                                      ADMIN_PASSWORD)
             logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+
             # Extract PROJECT, USER, ROLE IDs from NAME
             if not PROJECT_ID and PROJECT_NAME:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
+                logger.debug("PROJECT_ID=%s" % PROJECT_ID)
+
             if not USER_ID and USER_NAME:
                 USER_ID = self.idm.getDomainUserId(ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    USER_NAME)
+                logger.debug("USER_ID=%s" % USER_ID)
+
             if not ROLE_ID and ROLE_NAME:
                 ROLE_ID = self.idm.getDomainRoleId(ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    ROLE_NAME)
+                logger.debug("ROLE_ID=%s" % ROLE_ID)
+
+
             # if USER_ID:
             #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
             #                                                  USER_ID,
@@ -462,7 +478,7 @@ class Roles(FlowBase):
 
             # Ensure SERVICE_NAME
             if not SERVICE_NAME:
-                SERVICE_NAME = self.idm.getDomainNameFromToken(ADMIN_TOKEN,
+                SERVICE_NAME = self.idm.getDomainNameFromToken(SERVICE_ADMIN_TOKEN,
                                                                SERVICE_ID)
 
             #
@@ -479,7 +495,7 @@ class Roles(FlowBase):
                                                       SUBSERVICE_NAME)
             # Ensure SUBSERVICE_NAME
             if not SUBSERVICE_NAME:
-                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(ADMIN_TOKEN,
+                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(SERVICE_ADMIN_TOKEN,
                                                                    SERVICE_ID,
                                                                    SUBSERVICE_ID)
 
@@ -1046,7 +1062,7 @@ class Roles(FlowBase):
         - SERVICE_ADMIN_TOKEN: Service admin token
         - ROLE_NAME: Role name
         - ROLE_ID: Role ID
-        - POLICY_FILE_NAME:
+        - POLICY_FILE_NAME: XACML policy
         '''
         data_log = {
             "SERVICE_NAME": "%s" % SERVICE_NAME,

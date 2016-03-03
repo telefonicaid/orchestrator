@@ -65,9 +65,10 @@ class UpdateUser(FlowBase):
             "USER_ID": "%s" % USER_ID,
             "USER_DATA_VALUE": "%s" % USER_DATA_VALUE
         }
-        logger.debug("updateUser invoked with: %s" % json.dumps(data_log,
-                                                                indent=3))
-
+        logger.debug("FLOW updateUser invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 if not SERVICE_ID:
@@ -130,7 +131,7 @@ class UpdateUser(FlowBase):
         - SERVICE_ID: Service Id
         - USER_ID: user id
         - SERVICE_USER_NAME: Service admin username
-        - SERVICE_USER_PASSWORD: admin password
+        - SERVICE_USER_PASSWORD: Service admin password
         - SERVICE_USER_TOKEN: Service admin token
         - NEW_USER_PASSWORD: new user password
         '''
@@ -143,9 +144,10 @@ class UpdateUser(FlowBase):
             "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
             "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD
         }
-        logger.debug("change password invoked with: %s" % json.dumps(data_log,
-                                                                     indent=3))
-
+        logger.debug("FLOW change password invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_USER_TOKEN:
                 if not SERVICE_ID:
