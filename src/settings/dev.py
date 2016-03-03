@@ -13,6 +13,8 @@ from common import *  # noqa
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
+
 # Keystone Endpoint
 KEYSTONE = {
     "host": "localhost",
