@@ -22,8 +22,6 @@
 # Author: IoT team
 #
 import logging
-import sys
-import os
 import json
 
 from orchestrator.core.flow.base import FlowBase
