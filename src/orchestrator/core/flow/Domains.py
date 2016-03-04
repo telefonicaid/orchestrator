@@ -129,7 +129,7 @@ class Domains(FlowBase):
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -192,7 +192,7 @@ class Domains(FlowBase):
                                            DOMAIN_ID,
                                            NEW_SERVICE_DESCRIPTION)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -282,7 +282,8 @@ class Domains(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
                 if (len(subscriptions_deleted) > 0):
-                    logger.info("subscriptions deleted %s", subscriptions_deleted)
+                    logger.info("subscriptions deleted %s",
+                                subscriptions_deleted)
 
 
             #
@@ -295,7 +296,6 @@ class Domains(FlowBase):
             #
             # Delete all subscriptions
             #
-            # TODO: BUG: admin_domain (cloud_admin) can not delete a subsription in a service!!!!
             subscriptions_deleted = self.cb.deleteAllSubscriptions(
                                                               ADMIN_TOKEN,
                                                               DOMAIN_NAME)
@@ -361,8 +361,7 @@ class Domains(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID,
         }
         logger.debug("FLOW get_domain_role_policies invoked with: %s" % json.dumps(
-            data_log,
-            indent=3)
+            data_log, indent=3)
         )
         try:
 
@@ -606,7 +605,9 @@ class Domains(FlowBase):
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
+            logger.debug("getListSubscriptions res=%s" % json.dumps(
+                cb_res, indent=3)
+            )
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -693,19 +694,23 @@ class Domains(FlowBase):
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
+            logger.debug("getListSubscriptions res=%s" % json.dumps(
+                cb_res, indent=3)
+            )
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(self.get_endpoint_iot_module(iotmodule)):
+                    if sub_callback.startswith(
+                            self.get_endpoint_iot_module(iotmodule)):
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
-                            modules.append({ "name": iotmodule,
-                                             "subscriptionid": sub['id'],
-                                             "alias": self.get_alias_iot_module(iotmodule)
-                                             })
+                            modules.append(
+                                { "name": iotmodule,
+                                  "subscriptionid": sub['id'],
+                                  "alias": self.get_alias_iot_module(iotmodule)
+                                })
                             break
 
             logger.debug("modules=%s" % json.dumps(modules, indent=3))
