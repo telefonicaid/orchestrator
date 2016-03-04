@@ -606,7 +606,7 @@ class Domains(FlowBase):
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, ident=3))
+            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -693,7 +693,7 @@ class Domains(FlowBase):
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % cb_res)
+            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
