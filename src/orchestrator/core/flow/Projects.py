@@ -81,7 +81,7 @@ class Projects(FlowBase):
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
 
-            logger.debug("PROJECTS=%s" % PROJECTS)
+            logger.debug("PROJECTS=%s" % json.dumps(PROJECTS, indent=3))
 
         except Exception, ex:
             logger.error(ex)
