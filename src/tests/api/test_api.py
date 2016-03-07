@@ -1046,6 +1046,17 @@ class Test_NewServiceUser_RestView(object):
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg)
 
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+
     def test_post_bad(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
         res = self.TestRestOps.rest_request(
@@ -1553,6 +1564,17 @@ class Test_NewServiceRole_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        response = res.read()
+        json_body_response = json.loads(response)
+        role_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
+
+
     def test_post_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_nok)
         res = self.TestRestOps.rest_request(
@@ -1567,6 +1589,16 @@ class Test_NewServiceRole_RestView(object):
             json_data=True,
             data=self.payload_data_nok)
         assert res.code == 409, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        role_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
 
 
 class Test_DeleteServiceRole_RestView(object):
