@@ -268,6 +268,17 @@ class Test_NewService_RestView(object):
                                             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        # Delete new service created
+        response = res.read()
+        json_body_response = json.loads(response)
+        service_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="/v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+
+
+
     def test_post_ok2(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok2)
         data_response = token_res.read()
@@ -279,6 +290,15 @@ class Test_NewService_RestView(object):
                                             auth_token=TOKEN,
                                             data=self.payload_data_ok2)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        # Delete new service created
+        response = res.read()
+        json_body_response = json.loads(response)
+        service_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="/v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
 
     def test_post_ok_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
@@ -375,6 +395,14 @@ class Test_DeleteService_RestView(object):
                                             json_data=True,
                                             data=self.payload_data_bad)
         assert res.code == 401, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        service_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="/v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok2)
 
 
 class Test_NewSubService_RestView(object):
@@ -656,7 +684,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
-    def test_post_ok3(self):
+    def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data5_ok)
 
         # Create SubService
