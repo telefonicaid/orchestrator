@@ -1713,14 +1713,26 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
 
     def post(self, request):
 
-        #HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
-
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         logLevel = request.GET.get('level', None)
 
         try:
             # TODO: check HTTP_X_AUTH_TOKEN
             # Should belongs to default admin domain
-            result = None
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT)
+            result = flow.domains(
+                    "admin_domain",
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                     HTTP_X_AUTH_TOKEN))
+
+            if 'error' in result:
+                raise ParseError(detail="wrong auth provided")
+            else:
+                result = None
 
             if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]:
                 raise ParseError(detail="not supported log level")
