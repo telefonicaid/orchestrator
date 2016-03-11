@@ -58,7 +58,7 @@ class Projects(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW projects invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -119,7 +119,7 @@ class Projects(FlowBase):
             "PROJECT_ID": "%s" % PROJECT_ID,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW get_project invoked with: %s" % json.dumps(
             data_log,
@@ -185,7 +185,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
             "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
         }
         logger.debug("FLOW update_project invoked with: %s" % json.dumps(
@@ -257,7 +257,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW get_project invoked with: %s" % json.dumps(
             data_log,
@@ -389,7 +389,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ENTITY_ID": "%s" % ENTITY_ID,
             "PROTOCOL": "%s" % PROTOCOL,
@@ -791,7 +791,7 @@ class Projects(FlowBase):
             "PROJECT_ID": "%s" % PROJECT_ID,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "DEVICE_ID": "%s" % DEVICE_ID,
             "ENTITY_TYPE": "%s" % ENTITY_TYPE,
             "ENTITY_NAME": "%s" % ENTITY_NAME,
@@ -1101,7 +1101,7 @@ class Projects(FlowBase):
             "PROJECT_ID": "%s" % PROJECT_ID,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "CSV_DEVICES": "%s" % CSV_DEVICES
         }
         logger.debug("FLOW register_devices with: %s" % json.dumps(
@@ -1228,7 +1228,7 @@ class Projects(FlowBase):
             "PROJECT_ID": "%s" % PROJECT_ID,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "DEVICE_ID": "%s" % DEVICE_ID,
         }
         logger.debug("FLOW unregister_device with: %s" % json.dumps(
@@ -1321,7 +1321,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
@@ -1458,7 +1458,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
@@ -1568,7 +1568,7 @@ class Projects(FlowBase):
             "PROJECT_NAME": "%s" % PROJECT_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
         }
         logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
             data_log,

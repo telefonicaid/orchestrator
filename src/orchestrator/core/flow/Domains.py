@@ -55,11 +55,12 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW domains invoked with: %s" % json.dumps(
             data_log, indent=3)
-        )
+                 )
+
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
@@ -106,7 +107,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
             data_log,
@@ -169,7 +170,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
         logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
@@ -229,7 +230,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
             data_log,
@@ -356,7 +357,7 @@ class Domains(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
         }
@@ -456,7 +457,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
@@ -568,7 +569,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
@@ -658,7 +659,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
         }
         logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
             data_log,
