@@ -1701,3 +1701,62 @@ class OrchVersion_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class OrchLogLevel_RESTView(APIView, IoTConf):
+    """
+     { Read } Orchestrator Statistics
+    """
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request):
+
+        #HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+
+        logLevel = request.GET.get('level', None)
+
+        try:
+            # TODO: check HTTP_X_AUTH_TOKEN
+            # Should belongs to default admin domain
+            result = None
+
+            if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]:
+                raise ParseError(detail="not supported log level")
+
+            LEVELS = {
+                'DEBUG': logging.DEBUG,
+                'INFO': logging.INFO,
+                'WARNING': logging.WARNING,
+                'ERROR': logging.ERROR,
+                'FATAL': logging.FATAL,
+                'CRITICAL': logging.CRITICAL
+            }
+
+            # Set loggers level to such log level
+            logging.getLogger('django').setLevel(LEVELS[logLevel])
+            logging.getLogger('django.request').setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').setLevel(LEVELS[logLevel])
+
+            # Set also handlers (console and file)) to such log level
+            logging.getLogger('orchestrator_api').handlers[0].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').handlers[1].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').handlers[0].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').handlers[1].setLevel(LEVELS[logLevel])
+
+            # print it into a trace
+            logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
+                logLevel, indent=3))
+
+            return Response(result, status=status.HTTP_200_OK)
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
+                status=status.HTTP_400_BAD_REQUEST
+            )
