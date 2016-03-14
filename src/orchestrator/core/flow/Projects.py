@@ -81,7 +81,7 @@ class Projects(FlowBase):
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
 
-            logger.debug("PROJECTS=%s" % PROJECTS)
+            logger.debug("PROJECTS=%s" % json.dumps(PROJECTS, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -491,7 +491,7 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            logger.debug("subscribeContext res=%s" % cb_res)
+            logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
             subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
             logger.debug("subscription id ca=%s" % subscriptionid_ca)
 
@@ -572,7 +572,7 @@ class Projects(FlowBase):
                                            STATIC_ATTRIBUTES
                                         )
 
-            logger.debug("updateContext res=%s" % cb_res)
+            logger.debug("updateContext res=%s" % json.dumps(cb_res, indent=3))
 
             for r in cb_res['contextResponses']:
                 # Check ContextBroker status response
@@ -688,7 +688,7 @@ class Projects(FlowBase):
                     ATTRIBUTES,
                     NOTIFY_CONDITIONS
                     )
-                logger.debug("subscribeContext res=%s" % cb_res)
+                logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
                 subscriptionid_sth = cb_res['subscribeResponse']['subscriptionId']
                 logger.debug("registration id sth=%s" % subscriptionid_sth)
 
@@ -716,7 +716,7 @@ class Projects(FlowBase):
                     ATTRIBUTES,
                     NOTIFY_CONDITIONS
                     )
-                logger.debug("subscribeContext res=%s" % cb_res)
+                logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
                 subscriptionid_perseo = cb_res['subscribeResponse']['subscriptionId']
                 logger.debug("registration id perseo=%s" % subscriptionid_perseo)
 
@@ -1413,7 +1413,7 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            logger.debug("subscribeContext res=%s" % cb_res)
+            logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
             logger.debug("subscription id=%s" % subscriptionid)
 
@@ -1514,7 +1514,7 @@ class Projects(FlowBase):
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
-            logger.debug("getListSubscriptions res=%s" % cb_res)
+            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -1620,7 +1620,7 @@ class Projects(FlowBase):
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
-            logger.debug("getListSubscriptions res=%s" % cb_res)
+            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
@@ -1636,7 +1636,7 @@ class Projects(FlowBase):
                                              })
                             break
 
-            logger.debug("modules=%s" % modules)
+            logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
             logger.error(ex)
