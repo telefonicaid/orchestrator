@@ -26,6 +26,7 @@ import base64
 import json
 import csv
 import StringIO
+import requests
 
 class RestOperations(object):
     '''
@@ -35,7 +36,8 @@ class RestOperations(object):
     def __init__(self,
                  PROTOCOL=None,
                  HOST=None,
-                 PORT=None):
+                 PORT=None,
+                 TRANSACTION_ID=None):
 
         self.PROTOCOL = PROTOCOL
         self.HOST = HOST
@@ -44,6 +46,12 @@ class RestOperations(object):
             self.base_url = PROTOCOL+'://'+HOST+':'+PORT
         else:
             self.base_url = None
+
+        if TRANSACTION_ID:
+            self.TRANSACTION_ID = TRANSACTION_ID
+        else:
+            self.TRANSACTION_ID = None
+
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
@@ -97,6 +105,9 @@ class RestOperations(object):
 
         if fiware_service_path:
             request.add_header('Fiware-ServicePath', fiware_service_path)
+
+        if self.TRANSACTION_ID:
+            request.add_header('TransactionId', self.TRANSACTION_ID)
 
         res = None
 

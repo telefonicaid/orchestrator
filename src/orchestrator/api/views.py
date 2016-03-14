@@ -162,11 +162,13 @@ class ServiceList_RESTView(APIView, IoTConf):
     def get(self, request, service_id=None):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        TRANSACTION_ID = request.META.get('TRANSACTION_ID', None)
         try:
             request.DATA  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
-                           self.KEYSTONE_PORT)
+                           self.KEYSTONE_PORT,
+                           TRANSACTION_ID=TRANSACTION_ID)
             if not service_id:
                 # Get all domains
                 result = flow.domains(
