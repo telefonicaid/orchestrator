@@ -22,6 +22,7 @@
 # Author: IoT team
 #
 import logging
+import uuid
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
@@ -50,7 +51,14 @@ class FlowBase(object):
                  ORION_PORT="1026",
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
-                 CA_PORT="9999"):
+                 CA_PORT="9999",
+                 TRANSACTION_ID=None):
+
+        # Generate Transaction ID
+        if not TRANSACTION_ID:
+            self.TRANSACTION_ID = uuid.uuid4()
+
+        # TODO: put TransactionID in to each Operations()
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -65,7 +73,9 @@ class FlowBase(object):
 
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
-                               ORION_PORT)
+                               ORION_PORT,
+                               TRANSACTION_ID)
+
         if CA_PROTOCOL:
             # CA for Blackbutton notification flow
             self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"+"/notify"
