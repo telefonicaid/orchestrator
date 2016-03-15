@@ -378,6 +378,21 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 
 ## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
 
+### XACML Policies about a Role [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + roleId (required, `string`) ... Role Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole"
+            }
+        Required: ["ROLE_NAME"]
++ Response 200
+
 ### Delete a Role [DELETE]
 + Parameters
     + serviceId (required, `string`) ... Service Id
