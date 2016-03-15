@@ -1673,6 +1673,64 @@ class Test_ServiceRolePolicies_RestView(object):
         assert len(json_body_response) > 0, (res.code, res.msg, res.raw_json)
 
 
+class Test_SetServiceRolePolicies_RestView(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
+            "ROLE_NAME": "role_%s" % self.suffix,
+        }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "ROLE_NAME": "role_%s" % self.suffix,
+            "POLICY_FILE_NAME": "policy-sth-customer.xml"
+        }
+
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_set_service_role_policies_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/role/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        role_id = json_body_response['id']
+
+        # Get Role Policies
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+
 class Test_DeleteServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
@@ -2880,6 +2938,9 @@ if __name__ == '__main__':
     test_ServiceRolePolicies = Test_ServiceRolePolicies_RestView()
     test_ServiceRolePolicies.test_get_service_role_policies_ok()
     test_ServiceRolePolicies.test_get_service_role_policies_ok2()
+
+    test_SetServiceRolePolicies = Test_SetServiceRolePolicies_RestView()
+    test_SetServiceRolePolicies.test_set_service_role_policies_ok()
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
     test_ServiceDetail.test_get_ok()
