@@ -8,7 +8,7 @@ task/resolve_service_name_for_service_user_service_role
 task/refactor_flow_ensure_service_name
 fix/attributes_module_iot_subscription
 bug/create_trust_token_service_name_and_pep_user
-bug/wron_error_trace_create_user
+bug/wrong_error_trace_create_user
 bug/bad_token_iot_modules_for_services
 task/remove_duplicate_function
 
