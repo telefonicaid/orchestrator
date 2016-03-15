@@ -825,6 +825,37 @@ class Role_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
+    def get(self, request, service_id, role_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT,
+                           self.KEYPASS_PROTOCOL,
+                           self.KEYPASS_HOST,
+                           self.KEYPASS_PORT)
+
+            result = flow.getDomainRolePolicies(
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id))
+
+            return Response(result, status=status.HTTP_200_OK)
+
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
     def delete(self, request, service_id, role_id):
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         try:
