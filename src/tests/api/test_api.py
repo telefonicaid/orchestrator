@@ -13,7 +13,7 @@ TEST_SERVICE_NAME="smartcity"
 TEST_SUBSERVICE_NAME1="Basuras"
 TEST_SUBSERVICE_NAME2="Electricidad"
 TEST_SERVICE_ADMIN_USER="adm1"
-TEST_SERVICE_ADMIN_PASWORD="password"
+TEST_SERVICE_ADMIN_PASSWORD="password"
 TEST_SERVICE_USER_NAME="Alice"
 
 ORC_PROTOCOL="http"
@@ -356,7 +356,7 @@ class Test_DeleteService_RestView(object):
         self.payload_data_bad = {
             "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -409,14 +409,14 @@ class Test_NewSubService_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
@@ -438,7 +438,7 @@ class Test_NewSubService_RestView(object):
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "garden_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "garden_%s" % self.suffix,
             "NEW_SUBSERVICE_ADMIN_USER": "adm1_%s"% self.suffix,
@@ -878,7 +878,7 @@ class Test_DeleteSubService_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
@@ -886,7 +886,7 @@ class Test_DeleteSubService_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
@@ -945,7 +945,7 @@ class Test_NewServiceUser_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_USER_EMAIL": "pepe@gmail.com",
@@ -954,7 +954,7 @@ class Test_NewServiceUser_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
         }
@@ -962,7 +962,7 @@ class Test_NewServiceUser_RestView(object):
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "NEW_SERVICE_USER_EMAIL": "email@email.com",
@@ -979,7 +979,7 @@ class Test_NewServiceUser_RestView(object):
         self.payload_data_bad2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
@@ -1083,7 +1083,7 @@ class Test_NewServiceTrust_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME1,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "SubServiceAdmin",
             "TRUSTEE_USER_NAME": "pep",
             "TRUSTOR_USER_NAME": TEST_SERVICE_ADMIN_USER,
@@ -1096,21 +1096,21 @@ class Test_NewServiceTrust_RestView(object):
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "TRUSTEE_USER_NAME": "bob",
             "TRUSTOR_USER_NAME": TEST_SERVICE_ADMIN_USER,
         }
         self.payload_data_ok4 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": "bob",
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_ok5 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME1,
             "ROLE_NAME": "SubServiceAdmin",
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "TRUSTEE_USER_NAME":"iotagent",
             "TRUSTOR_USER_NAME":TEST_SERVICE_ADMIN_USER
         }
@@ -1124,7 +1124,7 @@ class Test_NewServiceTrust_RestView(object):
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME1,
             "ROLE_NAME": "SubServiceAdmin",
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "TRUSTEE_USER_NAME":TEST_SERVICE_USER_NAME,
             "TRUSTOR_USER_NAME":TEST_SERVICE_ADMIN_USER
         }
@@ -1291,7 +1291,7 @@ class Test_ServiceLists_RestView(object):
             "DOMAIN_NAME": TEST_SERVICE_NAME,
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_bad = {
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -1300,7 +1300,7 @@ class Test_ServiceLists_RestView(object):
         self.payload_data_bad2 = {
             "DOMAIN_NAME": ADMIN_DOMAIN,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_bad3 = {
             "DOMAIN_NAME": ADMIN_DOMAIN,
@@ -1315,7 +1315,7 @@ class Test_ServiceLists_RestView(object):
         self.payload_data_bad5 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -1399,7 +1399,7 @@ class Test_ServiceDetail_RestView(object):
         self.payload_data_nok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME": ADMIN_DOMAIN,
@@ -1445,12 +1445,12 @@ class Test_ProjectList_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
         }
@@ -1515,7 +1515,7 @@ class Test_ProjectDetail_RestView(object):
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -1540,14 +1540,14 @@ class Test_NewServiceRole_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_nok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
@@ -1601,13 +1601,85 @@ class Test_NewServiceRole_RestView(object):
             data=self.payload_data_ok)
 
 
+
+class Test_ServiceRolePolicies_RestView(object):
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_ROLE_NAME": "role_%s" % self.suffix,
+            "ROLE_NAME": "role_%s" % self.suffix,
+        }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "ROLE_NAME": "ServiceCustomer",
+        }
+
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_get_service_role_policies_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/role/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        role_id = json_body_response['id']
+
+        # Get Role Policies
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
+    def test_get_service_role_policies_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
+
+        token_res = self.TestRestOps.getToken(self.payload_data_ok2)
+        # token_res = self.TestRestOps.getScopedToken(self.payload_data_ok)
+        data_response = token_res.read()
+        json_body_response = json.loads(data_response)
+        role_id = json_body_response['token']['roles'][0]['id']  # admin role
+
+        # Get Role Policies
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert len(json_body_response) > 0, (res.code, res.msg, res.raw_json)
+
+
 class Test_DeleteServiceRole_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
             "ROLE_NAME": "role_%s" % self.suffix,
         }
@@ -1615,7 +1687,7 @@ class Test_DeleteServiceRole_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_ROLE_NAME": "role_tmp_%s" % self.suffix,
             "ROLE_NAME": "role_tmp_%s" % self.suffix,
             "SERVICE_USER_NAME": "user_for_role_%s" % self.suffix,
@@ -1626,7 +1698,7 @@ class Test_DeleteServiceRole_RestView(object):
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_ROLE_NAME": "role_%s" % self.suffix,
             "ROLE_NAME": "role_%s" % self.suffix,
         }
@@ -1734,13 +1806,13 @@ class Test_RoleList_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -1785,12 +1857,12 @@ class Test_UserList_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "START_INDEX": "10",
             "COUNT": "10"
         }
@@ -1838,7 +1910,7 @@ class Test_UserDetail_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -1864,7 +1936,7 @@ class Test_UserModify_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "USER_NAME": TEST_SERVICE_ADMIN_USER,
             "USER_DATA_VALUE": {"emails": [{"value": "test@gmail.com"}]}
         }
@@ -1872,7 +1944,7 @@ class Test_UserModify_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
@@ -1882,19 +1954,19 @@ class Test_UserModify_RestView(object):
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
             "USER_DATA_VALUE": {"name": "bet_%s" % self.suffix,
-                                TEST_SERVICE_ADMIN_PASWORD: "bet_%s" % self.suffix,
+                                TEST_SERVICE_ADMIN_PASSWORD: "bet_%s" % self.suffix,
                                 "description": "Bet bet_%s" % self.suffix}
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
@@ -2045,7 +2117,7 @@ class Test_UserDelete_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "USER_NAME": "Alice_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
@@ -2084,7 +2156,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok = {
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "SERVICE_NAME": TEST_SERVICE_NAME,
@@ -2102,7 +2174,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
             "SERVICE_NAME": TEST_SERVICE_NAME,
@@ -2219,14 +2291,14 @@ class Test_AssignRoleUserList_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.payload_data_ok2 = {
             "SERVICE_USER_NAME": TEST_SERVICE_USER_NAME,
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -2320,7 +2392,7 @@ class Test_AssignRoleUser_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "ServiceCustomer",
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -2331,7 +2403,7 @@ class Test_AssignRoleUser_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "SubServiceCustomer",
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -2341,7 +2413,7 @@ class Test_AssignRoleUser_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             #"SERVICE_ADMIN_USER": "user_%s" % self.suffix,
             #"SERVICE_ADMIN_PASSWORD": "user_%s" % self.suffix,
         }
@@ -2349,7 +2421,7 @@ class Test_AssignRoleUser_RestView(object):
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "SubServiceCustomer",
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -2359,7 +2431,7 @@ class Test_AssignRoleUser_RestView(object):
         self.payload_data_ok4 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "SubServiceCustomer",
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
@@ -2503,7 +2575,7 @@ class Test_UnassignRoleUser_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "SubServiceCustomer",
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
             "SERVICE_USER_PASSWORD": "user_%s" % self.suffix,
@@ -2548,42 +2620,42 @@ class Test_ModuleActivation_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
             "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASWORD
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data2_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
             "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
             "IOTMODULE": "STH",
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASWORD
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
         self.payload_data21_ok = {
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "IOTMODULE": "STH",
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASWORD
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data3_ok = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASWORD,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "gardens_%s" % self.suffix,
             "SUBSERVICE_NAME": "Gardens_%s" % self.suffix,
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
-            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASWORD
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -2843,6 +2915,10 @@ if __name__ == '__main__':
     test_DeleteServiceRole.test_delete_ok()
     test_DeleteServiceRole.test_delete_ok2()
     test_DeleteServiceRole.test_delete_nok()
+
+    test_ServiceRolePolicies = Test_ServiceRolePolicies_RestView()
+    test_ServiceRolePolicies.test_get_service_role_policies_ok()
+    test_ServiceRolePolicies.test_get_service_role_policies_ok2()
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
     test_ServiceDetail.test_get_ok()
