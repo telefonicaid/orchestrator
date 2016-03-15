@@ -164,3 +164,32 @@ class FlowBase(object):
                                                  SUBSERVICE_ID)
                 SUBSERVICE_NAME = SUBSERVICE['project']['name'].split('/')[1]
         return SUBSERVICE_NAME
+
+
+    def get_extended_token(self, USER_TOKEN):
+        token_extended = USER_TOKEN
+        if USER_TOKEN:
+            try:
+                token_detail = self.idm.getTokenDetail(USER_TOKEN)
+
+                token_extended  = {
+                    "token": USER_TOKEN,
+                    "user": token_detail['token']['user']['name']
+                }
+                # Include service scope if available
+                if 'domain' in token_detail['token']['user']:
+                    token_extended['domain'] = \
+                        token_detail['token']['user']['domain']['name']
+
+                # Include subservice scope if available
+                if 'project' in token_detail['token']:
+                    token_extended['project'] = \
+                        token_detail['token']['project']['name'].split('/')[1]
+
+            except Exception, ex:
+                # Probably expired?
+                token_extended  = {
+                    "token": USER_TOKEN,
+                    "error": ex.message
+                }
+        return token_extended

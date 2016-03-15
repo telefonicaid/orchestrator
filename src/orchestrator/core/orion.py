@@ -75,8 +75,11 @@ class CBOrionOperations(object):
             "duration": DURATION
         }
 
-        logger.debug("POST to /v1/registry/registerContext with: %s" % json.dumps(body_data,
-                                                                                  indent=3))
+        logger.debug("POST %s/%s to /v1/registry/registerContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
         res = self.CBRestOperations.rest_request(
             url='/v1/registry/registerContext',
             method='POST',
@@ -115,8 +118,11 @@ class CBOrionOperations(object):
             "updateAction": ACTION
         }
 
-        logger.debug("POST to /v1/updateContext with: %s" % json.dumps(body_data,
-                                                                       indent=3))
+        logger.debug("POST %s/%s to /v1/updateContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
         res = self.CBRestOperations.rest_request(
             url='/v1/updateContext',
             method='POST',
@@ -139,6 +145,11 @@ class CBOrionOperations(object):
                         SUBSERVICE_NAME,
                         ENTITY_TYPE=None):
 
+        logger.debug("Getting ContextTyesy for %s %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            ENTITY_TYPE)
+        )
         res = self.CBRestOperations.rest_request(
             url='/v1/contextTypes%s?details=on&offset=0&limit=1000' % (
                 '/' + ENTITY_TYPE if ENTITY_TYPE else ""),
@@ -176,8 +187,11 @@ class CBOrionOperations(object):
             "duration": DURATION,
             "notifyConditions": NOTIFY_CONDITIONS
         }
-        logger.debug("POST to /v1/subscribeContext with: %s" % json.dumps(body_data,
-                                                                          indent=3))
+        logger.debug("POST %s/%s to /v1/subscribeContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         #TODO: v1/registry/subscribeContextAvailability ?
         res = self.CBRestOperations.rest_request(
@@ -201,12 +215,16 @@ class CBOrionOperations(object):
                            SERVICE_NAME,
                            SUBSERVICE_NAME,
                            SUBSCRIPTION_ID):
+
         body_data = {
             "subscriptionId": SUBSCRIPTION_ID
         }
 
-        logger.debug("POST to /v1/unsubscribeContext with : %s" % json.dumps(body_data,
-                                                                             indent=3))
+        logger.debug("POST %s/%s to /v1/unsubscribeContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         res = self.CBRestOperations.rest_request(
             url='/v1/unsubscribeContext',
@@ -228,7 +246,11 @@ class CBOrionOperations(object):
                          SERVICE_NAME,
                          SUBSERVICE_NAME,
                          ENTITY_ID):
-
+        logger.debug("Getting ContextEntity for %s %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            ENTITY_ID)
+        )
         res = self.CBRestOperations.rest_request(
             url='/v1/contextEntities/%s' % ENTITY_ID ,
             method='GET',
@@ -244,11 +266,18 @@ class CBOrionOperations(object):
                                                       indent=3))
         return json_body_response
 
+
     def getListSubscriptions(self,
                              SERVICE_USER_TOKEN,
                              SERVICE_NAME,
                              SUBSERVICE_NAME,
                              ENTITY_ID=None):
+
+        logger.debug("Getting subscriptions for %s %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            ENTITY_ID)
+        )
 
         res = self.CBRestOperations.rest_request(
             url='/v2/subscriptions?offset=0&limit=1000',
@@ -283,12 +312,16 @@ class CBOrionOperations(object):
                                SUBSERVICE_NAME=""):
 
         subscriptions_deleted = []
-        logger.debug("Getting subscriptions for %s  %s" % (SERVICE_NAME,
-                                                           SUBSERVICE_NAME))
+        logger.debug("Removing all subscriptions for %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME)
+        )
         try:
             subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN,
                                                       SERVICE_NAME,
                                                       SUBSERVICE_NAME)
+            logger.debug("subscriptions: %s" % json.dumps(subscriptions,
+                                                          indent=3))
         except Exception, ex:
             logger.error("%s trying getListSubscriptions from CB: %s/%s" % (ex,
                                 SERVICE_NAME,
