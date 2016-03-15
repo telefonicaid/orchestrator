@@ -55,11 +55,12 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW domains invoked with: %s" % json.dumps(
             data_log, indent=3)
-        )
+                 )
+
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
@@ -106,7 +107,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
             data_log,
@@ -129,7 +130,7 @@ class Domains(FlowBase):
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -169,7 +170,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
         logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
@@ -192,7 +193,7 @@ class Domains(FlowBase):
                                            DOMAIN_ID,
                                            NEW_SERVICE_DESCRIPTION)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
             logger.error(ex)
@@ -229,7 +230,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
         logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
             data_log,
@@ -282,7 +283,8 @@ class Domains(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
                 if (len(subscriptions_deleted) > 0):
-                    logger.info("subscriptions deleted %s", subscriptions_deleted)
+                    logger.info("subscriptions deleted %s",
+                                subscriptions_deleted)
 
 
             #
@@ -295,7 +297,6 @@ class Domains(FlowBase):
             #
             # Delete all subscriptions
             #
-            # TODO: BUG: admin_domain (cloud_admin) can not delete a subsription in a service!!!!
             subscriptions_deleted = self.cb.deleteAllSubscriptions(
                                                               ADMIN_TOKEN,
                                                               DOMAIN_NAME)
@@ -356,13 +357,12 @@ class Domains(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
         }
         logger.debug("FLOW get_domain_role_policies invoked with: %s" % json.dumps(
-            data_log,
-            indent=3)
+            data_log, indent=3)
         )
         try:
 
@@ -456,7 +456,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
@@ -568,7 +568,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
@@ -606,7 +606,9 @@ class Domains(FlowBase):
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % cb_res)
+            logger.debug("getListSubscriptions res=%s" % json.dumps(
+                cb_res, indent=3)
+            )
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -658,7 +660,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": "%s" % SERVICE_USER_TOKEN,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
         }
         logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
             data_log,
@@ -693,22 +695,26 @@ class Domains(FlowBase):
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % cb_res)
+            logger.debug("getListSubscriptions res=%s" % json.dumps(
+                cb_res, indent=3)
+            )
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
                 for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(self.get_endpoint_iot_module(iotmodule)):
+                    if sub_callback.startswith(
+                            self.get_endpoint_iot_module(iotmodule)):
                         if ((len(sub['subject']['entities']) == 1) and
                             (sub['subject']['entities'][0]['idPattern'] == '.*') and
                             (sub['subject']['entities'][0]['type'] == '')):
-                            modules.append({ "name": iotmodule,
-                                             "subscriptionid": sub['id'],
-                                             "alias": self.get_alias_iot_module(iotmodule)
-                                             })
+                            modules.append(
+                                { "name": iotmodule,
+                                  "subscriptionid": sub['id'],
+                                  "alias": self.get_alias_iot_module(iotmodule)
+                                })
                             break
 
-            logger.debug("modules=%s" % modules)
+            logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
             logger.error(ex)
