@@ -1124,10 +1124,12 @@ class Roles(FlowBase):
             #
             # 3. Set Policy Role
             #
-            self.ac.provisionPolicy(SERVICE_NAME,
-                                    SERVICE_ADMIN_TOKEN,
-                                    ROLE_ID,
-                                    POLICY_FILE_NAME)
+            if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
+
+                self.ac.provisionPolicy(SERVICE_NAME,
+                                        SERVICE_ADMIN_TOKEN,
+                                        ROLE_ID,
+                                        POLICY_FILE_NAME)
 
         except Exception, ex:
             logger.error(ex)

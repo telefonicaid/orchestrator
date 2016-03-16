@@ -414,11 +414,13 @@ class Domains(FlowBase):
             logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             # Get policies in Access Control
-            policies = self.ac.getRolePolicies(SERVICE_NAME,
-                                               SERVICE_ADMIN_TOKEN,
-                                               ROLE_ID)
+            if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
 
-            logger.debug("POLICIES=%s" % policies)
+                policies = self.ac.getRolePolicies(SERVICE_NAME,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   ROLE_ID)
+
+                logger.debug("POLICIES=%s" % policies)
 
         except Exception, ex:
             logger.error(ex)
