@@ -1130,6 +1130,8 @@ class Roles(FlowBase):
                                         SERVICE_ADMIN_TOKEN,
                                         ROLE_ID,
                                         POLICY_FILE_NAME)
+            else:
+                raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
             logger.error(ex)

@@ -421,6 +421,8 @@ class Domains(FlowBase):
                                                    ROLE_ID)
 
                 logger.debug("POLICIES=%s" % policies)
+            else:
+                raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
             logger.error(ex)
