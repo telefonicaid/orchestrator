@@ -80,8 +80,11 @@ class IoTACppOperations(object):
             ]
         }
 
-        logger.debug("POST to iot/services with: %s" % json.dumps(body_data,
-                                                                  indent=3))
+        logger.debug("POST %s/%s to iot/services with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/services',
@@ -104,8 +107,10 @@ class IoTACppOperations(object):
                     SERVICE_NAME,
                     SUBSERVICE_NAME):
 
-        logger.debug("GET to iot/services ")
-
+        logger.debug("GET %s/%s to iot/services " % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME)
+        )
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/services',
             method='GET',
@@ -156,8 +161,11 @@ class IoTACppOperations(object):
             ]
         }
 
-        logger.debug("POST to iot/devices with: %s" % json.dumps(body_data,
-                                                                 indent=3))
+        logger.debug("POST %s/%s to iot/devices with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/devices',
@@ -183,7 +191,10 @@ class IoTACppOperations(object):
                    SERVICE_NAME,
                    SUBSERVICE_NAME):
 
-        logger.debug("GET to iot/devices")
+        logger.debug("GET %s/%s to iot/devices" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME)
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/devices',
@@ -208,7 +219,11 @@ class IoTACppOperations(object):
                          SUBSERVICE_NAME,
                          DEVICE_ID):
 
-        logger.debug("DELETE to iot/devices with: %s" % DEVICE_ID)
+        logger.debug("DELETE %s/%s to iot/devices with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            DEVICE_ID)
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/devices/%s' % DEVICE_ID,
