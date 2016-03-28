@@ -60,7 +60,7 @@ class CreateNewServiceRole(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
             "XACML_POLICY": "%s" % XACML_POLICY
         }
