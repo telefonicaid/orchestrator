@@ -1,7 +1,10 @@
 CHANGES
 =======
 
+task/transaction_id
 task/print_pretty_tokens_in_logs
+task/get_role_policies_api
+task/add_tests for clean data
 
 
 0.7.1
