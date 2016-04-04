@@ -21,12 +21,9 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
-logger = logging.getLogger('orchestrator_core')
 
 
 class UpdateUser(FlowBase):
@@ -65,7 +62,7 @@ class UpdateUser(FlowBase):
             "USER_ID": "%s" % USER_ID,
             "USER_DATA_VALUE": "%s" % USER_DATA_VALUE
         }
-        logger.debug("FLOW updateUser invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW updateUser invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -83,7 +80,7 @@ class UpdateUser(FlowBase):
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
             # 2. Get user ID
@@ -92,7 +89,7 @@ class UpdateUser(FlowBase):
                 USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                    SERVICE_ID,
                                                    USER_NAME)
-            logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
+            self.logger.debug("ID of user %s: %s" % (USER_NAME, USER_ID))
 
             #
             # 3. Updateuser
@@ -102,13 +99,13 @@ class UpdateUser(FlowBase):
                                 USER_DATA_VALUE)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "USER_ID": USER_ID,
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": USER_ID}
 
@@ -144,7 +141,7 @@ class UpdateUser(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD
         }
-        logger.debug("FLOW change password invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW change password invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -165,7 +162,7 @@ class UpdateUser(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD,
                         SCOPED=False)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             #
             # 2. Get user ID
@@ -173,7 +170,7 @@ class UpdateUser(FlowBase):
             if not USER_ID and SERVICE_USER_NAME:
                 USER_ID = self.idm.getUserId(SERVICE_USER_TOKEN,
                                              SERVICE_USER_NAME)
-                logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, USER_ID))
+                self.logger.debug("ID of user %s: %s" % (SERVICE_USER_NAME, USER_ID))
 
             #
             # 3. ChangeUserPassword
@@ -184,12 +181,12 @@ class UpdateUser(FlowBase):
                                         NEW_USER_PASSWORD)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "USER_ID": USER_ID,
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": USER_ID}
