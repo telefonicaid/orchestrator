@@ -27,6 +27,7 @@ import json
 import csv
 import StringIO
 import requests
+import logging
 
 class RestOperations(object):
     '''
@@ -239,3 +240,16 @@ class CSVOperations(object):
                 devices[header[i]].append(value)
 
         return i, header, devices
+
+
+class ContextFilterTransactionId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def __init__(self, TRANSACTION_ID):
+        self.TRANSACTION_ID = TRANSACTION_ID
+
+    def filter(self, record):
+        record.transaction = self.TRANSACTION_ID
+        return True
