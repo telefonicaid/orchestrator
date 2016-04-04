@@ -25,6 +25,9 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.core.flow.Roles import Roles
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
+
 from settings.dev import IOTMODULES
 
 
@@ -126,6 +129,8 @@ class Domains(FlowBase):
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+            DOMAIN_NAME = DOMAIN['domain']['name']
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
@@ -184,6 +189,11 @@ class Domains(FlowBase):
                 DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                  DOMAIN_NAME,
                                                  False)
+
+            if not DOMAIN_NAME:
+                DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+                DOMAIN_NAME = DOMAIN['domain']['name']
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
@@ -255,12 +265,15 @@ class Domains(FlowBase):
             if not DOMAIN_NAME:
                 DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
                 DOMAIN_NAME = DOMAIN['domain']['name']
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             # Get all subservices
             projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
             for project in projects['projects']:
 
                 PROJECT_NAME = project['name'].split('/')[1]
+                self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
+
                 #
                 # Delete all devices in subservice
                 #
@@ -480,6 +493,7 @@ class Domains(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
@@ -591,6 +605,7 @@ class Domains(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
@@ -682,6 +697,7 @@ class Domains(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)

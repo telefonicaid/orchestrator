@@ -253,3 +253,28 @@ class ContextFilterTransactionId(logging.Filter):
     def filter(self, record):
         record.transaction = self.TRANSACTION_ID
         return True
+
+
+class ContextFilterService(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def __init__(self, service):
+        self.service = service
+
+    def filter(self, record):
+        record.service = self.service
+        return True
+
+class ContextFilterSubService(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def __init__(self, subservice):
+        self.subservice = subservice
+
+    def filter(self, record):
+        record.subservice = self.subservice
+        return True
