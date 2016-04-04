@@ -21,14 +21,11 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import CSVOperations
 from settings.dev import IOTMODULES
-
-logger = logging.getLogger('orchestrator_core')
 
 
 class Projects(FlowBase):
@@ -60,7 +57,7 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("FLOW projects invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW projects invoked with: %s" % json.dumps(
             data_log, indent=3)
         )
         try:
@@ -76,21 +73,21 @@ class Projects(FlowBase):
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
 
-            logger.debug("PROJECTS=%s" % json.dumps(PROJECTS, indent=3))
+            self.logger.debug("PROJECTS=%s" % json.dumps(PROJECTS, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "PROJECTS": PROJECTS
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return PROJECTS
 
@@ -121,7 +118,7 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("FLOW get_project invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW get_project invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -130,7 +127,7 @@ class Projects(FlowBase):
                 ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                  ADMIN_USER,
                                                  ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             PROJECT = self.idm.getProject(ADMIN_TOKEN,
                                           PROJECT_ID)
@@ -140,16 +137,16 @@ class Projects(FlowBase):
             #     if project['id'] == PROJECT_ID:
             #         PROJECT = project
 
-            logger.debug("PROJECT=%s" % PROJECT)
+            self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "PROJECT": PROJECT
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
 
     def update_project(self,
@@ -188,7 +185,7 @@ class Projects(FlowBase):
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
             "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
         }
-        logger.debug("FLOW update_project invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW update_project invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -204,7 +201,7 @@ class Projects(FlowBase):
                     ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
@@ -216,16 +213,16 @@ class Projects(FlowBase):
                                              PROJECT_ID,
                                              NEW_SUBSERVICE_DESCRIPTION)
 
-            logger.debug("PROJECT=%s" % PROJECT)
+            self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "PROJECT": PROJECT
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return PROJECT
 
     def delete_project(self,
@@ -259,7 +256,7 @@ class Projects(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("FLOW get_project invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW get_project invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -292,9 +289,9 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             #
             # Delete all devices
@@ -303,7 +300,7 @@ class Projects(FlowBase):
                                                          DOMAIN_NAME,
                                                          PROJECT_NAME)
             if (len(devices_deleted) > 0):
-                logger.info("devices deleted %s", devices_deleted)
+                self.logger.info("devices deleted %s", devices_deleted)
 
 
             #
@@ -314,7 +311,7 @@ class Projects(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
             if (len(subscriptions_deleted) > 0):
-                logger.info("subscriptions deleted %s", subscriptions_deleted)
+                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
@@ -323,16 +320,16 @@ class Projects(FlowBase):
             self.idm.deleteProject(ADMIN_TOKEN,
                                    PROJECT_ID)
 
-            logger.debug("PROJECT=%s" % PROJECT)
+            self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "PROJECT": PROJECT
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return PROJECT
 
@@ -402,7 +399,7 @@ class Projects(FlowBase):
             "ATT_MAPPING": "%s" % ATT_MAPPING,
             "ATT_TIMEOUT": "%s" % ATT_TIMEOUT
         }
-        logger.debug("FLOW register_service invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW register_service invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -436,9 +433,9 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
             if not PROJECT_ID:
@@ -480,7 +477,7 @@ class Projects(FlowBase):
                         ]
                     }
                 ]
-            logger.debug("Trying to subscribe CA in CB...")
+            self.logger.debug("Trying to subscribe CA in CB...")
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -491,9 +488,9 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
             subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id ca=%s" % subscriptionid_ca)
+            self.logger.debug("subscription id ca=%s" % subscriptionid_ca)
 
             #
             # 2. Register Entity Service in CB
@@ -561,7 +558,7 @@ class Projects(FlowBase):
                     })
 
             # call CB
-            logger.debug("Trying to register service entity in CB...")
+            self.logger.debug("Trying to register service entity in CB...")
             cb_res = self.cb.updateContext(SERVICE_USER_TOKEN,
                                            DOMAIN_NAME,
                                            PROJECT_NAME,
@@ -572,14 +569,14 @@ class Projects(FlowBase):
                                            STATIC_ATTRIBUTES
                                         )
 
-            logger.debug("updateContext res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("updateContext res=%s" % json.dumps(cb_res, indent=3))
 
             for r in cb_res['contextResponses']:
                 # Check ContextBroker status response
                 if r['statusCode']['code'] != '200':
                     raise Exception(r['statusCode']['reasonPhrase'])
 
-            logger.debug("ENTITY_ID=%s" % ENTITY_ID)
+            self.logger.debug("ENTITY_ID=%s" % ENTITY_ID)
 
 
             #
@@ -676,7 +673,7 @@ class Projects(FlowBase):
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.get_endpoint_iot_module('STH')
 
-            logger.debug("Trying to subscribe STH...")
+            self.logger.debug("Trying to subscribe STH...")
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
                     SERVICE_USER_TOKEN,
@@ -688,9 +685,9 @@ class Projects(FlowBase):
                     ATTRIBUTES,
                     NOTIFY_CONDITIONS
                     )
-                logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+                self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
                 subscriptionid_sth = cb_res['subscribeResponse']['subscriptionId']
-                logger.debug("registration id sth=%s" % subscriptionid_sth)
+                self.logger.debug("registration id sth=%s" % subscriptionid_sth)
 
 
             #
@@ -704,7 +701,7 @@ class Projects(FlowBase):
             if PROTOCOL == "PDI-IoTA-ThinkingThings":
                 REFERENCE_URL = self.get_endpoint_iot_module('PERSEO')
 
-            logger.debug("Trying to subscribe PERSEO...")
+            self.logger.debug("Trying to subscribe PERSEO...")
             if len(ENTITIES) > 0:
                 cb_res = self.cb.subscribeContext(
                     SERVICE_USER_TOKEN,
@@ -716,13 +713,13 @@ class Projects(FlowBase):
                     ATTRIBUTES,
                     NOTIFY_CONDITIONS
                     )
-                logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+                self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
                 subscriptionid_perseo = cb_res['subscribeResponse']['subscriptionId']
-                logger.debug("registration id perseo=%s" % subscriptionid_perseo)
+                self.logger.debug("registration id perseo=%s" % subscriptionid_perseo)
 
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
@@ -731,7 +728,7 @@ class Projects(FlowBase):
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         result = {
             "subscriptionid_ca": subscriptionid_ca,
@@ -803,7 +800,7 @@ class Projects(FlowBase):
             "ATT_SERVICE_ID": "%s" % ATT_SERVICE_ID,
             "ATT_GEOLOCATION": "%s" % ATT_GEOLOCATION
         }
-        logger.debug("FLOW register_device with: %s" % json.dumps(
+        self.logger.debug("FLOW register_device with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -827,7 +824,7 @@ class Projects(FlowBase):
                         PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
             # Ensure DOMAIN_NAME and PROJECT_NAME
@@ -840,8 +837,8 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
 
 
             #
@@ -1055,17 +1052,17 @@ class Projects(FlowBase):
                                                 INTERNAL_ATTRIBUTES,
                                                 LAZY
                                         )
-            logger.debug("registerDevice res=%s" % iota_res)
+            self.logger.debug("registerDevice res=%s" % iota_res)
 
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
 
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DEVICE_ID
 
 
@@ -1104,7 +1101,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "CSV_DEVICES": "%s" % CSV_DEVICES
         }
-        logger.debug("FLOW register_devices with: %s" % json.dumps(
+        self.logger.debug("FLOW register_devices with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -1128,7 +1125,7 @@ class Projects(FlowBase):
                         PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
             # Ensure DOMAIN_NAME and PROJECT_NAME
@@ -1141,8 +1138,8 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
 
 
             # Read CSV
@@ -1163,7 +1160,7 @@ class Projects(FlowBase):
                     "ATT_SERVICE_ID" : devices['ATT_SERVICE_ID'][n],
                     "ATT_GEOLOCATION" : devices['ATT_GEOLOCATION'][n]
                 }
-                logger.debug("data%s" % data_log)
+                self.logger.debug("data%s" % data_log)
                 # TODO: use IOTA bulk API
                 res = self.register_device(
                     DOMAIN_NAME,
@@ -1187,13 +1184,13 @@ class Projects(FlowBase):
                 DEVICES_ID.append(res)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "devices": DEVICES_ID
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DEVICES_ID
 
     def unregister_device(self,
@@ -1231,7 +1228,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "DEVICE_ID": "%s" % DEVICE_ID,
         }
-        logger.debug("FLOW unregister_device with: %s" % json.dumps(
+        self.logger.debug("FLOW unregister_device with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -1255,7 +1252,7 @@ class Projects(FlowBase):
                         PROJECT_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
             # Ensure DOMAIN_NAME and PROJECT_NAME
@@ -1268,25 +1265,25 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
 
             iota_res = self.iota.unregisterDevice(
                                                 SERVICE_USER_TOKEN,
                                                 DOMAIN_NAME,
                                                 PROJECT_NAME,
                                                 DEVICE_ID)
-            logger.debug("unregisterDevice res=%s" % iota_res)
+            self.logger.debug("unregisterDevice res=%s" % iota_res)
 
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
 
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return {}
 
 
@@ -1324,7 +1321,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -1359,9 +1356,9 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
             if not PROJECT_ID:
@@ -1377,13 +1374,13 @@ class Projects(FlowBase):
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
-            # logger.debug("Trying to getContextTypes...")
+            # self.logger.debug("Trying to getContextTypes...")
             # cb_res = self.cb.getContextTypes(
             #     SERVICE_USER_TOKEN,
             #     DOMAIN_NAME,
             #     PROJECT_NAME,
             #     None)
-            # logger.debug("getContextTypes res=%s" % cb_res)
+            # self.logger.debug("getContextTypes res=%s" % cb_res)
             # for entity_type in cb_res['types']:
             #     for att in entity_type["attributes"] :
             #         ATTRIBUTES.append(att)
@@ -1402,7 +1399,7 @@ class Projects(FlowBase):
                 "condValues": NOTIFY_ATTRIBUTES
             } ]
 
-            logger.debug("Trying to subscribe moduleiot in CB...")
+            self.logger.debug("Trying to subscribe moduleiot in CB...")
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -1413,18 +1410,18 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id=%s" % subscriptionid)
+            self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "subscriptionid": subscriptionid
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return subscriptionid
 
     def deactivate_module(self,
@@ -1461,7 +1458,7 @@ class Projects(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -1497,9 +1494,9 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
@@ -1508,13 +1505,13 @@ class Projects(FlowBase):
 
             REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
-            logger.debug("Trying to get list subscriptions from CB...")
+            self.logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -1528,13 +1525,13 @@ class Projects(FlowBase):
                     break
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "subscriptionid": subscriptionid
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return subscriptionid
 
@@ -1570,7 +1567,7 @@ class Projects(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
         }
-        logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -1605,22 +1602,22 @@ class Projects(FlowBase):
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(SERVICE_USER_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
 
-            logger.debug("Trying to get list subscriptions from CB...")
+            self.logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
             modules = []
             for sub in cb_res:
                 sub_callback = sub["notification"]["callback"]
@@ -1636,15 +1633,15 @@ class Projects(FlowBase):
                                              })
                             break
 
-            logger.debug("modules=%s" % json.dumps(modules, indent=3))
+            self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "modules": modules
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return modules
