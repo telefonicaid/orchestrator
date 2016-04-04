@@ -56,7 +56,7 @@ class FlowBase(object):
 
         # Generate Transaction ID
         if not TRANSACTION_ID:
-            self.TRANSACTION_ID = uuid.uuid4()
+            TRANSACTION_ID = uuid.uuid4()
 
         # TODO: put TransactionID in to each Operations()
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
@@ -69,7 +69,8 @@ class FlowBase(object):
 
         self.iota = IoTAOperations(IOTA_PROTOCOL,
                                    IOTA_HOST,
-                                   IOTA_PORT)
+                                   IOTA_PORT,
+                                   TRANSACTION_ID)
 
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
