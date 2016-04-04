@@ -24,7 +24,7 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
+from orchestrator.common.util import ContextFilterService
 
 class CreateNewSubService(FlowBase):
 
@@ -96,6 +96,7 @@ class CreateNewSubService(FlowBase):
             SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #

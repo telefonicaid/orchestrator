@@ -29,6 +29,8 @@ from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.common.util import ContextFilterTransactionId
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 
 from settings.dev import IOTMODULES
 
@@ -63,6 +65,9 @@ class FlowBase(object):
 
         # Put transaction into logger
         self.logger.addFilter(ContextFilterTransactionId(TRANSACTION_ID))
+
+        self.logger.addFilter(ContextFilterService(None))
+        self.logger.addFilter(ContextFilterSubService(""))
 
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
