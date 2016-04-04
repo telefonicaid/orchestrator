@@ -107,7 +107,7 @@ class RestOperations(object):
             request.add_header('Fiware-ServicePath', fiware_service_path)
 
         if self.TRANSACTION_ID:
-            request.add_header('TransactionId', self.TRANSACTION_ID)
+            request.add_header('Fiware-Transaction', self.TRANSACTION_ID)
 
         res = None
 
