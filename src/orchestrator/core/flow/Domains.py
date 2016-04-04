@@ -21,14 +21,11 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.core.flow.Roles import Roles
 from settings.dev import IOTMODULES
-
-logger = logging.getLogger('orchestrator_core')
 
 
 class Domains(FlowBase):
@@ -57,7 +54,7 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("FLOW domains invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW domains invoked with: %s" % json.dumps(
             data_log, indent=3)
                  )
 
@@ -66,20 +63,20 @@ class Domains(FlowBase):
                 ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
 
-            logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
+            self.logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAINS": DOMAINS
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAINS
 
@@ -109,7 +106,7 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -126,20 +123,20 @@ class Domains(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                      DOMAIN_NAME)
 
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
 
-            logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
+            self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAIN
 
@@ -173,7 +170,7 @@ class Domains(FlowBase):
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
-        logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -188,21 +185,21 @@ class Domains(FlowBase):
                                                  DOMAIN_NAME,
                                                  False)
 
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
                                            DOMAIN_ID,
                                            NEW_SERVICE_DESCRIPTION)
 
-            logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
+            self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DOMAIN
 
     def delete_domain(self,
@@ -232,7 +229,7 @@ class Domains(FlowBase):
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
             "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -242,7 +239,7 @@ class Domains(FlowBase):
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
 
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             # Another way:
             # if not DOMAIN_ID:
             #     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
@@ -273,7 +270,7 @@ class Domains(FlowBase):
                     PROJECT_NAME)
 
                 if (len(devices_deleted) > 0):
-                    logger.info("devices deleted %s", devices_deleted)
+                    self.logger.info("devices deleted %s", devices_deleted)
 
                 #
                 # Delete all subscriptions in subservice
@@ -283,7 +280,7 @@ class Domains(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
                 if (len(subscriptions_deleted) > 0):
-                    logger.info("subscriptions deleted %s",
+                    self.logger.info("subscriptions deleted %s",
                                 subscriptions_deleted)
 
 
@@ -301,7 +298,7 @@ class Domains(FlowBase):
                                                               ADMIN_TOKEN,
                                                               DOMAIN_NAME)
             if (len(subscriptions_deleted) > 0):
-                logger.info("subscriptions deleted %s", subscriptions_deleted)
+                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
 
 
             #
@@ -314,16 +311,16 @@ class Domains(FlowBase):
             # Delete policy of roles in Access Control
             self.ac.deleteTenantPolicies(DOMAIN_NAME, ADMIN_TOKEN)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            self.logger.debug("DOMAIN=%s" % DOMAIN)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAIN
 
@@ -361,7 +358,7 @@ class Domains(FlowBase):
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
         }
-        logger.debug("FLOW get_domain_role_policies invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW get_domain_role_policies invoked with: %s" % json.dumps(
             data_log, indent=3)
         )
         try:
@@ -380,7 +377,7 @@ class Domains(FlowBase):
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
 
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Get Role ID
             if not ROLE_ID and ROLE_NAME:
@@ -411,23 +408,23 @@ class Domains(FlowBase):
                     ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                        SERVICE_ID,
                                                        ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+            self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             # Get policies in Access Control
             policies = self.ac.getRolePolicies(SERVICE_NAME,
                                                SERVICE_ADMIN_TOKEN,
                                                ROLE_ID)
 
-            logger.debug("POLICIES=%s" % policies)
+            self.logger.debug("POLICIES=%s" % policies)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "POLICIES": policies
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return policies
 
@@ -459,7 +456,7 @@ class Domains(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -484,8 +481,8 @@ class Domains(FlowBase):
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
             REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
@@ -494,13 +491,13 @@ class Domains(FlowBase):
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
-            # logger.debug("Trying to getContextTypes...")
+            # self.logger.debug("Trying to getContextTypes...")
             # cb_res = self.cb.getContextTypes(
             #     SERVICE_USER_TOKEN,
             #     DOMAIN_NAME,
             #     "",
             #     None)
-            # logger.debug("getContextTypes res=%s" % cb_res)
+            # self.logger.debug("getContextTypes res=%s" % cb_res)
             # for entity_type in cb_res['types']:
             #     for att in entity_type["attributes"] :
             #         ATTRIBUTES.append(att)
@@ -518,7 +515,7 @@ class Domains(FlowBase):
                 "type": "ONCHANGE",
                 "condValues": NOTIFY_ATTRIBUTES
             } ]
-            logger.debug("Trying to subscribe moduleiot in CB...")
+            self.logger.debug("Trying to subscribe moduleiot in CB...")
             cb_res = self.cb.subscribeContext(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
@@ -529,18 +526,18 @@ class Domains(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            logger.debug("subscribeContext res=%s" % cb_res)
+            self.logger.debug("subscribeContext res=%s" % cb_res)
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            logger.debug("subscription id=%s" % subscriptionid)
+            self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "subscriptionid": subscriptionid
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return subscriptionid
 
     def deactivate_module(self,
@@ -571,7 +568,7 @@ class Domains(FlowBase):
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
-        logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -595,18 +592,18 @@ class Domains(FlowBase):
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
             REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
 
-            logger.debug("Trying to get list subscriptions from CB...")
+            self.logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(
                 cb_res, indent=3)
             )
 
@@ -621,18 +618,18 @@ class Domains(FlowBase):
                                                sub['id'])
                     break
 
-            # logger.debug("subscribeContext res=%s" % cb_res)
+            # self.logger.debug("subscribeContext res=%s" % cb_res)
             # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            # logger.debug("subscription id=%s" % subscriptionid)
+            # self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "subscriptionid": subscriptionid
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return subscriptionid
 
@@ -662,7 +659,7 @@ class Domains(FlowBase):
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
         }
-        logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -686,16 +683,16 @@ class Domains(FlowBase):
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
 
-            logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
-            logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
-            logger.debug("Trying to get list subscriptions from CB...")
+            self.logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
                 SERVICE_USER_TOKEN,
                 DOMAIN_NAME,
                 ""
             )
-            logger.debug("getListSubscriptions res=%s" % json.dumps(
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(
                 cb_res, indent=3)
             )
             modules = []
@@ -714,15 +711,15 @@ class Domains(FlowBase):
                                 })
                             break
 
-            logger.debug("modules=%s" % json.dumps(modules, indent=3))
+            self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "modules": modules
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return modules
