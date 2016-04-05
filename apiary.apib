@@ -390,7 +390,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "SERVICE_ADMIN_TOKEN": "token",
                 "ROLE_NAME":"DemoRole"
             }
-        Required: ["ROLE_NAME"]
 + Response 200
 
 ### set XACML Policy Role [POST]
@@ -406,8 +405,8 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "ROLE_NAME":"DemoRole",
                 "POLICY_FILE_NAME": "policy-sth-customer.xml"
             }
-        Required: ["ROLE_NAME", "POLICY_FILE_NAME"]
-        POLICY_FILE_NAME: should be a name used internally por orchestrator
+        Required: ["POLICY_FILE_NAME"]
+        POLICY_FILE_NAME: should be a name used internally by orchestrator
 + Response 201
 
 ### Delete a Role [DELETE]
@@ -422,7 +421,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "SERVICE_ADMIN_TOKEN": "token",
                 "ROLE_NAME":"DemoRole"
             }
-        Required: ["ROLE_NAME"]
 + Response 204
 
 ## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
