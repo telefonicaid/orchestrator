@@ -27,7 +27,6 @@ from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
-from orchestrator.common.util import ContextFilter
 
 from settings.dev import IOTMODULES
 
