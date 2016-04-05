@@ -10,8 +10,9 @@ been supplied.
 """
 from common import *  # noqa
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
 
