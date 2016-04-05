@@ -58,7 +58,7 @@ class Users(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "START_INDEX": "%s" % START_INDEX,
             "COUNT": "%s" % COUNT,
         }
@@ -138,7 +138,7 @@ class Users(FlowBase):
             "USER_ID": "%s" % USER_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
         }
         logger.debug("FLOW user invoked with: %s" % json.dumps(
             data_log,

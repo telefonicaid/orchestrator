@@ -74,7 +74,7 @@ class CreateTrustToken(FlowBase):
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
             "TRUSTEE_USER_NAME": "%s" % TRUSTEE_USER_NAME,
@@ -218,7 +218,7 @@ class CreateTrustToken(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "TRUSTEE_USER_NAME": "%s" % TRUSTEE_USER_NAME,
             "TRUSTEE_USER_ID": "%s" % TRUSTEE_USER_ID,
         }

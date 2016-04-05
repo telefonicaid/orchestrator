@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 EXPOSE 8084
 
 WORKDIR /opt/orchestrator/bin
-CMD ["orchestrator-daemon.sh", "start"]
+CMD ["./orchestrator-daemon.sh", "start"]
 
 
 
