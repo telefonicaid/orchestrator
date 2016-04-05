@@ -2,6 +2,7 @@ CHANGES
 =======
 
 task/transaction_id
+fix/disable_django_debug
 task/print_pretty_tokens_in_logs
 task/get_role_policies_api
 task/add_tests for clean data
