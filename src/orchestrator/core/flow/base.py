@@ -28,7 +28,7 @@ from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
-from orchestrator.common.util import ContextFilterTransactionId
+from orchestrator.common.util import ContextFilterCorrelatorId
 
 from settings.dev import IOTMODULES
 
@@ -53,16 +53,16 @@ class FlowBase(object):
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
                  CA_PORT="9999",
-                 TRANSACTION_ID=None):
+                 CORRELATOR_ID=None):
 
         # Generate Transaction ID
-        if not TRANSACTION_ID:
-            TRANSACTION_ID = uuid.uuid4()
+        if not CORRELATOR_ID:
+            CORRELATOR_ID = uuid.uuid4()
 
         self.logger = logging.getLogger('orchestrator_core')
 
-        # Put transaction into logger
-        self.logger.addFilter(ContextFilterTransactionId(TRANSACTION_ID))
+        # Put collector into logger
+        self.logger.addFilter(ContextFilterCorrelatorId(CORRELATOR_ID))
 
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
@@ -75,12 +75,12 @@ class FlowBase(object):
         self.iota = IoTAOperations(IOTA_PROTOCOL,
                                    IOTA_HOST,
                                    IOTA_PORT,
-                                   TRANSACTION_ID)
+                                   CORRELATOR_ID)
 
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
                                ORION_PORT,
-                               TRANSACTION_ID)
+                               CORRELATOR_ID)
 
         if CA_PROTOCOL:
             # CA for Blackbutton notification flow
