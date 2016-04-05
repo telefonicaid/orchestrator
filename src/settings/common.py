@@ -1,7 +1,8 @@
 # Django settings for orchestrator project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS = ['*']
 
 ADMINS = (
      ('IoT support', 'iot_support@tid.es'),
