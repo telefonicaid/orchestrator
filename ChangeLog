@@ -1,9 +1,11 @@
 CHANGES
 =======
 
+
 0.7.2
 
 task/change_log_level_api
+fix/disable_django_debug
 task/print_pretty_tokens_in_logs
 task/get_role_policies_api
 task/add_tests for clean data
