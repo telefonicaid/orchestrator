@@ -1736,20 +1736,19 @@ class OrchVersion_RESTView(APIView, IoTConf):
 
 class OrchLogLevel_RESTView(APIView, IoTConf):
     """
-     { Read } Orchestrator Statistics
+     { Update } Orchestrator LogLevel
     """
 
     def __init__(self):
         IoTConf.__init__(self)
 
-    def post(self, request):
+    def put(self, request):
 
         HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
         logLevel = request.GET.get('level', None)
 
         try:
-            # TODO: check HTTP_X_AUTH_TOKEN
-            # Should belongs to default admin domain
+            # Check HTTP_X_AUTH_TOKEN: should belongs to default admin domain
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT)
@@ -1765,7 +1764,8 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             else:
                 result = None
 
-            if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]:
+            if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING",
+                                "INFO", "DEBUG"]:
                 raise ParseError(detail="not supported log level")
 
             LEVELS = {

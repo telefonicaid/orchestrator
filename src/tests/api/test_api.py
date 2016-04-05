@@ -2846,7 +2846,7 @@ class Test_LogLevel_RestView(object):
     def test_change_log_level_ok(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
         ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
-        res = self.TestRestOps.rest_request(method="POST",
+        res = self.TestRestOps.rest_request(method="PUT",
                                             url="/v1.0/admin/log?level=DEBUG",
                                             json_data=True,
                                             auth_token=ADMIN_TOKEN,
@@ -2857,8 +2857,8 @@ class Test_LogLevel_RestView(object):
     def test_change_log_level_bad(self):
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
         ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
-        res = self.TestRestOps.rest_request(method="POST",
-                                            url="/v1.0/admin/log?level=DEBUGa",
+        res = self.TestRestOps.rest_request(method="PUT",
+                                            url="/v1.0/admin/log?level=BADLEVEL",
                                             json_data=True,
                                             auth_token=ADMIN_TOKEN,
                                             data=None)
