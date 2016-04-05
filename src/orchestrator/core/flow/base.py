@@ -29,6 +29,7 @@ from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.common.util import ContextFilterCorrelatorId
+from orchestrator.common.util import ContextFilterTransactionId
 
 from settings.dev import IOTMODULES
 
@@ -53,16 +54,20 @@ class FlowBase(object):
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
                  CA_PORT="9999",
-                 CORRELATOR_ID=None):
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         # Generate Transaction ID
+        TRANSACTION_ID = uuid.uuid4()
+
         if not CORRELATOR_ID:
-            CORRELATOR_ID = uuid.uuid4()
+            CORRELATOR_ID = TRANSACTION_ID
 
         self.logger = logging.getLogger('orchestrator_core')
 
         # Put collector into logger
         self.logger.addFilter(ContextFilterCorrelatorId(CORRELATOR_ID))
+        self.logger.addFilter(ContextFilterTransactionId(TRANSACTION_ID))
 
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
@@ -70,17 +75,21 @@ class FlowBase(object):
 
         self.ac = AccCOperations(KEYPASS_PROTOCOL,
                                  KEYPASS_HOST,
-                                 KEYPASS_PORT)
+                                 KEYPASS_PORT,
+                                 CORRELATOR_ID=CORRELATOR_ID,
+                                 TRANSACTION_ID=TRANSACTION_ID)
 
         self.iota = IoTAOperations(IOTA_PROTOCOL,
                                    IOTA_HOST,
                                    IOTA_PORT,
-                                   CORRELATOR_ID)
+                                   CORRELATOR_ID=CORRELATOR_ID,
+                                   TRANSACTION_ID=TRANSACTION_ID)
 
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
                                ORION_PORT,
-                               CORRELATOR_ID)
+                               CORRELATOR_ID=CORRELATOR_ID,
+                               TRANSACTION_ID=TRANSACTION_ID)
 
         if CA_PROTOCOL:
             # CA for Blackbutton notification flow
