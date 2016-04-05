@@ -31,10 +31,10 @@ from django.utils.module_loading import module_has_submodule
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
-from orchestrator.common.util import ContextFilterTransactionId
+from orchestrator.common.util import ContextFilterCorrelatorId
 
 logger = logging.getLogger('orchestrator_api')
-logger.addFilter(ContextFilterTransactionId("n/a"))
+logger.addFilter(ContextFilterCorrelatorId("n/a"))
 
 def read_banner():
     banner_dir = os.path.dirname(__file__)

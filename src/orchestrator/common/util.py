@@ -242,14 +242,14 @@ class CSVOperations(object):
         return i, header, devices
 
 
-class ContextFilterTransactionId(logging.Filter):
+class ContextFilterCorrelatorId(logging.Filter):
     """
     This is a filter which injects contextual information into the log.
     """
 
-    def __init__(self, TRANSACTION_ID):
-        self.TRANSACTION_ID = TRANSACTION_ID
+    def __init__(self, CORRELATOR_ID):
+        self.CORRELATOR_ID = CORRELATOR_ID
 
     def filter(self, record):
-        record.transaction = self.TRANSACTION_ID
+        record.correlator = self.CORRELATOR_ID
         return True
