@@ -21,12 +21,9 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
-logger = logging.getLogger('orchestrator_core')
 
 
 class CreateNewServiceUser(FlowBase):
@@ -69,7 +66,7 @@ class CreateNewServiceUser(FlowBase):
             "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
             "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION
         }
-        logger.debug("FLOW createNewServiceUser invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW createNewServiceUser invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -78,7 +75,7 @@ class CreateNewServiceUser(FlowBase):
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
             # 1. Get service (aka domain)
@@ -87,14 +84,14 @@ class CreateNewServiceUser(FlowBase):
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
             # Ensure SERVICE_NAME
             SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
-            logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #
             # 2.  Create user
@@ -106,16 +103,16 @@ class CreateNewServiceUser(FlowBase):
                                                 NEW_USER_PASSWORD,
                                                 NEW_USER_EMAIL,
                                                 NEW_USER_DESCRIPTION)
-            logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
+            self.logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
             "ID_USER": "%s" % ID_USER,
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_USER}

@@ -2887,6 +2887,45 @@ class Test_ModuleActivation_RestView(object):
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
+
+class Test_LogLevel_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": ADMIN_DOMAIN,
+            "SERVICE_ADMIN_USER": ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": ADMIN_PASSWORD,
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_change_log_level_ok(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="PUT",
+                                            url="/v1.0/admin/log?level=DEBUG",
+                                            json_data=True,
+                                            auth_token=ADMIN_TOKEN,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+
+    def test_change_log_level_bad(self):
+        token_res = self.TestRestOps.getToken(self.payload_data_ok)
+        ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
+        res = self.TestRestOps.rest_request(method="PUT",
+                                            url="/v1.0/admin/log?level=BADLEVEL",
+                                            json_data=True,
+                                            auth_token=ADMIN_TOKEN,
+                                            data=None)
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
+
+
+
+
+
 if __name__ == '__main__':
 
     test_NewService = Test_NewService_RestView()
@@ -3021,3 +3060,7 @@ if __name__ == '__main__':
     test_ModuleActivation.test_list_module_activation_ok2()
     test_ModuleActivation.test_set_module_activation_ok2()
     test_ModuleActivation.test_set_module_deactivation_ok2()
+
+    test_LogLevel = Test_LogLevel_RestView()
+    test_LogLevel.test_change_log_level_ok()
+    test_LogLevel.test_change_log_level_bad()
