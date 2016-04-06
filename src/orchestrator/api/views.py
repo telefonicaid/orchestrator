@@ -1732,3 +1732,74 @@ class OrchVersion_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class OrchLogLevel_RESTView(APIView, IoTConf):
+    """
+     { Update } Orchestrator LogLevel
+    """
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def put(self, request):
+
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        logLevel = request.GET.get('level', None)
+
+        try:
+            # Check HTTP_X_AUTH_TOKEN: should belongs to default admin domain
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT)
+            result = flow.domains(
+                    "admin_domain",
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                     HTTP_X_AUTH_TOKEN))
+
+            if 'error' in result:
+                raise ParseError(detail="wrong auth provided")
+            else:
+                result = None
+
+            if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING",
+                                "INFO", "DEBUG"]:
+                raise ParseError(detail="not supported log level")
+
+            LEVELS = {
+                'DEBUG': logging.DEBUG,
+                'INFO': logging.INFO,
+                'WARNING': logging.WARNING,
+                'ERROR': logging.ERROR,
+                'FATAL': logging.FATAL,
+                'CRITICAL': logging.CRITICAL
+            }
+
+            # Set loggers level to such log level
+            logging.getLogger('django').setLevel(LEVELS[logLevel])
+            logging.getLogger('django.request').setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').setLevel(LEVELS[logLevel])
+
+            # Set also handlers (console and file)) to such log level
+            logging.getLogger('orchestrator_api').handlers[0].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').handlers[1].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').handlers[0].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').handlers[1].setLevel(LEVELS[logLevel])
+
+            # print it into a trace
+            logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
+                logLevel, indent=3))
+
+            return Response(result, status=status.HTTP_200_OK)
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
+                status=status.HTTP_400_BAD_REQUEST
+            )

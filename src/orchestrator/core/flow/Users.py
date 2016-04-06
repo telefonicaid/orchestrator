@@ -21,12 +21,9 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
-logger = logging.getLogger('orchestrator_core')
 
 
 class Users(FlowBase):
@@ -62,7 +59,7 @@ class Users(FlowBase):
             "START_INDEX": "%s" % START_INDEX,
             "COUNT": "%s" % COUNT,
         }
-        logger.debug("FLOW users invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW users invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -80,12 +77,12 @@ class Users(FlowBase):
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
             #                                         SERVICE_ID)
 
-            # logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES,
+            # self.logger.debug("SERVICE_ROLES=%s" %  json.dumps(SERVICE_ROLES,
             #                                               indent=3))
 
             SERVICE_USERS = self.idm.getDomainUsers(SERVICE_ADMIN_TOKEN,
@@ -93,7 +90,7 @@ class Users(FlowBase):
                                                     START_INDEX,
                                                     COUNT)
 
-            logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS,
+            self.logger.debug("SERVICE_USERS=%s" % json.dumps(SERVICE_USERS,
                                                          indent=3))
 
             # Get Roles de SubServicio
@@ -104,13 +101,13 @@ class Users(FlowBase):
             # Listar los usuarios de un Subservicio
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "SERVICE_USERS": SERVICE_USERS,
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return SERVICE_USERS
 
 
@@ -140,7 +137,7 @@ class Users(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
         }
-        logger.debug("FLOW user invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW user invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
@@ -150,18 +147,18 @@ class Users(FlowBase):
                     SERVICE_ID,
                     SERVICE_ADMIN_USER,
                     SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
                                               USER_ID)
-            logger.debug("DETAIL_USER=%s" % json.dumps(DETAIL_USER, indent=3))
+            self.logger.debug("DETAIL_USER=%s" % json.dumps(DETAIL_USER, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DETAIL_USER": DETAIL_USER,
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DETAIL_USER

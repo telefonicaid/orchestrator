@@ -31,7 +31,7 @@ from orchestrator.core.orion import CBOrionOperations as CBOperations
 from settings.dev import IOTMODULES
 
 
-logger = logging.getLogger('orchestrator_core')
+
 
 
 class FlowBase(object):
@@ -51,6 +51,9 @@ class FlowBase(object):
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
                  CA_PORT="9999"):
+
+        self.logger = logging.getLogger('orchestrator_core')
+
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
@@ -136,7 +139,7 @@ class FlowBase(object):
 
     def ensure_service_name(self, USER_TOKEN, SERVICE_ID, SERVICE_NAME):
         if not SERVICE_NAME:
-            logger.debug("Not SERVICE_NAME provided, getting it from token")
+            self.logger.debug("Not SERVICE_NAME provided, getting it from token")
             try:
                 SERVICE_NAME = self.idm.getDomainNameFromToken(
                     USER_TOKEN,
@@ -152,7 +155,7 @@ class FlowBase(object):
     def ensure_subservice_name(self, USER_TOKEN, SERVICE_ID, SUBSERVICE_ID,
                                SUBSERVICE_NAME):
         if not SUBSERVICE_NAME:
-            logger.debug("Not SUBSERVICE_NAME provided, getting it from token")
+            self.logger.debug("Not SUBSERVICE_NAME provided, getting it from token")
             try:
                 SUBSERVICE_NAME = self.idm.getProjectNameFromToken(
                      USER_TOKEN,
