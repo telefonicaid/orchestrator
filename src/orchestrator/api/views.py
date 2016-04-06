@@ -78,6 +78,8 @@ class Stats(object):
     num_delete_role = 0
     num_post_role = 0
     num_get_role = 0
+    num_get_role_policies = 0
+    num_post_role_policies = 0
 
     num_delete_roleassignment = 0
     num_post_roleassignment = 0
@@ -844,7 +846,52 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("ROLE_NAME", None),
                 request.DATA.get("ROLE_ID", role_id))
 
-            return Response(result, status=status.HTTP_200_OK)
+            if 'error' not in result:
+                Stats.num_get_role_policies += 1
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def post(self, request, service_id, role_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         self.KEYPASS_PROTOCOL,
+                         self.KEYPASS_HOST,
+                         self.KEYPASS_PORT)
+
+            result = flow.setPolicyRole(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("POLICY_FILE_NAME", None),
+            )
+
+            if 'error' not in result:
+                Stats.num_post_role_policies += 1
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1143,7 +1190,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
 class Trust_RESTView(APIView, IoTConf):
     """
-    { Creates }  a Trust Token 
+    { Creates }  a Trust Token
 
     """
     schema_name = "Trust"
@@ -1693,6 +1740,8 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_delete_role": self.num_delete_role,
                     "num_post_role": self.num_post_role,
                     "num_get_role": self.num_get_role,
+                    "num_post_role_policies": self.num_post_role_policies,
+                    "num_get_role_policies": self.num_get_role_policies,
 
                     "num_delete_roleassignment": self.num_delete_roleassignment,
                     "num_post_roleassignment": self.num_post_roleassignment,
