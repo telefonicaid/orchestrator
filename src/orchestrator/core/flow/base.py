@@ -69,6 +69,7 @@ class FlowBase(object):
         self.logger.addFilter(ContextFilterCorrelatorId(CORRELATOR_ID))
         self.logger.addFilter(ContextFilterTransactionId(TRANSACTION_ID))
 
+
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
                                  KEYSTONE_PORT)
