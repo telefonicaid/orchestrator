@@ -430,6 +430,9 @@ json = {
             "ROLE_ID": {
                 "type": "string",
             },
+            "POLICY_FILE_NAME": {
+                "type": "string",
+            },
         },
     },
     ####################

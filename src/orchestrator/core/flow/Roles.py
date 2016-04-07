@@ -27,6 +27,7 @@ from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 
+
 class Roles(FlowBase):
 
     def roles(self,
@@ -1126,10 +1127,14 @@ class Roles(FlowBase):
             #
             # 3. Set Policy Role
             #
-            self.ac.provisionPolicy(SERVICE_NAME,
-                                    SERVICE_ADMIN_TOKEN,
-                                    ROLE_ID,
-                                    POLICY_FILE_NAME)
+            if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
+
+                self.ac.provisionPolicy(SERVICE_NAME,
+                                        SERVICE_ADMIN_TOKEN,
+                                        ROLE_ID,
+                                        POLICY_FILE_NAME)
+            else:
+                raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
             self.logger.error(ex)

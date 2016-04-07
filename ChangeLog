@@ -1,9 +1,15 @@
 CHANGES
 =======
 
+
+
+0.7.2
+
 task/add_log_service_subservice
 task/transaction_id
+task/change_log_level_api
 fix/disable_django_debug
+task/api_set_role_policy
 task/print_pretty_tokens_in_logs
 task/get_role_policies_api
 task/add_tests for clean data

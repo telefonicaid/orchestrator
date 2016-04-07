@@ -1401,3 +1401,11 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+    def isTokenAdmin(self, TOKEN, DOMAIN_ID):
+        # Check Role admin asigned in DOMAIN
+        token_res = self.getTokenDetail(TOKEN)
+        for role in token_res['token']['roles']:
+            if role['name'] == 'admin':
+                return True
+        return False
