@@ -151,6 +151,9 @@ class IoTConf(Stats):
     def getCorrelatorId(self, request):
         return request.META.get('FIWARE-CORRELATOR', None)
 
+    def getXAuthToken(self, request):
+        return request.META.get('HTTP_X_AUTH_TOKEN', None)
+
 
 class ServiceList_RESTView(APIView, IoTConf):
     """
@@ -166,7 +169,7 @@ class ServiceList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id=None):
         self.schema_name = "ServiceList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -209,7 +212,7 @@ class ServiceList_RESTView(APIView, IoTConf):
 
     def put(self, request, service_id=None):
         self.schema_name = "ServiceList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA # json validation
@@ -241,7 +244,7 @@ class ServiceList_RESTView(APIView, IoTConf):
 
     def delete(self, request, service_id=None):
         self.schema_name = "ServiceList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -289,7 +292,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
         ServiceList_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -342,7 +345,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
     def get(self, request, service_id=None, subservice_id=None):
 
         self.schema_name = "SubServiceList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -392,7 +395,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
     def put(self, request, service_id=None, subservice_id=None):
 
         self.schema_name = "SubServiceList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             # request.DATA # json validation
@@ -433,7 +436,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
     def delete(self, request, service_id=None, subservice_id=None):
         self.schema_name = "SubServiceList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             # request.DATA # json validation
@@ -487,7 +490,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
         SubServiceList_RESTView.__init__(self)
 
     def post(self, request, service_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -633,7 +636,7 @@ class User_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, user_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -665,7 +668,7 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def put(self, request, service_id, user_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -697,7 +700,7 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def get(self, request, service_id, user_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -727,7 +730,7 @@ class User_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, user_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -774,7 +777,7 @@ class UserList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
@@ -811,7 +814,7 @@ class UserList_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -858,7 +861,7 @@ class Role_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id, role_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -897,7 +900,7 @@ class Role_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, role_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         try:
             request.DATA  # json validation
 
@@ -936,7 +939,7 @@ class Role_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id, role_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -981,7 +984,7 @@ class RoleList_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id):
         self.schema_name = "RoleList"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1015,7 +1018,7 @@ class RoleList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id=None):
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
@@ -1065,7 +1068,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         role_id = request.GET.get('role_id', None)
         effective = request.GET.get('effective', False) == "true"
 
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         flow = Roles(self.KEYSTONE_PROTOCOL,
                      self.KEYSTONE_HOST,
@@ -1095,7 +1098,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
@@ -1165,7 +1168,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
     def delete(self, request, service_id):
         self.schema_name = "AssignRole"
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
@@ -1246,7 +1249,7 @@ class Trust_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1298,7 +1301,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1354,7 +1357,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             )
 
     def delete(self, request, service_id, subservice_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1413,7 +1416,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1472,7 +1475,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1541,7 +1544,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id, subservice_id=None):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1615,7 +1618,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             )
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1691,7 +1694,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
 
 
     def delete(self, request, service_id, subservice_id=None, iot_module=None):
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
@@ -1776,7 +1779,7 @@ class OrchVersion_RESTView(APIView, IoTConf):
 
     def get(self, request):
 
-        #HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        #HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         try:
             # Extract version and stats data
             result = {
@@ -1858,7 +1861,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
 
     def put(self, request):
 
-        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         logLevel = request.GET.get('level', None)
 
         try:
