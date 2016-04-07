@@ -38,7 +38,8 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     SubServiceIoTADevices_RESTView,
                                     SubServiceIoTAService_RESTView,
                                     IOTModuleActivation_RESTView,
-                                    OrchVersion_RESTView
+                                    OrchVersion_RESTView,
+                                    OrchLogLevel_RESTView
                                     )
 
 
@@ -61,4 +62,5 @@ urlpatterns = patterns('',
      url(r'^service/(?P<service_id>\w+)/role_assignments[/]?$', AssignRoleUser_RESTView.as_view(), name='assign_role_rest_view'),
      url(r'^service/(?P<service_id>\w+)/trust[/]?$', Trust_RESTView.as_view(), name='new_trust_rest_view'),
      url(r'^version[/]?$', OrchVersion_RESTView.as_view(), name='orch_version_rest_view'),
+     url(r'^admin/log?$', OrchLogLevel_RESTView.as_view(), name='orch_loglevel_rest_view'),
 )

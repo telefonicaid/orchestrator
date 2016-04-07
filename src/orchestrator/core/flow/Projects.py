@@ -315,8 +315,12 @@ class Projects(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
             if (len(subscriptions_deleted) > 0):
+<<<<<<< HEAD
                 self.logger.info("subscriptions deleted %s",
                                  subscriptions_deleted)
+=======
+                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
+>>>>>>> develop
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
@@ -495,8 +499,12 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
+<<<<<<< HEAD
             self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
                                                                      indent=3))
+=======
+            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+>>>>>>> develop
             subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
             self.logger.debug("subscription id ca=%s" % subscriptionid_ca)
 
@@ -577,8 +585,12 @@ class Projects(FlowBase):
                                            STATIC_ATTRIBUTES
                                         )
 
+<<<<<<< HEAD
             self.logger.debug("updateContext res=%s" % json.dumps(cb_res,
                                                                   indent=3))
+=======
+            self.logger.debug("updateContext res=%s" % json.dumps(cb_res, indent=3))
+>>>>>>> develop
 
             for r in cb_res['contextResponses']:
                 # Check ContextBroker status response
@@ -694,8 +706,12 @@ class Projects(FlowBase):
                     ATTRIBUTES,
                     NOTIFY_CONDITIONS
                     )
+<<<<<<< HEAD
                 self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
                                                                          indent=3))
+=======
+                self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+>>>>>>> develop
                 subscriptionid_sth = cb_res['subscribeResponse']['subscriptionId']
                 self.logger.debug("registration id sth=%s" % subscriptionid_sth)
 
@@ -1428,8 +1444,12 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
+<<<<<<< HEAD
             self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
                                                                      indent=3))
+=======
+            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+>>>>>>> develop
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
@@ -1532,8 +1552,12 @@ class Projects(FlowBase):
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
+<<<<<<< HEAD
             self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res,
                                                                          indent=3))
+=======
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
+>>>>>>> develop
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
