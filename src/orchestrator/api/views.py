@@ -78,6 +78,8 @@ class Stats(object):
     num_delete_role = 0
     num_post_role = 0
     num_get_role = 0
+    num_get_role_policies = 0
+    num_post_role_policies = 0
 
     num_delete_roleassignment = 0
     num_post_roleassignment = 0
@@ -878,7 +880,52 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("ROLE_NAME", None),
                 request.DATA.get("ROLE_ID", role_id))
 
-            return Response(result, status=status.HTTP_200_OK)
+            if 'error' not in result:
+                Stats.num_get_role_policies += 1
+                return Response(result, status=status.HTTP_200_OK)
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
+
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def post(self, request, service_id, role_id):
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        try:
+            request.DATA  # json validation
+
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         self.KEYPASS_PROTOCOL,
+                         self.KEYPASS_HOST,
+                         self.KEYPASS_PORT)
+
+            result = flow.setPolicyRole(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("POLICY_FILE_NAME", None),
+            )
+
+            if 'error' not in result:
+                Stats.num_post_role_policies += 1
+                return Response(result, status=status.HTTP_201_CREATED)
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']))
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1758,6 +1805,8 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_delete_role": self.num_delete_role,
                     "num_post_role": self.num_post_role,
                     "num_get_role": self.num_get_role,
+                    "num_post_role_policies": self.num_post_role_policies,
+                    "num_get_role_policies": self.num_get_role_policies,
 
                     "num_delete_roleassignment": self.num_delete_roleassignment,
                     "num_post_roleassignment": self.num_post_roleassignment,
@@ -1795,5 +1844,76 @@ class OrchVersion_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class OrchLogLevel_RESTView(APIView, IoTConf):
+    """
+     { Update } Orchestrator LogLevel
+    """
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def put(self, request):
+
+        HTTP_X_AUTH_TOKEN = request.META.get('HTTP_X_AUTH_TOKEN', None)
+        logLevel = request.GET.get('level', None)
+
+        try:
+            # Check HTTP_X_AUTH_TOKEN: should belongs to default admin domain
+            flow = Domains(self.KEYSTONE_PROTOCOL,
+                           self.KEYSTONE_HOST,
+                           self.KEYSTONE_PORT)
+            result = flow.domains(
+                    "admin_domain",
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                     HTTP_X_AUTH_TOKEN))
+
+            if 'error' in result:
+                raise ParseError(detail="wrong auth provided")
+            else:
+                result = None
+
+            if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING",
+                                "INFO", "DEBUG"]:
+                raise ParseError(detail="not supported log level")
+
+            LEVELS = {
+                'DEBUG': logging.DEBUG,
+                'INFO': logging.INFO,
+                'WARNING': logging.WARNING,
+                'ERROR': logging.ERROR,
+                'FATAL': logging.FATAL,
+                'CRITICAL': logging.CRITICAL
+            }
+
+            # Set loggers level to such log level
+            logging.getLogger('django').setLevel(LEVELS[logLevel])
+            logging.getLogger('django.request').setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').setLevel(LEVELS[logLevel])
+
+            # Set also handlers (console and file)) to such log level
+            logging.getLogger('orchestrator_api').handlers[0].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').handlers[1].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').handlers[0].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_core').handlers[1].setLevel(LEVELS[logLevel])
+
+            # print it into a trace
+            logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
+                logLevel, indent=3))
+
+            return Response(result, status=status.HTTP_200_OK)
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
                 status=status.HTTP_400_BAD_REQUEST
             )
