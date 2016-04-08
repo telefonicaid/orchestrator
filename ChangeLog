@@ -4,6 +4,7 @@ CHANGES
 
 0.7.2
 
+fix/alias_iotmodule_not_found
 task/change_log_level_api
 fix/disable_django_debug
 task/api_set_role_policy
