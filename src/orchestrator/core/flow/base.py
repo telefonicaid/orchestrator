@@ -131,9 +131,10 @@ class FlowBase(object):
         else:
             comppackage = __import__("settings.dev", fromlist=iot_module)
             iot_module_conf = getattr(comppackage, iot_module)
-            assert 'alias' in iot_module_conf
-            alias = iot_module_conf['alias']
-            self.iotmodules_aliases[iot_module] = alias
+            alias = iot_module
+            if 'alias' in iot_module_conf:
+                alias = iot_module_conf['alias']
+                self.iotmodules_aliases[iot_module] = alias
             return alias
 
 
