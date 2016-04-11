@@ -37,6 +37,7 @@ class CBOrionOperations(object):
                  CB_PROTOCOL=None,
                  CB_HOST=None,
                  CB_PORT=None,
+                 CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
 
         self.CB_PROTOCOL = CB_PROTOCOL
@@ -46,6 +47,7 @@ class CBOrionOperations(object):
         self.CBRestOperations = RestOperations(CB_PROTOCOL,
                                                CB_HOST,
                                                CB_PORT,
+                                               CORRELATOR_ID,
                                                TRANSACTION_ID)
 
 

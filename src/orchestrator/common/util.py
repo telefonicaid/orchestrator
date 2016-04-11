@@ -38,6 +38,7 @@ class RestOperations(object):
                  PROTOCOL=None,
                  HOST=None,
                  PORT=None,
+                 CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
 
         self.PROTOCOL = PROTOCOL
@@ -52,6 +53,11 @@ class RestOperations(object):
             self.TRANSACTION_ID = TRANSACTION_ID
         else:
             self.TRANSACTION_ID = None
+
+        if CORRELATOR_ID:
+            self.CORRELATOR_ID = CORRELATOR_ID
+        else:
+            self.CORRELATOR_ID = None
 
 
     def rest_request(self, url, method, user=None, password=None,
@@ -109,6 +115,9 @@ class RestOperations(object):
 
         if self.TRANSACTION_ID:
             request.add_header('Fiware-Transaction', self.TRANSACTION_ID)
+
+        if self.CORRELATOR_ID:
+            request.add_header('Fiware-Correlator', self.CORRELATOR_ID)
 
         res = None
 
@@ -194,6 +203,12 @@ class RestOperations(object):
         if fiware_service_path:
             headers.update({'Fiware-ServicePath': fiware_service_path})
 
+        if self.TRANSACTION_ID:
+            headers.update({'Fiware-Transaction': self.TRANSACTION_ID})
+
+        if self.CORRELATOR_ID:
+            headers.update({'Fiware-Correlator': self.CORRELATOR_ID})
+
         res = None
 
         try:
@@ -259,7 +274,6 @@ class ContextFilterService(logging.Filter):
     """
     This is a filter which injects contextual information into the log.
     """
-
     def __init__(self, service):
         self.service = service
 
@@ -267,14 +281,26 @@ class ContextFilterService(logging.Filter):
         record.service = self.service
         return True
 
+
 class ContextFilterSubService(logging.Filter):
     """
     This is a filter which injects contextual information into the log.
     """
-
     def __init__(self, subservice):
         self.subservice = subservice
 
     def filter(self, record):
         record.subservice = self.subservice
+        return True        
+
+
+class ContextFilterCorrelatorId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """            
+    def __init__(self, CORRELATOR_ID):
+        self.CORRELATOR_ID = CORRELATOR_ID
+
+    def filter(self, record):
+        record.correlator = self.CORRELATOR_ID
         return True
