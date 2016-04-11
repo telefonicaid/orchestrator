@@ -24,11 +24,8 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
-<<<<<<< HEAD
 from orchestrator.common.util import ContextFilterService
-=======
 
->>>>>>> develop
 
 class CreateNewServiceRole(FlowBase):
 
@@ -87,14 +84,11 @@ class CreateNewServiceRole(FlowBase):
                                                        SERVICE_ID))
 
             # Ensure SERVICE_NAME
-<<<<<<< HEAD
             SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
-=======
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN, SERVICE_ID, SERVICE_NAME)
->>>>>>> develop
+
             self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #
