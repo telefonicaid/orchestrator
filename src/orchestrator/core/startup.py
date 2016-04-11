@@ -29,12 +29,15 @@ from django.conf import settings
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
+
+from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 
 logger = logging.getLogger('orchestrator_api')
-logger.addFilter(ContextFilterTransactionId("None"))
+logger.addFilter(ContextFilterCorrelatorId("n/a"))
+logger.addFilter(ContextFilterTransactionId("n/a"))
 logger.addFilter(ContextFilterService("None"))
 logger.addFilter(ContextFilterSubService(""))
 

@@ -37,6 +37,7 @@ class IoTACppOperations(object):
                  IOTA_PROTOCOL=None,
                  IOTA_HOST=None,
                  IOTA_PORT=None,
+                 CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
 
         self.IOTA_PROTOCOL = IOTA_PROTOCOL
@@ -46,6 +47,7 @@ class IoTACppOperations(object):
         self.IoTACppRestOperations = RestOperations(IOTA_PROTOCOL,
                                                     IOTA_HOST,
                                                     IOTA_PORT,
+                                                    CORRELATOR_ID,
                                                     TRANSACTION_ID)
 
     def checkIoTA(self):
