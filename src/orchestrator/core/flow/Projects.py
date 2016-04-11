@@ -315,12 +315,8 @@ class Projects(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
             if (len(subscriptions_deleted) > 0):
-<<<<<<< HEAD
                 self.logger.info("subscriptions deleted %s",
                                  subscriptions_deleted)
-=======
-                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
->>>>>>> develop
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
