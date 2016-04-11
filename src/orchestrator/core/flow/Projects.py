@@ -25,6 +25,8 @@ import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import CSVOperations
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 from settings.dev import IOTMODULES
 
 
@@ -278,6 +280,7 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
@@ -288,6 +291,7 @@ class Projects(FlowBase):
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -311,7 +315,8 @@ class Projects(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
             if (len(subscriptions_deleted) > 0):
-                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
+                self.logger.info("subscriptions deleted %s",
+                                 subscriptions_deleted)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
@@ -427,11 +432,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -488,7 +495,8 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
+                                                                     indent=3))
             subscriptionid_ca = cb_res['subscribeResponse']['subscriptionId']
             self.logger.debug("subscription id ca=%s" % subscriptionid_ca)
 
@@ -569,7 +577,8 @@ class Projects(FlowBase):
                                            STATIC_ATTRIBUTES
                                         )
 
-            self.logger.debug("updateContext res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("updateContext res=%s" % json.dumps(cb_res,
+                                                                  indent=3))
 
             for r in cb_res['contextResponses']:
                 # Check ContextBroker status response
@@ -685,7 +694,8 @@ class Projects(FlowBase):
                     ATTRIBUTES,
                     NOTIFY_CONDITIONS
                     )
-                self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+                self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
+                                                                         indent=3))
                 subscriptionid_sth = cb_res['subscribeResponse']['subscriptionId']
                 self.logger.debug("registration id sth=%s" % subscriptionid_sth)
 
@@ -831,11 +841,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1132,11 +1144,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1259,11 +1273,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1350,11 +1366,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1410,7 +1428,8 @@ class Projects(FlowBase):
                 ATTRIBUTES,
                 NOTIFY_CONDITIONS
             )
-            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
+                                                                     indent=3))
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
@@ -1488,11 +1507,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
@@ -1511,7 +1532,8 @@ class Projects(FlowBase):
                 DOMAIN_NAME,
                 PROJECT_NAME
             )
-            self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res,
+                                                                         indent=3))
 
             for sub in cb_res:
                 subs_url = sub["notification"]["callback"]
@@ -1596,11 +1618,13 @@ class Projects(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(SERVICE_USER_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("PROJECT_NAME=%s" % PROJECT_NAME)
