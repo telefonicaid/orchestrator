@@ -416,7 +416,6 @@ class Domains(FlowBase):
                 policies = self.ac.getRolePolicies(SERVICE_NAME,
                                                    SERVICE_ADMIN_TOKEN,
                                                    ROLE_ID)
-
                 self.logger.debug("POLICIES=%s" % policies)
             else:
                 raise Exception("not admin role found to perform this action")

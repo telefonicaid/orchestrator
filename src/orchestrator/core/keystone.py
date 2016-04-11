@@ -38,7 +38,8 @@ class IdMKeystoneOperations(IdMOperations):
     def __init__(self,
                  KEYSTONE_PROTOCOL=None,
                  KEYSTONE_HOST=None,
-                 KEYSTONE_PORT=None):
+                 KEYSTONE_PORT=None,
+                 TRANSACTION_ID=None):
 
         self.KEYSTONE_PROTOCOL = KEYSTONE_PROTOCOL
         self.KEYSTONE_HOST = KEYSTONE_HOST
@@ -46,7 +47,8 @@ class IdMKeystoneOperations(IdMOperations):
 
         self.IdMRestOperations = RestOperations(KEYSTONE_PROTOCOL,
                                                 KEYSTONE_HOST,
-                                                KEYSTONE_PORT)
+                                                KEYSTONE_PORT,
+                                                TRANSACTION_ID)
 
         try:
             from settings.common import SCIM_API_VERSION

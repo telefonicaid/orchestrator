@@ -36,7 +36,9 @@ class CBOrionOperations(object):
     def __init__(self,
                  CB_PROTOCOL=None,
                  CB_HOST=None,
-                 CB_PORT=None):
+                 CB_PORT=None,
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         self.CB_PROTOCOL = CB_PROTOCOL
         self.CB_HOST = CB_HOST
@@ -44,7 +46,9 @@ class CBOrionOperations(object):
 
         self.CBRestOperations = RestOperations(CB_PROTOCOL,
                                                CB_HOST,
-                                               CB_PORT)
+                                               CB_PORT,
+                                               CORRELATOR_ID,
+                                               TRANSACTION_ID)
 
 
     def checkCB(self):
