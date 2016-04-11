@@ -26,6 +26,8 @@ import base64
 import json
 import csv
 import StringIO
+import requests
+import logging
 
 class RestOperations(object):
     '''
@@ -35,7 +37,9 @@ class RestOperations(object):
     def __init__(self,
                  PROTOCOL=None,
                  HOST=None,
-                 PORT=None):
+                 PORT=None,
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         self.PROTOCOL = PROTOCOL
         self.HOST = HOST
@@ -44,6 +48,17 @@ class RestOperations(object):
             self.base_url = PROTOCOL+'://'+HOST+':'+PORT
         else:
             self.base_url = None
+
+        if TRANSACTION_ID:
+            self.TRANSACTION_ID = TRANSACTION_ID
+        else:
+            self.TRANSACTION_ID = None
+
+        if CORRELATOR_ID:
+            self.CORRELATOR_ID = CORRELATOR_ID
+        else:
+            self.CORRELATOR_ID = None
+
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
@@ -97,6 +112,12 @@ class RestOperations(object):
 
         if fiware_service_path:
             request.add_header('Fiware-ServicePath', fiware_service_path)
+
+        if self.TRANSACTION_ID:
+            request.add_header('Fiware-Transaction', self.TRANSACTION_ID)
+
+        if self.CORRELATOR_ID:
+            request.add_header('Fiware-Correlator', self.CORRELATOR_ID)
 
         res = None
 
@@ -182,6 +203,12 @@ class RestOperations(object):
         if fiware_service_path:
             headers.update({'Fiware-ServicePath': fiware_service_path})
 
+        if self.TRANSACTION_ID:
+            headers.update({'Fiware-Transaction': self.TRANSACTION_ID})
+
+        if self.CORRELATOR_ID:
+            headers.update({'Fiware-Correlator': self.CORRELATOR_ID})
+
         res = None
 
         try:
@@ -228,3 +255,29 @@ class CSVOperations(object):
                 devices[header[i]].append(value)
 
         return i, header, devices
+
+
+class ContextFilterTransactionId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def __init__(self, TRANSACTION_ID):
+        self.TRANSACTION_ID = TRANSACTION_ID
+
+    def filter(self, record):
+        record.transaction = self.TRANSACTION_ID
+        return True
+
+
+class ContextFilterCorrelatorId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def __init__(self, CORRELATOR_ID):
+        self.CORRELATOR_ID = CORRELATOR_ID
+
+    def filter(self, record):
+        record.correlator = self.CORRELATOR_ID
+        return True

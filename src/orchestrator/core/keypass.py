@@ -37,7 +37,9 @@ class AccCKeypassOperations(AccCOperations):
     def __init__(self,
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,
-                 KEYPASS_PORT=None):
+                 KEYPASS_PORT=None,
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         self.KEYPASS_PROTOCOL = KEYPASS_PROTOCOL
         self.KEYPASS_HOST = KEYPASS_HOST
@@ -45,7 +47,9 @@ class AccCKeypassOperations(AccCOperations):
 
         self.AccessControlRestOperations = RestOperations(KEYPASS_PROTOCOL,
                                                           KEYPASS_HOST,
-                                                          KEYPASS_PORT)
+                                                          KEYPASS_PORT,
+                                                          CORRELATOR_ID,
+                                                          TRANSACTION_ID)
 
         self.policy_dir = os.path.dirname(policies.__file__)
 
