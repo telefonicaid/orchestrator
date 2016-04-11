@@ -24,6 +24,8 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 from settings.common import IOTAGENT, PEP
 
 
@@ -102,7 +104,8 @@ class CreateTrustToken(FlowBase):
                 SERVICE = self.idm.getDomain(SERVICE_ADMIN_TOKEN, SERVICE_ID)
                 SERVICE_NAME = SERVICE['domain']['name']
                 self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
-                                                           SERVICE_ID))
+                                                                SERVICE_ID))
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
 
             #
             # 2. Get SubService (aka project)
@@ -112,7 +115,8 @@ class CreateTrustToken(FlowBase):
                                                       SERVICE_NAME,
                                                       SUBSERVICE_NAME)
                 self.logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
-                                                              SUBSERVICE_ID))
+                                                                   SUBSERVICE_ID))
+            self.logger.addFilter(ContextFilterSubService(SUBSERVICE_NAME))
 
             #
             # 3. Get role

@@ -30,6 +30,8 @@ from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 
 from settings.dev import IOTMODULES
 
@@ -68,7 +70,8 @@ class FlowBase(object):
         # Put collector into logger
         self.logger.addFilter(ContextFilterCorrelatorId(CORRELATOR_ID))
         self.logger.addFilter(ContextFilterTransactionId(TRANSACTION_ID))
-
+        self.logger.addFilter(ContextFilterService(None))
+        self.logger.addFilter(ContextFilterSubService(""))
 
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,

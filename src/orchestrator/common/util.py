@@ -270,11 +270,34 @@ class ContextFilterTransactionId(logging.Filter):
         return True
 
 
-class ContextFilterCorrelatorId(logging.Filter):
+class ContextFilterService(logging.Filter):
     """
     This is a filter which injects contextual information into the log.
     """
+    def __init__(self, service):
+        self.service = service
 
+    def filter(self, record):
+        record.service = self.service
+        return True
+
+
+class ContextFilterSubService(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+    def __init__(self, subservice):
+        self.subservice = subservice
+
+    def filter(self, record):
+        record.subservice = self.subservice
+        return True        
+
+
+class ContextFilterCorrelatorId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """            
     def __init__(self, CORRELATOR_ID):
         self.CORRELATOR_ID = CORRELATOR_ID
 

@@ -24,6 +24,8 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 
 
 class Roles(FlowBase):
@@ -174,6 +176,7 @@ class Roles(FlowBase):
             DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
 
             # Extract PROJECT, USER, ROLE IDs from NAME
@@ -477,11 +480,12 @@ class Roles(FlowBase):
             if not SERVICE_NAME:
                 SERVICE_NAME = self.idm.getDomainNameFromToken(SERVICE_ADMIN_TOKEN,
                                                                SERVICE_ID)
-
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             #
             # 1. Get service (aka domain)
             #
-            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
 
             #
             # 2. Get SubService (aka project)
@@ -495,6 +499,7 @@ class Roles(FlowBase):
                 SUBSERVICE_NAME = self.idm.getProjectNameFromToken(SERVICE_ADMIN_TOKEN,
                                                                    SERVICE_ID,
                                                                    SUBSERVICE_ID)
+            self.logger.addFilter(ContextFilterSubService(SUBSERVICE_NAME))
 
             self.logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
                                                           SUBSERVICE_ID))
@@ -921,7 +926,8 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
-            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME, SERVICE_ID))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
 
             #
             # 2. Get role
