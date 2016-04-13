@@ -2905,7 +2905,7 @@ class Test_LogLevel_RestView(object):
         token_res = self.TestRestOps.getToken(self.payload_data_ok)
         ADMIN_TOKEN = token_res.headers.get('X-Subject-Token')
         res = self.TestRestOps.rest_request(method="PUT",
-                                            url="/v1.0/admin/log?level=DEBUG",
+                                            url="/v1.0/admin/log?level=Debug",
                                             json_data=True,
                                             auth_token=ADMIN_TOKEN,
                                             data=None)

@@ -1881,8 +1881,9 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             else:
                 result = None
 
-            if logLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING",
-                                "INFO", "DEBUG"]:
+            newLogLevel = logLevel.upper()
+            if newLogLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING",
+                                   "INFO", "DEBUG"]:
                 raise ParseError(detail="not supported log level")
 
             LEVELS = {
@@ -1894,17 +1895,18 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                 'CRITICAL': logging.CRITICAL
             }
 
+
             # Set loggers level to such log level
-            logging.getLogger('django').setLevel(LEVELS[logLevel])
-            logging.getLogger('django.request').setLevel(LEVELS[logLevel])
-            logging.getLogger('orchestrator_api').setLevel(LEVELS[logLevel])
-            logging.getLogger('orchestrator_core').setLevel(LEVELS[logLevel])
+            logging.getLogger('django').setLevel(LEVELS[newLogLevel])
+            logging.getLogger('django.request').setLevel(LEVELS[newLogLevel])
+            logging.getLogger('orchestrator_api').setLevel(LEVELS[newLogLevel])
+            logging.getLogger('orchestrator_core').setLevel(LEVELS[newLogLevel])
 
             # Set also handlers (console and file)) to such log level
-            logging.getLogger('orchestrator_api').handlers[0].setLevel(LEVELS[logLevel])
-            logging.getLogger('orchestrator_api').handlers[1].setLevel(LEVELS[logLevel])
-            logging.getLogger('orchestrator_core').handlers[0].setLevel(LEVELS[logLevel])
-            logging.getLogger('orchestrator_core').handlers[1].setLevel(LEVELS[logLevel])
+            logging.getLogger('orchestrator_api').handlers[0].setLevel(LEVELS[newLogLevel])
+            logging.getLogger('orchestrator_api').handlers[1].setLevel(LEVELS[newLogLevel])
+            logging.getLogger('orchestrator_core').handlers[0].setLevel(LEVELS[newLogLevel])
+            logging.getLogger('orchestrator_core').handlers[1].setLevel(LEVELS[newLogLevel])
 
             # print it into a trace
             logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
