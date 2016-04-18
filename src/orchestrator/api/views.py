@@ -151,7 +151,7 @@ class IoTConf(Stats):
         return rstatus
 
     def getCorrelatorId(self, request):
-        return request.META.get('FIWARE-CORRELATOR', None)
+        return request.META.get('HTTP_FIWARE_CORRELATOR', None)
 
     def getXAuthToken(self, request):
         return request.META.get('HTTP_X_AUTH_TOKEN', None)
