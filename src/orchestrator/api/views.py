@@ -196,11 +196,13 @@ class ServiceList_RESTView(APIView, IoTConf):
                                      HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
                 Stats.num_get_service += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -229,11 +231,13 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_SERVICE_DESCRIPTION", None))
             if 'error' not in result:
                 Stats.num_put_service += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -266,11 +270,13 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
                 Stats.num_delete_service += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -317,11 +323,13 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
 
             if 'token' in result:
                 Stats.num_post_service += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -378,11 +386,13 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_get_subservice += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -421,11 +431,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_put_subservice += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -466,11 +479,13 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_delete_subservice += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -609,11 +624,13 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
             if 'id' in result and ('error' not in result):
                 Stats.num_post_subservice += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -654,11 +671,13 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("USER_ID", user_id))
             if 'error' not in result:
                 Stats.num_delete_user += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -687,11 +706,13 @@ class User_RESTView(APIView, IoTConf):
                 request.DATA.get("USER_DATA_VALUE"))
             if 'error' not in result:
                 Stats.num_put_user += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -716,11 +737,13 @@ class User_RESTView(APIView, IoTConf):
                                                 HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
                 Stats.num_get_user += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -751,11 +774,13 @@ class User_RESTView(APIView, IoTConf):
                 )
             if 'error' not in result:
                 Stats.num_post_user += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -800,11 +825,13 @@ class UserList_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_get_userlist += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -835,11 +862,13 @@ class UserList_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_SERVICE_USER_DESCRIPTION", None))
             if 'id' in result:
                 Stats.num_post_userlist += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -885,11 +914,13 @@ class Role_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_get_role_policies += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -901,6 +932,7 @@ class Role_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id, role_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorId(request)
         try:
             request.DATA  # json validation
 
@@ -909,7 +941,8 @@ class Role_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          self.KEYPASS_PROTOCOL,
                          self.KEYPASS_HOST,
-                         self.KEYPASS_PORT)
+                         self.KEYPASS_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
 
             result = flow.setPolicyRole(
                 request.DATA.get("SERVICE_NAME", None),
@@ -924,11 +957,13 @@ class Role_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_post_role_policies += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -957,11 +992,13 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("ROLE_ID", role_id))
             if 'error' not in result:
                 Stats.num_delete_role += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -1002,11 +1039,13 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.DATA.get("XACML_POLICY", None))
             if 'error' not in result:
                 Stats.num_post_role += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1039,11 +1078,13 @@ class RoleList_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_get_role += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -1090,11 +1131,13 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
 
         if 'error' not in result:
             Stats.num_get_roleassignment += 1
-            return Response(result, status=status.HTTP_200_OK)
+            return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         else:
             Stats.num_flow_errors += 1
             return Response(result['error'],
-                            status=self.getStatusFromCode(result['code']))
+                            status=self.getStatusFromCode(result['code']),
+                            headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
@@ -1153,11 +1196,13 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
                 Stats.num_post_roleassignment += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -1223,11 +1268,13 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.DATA.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
                 Stats.num_delete_roleassignment += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -1274,11 +1321,13 @@ class Trust_RESTView(APIView, IoTConf):
             )
             if 'error' not in result:
                 Stats.num_post_trust += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1342,11 +1391,13 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             )
             if 'error' not in result:
                 Stats.num_post_device += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1389,11 +1440,13 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             )
             if 'error' not in result:
                 Stats.num_delete_device += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1448,11 +1501,13 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
             )
             if 'error' not in result:
                 Stats.num_post_devices += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1517,11 +1572,13 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             )
             if 'error' not in result:
                 Stats.num_post_entity_service += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1602,12 +1659,14 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             if 'error' not in modules:
                 result['actived_modules'] = modules
                 Stats.num_get_module_activation += 1
-                return Response(result, status=status.HTTP_200_OK)
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 result = modules
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1678,11 +1737,13 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             result['subscriptionid'] = sub
             if 'error' not in result:
                 Stats.num_post_module_activation += 1
-                return Response(result, status=status.HTTP_201_CREATED)
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1754,11 +1815,13 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 Stats.num_delete_module_activation += 1
-                return Response(result, status=status.HTTP_204_NO_CONTENT)
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
-                                status=self.getStatusFromCode(result['code']))
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
@@ -1862,13 +1925,15 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
     def put(self, request):
 
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorId(request)
         logLevel = request.GET.get('level', None)
 
         try:
             # Check HTTP_X_AUTH_TOKEN: should belongs to default admin domain
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
-                           self.KEYSTONE_PORT)
+                           self.KEYSTONE_PORT,
+                           CORRELATOR_ID=CORRELATOR_ID)
             result = flow.domains(
                     "admin_domain",
                     request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1912,7 +1977,9 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
                 logLevel, indent=3))
 
-            return Response(result, status=status.HTTP_200_OK)
+            return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+
 
         except ParseError as error:
             body = {
