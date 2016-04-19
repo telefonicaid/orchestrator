@@ -626,7 +626,7 @@ class Domains(FlowBase):
             )
 
             for sub in cb_res:
-                subs_url = sub["notification"]["http"]["uri"]
+                subs_url = sub["notification"]["http"]["url"]
                 subscriptionid = sub['id']
                 if subs_url.startswith(REFERENCE_URL):
 
@@ -716,7 +716,7 @@ class Domains(FlowBase):
             )
             modules = []
             for sub in cb_res:
-                sub_callback = sub["notification"]["http"]["uri"]
+                sub_callback = sub["notification"]["http"]["url"]
                 for iotmodule in IOTMODULES:
                     if sub_callback.startswith(
                             self.get_endpoint_iot_module(iotmodule)):
