@@ -1642,7 +1642,7 @@ class Projects(FlowBase):
                 PROJECT_NAME
             )
             self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
-            modules = self.db.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
+            modules = self.cb.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
