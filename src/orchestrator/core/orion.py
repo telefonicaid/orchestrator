@@ -343,3 +343,31 @@ class CBOrionOperations(object):
                 logger.error("%s trying to unsubscribe context: %s" % (ex,
                                                         subscription['id']))
         return subscriptions_deleted
+
+    def extract_modules_from_subscriptions(self,
+                                           flow,
+                                           iot_modules,
+                                           subscriptions):
+        modules = []
+        for sub in subscriptions:
+            if "notification" in sub:
+                if "callback" in sub["notification"]:
+                    sub_callback = sub["notification"]["callback"]
+                else:  # From Orion 1.1.0'
+                    if "http" in sub["notification"]:
+                        sub_callback = sub["notification"]["http"]["url"]
+                    else:
+                        sub_callback = ""
+                for iotmodule in iot_modules:
+                    if sub_callback.startswith(
+                        flow.get_endpoint_iot_module(iotmodule)):
+                        if ((len(sub['subject']['entities']) == 1) and
+                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            (sub['subject']['entities'][0]['type'] == '')):
+                            modules.append(
+                                { "name": iotmodule,
+                                  "subscriptionid": sub['id'],
+                                  "alias": flow.get_alias_iot_module(iotmodule)
+                              })
+                            break
+        return modules
