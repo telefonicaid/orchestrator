@@ -351,13 +351,7 @@ class CBOrionOperations(object):
         modules = []
         for sub in subscriptions:
             if "notification" in sub:
-                if "callback" in sub["notification"]:
-                    sub_callback = sub["notification"]["callback"]
-                else:  # From Orion 1.1.0'
-                    if "http" in sub["notification"]:
-                        sub_callback = sub["notification"]["http"]["url"]
-                    else:
-                        sub_callback = ""
+                sub_callback = self.get_subscription_callback_endpoint(sub)
                 for iotmodule in iot_modules:
                     if sub_callback.startswith(
                         flow.get_endpoint_iot_module(iotmodule)):
@@ -370,4 +364,16 @@ class CBOrionOperations(object):
                                   "alias": flow.get_alias_iot_module(iotmodule)
                               })
                             break
+
         return modules
+
+    def get_subscription_callback_endpoint(self, sub):
+        sub_callback = ""
+        if "notification" in sub:
+            if "callback" in sub["notification"]:
+                sub_callback = sub["notification"]["callback"]
+            else:  # From Orion 1.1.0
+                if "http" in sub["notification"]:
+                    sub_callback = sub["notification"]["http"]["url"]
+
+        return sub_callback

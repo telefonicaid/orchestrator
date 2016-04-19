@@ -1536,7 +1536,7 @@ class Projects(FlowBase):
                                                                          indent=3))
 
             for sub in cb_res:
-                subs_url = sub["notification"]["http"]["url"]
+                subs_url = self.cb.get_subscription_callback_endpoint(sub)
                 subscriptionid = sub['id']
                 if subs_url.startswith(REFERENCE_URL):
 
