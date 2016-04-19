@@ -1536,7 +1536,7 @@ class Projects(FlowBase):
                                                                          indent=3))
 
             for sub in cb_res:
-                subs_url = sub["notification"]["http"]["uri"]
+                subs_url = sub["notification"]["http"]["url"]
                 subscriptionid = sub['id']
                 if subs_url.startswith(REFERENCE_URL):
 
@@ -1644,7 +1644,7 @@ class Projects(FlowBase):
             self.logger.debug("getListSubscriptions res=%s" % json.dumps(cb_res, indent=3))
             modules = []
             for sub in cb_res:
-                sub_callback = sub["notification"]["http"]["uri"]
+                sub_callback = sub["notification"]["http"]["url"]
                 for iotmodule in IOTMODULES:
                     if sub_callback.startswith(self.get_endpoint_iot_module(iotmodule)):
                         # Check All entities and servicePath
