@@ -56,14 +56,16 @@ class FlowBase(object):
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
                  CA_PORT="9999",
-                 CORRELATOR_ID=None,
-                 TRANSACTION_ID=None):
+                 TRANSACTION_ID=None,
+                 CORRELATOR_ID=None):
 
         # Generate Transaction ID
         self.TRANSACTION_ID = uuid.uuid4()
 
         if not CORRELATOR_ID:
             self.CORRELATOR_ID = self.TRANSACTION_ID
+        else:
+            self.CORRELATOR_ID = CORRELATOR_ID
 
         self.logger = logging.getLogger('orchestrator_core')
 
