@@ -49,7 +49,6 @@ CA = {
     "host": "localhost",
     "port": "9999",
     "protocol":"http",
-    "alias": "GEO"
 }
 
 # STH endpoint (just for use as reference in Orion Subscriptions)
@@ -57,7 +56,6 @@ STH = {
     "host": "localhost",
     "port": "18666",
     "protocol":"http",
-    "alias": "HISTORIC"
 }
 
 # PERSEO endpoint (just for use as reference in Orion Subscriptions)
@@ -65,7 +63,6 @@ PERSEO = {
     "host": "localhost",
     "port": "19090",
     "protocol":"http",
-    "alias": "RULES"
 }
 
 #IOTMODULES = [ "CA", "STH", "PERSEO" ]
