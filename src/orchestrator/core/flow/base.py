@@ -60,7 +60,7 @@ class FlowBase(object):
                  CORRELATOR_ID=None):
 
         # Generate Transaction ID
-        TRANSACTION_ID = uuid.uuid4()
+        self.TRANSACTION_ID = uuid.uuid4()
 
         if not CORRELATOR_ID:
             self.CORRELATOR_ID = self.TRANSACTION_ID
@@ -70,8 +70,8 @@ class FlowBase(object):
         self.logger = logging.getLogger('orchestrator_core')
 
         # Put collector into logger
-        self.logger.addFilter(ContextFilterCorrelatorId(CORRELATOR_ID))
-        self.logger.addFilter(ContextFilterTransactionId(TRANSACTION_ID))
+        self.logger.addFilter(ContextFilterCorrelatorId(self.CORRELATOR_ID))
+        self.logger.addFilter(ContextFilterTransactionId(self.TRANSACTION_ID))
         self.logger.addFilter(ContextFilterService(None))
         self.logger.addFilter(ContextFilterSubService(""))
 
@@ -82,20 +82,20 @@ class FlowBase(object):
         self.ac = AccCOperations(KEYPASS_PROTOCOL,
                                  KEYPASS_HOST,
                                  KEYPASS_PORT,
-                                 CORRELATOR_ID=CORRELATOR_ID,
-                                 TRANSACTION_ID=TRANSACTION_ID)
+                                 CORRELATOR_ID=self.CORRELATOR_ID,
+                                 TRANSACTION_ID=self.TRANSACTION_ID)
 
         self.iota = IoTAOperations(IOTA_PROTOCOL,
                                    IOTA_HOST,
                                    IOTA_PORT,
-                                   CORRELATOR_ID=CORRELATOR_ID,
-                                   TRANSACTION_ID=TRANSACTION_ID)
+                                   CORRELATOR_ID=self.CORRELATOR_ID,
+                                   TRANSACTION_ID=self.TRANSACTION_ID)
 
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
                                ORION_PORT,
-                               CORRELATOR_ID=CORRELATOR_ID,
-                               TRANSACTION_ID=TRANSACTION_ID)
+                               CORRELATOR_ID=self.CORRELATOR_ID,
+                               TRANSACTION_ID=self.TRANSACTION_ID)
 
         if CA_PROTOCOL:
             # CA for Blackbutton notification flow
