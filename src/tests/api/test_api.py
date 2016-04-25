@@ -1741,6 +1741,7 @@ class Test_SetServiceRolePolicies_RestView(object):
 
     def test_delete_service_role_policy_from_role_ok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        # Create New Role
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/role/" % service_id,
@@ -1758,7 +1759,6 @@ class Test_SetServiceRolePolicies_RestView(object):
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
         policies = res.read()
 
         # Add Policy to Role
@@ -1769,7 +1769,6 @@ class Test_SetServiceRolePolicies_RestView(object):
             data=self.payload_data_ok3)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
-
         # Get Role Policies
         res = self.TestRestOps.rest_request(
             method="GET",
@@ -1777,8 +1776,8 @@ class Test_SetServiceRolePolicies_RestView(object):
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
         policies2 = res.read()
+
         # Delete Role Policy
         res = self.TestRestOps.rest_request(
             method="DELETE",
@@ -1787,15 +1786,16 @@ class Test_SetServiceRolePolicies_RestView(object):
             data=self.payload_data_ok3)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
+        # Get Role Policies
         res = self.TestRestOps.rest_request(
             method="GET",
             url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok3)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
         policies3 = res.read()
 
+        # Compare policies
         assert len(policies) == len(policies3)
         assert len(policies2) > len(policies3)
 
