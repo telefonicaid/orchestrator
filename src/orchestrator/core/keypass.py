@@ -135,3 +135,19 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 204, (res.code, res.msg)
+
+
+    def deleteRolePolicy(self,
+                         SERVICE_NAME,
+                         SERVICE_ADMIN_TOKEN,
+                         SERVICE_ROLE_ID,
+                         POLICY_NAME):
+
+        res = self.AccessControlRestOperations.rest_request(
+            url='/pap/v1/subject/'+ SERVICE_ROLE_ID + '/policy/' + POLICY_NAME,
+            method='DELETE',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
