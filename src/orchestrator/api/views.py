@@ -177,6 +177,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             if not service_id:
                 # Get all domains
                 result = flow.domains(
@@ -209,7 +210,8 @@ class ServiceList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def put(self, request, service_id=None):
@@ -222,6 +224,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.update_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -243,7 +246,8 @@ class ServiceList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id=None):
@@ -262,6 +266,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.IOTA_HOST,
                            self.IOTA_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.delete_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -282,7 +287,8 @@ class ServiceList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -309,6 +315,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                     self.KEYPASS_HOST,
                                     self.KEYPASS_PORT,
                                     CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.createNewService(
                 request.DATA.get("DOMAIN_NAME", None),
                 request.DATA.get("DOMAIN_ADMIN_USER", None),
@@ -335,7 +342,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -361,6 +369,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             if service_id:
                 if not subservice_id:
                     result = flow.projects(
@@ -399,7 +408,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def put(self, request, service_id=None, subservice_id=None):
@@ -413,6 +423,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             if service_id:
                 if subservice_id:
                     result = flow.update_project(
@@ -444,7 +455,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id=None, subservice_id=None):
@@ -463,6 +475,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.IOTA_HOST,
                             self.IOTA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             if service_id:
                     result = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
@@ -491,7 +504,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -522,6 +536,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        self.ORION_HOST,
                                        self.ORION_PORT,
                                        CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
 
             result = flow.createNewSubService(
                 request.DATA.get("SERVICE_NAME", None),
@@ -602,6 +617,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
                 result_rd = flow.register_device(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -637,7 +653,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -661,6 +678,7 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.removeUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -683,7 +701,8 @@ class User_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def put(self, request, service_id, user_id):
@@ -695,6 +714,7 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.updateUser(
                 request.DATA.get("SERVICE_NAME"),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -717,7 +737,8 @@ class User_RESTView(APIView, IoTConf):
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0}'.format(error.message),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def get(self, request, service_id, user_id):
@@ -729,6 +750,7 @@ class User_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.user(request.DATA.get("SERVICE_ID",  service_id),
                                request.DATA.get("USER_ID", user_id),
                                request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -749,7 +771,8 @@ class User_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def post(self, request, service_id, user_id):
@@ -761,7 +784,7 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.changeUserPassword(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -786,7 +809,8 @@ class User_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -813,7 +837,7 @@ class UserList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.users(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -837,7 +861,8 @@ class UserList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def post(self, request, service_id):
@@ -849,6 +874,7 @@ class UserList_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT,
                                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.createNewServiceUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -874,7 +900,8 @@ class UserList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -902,7 +929,7 @@ class Role_RESTView(APIView, IoTConf):
                            self.KEYPASS_HOST,
                            self.KEYPASS_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.getDomainRolePolicies(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -927,7 +954,8 @@ class Role_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def post(self, request, service_id, role_id):
@@ -943,6 +971,7 @@ class Role_RESTView(APIView, IoTConf):
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
 
             result = flow.setPolicyRole(
                 request.DATA.get("SERVICE_NAME", None),
@@ -970,7 +999,8 @@ class Role_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def delete(self, request, service_id, role_id):
@@ -982,6 +1012,8 @@ class Role_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
+
             result = flow.removeRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -990,6 +1022,7 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("ROLE_NAME", None),
                 request.DATA.get("ROLE_ID", role_id))
+
             if 'error' not in result:
                 Stats.num_delete_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
@@ -1004,7 +1037,63 @@ class Role_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
+            )
+
+
+class RolePolicy_RESTView(APIView, IoTConf):
+    """
+    { Delete } Role Policies in a Service
+
+    """
+    schema_name = "Role"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def delete(self, request, service_id, role_id, policy_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorId(request)
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         self.KEYPASS_PROTOCOL,
+                         self.KEYPASS_HOST,
+                         self.KEYPASS_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
+
+            result = flow.removePolicyFromRole(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("POLICY_NAME", policy_id))
+
+>>>>>>> Stashed changes
+            if 'error' not in result:
+                Stats.num_delete_role += 1
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1029,6 +1118,7 @@ class RoleList_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT,
                                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.createNewServiceRole(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -1052,7 +1142,8 @@ class RoleList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def get(self, request, service_id=None):
@@ -1067,6 +1158,7 @@ class RoleList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.roles(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1090,7 +1182,8 @@ class RoleList_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1115,6 +1208,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                      self.KEYSTONE_HOST,
                      self.KEYSTONE_PORT,
                      CORRELATOR_ID=CORRELATOR_ID)
+        CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID        
         result = flow.roles_assignments(
             request.DATA.get("SERVICE_ID", service_id),
             request.DATA.get("SERVICE_NAME",None),
@@ -1154,7 +1248,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID            
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
@@ -1208,7 +1302,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def delete(self, request, service_id):
@@ -1226,6 +1321,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
@@ -1280,7 +1376,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1304,6 +1401,7 @@ class Trust_RESTView(APIView, IoTConf):
                                     self.KEYSTONE_HOST,
                                     self.KEYSTONE_PORT,
                                     CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
             result = flow.createTrustToken(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1334,7 +1432,8 @@ class Trust_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": flow.CORRELATOR_ID}                
             )
 
 
@@ -1370,6 +1469,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID            
             result = flow.register_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1404,7 +1504,8 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def delete(self, request, service_id, subservice_id):
@@ -1428,6 +1529,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID            
             result = flow.unregister_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1453,7 +1555,8 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1489,6 +1592,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID            
             result = flow.register_devices(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1514,7 +1618,8 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1550,6 +1655,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID            
             result = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1585,7 +1691,8 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1622,6 +1729,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_HOST,
                                self.CA_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID                
                 modules = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1646,6 +1754,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID                
                 modules = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1673,7 +1782,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
@@ -1698,6 +1808,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_HOST,
                                self.CA_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
                 sub = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1723,6 +1834,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID                
                 sub = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1750,7 +1862,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                                
             )
 
 
@@ -1776,6 +1889,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_HOST,
                                self.CA_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
                 flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1801,6 +1915,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID
                 flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1828,7 +1943,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}                
             )
 
 
@@ -1934,6 +2050,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = flow.CORRELATOR_ID if not CORRELATOR_ID else CORRELATOR_ID            
             result = flow.domains(
                     "admin_domain",
                     request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1987,5 +2104,6 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             }
             return Response(
                 json.dumps(body),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": flow.CORRELATOR_ID}
             )
