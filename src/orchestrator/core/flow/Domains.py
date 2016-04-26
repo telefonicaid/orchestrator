@@ -626,7 +626,7 @@ class Domains(FlowBase):
             )
 
             for sub in cb_res:
-                subs_url = sub["notification"]["callback"]
+                subs_url = self.cb.get_subscription_callback_endpoint(sub)
                 subscriptionid = sub['id']
                 if subs_url.startswith(REFERENCE_URL):
 
@@ -714,22 +714,7 @@ class Domains(FlowBase):
             self.logger.debug("getListSubscriptions res=%s" % json.dumps(
                 cb_res, indent=3)
             )
-            modules = []
-            for sub in cb_res:
-                sub_callback = sub["notification"]["callback"]
-                for iotmodule in IOTMODULES:
-                    if sub_callback.startswith(
-                            self.get_endpoint_iot_module(iotmodule)):
-                        if ((len(sub['subject']['entities']) == 1) and
-                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
-                            (sub['subject']['entities'][0]['type'] == '')):
-                            modules.append(
-                                { "name": iotmodule,
-                                  "subscriptionid": sub['id'],
-                                  "alias": self.get_alias_iot_module(iotmodule)
-                                })
-                            break
-
+            modules = self.cb.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
