@@ -1277,7 +1277,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID,
             "POLICY_NAME": "%s" % POLICY_NAME
         }
-        self.logger.debug("set policy role invoked with: %s" % json.dumps(data_log,
+        self.logger.debug("get policy role invoked with: %s" % json.dumps(data_log,
                                                                 indent=3))
         try:
             if not SERVICE_ADMIN_TOKEN:
