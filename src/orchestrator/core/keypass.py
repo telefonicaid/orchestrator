@@ -122,6 +122,25 @@ class AccCKeypassOperations(AccCOperations):
         logger.debug("data response: %s" % body_data)
         return body_data
 
+
+    def getRolePolicy(self,
+                      SERVICE_NAME,
+                      SERVICE_ADMIN_TOKEN,
+                      SERVICE_ROLE_ID,
+                      POLICY_NAME):
+
+        res = self.AccessControlRestOperations.rest_request(
+            url='/pap/v1/subject/'+ SERVICE_ROLE_ID + '/policy/' + POLICY_NAME,
+            method='GET',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        body_data = res.read()
+        logger.debug("data response: %s" % body_data)
+        return body_data
+
     def deleteRolePolicies(self,
                            SERVICE_NAME,
                            SERVICE_ADMIN_TOKEN,
