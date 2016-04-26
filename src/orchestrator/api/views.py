@@ -606,8 +606,6 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
             # TODO: see optional values for register device
             if 'id' in result and request.DATA.get("DEVICE_ID", None):
-                import ipdb
-                ipdb.set_trace()
                 flow = Projects(self.KEYSTONE_PROTOCOL,
                                 self.KEYSTONE_HOST,
                                 self.KEYSTONE_PORT,
