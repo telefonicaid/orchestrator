@@ -1048,7 +1048,8 @@ class Role_RESTView(APIView, IoTConf):
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1076,7 +1077,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
-            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)            
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result = flow.getPolicyFromRole(
                 request.DATA.get("SERVICE_NAME", None),
