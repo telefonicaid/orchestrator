@@ -1077,7 +1077,6 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 request.DATA.get("ROLE_ID", role_id),
                 request.DATA.get("POLICY_NAME", policy_id))
 
->>>>>>> Stashed changes
             if 'error' not in result:
                 Stats.num_delete_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
