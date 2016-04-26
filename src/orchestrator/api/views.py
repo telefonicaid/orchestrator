@@ -150,11 +150,14 @@ class IoTConf(Stats):
             rstatus = status.HTTP_400_BAD_REQUEST
         return rstatus
 
-    def getCorrelatorId(self, request):
-        return request.META.get('HTTP_FIWARE_CORRELATOR', None)
+    def getCorrelatorIdHeader(self, request):
+        return request.META.get('FIWARE-CORRELATOR', None)
 
     def getXAuthToken(self, request):
         return request.META.get('HTTP_X_AUTH_TOKEN', None)
+
+    def getCorrelatorId(self, flow, CORRELATOR_ID):
+        return str(flow.CORRELATOR_ID) if not CORRELATOR_ID else CORRELATOR_ID
 
 
 class ServiceList_RESTView(APIView, IoTConf):
@@ -172,13 +175,14 @@ class ServiceList_RESTView(APIView, IoTConf):
     def get(self, request, service_id=None):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if not service_id:
                 # Get all domains
                 result = flow.domains(
@@ -199,31 +203,33 @@ class ServiceList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_get_service += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def put(self, request, service_id=None):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.update_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -234,24 +240,25 @@ class ServiceList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_put_service += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id=None):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
@@ -264,6 +271,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.IOTA_HOST,
                            self.IOTA_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.delete_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -273,18 +281,19 @@ class ServiceList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_service += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -301,7 +310,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
 
     def post(self, request, *args, **kw):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = CreateNewService(self.KEYSTONE_PROTOCOL,
@@ -311,6 +320,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                     self.KEYPASS_HOST,
                                     self.KEYPASS_PORT,
                                     CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.createNewService(
                 request.DATA.get("DOMAIN_NAME", None),
                 request.DATA.get("DOMAIN_ADMIN_USER", None),
@@ -326,18 +336,19 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
             if 'token' in result:
                 Stats.num_post_service += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -356,13 +367,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if not subservice_id:
                     result = flow.projects(
@@ -389,32 +401,34 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_get_subservice += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def put(self, request, service_id=None, subservice_id=None):
 
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             # request.DATA # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if subservice_id:
                     result = flow.update_project(
@@ -434,25 +448,26 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_put_subservice += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id=None, subservice_id=None):
         self.schema_name = "SubServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             # request.DATA # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -465,6 +480,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.IOTA_HOST,
                             self.IOTA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                     result = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
@@ -482,18 +498,19 @@ class SubServiceList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_subservice += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -508,7 +525,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
 
     def post(self, request, service_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
@@ -524,6 +541,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        self.ORION_HOST,
                                        self.ORION_PORT,
                                        CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result = flow.createNewSubService(
                 request.DATA.get("SERVICE_NAME", None),
@@ -557,7 +575,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
-
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 result2 = flow.register_service(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -604,6 +622,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 result_rd = flow.register_device(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -627,19 +646,20 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
             if 'id' in result and ('error' not in result):
                 Stats.num_post_subservice += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -656,13 +676,14 @@ class User_RESTView(APIView, IoTConf):
 
     def delete(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.removeUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -674,29 +695,31 @@ class User_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_user += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def put(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.updateUser(
                 request.DATA.get("SERVICE_NAME"),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -709,28 +732,30 @@ class User_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_put_user += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0}'.format(error.message),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def get(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Users(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.user(request.DATA.get("SERVICE_ID",  service_id),
                                request.DATA.get("USER_ID", user_id),
                                request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -740,30 +765,31 @@ class User_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_get_user += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def post(self, request, service_id, user_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.changeUserPassword(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -777,18 +803,19 @@ class User_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_user += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -805,7 +832,7 @@ class UserList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
 
@@ -815,7 +842,7 @@ class UserList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.users(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -828,29 +855,31 @@ class UserList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_get_userlist += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def post(self, request, service_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT,
                                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.createNewServiceUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -865,18 +894,19 @@ class UserList_RESTView(APIView, IoTConf):
             if 'id' in result:
                 Stats.num_post_userlist += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -893,7 +923,7 @@ class Role_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id, role_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
 
@@ -904,7 +934,7 @@ class Role_RESTView(APIView, IoTConf):
                            self.KEYPASS_HOST,
                            self.KEYPASS_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.getDomainRolePolicies(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -917,24 +947,25 @@ class Role_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_get_role_policies += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def post(self, request, service_id, role_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
 
@@ -945,6 +976,7 @@ class Role_RESTView(APIView, IoTConf):
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result = flow.setPolicyRole(
                 request.DATA.get("SERVICE_NAME", None),
@@ -960,30 +992,33 @@ class Role_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_role_policies += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id, role_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+
             result = flow.removeRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -992,21 +1027,77 @@ class Role_RESTView(APIView, IoTConf):
                 request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.DATA.get("ROLE_NAME", None),
                 request.DATA.get("ROLE_ID", role_id))
+
             if 'error' not in result:
                 Stats.num_delete_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+
+class RolePolicy_RESTView(APIView, IoTConf):
+    """
+    { Delete } Role Policies in a Service
+
+    """
+    schema_name = "Role"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def delete(self, request, service_id, role_id, policy_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         self.KEYPASS_PROTOCOL,
+                         self.KEYPASS_HOST,
+                         self.KEYPASS_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+
+            result = flow.removePolicyFromRole(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("POLICY_NAME", policy_id))
+
+            if 'error' not in result:
+                Stats.num_delete_role += 1
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1024,13 +1115,14 @@ class RoleList_RESTView(APIView, IoTConf):
     def post(self, request, service_id):
         self.schema_name = "RoleList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = CreateNewServiceRole(self.KEYSTONE_PROTOCOL,
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT,
                                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.createNewServiceRole(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
@@ -1042,25 +1134,26 @@ class RoleList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_role += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def get(self, request, service_id=None):
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
         try:
@@ -1069,6 +1162,7 @@ class RoleList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.roles(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1081,18 +1175,19 @@ class RoleList_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_get_role += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1110,41 +1205,51 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
         effective = request.GET.get('effective', False) == "true"
-
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
-        flow = Roles(self.KEYSTONE_PROTOCOL,
-                     self.KEYSTONE_HOST,
-                     self.KEYSTONE_PORT,
-                     CORRELATOR_ID=CORRELATOR_ID)
-        result = flow.roles_assignments(
-            request.DATA.get("SERVICE_ID", service_id),
-            request.DATA.get("SERVICE_NAME",None),
-            request.DATA.get("SUBSERVICE_ID", subservice_id),
-            request.DATA.get("SUBSERVICE_NAME", None),
-            request.DATA.get("ROLE_ID", role_id),
-            request.DATA.get("ROLE_NAME", None),
-            request.DATA.get("USER_ID", user_id),
-            request.DATA.get("USER_NAME", None),
-            request.DATA.get("SERVICE_ADMIN_USER", None),
-            request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-            request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-            request.DATA.get("EFFECTIVE", effective))
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
 
-        if 'error' not in result:
-            Stats.num_get_roleassignment += 1
-            return Response(result, status=status.HTTP_200_OK,
-                            headers={"Fiware-Correlator": flow.CORRELATOR_ID})
-        else:
-            Stats.num_flow_errors += 1
-            return Response(result['error'],
-                            status=self.getStatusFromCode(result['code']),
-                            headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+        try:
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.roles_assignments(
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_NAME",None),
+                request.DATA.get("SUBSERVICE_ID", subservice_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("USER_ID", user_id),
+                request.DATA.get("USER_NAME", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("EFFECTIVE", effective))
+
+            if 'error' not in result:
+                Stats.num_get_roleassignment += 1
+                return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
 
     def post(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
@@ -1156,7 +1261,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
-
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
@@ -1199,24 +1304,25 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_roleassignment += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
@@ -1228,6 +1334,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
@@ -1271,18 +1378,19 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_roleassignment += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1299,13 +1407,14 @@ class Trust_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = CreateTrustToken(self.KEYSTONE_PROTOCOL,
                                     self.KEYSTONE_HOST,
                                     self.KEYSTONE_PORT,
                                     CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.createTrustToken(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1324,19 +1433,20 @@ class Trust_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_trust += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1353,7 +1463,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id, subservice_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1372,6 +1482,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.register_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1394,24 +1505,25 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_device += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id, subservice_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1430,6 +1542,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.unregister_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1443,19 +1556,20 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_device += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1472,7 +1586,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id, subservice_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1491,6 +1605,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.register_devices(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1504,19 +1619,20 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_devices += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1533,7 +1649,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
 
     def post(self, request, service_id, subservice_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -1552,6 +1668,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.CA_HOST,
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
@@ -1575,19 +1692,20 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_entity_service += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1604,7 +1722,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id, subservice_id=None):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             if not subservice_id:
@@ -1624,6 +1742,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_HOST,
                                self.CA_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 modules = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1648,6 +1767,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 modules = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1662,25 +1782,26 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                 result['actived_modules'] = modules
                 Stats.num_get_module_activation += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 result = modules
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             if not subservice_id:
@@ -1700,6 +1821,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_HOST,
                                self.CA_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 sub = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1725,6 +1847,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 sub = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1740,25 +1863,26 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_post_module_activation += 1
                 return Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
     def delete(self, request, service_id, subservice_id=None, iot_module=None):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             if not subservice_id:
@@ -1778,6 +1902,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_HOST,
                                self.CA_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1803,6 +1928,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_HOST,
                                 self.CA_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
+                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
@@ -1818,19 +1944,20 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_module_activation += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
 
@@ -1929,7 +2056,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
     def put(self, request):
 
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         logLevel = request.GET.get('level', None)
 
         try:
@@ -1938,6 +2065,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.domains(
                     "admin_domain",
                     request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1983,7 +2111,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
 
             Stats.num_update_loglevel += 1
             return Response(result, status=status.HTTP_200_OK,
-                            headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
 
 
         except ParseError as error:
@@ -1992,5 +2120,6 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             }
             return Response(
                 json.dumps(body),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
