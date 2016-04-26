@@ -97,6 +97,8 @@ class Stats(object):
     num_post_module_activation = 0
     num_delete_module_activation = 0
 
+    num_update_loglevel = 0
+
     num_api_errors = 0
     num_flow_errors = 0
 
@@ -2019,6 +2021,8 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_post_module_activation": self.num_post_module_activation,
                     "num_delete_module_activation": self.num_delete_module_activation,
 
+                    "num_update_loglevel": self.num_update_loglevel,
+
                     "num_api_errors": self.num_api_errors,
                     "num_flow_errors": self.num_flow_errors
 
@@ -2107,6 +2111,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
                 logLevel, indent=3))
 
+            Stats.num_update_loglevel += 1
             return Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
