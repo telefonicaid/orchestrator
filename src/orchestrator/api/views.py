@@ -81,6 +81,9 @@ class Stats(object):
     num_get_role_policies = 0
     num_post_role_policies = 0
 
+    num_delete_policy_from_role = 0
+    num_get_policy_from_role = 0
+
     num_delete_roleassignment = 0
     num_post_roleassignment = 0
     num_get_roleassignment = 0
@@ -1086,7 +1089,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 request.DATA.get("POLICY_NAME", policy_id))
 
             if 'error' not in result:
-                Stats.num_delete_role += 1
+                Stats.num_get_policy_from_role += 1
                 return Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -1128,7 +1131,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 request.DATA.get("POLICY_NAME", policy_id))
 
             if 'error' not in result:
-                Stats.num_delete_role += 1
+                Stats.num_delete_policy_from_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -2047,6 +2050,9 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_get_role": self.num_get_role,
                     "num_post_role_policies": self.num_post_role_policies,
                     "num_get_role_policies": self.num_get_role_policies,
+
+                    "num_delete_policy_from_role": self.num_delete_policy_from_role,
+                    "num_get_policy_from_role": self.num_get_policy_from_role,
 
                     "num_delete_roleassignment": self.num_delete_roleassignment,
                     "num_post_roleassignment": self.num_post_roleassignment,
