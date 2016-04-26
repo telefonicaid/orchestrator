@@ -1034,12 +1034,12 @@ class Role_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
@@ -1063,7 +1063,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id, role_id, policy_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -1088,23 +1088,24 @@ class RolePolicy_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 Stats.num_delete_role += 1
                 return Response(result, status=status.HTTP_200_OK,
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
                 return Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": flow.CORRELATOR_ID})
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
             Stats.num_api_errors += 1
             return Response(
                 'Input validation error - {0} {1}'.format(error.message,
                                                           error.detail),
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
             )
 
     def delete(self, request, service_id, role_id, policy_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorId(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
