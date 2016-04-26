@@ -1778,6 +1778,14 @@ class Test_SetServiceRolePolicies_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
         policies2 = res.read()
 
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s/policy/STHSubServiceCustomer" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        #policies4 = res.read()
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
         # Delete Role Policy
         res = self.TestRestOps.rest_request(
             method="DELETE",
