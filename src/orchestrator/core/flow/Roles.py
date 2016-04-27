@@ -1141,3 +1141,203 @@ class Roles(FlowBase):
             return self.composeErrorCode(ex)
 
         return {}
+
+
+    def removePolicyFromRole(self,
+                      SERVICE_NAME,
+                      SERVICE_ID,
+                      SERVICE_ADMIN_USER,
+                      SERVICE_ADMIN_PASSWORD,
+                      SERVICE_ADMIN_TOKEN,
+                      ROLE_NAME,
+                      ROLE_ID,
+                      POLICY_NAME):
+
+        '''Remove a XACML policy for a role in Access Control.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service name
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role ID
+        - POLICY_NAME: Policy name id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "POLICY_NAME": "%s" % POLICY_NAME
+        }
+        self.logger.debug("remove policy role invoked with: %s" % json.dumps(data_log,
+                                                                indent=3))
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 2. Get Role ID
+            #
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
+                self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 3. Set Policy Role
+            #
+            if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
+
+                self.ac.deleteRolePolicy(SERVICE_NAME,
+                                         SERVICE_ADMIN_TOKEN,
+                                         ROLE_ID,
+                                         POLICY_NAME)
+            else:
+                raise Exception("not admin role found to perform this action")
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return {}
+
+
+    def getPolicyFromRole(self,
+                      SERVICE_NAME,
+                      SERVICE_ID,
+                      SERVICE_ADMIN_USER,
+                      SERVICE_ADMIN_PASSWORD,
+                      SERVICE_ADMIN_TOKEN,
+                      ROLE_NAME,
+                      ROLE_ID,
+                      POLICY_NAME):
+
+        '''Get a XACML policy for a role in Access Control.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service name
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role ID
+        - POLICY_NAME: Policy name id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "POLICY_NAME": "%s" % POLICY_NAME
+        }
+        self.logger.debug("get policy role invoked with: %s" % json.dumps(data_log,
+                                                                indent=3))
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 2. Get Role ID
+            #
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
+                self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 3. Set Policy Role
+            #
+            if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
+
+                return self.ac.getRolePolicy(SERVICE_NAME,
+                                             SERVICE_ADMIN_TOKEN,
+                                             ROLE_ID,
+                                             POLICY_NAME)
+            else:
+                raise Exception("not admin role found to perform this action")
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        return {}

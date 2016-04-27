@@ -63,7 +63,7 @@ class AccCKeypassOperations(AccCOperations):
     def provisionPolicy(self,
                         SERVICE_NAME,
                         SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_ROLE_ID,
+                        SERVICE_ROLE_ID,
                         POLICY_FILE_NAME):
 
         xml_data = open(self.policy_dir + '/' + POLICY_FILE_NAME)
@@ -72,17 +72,17 @@ class AccCKeypassOperations(AccCOperations):
         xml_data.close()
         self.provisionPolicyByContent(SERVICE_NAME,
                                       SERVICE_ADMIN_TOKEN,
-                                      SUB_SERVICE_ROLE_ID,
+                                      SERVICE_ROLE_ID,
                                       body_data)
 
     def provisionPolicyByContent(self,
                                  SERVICE_NAME,
                                  SERVICE_ADMIN_TOKEN,
-                                 SUB_SERVICE_ROLE_ID,
+                                 SERVICE_ROLE_ID,
                                  POLICY_CONTENT):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SERVICE_ROLE_ID,
             method='POST',
             json_data=False,
             data=POLICY_CONTENT,
@@ -108,10 +108,28 @@ class AccCKeypassOperations(AccCOperations):
     def getRolePolicies(self,
                         SERVICE_NAME,
                         SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_ROLE_ID):
+                        SERVICE_ROLE_ID):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SERVICE_ROLE_ID,
+            method='GET',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        body_data = res.read()
+        logger.debug("data response: %s" % body_data)
+        return body_data
+
+    def getRolePolicy(self,
+                      SERVICE_NAME,
+                      SERVICE_ADMIN_TOKEN,
+                      SERVICE_ROLE_ID,
+                      POLICY_NAME):
+
+        res = self.AccessControlRestOperations.rest_request(
+            url='/pap/v1/subject/'+ SERVICE_ROLE_ID + '/policy/' + POLICY_NAME,
             method='GET',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,
@@ -125,10 +143,25 @@ class AccCKeypassOperations(AccCOperations):
     def deleteRolePolicies(self,
                            SERVICE_NAME,
                            SERVICE_ADMIN_TOKEN,
-                           SUB_SERVICE_ROLE_ID):
+                           SERVICE_ROLE_ID):
 
         res = self.AccessControlRestOperations.rest_request(
-            url='/pap/v1/subject/'+SUB_SERVICE_ROLE_ID,
+            url='/pap/v1/subject/'+SERVICE_ROLE_ID,
+            method='DELETE',
+            json_data=False,
+            auth_token=SERVICE_ADMIN_TOKEN,
+            fiware_service=SERVICE_NAME)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def deleteRolePolicy(self,
+                         SERVICE_NAME,
+                         SERVICE_ADMIN_TOKEN,
+                         SERVICE_ROLE_ID,
+                         POLICY_NAME):
+
+        res = self.AccessControlRestOperations.rest_request(
+            url='/pap/v1/subject/'+ SERVICE_ROLE_ID + '/policy/' + POLICY_NAME,
             method='DELETE',
             json_data=False,
             auth_token=SERVICE_ADMIN_TOKEN,

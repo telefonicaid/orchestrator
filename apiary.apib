@@ -423,6 +423,25 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             }
 + Response 204
 
+
+## Policy in a Role in Service [/v1.0/service/{serviceId}/role/{roleId}/policy/{policyId}]
+
+### Delete a Policy from Role [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + roleId (required, `string`) ... Role Id
+    + policyId (required, `string`) ... Policy Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole"
+            }
++ Response 204
+
+
 ## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
 
 ### List of assignment roles [GET]

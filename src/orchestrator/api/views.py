@@ -81,6 +81,9 @@ class Stats(object):
     num_get_role_policies = 0
     num_post_role_policies = 0
 
+    num_delete_policy_from_role = 0
+    num_get_policy_from_role = 0
+
     num_delete_roleassignment = 0
     num_post_roleassignment = 0
     num_get_roleassignment = 0
@@ -912,7 +915,7 @@ class UserList_RESTView(APIView, IoTConf):
 
 class Role_RESTView(APIView, IoTConf):
     """
-    { Delete } Roles in a Service
+    { Create, Read, Delete } Roles in a Service
 
     """
     schema_name = "Role"
@@ -1016,6 +1019,9 @@ class Role_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
+                         self.KEYPASS_PROTOCOL,
+                         self.KEYPASS_HOST,
+                         self.KEYPASS_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
@@ -1049,7 +1055,7 @@ class Role_RESTView(APIView, IoTConf):
 
 class RolePolicy_RESTView(APIView, IoTConf):
     """
-    { Delete } Role Policies in a Service
+    { Delete, Read } Role Policies in a Service
 
     """
     schema_name = "Role"
@@ -1057,6 +1063,49 @@ class RolePolicy_RESTView(APIView, IoTConf):
 
     def __init__(self):
         IoTConf.__init__(self)
+
+
+    def get(self, request, service_id, role_id, policy_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         self.KEYPASS_PROTOCOL,
+                         self.KEYPASS_HOST,
+                         self.KEYPASS_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+
+            result = flow.getPolicyFromRole(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("POLICY_NAME", policy_id))
+
+            if 'error' not in result:
+                Stats.num_get_policy_from_role += 1
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
 
     def delete(self, request, service_id, role_id, policy_id):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -1083,7 +1132,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 request.DATA.get("POLICY_NAME", policy_id))
 
             if 'error' not in result:
-                Stats.num_delete_role += 1
+                Stats.num_delete_policy_from_role += 1
                 return Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -2002,6 +2051,9 @@ class OrchVersion_RESTView(APIView, IoTConf):
                     "num_get_role": self.num_get_role,
                     "num_post_role_policies": self.num_post_role_policies,
                     "num_get_role_policies": self.num_get_role_policies,
+
+                    "num_delete_policy_from_role": self.num_delete_policy_from_role,
+                    "num_get_policy_from_role": self.num_get_policy_from_role,
 
                     "num_delete_roleassignment": self.num_delete_roleassignment,
                     "num_post_roleassignment": self.num_post_roleassignment,

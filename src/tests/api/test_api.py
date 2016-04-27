@@ -1618,7 +1618,6 @@ class Test_ServiceRolePolicies_RestView(object):
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "ROLE_NAME": "ServiceCustomer",
         }
-
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
                                               PORT=ORC_PORT)
@@ -1673,6 +1672,9 @@ class Test_ServiceRolePolicies_RestView(object):
         assert len(json_body_response) > 0, (res.code, res.msg, res.raw_json)
 
 
+
+
+
 class Test_SetServiceRolePolicies_RestView(object):
     def __init__(self):
         self.suffix = str(uuid.uuid4())[:8]
@@ -1684,6 +1686,14 @@ class Test_SetServiceRolePolicies_RestView(object):
             "ROLE_NAME": "role_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "ROLE_NAME": "role_%s" % self.suffix,
+            "POLICY_FILE_NAME": "policy-sth-customer.xml"
+        }
+
+        self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
@@ -1728,6 +1738,74 @@ class Test_SetServiceRolePolicies_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+    def test_delete_service_role_policy_from_role_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        # Create New Role
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/role/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        role_id = json_body_response['id']
+
+        # Get Role Policies
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        policies = res.read()
+
+        # Add Policy to Role
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        # Get Role Policies
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        policies2 = res.read()
+
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s/policy/STHSubServiceCustomer" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        #policies4 = res.read()
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+        # Delete Role Policy
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s/policy/STHSubServiceCustomer" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+        # Get Role Policies
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        policies3 = res.read()
+
+        # Compare policies
+        assert len(policies) == len(policies3)
+        assert len(policies2) > len(policies3)
 
 
 
@@ -2980,6 +3058,7 @@ if __name__ == '__main__':
 
     test_SetServiceRolePolicies = Test_SetServiceRolePolicies_RestView()
     test_SetServiceRolePolicies.test_set_service_role_policies_ok()
+    test_SetServiceRolePolicies.test_delete_service_role_policy_from_role_ok()
 
     test_ServiceDetail = Test_ServiceDetail_RestView()
     test_ServiceDetail.test_get_ok()
