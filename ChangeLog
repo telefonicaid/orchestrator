@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+
+1.0.0
+
+task/remove_policy_from_role
+
+
 0.9.0
 
 task/orion_v2_subscriptions_callback
