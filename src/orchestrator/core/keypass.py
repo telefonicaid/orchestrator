@@ -167,4 +167,4 @@ class AccCKeypassOperations(AccCOperations):
             auth_token=SERVICE_ADMIN_TOKEN,
             fiware_service=SERVICE_NAME)
 
-        assert res.code == 200, (res.code, res.msg)
+        assert res.code == 204, (res.code, res.msg)
