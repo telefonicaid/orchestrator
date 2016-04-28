@@ -33,7 +33,7 @@ KEYPASS = {
 # IoTA endpoint
 IOTA = {
     "host": "localhost",
-    "port": "4041",
+    "port": "4052",
     "protocol":"http"
 }
 
