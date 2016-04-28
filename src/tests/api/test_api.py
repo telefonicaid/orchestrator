@@ -685,6 +685,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
     def test_post_ok2(self):
@@ -707,6 +708,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data3_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
     def test_post_ok3(self):
