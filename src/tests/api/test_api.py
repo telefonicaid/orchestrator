@@ -722,6 +722,17 @@ class Test_SubServiceIoTADevice_RestView(object):
             data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data4_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+
     def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data5_ok)
 
@@ -1833,6 +1844,12 @@ class Test_SetServiceRolePolicies_RestView(object):
         assert len(policies) == len(policies3)
         assert len(policies2) > len(policies3)
 
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_DeleteServiceRole_RestView(object):
@@ -1942,6 +1959,17 @@ class Test_DeleteServiceRole_RestView(object):
         assert res.code == 400, (res.code, res.msg, res.raw_json)
         # json_body_response = json.loads(response)
         # assert len(json_body_response['role_assignments']) == 0
+
+
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg)
+
 
     def test_delete_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
