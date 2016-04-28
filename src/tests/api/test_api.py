@@ -2794,6 +2794,10 @@ class Test_UnassignRoleUser_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/role_assignments" % (
@@ -2809,6 +2813,15 @@ class Test_UnassignRoleUser_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+        # Delete User
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg)
 
 
 class Test_ModuleActivation_RestView(object):
