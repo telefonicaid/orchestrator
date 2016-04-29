@@ -10,8 +10,8 @@ ADMIN_USER="cloud_admin"
 ADMIN_PASSWORD="password"
 
 TEST_SERVICE_NAME="smartcity"
-TEST_SUBSERVICE_NAME1="Basuras"
-TEST_SUBSERVICE_NAME2="Electricidad"
+TEST_SUBSERVICE_NAME1="basuras"
+TEST_SUBSERVICE_NAME2="electricidad"
 TEST_SERVICE_ADMIN_USER="adm1"
 TEST_SERVICE_ADMIN_PASSWORD="password"
 TEST_SERVICE_USER_NAME="Alice"
@@ -222,7 +222,10 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
-            "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es"
+            "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
+            "SERVICE_NAME": "smartcity_%s" % self.suffix,
+            "SERVICE_ADMIN_USER": ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": ADMIN_PASSWORD
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok2 = {
@@ -276,6 +279,7 @@ class Test_NewService_RestView(object):
                                             url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 
@@ -299,13 +303,29 @@ class Test_NewService_RestView(object):
                                             url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
     def test_post_ok_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
                                             url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        service_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="/v1.0/service/",
+                                            json_data=True,
+                                            data=self.payload_data_ok)
         assert res.code == 409, (res.code, res.msg)
+
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="/v1.0/service/%s" % service_id,
+                                            json_data=True,
+                                            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
     def test_post_bad(self):
         res = self.TestRestOps.rest_request(method="POST",
@@ -400,6 +420,7 @@ class Test_DeleteService_RestView(object):
                                             url="/v1.0/service/%s" % service_id,
                                             json_data=True,
                                             data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_NewSubService_RestView(object):
@@ -410,7 +431,7 @@ class Test_NewSubService_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
@@ -664,6 +685,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
     def test_post_ok2(self):
@@ -686,6 +708,7 @@ class Test_SubServiceIoTADevice_RestView(object):
             url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
             json_data=True,
             data=self.payload_data3_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
     def test_post_ok3(self):
@@ -698,6 +721,17 @@ class Test_SubServiceIoTADevice_RestView(object):
             json_data=True,
             data=self.payload_data4_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        response = res.read()
+        json_body_response = json.loads(response)
+        subservice_id = json_body_response['id']
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/subservice/%s" % (service_id, subservice_id),
+            json_data=True,
+            data=self.payload_data4_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
 
     def test_post_ok4(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data5_ok)
@@ -879,7 +913,7 @@ class Test_DeleteSubService_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -1055,6 +1089,7 @@ class Test_NewServiceUser_RestView(object):
                                              user_id),
             json_data=True,
             data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg)
 
     def test_post_bad(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
@@ -1452,7 +1487,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
-            "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
         }
         self.payload_data_bad = {
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -1463,7 +1498,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_USER": ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
-            "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -1572,6 +1607,7 @@ class Test_NewServiceRole_RestView(object):
             url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
     def test_post_nok(self):
@@ -1599,6 +1635,7 @@ class Test_NewServiceRole_RestView(object):
             url="/v1.0/service/%s/role/%s" % (service_id, role_id),
             json_data=True,
             data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 
@@ -1807,6 +1844,12 @@ class Test_SetServiceRolePolicies_RestView(object):
         assert len(policies) == len(policies3)
         assert len(policies2) > len(policies3)
 
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/role/%s" % (service_id, role_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_DeleteServiceRole_RestView(object):
@@ -1916,6 +1959,17 @@ class Test_DeleteServiceRole_RestView(object):
         assert res.code == 400, (res.code, res.msg, res.raw_json)
         # json_body_response = json.loads(response)
         # assert len(json_body_response['role_assignments']) == 0
+
+
+        # Delete user
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg)
+
 
     def test_delete_nok(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
@@ -2108,6 +2162,14 @@ class Test_UserModify_RestView(object):
             "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
             "USER_DATA_VALUE": {"nameKK3": "bet_%s" % self.suffix}
         }
+        self.payload_data_bad2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
+            "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix
+        }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
                                               PORT=ORC_PORT)
@@ -2237,13 +2299,13 @@ class Test_UserModify_RestView(object):
             data=self.payload_data_bad)
         assert res.code == 400, (res.code, res.msg, res.raw_json)
         # # Delete user
-        # res = self.TestRestOps.rest_request(
-        #     method="DELETE",
-        #     url="/v1.0/service/%s/user/%s" % (service_id,
-        #                                      user_id),
-        #     json_data=True,
-        #     data=self.payload_data_bad)
-        # assert res.code == 204, (res.code, res.msg, res.raw_json)
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_bad2)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 class Test_UserDelete_RestView(object):
@@ -2732,6 +2794,10 @@ class Test_UnassignRoleUser_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/role_assignments" % (
@@ -2748,6 +2814,15 @@ class Test_UnassignRoleUser_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
+        # Delete User
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/user/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg)
+
 
 class Test_ModuleActivation_RestView(object):
 
@@ -2757,9 +2832,9 @@ class Test_ModuleActivation_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
-            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
             "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
@@ -2768,9 +2843,9 @@ class Test_ModuleActivation_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
-            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "IOTMODULE": "STH",
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
             "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
