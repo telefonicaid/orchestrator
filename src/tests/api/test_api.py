@@ -431,7 +431,7 @@ class Test_NewSubService_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.payload_data_ok2 = {
@@ -913,7 +913,7 @@ class Test_DeleteSubService_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -1487,7 +1487,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
-            "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
         }
         self.payload_data_bad = {
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -1498,7 +1498,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_USER": ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
-            "NEW_SUBSERVICE_DESCRIPTION": "Elektricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -2832,9 +2832,9 @@ class Test_ModuleActivation_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
-            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
             "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
@@ -2843,9 +2843,9 @@ class Test_ModuleActivation_RestView(object):
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "NEW_SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
-            "SUBSERVICE_NAME": "Electricidad_%s" % self.suffix,
+            "SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "IOTMODULE": "STH",
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
             "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
