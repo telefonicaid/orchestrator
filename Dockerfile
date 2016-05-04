@@ -11,6 +11,7 @@ RUN adduser --comment "${ORCHESTRATOR_USER}" ${ORCHESTRATOR_USER}
 WORKDIR /opt
 
 RUN \
+    # Install dependencies
     yum update -y && yum install -y wget && \
     wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm && \
     yum localinstall -y --nogpgcheck epel-release-6-8.noarch.rpm && \
@@ -21,9 +22,10 @@ RUN \
     git checkout ${GIT_REV_ORCHESTRATOR}
 
 WORKDIR /opt/orchestrator
-RUN pip install -r requirements.txt
 
+RUN \
+    pip install -r requirements.txt
+
+WORKDIR /
+CMD ["/opt/orchestrator/bin/orchestrator-daemon.sh", "start"]
 EXPOSE 8084
-
-WORKDIR /opt/orchestrator/bin
-CMD ["./orchestrator-daemon.sh", "start"]
