@@ -29,7 +29,6 @@ ENV PERSEO_PROTOCOL http
 
 RUN adduser --comment "${ORCHESTRATOR_USER}" ${ORCHESTRATOR_USER}
 
-WORKDIR /tmp
 
 RUN \
     # Install dependencies
