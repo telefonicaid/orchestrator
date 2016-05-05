@@ -57,35 +57,35 @@ RUN mkdir -p /var/log/orchestrator
 
 
 # Set IOTP EndPoints in orchestrator config
-RUN sed -i "s/KEYSTONE = {[A-Za-z0-9,\"\n: ]*}/KEYSTONE = { \
-             \"host\": \""$KEYSTONE_HOST"\", \
-             \"port\": \""$KEYSTONE_PORT"\", \
-             \"protocol\": \""$KEYSTONE_PROTOCOL"\" \
-}/g" /opt/orchestrator/settings/dev.py
+RUN sed -i ':a;N;$!ba;s/KEYSTONE = {[A-Za-z0-9,\"\n: ]*}/KEYSTONE = { \
+             \"host\": \"'$KEYSTONE_HOST'\", \
+             \"port\": \"'$KEYSTONE_PORT'\", \
+             \"protocol\": \"'$KEYSTONE_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
 
-RUN sed -i "s/KEYPASS = {[A-Za-z0-9,\"\n: ]*}/KEYPASS = { \
-             \"host\": \""$KEYPASS_HOST"\", \
-             \"port\": \""$KEYPASS_PORT"\", \
-             \"protocol\": \""$KEYPASS_PROTOCOL"\" \
-}/g" /opt/orchestrator/settings/dev.py
+RUN sed -i ':a;N;$!ba;s/KEYPASS = {[A-Za-z0-9,\"\n: ]*}/KEYPASS = { \
+             \"host\": \"'$KEYPASS_HOST'\", \
+             \"port\": \"'$KEYPASS_PORT'\", \
+             \"protocol\": \"'$KEYPASS_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
 
-RUN sed -i "s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
-             \"host\": \""$ORION_HOST"\", \
-             \"port\": \""$ORION_PORT"\", \
-             \"protocol\": \""$ORION_PROTOCOL"\" \
-}/g" /opt/orchestrator/settings/dev.py
+RUN sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
+             \"host\": \"'$ORION_HOST'\", \
+             \"port\": \"'$ORION_PORT'\", \
+             \"protocol\": \"'$ORION_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
 
-RUN sed -i "s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \
-             \"host\": \""$STH_HOST"\", \
-             \"port\": \""$STH_PORT"\", \
-             \"protocol\": \""$STH_PROTOCOL"\" \
-}/g" /opt/orchestrator/settings/dev.py
+RUN sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \
+             \"host\": \"'$STH_HOST'\", \
+             \"port\": \"'$STH_PORT'\", \
+             \"protocol\": \"'$STH_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
 
-RUN sed -i "s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PERSEO = { \
-             \"host\": \""$PERSEO_HOST"\", \
-             \"port\": \""$PERSEO_PORT"\", \
-             \"protocol\": \""$PERSEO_PROTOCOL"\" \
-}/g" /opt/orchestrator/settings/dev.py
+RUN sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PERSEO = { \
+             \"host\": \"'$PERSEO_HOST'\", \
+             \"port\": \"'$PERSEO_PORT'\", \
+             \"protocol\": \"'$PERSEO_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
 
 RUN cat /opt/orchestrator/settings/dev.py
 
