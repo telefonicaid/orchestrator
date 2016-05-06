@@ -8,7 +8,7 @@ ENV CLEAN_DEV_TOOLS 1
 
 ENV KEYSTONE_HOST localhost
 ENV KEYSTONE_PORT 5001
-ENV KEYSTONE_PROTOCOL https
+ENV KEYSTONE_PROTOCOL http
 
 ENV KEYPASS_HOST localhost
 ENV KEYPASS_PORT 17070
@@ -17,6 +17,10 @@ ENV KEYPASS_PROTOCOL http
 ENV ORION_HOST localhost
 ENV ORION_PORT 1026
 ENV ORION_PROTOCOL http
+
+ENV IOTA_HOST localhost
+ENV IOTA_PORT 4052
+ENV IOTA_PROTOCOL http
 
 ENV STH_HOST localhost
 ENV STH_PORT 18666
@@ -74,6 +78,12 @@ RUN sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
+RUN sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
+             \"host\": \"'$IOTA_HOST'\", \
+             \"port\": \"'$IOTA_PORT'\", \
+             \"protocol\": \"'$IOTA_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
+
 RUN sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \
              \"host\": \"'$STH_HOST'\", \
              \"port\": \"'$STH_PORT'\", \
@@ -86,8 +96,26 @@ RUN sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PERSEO = { \
              \"protocol\": \"'$PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
+# TODO: put IOT endpoints conf into ochestrator-entrypoint.sh
+RUN sed -i '/KEYSTONE_PORT=5001/KEYSTONE_PORT='$KEYSTONE_PORT'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/KEYSTONE_PROTOCOL=http/KEYSTONE_PROTOCOL='$KEYSTONE_PROTOCOL'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/KEYPASS_PORT=17070/KEYPASS_PORT='$KEYPASS_PORT'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/KEYPASS_PROTOCOL=http/KEYPASS_PROTOCOL='$KEYPASS_PROTOCOL'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/ORION_PORT=1026/ORION_PORT='$ORION_PORT'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/ORION_PROTOCOL=http/ORION_PROTOCOL='$ORION_PROTOCOL'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/IOTA_PORT=4052/IOTA_PORT='$IOTA_PORT'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/IOTA_PROTOCOL=http/IOTA_PROTOCOL='$IOTA_PROTOCOL'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/STH_PORT=18666/STH_PORT='$STH_PORT'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/STH_PROTOCOL=http/STH_PROTOCOL='$STH_PROTOCOL'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/PERSEO_PORT=19090/PERSEO_PORT='$PERSEO_PORT'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+RUN sed -i '/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'}/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+
+
 RUN cat /opt/orchestrator/settings/dev.py
 
 WORKDIR /
-CMD ["/opt/orchestrator/bin/orchestrator-daemon.sh", "start"]
+
+# Define the entry point
+ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
+
 EXPOSE 8084
