@@ -5,6 +5,8 @@ orchestrator:
     - keypass 
   ports:
     - "8084:8084"
+  command: -keystonehost keypass \
+           -keypasshost keypass
 
 keypass:
   image: telefonicaiot/keypass
