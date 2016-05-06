@@ -55,7 +55,9 @@ RUN find $python_lib/iotp-orchestrator -name "*.pyc" -delete
 COPY ./bin/orchestrator-daemon.sh /etc/init.d/orchestrator
 COPY ./bin/orchestrator-daemon /etc/default/orchestrator-daemon
 RUN ln -s $python_lib/iotp-orchestrator /opt/orchestrator
-RUN ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin
+RUN mkdir -p $python_lib/iotp-orchestrator/bin
+COPY ./bin/orchestrator-entrypoint.sh /opt/orchestrator/bin
+RUN ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/
 RUN mkdir -p /var/log/orchestrator
 
 
