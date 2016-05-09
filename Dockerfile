@@ -3,8 +3,6 @@ FROM centos:6
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
-ENV GIT_REV_ORCHESTRATOR develop
-ENV CLEAN_DEV_TOOLS 1
 
 ENV KEYSTONE_HOST localhost
 ENV KEYSTONE_PORT 5001
