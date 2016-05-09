@@ -1,5 +1,5 @@
 orchestrator:
-  build: .
+  image: telefonicaiot/orchestrator
   links:
     - keystone
     - keypass 
@@ -9,7 +9,7 @@ orchestrator:
            -keypasshost keypass
 
 keypass:
-  image: telefonicaiot/keypass
+  image: telefonicaiot/fiware-keypass
 
 keystone:
-  image: telefonicaiot/keystone
+  image: telefonicaiot/fiware-keystone-spassword
