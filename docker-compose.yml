@@ -5,7 +5,7 @@ orchestrator:
     - keypass 
   ports:
     - "8084:8084"
-  command: -keystonehost keypass \
+  command: -keystonehost keystone \
            -keypasshost keypass
 
 keypass:
