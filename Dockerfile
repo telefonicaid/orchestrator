@@ -30,6 +30,7 @@ ENV PERSEO_HOST localhost
 ENV PERSEO_PORT 19090
 ENV PERSEO_PROTOCOL http
 
+ENV python_lib /var/env-orchestrator/lib/python2.6/site-packages
 
 RUN \
     adduser --comment "${ORCHESTRATOR_USER}" ${ORCHESTRATOR_USER} && \
@@ -38,29 +39,27 @@ RUN \
     wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm && \
     yum localinstall -y --nogpgcheck epel-release-6-8.noarch.rpm && \
     yum install -y python git python-pip python-devel python-virtualenv gcc ssh && \
-    # Install orchestrator from source
-    git clone https://github.com/telefonicaid/orchestrator && \
-    cd orchestrator && \
-    git checkout ${GIT_REV_ORCHESTRATOR} && \
-    pip install -r requirements.txt && \
-    pip install repoze.lru
-
-ENV python_lib /var/env-orchestrator/lib/python2.6/site-packages
-
-RUN mkdir -p $python_lib/iotp-orchestrator
-COPY ./src/ $python_lib/iotp-orchestrator
-RUN find $python_lib/iotp-orchestrator -name "*.pyc" -delete
-COPY ./bin/orchestrator-daemon.sh /etc/init.d/orchestrator
-COPY ./bin/orchestrator-daemon /etc/default/orchestrator-daemon
-RUN \
-    ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
+    mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin
-COPY ./bin/orchestrator-entrypoint.sh /opt/orchestrator/bin
-RUN \
-    ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
-    mkdir -p /var/log/orchestrator
+
+COPY ./src/ $python_lib/iotp-orchestrator
+COPY ./requirements.txt $python_lib/iotp-orchestrator
+COPY ./bin/orchestrator-daemon.sh $python_lib/iotp-orchestrator/bin/orchestrator-daemon.sh
+COPY ./bin/orchestrator-daemon $python_lib/iotp-orchestrator/bin/orchestrator-daemon
+COPY ./bin/orchestrator-entrypoint.sh $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh
+
+WORKDIR /$python_lib/iotp-orchestrator
 
 RUN \
+    pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
+    pip install repoze.lru && \
+    find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
+    cp $python_lib/iotp-orchestrator/bin/orchestrator-daemon.sh /etc/init.d/orchestrator && \
+    cp $python_lib/iotp-orchestrator/bin/orchestrator-daemon /etc/default/orchestrator-daemon && \
+    ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
+    ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
+    mkdir -p /var/log/orchestrator && \
+
     # Set IOTP EndPoints in orchestrator config
     sed -i ':a;N;$!ba;s/KEYSTONE = {[A-Za-z0-9,\"\n: ]*}/KEYSTONE = { \
              \"host\": \"'$KEYSTONE_HOST'\", \
@@ -111,14 +110,6 @@ RUN \
     sed -i 's/STH_PROTOCOL=http/STH_PROTOCOL='$STH_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PORT=19090/PERSEO_PORT='$PERSEO_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
-
-
-RUN \
-    # Just for debugging
-    cat  /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
-    cat /opt/orchestrator/settings/dev.py
-
-WORKDIR /
 
 # Define the entry point
 ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
