@@ -351,6 +351,11 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
@@ -602,6 +607,11 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
@@ -706,6 +716,11 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
@@ -814,6 +829,11 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
@@ -926,6 +946,11 @@ class Roles(FlowBase):
             #
             # 1. Get service (aka domain)
             #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                             SERVICE_ID))
 
@@ -1016,6 +1041,13 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+
             #
             # 2. Get Role ID
             #
@@ -1094,6 +1126,12 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
 
             #
             # 2. Get Role ID
@@ -1195,6 +1233,13 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+
             #
             # 2. Get Role ID
             #
@@ -1294,6 +1339,11 @@ class Roles(FlowBase):
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
 
             #
             # 2. Get Role ID
