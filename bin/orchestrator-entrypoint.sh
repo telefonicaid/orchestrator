@@ -52,7 +52,7 @@ if [ "$KEYPASS_HOST_ARG" == "-keypasshost" ]; then
     sed -i ':a;N;$!ba;s/KEYPASS = {[A-Za-z0-9,\"\n: ]*}/KEYPASS = { \
              \"host\": \"'$KEYPASS_HOST_VALUE'\", \
              \"port\": \"'$KEYPASS_PORT'\", \
-             \"protocol\": \"'$KEYPASS_PROTOCOL'\" \    
+             \"protocol\": \"'$KEYPASS_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
@@ -60,7 +60,7 @@ if [ "$ORION_HOST_ARG" == "-orionhost" ]; then
     sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
              \"host\": \"'$ORION_HOST_VALUE'\", \
              \"port\": \"'$ORION_PORT'\", \
-             \"protocol\": \"'$ORION_PROTOCOL'\" \    
+             \"protocol\": \"'$ORION_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
@@ -68,7 +68,7 @@ if [ "$IOTA_HOST_ARG" == "-iotahost" ]; then
     sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
              \"host\": \"'$IOTA_HOST_VALUE'\", \
              \"port\": \"'$IOTA_PORT'\", \
-             \"protocol\": \"'$IOTA_PROTOCOL'\" \    
+             \"protocol\": \"'$IOTA_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
@@ -76,7 +76,7 @@ if [ "$PERSEO_HOST_ARG" == "-perseohost" ]; then
     sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PERSEO = { \
              \"host\": \"'$PERSEO_HOST_VALUE'\", \
              \"port\": \"'$PERSEO_PORT'\", \
-             \"protocol\": \"'$PERSEO_PROTOCOL'\" \    
+             \"protocol\": \"'$PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
@@ -84,9 +84,10 @@ if [ "$STH_HOST_ARG" == "-sthhost" ]; then
     sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \
              \"host\": \"'$STH_HOST_VALUE'\", \
              \"port\": \"'$STH_PORT'\", \
-             \"protocol\": \"'$STH_PROTOCOL'\" \    
+             \"protocol\": \"'$STH_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
-/opt/orchestrator/bin/orchestrator-daemon.sh start
-
+sleep 50
+#/opt/orchestrator/bin/orchestrator-daemon.sh restart
+python manage.py runserver 8084 --settings=settings.dev

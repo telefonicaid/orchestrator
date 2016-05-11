@@ -1,15 +1,47 @@
-orchestrator:
-  image: telefonicaiot/orchestrator
-  links:
-    - keystone
-    - keypass 
+mysql:
+  image: mysql
+  expose:
+    - "3306"
   ports:
-    - "8084:8084"
-  command: -keystonehost keystone \
-           -keypasshost keypass
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: iotonpremise
+    MYSQL_DATABASE: keypass
+    MYSQL_USER: keypass
+    MYSQL_PASSWORD: keypass
 
 keypass:
-  image: telefonicaiot/fiware-keypass
+  #image: telefonicaiot/fiware-keypass
+  build: ../fiware-keypass
+  links:
+    - mysql
+  expose:
+    - "7070"
+    - "7071"
+  ports:
+    - "7070:7070"
+    - "7071:7071"
+  command: -dbhost mysql
 
 keystone:
-  image: telefonicaiot/fiware-keystone-spassword
+  build: ../fiware-keystone-spassword/docker
+  #image: telefonicaiot/fiware-keystone-spassword
+  expose:
+    - "5001"
+  links:
+    - mysql
+  ports:
+    - "5001:5001"
+  command: -dbhost mysql
+
+orchestrator:
+  build: .
+  #image: telefonicaiot/orchestrator
+  expose:
+    - "8084"
+  links:
+    - keystone
+    - keypass
+  ports:
+    - "8084:8084"
+  command: -keystonehost keystone -keypasshost keypass

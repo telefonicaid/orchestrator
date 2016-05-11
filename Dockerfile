@@ -49,6 +49,7 @@ COPY ./bin/orchestrator-entrypoint.sh $python_lib/iotp-orchestrator/bin/orchestr
 WORKDIR /$python_lib/iotp-orchestrator
 
 RUN \
+    chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
     pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
     pip install repoze.lru && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
@@ -108,6 +109,10 @@ RUN \
     sed -i 's/STH_PROTOCOL=http/STH_PROTOCOL='$STH_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PORT=19090/PERSEO_PORT='$PERSEO_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+
+RUN \
+    cat /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    cat /opt/orchestrator/settings/dev.py
 
 # Define the entry point
 ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
