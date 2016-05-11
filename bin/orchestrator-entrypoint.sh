@@ -89,4 +89,4 @@ fi
 
 sleep 60
 #/opt/orchestrator/bin/orchestrator-daemon.sh restart
-python manage.py runserver 8084 --settings=settings.dev
+python manage.py runserver 0.0.0.0:8084 --settings=settings.dev
