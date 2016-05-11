@@ -23,7 +23,6 @@ PERSEO_PROTOCOL=http
 # Check arguments
 KEYSTONE_HOST_ARG=${1}
 KEYSTONE_HOST_VALUE=${2}
-
 KEYPASS_HOST_ARG=${3}
 KEYPASS_HOST_VALUE=${4}
 
@@ -40,7 +39,7 @@ PERSEO_HOST_ARG=${11}
 PERSEO_HOST_VALUE=${12}
 
 
-if [ "KEYSTONE_HOST_ARG" == "-keystonehost" ]; then
+if [ "$KEYSTONE_HOST_ARG" == "-keystonehost" ]; then
     sed -i ':a;N;$!ba;s/KEYSTONE = {[A-Za-z0-9,\"\n: ]*}/KEYSTONE = { \
              \"host\": \"'$KEYSTONE_HOST_VALUE'\", \
              \"port\": \"'$KEYSTONE_PORT'\", \
@@ -88,6 +87,6 @@ if [ "$STH_HOST_ARG" == "-sthhost" ]; then
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
-sleep 50
+sleep 60
 #/opt/orchestrator/bin/orchestrator-daemon.sh restart
 python manage.py runserver 8084 --settings=settings.dev

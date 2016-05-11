@@ -78,7 +78,7 @@ RUN \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
+    sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
              \"host\": \"'$IOTA_HOST'\", \
              \"port\": \"'$IOTA_PORT'\", \
              \"protocol\": \"'$IOTA_PROTOCOL'\" \
