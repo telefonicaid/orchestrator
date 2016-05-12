@@ -1,3 +1,14 @@
+mongo:
+  image: mongo:3.2
+
+orion:
+  image: fiware/orion
+  links:
+    - mongo
+  ports:
+    - "1026:1026"
+  command: -dbhost mongo
+
 mysql:
   image: mysql
   expose:
@@ -11,8 +22,7 @@ mysql:
     MYSQL_PASSWORD: keypass
 
 keypass:
-  #image: telefonicaiot/fiware-keypass
-  build: ../fiware-keypass
+  image: telefonicaiot/fiware-keypass
   links:
     - mysql
   expose:
@@ -24,8 +34,7 @@ keypass:
   command: -dbhost mysql
 
 keystone:
-  build: ../fiware-keystone-spassword/docker
-  #image: telefonicaiot/fiware-keystone-spassword
+  image: telefonicaiot/fiware-keystone-spassword
   expose:
     - "5001"
   links:
@@ -35,8 +44,7 @@ keystone:
   command: -dbhost mysql
 
 orchestrator:
-  build: .
-  #image: telefonicaiot/orchestrator
+  image: telefonicaiot/orchestrator
   expose:
     - "8084"
   links:
@@ -44,4 +52,4 @@ orchestrator:
     - keypass
   ports:
     - "8084:8084"
-  command: -keystonehost keystone -keypasshost keypass
+  command: -keystonehost keystone -keypasshost keypass -orionhost orion
