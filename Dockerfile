@@ -37,6 +37,7 @@ RUN \
     wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm && \
     yum localinstall -y --nogpgcheck epel-release-6-8.noarch.rpm && \
     yum install -y python git python-pip python-devel python-virtualenv gcc ssh && \
+    yum install -y findutils sed && \
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin
 
