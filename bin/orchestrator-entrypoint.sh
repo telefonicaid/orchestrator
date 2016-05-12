@@ -88,5 +88,5 @@ if [ "$STH_HOST_ARG" == "-sthhost" ]; then
 fi
 
 sleep 60
-#/opt/orchestrator/bin/orchestrator-daemon.sh restart
+
 python manage.py runserver 0.0.0.0:8084 --settings=settings.dev

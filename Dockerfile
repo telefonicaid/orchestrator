@@ -111,9 +111,6 @@ RUN \
     sed -i 's/PERSEO_PORT=19090/PERSEO_PORT='$PERSEO_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
 
-RUN \
-    cat /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
-    cat /opt/orchestrator/settings/dev.py
 
 # Define the entry point
 ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
