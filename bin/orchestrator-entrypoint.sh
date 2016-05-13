@@ -89,4 +89,4 @@ fi
 
 sleep 60
 
-python manage.py runserver 0.0.0.0:8084 --settings=settings.dev
+uwsgi --http :8084 --chdir /opt/orchestrator --wsgi-file wsgi.py  --env DJANGO_SETTINGS_MODULE=settings.dev --master --processes 1 --threads 4
