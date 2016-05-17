@@ -98,7 +98,8 @@ if [ "$STH_HOST_ARG" == "-sthhost" ]; then
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
-sleep 60
+# Wait until Keystone is up
+while ! nc -z $KEYSTONE_HOST_VALUE $KEYSTONE_PORT ; do sleep 10; done
 
 uwsgi --http :$PORT \
       --chdir /opt/orchestrator \
