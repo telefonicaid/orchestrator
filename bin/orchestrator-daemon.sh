@@ -33,6 +33,7 @@ exe="$UWGSI --http :${PORT} \
 --chdir $ORCHESTRATOR_DIR \
 --wsgi-file wsgi.py \
 --env $ENVIRONMENT \
+--virtualenv $VIRTUALENV \
 --master \
 --processes $PROCESSES \
 --threads $THREADS \
@@ -44,37 +45,41 @@ server="$exe"
 RETVAL=0
 
 start() {
-    echo -n "Starting $PNAME : "
-    #daemon ${exe} # Not working ...
-    if [ -s ${PIDFILE} ]; then
-        RETVAL=1
-        echo -n "Already running !" && warning
-    else
-        touch $PIDFILE
-        chown $USER $PIDFILE
-        su -s /bin/sh $USER -c "
-cd $ORCHESTRATOR_DIR
-exec setsid ${server} \
-</dev/null >/dev/null 2>&1 &
-echo \$! >${PIDFILE}
-disown \$!
-"
-        PID=`cat $PIDFILE`
-        [ $PID ] && success || failure
+    echo -n "Starting ${PNAME}: "
+
+
+    status -p ${PIDFILE} ${PNAME} &> /dev/null 
+
+    if [[ ${?} -eq 0 ]]; then
+        echo "Already running, skipping $(success)"
+        return 0
     fi
-echo
+
+    touch ${PIDFILE}
+    chown ${USER}:${USER} ${PIDFILE}
+
+    su -s /bin/sh ${USER} -c \
+    "cd $ORCHESTRATOR_DIR
+     . ${VIRTUALENV}/bin/activate
+     exec setsid ${server} < /dev/null >/dev/null 2>&1 &
+     echo \$! >${PIDFILE}
+     disown \$!"
+
+    PID=$(cat ${PIDFILE})
+    [ ${PID} ] && success || failure
+    echo
 }
 
 stop() {
     echo -n "Shutting down $PNAME : "
-    if [ -f $PIDFILE ]; then
+    if [ -f ${PIDFILE} ]; then
         PID=`cat $PIDFILE`
         kill -9 $PID
         RETVAL=$?
         [ $RETVAL -eq 0 ] && success || failure
         rm -f $PIDFILE
     else
-        echo -n "Not running" && failure
+        echo -n "Not running" && success
     fi
 echo
 }
