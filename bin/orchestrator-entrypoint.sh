@@ -1,5 +1,16 @@
 #!/bin/bash
 
+
+# DEFAULT SETTINGS
+PORT=8084
+PROCESSES=1
+THREADS=4
+ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
+
+# LOAD CUSTOMIZED SETTINGS
+[ -f /etc/default/orchestrator-daemon ] && . /etc/default/orchestrator-daemon
+
+
 # Default values
 KEYSTONE_PORT=5001
 KEYSTONE_PROTOCOL=http
@@ -89,4 +100,9 @@ fi
 
 sleep 60
 
-python manage.py runserver 0.0.0.0:8084 --settings=settings.dev
+uwsgi --http :$PORT \
+      --chdir /opt/orchestrator \
+      --wsgi-file wsgi.py \
+      --env $ENVIRONMENT \
+      --master --processes $PROCESSES \
+      --threads $THREADS
