@@ -1,5 +1,16 @@
 #!/bin/bash
 
+
+# DEFAULT SETTINGS
+PORT=8084
+PROCESSES=1
+THREADS=4
+ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
+
+# LOAD CUSTOMIZED SETTINGS
+[ -f /etc/default/orchestrator-daemon ] && . /etc/default/orchestrator-daemon
+
+
 # Default values
 KEYSTONE_PORT=5001
 KEYSTONE_PROTOCOL=http
@@ -87,6 +98,12 @@ if [ "$STH_HOST_ARG" == "-sthhost" ]; then
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
-sleep 60
-#/opt/orchestrator/bin/orchestrator-daemon.sh restart
-python manage.py runserver 0.0.0.0:8084 --settings=settings.dev
+# Wait until Keystone is up
+while ! nc -z $KEYSTONE_HOST_VALUE $KEYSTONE_PORT ; do sleep 10; done
+
+uwsgi --http :$PORT \
+      --chdir /opt/orchestrator \
+      --wsgi-file wsgi.py \
+      --env $ENVIRONMENT \
+      --master --processes $PROCESSES \
+      --threads $THREADS
