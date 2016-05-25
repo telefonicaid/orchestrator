@@ -28,6 +28,10 @@ ENV PERSEO_HOST localhost
 ENV PERSEO_PORT 19090
 ENV PERSEO_PROTOCOL http
 
+ENV CYGNUS_HOST localhost
+ENV CYGNUS_PORT 5050
+ENV CYGNUS_PROTOCOL http
+
 ENV python_lib /var/env-orchestrator/lib/python2.6/site-packages
 
 RUN \
@@ -97,6 +101,12 @@ RUN \
              \"protocol\": \"'$PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
+    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\"\n: ]*}/CYGNUS = { \
+             \"host\": \"'$CYGNUS_HOST'\", \
+             \"port\": \"'$CYGNUS_PORT'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
     # Put IOT endpoints conf into ochestrator-entrypoint.sh
     sed -i 's/KEYSTONE_PORT=5001/KEYSTONE_PORT='$KEYSTONE_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/KEYSTONE_PROTOCOL=http/KEYSTONE_PROTOCOL='$KEYSTONE_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
@@ -109,7 +119,9 @@ RUN \
     sed -i 's/STH_PORT=18666/STH_PORT='$STH_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/STH_PROTOCOL=http/STH_PROTOCOL='$STH_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PORT=19090/PERSEO_PORT='$PERSEO_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
-    sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
+    sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/CYGNUS_PORT=5050/CYGNUS_PORT='$CYGNUS_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/CYGNUS_PROTOCOL=http/CYGNUS_PROTOCOL='$CYGNUS_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh
 
 
 # Define the entry point
