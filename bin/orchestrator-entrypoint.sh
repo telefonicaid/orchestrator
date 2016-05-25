@@ -30,6 +30,9 @@ STH_PROTOCOL=http
 PERSEO_PORT=19090
 PERSEO_PROTOCOL=http
 
+CYGNUS_PORT=5050
+CYGNUS_PROTOCOL=http
+
 
 # Check arguments
 KEYSTONE_HOST_ARG=${1}
@@ -48,6 +51,9 @@ STH_HOST_VALUE=${10}
 
 PERSEO_HOST_ARG=${11}
 PERSEO_HOST_VALUE=${12}
+
+CYGNUS_HOST_ARG=${13}
+CYGNUS_HOST_VALUE=${14}
 
 
 if [ "$KEYSTONE_HOST_ARG" == "-keystonehost" ]; then
@@ -95,6 +101,14 @@ if [ "$STH_HOST_ARG" == "-sthhost" ]; then
              \"host\": \"'$STH_HOST_VALUE'\", \
              \"port\": \"'$STH_PORT'\", \
              \"protocol\": \"'$STH_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
+fi
+
+if [ "$CYGNUS_HOST_ARG" == "-cygnushost" ]; then
+    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\"\n: ]*}/CYGNUS = { \
+             \"host\": \"'$CYGNUS_HOST_VALUE'\", \
+             \"port\": \"'$CYGNUS_PORT'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
