@@ -65,4 +65,4 @@ PERSEO = {
     "protocol":"http",
 }
 
-#IOTMODULES = [ "CA", "STH", "PERSEO" ]
+IOTMODULES = [ "STH", "PERSEO" ]
