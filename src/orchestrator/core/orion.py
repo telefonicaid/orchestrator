@@ -22,11 +22,9 @@
 # Author: IoT team
 #
 import json
-import os
 import logging
 
 from orchestrator.common.util import RestOperations
-from orchestrator.core.cb import CBOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -38,7 +36,9 @@ class CBOrionOperations(object):
     def __init__(self,
                  CB_PROTOCOL=None,
                  CB_HOST=None,
-                 CB_PORT=None):
+                 CB_PORT=None,
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         self.CB_PROTOCOL = CB_PROTOCOL
         self.CB_HOST = CB_HOST
@@ -46,7 +46,9 @@ class CBOrionOperations(object):
 
         self.CBRestOperations = RestOperations(CB_PROTOCOL,
                                                CB_HOST,
-                                               CB_PORT)
+                                               CB_PORT,
+                                               CORRELATOR_ID,
+                                               TRANSACTION_ID)
 
 
     def checkCB(self):
@@ -77,8 +79,11 @@ class CBOrionOperations(object):
             "duration": DURATION
         }
 
-        logger.debug("POST to /v1/registry/registerContext with: %s" % json.dumps(body_data,
-                                                                                  indent=3))
+        logger.debug("POST %s/%s to /v1/registry/registerContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
         res = self.CBRestOperations.rest_request(
             url='/v1/registry/registerContext',
             method='POST',
@@ -117,8 +122,11 @@ class CBOrionOperations(object):
             "updateAction": ACTION
         }
 
-        logger.debug("POST to /v1/updateContext with: %s" % json.dumps(body_data,
-                                                                       indent=3))
+        logger.debug("POST %s/%s to /v1/updateContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
         res = self.CBRestOperations.rest_request(
             url='/v1/updateContext',
             method='POST',
@@ -138,10 +146,17 @@ class CBOrionOperations(object):
     def getContextTypes(self,
                         SERVICE_USER_TOKEN,
                         SERVICE_NAME,
-                        SUBSERVICE_NAME):
+                        SUBSERVICE_NAME,
+                        ENTITY_TYPE=None):
 
+        logger.debug("Getting ContextTyesy for %s %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            ENTITY_TYPE)
+        )
         res = self.CBRestOperations.rest_request(
-            url='/v1/contextTypes?details=on&limit=1000&offset=0',
+            url='/v1/contextTypes%s?details=on&offset=0&limit=1000' % (
+                '/' + ENTITY_TYPE if ENTITY_TYPE else ""),
             method='GET',
             data=None,
             auth_token=SERVICE_USER_TOKEN,
@@ -153,6 +168,10 @@ class CBOrionOperations(object):
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
+        if 'statusCode' in json_body_response:
+            if (int(json_body_response['statusCode']['code']) != 200):
+                return []
+
         return json_body_response
 
 
@@ -172,8 +191,11 @@ class CBOrionOperations(object):
             "duration": DURATION,
             "notifyConditions": NOTIFY_CONDITIONS
         }
-        logger.debug("POST to /v1/subscribeContext with: %s" % json.dumps(body_data,
-                                                                          indent=3))
+        logger.debug("POST %s/%s to /v1/subscribeContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         #TODO: v1/registry/subscribeContextAvailability ?
         res = self.CBRestOperations.rest_request(
@@ -197,12 +219,16 @@ class CBOrionOperations(object):
                            SERVICE_NAME,
                            SUBSERVICE_NAME,
                            SUBSCRIPTION_ID):
+
         body_data = {
             "subscriptionId": SUBSCRIPTION_ID
         }
 
-        logger.debug("POST to /v1/unsubscribeContext with : %s" % json.dumps(body_data,
-                                                                             indent=3))
+        logger.debug("POST %s/%s to /v1/unsubscribeContext with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         res = self.CBRestOperations.rest_request(
             url='/v1/unsubscribeContext',
@@ -218,3 +244,136 @@ class CBOrionOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+    def getContextEntity(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME,
+                         ENTITY_ID):
+        logger.debug("Getting ContextEntity for %s %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            ENTITY_ID)
+        )
+        res = self.CBRestOperations.rest_request(
+            url='/v1/contextEntities/%s' % ENTITY_ID ,
+            method='GET',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
+    def getListSubscriptions(self,
+                             SERVICE_USER_TOKEN,
+                             SERVICE_NAME,
+                             SUBSERVICE_NAME,
+                             ENTITY_ID=None):
+
+        logger.debug("Getting subscriptions for %s %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            ENTITY_ID)
+        )
+
+        res = self.CBRestOperations.rest_request(
+            url='/v2/subscriptions?offset=0&limit=1000',
+            method='GET',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        subscriptions_related = []
+
+        # ensure subcrtiptions is an array
+        if isinstance(json_body_response, list):
+            for subscription in json_body_response:
+                for entity in subscription['subject']['entities']:
+                    if not entity['idPattern'] and entity['id'] == ENTITY_ID:
+                        subscriptions_related.append(subscription)
+                    if entity['idPattern'] and entity['idPattern'] in [".*", "*"]:
+                        subscriptions_related.append(subscription)
+
+        return subscriptions_related
+
+
+    def deleteAllSubscriptions(self,
+                               SERVICE_USER_TOKEN,
+                               SERVICE_NAME,
+                               SUBSERVICE_NAME=""):
+
+        subscriptions_deleted = []
+        logger.debug("Removing all subscriptions for %s %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME)
+        )
+        try:
+            subscriptions = self.getListSubscriptions(SERVICE_USER_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
+            logger.debug("subscriptions: %s" % json.dumps(subscriptions,
+                                                          indent=3))
+        except Exception, ex:
+            logger.error("%s trying getListSubscriptions from CB: %s/%s" % (ex,
+                                SERVICE_NAME,
+                                SUBSERVICE_NAME))
+            return subscriptions_deleted
+
+        for subscription in subscriptions:
+            try:
+                self.unsubscribeContext(SERVICE_USER_TOKEN,
+                                        SERVICE_NAME,
+                                        SUBSERVICE_NAME,
+                                        subscription['id'])
+                subscriptions_deleted.append(subscription['id'])
+            except Exception, ex:
+                logger.error("%s trying to unsubscribe context: %s" % (ex,
+                                                        subscription['id']))
+        return subscriptions_deleted
+
+    def extract_modules_from_subscriptions(self,
+                                           flow,
+                                           iot_modules,
+                                           subscriptions):
+        modules = []
+        for sub in subscriptions:
+            if "notification" in sub:
+                sub_callback = self.get_subscription_callback_endpoint(sub)
+                for iotmodule in iot_modules:
+                    if sub_callback.startswith(
+                        flow.get_endpoint_iot_module(iotmodule)):
+                        if ((len(sub['subject']['entities']) == 1) and
+                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            (sub['subject']['entities'][0]['type'] == '')):
+                            modules.append(
+                                { "name": iotmodule,
+                                  "subscriptionid": sub['id'],
+                                  "alias": flow.get_alias_iot_module(iotmodule)
+                              })
+                            break
+
+        return modules
+
+    def get_subscription_callback_endpoint(self, sub):
+        sub_callback = ""
+        if "notification" in sub:
+            if "callback" in sub["notification"]:
+                sub_callback = sub["notification"]["callback"]
+            else:  # From Orion 1.1.0
+                if "http" in sub["notification"]:
+                    sub_callback = sub["notification"]["http"]["url"]
+
+        return sub_callback

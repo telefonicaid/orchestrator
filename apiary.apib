@@ -1,118 +1,147 @@
 FORMAT: 1A
-HOST: *
+HOST: orchestrator_host:8084
 
 # Orchestrator
 
 Component to expose an API to automatise provisioning in all the IoT Platform modules.
 
+
 # Group Orchestrator
 
-All requests can be performed providing a 'x-auth-token' header instead of X_USER / X_PASSWORD payload fields
+All requests can be performed providing a 'x-auth-token' header instead of SERVICE_X_USER / SERVICE_X_PASSWORD or SERVICE_X_TOKEN payload fields. But one of these three auth ways should be present.
 
+In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can be omitted, due to "SERVICE_NAME" is referenced to serviceId. In the same way, "SUBSERVICE_NAME" field at body can be omitted in cases where "subserviceId" is part or the URL
 
 ## Services query [/v1.0/service]
-### Listado de Services [GET]
 
+### List of Services [GET]
 + Request (application/json)
-
             {
                 "DOMAIN_NAME":"admin_domain",
                 "SERVICE_ADMIN_USER":"cloud_admin",
-                "SERVICE_ADMIN_PASSWORD": "password",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token"
             }
-
 + Response 200 (application/json)
-
     + Body
-
             {
                 "domains": [
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                        "name": "SmartValencia",
-                        "description": "SmartValencia"
+                        "name": "test_service",
+                        "description": "test_service description"
                     },
                     {
                         "enabled": true,
                         "id": "f7a5b8e303ec43e8a912fe26fa79dc03",
-                        "name": "SmartLogrono",
-                        "description": "SmartLogro�o"
+                        "name": "test_service2",
+                        "description": "test_service2"
                     }
                 ]
             }
 
+
 ### Create Service [POST]
 + Request (application/json)
-
             {
                 "DOMAIN_NAME":"admin_domain",
                 "DOMAIN_ADMIN_USER":"cloud_admin",
-                "DOMAIN_ADMIN_PASSWORD": "password",
-                "NEW_SERVICE_NAME":"SmartValencia",
-                "NEW_SERVICE_DESCRIPTION":"SmartValencia desc",
-                "NEW_SERVICE_ADMIN_USER":"adm1",
-                "NEW_SERVICE_ADMIN_PASSWORD":"password",
-                "NEW_SERVICE_ADMIN_EMAIL":"pepe@tid.es",
+                "DOMAIN_ADMIN_PASSWORD": "passwd",
+                "DOMAIN_ADMIN_TOKEN": "token",
+                "NEW_SERVICE_NAME":"test_service",
+                "NEW_SERVICE_DESCRIPTION":"test_service description",
+                "NEW_SERVICE_ADMIN_USER":"test_admin_service",
+                "NEW_SERVICE_ADMIN_PASSWORD":"passwd",
+                "NEW_SERVICE_ADMIN_EMAIL":"pepe at site dot com"
             }
-
+       Required: ["NEW_SERVICE_NAME", "NEW_SERVICE_ADMIN_USER",  "NEW_SERVICE_ADMIN_PASSWORD"]
 + Response 201 (application/json)
-
     + Body
-
             {
-             "id" : 0000
+             "id" : "000a345gserg345t0"
             }
+
 
 ## Service manager [/v1.0/service/{serviceId}]
-### Get data [GET]
+
+### Detail of Service [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
-
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN": "token"
             }
 + Response 200 (application/json)
-
     + Body
-
             {
                 "enabled": true,
                 "id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                "name": "SmartValencia",
-                "description": "SmartValencia"
+                "name": "test_service",
+                "description": "test_service"
             }
 
-## Sub-services in service [/v1.0/service/{serviceId}/subservice]
-### listado de subservicio [GET]
+
+### Modify Service [PUT]
 + Parameters
     + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "NEW_SERVICE_DESCRIPTION":"new test_service description"
+            }
+       Required: ["NEW_SERVICE_DESCRIPTION"]
++ Response 200
+
+### Delete a Service [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN": "token"
+            }
++ Response 204
 
 
+## Sub-services in service [/v1.0/service/{serviceId}/subservice]
+
+### List of subservices [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN": "token"
+            }
 + Response 200 (application/json)
-
     + Body
-
             {
               "projects": [
                 {
-                  "description": "SmartValencia Subservicio Electricidad",
+                  "description": "test_service Subservicio test_subservice",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aea",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02",
-                  "name": "Electricidad"
+                  "name": "test_subservice"
                 },
                 {
-                  "description": "SmartValencia Subservicio Basuras",
+                  "description": "test_service Subservicio Basuras",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aeb",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc03",
                   "name": "Basuras"
                 },
                 {
-                  "description": "SmartValencia Subservicio Jardines",
+                  "description": "test_service Subservicio Jardines",
                   "id": "c6851f8ef57c4b91b567ab62ca3d0aec",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc04",
                   "name": "Jardines"
@@ -120,142 +149,192 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
               ]
             }
 
-### edicion de subservicio [PUT]
-
-+ Request (application/json)
-
-            {
-                "SERVICE_NAME":"SmartValencia",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad new desc",
-            }
-
-
-+ Response 201 (application/json)
-
-    + Body
-
-            {
-                   "id" : 0000
-            }
 
 ### Create SubService [POST]
 + Parameters
     + serviceId (required, `string`) ... Service Id
-
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD":"password",
-                "NEW_SUBSERVICE_NAME":"Electricidad",
-                "NEW_SUBSERVICE_DESCRIPTION":"electricidad desc",
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "NEW_SUBSERVICE_NAME":"test_subservice",
+                "NEW_SUBSERVICE_DESCRIPTION":"test subservice desc",
+                "NEW_SUBSERVICE_ADMIN_USER":"subservice_admin_user",
+                "NEW_SUBSERVICE_ADMIN_PASSWORD":"passwd",
+                "NEW_SUBSERVICE_ADMIN_EMAIL":"email.at.dot.com"
             }
-
+       Required: ["NEW_SUBSERVICE_NAME" ]
 + Response 201 (application/json)
-
+    + Body
             {
-                 "id" : 0000
+                 "id" : "000234sdgstr45rh0"
             }
+
 
 ## Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}]
-### listado de subservicio [GET]
-+ Response 200 (application/json)
 
-    + Body
-
+### Detail of SubService [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
             {
-                'description': 'electricidad',
+                "SERVICE_NAME":"test_service",
+                "SUBSERVICE_NAME":"test_subservice",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN": "token"
+            }
++ Response 200 (application/json)
+    + Body
+            {
+                'description': 'testsubservice',
                 'domain_id': '06b9a460f5c343b3bc8b43f8533f7ab4',
                 'id': '1119023a10064570a2a3de0b5b286500',
-                'name': '/Electricidad'}
+                'name': '/test_subservice'
             }
 
+
+### Modify SubService [PUT]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "NEW_SUBSERVICE_DESCRIPTION":"testsubservice new desc"
+            }
+       Required: ["NEW_SUBSERVICE_DESCRIPTION"]
++ Response 200
+
+
+### Delete a SubService [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SUBSERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD":"passwd",
+                "SERVICE_ADMIN_TOKEN":"token"
+            }
++ Response 204
 
 
 ## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
-### registar dispositivo en IoTA [POST]
+### register device in IoTA [POST]
 + Parameters
-    + serviceId (required, `string`) ... Service
-    + subserviceId (required, `string`) ... SubService
-
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
-                "SERVICE_USER_NAME":"adm1",
-                "SERVICE_USER_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "DEVICE_ID":"buton_XXX",
-                "ENTITY_TYPE":""BlackButton,
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "DEVICE_ID":"device_id_XXX",
+                "ENTITY_TYPE":"BlackButton",
+                "ENTITY_NAME":"device_id_XXX",
                 "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_CCID":"AAA",
-                "ATT_IMEI":"123425345",
-                "ATT_IMSI":"4535656777",
-                "ATT_INTERACTION_TYPE":"asynchronous",
-                "ATT_SERVICE_ID":"S-blackbutton",
-                "ATT_GEOLOCATION":"40.4188,-36919",
+                "ATT_ICCID":"",
+                "ATT_IMEI":"",
+                "ATT_IMSI":"",
+                "ATT_INTERACTION_TYPE": "asynchronous",
+                "ATT_SERVICE_ID":"test_service",
+                "ATT_GEOLOCATION":""
             }
+        Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
+        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"},
+                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
 
 + Response 201 (application/json)
+    + DEVICE_ID
 
-            {
-                 "registrationid" : "1234"
-            }
 
-## Register IoTA service in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
-### registar servicio  en IoTA [POST]
+
+### unregister device in IoTA [DELETE]
 + Parameters
-    + serviceId (required, `string`) ... Service
-    + subserviceId (required, `string`) ... SubService
-
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
-                "SERVICE_USER_NAME":"adm1",
-                "SERVICE_USER_PASSWORD":"password",
-                "SUBSERVICE_NAME":"Electricidad",
-                "ENTITY_TYPE":"BlackButton",
-                "ENTITY_ID":"buttonXXX",
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "DEVICE_ID":"device_id_XXX"
+            }
+        Required: [ "DEVICE_ID" ]
++ Response 204 (application/json)
+
+
+## Register entity service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
+### Register entity service for IoTA and ca, sth, perseo subscriptions [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "ENTITY_TYPE":"entity_type",
+                "ENTITY_ID":"entity_id",
                 "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_NAME":"blackbutton_telepizza",
-                "ATT_PROVIDER":"telepizza",
+                "ATT_NAME":"test_service_test_subbservice",
+                "ATT_PROVIDER":"provider_name",
                 "ATT_ENDPOINT":"http://localhost:6500/sync/request",
                 "ATT_METHOD":"POST",
                 "ATT_AUTHENTICATION":"context-adapter",
                 "ATT_INTERACTION_TYPE":"synchronous",
                 "ATT_MAPPING":"[]",
-                "ATT_TIMEOUT":"120",
-
+                "ATT_TIMEOUT":"120"
             }
+        Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
+        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"}
+                 ATT_AUTHENTICATION = {"context-adapter", "third-party"}
+                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
+
 
 + Response 201 (application/json)
-
+    + Body
             {
-                 "??" : ???
+                 "subscriptionid_ca" : "1323423gsdfbb35tergs",
+                 "subscriptionid_sth" : "1323423gsdfb4345b35tergs",
+                 "subscriptionid_perseo" : "1323423gsdfb4sdb35tergs"
             }
 
 
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
+
 ### List Roles[GET]
 + Parameters
-    + serviceId (required, `string`) ... Service
+    + serviceId (required, `string`) ... Service Id
     + index (optional, `number`) ... Start index for pagination
     + count (optional, `number`) ...  Number of results for pagination
-
 + Request (application/json)
-
         {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
             "START_INDEX":"10",
-            "COUNT":"10",
+            "COUNT":"10"
         }
-
 + Response 200 (application/json)
-
+    + Body
         {
             "roles": [
                 {
@@ -277,39 +356,117 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             ]
         }
 
-### Create a Role[POST]
+
+### Create a Role [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
 + Request (application/json)
-
             {
-                "SERVICE_NAME":"SmartValencia",
-                "SERVICE_ADMIN_USER":"adm1",
-                "SERVICE_ADMIN_PASSWORD": "password",
-                "NEW_ROLE_NAME":"role_NameBlabla"
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "NEW_ROLE_NAME":"DemoRole"
             }
-
+        Required: ["NEW_ROLE_NAME"]
 + Response 201 (application/json)
-
+    + Body
             {
-                 "id" : 0000
+                 "id" : "00342234ergdfy54600"
             }
+
 
 ## Role in Service [/v1.0/service/{serviceId}/role/{roleId}]
-### Delete a Role[DELETE]
 
+### XACML Policies about a Role [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + roleId (required, `string`) ... Role Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole"
+            }
++ Response 200
+
+### set XACML Policy Role [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + roleId (required, `string`) ... Role Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole",
+                "POLICY_FILE_NAME": "policy-sth-customer.xml"
+            }
+        Required: ["POLICY_FILE_NAME"]
+        POLICY_FILE_NAME: should be a name used internally by orchestrator
++ Response 201
+
+### Delete a Role [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + roleId (required, `string`) ... Role Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole"
+            }
 + Response 204
 
-## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
-### listado de roles asignados [GET]
+
+## Policy in a Role in Service [/v1.0/service/{serviceId}/role/{roleId}/policy/{policyId}]
+
+### Delete a Policy from Role [DELETE]
 + Parameters
-    + service_id (required, `string`) ... Domain
-    + user_id (optional, `string`) ... User
-    + subservice_id (optional, `string`) ... Subservice (aka Project)
-    + role_id (optional, `string`) ... Role
-    + effective (optional, `boolean`) ... effective
-    + inherit (optional, `boolean`) ... all inherit roles
+    + serviceId (required, `string`) ... Service Id
+    + roleId (required, `string`) ... Role Id
+    + policyId (required, `string`) ... Policy Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_ADMIN_USER":"test_admin_service",
+                "SERVICE_ADMIN_PASSWORD": "passwd",
+                "SERVICE_ADMIN_TOKEN": "token",
+                "ROLE_NAME":"DemoRole"
+            }
++ Response 204
 
+
+## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
+
+### List of assignment roles [GET]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + user_id (optional, `string`) ... User Id
+    + subservice_id (optional, `string`) ... Subservice Id (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + effective (optional, `boolean`) ... effective in subservice or not
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"2342342asdgdsfh34234",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"s2345567ad678fasdfasdfas",
+            "SERVICE_USER_NAME":"user_name",
+            "SERVICE_USER_ID":"asdfas52345346sdf",
+            "EFFECTIVE":true
+        }
+        Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
 + Response 200 (application/json)
-
         {
           "role_assignments": [
             {
@@ -324,7 +481,7 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
               },
               "user": {
-                "description": "user of domain SmartValencia",
+                "description": "user of domain test_service",
                 "name": "Carl",
                 "enabled": true,
                 "id": "7ee5a828843945a79026d99ae0057bb9",
@@ -345,8 +502,8 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
                 "name": "admin"
               },
               "user": {
-                "description": "Administrator of domain SmartValencia",
-                "name": "adm1",
+                "description": "Administrator of domain test_service",
+                "name": "test_admin_service",
                 "enabled": true,
                 "id": "a5c624a8402b48c3931d4600a7fe2be9",
                 "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
@@ -358,71 +515,77 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
-### asignacion de rol a usuario [POST]
+
+### Assign role to user [POST]
 + Parameters
-    + service_id (required, `string`) ... Domain
-
+    + service_id (required, `string`) ... Service Id
+    + user_id (optional, `string`) ... User Id
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
 + Request (application/json)
-
         {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SUBSERVICE_ID":"234234234234",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"234234234234sdfgdfghdfgh",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
             "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"sadfasdfasdfas",
+            "ROLE_ID":"sadfasdfasdfae456457567567s",
             "SERVICE_USER_NAME":"user_nameX",
-            "SERVICE_USER_ID":"asdfasdf",
+            "SERVICE_USER_ID":"asdfa34563457756sdf",
             "INHERIT":true
         }
-
+        Required: ["ROLE_NAME", "SERVICE_USER_NAME"]
 + Response 201
 
 
-### rovocar rol a usuario [DELETE]
+### Revoke Role user [DELETE]
 + Parameters
-    + service_id (required, `string`) ... Domain
-
+    + service_id (required, `string`) ... Service Id
+    + user_id (optional, `string`) ... User Id
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
 + Request (application/json)
-
         {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SUBSERVICE_ID":"234234234234",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"23423423423fghfgh4",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
             "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"sadfasdfasdfas",
+            "ROLE_ID":"sadfasdfasd5674567fas",
             "SERVICE_USER_NAME":"user_nameX",
-            "SERVICE_USER_ID":"asdfasdf",
+            "SERVICE_USER_ID":"asd54634574567fasdf",
             "INHERIT":true
         }
-
 + Response 204
 
 
 ## Users in Service [/v1.0/service/{serviceId}/user{?index}{?count}]
-### Users list [GET]
+
+### User Service list [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + index (optional, `number`) ... Start index for pagination
     + count (optional, `number`) ...  Number of results for pagination
-
 + Request (application/json)
-
         {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
             "START_INDEX":"10",
-            "COUNT":"10",
+            "COUNT":"10"
         }
-
 + Response 200 (application/json)
-
+    + Body
         {
             "users" : [
                 {
                   "description": "Administrator of domain dom1",
-                  "name": "adm1",
+                  "name": "test_admin_service",
                   "enabled": true,
                   "id": "8ac8aa6470c64b5083a6778fc2cd7828",
                   "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
@@ -451,32 +614,41 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
             ]
         }
 
+
 ### Create Users [POST]
-
++ Parameters
+    + serviceId (required, `string`) ... Service Id
 + Request (application/json)
-
         {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
             "NEW_SERVICE_USER_NAME":"user_name_new",
-            "NEW_SERVICE_USER_PASSWORD":"password",
+            "NEW_SERVICE_USER_PASSWORD":"passwd",
             "NEW_SERVICE_USER_EMAIL":"email@email.com",
             "NEW_SERVICE_USER_DESCRIPTION":"user description"
         }
-
 + Response 201 (application/json)
-
         {
             "id": 00000
         }
 
 
 ## User in Service [/v1.0/service/{serviceId}/user/{userId}]
-### detail of user[GET]
+
+### detail of user [GET]
 + Parameters
-    + userId (required, `string`) ... User
-    + serviceId (required, `string`) ... Service
-
+    + userId (required, `string`) ... User Id
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token"
+        }
 + Response 200 (application/json)
-
         {
           "userName": "alice",
           "urn:scim:schemas:extension:keystone:1.0": {
@@ -495,56 +667,190 @@ All requests can be performed providing a 'x-auth-token' header instead of X_USE
           ]
         }
 
+
 ### update an user (by his admin) [PUT]
-
++ Parameters
+    + userId (required, `string`) ... User Id
+    + serviceId (required, `string`) ... Service Id
 + Request (application/json)
-
         {
+             "SERVICE_NAME":"test_service",
+             "SERVICE_ADMIN_USER":"test_admin_service",
+             "SERVICE_ADMIN_PASSWORD":"passwd",
+             "SERVICE_ADMIN_TOKEN":"token",
+             "USER_NAME":"user_name",
              "USER_DATA_VALUE": { "emails": [ {"value": "test@gmail.com"}],
-                                  "name": "new name user",
-                                  "description": "new description user",
-                                  "password": "new description password"
-             }
+                                  "name": "new user name",
+                                  "description": "new user description",
+                                  "password": "new user password"
+                                }
         }
-
 + Response 200
+
 
 ### change user password by himself [POST]
-
++ Parameters
+    + userId (required, `string`) ... User Id
+    + serviceId (required, `string`) ... Service Id
 + Request (application/json)
-
         {
-             "SERVICE_USER_PASSWORD": "old_password",
-             "NEW_USER_PASSWORD": "new_password"
+             "SERVICE_NAME": "test_service",
+             "SERVICE_USER_TOKEN": "token",
+             "SERVICE_USER_NAME": "username",
+             "SERVICE_USER_PASSWORD": "old_passwd",
+             "NEW_USER_PASSWORD": "new_passwd"
         }
-
 + Response 200
 
-### delete an user[DELETE]
 
+### delete an user [DELETE]
++ Parameters
+    + userId (required, `string`) ... User Id
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
+            "USER_NAME":"user_name"
+
+        }
 + Response 204
 
-## Trust Token [/orc/service/{serviceId}/trust]
+
+## Trust Token [/v1.0/service/{serviceId}/trust]
 
 ### Create Trust Token [POST]
-
++ Parameters
+    + serviceId (required, `string`) ... Service Id
 + Request (application/json)
-
         {
-            "SUBSERVICE_NAME":"Electricidad",
-            "SUBSERVICE_ID":"234234234234",
-            "SERVICE_ADMIN_USER":"adm1",
-            "SERVICE_ADMIN_PASSWORD": "password",
+            "SERVICE_NAME":"test_service",
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"2342342342dfhjghjty34",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
             "ROLE_NAME":"ServiceCustomer",
-            "ROLE_ID":"SDFG930J34534K5",
+            "ROLE_ID":"SDFG93hdg350J34534K5",
             "TRUSTEE_USER_NAME":"iotagent",
-            "TRUSTEE_USER_ID":"345635ASDFASD6347",
-            "TRUSTOR_USER_NAME":"adm1",
-            "TRUSTOR_USER_ID":"45674ASDFASDF5674567",
+            "TRUSTEE_USER_ID":"34563fghfgh5ASDFASD6347",
+            "TRUSTOR_USER_NAME":"test_admin_service",
+            "TRUSTOR_USER_ID":"45674ASDFAghjghjSDF5674567"
         }
-
 + Response 201 (application/json)
-
+    + Body
         {
             "ID_TRUST": "147562fcd773448aac3dd53748a43b0c"
         }
+
+
+## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation/{iot_module}]
+
+### list activated IoT Modules [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+            }
++ Response 200 (application/json)
+    + Body
+      {
+         "activated_modules": [ {"name": "STH", "subscriptionid": "23423435", "alias": "HISTORIC"},
+                                {"name": "PERSEO", "subscriptionid": "34243434", "alias": "RULES"} ]
+      }
+
+### activate an IoT Module [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
+    + iot_module (optional, `string`) ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 201 (application/json)
+    + Body
+      {
+         "subscriptionid": "23423435"
+      }
+
+### deactivate an IoT Module [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service id
+    + subserviceId (required, `string`) ... SubService Id
+    + iot_module (optional, `string`) ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 204
+
+
+## Stats [/v1.0/version]
+
+### Get Version, Uptime and API stats [GET]
++ Response 201 (application/json)
+    + Body
+      {
+         "uptime": "2015-11-02T08:15:35.166",
+         "IoTModules": [
+             "STH",
+             "PERSEO"
+         ],
+         "version": "0.5.1",
+         "API_stats": {
+            "num_post_device": 3,
+            "num_delete_user": 40,
+            "num_get_role": 20,
+            "num_delete_subservice": 330,
+            "num_get_service": 30,
+            "num_post_trust": 30,
+            "num_put_service": 30,
+            "num_post_roleassignment": 50,
+            "num_post_userlist": 203,
+            "num_delete_service": 20,
+            "num_delete_role": 30,
+            "num_post_subservice": 30,
+            "num_post_entity_service": 10,
+            "num_get_subservice": 30,
+            "num_post_devices": 30,
+            "num_post_user": 40,
+            "num_get_user ": 20,
+            "num_put_user": 10,
+            "num_get_roleassignment": 20,
+            "num_get_userlist": 20,
+            "num_post_service": 20,
+            "num_delete_roleassignment": 10,
+            "num_post_role": 10,
+            "num_delete_device": 10,
+            "num_put_subservice": 10
+          }
+       }
+
+
+## LogLevel [/v1.0/admin/logs]
+
+### Set new Log Level [PUT]
++ Parameters
+  + level (required, `string`) ... ["DEBUG", ... "FATAL"]
++ Response 200

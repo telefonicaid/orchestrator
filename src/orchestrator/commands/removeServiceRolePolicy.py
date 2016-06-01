@@ -24,6 +24,7 @@
 # Author: IoT team
 #
 import sys
+import pprint
 import logging.config
 import os
 
@@ -39,11 +40,12 @@ except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 def main():
 
-    print "This script set a XACML policy to a role in Access Control"
+    print "This script removes a Role Service (aka keystone domain) in IoT Platform"
+
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 11
+    NUM_ARGS_EXPECTED = 7
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -52,13 +54,13 @@ def main():
         print "  <KEYSTONE_HOST>                 Keystone HOSTNAME or IP"
         print "  <KEYSTONE_PORT>                 Keystone PORT"
         print "  <SERVICE_NAME>                  Service name"
-        print "  <SERVICE_ADMIN_USER>            Service admin username"
-        print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <ROLE_NAME>                     Name of role"
-        print "  <POLICY_FILE>                   Policy XACML file name"
+        print "  <SERVICE_ADMIN_USER>            Service Admin username"
+        print "  <SERVICE_ADMIN_PASSWORD>        Service Admin password"
+        print "  <ROLE_NAME>                     Role name"
+        print "  <POLICY_NAME>                   Policy name"               
         print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
         print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
-        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"        
+        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"                
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -67,11 +69,11 @@ def main():
         print "                                 smartcity      \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 ServiceCustomer\\"
-        print "                                 mypolicy.xml   \\"        
+        print "                                 SubServiceCustomer\\"
+        print "                                 STHSubServiceCustomer\\"
         print "                                 http           \\"
         print "                                 localhost      \\"
-        print "                                 8080           \\"        
+        print "                                 8080           \\"                
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -81,30 +83,34 @@ def main():
     KEYSTONE_HOST = sys.argv[2]
     KEYSTONE_PORT = sys.argv[3]
     SERVICE_NAME = sys.argv[4]
+
     SERVICE_ADMIN_USER = sys.argv[5]
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
     ROLE_NAME = sys.argv[7]
-    POLICY_FILE_NAME = sys.argv[8]
+    POLICY_NAME = sys.argv[8]
+    
     KEYPASS_PROTOCOL = sys.argv[9]
     KEYPASS_HOST = sys.argv[10]
-    KEYPASS_PORT = sys.argv[11]    
-
+    KEYPASS_PORT = sys.argv[11]
+    
     flow = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT,
                  KEYPASS_PROTOCOL,
                  KEYPASS_HOST,
-                 KEYPASS_PORT)                 
+                 KEYPASS_PORT)                                  
 
-    flow.setPolicyRole(
-        SERVICE_NAME,
-        None,
-        SERVICE_ADMIN_USER,
-        SERVICE_ADMIN_PASSWORD,
-        None,
-        ROLE_NAME,
-        None,
-        POLICY_FILE_NAME)
+    role_detail = flow.removePolicyFromRole(
+                                  SERVICE_NAME,
+                                  None,
+                                  SERVICE_ADMIN_USER,
+                                  SERVICE_ADMIN_PASSWORD,
+                                  None,
+                                  ROLE_NAME,
+                                  None,
+                                  POLICY_NAME)        
+
+    pprint.pprint(role_detail)
 
 if __name__ == '__main__':
 

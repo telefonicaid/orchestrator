@@ -1,6 +1,6 @@
 # Django settings for orchestrator project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -8,6 +8,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+CACHE_BACKEND = 'locmem://'
 
 DATABASES = {
     'default': {
@@ -22,7 +24,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -156,7 +158,7 @@ LOGGING = {
         'standard': {
             #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             #'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
-            'format' : 'time=%(asctime)s | lvl=%(levelname)s | component=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
+            'format' : 'time=%(asctime)s | lvl=%(levelname)s | corr=%(correlator)s | trans=%(transaction)s | srv=%(service)s | subsrv=/%(subservice)s | component=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
     },
@@ -207,9 +209,14 @@ LOGGING = {
 }
 
 REST_FRAMEWORK = {
-    #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    #'PAGINATE_BY': 10
+
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '200/sec',
+    }
 }
 
 
@@ -219,22 +226,35 @@ REST_FRAMEWORK = {
 
 # Custom settings
 # ---------------
+# The following values are tipically modified in custom config files, like dev.py
+
+
 KEYSTONE = {}
 KEYPASS = {}
 IOTA = {}
 ORION = {}
 CA = {}
-CYGNUS = {}
 STH = {}
+PERSEO = {}
 
+# List of possible IoTModules: persistence services, etc
+IOTMODULES = [ "STH", "PERSEO", "CA"]
+
+# Pep user credencials. Pep is a user of admin_domain
+# Needed to for resolve pep user id
 PEP = {
     "user": "pep",
     "password": "pep"
 }
 
+# IoTAgent user credentials. Iotagent is a user of default domain
+# Needed to for resolve iotagent user id
 IOTAGENT = {
     "user": "iotagent",
     "password": "iotagent"
 }
 
 SCIM_API_VERSION = "1.1"  # Supported v1.1 (1.1) and v2.0 (2.0) (by UPM)
+
+# Internal version of Orchestrator
+ORC_VERSION = "ORC_version"

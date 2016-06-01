@@ -22,11 +22,9 @@
 # Author: IoT team
 #
 import json
-import os
 import logging
 
 from orchestrator.common.util import RestOperations
-from orchestrator.core import policies
 from orchestrator.core.idm import IdMOperations
 
 logger = logging.getLogger('orchestrator_core')
@@ -40,7 +38,8 @@ class IdMKeystoneOperations(IdMOperations):
     def __init__(self,
                  KEYSTONE_PROTOCOL=None,
                  KEYSTONE_HOST=None,
-                 KEYSTONE_PORT=None):
+                 KEYSTONE_PORT=None,
+                 TRANSACTION_ID=None):
 
         self.KEYSTONE_PROTOCOL = KEYSTONE_PROTOCOL
         self.KEYSTONE_HOST = KEYSTONE_HOST
@@ -48,7 +47,8 @@ class IdMKeystoneOperations(IdMOperations):
 
         self.IdMRestOperations = RestOperations(KEYSTONE_PROTOCOL,
                                                 KEYSTONE_HOST,
-                                                KEYSTONE_PORT)
+                                                KEYSTONE_PORT,
+                                                TRANSACTION_ID)
 
         try:
             from settings.common import SCIM_API_VERSION
@@ -70,6 +70,11 @@ class IdMKeystoneOperations(IdMOperations):
                  DOMAIN_ADMIN_USER,
                  DOMAIN_ADMIN_PASSWORD,
                  SCOPED=True):
+
+        assert DOMAIN_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert DOMAIN_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
 
         auth_data = {
             "auth": {
@@ -116,6 +121,12 @@ class IdMKeystoneOperations(IdMOperations):
                   DOMAIN_ADMIN_USER,
                   DOMAIN_ADMIN_PASSWORD,
                   SCOPED=True):
+
+        assert DOMAIN_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert DOMAIN_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -156,11 +167,76 @@ class IdMKeystoneOperations(IdMOperations):
         return res.headers.get('X-Subject-Token')
 
 
+    def getTokenFromToken(self,
+                 DOMAIN_ADMIN_TOKEN,
+                 DOMAIN_ID,
+                 PROJECT_ID,
+                 SCOPED=True):
+
+        assert DOMAIN_ADMIN_TOKEN != None, (
+                401, "auth wrong: user token not provided")
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "token"
+                    ],
+                    "token": {
+                        "id": DOMAIN_ADMIN_TOKEN
+                    }
+                }
+            }
+        }
+
+        if DOMAIN_ID:
+            if SCOPED:
+                if PROJECT_ID:
+                    scope_domain = {
+                        "scope": {
+                            "project": {
+                                "domain": {
+                                    "id": DOMAIN_ID
+                                    },
+                                    "id": PROJECT_ID
+                                }
+                            }
+                        }
+                else:
+                    scope_domain = {
+                        "scope": {
+                            "domain": {
+                                "id": DOMAIN_ID
+                            }
+                        }
+                    }
+                auth_data['auth'].update(scope_domain)
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        #return res.headers.get('X-Subject-Token')
+
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response, res.headers.get('X-Subject-Token')
+
+
     def getScopedProjectToken(self,
                               DOMAIN_NAME,
                               PROJECT_NAME,
                               SERVICE_ADMIN_USER,
                               SERVICE_ADMIN_PASSWORD):
+
+        assert SERVICE_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert SERVICE_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -202,6 +278,12 @@ class IdMKeystoneOperations(IdMOperations):
                               PROJECT_ID,
                               SERVICE_ADMIN_USER,
                               SERVICE_ADMIN_PASSWORD):
+
+        assert SERVICE_ADMIN_USER != None, (
+                401, "auth wrong: user name not provided")
+        assert SERVICE_ADMIN_PASSWORD != None, (
+                401, "auth wrong: user password not provided")
+
         auth_data = {
             "auth": {
                 "identity": {
@@ -443,7 +525,7 @@ class IdMKeystoneOperations(IdMOperations):
                 "enabled": True,
                 "domain_id": "%s" % ID_DOM1,
                 "name": "%s" % NEW_USER_NAME,
-                "password": "%s" % NEW_USER_PASSWORD,
+                "password": "%s" % NEW_USER_PASSWORD
             }
         }
         if NEW_USER_EMAIL:
@@ -744,6 +826,7 @@ class IdMKeystoneOperations(IdMOperations):
                                                       indent=3))
         return json_body_response
 
+
     def getDomainRoles(self,
                        SERVICE_ADMIN_TOKEN,
                        DOMAIN_ID,
@@ -896,6 +979,36 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def getDomainNameFromToken(self,
+                               SERVICE_ADMIN_TOKEN,
+                               DOMAIN_ID):
+
+        token_data, token_value = self.getTokenFromToken(
+                                            SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            None,
+                                            True)
+        logger.debug("json response: %s" % json.dumps(token_data,
+                                                      indent=3))
+        return token_data['token']['domain']['name']
+
+
+    def getProjectNameFromToken(self,
+                            SERVICE_ADMIN_TOKEN,
+                            DOMAIN_ID,
+                            PROJECT_ID):
+
+        token_data, token_value = self.getTokenFromToken(
+                                            SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            PROJECT_ID,
+                                            True)
+        logger.debug("json response: %s" % json.dumps(token_data,
+                                                      indent=3))
+
+        return token_data['token']['project']['name'].split('/')[1]
 
     def getProjectRoleAssignments(self,
                                   SERVICE_ADMIN_TOKEN,
@@ -1135,3 +1248,164 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return { "trusts": json_body_response['trusts'] }
+
+
+    def getAuthorizeOauth2(self,
+                           SERVICE_USER_TOKEN,
+                           URL_PARAMS):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-OAUTH2/authorize?%s' % URL_PARAMS,
+            method='GET',
+            auth_token=SERVICE_USER_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+
+    def getAuthorizeCodeOauth2(self,
+                               SERVICE_USER_TOKEN,
+                               CLIENT_ID,
+                               SCOPES):
+
+        user_auth_data = {
+            "user_auth": {
+                "client_id": CLIENT_ID,
+                "scopes": SCOPES
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request2(
+            url='/v3/OS-OAUTH2/authorize',
+            method='POST',
+            data=user_auth_data,
+            auth_token=SERVICE_USER_TOKEN)
+
+        #assert res.code == 201, (res.code, res.msg)
+        return res.history[0].headers.get('location').split('code=')[1]
+
+
+    def requestAccessToken(self,
+                           USER,
+                           PASSWORD,
+                           GRANT_TYPE,
+                           CODE,
+                           REDIRECT_URL):
+
+        data = {
+            "token_request": {
+                "grant_type": GRANT_TYPE,
+                "code": CODE,
+                "redirect_uri": REDIRECT_URL
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request2(
+            user=USER,
+            password=PASSWORD,
+            url='/v3/OS-OAUTH2/access_token',
+            method='POST',
+            data=data)
+
+        assert res.status_code == 200, (res.code, res.reason)
+
+        json_body_response = json.loads(res.content)
+        return json_body_response['access_token'], json_body_response['refresh_token']
+
+    def requestRefreshAccessToken(self,
+                           USER,
+                           PASSWORD,
+                           GRANT_TYPE,
+                           REFRESH_TOKEN):
+
+        data = {
+            "token_request": {
+                "grant_type": GRANT_TYPE,
+                "refresh_token": REFRESH_TOKEN
+            }
+        }
+
+        res = self.IdMRestOperations.rest_request2(
+            user=USER,
+            password=PASSWORD,
+            url='/v3/OS-OAUTH2/access_token',
+            method='POST',
+            data=data)
+
+        assert res.status_code == 200, (res.code, res.reason)
+
+        json_body_response = json.loads(res.content)
+        return json_body_response['access_token']
+
+
+    def getTokenFromAccessToken(self,
+                                ACCESS_TOKEN_ID,
+                                DOMAIN_NAME,
+                                PROJECT_NAME=None,
+                                SCOPED=True):
+
+        auth_data = {
+            "auth": {
+                "identity": {
+                    "methods": [
+                        "oauth2"
+                    ],
+                    "oauth2": {
+                        "access_token_id": ACCESS_TOKEN_ID
+                    }
+                }
+            }
+        }
+
+        if DOMAIN_NAME:
+            if SCOPED:
+                if PROJECT_NAME:
+                    scope_domain = {
+                        "scope": {
+                            "project": {
+                                "domain": {
+                                    "name": DOMAIN_NAME
+                                },
+                                "name": "/" + PROJECT_NAME
+                            }
+                        }
+                    }
+                else:
+                    scope_domain = {
+                        "scope": {
+                            "domain": {
+                                "name": DOMAIN_NAME
+                            }
+                        }
+                    }
+                auth_data['auth'].update(scope_domain)
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='POST',
+            data=auth_data)
+        assert res.code == 201, (res.code, res.msg)
+        return res.headers.get('X-Subject-Token')
+
+    def getTokenDetail(self,
+                       TOKEN):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/auth/tokens',
+            method='GET',
+            data=None,
+            auth_token=TOKEN,
+            subject_token=TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+    def isTokenAdmin(self, TOKEN, DOMAIN_ID):
+        # Check Role admin asigned in DOMAIN
+        token_res = self.getTokenDetail(TOKEN)
+        for role in token_res['token']['roles']:
+            if role['name'] == 'admin':
+                return True
+        return False
