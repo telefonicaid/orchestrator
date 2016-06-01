@@ -26,7 +26,7 @@ json = {
     ###############
     "ServiceCreate": {
     ###############
-        "name": "Service",
+        "name": "ServiceCreate",
         "dependencies": {
             "DOMAIN_NAME": [
                 "DOMAIN_ADMIN_USER",
@@ -99,27 +99,36 @@ json = {
     #############
         "name": "ServiceList",
         "dependencies": {
-            "DOMAIN_ADMIN_USER": [
-                "DOMAIN_ADMIN_PASSWORD"
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
             ],
-            "DOMAIN_ADMIN_PASSWORD": [
-                "DOMAIN_ADMIN_USER",
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
             ]
         },
         "properties": {
             "DOMAIN_NAME": {
                 "type": "string",
             },
-            "DOMAIN_ADMIN_USER": {
+            "SERVICE_ADMIN_USER": {
                 "type": "string",
             },
-            "DOMAIN_ADMIN_PASSWORD": {
+            "SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
             },
-            "DOMAIN_ADMIN_TOKEN": {
+            "SERVICE_ADMIN_TOKEN": {
                 "type": "string",
             },
             "DOMAIN_ID": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "NEW_SERVICE_DESCRIPTION": {
                 "type": "string",
             },
         },
@@ -151,6 +160,15 @@ json = {
                 "type": "string",
             },
             "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
             },
         },
@@ -191,6 +209,19 @@ json = {
             },
             "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
+            },
+            "NEW_SUBSERVICE_ADMIN_USER": {
+                "type": "string",
+                "maxLength": 50,
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "NEW_SUBSERVICE_ADMIN_PASSWORD":{
+                "type": "string",
+                "minLength": 6,
+            },
+            "NEW_SUBSERVICE_ADMIN_EMAIL":{
+                "type": "string",
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
             },
         },
         "required": [
@@ -242,7 +273,7 @@ json = {
                     "userName": {
                         "type": "string",
                         "pattern": "^([A-Za-z0-9_]+)$",
-                        },                    
+                        },
                     "password": {
                         "type": "string",
                         "minLength": 6,
@@ -269,6 +300,10 @@ json = {
                     },
                 "additionalProperties": False,
                 # "required": ["user", "emails"]
+            },
+            "NEW_USER_PASSWORD":{
+                "type": "string",
+                "minLength": 6,
             },
         },
         # "required": [ ],
@@ -320,9 +355,9 @@ json = {
         },
         # "required": [ ],
     },
-    #######
+    ###########
     "RoleList": {
-    #######
+    ###########
         "name": "RoleList",
         "dependencies": {
             "SERVICE_ADMIN_USER": [
@@ -389,12 +424,13 @@ json = {
             "SERVICE_NAME": {
                 "type": "string",
             },
-            "NEW_ROLE_NAME": {
+            "ROLE_NAME": {
                 "type": "string",
-                "maxLength": 50,
-                "pattern": "^([A-Za-z0-9_]+)$",
             },
-            "XACML_POLICY": {
+            "ROLE_ID": {
+                "type": "string",
+            },
+            "POLICY_FILE_NAME": {
                 "type": "string",
             },
         },
@@ -427,7 +463,16 @@ json = {
             "SUBSERVICE_ID": {
                 "type": "string",
             },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
             "USER_ID": {
+                "type": "string",
+            },
+            "USER_NAME": {
                 "type": "string",
             },
         },
@@ -528,13 +573,13 @@ json = {
             "TRUSTEE_USER_NAME": {
                 "type": "string",
             },
-            "TRUSTEE_USER__ID": {
+            "TRUSTEE_USER_ID": {
                 "type": "string",
             },
             "TRUSTOR_USER_NAME": {
                 "type": "string",
             },
-            "TRUSTOR_USER__ID": {
+            "TRUSTOR_USER_ID": {
                 "type": "string",
             },
         },
@@ -542,5 +587,233 @@ json = {
         # ],
     },
 
-}
+    #############
+    "IoTADevice": {
+    #############
+        "name": "IoTADevice",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "DEVICE_ID": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ENTITY_TYPE": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ENTITY_NAME": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "PROTOCOL": {
+                "type": "string",
+            },
+            "ATT_ICCID": {
+                "type": "string",
+            },
+            "ATT_IMEI": {
+                "type": "string",
+            },
+            "ATT_IMSI": {
+                "type": "string",
+            },
+            "ATT_INTERACTION_TYPE": {
+                "type": "string",
+                "enum": ["synchronous", "asynchronous"]
+            },
+            "ATT_SERVICE_ID": {
+                "type": "string",
+            },
+            "ATT_GEOLOCATION": {
+                "type": "string",
+            },
+        },
+        "required": [
+            "DEVICE_ID",
+            # "ENTITY_TYPE",
+            # "PROTOCOL"
+        ],
+    },
 
+
+    ##############
+    "IoTAService": {
+    ##############
+        "name": "IoTAService",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+            "ENTITY_TYPE": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ENTITY_ID": {
+                "type": "string",
+                "pattern": "^[^'\"=;()]*$",
+            },
+            "ATT_NAME": {
+                "type": "string",
+            },
+            "ATT_PROVIDER": {
+                "type": "string",
+            },
+            "ATT_ENDPOINT": {
+                "type": "string",
+            },
+            "ATT_METHOD": {
+                "type": "string",
+            },
+            "ATT_AUTHENTICATION": {
+                "type": "string",
+                "enum": ["context-adapter", "third-party"]
+            },
+            "ATT_INTERACTION_TYPE": {
+                "type": "string",
+                "enum": ["synchronous", "asynchronous"]
+            },
+            "ATT_MAPPING": {
+                "type": "string",
+            },
+            "ATT_TIMEOUT": {
+                "type": "string",
+            },
+
+        },
+        "required": [
+            "ENTITY_TYPE",
+            "ENTITY_ID",
+            "PROTOCOL",
+        ],
+    },
+
+
+    #############
+    "IoTADevices": {
+    #############
+        "name": "IoTADevices",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_NAME": {
+                "type": "string",
+            },
+        },
+        # "required": [
+        # ],
+    },
+
+    #####################
+    "IOTModuleActivation": {
+    #####################
+        "name": "IOTModuleActivation",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "IOTMODULE": {
+                "type": "string",
+            },
+        },
+        # "required": [ ],
+    },
+
+}

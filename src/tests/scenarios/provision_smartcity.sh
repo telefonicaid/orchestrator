@@ -42,10 +42,7 @@ python ./assignInheritRoleServiceUser.py $KEYSTONE_PROTOCOL \
                                     adm1             \
                                     password         \
                                     adm1             \
-                                    SubServiceAdmin  \
-                                    $KEYPASS_PROTOCOL\
-                                    $KEYPASS_HOST    \
-                                    $KEYPASS_PORT
+                                    SubServiceAdmin
 checkResult $? "assignInheritRole to admin"
 
 python ./createNewSubService.py  $KEYSTONE_PROTOCOL  \
@@ -120,17 +117,18 @@ python ./createNewServiceUser.py  $KEYSTONE_PROTOCOL \
                                       password
 checkResult $? "Creating user Carl"
 
-python ./createNewServiceRole.py  $KEYSTONE_PROTOCOL \
-                                      $KEYSTONE_HOST \
-                                      $KEYSTONE_PORT \
-                                      smartcity      \
-                                      adm1           \
-                                      password       \
-                                      ServiceCustomer\
-                                      $KEYSTONE_PROTOCOL  \
-                                      $KEYSTONE_HOST \
-                                      $KEYPASS_PORT
-checkResult $? "creating new ServiceCustomer role"
+# ServiceCustomer is already created at new service creation time
+# python ./createNewServiceRole.py  $KEYSTONE_PROTOCOL \
+#                                       $KEYSTONE_HOST \
+#                                       $KEYSTONE_PORT \
+#                                       smartcity      \
+#                                       adm1           \
+#                                       password       \
+#                                       ServiceCustomer\
+#                                       $KEYSTONE_PROTOCOL  \
+#                                       $KEYSTONE_HOST \
+#                                       $KEYPASS_PORT
+# checkResult $? "creating new ServiceCustomer role"
 
 python ./assignRoleServiceUser.py $KEYSTONE_PROTOCOL  \
                                        $KEYSTONE_HOST \

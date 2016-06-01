@@ -21,13 +21,12 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-from settings.common import PEP
-
-logger = logging.getLogger('orchestrator_core')
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
+from settings.common import IOTAGENT, PEP
 
 
 class CreateTrustToken(FlowBase):
@@ -74,7 +73,7 @@ class CreateTrustToken(FlowBase):
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
             "TRUSTEE_USER_NAME": "%s" % TRUSTEE_USER_NAME,
@@ -82,7 +81,7 @@ class CreateTrustToken(FlowBase):
             "TRUSTOR_USER_NAME": "%s" % TRUSTOR_USER_NAME,
             "TRUSTOR_USER_ID": "%s" % TRUSTOR_USER_ID,
         }
-        logger.debug("createTrustToken invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW createTrustToken invoked with: %s" % json.dumps(
             data_log, indent=3)
             )
 
@@ -91,7 +90,7 @@ class CreateTrustToken(FlowBase):
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
             # 1. Get service (aka domain)
@@ -99,9 +98,14 @@ class CreateTrustToken(FlowBase):
             if not SERVICE_ID and SERVICE_NAME:
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
+                self.logger.debug("ID of your service %s" % SERVICE_ID)
 
-                logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
-                                                           SERVICE_ID))
+            if not SERVICE_NAME:
+                SERVICE = self.idm.getDomain(SERVICE_ADMIN_TOKEN, SERVICE_ID)
+                SERVICE_NAME = SERVICE['domain']['name']
+                self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                                SERVICE_ID))
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
 
             #
             # 2. Get SubService (aka project)
@@ -110,17 +114,25 @@ class CreateTrustToken(FlowBase):
                 SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME,
                                                       SUBSERVICE_NAME)
-                logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
-                                                            SUBSERVICE_ID))
+                self.logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
+                                                                   SUBSERVICE_ID))
+            self.logger.addFilter(ContextFilterSubService(SUBSERVICE_NAME))
 
             #
             # 3. Get role
             #
             if not ROLE_ID and ROLE_NAME:
-                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
-                                                   SERVICE_ID,
-                                                   ROLE_NAME)
-                logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+                if SERVICE_ADMIN_USER and SERVICE_ADMIN_USER == TRUSTOR_USER_NAME:
+                    ROLE_ID = self.idm.getUserRoleId(SERVICE_ADMIN_TOKEN,
+                                                     SERVICE_ID,
+                                                     SUBSERVICE_ID,
+                                                     ROLE_NAME)
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
+
+                self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
             # 4. Get Trustee User
@@ -128,27 +140,31 @@ class CreateTrustToken(FlowBase):
             if not TRUSTEE_USER_ID and TRUSTEE_USER_NAME:
                 # We are asuming that trustee belong to SERVICE!!
                 if TRUSTEE_USER_NAME == "iotagent":
-                    PEP_TOKEN = self.idm.getToken('admin_domain',
-                                                  PEP['user'],
-                                                  PEP['password'],
+                    IOTAGENT_TOKEN = self.idm.getToken('default',
+                                                  IOTAGENT['user'],
+                                                  IOTAGENT['password'],
                                                   False)
-                    TRUSTEE_USER_ID = self.idm.getUserId(PEP_TOKEN,
-                                                         TRUSTEE_USER_NAME )
+                    TRUSTEE_USER_ID = self.idm.getUserId(IOTAGENT_TOKEN,
+                                                        TRUSTEE_USER_NAME)
                 else:
                     TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                                           SERVICE_ID,
-                                                           TRUSTEE_USER_NAME)
-                logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
+                                                               SERVICE_ID,
+                                                               TRUSTEE_USER_NAME)
+                self.logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
                                                             TRUSTEE_USER_ID))
 
             #
             # 5. Get Trustor User
             #
             if not TRUSTOR_USER_ID and TRUSTOR_USER_NAME:
-                TRUSTOR_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
-                                                           SERVICE_ID,
-                                                           TRUSTOR_USER_NAME)
-                logger.debug("ID of trustor user %s: %s" % (TRUSTOR_USER_NAME,
+                if SERVICE_ADMIN_USER and SERVICE_ADMIN_USER == TRUSTOR_USER_NAME:
+                    TRUSTOR_USER_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                         TRUSTOR_USER_NAME)
+                else:
+                    TRUSTOR_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                               SERVICE_ID,
+                                                               TRUSTOR_USER_NAME)
+                self.logger.debug("ID of trustor user %s: %s" % (TRUSTOR_USER_NAME,
                                                             TRUSTOR_USER_ID))
 
             #
@@ -160,29 +176,29 @@ class CreateTrustToken(FlowBase):
                                                  TRUSTEE_USER_ID,
                                                  TRUSTOR_USER_ID)
 
-            logger.debug("ID of Trust %s" % (ID_TRUST))
+            self.logger.debug("ID of Trust %s" % (ID_TRUST))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "ID_TRUST": "%s" % ID_TRUST
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_TRUST}
 
 
 
     def getTrustsUserTrustee(self,
-                         SERVICE_NAME,
-                         SERVICE_ID,
-                         SERVICE_ADMIN_USER,
-                         SERVICE_ADMIN_PASSWORD,
-                         SERVICE_ADMIN_TOKEN,
-                         TRUSTEE_USER_NAME,
-                         TRUSTEE_USER_ID):
+                             SERVICE_NAME,
+                             SERVICE_ID,
+                             SERVICE_ADMIN_USER,
+                             SERVICE_ADMIN_PASSWORD,
+                             SERVICE_ADMIN_TOKEN,
+                             TRUSTEE_USER_NAME,
+                             TRUSTEE_USER_ID):
         '''Lists all trust of a trustee user
 
         In case of HTTP error, return HTTP error
@@ -203,20 +219,20 @@ class CreateTrustToken(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "TRUSTEE_USER_NAME": "%s" % TRUSTEE_USER_NAME,
             "TRUSTEE_USER_ID": "%s" % TRUSTEE_USER_ID,
         }
-        logger.debug("getTrustsUserTrustee invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        self.logger.debug("FLOW getTrustsUserTrustee invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
             # 1. Get service (aka domain)
@@ -225,7 +241,7 @@ class CreateTrustToken(FlowBase):
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
 
             #
@@ -243,8 +259,8 @@ class CreateTrustToken(FlowBase):
                 else:
                     TRUSTEE_USER_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
                                                                SERVICE_ID,
-                                                           TRUSTEE_USER_NAME)
-            logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
+                                                               TRUSTEE_USER_NAME)
+            self.logger.debug("ID of trustee user %s: %s" % (TRUSTEE_USER_NAME,
                                                         TRUSTEE_USER_ID))
 
             #
@@ -253,15 +269,15 @@ class CreateTrustToken(FlowBase):
             TRUSTS = self.idm.getTrustsTrustee(SERVICE_ADMIN_TOKEN,
                                                TRUSTEE_USER_ID)
 
-            logger.debug("Trusts %s" % (TRUSTS))
+            self.logger.debug("Trusts %s" % (TRUSTS))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "TRUSTS": "%s" % TRUSTS
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return TRUSTS

@@ -101,14 +101,6 @@ def main():
     KEYPASS_HOST = sys.argv[12]
     KEYPASS_PORT = sys.argv[13]
 
-    #parser = argparse.ArgumentParser(
-    #         description='Utilities to update API documentation from code')
-    # parser.add_argument('-p', '--path', dest='path', default=None,
-    #                    help='Path for UDo-wiki repository')
-    # parser.add_argument('--tables', dest='tables', action='store_true',
-    #                    help='Shows tables draft')
-    #args = parser.parse_args()
-
     #Draft4Validator.check_schema(schemas.json["ServiceCreate"])
 
     validate(
