@@ -65,4 +65,11 @@ PERSEO = {
     "protocol":"http",
 }
 
-#IOTMODULES = [ "CA", "STH", "PERSEO" ]
+# CYGNUS endpoint (just for use as reference in Orion Subscriptions)
+CYGNUS = {
+    "host": "localhost",
+    "port": "5050",
+    "protocol":"http",
+}
+
+IOTMODULES = [ "CYGNUS", "PERSEO" ]

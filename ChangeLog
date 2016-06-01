@@ -2,6 +2,12 @@ CHANGES
 =======
 
 
+1.1.0
+
+task/docker_improvements
+task/task/resolve_service_name_role_flow
+
+
 1.0.0
 
 task/remove_policy_from_role

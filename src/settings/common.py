@@ -236,9 +236,10 @@ ORION = {}
 CA = {}
 STH = {}
 PERSEO = {}
+CYGNUS = {}
 
 # List of possible IoTModules: persistence services, etc
-IOTMODULES = [ "STH", "PERSEO", "CA"]
+IOTMODULES = [ "CYGNUS", "STH", "PERSEO", "CA"]
 
 # Pep user credencials. Pep is a user of admin_domain
 # Needed to for resolve pep user id
