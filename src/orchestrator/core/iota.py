@@ -21,11 +21,6 @@
 #
 # Author: IoT team
 #
-import json
-import os
-
-from orchestrator.common.util import RestOperations
-
 
 class IoTAOperations(object):
     def checkIoTA(self):

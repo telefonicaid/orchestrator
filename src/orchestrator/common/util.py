@@ -24,7 +24,10 @@
 import urllib2
 import base64
 import json
-
+import csv
+import StringIO
+import requests
+import logging
 
 class RestOperations(object):
     '''
@@ -34,7 +37,9 @@ class RestOperations(object):
     def __init__(self,
                  PROTOCOL=None,
                  HOST=None,
-                 PORT=None):
+                 PORT=None,
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         self.PROTOCOL = PROTOCOL
         self.HOST = HOST
@@ -44,9 +49,21 @@ class RestOperations(object):
         else:
             self.base_url = None
 
+        if TRANSACTION_ID:
+            self.TRANSACTION_ID = TRANSACTION_ID
+        else:
+            self.TRANSACTION_ID = None
+
+        if CORRELATOR_ID:
+            self.CORRELATOR_ID = CORRELATOR_ID
+        else:
+            self.CORRELATOR_ID = None
+
+
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
-                     auth_token=None, fiware_service=None, fiware_service_path=None):
+                     auth_token=None, subject_token=None, fiware_service=None,
+                     fiware_service_path=None):
         '''Does an (optionally) authorized REST request with optional JSON data.
 
         In case of HTTP error, the exception is returned normally instead of
@@ -71,10 +88,12 @@ class RestOperations(object):
 
         if json_data:
             request.add_header('Accept', 'application/json')
-            request.add_header('Content-Type', 'application/json')
+            if data:
+                request.add_header('Content-Type', 'application/json')
         else:
             request.add_header('Accept', 'application/xml')
-            request.add_header('Content-Type', 'application/xml')
+            if data:
+                request.add_header('Content-Type', 'application/xml')
 
         if user and password:
             base64string = base64.encodestring(
@@ -85,11 +104,20 @@ class RestOperations(object):
         if auth_token:
             request.add_header('X-Auth-Token', auth_token)
 
+        if subject_token:
+            request.add_header('X-Subject-Token', subject_token)
+
         if fiware_service:
             request.add_header('Fiware-Service', fiware_service)
 
         if fiware_service_path:
             request.add_header('Fiware-ServicePath', fiware_service_path)
+
+        if self.TRANSACTION_ID:
+            request.add_header('Fiware-Transaction', self.TRANSACTION_ID)
+
+        if self.CORRELATOR_ID:
+            request.add_header('Fiware-Correlator', self.CORRELATOR_ID)
 
         res = None
 
@@ -110,9 +138,169 @@ class RestOperations(object):
                         isinstance(data_json['error'], dict) and \
                         'message' in data_json['error']:
                         res.msg = data_json['error']['message']
+                if data_json and isinstance(data_json, dict) and \
+                    'message' in data_json:
+                    res.msg = data_json['message']
             except ValueError:
                 res.msg = data
             except Exception, e:
                 print e
 
         return res
+
+
+    def rest_request2(self, url, method, user=None, password=None,
+                     data=None, json_data=True, relative_url=True,
+                     auth_token=None, subject_token=None, fiware_service=None,
+                     fiware_service_path=None):
+        '''Does an (optionally) authorized REST request with optional JSON data.
+
+        In case of HTTP error, the exception is returned normally instead of
+        raised and, if JSON error data is present in the response, .msg will
+        contain the error detail.
+        Without SSL security
+
+        '''
+        user = user or None
+        password = password or None
+        auth = None
+
+        if relative_url:
+            # Create real url
+            url = self.base_url + url
+
+        headers = {}
+        rdata = None
+
+        if json_data:
+            headers.update({'Accept': 'application/json'})
+            if data:
+                headers.update({'Content-Type': 'application/json'})
+                rdata = json.dumps(data)
+        else:
+            headers.update({'Accept': 'application/xml'})
+            if data:
+                headers.update({'Content-Type': 'application/xml'})
+                rdata = data
+
+
+        if user and password:
+            # base64string = base64.encodestring(
+            #     '%s:%s' % (user, password))[:-1]
+            # authheader = "Basic %s" % base64string
+            # headers.update({'Authorization': authheader})
+            auth=(user, password)
+
+        if auth_token:
+            headers.update({'X-Auth-Token': auth_token })
+
+        if subject_token:
+            headers.update({'X-Subject-Token': subject_token })
+
+        if fiware_service:
+            headers.update({'Fiware-Service': fiware_service})
+
+        if fiware_service_path:
+            headers.update({'Fiware-ServicePath': fiware_service_path})
+
+        if self.TRANSACTION_ID:
+            headers.update({'Fiware-Transaction': self.TRANSACTION_ID})
+
+        if self.CORRELATOR_ID:
+            headers.update({'Fiware-Correlator': self.CORRELATOR_ID})
+
+        res = None
+
+        try:
+            if not auth:
+                res = requests.post(url,
+                                    headers=headers,
+                                    data=rdata,
+                                    verify=False)
+            else:
+                res = requests.post(url,
+                                    auth=auth,
+                                    headers=headers,
+                                    data=rdata,
+                                    verify=False)
+
+        except Exception, e:
+            print e
+
+        return res
+
+
+class CSVOperations(object):
+    '''
+
+    '''
+
+    def __init__(self):
+        None
+
+    @staticmethod
+    def read_devices(CSV):
+        devices = {}
+        csvreader = csv.reader(StringIO.StringIO(CSV),
+                               delimiter=',',
+                               #quotechar='"',
+                               skipinitialspace=True)
+
+        header =  csvreader.next()
+        for name in header:
+            devices[name] = []
+
+        for row in csvreader:
+            for i, value in enumerate(row):
+                devices[header[i]].append(value)
+
+        return i, header, devices
+
+
+class ContextFilterTransactionId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def __init__(self, TRANSACTION_ID):
+        self.TRANSACTION_ID = TRANSACTION_ID
+
+    def filter(self, record):
+        record.transaction = self.TRANSACTION_ID
+        return True
+
+
+class ContextFilterService(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+    def __init__(self, service):
+        self.service = service
+
+    def filter(self, record):
+        record.service = self.service
+        return True
+
+
+class ContextFilterSubService(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+    def __init__(self, subservice):
+        self.subservice = subservice
+
+    def filter(self, record):
+        record.subservice = self.subservice
+        return True        
+
+
+class ContextFilterCorrelatorId(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """            
+    def __init__(self, CORRELATOR_ID):
+        self.CORRELATOR_ID = CORRELATOR_ID
+
+    def filter(self, record):
+        record.correlator = self.CORRELATOR_ID
+        return True

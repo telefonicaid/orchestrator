@@ -22,11 +22,9 @@
 # Author: IoT team
 #
 import json
-import os
 import logging
 
 from orchestrator.common.util import RestOperations
-from orchestrator.core.iota import IoTAOperations
 
 logger = logging.getLogger('orchestrator_core')
 
@@ -38,7 +36,9 @@ class IoTACppOperations(object):
     def __init__(self,
                  IOTA_PROTOCOL=None,
                  IOTA_HOST=None,
-                 IOTA_PORT=None):
+                 IOTA_PORT=None,
+                 CORRELATOR_ID=None,
+                 TRANSACTION_ID=None):
 
         self.IOTA_PROTOCOL = IOTA_PROTOCOL
         self.IOTA_HOST = IOTA_HOST
@@ -46,8 +46,9 @@ class IoTACppOperations(object):
 
         self.IoTACppRestOperations = RestOperations(IOTA_PROTOCOL,
                                                     IOTA_HOST,
-                                                    IOTA_PORT)
-
+                                                    IOTA_PORT,
+                                                    CORRELATOR_ID,
+                                                    TRANSACTION_ID)
 
     def checkIoTA(self):
         res = self.IoTACppRestOperations.rest_request(
@@ -70,12 +71,12 @@ class IoTACppOperations(object):
                         MAPPING_ATTRIBUTES=[],
                         STATIC_ATTRIBUTES=[]):
         body_data = {
-            services : [
+            "services" : [
                 {
                     "protocol": [PROTOCOL],
                     "entity_type": ENTITY_TYPE,
                     "apikey": APIKEY,
-                    "token": TRUSTOKENID,
+                    "token": TRUSTTOKENID,
                     "cbroker": CBROKER_ENDPOINT,
                     "attributes": MAPPING_ATTRIBUTES,
                     "static_attributes": STATIC_ATTRIBUTES,
@@ -83,8 +84,11 @@ class IoTACppOperations(object):
             ]
         }
 
-        logger.debug("POST to iot/services with: %s" % json.dumps(body_data,
-                                                                  indent=3))
+        logger.debug("POST %s/%s to iot/services with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/services',
@@ -107,8 +111,10 @@ class IoTACppOperations(object):
                     SERVICE_NAME,
                     SUBSERVICE_NAME):
 
-        logger.debug("GET to iot/services ")
-
+        logger.debug("GET %s/%s to iot/services " % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME)
+        )
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/services',
             method='GET',
@@ -159,8 +165,11 @@ class IoTACppOperations(object):
             ]
         }
 
-        logger.debug("POST to iot/devices with: %s" % json.dumps(body_data,
-                                                                 indent=3))
+        logger.debug("POST %s/%s to iot/devices with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            json.dumps(body_data, indent=3))
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/devices',
@@ -186,7 +195,10 @@ class IoTACppOperations(object):
                    SERVICE_NAME,
                    SUBSERVICE_NAME):
 
-        logger.debug("GET to iot/devices")
+        logger.debug("GET %s/%s to iot/devices" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME)
+        )
 
         res = self.IoTACppRestOperations.rest_request(
             url='/iot/devices',
@@ -203,3 +215,75 @@ class IoTACppOperations(object):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def unregisterDevice(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME,
+                         DEVICE_ID):
+
+        logger.debug("DELETE %s/%s to iot/devices with: %s" % (
+            SERVICE_NAME,
+            SUBSERVICE_NAME,
+            DEVICE_ID)
+        )
+
+        res = self.IoTACppRestOperations.rest_request(
+            url='/iot/devices/%s' % DEVICE_ID,
+            method='DELETE',
+            data=None,
+            auth_token=SERVICE_USER_TOKEN,
+            fiware_service=SERVICE_NAME,
+            fiware_service_path='/'+SUBSERVICE_NAME)
+
+        assert res.code == 204, (res.code, res.msg)
+
+
+    def deleteAllDevices(self,
+                         SERVICE_USER_TOKEN,
+                         SERVICE_NAME,
+                         SUBSERVICE_NAME=""):
+        #
+        # 1. Get devices
+        #
+        devices_deleted = []
+
+        logger.debug("Getting devices for %s %s" % (SERVICE_NAME,
+                                                    SUBSERVICE_NAME))
+        try:
+            devices = self.getDevices(SERVICE_USER_TOKEN,
+                                      SERVICE_NAME,
+                                      SUBSERVICE_NAME)
+            # Check devices returned: IOTA returns devices into dict before some versions
+            if 'devices' in devices:
+                devices = devices['devices']
+        except Exception, ex:
+            logger.error("%s trying getDevices from IOTA: %s/%s" % (ex,
+                                                            SERVICE_NAME,
+                                                            SUBSERVICE_NAME))
+            return devices_deleted
+
+        for device in devices:
+            #
+            # 2. Unregister each device
+            #
+            # Get device_id: IOTA returns device_id in a field depending on version
+            device_id = None
+            if 'device_id' in device:
+                device_id = device['device_id']
+            if 'id' in device:
+                device_id = device['id']
+
+            logger.debug("Unregistering device: %s" % device_id)
+            try:
+                self.unregisterDevice(SERVICE_USER_TOKEN,
+                                      SERVICE_NAME,
+                                      SUBSERVICE_NAME,
+                                      device_id)
+                devices_deleted.append(device_id)
+            except Exception, ex:
+                logger.error("%s trying to unregister device: %s" % (ex,
+                                                            device_id))
+
+        return devices_deleted

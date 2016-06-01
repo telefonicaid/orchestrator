@@ -21,14 +21,9 @@
 #
 # Author: IoT team
 #
-import logging
-import sys
-import os
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
-logger = logging.getLogger('orchestrator_core')
 
 
 class CreateNewService(FlowBase):
@@ -57,7 +52,7 @@ class CreateNewService(FlowBase):
         - NEW_SERVICE_DESCRIPTION: New service description
         - NEW_SERVICE_ADMIN_USER: New service admin username
         - NEW_SERVICE_ADMIN_PASSWORD: New service admin password
-        - NEW_SERVICE_ADMIN_EMAIL: New service admin password (optional)
+        - NEW_SERVICE_ADMIN_EMAIL: New service admin email (optional)
         Return:
         - token: service admin token
         - id: service Id
@@ -65,27 +60,31 @@ class CreateNewService(FlowBase):
 
         SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
+        SERVICE_CUSTOMER_ROLE_NAME = "ServiceCustomer"
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "DOMAIN_ADMIN_USER": "%s" % DOMAIN_ADMIN_USER,
             "DOMAIN_ADMIN_PASSWORD": "%s" % DOMAIN_ADMIN_PASSWORD,
-            "DOMAIN_ADMIN_TOKEN": "%s" % DOMAIN_ADMIN_TOKEN,
+            "DOMAIN_ADMIN_TOKEN": self.get_extended_token(DOMAIN_ADMIN_TOKEN),
             "NEW_SERVICE_NAME": "%s" % NEW_SERVICE_NAME,
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
-            "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_PASSWORD
+            "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_USER,
+            "NEW_SERVICE_ADMIN_PASSWORD": "%s" % NEW_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_ADMIN_EMAIL": "%s" % NEW_SERVICE_ADMIN_EMAIL
         }
-        logger.debug("createNewService invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW createNewService invoked with: %s" % json.dumps(
             data_log,
             indent=3)
-            )
+        )
+        ID_DOM1=None
         try:
 
             if not DOMAIN_ADMIN_TOKEN:
                 DOMAIN_ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                        DOMAIN_ADMIN_USER,
                                                        DOMAIN_ADMIN_PASSWORD)
-            logger.debug("DOMAIN_ADMIN_TOKEN=%s" % DOMAIN_ADMIN_TOKEN)
+            self.logger.debug("DOMAIN_ADMIN_TOKEN=%s" % DOMAIN_ADMIN_TOKEN)
 
             #
             # 1. Create service (aka domain)
@@ -93,7 +92,7 @@ class CreateNewService(FlowBase):
             ID_DOM1 = self.idm.createDomain(DOMAIN_ADMIN_TOKEN,
                                             NEW_SERVICE_NAME,
                                             NEW_SERVICE_DESCRIPTION)
-            logger.debug("ID of your new service %s:%s" % (NEW_SERVICE_NAME,
+            self.logger.debug("ID of your new service %s:%s" % (NEW_SERVICE_NAME,
                                                            ID_DOM1))
 
             #
@@ -108,15 +107,15 @@ class CreateNewService(FlowBase):
                                                 NEW_SERVICE_ADMIN_EMAIL,
                                                 None)
             except Exception, ex:
-                logger.debug("ERROR creating user %s: %s" % (
+                self.logger.warn("ERROR creating user %s: %s" % (
                     NEW_SERVICE_ADMIN_USER,
                     ex))
-                logger.debug("removing uncomplete created domain %s" % ID_DOM1)
+                self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
                 self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 return self.composeErrorCode(ex)
 
-            logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER,
+            self.logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER,
                                                 ID_ADM1))
 
             #
@@ -124,8 +123,8 @@ class CreateNewService(FlowBase):
             #
             ADMIN_ROLE_ID = self.idm.getRoleId(DOMAIN_ADMIN_TOKEN,
                                                ROLE_NAME="admin")
-            logger.debug("ID of role  %s: %s" % ("admin",
-                                                 ID_ADM1))
+            self.logger.debug("ID of role  %s: %s" % ("admin",
+                                                 ADMIN_ROLE_ID))
 
             self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
                                      ADMIN_ROLE_ID)
@@ -134,7 +133,7 @@ class CreateNewService(FlowBase):
                 NEW_SERVICE_NAME,
                 NEW_SERVICE_ADMIN_USER,
                 NEW_SERVICE_ADMIN_PASSWORD)
-            logger.debug("NEW_SERVICE_ADMIN_TOKEN %s" % NEW_SERVICE_ADMIN_TOKEN)
+            self.logger.debug("NEW_SERVICE_ADMIN_TOKEN %s" % NEW_SERVICE_ADMIN_TOKEN)
 
             #
             # 4. Create SubService roles
@@ -143,15 +142,24 @@ class CreateNewService(FlowBase):
                 NEW_SERVICE_ADMIN_TOKEN,
                 SUB_SERVICE_ADMIN_ROLE_NAME,
                 ID_DOM1)
-            logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME,
+            self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
 
             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = self.idm.createDomainRole(
                 NEW_SERVICE_ADMIN_TOKEN,
                 SUB_SERVICE_CUSTOMER_ROLE_NAME,
                 ID_DOM1)
-            logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME,
+            self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
+            #
+            # 4.1 Create ServiceCustomer role
+            #
+            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER = self.idm.createDomainRole(
+                NEW_SERVICE_ADMIN_TOKEN,
+                SERVICE_CUSTOMER_ROLE_NAME,
+                ID_DOM1)
+            self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME,
+                                                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
 
             #
             # 4.5 Inherit subserviceadim
@@ -164,7 +172,7 @@ class CreateNewService(FlowBase):
             # 5. Provision default platform roles AccessControl policies
             #
 
-            # SubServiceAdmin Role
+            # Policies for SubServiceAdmin Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-orion-admin.xml')
@@ -180,7 +188,7 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
                                     POLICY_FILE_NAME='policy-keypass-admin.xml')
-            # SubServiceCustomer Role
+            # Policies for SubServiceCustomer Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-orion-customer.xml')
@@ -196,7 +204,7 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-keypass-customer.xml')
-            # Admin Role
+            # Policies for Admin Role
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-orion-admin2.xml')
@@ -212,18 +220,39 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ADMIN_ROLE_ID,
                                     POLICY_FILE_NAME='policy-keypass-admin2.xml')
+            # Policies for ServiceCustomer Role
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-orion-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-perseo-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-iotagent-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-sth-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
         except Exception, ex:
-            logger.error(ex)
+            if ID_DOM1:
+                self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
+                self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "ID_DOM1": "%s" % ID_DOM1,
             "NEW_SERVICE_ADMIN_TOKEN": "%s" % NEW_SERVICE_ADMIN_TOKEN,
             "ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER
+            "ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+            "ID_NEW_SERVICE_ROLE_SERVICECUSTOMER": "%s" % ID_NEW_SERVICE_ROLE_SERVICECUSTOMER
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {
             "token": NEW_SERVICE_ADMIN_TOKEN,

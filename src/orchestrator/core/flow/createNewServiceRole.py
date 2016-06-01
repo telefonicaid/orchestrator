@@ -21,12 +21,10 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
-logger = logging.getLogger('orchestrator_core')
+from orchestrator.common.util import ContextFilterService
 
 
 class CreateNewServiceRole(FlowBase):
@@ -60,21 +58,20 @@ class CreateNewServiceRole(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
             "XACML_POLICY": "%s" % XACML_POLICY
         }
-        logger.debug("createNewServiceRole invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW createNewServiceRole invoked with: %s" % json.dumps(
             data_log,
             indent=3)
-            )
-
+        )
         try:
             if not SERVICE_ADMIN_TOKEN:
                 SERVICE_ADMIN_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                         SERVICE_ADMIN_USER,
                                                         SERVICE_ADMIN_PASSWORD)
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             #
             # 1. Get service (aka domain)
@@ -83,8 +80,16 @@ class CreateNewServiceRole(FlowBase):
                 SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                   SERVICE_NAME)
 
-            logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
                                                        SERVICE_ID))
+
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #
             # 2. Create role
@@ -92,13 +97,13 @@ class CreateNewServiceRole(FlowBase):
             ID_ROLE = self.idm.createRoleDomain(SERVICE_ADMIN_TOKEN,
                                                 SERVICE_ID,
                                                 NEW_ROLE_NAME)
-            logger.debug("ID of user %s: %s" % (NEW_ROLE_NAME, ID_ROLE))
+            self.logger.debug("ID of user %s: %s" % (NEW_ROLE_NAME, ID_ROLE))
 
             #
             # 3. Provision policy provided in keypass
             #
             if XACML_POLICY:
-                logger.debug("set XACML_POLICY %s for role %s" % (XACML_POLICY,
+                self.logger.debug("set XACML_POLICY %s for role %s" % (XACML_POLICY,
                                                                   ID_ROLE))
                 self.ac.provisionPolicyByContent(SERVICE_NAME,
                                                  SERVICE_ADMIN_TOKEN,
@@ -106,7 +111,7 @@ class CreateNewServiceRole(FlowBase):
                                                  XACML_POLICY)
 
             if NEW_ROLE_NAME == 'ServiceCustomer':
-                logger.debug("set default XACML policies for role %s" % NEW_ROLE_NAME)
+                self.logger.debug("set default XACML policies for role %s" % NEW_ROLE_NAME)
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-orion-customer2.xml')
@@ -121,16 +126,16 @@ class CreateNewServiceRole(FlowBase):
                                         POLICY_FILE_NAME='policy-sth-customer2.xml')
                 self.ac.provisionPolicy(SERVICE_NAME, SERVICE_ADMIN_TOKEN,
                                         ID_ROLE,
-                                        POLICY_FILE_NAME='policy-keypass-customer2.xml')                
+                                        POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
             "ID_ROLE": "%s" % ID_ROLE
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         return {"id": ID_ROLE}

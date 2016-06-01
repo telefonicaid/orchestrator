@@ -24,6 +24,7 @@
 # Author: IoT team
 #
 import sys
+import pprint
 import logging.config
 import os
 
@@ -31,7 +32,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
-from orchestrator.core.flow.Roles import Roles
+from orchestrator.core.flow.Projects import Projects
 
 try: logging.config.dictConfig(LOGGING)
 except AttributeError: logging.basicConfig(level=logging.WARNING)
@@ -39,11 +40,11 @@ except AttributeError: logging.basicConfig(level=logging.WARNING)
 
 def main():
 
-    print "This script set a XACML policy to a role in Access Control"
+    print "This script prints IoT Modules actived in a service or subservice"
     print ""
 
     SCRIPT_NAME = sys.argv[0]
-    NUM_ARGS_EXPECTED = 11
+    NUM_ARGS_EXPECTED = 10
 
     if (len(sys.argv) - 1 < NUM_ARGS_EXPECTED):
         print "Usage: %s [args]" % SCRIPT_NAME
@@ -54,11 +55,10 @@ def main():
         print "  <SERVICE_NAME>                  Service name"
         print "  <SERVICE_ADMIN_USER>            Service admin username"
         print "  <SERVICE_ADMIN_PASSWORD>        Service admin password"
-        print "  <ROLE_NAME>                     Name of role"
-        print "  <POLICY_FILE>                   Policy XACML file name"
-        print "  <KEYPASS_PROTOCOL>              HTTP or HTTPS"
-        print "  <KEYPASS_HOST>                  Keypass (or PEPProxy) HOSTNAME or IP"
-        print "  <KEYPASS_PORT>                  Keypass (or PEPProxy) PORT"        
+        print "  <SUBSERVICE_NAME>               SubService name"
+        print "  <ORION_PROTOCOL>                HTTP or HTTPS"
+        print "  <ORION_HOST>                    Orion HOSTNAME or IP"
+        print "  <ORION_PORT>                    Orion PORT"
         print ""
         print "  Typical usage:"
         print "     %s http           \\" % SCRIPT_NAME
@@ -67,11 +67,10 @@ def main():
         print "                                 smartcity      \\"
         print "                                 adm1           \\"
         print "                                 password       \\"
-        print "                                 ServiceCustomer\\"
-        print "                                 mypolicy.xml   \\"        
+        print "                                 gardens        \\"
         print "                                 http           \\"
         print "                                 localhost      \\"
-        print "                                 8080           \\"        
+        print "                                 1026           \\"
         print ""
         print "For bug reporting, please contact with:"
         print "<iot_support@tid.es>"
@@ -83,28 +82,32 @@ def main():
     SERVICE_NAME = sys.argv[4]
     SERVICE_ADMIN_USER = sys.argv[5]
     SERVICE_ADMIN_PASSWORD = sys.argv[6]
-    ROLE_NAME = sys.argv[7]
-    POLICY_FILE_NAME = sys.argv[8]
-    KEYPASS_PROTOCOL = sys.argv[9]
-    KEYPASS_HOST = sys.argv[10]
-    KEYPASS_PORT = sys.argv[11]    
+    SUBSERVICE_NAME = sys.argv[7]
+    ORION_PROTOCOL = sys.argv[8]
+    ORION_HOST = sys.argv[9]
+    ORION_PORT = sys.argv[10]
 
-    flow = Roles(KEYSTONE_PROTOCOL,
-                 KEYSTONE_HOST,
-                 KEYSTONE_PORT,
-                 KEYPASS_PROTOCOL,
-                 KEYPASS_HOST,
-                 KEYPASS_PORT)                 
+    flow = Projects(KEYSTONE_PROTOCOL,
+                    KEYSTONE_HOST,
+                    KEYSTONE_PORT,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    ORION_PROTOCOL,
+                    ORION_HOST,
+                    ORION_PORT)
 
-    flow.setPolicyRole(
-        SERVICE_NAME,
-        None,
-        SERVICE_ADMIN_USER,
-        SERVICE_ADMIN_PASSWORD,
-        None,
-        ROLE_NAME,
-        None,
-        POLICY_FILE_NAME)
+    roles = flow.list_activated_modules(SERVICE_NAME,
+                                        None,
+                                        SUBSERVICE_NAME,
+                                        None,
+                                        SERVICE_ADMIN_USER,
+                                        SERVICE_ADMIN_PASSWORD,
+                                        None)
+    pprint.pprint(roles)
 
 if __name__ == '__main__':
 

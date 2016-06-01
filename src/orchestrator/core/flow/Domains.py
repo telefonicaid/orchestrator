@@ -21,13 +21,14 @@
 #
 # Author: IoT team
 #
-import logging
 import json
 
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.core.flow.Roles import Roles
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 
-logger = logging.getLogger('orchestrator_core')
+from settings.dev import IOTMODULES
 
 
 class Domains(FlowBase):
@@ -43,7 +44,7 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_NAME:
+        - DOMAIN_NAME: Service name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -54,31 +55,31 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("domains invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW domains invoked with: %s" % json.dumps(
             data_log, indent=3)
-            )
+                 )
 
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
 
-            logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
+            self.logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAINS": DOMAINS
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAINS
 
@@ -93,8 +94,8 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_ID:
-        - DOMAIN_NAME:
+        - DOMAIN_ID: Service Id
+        - DOMAIN_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -106,10 +107,12 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("get_domain invoked with: %s" % json.dumps(data_log,
-                                                                indent=3))
+        self.logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 if DOMAIN_ID:
@@ -123,20 +126,22 @@ class Domains(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                      DOMAIN_NAME)
 
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+            DOMAIN_NAME = DOMAIN['domain']['name']
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAIN
 
@@ -153,8 +158,8 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_ID:
-        - DOMAIN_NAME:
+        - DOMAIN_ID: Service Id
+        - DOMAIN_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -167,11 +172,13 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN,
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
-        logger.debug("updateDomain invoked with: %s" % json.dumps(data_log,
-                                                                  indent=3))
+        self.logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 # UpdateDomain can be only done by cloud_admin
@@ -183,21 +190,26 @@ class Domains(FlowBase):
                                                  DOMAIN_NAME,
                                                  False)
 
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            if not DOMAIN_NAME:
+                DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
+                DOMAIN_NAME = DOMAIN['domain']['name']
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             DOMAIN = self.idm.updateDomain(ADMIN_TOKEN,
                                            DOMAIN_ID,
                                            NEW_SERVICE_DESCRIPTION)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DOMAIN
 
     def delete_domain(self,
@@ -212,8 +224,8 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - DOMAIN_ID:
-        - DOMAIN_NAME:
+        - DOMAIN_ID: Service Id
+        - DOMAIN_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
@@ -225,19 +237,19 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": "%s" % ADMIN_TOKEN
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
         }
-        logger.debug("delete_domain invoked with: %s" % json.dumps(
-            data_log, indent=3)
-            )
-
+        self.logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
         try:
             if not ADMIN_TOKEN:
                 ADMIN_TOKEN = self.idm.getToken("admin_domain",
                                                 ADMIN_USER,
                                                 ADMIN_PASSWORD)
 
-            logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
             # Another way:
             # if not DOMAIN_ID:
             #     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
@@ -253,7 +265,58 @@ class Domains(FlowBase):
             if not DOMAIN_NAME:
                 DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
                 DOMAIN_NAME = DOMAIN['domain']['name']
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
+            # Get all subservices
+            projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
+            for project in projects['projects']:
+
+                PROJECT_NAME = project['name'].split('/')[1]
+                self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
+
+                #
+                # Delete all devices in subservice
+                #
+                devices_deleted = self.iota.deleteAllDevices(
+                    ADMIN_TOKEN,
+                    DOMAIN_NAME,
+                    PROJECT_NAME)
+
+                if (len(devices_deleted) > 0):
+                    self.logger.info("devices deleted %s", devices_deleted)
+
+                #
+                # Delete all subscriptions in subservice
+                #
+                subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                                                              ADMIN_TOKEN,
+                                                              DOMAIN_NAME,
+                                                              PROJECT_NAME)
+                if (len(subscriptions_deleted) > 0):
+                    self.logger.info("subscriptions deleted %s",
+                                subscriptions_deleted)
+
+
+            #
+            # Delete all devices
+            #
+
+            devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
+                                                         DOMAIN_NAME)
+
+            #
+            # Delete all subscriptions
+            #
+            subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                                                              ADMIN_TOKEN,
+                                                              DOMAIN_NAME)
+            if (len(subscriptions_deleted) > 0):
+                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
+
+
+            #
+            # Disable Domain
+            #
             DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
@@ -261,16 +324,16 @@ class Domains(FlowBase):
             # Delete policy of roles in Access Control
             self.ac.deleteTenantPolicies(DOMAIN_NAME, ADMIN_TOKEN)
 
-            logger.debug("DOMAIN=%s" % DOMAIN)
+            self.logger.debug("DOMAIN=%s" % DOMAIN)
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "DOMAIN": DOMAIN
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return DOMAIN
 
@@ -289,13 +352,13 @@ class Domains(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
-        - SERVICE_ID:
-        - SERVICE_NAME:
+        - SERVICE_ID: Service Id
+        - SERVICE_NAME: Service Name
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
         - SERVICE_ADMIN_TOKEN: Service admin token
-        - ROLE_NAME
-        - ROLE_ID
+        - ROLE_NAME: Role Name
+        - ROLE_ID: Role Id
         Return:
         - XACML policies
         '''
@@ -304,14 +367,13 @@ class Domains(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": "%s" % SERVICE_ADMIN_TOKEN,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
         }
-        logger.debug("get_domain_role_policies invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW get_domain_role_policies invoked with: %s" % json.dumps(
             data_log, indent=3)
-            )
-
+        )
         try:
 
             if not SERVICE_ADMIN_TOKEN:
@@ -328,7 +390,7 @@ class Domains(FlowBase):
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
 
-            logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Get Role ID
             if not ROLE_ID and ROLE_NAME:
@@ -359,20 +421,309 @@ class Domains(FlowBase):
                     ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
                                                        SERVICE_ID,
                                                        ROLE_NAME)
-            logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+            self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             # Get policies in Access Control
-            policies = self.ac.getRolePolicies(SERVICE_NAME, SERVICE_ADMIN_TOKEN, ROLE_ID)
+            if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
 
-            logger.debug("POLICIES=%s" % policies)
+                policies = self.ac.getRolePolicies(SERVICE_NAME,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   ROLE_ID)
+                self.logger.debug("POLICIES=%s" % policies)
+            else:
+                raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
-            logger.error(ex)
+            self.logger.error(ex)
             return self.composeErrorCode(ex)
 
         data_log = {
             "POLICIES": policies
         }
-        logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
         return policies
+
+    def activate_module(self,
+                        DOMAIN_NAME,
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD,
+                        SERVICE_USER_TOKEN,
+                        IOTMODULE):
+
+        '''Activate Module
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - IOTMODULE: IoT Module to activate: STH,  PERSEO
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
+            "IOTMODULE": "%s" % IOTMODULE,
+        }
+        self.logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getToken(
+                        DOMAIN_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME
+            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+
+            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
+
+            DURATION="P1Y"
+
+            # Set default ATTRIBUTES for subscription
+            ATTRIBUTES = []
+            # self.logger.debug("Trying to getContextTypes...")
+            # cb_res = self.cb.getContextTypes(
+            #     SERVICE_USER_TOKEN,
+            #     DOMAIN_NAME,
+            #     "",
+            #     None)
+            # self.logger.debug("getContextTypes res=%s" % cb_res)
+            # for entity_type in cb_res['types']:
+            #     for att in entity_type["attributes"] :
+            #         ATTRIBUTES.append(att)
+
+            # Set default ENTITIES for subscription
+            ENTITIES = [ {
+                "isPattern": "true",
+                "id": ".*"
+            } ]
+
+            # Set default Notify conditions
+            NOTIFY_ATTRIBUTES = []
+            NOTIFY_ATTRIBUTES.append("TimeInstant")
+            NOTIFY_CONDITIONS = [ {
+                "type": "ONCHANGE",
+                "condValues": NOTIFY_ATTRIBUTES
+            } ]
+            self.logger.debug("Trying to subscribe moduleiot in CB...")
+            cb_res = self.cb.subscribeContext(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                "",
+                REFERENCE_URL,
+                DURATION,
+                ENTITIES,
+                ATTRIBUTES,
+                NOTIFY_CONDITIONS
+            )
+            self.logger.debug("subscribeContext res=%s" % cb_res)
+            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            self.logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "subscriptionid": subscriptionid
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return subscriptionid
+
+    def deactivate_module(self,
+                          DOMAIN_NAME,
+                          DOMAIN_ID,
+                          SERVICE_USER_NAME,
+                          SERVICE_USER_PASSWORD,
+                          SERVICE_USER_TOKEN,
+                          IOTMODULE):
+
+        ''' Deactivate IoT Module
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        - IOTMODULE: IoT Module to activate: STH, PERSEO
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
+            "IOTMODULE": "%s" % IOTMODULE,
+        }
+        self.logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getToken(
+                        DOMAIN_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME
+            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
+
+            self.logger.debug("Trying to get list subscriptions from CB...")
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                ""
+            )
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(
+                cb_res, indent=3)
+            )
+
+            for sub in cb_res:
+                subs_url = self.cb.get_subscription_callback_endpoint(sub)
+                subscriptionid = sub['id']
+                if subs_url.startswith(REFERENCE_URL):
+
+                    self.cb.unsubscribeContext(SERVICE_USER_TOKEN,
+                                               DOMAIN_NAME,
+                                               "",
+                                               sub['id'])
+                    break
+
+            # self.logger.debug("subscribeContext res=%s" % cb_res)
+            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            # self.logger.debug("subscription id=%s" % subscriptionid)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "subscriptionid": subscriptionid
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return subscriptionid
+
+
+    def list_activated_modules(self,
+                               DOMAIN_NAME,
+                               DOMAIN_ID,
+                               SERVICE_USER_NAME,
+                               SERVICE_USER_PASSWORD,
+                               SERVICE_USER_TOKEN):
+
+        '''List Activated IoT Modules
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - SERVICE_USER_NAME: Service admin username
+        - SERVICE_USER_PASSWORD: Service admin password
+        - SERVICE_USER_TOKEN: Service admin token
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
+            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
+        }
+        self.logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+
+            if not SERVICE_USER_TOKEN:
+                if not DOMAIN_ID:
+                    SERVICE_USER_TOKEN = self.idm.getToken(
+                        DOMAIN_NAME,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                        DOMAIN_ID,
+                        SERVICE_USER_NAME,
+                        SERVICE_USER_PASSWORD)
+            # Ensure DOMAIN_NAME
+            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+            self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
+
+            self.logger.debug("Trying to get list subscriptions from CB...")
+            cb_res = self.cb.getListSubscriptions(
+                SERVICE_USER_TOKEN,
+                DOMAIN_NAME,
+                ""
+            )
+            self.logger.debug("getListSubscriptions res=%s" % json.dumps(
+                cb_res, indent=3)
+            )
+            modules = self.cb.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
+            self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "modules": modules
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return modules

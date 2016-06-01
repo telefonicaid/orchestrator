@@ -23,15 +23,23 @@
 #
 import logging
 import os
+import json
 
 from django.conf import settings
-from django.utils.importlib import import_module
-from django.utils.module_loading import module_has_submodule
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 
+from orchestrator.common.util import ContextFilterCorrelatorId
+from orchestrator.common.util import ContextFilterTransactionId
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
+
 logger = logging.getLogger('orchestrator_api')
+logger.addFilter(ContextFilterCorrelatorId("n/a"))
+logger.addFilter(ContextFilterTransactionId("n/a"))
+logger.addFilter(ContextFilterService("None"))
+logger.addFilter(ContextFilterSubService(""))
 
 
 def read_banner():
@@ -54,20 +62,32 @@ def check_endpoints():
     idm = IdMOperations(KEYSTONE_PROTOCOL, KEYSTONE_HOST, KEYSTONE_PORT)
     try:
         idm.checkIdM()
+        logger.info("Keystone endpoint OK")
     except Exception, ex:
-        logger.error("keystone endpoint not found")
-        return "ERROR keystone endpoint not found"
+        logger.error("keystone endpoint not found: %s" % ex)
+        return "ERROR keystone endpoint not found: %s" % ex
 
     ac = AccCOperations(KEYPASS_PROTOCOL, KEYPASS_HOST, KEYPASS_PORT)
     try:
         ac.checkAccC()
+        logger.info("Keypass endpoint OK")
     except Exception, ex:
-        logger.error("keyspass endpoint not found")
-        return "ERROR keypass endpoint not found"
+        logger.error("keypass endpoint not found: %s" % ex)
+        return "ERROR keypass endpoint not found: %s" % ex
 
     return "OK"
+
+def show_conf():
+    conf = {}
+    from django.conf import settings
+    custom_settings_entries = ['KEYSTONE', 'KEYPASS', 'IOTA', 'ORION', 'CA',
+                               'PEP', 'IOTAGENT', 'SCIM_API_VERSION']
+    for name in custom_settings_entries:
+        conf[name] = getattr(settings, name)
+    return conf
 
 
 def run():
     logger.info("Starting Service %s " % read_banner())
     logger.info("Checking endpoints %s " % check_endpoints())
+    logger.info("Using custom conf: %s " % json.dumps(show_conf(), indent=3))
