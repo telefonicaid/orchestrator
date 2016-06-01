@@ -83,14 +83,6 @@ def main():
     NEW_SUBSERVICE_NAME = sys.argv[7]
     NEW_SUBSERVICE_DESCRIPTION = sys.argv[8]
 
-    #parser = argparse.ArgumentParser(
-    #         description='Utilities to update API documentation from code')
-    # parser.add_argument('-p', '--path', dest='path', default=None,
-    #                    help='Path for UDo-wiki repository')
-    # parser.add_argument('--tables', dest='tables', action='store_true',
-    #                    help='Shows tables draft')
-    #args = parser.parse_args()
-
     validate(
         {
             "SERVICE_NAME": SERVICE_NAME,
