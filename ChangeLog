@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+1.2.0
+
+task/delete_keystone_roles_at_delete_domain
+task/utc_for_log_time
+
 
 1.1.0
 
