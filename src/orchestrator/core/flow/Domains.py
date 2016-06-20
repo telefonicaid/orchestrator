@@ -313,6 +313,12 @@ class Domains(FlowBase):
             if (len(subscriptions_deleted) > 0):
                 self.logger.info("subscriptions deleted %s", subscriptions_deleted)
 
+            #
+            # Delete all roles
+            #
+            roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
+            for role in roles['roles']:
+                self.idm.removeRole(ADMIN_TOKEN, DOMAIN_ID, role['id'])
 
             #
             # Disable Domain
