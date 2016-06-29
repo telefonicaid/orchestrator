@@ -356,8 +356,10 @@ class CBOrionOperations(object):
                     if sub_callback.startswith(
                         flow.get_endpoint_iot_module(iotmodule)):
                         if ((len(sub['subject']['entities']) == 1) and
-                            (sub['subject']['entities'][0]['idPattern'] == '.*') and
-                            (sub['subject']['entities'][0]['type'] == '')):
+                            ('idPattern' in sub['subject']['entities'][0] and
+                             sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            ('type' in sub['subject']['entities'][0] and
+                             sub['subject']['entities'][0]['type'] == '')):
                             modules.append(
                                 { "name": iotmodule,
                                   "subscriptionid": sub['id'],
