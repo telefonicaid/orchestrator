@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+
+1.2.1
+
+bug/check_orion_suscription_entity_type_exits
+
+
 1.2.0
 
 task/delete_keystone_roles_at_delete_domain
