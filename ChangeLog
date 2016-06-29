@@ -2,6 +2,11 @@ CHANGES
 =======
 
 
+1.2.2
+
+bug/allow_orion_subscription_entity_without_type_or_empty
+
+
 1.2.1
 
 bug/check_orion_suscription_entity_type_exits

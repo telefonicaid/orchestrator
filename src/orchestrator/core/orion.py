@@ -358,8 +358,9 @@ class CBOrionOperations(object):
                         if ((len(sub['subject']['entities']) == 1) and
                             ('idPattern' in sub['subject']['entities'][0] and
                              sub['subject']['entities'][0]['idPattern'] == '.*') and
-                            ('type' in sub['subject']['entities'][0] and
-                             sub['subject']['entities'][0]['type'] == '')):
+                            ( ('type' in sub['subject']['entities'][0] and
+                               sub['subject']['entities'][0]['type'] == '') or
+                              'type' not in sub['subject']['entities'][0])):
                             modules.append(
                                 { "name": iotmodule,
                                   "subscriptionid": sub['id'],
