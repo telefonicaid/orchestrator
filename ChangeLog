@@ -2,6 +2,10 @@ CHANGES
 =======
 
 
+1.2.3
+bug/check_idpattern_exists_all_subcriptions
+
+
 1.2.2
 
 bug/allow_orion_subscription_entity_without_type_or_empty
