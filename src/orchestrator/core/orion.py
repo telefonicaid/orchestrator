@@ -302,9 +302,12 @@ class CBOrionOperations(object):
         if isinstance(json_body_response, list):
             for subscription in json_body_response:
                 for entity in subscription['subject']['entities']:
-                    if not entity['idPattern'] and entity['id'] == ENTITY_ID:
+                    if ( ((not 'idPattern' in entity) or
+                          ('idPattern' in entity and not entity['idPattern'])) and
+                         entity['id'] == ENTITY_ID):
                         subscriptions_related.append(subscription)
-                    if entity['idPattern'] and entity['idPattern'] in [".*", "*"]:
+                    if ('idPattern' in entity and entity['idPattern'] and
+                        entity['idPattern'] in [".*", "*"]):
                         subscriptions_related.append(subscription)
 
         return subscriptions_related
