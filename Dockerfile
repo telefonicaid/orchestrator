@@ -125,7 +125,7 @@ RUN \
     sed -i 's/CYGNUS_PROTOCOL=http/CYGNUS_PROTOCOL='$CYGNUS_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
-    sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/core/banner.txt
+    sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt
 
 # Define the entry point
 ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
