@@ -15,22 +15,22 @@ ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 KEYSTONE_PORT=5001
 KEYSTONE_PROTOCOL=http
 
-KEYPASS_PORT=7070
+KEYPASS_PORT=7070 # Pep and default internal container port
 KEYPASS_PROTOCOL=http
 
-ORION_PORT=1026
+ORION_PORT=1026  # Pep and default internal container port
 ORION_PROTOCOL=http
 
 IOTA_PORT=4052
 IOTA_PROTOCOL=http
 
-STH_PORT=8666
+STH_PORT=8666  # Pep and default internal container port
 STH_PROTOCOL=http
 
-PERSEO_PORT=9090
+PERSEO_PORT=9090  # Pep and default internal container port
 PERSEO_PROTOCOL=http
 
-CYGNUS_PORT=5050
+CYGNUS_PORT=5050  # Pep and default internal container port
 CYGNUS_PROTOCOL=http
 
 
