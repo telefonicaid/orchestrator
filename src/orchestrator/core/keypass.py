@@ -45,7 +45,8 @@ class AccCKeypassOperations(AccCOperations):
         self.KEYPASS_HOST = KEYPASS_HOST
         self.KEYPASS_PORT = KEYPASS_PORT
 
-        self.AccessControlRestOperations = RestOperations(KEYPASS_PROTOCOL,
+        self.AccessControlRestOperations = RestOperations("KEYPASS",
+                                                          KEYPASS_PROTOCOL,
                                                           KEYPASS_HOST,
                                                           KEYPASS_PORT,
                                                           CORRELATOR_ID,
