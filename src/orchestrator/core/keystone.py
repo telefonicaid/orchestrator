@@ -45,7 +45,8 @@ class IdMKeystoneOperations(IdMOperations):
         self.KEYSTONE_HOST = KEYSTONE_HOST
         self.KEYSTONE_PORT = KEYSTONE_PORT
 
-        self.IdMRestOperations = RestOperations(KEYSTONE_PROTOCOL,
+        self.IdMRestOperations = RestOperations("KEYSTONE",
+                                                KEYSTONE_PROTOCOL,
                                                 KEYSTONE_HOST,
                                                 KEYSTONE_PORT,
                                                 TRANSACTION_ID)
