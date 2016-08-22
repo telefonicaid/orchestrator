@@ -66,23 +66,34 @@ class PerseoOperations(object):
                        SERVICE_NAME,
                        SUBSERVICE_NAME):
 
-        # GET all rules: /perseo-core/rules
-        body_data = {}
-        logger.debug("GET %s/%s to /perseo-core/rules" % (
-            SERVICE_NAME,
-            SUBSERVICE_NAME))
-        res = self.PerseoRestOperations.rest_request(
-            url='/perseo-core/rules',
-            method='GET',
-            data=body_data,
-            auth_token=SERVICE_USER_TOKEN,
-            fiware_service=SERVICE_NAME,
-            fiware_service_path='/'+SUBSERVICE_NAME)
+        rules_deleted = []
 
-        # TODO:
-        # res['name']
+        logger.debug("Getting rules for %s %s" % (SERVICE_NAME,
+                                                  SUBSERVICE_NAME))
+
+        try:
+
+            # GET all rules: /perseo-core/rules
+            body_data = {}
+            logger.debug("GET %s/%s to /perseo-core/rules" % (
+                SERVICE_NAME,
+                SUBSERVICE_NAME))
+            res = self.PerseoRestOperations.rest_request(
+                url='/perseo-core/rules',
+                method='GET',
+                data=body_data,
+                auth_token=SERVICE_USER_TOKEN,
+                fiware_service=SERVICE_NAME,
+                fiware_service_path='/'+SUBSERVICE_NAME)
+
+        except Exception, ex:
+            logger.error("%s trying getRules from PERSEO: %s/%s" % (ex,
+                                                                    SERVICE_NAME,
+                                                                    SUBSERVICE_NAME))
+            return rules_deleted
+
         for rule in res:
-            # DELETE /perseo-core/rules/{name}: remvoes a rule
+            # DELETE /perseo-core/rules/{name}: removes a rule
 
             logger.debug("DELETE %s/%s to /perseo-core/rules/{name} with: %s" % (
                 SERVICE_NAME,
@@ -97,9 +108,11 @@ class PerseoOperations(object):
                 fiware_service=SERVICE_NAME,
                 fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
+            assert res.code == 204, (res.code, res.msg)
+            data = res.read()
+            json_body_response = json.loads(data)
+            logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                          indent=3))
+            rules_deleted.append(rule['name'])
+
+        return rules_deleted

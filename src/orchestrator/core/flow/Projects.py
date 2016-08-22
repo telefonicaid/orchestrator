@@ -318,6 +318,13 @@ class Projects(FlowBase):
                 self.logger.info("subscriptions deleted %s",
                                  subscriptions_deleted)
 
+            #
+            # Delete all rules in a subservice
+            #
+            self.perseo.deleteAllRules(ADMIN_TOKEN,
+                                       DOMAIN_NAME,
+                                       PROJECT_NAME)
+
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
                                               PROJECT_ID)
