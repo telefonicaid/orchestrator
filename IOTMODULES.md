@@ -6,7 +6,7 @@ Orchestrator allows enable or disable these IoT Modules per service (aka keyston
 
 Enable or disable an IoT Module implies subscribe or unsubscribe IoTModule in Orion Context Broker for all entities.
 
-IoT Module endpoints are just used as reference in Orion Context Broker subscriptions, but are never invoked by Orchestrator directly. An IoT Module is going to be a Context Application subscribed in Orion Context Broker, so an IoT Module is going to be notified by Orion Context Broker.
+IoT Module endpoints are just used as reference in Orion Context Broker subscriptions, but are never invoked by Orchestrator directly. An IoT Module is going to be a Context Application subscribed in Orion Context Broker, so an IoT Module is going to be notified by Orion Context Broker. By default notify path will be /notify, but can be overwrite in each IoT module endpoint configuration, by defining "notifypath".
 
 IoT Modules are defined in Orchestrator configuration files, typically a file like [that](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/dev.py) in this sense:
 
@@ -22,7 +22,8 @@ For each IoT Module there is an object to define fully related endpoint. This ob
 STH = {
     "host": "localhost",
     "port": "8666",
-    "protocol":"http"
+    "protocol":"http",
+    "notifypath":"/notify"
 }
 ```
 
@@ -34,6 +35,7 @@ IOTMODULES = [ "STH", "CYGNUS", "PERSEO", "MYNEWMOD" ]
 MYNEWMOD = {
     "host": "localhost",
     "port": "7777",
-    "protocol":"http"
+    "protocol":"http",
+    "notifypath":"/mynotify"    
 }
 ```

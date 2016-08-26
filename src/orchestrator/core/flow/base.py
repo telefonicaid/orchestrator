@@ -145,9 +145,10 @@ class FlowBase(object):
             assert 'protocol' in iot_module_conf
             assert 'host' in iot_module_conf
             assert 'port' in iot_module_conf
+            notifypath = "/notify" if not 'notifypath' in iot_module_conf else iot_module_conf['notifypath']
             iot_mddule_enpoint = iot_module_conf['protocol'] + "://" + \
               iot_module_conf['host'] + ":" + \
-              iot_module_conf['port'] + "/notify"
+              iot_module_conf['port'] + notifypath
             self.endpoints[iot_module] = iot_mddule_enpoint
             return iot_mddule_enpoint
 
