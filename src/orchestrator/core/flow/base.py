@@ -102,10 +102,10 @@ class FlowBase(object):
                                TRANSACTION_ID=self.TRANSACTION_ID)
 
         self.perseo = PerseoOperations(PERSEO_PROTOCOL,
-                                   PERSEO_HOST,
-                                   PERSEO_PORT,
-                                   CORRELATOR_ID=self.CORRELATOR_ID,
-                                   TRANSACTION_ID=self.TRANSACTION_ID)
+                                       PERSEO_HOST,
+                                       PERSEO_PORT,
+                                       CORRELATOR_ID=self.CORRELATOR_ID,
+                                       TRANSACTION_ID=self.TRANSACTION_ID)
 
         if CA_PROTOCOL:
             # CA for Blackbutton notification flow
