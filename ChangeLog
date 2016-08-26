@@ -1,8 +1,13 @@
 CHANGES
 =======
 
+1.2.4
+
+feature/task/notify_path_by_conf_for_iotmodules
+
 
 1.2.3
+
 bug/check_idpattern_exists_all_subcriptions
 
 
