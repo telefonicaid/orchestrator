@@ -50,6 +50,22 @@ orchestrator:
   links:
     - keystone
     - keypass
+    - orion
   ports:
     - "8084:8084"
   command: -keystonehost keystone -keypasshost keypass -orionhost orion
+
+
+portal:
+  image: telefonicaiot/portal:develop
+  links:
+    - keystone
+    - orion
+    - orchestrator
+  ports:
+    - "80:80"
+    - "8008:8008"
+    - "443:443"
+  environment:
+    - portal_hostname=my_iot_portal
+  command: -urlcep localhost:9090 -urlidm keystone:5001 -urlcb orion:1026 -urlorc orchestrator:8084 -urliot localhost:8081 -urlsth localhost:8666

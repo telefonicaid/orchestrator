@@ -48,7 +48,7 @@ ORION = {
 CA = {
     "host": "localhost",
     "port": "9999",
-    "protocol":"http",
+    "protocol":"http"
 }
 
 # PEP PERSEO endpoint (with or without pep, but recommended with)
@@ -66,6 +66,7 @@ STH = {
     "host": "localhost",
     "port": "18666",
     "protocol":"http",
+    "notifypath":"/notify"
 }
 
 # PERSEO endpoint (just for use as reference in Orion Subscriptions)
@@ -73,6 +74,7 @@ PERSEO = {
     "host": "localhost",
     "port": "19090",
     "protocol":"http",
+    "notifypath":"/notices"
 }
 
 # CYGNUS endpoint (just for use as reference in Orion Subscriptions)
@@ -80,6 +82,7 @@ CYGNUS = {
     "host": "localhost",
     "port": "5050",
     "protocol":"http",
+    "notifypath":"/notify"
 }
 
 IOTMODULES = [ "CYGNUS", "PERSEO" ]
