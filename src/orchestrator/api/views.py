@@ -133,9 +133,9 @@ class IoTConf(Stats):
             self.CA_HOST = settings.CA['host']
             self.CA_PORT = settings.CA['port']
 
-            self.PERSEO_PROTOCOL = settings.PERSEO['protocol']
-            self.PERSEO_HOST = settings.PERSEO['host']
-            self.PERSEO_PORT = settings.PERSEO['port']
+            self.PERSEO_PROTOCOL = settings.PEP_PERSEO['protocol']
+            self.PERSEO_HOST = settings.PEP_PERSEO['host']
+            self.PERSEO_PORT = settings.PEP_PERSEO['port']
 
         except KeyError:
             logger.error("keystone / keypass or other endpoint conf error")
