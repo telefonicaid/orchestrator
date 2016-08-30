@@ -80,8 +80,11 @@ def check_endpoints():
 def show_conf():
     conf = {}
     from django.conf import settings
-    custom_settings_entries = ['KEYSTONE', 'KEYPASS', 'IOTA', 'ORION', 'CA',
-                               'PEP', 'IOTAGENT', 'SCIM_API_VERSION']
+    custom_settings_entries = ['KEYSTONE', 'KEYPASS',
+                               'IOTA', 'ORION', 'CA',
+                               'PEP', 'IOTAGENT', 'SCIM_API_VERSION',
+                               'CYGNUS', 'CA', 'STH', 'PERSEO'
+                               ]
     for name in custom_settings_entries:
         conf[name] = getattr(settings, name)
     return conf
