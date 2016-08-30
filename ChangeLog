@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+
+1.3.0
+
+task/get_current_log_level
+task/align_log_format
+
+
 1.2.5
 
 bug/remove_subscriptions_at_service_subservice_delete - issue 22
