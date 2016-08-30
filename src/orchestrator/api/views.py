@@ -275,6 +275,9 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.IOTA_PROTOCOL,
                            self.IOTA_HOST,
                            self.IOTA_PORT,
+                           self.ORION_PROTOCOL,
+                           self.ORION_HOST,
+                           self.ORION_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.delete_domain(
@@ -484,6 +487,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.IOTA_PROTOCOL,
                             self.IOTA_HOST,
                             self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
