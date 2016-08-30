@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+1.2.5
+
+bug/remove_subscriptions_at_service_subservice_delete
+
+
 1.2.4
 
 feature/task/notify_path_by_conf_for_iotmodules
