@@ -23,7 +23,7 @@ mysql:
     MYSQL_PASSWORD: keypass
 
 keypass:
-  image: telefonicaiot/fiware-keypass
+  image: telefonicaiot/fiware-keypass:develop
   links:
     - mysql
   expose:
@@ -35,7 +35,7 @@ keypass:
   command: -dbhost mysql
 
 keystone:
-  image: telefonicaiot/fiware-keystone-spassword
+  image: telefonicaiot/fiware-keystone-spassword:develop
   expose:
     - "5001"
   links:
@@ -45,7 +45,7 @@ keystone:
   command: -dbhost mysql
 
 orchestrator:
-  image: telefonicaiot/orchestrator
+  image: telefonicaiot/orchestrator:develop
   expose:
     - "8084"
   links:
@@ -55,7 +55,6 @@ orchestrator:
   ports:
     - "8084:8084"
   command: -keystonehost keystone -keypasshost keypass -orionhost orion
-
 
 portal:
   image: telefonicaiot/portal:develop
