@@ -2111,6 +2111,29 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
+    def get(self, request):
+
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+
+        try:
+            result = {
+                "level":
+                logging.getLevelName(
+                    logging.getLogger('orchestrator_api').getEffectiveLevel())
+            }
+            return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
     def put(self, request):
 
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
