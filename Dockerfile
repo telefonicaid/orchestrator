@@ -21,6 +21,10 @@ ENV IOTA_HOST localhost
 ENV IOTA_PORT 4052
 ENV IOTA_PROTOCOL http
 
+ENV PEP_PERSEO_HOST localhost
+ENV PEP_PERSEO_PORT 9090
+ENV PEP_PERSEO_PROTOCOL http
+
 ENV STH_HOST localhost
 ENV STH_PORT 18666
 ENV STH_PROTOCOL http
@@ -88,6 +92,12 @@ RUN \
              \"host\": \"'$IOTA_HOST'\", \
              \"port\": \"'$IOTA_PORT'\", \
              \"protocol\": \"'$IOTA_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
+    sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
+             \"host\": \"'$PEP_PERSEO_HOST'\", \
+             \"port\": \"'$PEP_PERSEO_PORT'\", \
+             \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
     sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \

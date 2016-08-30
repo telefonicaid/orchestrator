@@ -24,10 +24,13 @@ ORION_PROTOCOL=http
 IOTA_PORT=4052
 IOTA_PROTOCOL=http
 
+PEP_PERSEO_PORT=9090  # Pep Perseo
+PEP_PERSEO_PROTOCOL=http
+
 STH_PORT=8666  # Pep and default internal container port
 STH_PROTOCOL=http
 
-PERSEO_PORT=9090  # Pep and default internal container port
+PERSEO_PORT=19090  # Pep and default internal container port
 PERSEO_PROTOCOL=http
 
 CYGNUS_PORT=5050  # Pep and default internal container port
@@ -85,6 +88,14 @@ if [ "$IOTA_HOST_ARG" == "-iotahost" ]; then
              \"host\": \"'$IOTA_HOST_VALUE'\", \
              \"port\": \"'$IOTA_PORT'\", \
              \"protocol\": \"'$IOTA_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
+fi
+
+if [ "$PEP_PERSEO_HOST_ARG" == "-pepperseohost" ]; then
+    sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
+             \"host\": \"'$PEP_PERSEO_HOST_VALUE'\", \
+             \"port\": \"'$PEP_PERSEO_PORT'\", \
+             \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
