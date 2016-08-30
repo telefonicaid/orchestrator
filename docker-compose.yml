@@ -2,7 +2,7 @@ mongo:
   image: mongo:3.2
 
 orion:
-  image: fiware/orion
+  image: fiware/orion:develop
   links:
     - mongo
     - perseo-fe
@@ -55,7 +55,7 @@ orchestrator:
     - pep-perseo-fe
   ports:
     - "8084:8084"
-  command: -keystonehost keystone -keypasshost keypass -orionhost orion -perseohost perseo-fe -pepperseohost pep-perseo-fe
+  command: -keystonehost keystone -keypasshost keypass -orionhost orion -iotahost 127.0.0.1 -pepperseohost pep-perseo-fe -sthhost 127.0.0.1 -perseohost perseo-fe
 
 portal:
   image: telefonicaiot/portal:develop
