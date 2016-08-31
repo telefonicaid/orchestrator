@@ -69,7 +69,7 @@ get_version_string()
           ## in release branches the version is a tag named
           branch_name="$(get_branch)"
           branch_name="${branch_name#*/}"
-          describe_tags="$(git describe --tags --long  --match ${branch_name} 2>/dev/null)"
+          describe_tags="$(git describe --tags --long  --match "[[:digit:]]*.[[:digit:]]*.[[:digit:]]*" 2>/dev/null)"
           version="${describe_tags%-*-*}"
           version="${version%KO}"
           release=${describe_tags#*.*.*-}
