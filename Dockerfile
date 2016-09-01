@@ -94,7 +94,7 @@ RUN \
              \"protocol\": \"'$IOTA_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
+    sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
              \"host\": \"'$PEP_PERSEO_HOST'\", \
              \"port\": \"'$PEP_PERSEO_PORT'\", \
              \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
