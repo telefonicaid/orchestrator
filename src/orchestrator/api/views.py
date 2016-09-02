@@ -149,6 +149,8 @@ class IoTConf(Stats):
             rstatus = status.HTTP_403_FORBIDDEN
         elif code == 409:
             rstatus = status.HTTP_409_CONFLICT
+        elif code == 500:
+            rstatus = status.HTTP_500_INTERNAL_SERVER_ERROR
         else:
             rstatus = status.HTTP_400_BAD_REQUEST
         return rstatus
