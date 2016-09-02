@@ -44,7 +44,8 @@ class CBOrionOperations(object):
         self.CB_HOST = CB_HOST
         self.CB_PORT = CB_PORT
 
-        self.CBRestOperations = RestOperations(CB_PROTOCOL,
+        self.CBRestOperations = RestOperations("ORION",
+                                               CB_PROTOCOL,
                                                CB_HOST,
                                                CB_PORT,
                                                CORRELATOR_ID,

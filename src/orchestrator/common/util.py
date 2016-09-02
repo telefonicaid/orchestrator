@@ -35,12 +35,14 @@ class RestOperations(object):
     '''
 
     def __init__(self,
+                 ENDPOINT_NAME="",
                  PROTOCOL=None,
                  HOST=None,
                  PORT=None,
                  CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
 
+        self.ENDPOINT_NAME = ENDPOINT_NAME
         self.PROTOCOL = PROTOCOL
         self.HOST = HOST
         self.PORT = PORT
@@ -141,10 +143,15 @@ class RestOperations(object):
                 if data_json and isinstance(data_json, dict) and \
                     'message' in data_json:
                     res.msg = data_json['message']
+
             except ValueError:
                 res.msg = data
             except Exception, e:
                 print e
+        except urllib2.URLError, e:
+            res = e
+            res.code = 500
+            res.msg = self.ENDPOINT_NAME + " endpoint ERROR: " + res.args[0][1]
 
         return res
 
