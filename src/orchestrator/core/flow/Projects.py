@@ -321,9 +321,12 @@ class Projects(FlowBase):
             #
             # Delete all rules in a subservice
             #
-            self.perseo.deleteAllRules(ADMIN_TOKEN,
-                                       DOMAIN_NAME,
-                                       PROJECT_NAME)
+            rules_deleted = self.perseo.deleteAllRules(ADMIN_TOKEN,
+                                                       DOMAIN_NAME,
+                                                       PROJECT_NAME)
+            if (len(rules_deleted) > 0):
+                self.logger.info("rules deleted %s",
+                                 rules_deleted)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
                                               DOMAIN_ID,
