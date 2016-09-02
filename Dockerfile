@@ -127,6 +127,8 @@ RUN \
     sed -i 's/ORION_PROTOCOL=http/ORION_PROTOCOL='$ORION_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/IOTA_PORT=4052/IOTA_PORT='$IOTA_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/IOTA_PROTOCOL=http/IOTA_PROTOCOL='$IOTA_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/PEP_PERSEO_PORT=1026/PEP_PERSEO_PORT='$PEP_PERSEO_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/PEP_PERSEO_PROTOCOL=http/PEP_PERSEO_PROTOCOL='$PEP_PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/STH_PORT=18666/STH_PORT='$STH_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/STH_PROTOCOL=http/STH_PROTOCOL='$STH_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/PERSEO_PORT=19090/PERSEO_PORT='$PERSEO_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
