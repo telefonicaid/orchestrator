@@ -24,7 +24,7 @@ ORION_PROTOCOL=http
 IOTA_PORT=4052
 IOTA_PROTOCOL=http
 
-PEP_PERSEO_PORT=9090  # Pep Perseo
+PEP_PERSEO_PORT=1026  # Pep Perseo
 PEP_PERSEO_PROTOCOL=http
 
 STH_PORT=8666  # Pep and default internal container port
