@@ -2,6 +2,9 @@ CHANGES
 =======
 
 
+Remove perseo rules when service or subservice is deleted - issue 24
+
+
 1.3.0
 
 task/get_current_log_level
