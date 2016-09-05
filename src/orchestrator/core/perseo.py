@@ -44,7 +44,8 @@ class PerseoOperations(object):
         self.PERSEO_HOST = PERSEO_HOST
         self.PERSEO_PORT = PERSEO_PORT
 
-        self.PerseoRestOperations = RestOperations(PERSEO_PROTOCOL,
+        self.PerseoRestOperations = RestOperations("PERSEO",
+                                                   PERSEO_PROTOCOL,
                                                    PERSEO_HOST,
                                                    PERSEO_PORT,
                                                    CORRELATOR_ID,
