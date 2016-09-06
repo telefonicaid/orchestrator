@@ -6,6 +6,7 @@ CHANGES
 
 task/get_current_log_level
 task/align_log_format
+task/endpoint_connection_error_in_detail
 
 
 1.2.5
