@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+1.4.0
+
 Remove perseo rules when service or subservice is deleted - issue 24
 
 
@@ -8,6 +10,10 @@ Remove perseo rules when service or subservice is deleted - issue 24
 
 task/get_current_log_level
 task/align_log_format
+
+1.2.6
+
+bug/get_tag_release_branch
 
 1.2.6
 
