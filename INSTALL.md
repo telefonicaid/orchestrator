@@ -6,11 +6,11 @@ The iotp-orchestrator is a stateless application. This means that its code can b
 ## Backup procedure
 Due to its stateless behavior, iotp-orchestrator does not require any backup procedure.
 
-## Installation using pdihub
+## Installation using github
 
 ### Prerequisites
  * Internet access
- * Connectivity to http://pdihub.hi.inet
+ * Connectivity to http://github.com
  * [Git](http://git-scm.com/)
  * Python 2.6 (or upper) and pip
  * C and C++ compilation platform: gcc, g++, make and python headers
@@ -22,7 +22,7 @@ Make sure you have installed Python and Git
 
 Download the iotp-orchestrator code and change of directory:
 ```
-git clone git@pdihub.hi.inet:fiware/iotp-orchestrator.git
+git clone git@github.com:telefonicaid/orchestrator.git
 git checkout BRANCH
 cd iotp-orchestrator
 ```
@@ -57,7 +57,7 @@ uwsgi --http :8084 --chdir /home/user/iotp-orchestrator/src --wsgi-file wsgi.py 
 ```
 
 ### Build procedure
-Build RPM by running script [package-orchestrator](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/package-orchestrator.sh)
+Build RPM by running script [package-orchestrator](https://github.com/telefonicaid/orchestrator/blob/develop/package-orchestrator.sh)
 ```
 package-orchestrator.sh
 ```
@@ -70,12 +70,12 @@ Just install as usual:
 rpm -iVh iotp-orchestrator.rpm
 ```
 
-Once installed, configure your environment [settings](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings) following [Configuration](CONFIG.md)
+Once installed, configure your environment [settings](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings) following [Configuration](CONFIG.md)
 
 
 
 ## Start the server
-RPM install orchestrator as a service controlled by a [daemon](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/bin/orchestrator-daemon.sh)
+RPM install orchestrator as a service controlled by a [daemon](https://github.com/telefonicaid/orchestrator/blob/develop/bin/orchestrator-daemon.sh)
 
 ```
 $ sudo service orchestrator start
