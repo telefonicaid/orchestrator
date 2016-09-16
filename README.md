@@ -5,7 +5,7 @@ Orchestrator exposes an API and provide scripts commands to perform all these op
 Orchestrator Script commands can interact with any remote Keystone and Keypass, since related host and port should be provideed as argument to earch script.
 Orchestrator is used maninly by [IoT Portal](https://pdihub.hi.inet/fiware/iotp-portal) and operation team
 
-A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.inet/ep/fiware-components/wiki/Keystone-scenario-test) or [these](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/tests/scenarios/SCENARIOS.md)
+A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.inet/ep/fiware-components/wiki/Keystone-scenario-test) or [these](https://github.com/telefonicaid/orchestrator/blob/develop/src/tests/scenarios/SCENARIOS.md)
 
 - Create/List/Update/Delete services
 - Create/List/Update/Delete subservices
@@ -27,7 +27,7 @@ Orchestrator relies on these other IoT parts:
 - Context Broker (Orion)
 - IoTAgent (IoTA)
 
-These are all dependencies [requirements.txt](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/requirements.txt)
+These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/develop/requirements.txt)
 
 Orchestrator needs a WSGI server like Apache, Lighttpd or NGIX. [wsgi.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/wsgi.py)
 
