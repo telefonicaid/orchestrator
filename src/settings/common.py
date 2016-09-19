@@ -234,6 +234,7 @@ KEYPASS = {}
 IOTA = {}
 ORION = {}
 CA = {}
+PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}
