@@ -51,6 +51,16 @@ CA = {
     "protocol":"http"
 }
 
+# PEP PERSEO endpoint (with or without pep, but recommended with)
+PEP_PERSEO = {
+    "host": "localhost",
+    "port": "9090",
+    "protocol":"http",
+}
+
+#
+## IOTMODULES
+#
 # STH endpoint (just for use as reference in Orion Subscriptions)
 STH = {
     "host": "localhost",
