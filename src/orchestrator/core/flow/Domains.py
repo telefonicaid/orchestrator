@@ -294,8 +294,17 @@ class Domains(FlowBase):
                                                               PROJECT_NAME)
                 if (len(subscriptions_deleted) > 0):
                     self.logger.info("subscriptions deleted %s",
-                                subscriptions_deleted)
+                                     subscriptions_deleted)
 
+                #
+                # Delete all rules in a subservice
+                #
+                rules_deleted = self.perseo.deleteAllRules(ADMIN_TOKEN,
+                                                           DOMAIN_NAME,
+                                                           PROJECT_NAME)
+                if (len(rules_deleted) > 0):
+                    self.logger.info("rules deleted %s",
+                                     rules_deleted)
 
             #
             # Delete all devices
@@ -312,6 +321,7 @@ class Domains(FlowBase):
                                                               DOMAIN_NAME)
             if (len(subscriptions_deleted) > 0):
                 self.logger.info("subscriptions deleted %s", subscriptions_deleted)
+
 
             #
             # Delete all roles

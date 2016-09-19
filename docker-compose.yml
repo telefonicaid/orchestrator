@@ -2,9 +2,10 @@ mongo:
   image: mongo:3.2
 
 orion:
-  image: fiware/orion
+  image: fiware/orion:develop
   links:
     - mongo
+    - perseo-fe
   ports:
     - "1026:1026"
   command: -dbhost mongo
@@ -22,7 +23,7 @@ mysql:
     MYSQL_PASSWORD: keypass
 
 keypass:
-  image: telefonicaiot/fiware-keypass
+  image: telefonicaiot/fiware-keypass:develop
   links:
     - mysql
   expose:
@@ -34,7 +35,7 @@ keypass:
   command: -dbhost mysql
 
 keystone:
-  image: telefonicaiot/fiware-keystone-spassword
+  image: telefonicaiot/fiware-keystone-spassword:develop
   expose:
     - "5001"
   links:
@@ -44,17 +45,17 @@ keystone:
   command: -dbhost mysql
 
 orchestrator:
-  image: telefonicaiot/orchestrator
+  image: telefonicaiot/orchestrator:develop
   expose:
     - "8084"
   links:
     - keystone
     - keypass
     - orion
+    - pep-perseo-fe
   ports:
     - "8084:8084"
-  command: -keystonehost keystone -keypasshost keypass -orionhost orion
-
+  command: -keystonehost keystone -keypasshost keypass -orionhost orion -iotahost 127.0.0.1 -pepperseohost pep-perseo-fe -sthhost 127.0.0.1 -perseohost perseo-fe
 
 portal:
   image: telefonicaiot/portal:develop
@@ -69,3 +70,42 @@ portal:
   environment:
     - portal_hostname=my_iot_portal
   command: -urlcep localhost:9090 -urlidm keystone:5001 -urlcb orion:1026 -urlorc orchestrator:8084 -urliot localhost:8081 -urlsth localhost:8666
+
+
+perseo-core:
+  image: telefonicaiot/perseo-core:develop
+  ports:
+    - "8080:8080"
+  command: -perseo_fe_url 172.17.0.1:19090
+
+perseo-fe:
+  image: telefonicaiot/perseo-fe:develop
+  links:
+    - perseo-core
+    - mongo
+  ports:
+    - "127.0.0.1:19090:9090"
+  environment:
+    - PERSEO_MONGO_HOST=mongo
+    - PERSEO_CORE_URL=http://perseo-core:8080
+    - PERSEO_NOTICES_PATH=/notices
+
+pep-perseo-fe:
+  image: telefonicaiot/fiware-pep-steelskin:develop
+  links:
+    - perseo-fe
+    - keystone
+    - keypass
+  ports:
+    - "9090:1026"
+    - "11213:11211"
+  environment:
+    - COMPONENT_PLUGIN=perseo
+    - TARGET_HOST=perseo-fe
+    - TARGET_PORT=9090
+    - PROXY_USERNAME=pep
+    - PROXY_PASSWORD=4pass1w0rd
+    - ACCESS_HOST=keypass
+    - ACCESS_PORT=7070
+    - AUTHENTICATION_HOST=keystone
+    - AUTHENTICATION_PORT=5001

@@ -24,10 +24,13 @@ ORION_PROTOCOL=http
 IOTA_PORT=4052
 IOTA_PROTOCOL=http
 
+PEP_PERSEO_PORT=1026  # Pep Perseo
+PEP_PERSEO_PROTOCOL=http
+
 STH_PORT=8666  # Pep and default internal container port
 STH_PROTOCOL=http
 
-PERSEO_PORT=9090  # Pep and default internal container port
+PERSEO_PORT=19090  # Pep and default internal container port
 PERSEO_PROTOCOL=http
 
 CYGNUS_PORT=5050  # Pep and default internal container port
@@ -46,14 +49,17 @@ ORION_HOST_VALUE=${6}
 IOTA_HOST_ARG=${7}
 IOTA_HOST_VALUE=${8}
 
-STH_HOST_ARG=${9}
-STH_HOST_VALUE=${10}
+PEP_PERSEO_HOST_ARG=${9}
+PEP_PERSEO_HOST_VALUE=${10}
 
-PERSEO_HOST_ARG=${11}
-PERSEO_HOST_VALUE=${12}
+STH_HOST_ARG=${11}
+STH_HOST_VALUE=${12}
 
-CYGNUS_HOST_ARG=${13}
-CYGNUS_HOST_VALUE=${14}
+PERSEO_HOST_ARG=${13}
+PERSEO_HOST_VALUE=${14}
+
+CYGNUS_HOST_ARG=${15}
+CYGNUS_HOST_VALUE=${16}
 
 
 if [ "$KEYSTONE_HOST_ARG" == "-keystonehost" ]; then
@@ -85,6 +91,14 @@ if [ "$IOTA_HOST_ARG" == "-iotahost" ]; then
              \"host\": \"'$IOTA_HOST_VALUE'\", \
              \"port\": \"'$IOTA_PORT'\", \
              \"protocol\": \"'$IOTA_PROTOCOL'\" \
+}/g' /opt/orchestrator/settings/dev.py
+fi
+
+if [ "$PEP_PERSEO_HOST_ARG" == "-pepperseohost" ]; then
+    sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
+             \"host\": \"'$PEP_PERSEO_HOST_VALUE'\", \
+             \"port\": \"'$PEP_PERSEO_PORT'\", \
+             \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
