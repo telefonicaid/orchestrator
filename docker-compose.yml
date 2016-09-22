@@ -19,7 +19,7 @@ pep-orion:
     - keypass
   ports:
     - "1026:1026"
-    - "112111:11211"
+    - "11211:11211"
   environment:
     - COMPONENT_PLUGIN=orion
     - TARGET_HOST=orion
