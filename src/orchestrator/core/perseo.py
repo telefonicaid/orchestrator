@@ -86,33 +86,42 @@ class PerseoOperations(object):
                 fiware_service=SERVICE_NAME,
                 fiware_service_path='/'+SUBSERVICE_NAME)
 
+            assert res.code == 200, (res.code, res.msg)
+            data = res.read()
+            rules = json.loads(data)
+
+            logger.debug("rules: %s" % json.dumps(rules, indent=3))
+
         except Exception, ex:
             logger.error("%s trying getRules from PERSEO: %s/%s" % (ex,
                                                                     SERVICE_NAME,
                                                                     SUBSERVICE_NAME))
             return rules_deleted
 
-        for rule in res:
+        for rule in rules:
             # DELETE /perseo-core/rules/{name}: removes a rule
+            try:
+                logger.debug("DELETE %s/%s to /perseo-core/rules/{name} with: %s" % (
+                    SERVICE_NAME,
+                    SUBSERVICE_NAME,
+                    rule['name'])
+                )
+                res = self.PerseoRestOperations.rest_request(
+                    url='/perseo-core/rules/'+ rule['name'],
+                    method='DELETE',
+                    data=body_data,
+                    auth_token=SERVICE_USER_TOKEN,
+                    fiware_service=SERVICE_NAME,
+                    fiware_service_path='/'+SUBSERVICE_NAME)
 
-            logger.debug("DELETE %s/%s to /perseo-core/rules/{name} with: %s" % (
-                SERVICE_NAME,
-                SUBSERVICE_NAME,
-                rule['name'])
-            )
-            res = self.PerseoRestOperations.rest_request(
-                url='/perseo-core/rules/'+ rule['name'],
-                method='DELETE',
-                data=body_data,
-                auth_token=SERVICE_USER_TOKEN,
-                fiware_service=SERVICE_NAME,
-                fiware_service_path='/'+SUBSERVICE_NAME)
-
-            assert res.code == 204, (res.code, res.msg)
-            data = res.read()
-            json_body_response = json.loads(data)
-            logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                          indent=3))
-            rules_deleted.append(rule['name'])
+                assert res.code == 204, (res.code, res.msg)
+                data = res.read()
+                json_body_response = json.loads(data)
+                logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                              indent=3))
+                rules_deleted.append(rule['name'])
+            except Exception, ex:
+                logger.error("%s trying to remove rule: %s" % (ex,
+                                                               rule['name']))
 
         return rules_deleted
