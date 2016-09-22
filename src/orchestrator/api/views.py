@@ -117,7 +117,7 @@ class IoTConf(Stats):
             self.KEYSTONE_HOST = settings.KEYSTONE['host']
             self.KEYSTONE_PORT = settings.KEYSTONE['port']
         except KeyError:
-            logger.error("KEYSTONE endpoint configuration error" +
+            logger.error("KEYSTONE endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
             self.KEYSTONE_PROTOCOL = "http"
             self.KEYSTONE_HOST = "localhost"
@@ -128,7 +128,7 @@ class IoTConf(Stats):
             self.KEYPASS_HOST = settings.KEYPASS['host']
             self.KEYPASS_PORT = settings.KEYPASS['port']
         except KeyError:
-            logger.error("KEYPASS endpoint configuration error" +
+            logger.error("KEYPASS endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
             self.KEYPASS_PROTOCOL = "http"
             self.KEYPASS_HOST = "localhost"
@@ -139,7 +139,7 @@ class IoTConf(Stats):
             self.IOTA_HOST = settings.IOTA['host']
             self.IOTA_PORT = settings.IOTA['port']
         except KeyError:
-            logger.error("IOTA endpoint configuration error" +
+            logger.error("IOTA endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
             self.IOTA_PROTOCOL = "http"
             self.IOTA_HOST = "localhost"
@@ -150,7 +150,7 @@ class IoTConf(Stats):
             self.ORION_HOST = settings.ORION['host']
             self.ORION_PORT = settings.ORION['port']
         except KeyError:
-            logger.error("ORION endpoint configuration error" +
+            logger.error("ORION endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
             self.ORION_PROTOCOL = "http"
             self.ORION_HOST = "localhost"
@@ -161,7 +161,7 @@ class IoTConf(Stats):
             self.CA_HOST = settings.CA['host']
             self.CA_PORT = settings.CA['port']
         except KeyError:
-            logger.error("CA endpoint configuration error" +
+            logger.error("CA endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
             self.CA_PROTOCOL = "http"
             self.CA_HOST = "localhost"
@@ -172,7 +172,7 @@ class IoTConf(Stats):
             self.PERSEO_HOST = settings.PEP_PERSEO['host']
             self.PERSEO_PORT = settings.PEP_PERSEO['port']
         except KeyError:
-            logger.error("PEP_PERSEO endpoint configuration error" +
+            logger.error("PEP_PERSEO endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
             self.PERSEO_PROTOCOL = "http"
             self.PERSEO_HOST = "localhost"
