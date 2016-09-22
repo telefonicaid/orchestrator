@@ -7,8 +7,30 @@ orion:
     - mongo
     - perseo-fe
   ports:
-    - "1026:1026"
+    - "10026:1026"
   command: -dbhost mongo
+
+
+pep-orion:
+  image: telefonicaiot/fiware-pep-steelskin:develop
+  links:
+    - orion
+    - keystone
+    - keypass
+  ports:
+    - "1026:1026"
+    - "112111:11211"
+  environment:
+    - COMPONENT_PLUGIN=orion
+    - TARGET_HOST=orion
+    - TARGET_PORT=1026
+    - PROXY_USERNAME=pep
+    - PROXY_PASSWORD=4pass1w0rd
+    - ACCESS_HOST=keypass
+    - ACCESS_PORT=7070
+    - AUTHENTICATION_HOST=keystone
+    - AUTHENTICATION_PORT=5001
+
 
 mysql:
   image: mysql
@@ -51,17 +73,17 @@ orchestrator:
   links:
     - keystone
     - keypass
-    - orion
+    - pep-orion
     - pep-perseo-fe
   ports:
     - "8084:8084"
-  command: -keystonehost keystone -keypasshost keypass -orionhost orion -iotahost 127.0.0.1 -pepperseohost pep-perseo-fe -sthhost 127.0.0.1 -perseohost perseo-fe
+  command: -keystonehost keystone -keypasshost keypass -orionhost pep-orion -iotahost 127.0.0.1 -pepperseohost pep-perseo-fe -sthhost 127.0.0.1 -perseohost perseo-fe
 
 portal:
   image: telefonicaiot/portal:develop
   links:
     - keystone
-    - orion
+    - pep-orion
     - orchestrator
   ports:
     - "80:80"
@@ -69,7 +91,7 @@ portal:
     - "443:443"
   environment:
     - portal_hostname=my_iot_portal
-  command: -urlcep localhost:9090 -urlidm keystone:5001 -urlcb orion:1026 -urlorc orchestrator:8084 -urliot localhost:8081 -urlsth localhost:8666
+  command: -urlcep localhost:9090 -urlidm keystone:5001 -urlcb pep-orion:1026 -urlorc orchestrator:8084 -urliot localhost:8081 -urlsth localhost:8666
 
 
 perseo-core:
