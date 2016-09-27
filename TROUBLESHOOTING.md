@@ -1,4 +1,4 @@
-# Troubleshooting
+# Troubleshooting: logs and alarms
 
 ## Log location
 
@@ -25,14 +25,15 @@ time=15:12:54.743 | lvl=INFO | component=Orchestrator | msg=Starting Service
  | |__| | | | (__| | | |  __/\__ \ |_| | | (_| | || (_) | |
   \____/|_|  \___|_| |_|\___||___/\__|_|  \__,_|\__\___/|_|
 
- v0.1.0
+ v1.2.0
 
 
 ## Endpoint connection errors
 
-At start time Orchestrator tries to connect to Auth (Keystone) and Access Control (Keypass) Endpoints
+At start time Orchestrator tries to connect to Auth (Keystone) and Access Control (Keypass) Endpoints.
 
-If all endpoints are available the following info entry will appear in the logs.
+
+If all of these endpoints are available the following info entry will appear in the logs.
 
 ```
 time=24/Feb/2015 10:47:49 | lvl=INFO | component=Orchestrator | msg=Checking endpoints OK
@@ -46,8 +47,20 @@ time=24/Feb/2015 10:50:04 | lvl=INFO | component=Orchestrator | msg=Checking end
 
 If Keypass connection is not available the following error entry will appear in the logs.
 ```
-time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg=keyspass endpoint not found
+time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg=keypass endpoint not found
 time=24/Feb/2015 10:49:27 | lvl=INFO | component=Orchestrator | msg=Checking endpoints ERROR keypass endpoint not found
 ```
+
+
+## Endpoint configuration errors
+
+At start time Orchestrator tries to connect to Auth (Keystone),  Access Control (Keypass) Endpoints
+other endpoints (as orion, perseo or iotagent)
+
+if Any of the above endpoints are not available the following error entry will appear in the log.
+```
+time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg="KEYSTONE endpoint configuration error. Forcing to use default conf values (localhost)"
+```
+
 
 ## API Errors
