@@ -54,7 +54,7 @@ class PerseoOperations(object):
 
     def checkPERSEO(self):
         res = self.PerseoRestOperations.rest_request(
-            url='/perseo-core/rules',
+            url='/m2m/vrules',
             method='GET',
             data=None)
         assert res.code == 404, (res.code, res.msg)
@@ -75,11 +75,11 @@ class PerseoOperations(object):
 
             # GET all rules: /perseo-core/rules
             body_data = {}
-            logger.debug("GET %s/%s to /perseo-core/rules" % (
+            logger.debug("GET %s/%s to /m2m/vrules" % (
                 SERVICE_NAME,
                 SUBSERVICE_NAME))
             res = self.PerseoRestOperations.rest_request(
-                url='/perseo-core/rules',
+                url='/m2m/vrules',
                 method='GET',
                 data=body_data,
                 auth_token=SERVICE_USER_TOKEN,
@@ -98,16 +98,16 @@ class PerseoOperations(object):
                                                                     SUBSERVICE_NAME))
             return rules_deleted
 
-        for rule in rules:
+        for rule in rules['data']:
             # DELETE /perseo-core/rules/{name}: removes a rule
             try:
-                logger.debug("DELETE %s/%s to /perseo-core/rules/{name} with: %s" % (
+                logger.debug("DELETE %s/%s to /m2m/vrules/{name} with: %s" % (
                     SERVICE_NAME,
                     SUBSERVICE_NAME,
                     rule['name'])
                 )
                 res = self.PerseoRestOperations.rest_request(
-                    url='/perseo-core/rules/'+ rule['name'],
+                    url='/m2m/vrules/'+ rule['name'],
                     method='DELETE',
                     data=body_data,
                     auth_token=SERVICE_USER_TOKEN,
