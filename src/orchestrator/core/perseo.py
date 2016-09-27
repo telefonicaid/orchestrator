@@ -67,7 +67,6 @@ class PerseoOperations(object):
                        SUBSERVICE_NAME):
 
         rules_deleted = []
-
         logger.debug("Getting rules for %s %s" % (SERVICE_NAME,
                                                   SUBSERVICE_NAME))
 
@@ -89,7 +88,6 @@ class PerseoOperations(object):
             assert res.code == 200, (res.code, res.msg)
             data = res.read()
             rules = json.loads(data)
-
             logger.debug("rules: %s" % json.dumps(rules, indent=3))
 
         except Exception, ex:
@@ -113,12 +111,7 @@ class PerseoOperations(object):
                     auth_token=SERVICE_USER_TOKEN,
                     fiware_service=SERVICE_NAME,
                     fiware_service_path='/'+SUBSERVICE_NAME)
-
                 assert res.code == 204, (res.code, res.msg)
-                data = res.read()
-                json_body_response = json.loads(data)
-                logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                              indent=3))
                 rules_deleted.append(rule['name'])
             except Exception, ex:
                 logger.error("%s trying to remove rule: %s" % (ex,
