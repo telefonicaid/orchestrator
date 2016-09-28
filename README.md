@@ -43,4 +43,5 @@ In this README document you will find how to get started with the application an
 * [Installation guide](INSTALL.md)
 * [Configuration](CONFIG.md)
 * [IoTModules](IOTMODULES.md)
+* [Docker configuraton](DOCKER.md)
 
