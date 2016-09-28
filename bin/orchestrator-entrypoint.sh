@@ -29,12 +29,15 @@ PEP_PERSEO_PROTOCOL=http
 
 STH_PORT=8666  # Pep and default internal container port
 STH_PROTOCOL=http
+STH_NOTIFYPATH=notify
 
 PERSEO_PORT=19090  # Pep and default internal container port
 PERSEO_PROTOCOL=http
+PERSEO_NOTIFYPATH=notices
 
 CYGNUS_PORT=5050  # Pep and default internal container port
 CYGNUS_PROTOCOL=http
+CYGNUS_NOTIFYPATH=notify
 
 
 # Check arguments
@@ -103,26 +106,29 @@ if [ "$PEP_PERSEO_HOST_ARG" == "-pepperseohost" ]; then
 fi
 
 if [ "$PERSEO_HOST_ARG" == "-perseohost" ]; then
-    sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PERSEO = { \
+    sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\/\"\n: ]*}/PERSEO = { \
              \"host\": \"'$PERSEO_HOST_VALUE'\", \
              \"port\": \"'$PERSEO_PORT'\", \
-             \"protocol\": \"'$PERSEO_PROTOCOL'\" \
+             \"protocol\": \"'$PERSEO_PROTOCOL'\", \
+             \"notifypath\": \"\/'$PERSEO_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
 if [ "$STH_HOST_ARG" == "-sthhost" ]; then
-    sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \
+    sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
              \"host\": \"'$STH_HOST_VALUE'\", \
              \"port\": \"'$STH_PORT'\", \
-             \"protocol\": \"'$STH_PROTOCOL'\" \
+             \"protocol\": \"'$STH_PROTOCOL'\", \
+             \"notifypath\": \"\/'$STH_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
 if [ "$CYGNUS_HOST_ARG" == "-cygnushost" ]; then
-    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\"\n: ]*}/CYGNUS = { \
+    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"host\": \"'$CYGNUS_HOST_VALUE'\", \
              \"port\": \"'$CYGNUS_PORT'\", \
-             \"protocol\": \"'$CYGNUS_PROTOCOL'\" \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 fi
 
