@@ -41,7 +41,7 @@ time=15:12:54.743 | lvl=INFO | component=Orchestrator | msg=Starting Service
   \____/|_|  \___|_| |_|\___||___/\__|_|  \__,_|\__\___/|_|
 
  v1.2.0
-
+```
 
 ## Endpoint connection errors
 
