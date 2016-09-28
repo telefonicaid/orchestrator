@@ -21,7 +21,7 @@ curl -i -X GET 'http://localhost:8084/v1.0/admin/log' -H 'Content-Type: applicat
 
 To change log level to DEBUG level:
 ```
-curl -i -X PUT 'http://localhost:8084/v1.0/admin/log?level=DEBUG' -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{ "SERVICE_ADMIN_USER": "cloud_admin", "SERVICE_ADMIN_PASSWORD":"4pass1w0rd"}'
+curl -i -X PUT 'http://localhost:8084/v1.0/admin/log?level=DEBUG' -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{ "SERVICE_ADMIN_USER": "cloud_admin", "SERVICE_ADMIN_PASSWORD":"password"}'
 ```
 
 
