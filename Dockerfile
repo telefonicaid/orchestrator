@@ -28,14 +28,17 @@ ENV PEP_PERSEO_PROTOCOL http
 ENV STH_HOST localhost
 ENV STH_PORT 18666
 ENV STH_PROTOCOL http
+ENV STH_NOTIFYPATH notify
 
 ENV PERSEO_HOST localhost
 ENV PERSEO_PORT 19090
 ENV PERSEO_PROTOCOL http
+ENV PERSEO_NOTIFYPATH notices
 
 ENV CYGNUS_HOST localhost
 ENV CYGNUS_PORT 5050
 ENV CYGNUS_PROTOCOL http
+ENV CYGNUS_NOTIFYPATH notify
 
 ENV python_lib /var/env-orchestrator/lib/python2.6/site-packages
 
@@ -100,22 +103,25 @@ RUN \
              \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\"\n: ]*}/STH = { \
+    sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
              \"host\": \"'$STH_HOST'\", \
              \"port\": \"'$STH_PORT'\", \
-             \"protocol\": \"'$STH_PROTOCOL'\" \
+             \"protocol\": \"'$STH_PROTOCOL'\", \
+             \"notifypath\": \"\/'$STH_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\"\n: ]*}/PERSEO = { \
+    sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\/\"\n: ]*}/PERSEO = { \
              \"host\": \"'$PERSEO_HOST'\", \
              \"port\": \"'$PERSEO_PORT'\", \
-             \"protocol\": \"'$PERSEO_PROTOCOL'\" \
+             \"protocol\": \"'$PERSEO_PROTOCOL'\", \
+             \"notifypath\": \"\/'$PERSEO_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\"\n: ]*}/CYGNUS = { \
+    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$CYGNUS_PORT'\", \
-             \"protocol\": \"'$CYGNUS_PROTOCOL'\" \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
     # Put IOT endpoints conf into ochestrator-entrypoint.sh
