@@ -12,6 +12,16 @@ Logs are configured by default to rotate every 25Mb and keep 2 older copies. For
 
 ## Log Level
 
+The following levels are allowed to use to print logs:
+
+ CRITICAL: only CRITICAL messages are logged
+ ERROR: only ERROR messages are logged
+ WARN (default): WARN and ERROR messages are logged
+ INFO: INFO, WARN and ERROR messages are logged
+ DEBUG: DEBUG, INFO, WARN and ERROR messages are logged
+
+
+
 There are some API operations to allow get and change log level.
 
 To get current log level:
@@ -42,6 +52,18 @@ time=15:12:54.743 | lvl=INFO | component=Orchestrator | msg=Starting Service
 
  v1.2.0
 ```
+
+
+## Alarms
+
+Alarm conditions:
+
+
+| Alarm ID   | Severity   |   Detection strategy                                                                                              | Stop condition                                                                                                                                                                                                                            | Description                                                                                                   | Action
+|:---------- |:----------:|:----------------------------------------------------------------------------------------------------------------- |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |:------------------------------------------------------------------------------------------------------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| 1          | CRITICAL   | A CRITICAL trace is found                                                                                            | N/A                                                                                                                                                                                                                                       | A problem has occurred at orchestrator startup. The CRITICAL 'msg' field details the particular problem. | Solving the issue that is precluding Orchestrator startup, e.g. if the problem was due to the listening port is being used, the solution would be either changing Orchestrator listening port or ending the process that is already using the port.
+
+| 2          | CRITICAL   | The following ERROR text appears in the 'msg' field: "Runtime Error (`<detail>`)"                                 | N/A                                                                                                                                                                                                                                       | Runtime Error. The `<detail>` text containts the detailed information.                                        | Restart Orchestrator. If it persists (e.g. new Runtime Errors appear within the next hour), scale up the problem to development team.
 
 ## Endpoint connection errors
 
