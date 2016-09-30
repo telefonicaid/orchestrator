@@ -854,3 +854,10 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Parameters
   + level (required, `string`) ... ["DEBUG", ... "FATAL"]
 + Response 200
+
+### Get current Log Level [GET]
++ Response 200 (application/json)
+    + Body
+      {
+         "level": "DEBUG"
+      }

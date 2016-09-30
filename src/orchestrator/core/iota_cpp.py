@@ -44,7 +44,8 @@ class IoTACppOperations(object):
         self.IOTA_HOST = IOTA_HOST
         self.IOTA_PORT = IOTA_PORT
 
-        self.IoTACppRestOperations = RestOperations(IOTA_PROTOCOL,
+        self.IoTACppRestOperations = RestOperations("IOTA",
+                                                    IOTA_PROTOCOL,
                                                     IOTA_HOST,
                                                     IOTA_PORT,
                                                     CORRELATOR_ID,

@@ -1,6 +1,53 @@
 CHANGES
 =======
 
+1.4.0
+
+FEATURE: Remove perseo rules when service or subservice is deleted - issue 24
+FIX: Notifypath not handled by docker orchestrator conf - issue 42
+
+1.3.0
+
+task/get_current_log_level
+task/align_log_format
+task/endpoint_connection_error_in_detail
+
+
+1.2.6
+
+bug/get_tag_release_branch
+
+
+1.2.5
+
+bug/remove_subscriptions_at_service_subservice_delete - issue 22
+
+
+1.2.4
+
+feature/task/notify_path_by_conf_for_iotmodules
+
+
+1.2.3
+
+bug/check_idpattern_exists_all_subcriptions
+
+
+1.2.2
+
+bug/allow_orion_subscription_entity_without_type_or_empty
+
+
+1.2.1
+
+bug/check_orion_suscription_entity_type_exits
+
+
+1.2.0
+
+task/delete_keystone_roles_at_delete_domain
+task/utc_for_log_time
+
 
 1.1.0
 

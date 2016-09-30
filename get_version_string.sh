@@ -51,10 +51,17 @@ get_version_string()
     local branch branch_name describe_tags version ancestor release
     case $(get_branch_type) in
         stable)
-           # If we are on stable branch get last tag as the version, but transform to x.x.x-x-SHA1
-           describe_tags="$(git describe --tags --long  --match "[[:digit:]]*.[[:digit:]]*.[[:digit:]]*" 2>/dev/null)"
-           version="${describe_tags%-*-*}"
-           echo "${version%.*}-${version#*.*.*.}-$(git log --pretty=format:'%h' -1)"
+           # # If we are on stable branch get last tag as the version, but transform to x.x.x-x-SHA1
+           # describe_tags="$(git describe --tags --long  --match "[[:digit:]]*.[[:digit:]]*.[[:digit:]]*" 2>/dev/null)"
+           # version="${describe_tags%-*-*}"
+           # echo "${version%.*}-${version#*.*.*.}-$(git log --pretty=format:'%h' -1)"
+          ## If we are in develop use the total count of commits of the repo
+          total_commit_number=$(git rev-list --all --count)
+          short_hash=$(git rev-parse --short HEAD)
+          version="$(git describe --tags --long  --match "[[:digit:]]*.[[:digit:]]*.[[:digit:]]*" 2>/dev/null)"
+          version="${version%-*-*}"
+          version="${version%KO}"
+          echo "${version}-${total_commit_number}-${short_hash}"
         ;;
         develop)
           ## If we are in develop use the total count of commits of the repo
@@ -69,7 +76,7 @@ get_version_string()
           ## in release branches the version is a tag named
           branch_name="$(get_branch)"
           branch_name="${branch_name#*/}"
-          describe_tags="$(git describe --tags --long  --match ${branch_name} 2>/dev/null)"
+          describe_tags="$(git describe --tags --long  --match "[[:digit:]]*.[[:digit:]]*.[[:digit:]]*" 2>/dev/null)"
           version="${describe_tags%-*-*}"
           version="${version%KO}"
           release=${describe_tags#*.*.*-}

@@ -133,6 +133,10 @@ class IoTConf(Stats):
             self.CA_HOST = settings.CA['host']
             self.CA_PORT = settings.CA['port']
 
+            self.PERSEO_PROTOCOL = settings.PEP_PERSEO['protocol']
+            self.PERSEO_HOST = settings.PEP_PERSEO['host']
+            self.PERSEO_PORT = settings.PEP_PERSEO['port']
+
         except KeyError:
             logger.error("keystone / keypass or other endpoint conf error")
             raise ImproperlyConfigured("keystone / Keypass or other endpoint conf")
@@ -149,6 +153,8 @@ class IoTConf(Stats):
             rstatus = status.HTTP_403_FORBIDDEN
         elif code == 409:
             rstatus = status.HTTP_409_CONFLICT
+        elif code == 500:
+            rstatus = status.HTTP_500_INTERNAL_SERVER_ERROR
         else:
             rstatus = status.HTTP_400_BAD_REQUEST
         return rstatus
@@ -273,6 +279,15 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.IOTA_PROTOCOL,
                            self.IOTA_HOST,
                            self.IOTA_PORT,
+                           self.ORION_PROTOCOL,
+                           self.ORION_HOST,
+                           self.ORION_PORT,
+                           self.CA_PROTOCOL,
+                           self.CA_HOST,
+                           self.CA_PORT,
+                           self.PERSEO_PROTOCOL,
+                           self.PERSEO_HOST,
+                           self.PERSEO_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.delete_domain(
@@ -482,6 +497,15 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.IOTA_PROTOCOL,
                             self.IOTA_HOST,
                             self.IOTA_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.CA_PROTOCOL,
+                            self.CA_HOST,
+                            self.CA_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
@@ -577,6 +601,9 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
                                 self.CA_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 result2 = flow.register_service(
@@ -1590,6 +1617,9 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.unregister_device(
@@ -1653,6 +1683,9 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.register_devices(
@@ -1716,6 +1749,9 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.CA_PROTOCOL,
                             self.CA_HOST,
                             self.CA_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.register_service(
@@ -1790,6 +1826,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_PROTOCOL,
                                self.CA_HOST,
                                self.CA_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 modules = flow.list_activated_modules(
@@ -1815,6 +1854,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
                                 self.CA_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 modules = flow.list_activated_modules(
@@ -1869,6 +1911,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_PROTOCOL,
                                self.CA_HOST,
                                self.CA_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 sub = flow.activate_module(
@@ -1895,6 +1940,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
                                 self.CA_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 sub = flow.activate_module(
@@ -1950,6 +1998,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.CA_PROTOCOL,
                                self.CA_HOST,
                                self.CA_PORT,
+                               self.PERSEO_PROTOCOL,
+                               self.PERSEO_HOST,
+                               self.PERSEO_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 flow.deactivate_module(
@@ -1976,6 +2027,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.CA_PROTOCOL,
                                 self.CA_HOST,
                                 self.CA_PORT,
+                                self.PERSEO_PROTOCOL,
+                                self.PERSEO_HOST,
+                                self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 flow.deactivate_module(
@@ -2104,6 +2158,29 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
 
     def __init__(self):
         IoTConf.__init__(self)
+
+    def get(self, request):
+
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+
+        try:
+            result = {
+                "level":
+                logging.getLevelName(
+                    logging.getLogger('orchestrator_api').getEffectiveLevel())
+            }
+            return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
 
     def put(self, request):
 
