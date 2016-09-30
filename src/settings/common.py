@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*']
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'Europe/Madrid'
+TIME_ZONE = 'UTC'
 
 # Encoding
 DEFAULT_CHARSET = 'utf-8'
@@ -158,8 +158,8 @@ LOGGING = {
         'standard': {
             #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             #'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
-            'format' : 'time=%(asctime)s | lvl=%(levelname)s | corr=%(correlator)s | trans=%(transaction)s | srv=%(service)s | subsrv=/%(subservice)s | component=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format' : 'time=%(asctime)s.%(msecs)03dZ | lvl=%(levelname)s | corr=%(correlator)s | trans=%(transaction)s | srv=%(service)s | subsrv=/%(subservice)s | comp=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
+            'datefmt' : "%Y-%m-%dT%H:%M:%S"
         },
     },
     'handlers': {
@@ -234,6 +234,7 @@ KEYPASS = {}
 IOTA = {}
 ORION = {}
 CA = {}
+PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}

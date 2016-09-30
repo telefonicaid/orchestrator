@@ -28,6 +28,7 @@ from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
+from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
@@ -56,6 +57,9 @@ class FlowBase(object):
                  CA_PROTOCOL="http",
                  CA_HOST="localhost",
                  CA_PORT="9999",
+                 PERSEO_PROTOCOL="http",
+                 PERSEO_HOST="localhost",
+                 PERSEO_PORT="9090",                 
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 
@@ -96,6 +100,12 @@ class FlowBase(object):
                                ORION_PORT,
                                CORRELATOR_ID=self.CORRELATOR_ID,
                                TRANSACTION_ID=self.TRANSACTION_ID)
+
+        self.perseo = PerseoOperations(PERSEO_PROTOCOL,
+                                       PERSEO_HOST,
+                                       PERSEO_PORT,
+                                       CORRELATOR_ID=self.CORRELATOR_ID,
+                                       TRANSACTION_ID=self.TRANSACTION_ID)
 
         if CA_PROTOCOL:
             # CA for Blackbutton notification flow
@@ -145,9 +155,10 @@ class FlowBase(object):
             assert 'protocol' in iot_module_conf
             assert 'host' in iot_module_conf
             assert 'port' in iot_module_conf
+            notifypath = "/notify" if not 'notifypath' in iot_module_conf else iot_module_conf['notifypath']
             iot_mddule_enpoint = iot_module_conf['protocol'] + "://" + \
               iot_module_conf['host'] + ":" + \
-              iot_module_conf['port'] + "/notify"
+              iot_module_conf['port'] + notifypath
             self.endpoints[iot_module] = iot_mddule_enpoint
             return iot_mddule_enpoint
 
