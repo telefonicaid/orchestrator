@@ -10,6 +10,21 @@ If you are using the `rpm` distribution the logs are located in `/var/log/orches
 
 Logs are configured by default to rotate every 25Mb and keep 2 older copies. For further information seee LOGGIN section of settings
 
+## Log Level
+
+There are some API operations to allow get and change log level.
+
+To get current log level:
+```
+curl -i -X GET 'http://localhost:8084/v1.0/admin/log' -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{ "SERVICE_ADMIN_USER": "cloud_admin", "SERVICE_ADMIN_PASSWORD":"password"}'
+```
+
+To change log level to DEBUG level:
+```
+curl -i -X PUT 'http://localhost:8084/v1.0/admin/log?level=DEBUG' -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{ "SERVICE_ADMIN_USER": "cloud_admin", "SERVICE_ADMIN_PASSWORD":"password"}'
+```
+
+
 ## Version, launch date and listen ports
 
 You can easily discover what version was launched, at what date it was launched,
@@ -27,11 +42,12 @@ time=15:12:54.743 | lvl=INFO | component=Orchestrator | msg=Starting Service
 
  v1.2.0
 
+```
+
 
 ## Endpoint connection errors
 
 At start time Orchestrator tries to connect to Auth (Keystone) and Access Control (Keypass) Endpoints.
-
 
 If all of these endpoints are available the following info entry will appear in the logs.
 

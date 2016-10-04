@@ -26,10 +26,11 @@ Orchestrator relies on these other IoT parts:
 - Access Control (Keypass)
 - Context Broker (Orion)
 - IoTAgent (IoTA)
+- CEP (Perseo)
 
 These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/develop/requirements.txt)
 
-Orchestrator needs a WSGI server like Apache, Lighttpd or NGIX. [wsgi.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/wsgi.py)
+Orchestrator needs a WSGI server like Apache, Lighttpd or NGIX. [wsgi.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/wsgi.py)
 
 Orchestrator interacts mainly with Identity Manager [Keystone](https://github.com/telefonicaid/fiware-keystone-scim) and Access Control [Keypass](https://github.com/telefonicaid/fiware-keypass).
 Since ContextBroker and IotAgent are secured elements (by [PepProxy](https://github.com/telefonicaid/fiware-pep-steelskin)) orchestrator can interact directly with tem using user provided credencials. If credencials or access control level is not enoght then orchestrator operation will not be performed.
@@ -42,4 +43,5 @@ In this README document you will find how to get started with the application an
 * [Installation guide](INSTALL.md)
 * [Configuration](CONFIG.md)
 * [IoTModules](IOTMODULES.md)
+* [Docker configuraton](DOCKER.md)
 
