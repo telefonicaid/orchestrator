@@ -1,15 +1,26 @@
 # Configuration guide
 
 ## Endpoints
-The most important things that can be customized are endpoints of keystone and keypass
+The most important things that can be customized are endpoints about Keystone and Keypass.
+Some specific operations involve calls to others endpoints like Orion, Iota or Perseo.
+And there are others endpoints that are not invoked but are keept to use into Orion subscriptions like STH, Perseo and Cygnus.
 
-By default in [settings/common.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/common.py) endpoints are set to:
+
+
+By default in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) endpoints are set to:
 ```
 KEYSTONE = {}
 KEYPASS = {}
+IOTA = {}
+ORION = {}
+CA = {}
+PEP_PERSEO = {}
+STH = {}
+PERSEO = {}
+CYGNUS = {}
 ```
 
-and tipically are fixed in [settings/dev.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/dev.py) like
+Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py) like
 ```
 KEYSTONE = {
     "host": "localhost",
@@ -22,11 +33,61 @@ KEYPASS = {
     "port": "7070",
     "protocol":"http"
 }
+
+IOTA = {
+    "host": "localhost",
+    "port": "4052",
+    "protocol":"http"
+}
+
+ORION = {
+    "host": "localhost",
+    "port": "1026",
+    "protocol":"http"
+}
+
+CA = {
+    "host": "localhost",
+    "port": "9999",
+    "protocol":"http"
+}
+
+PEP_PERSEO = {
+    "host": "localhost",
+    "port": "9090",
+    "protocol":"http",
+}
+```
+
+These other endpints are just keept to use with Orion subscriptions about IoT Modules:
+
+```
+STH = {
+    "host": "localhost",
+    "port": "18666",
+    "protocol":"http",
+    "notifypath":"/notify"
+}
+
+PERSEO = {
+    "host": "localhost",
+    "port": "19090",
+    "protocol":"http",
+    "notifypath":"/notices"
+}
+
+CYGNUS = {
+    "host": "localhost",
+    "port": "5050",
+    "protocol":"http",
+    "notifypath":"/notify"
+}
+IOTMODULES = [ "CYGNUS", "PERSEO" ]
 ```
 
 ## Logging
 
-By default logging configuration is defined in [settings/common.py](https://pdihub.hi.inet/fiware/iotp-orchestrator/blob/develop/src/settings/common.py) like this:
+By default logging configuration is defined in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) like this:
 
 ```
 LOGGING = {
@@ -80,6 +141,15 @@ LOGGING = {
 }
 ```
 
+There is a easy way to change log level using configuration files. Just adding to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py)
+
+```
+LOGGING['handlers']['console']['level'] = 'DEBUG'
+LOGGING['handlers']['logfile']['level'] = 'DEBUG'
+LOGGING['loggers']['orchestrator_api']['level'] = 'DEBUG'
+LOGGING['loggers']['orchestrator_core']['level'] = 'DEBUG'
+```
+
 
 ## Throttling
 
@@ -123,4 +193,36 @@ ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
 PNAME="orchestrator"
 USER="orchestrator"
+```
+
+
+## Environment users
+
+There are some users needed to to perform some operations related with trust tokens. For that it needed to keep some configuration about that users in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) and by default is:
+
+
+```
+PEP = {
+    "user": "pep",
+    "password": "pep"
+}
+
+IOTAGENT = {
+    "user": "iotagent",
+    "password": "iotagent"
+}
+```
+
+This value could be overwrite just adding right values to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py)
+
+```
+PEP = {
+    "user": "pep_user",
+    "password": "pep_password"
+}
+
+IOTAGENT = {
+    "user": "iotagent_user",
+    "password": "iotagent_password"
+}
 ```
