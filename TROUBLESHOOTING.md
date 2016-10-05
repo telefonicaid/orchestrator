@@ -51,7 +51,9 @@ time=15:12:54.743 | lvl=INFO | component=Orchestrator | msg=Starting Service
   \____/|_|  \___|_| |_|\___||___/\__|_|  \__,_|\__\___/|_|
 
  v1.2.0
+
 ```
+
 
 
 ## Alarms
@@ -65,10 +67,10 @@ Alarm conditions:
 
 | 2          | CRITICAL   | The following ERROR text appears in the 'msg' field: "Runtime Error (`<detail>`)"                                 | N/A                                                                                                                                                                                                                                       | Runtime Error. The `<detail>` text containts the detailed information.                                        | Restart Orchestrator. If it persists (e.g. new Runtime Errors appear within the next hour), scale up the problem to development team.
 
+
 ## Endpoint connection errors
 
 At start time Orchestrator tries to connect to Auth (Keystone) and Access Control (Keypass) Endpoints.
-
 
 If all of these endpoints are available the following info entry will appear in the logs.
 
