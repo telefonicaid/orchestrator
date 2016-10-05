@@ -17,7 +17,7 @@ Simply navigate to the docker directory of the orchestrator code (if you have do
 
 If you haven't or you don't want to download the whole thing, you can download the file called `docker-compose.yaml` in a directory of your choice and run the aforementioned command. It will work just the same.
 
-You can use [this](https://github.com/telefonicaid/orchestrator/blob/develop/docker-compose.yaml) or also you can create a docker-compose.yaml file, were you should include an orchestrator section like this:
+You can use [this](https://github.com/telefonicaid/orchestrator/blob/master/docker-compose.yaml) or also you can create a docker-compose.yaml file, were you should include an orchestrator section like this:
 
 ```
 orchestrator:
