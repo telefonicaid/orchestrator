@@ -64,10 +64,10 @@ keystone:
     - mysql
   ports:
     - "5001:5001"
-  command: -dbhost mysql -default_pwd 4pass1w0rd -mysql_pwd iotonpremise
+  command: -dbhost mysql
 
 orchestrator:
-  image: telefonicaiot/orchestrator:latest
+  image: 95d70c61c732
   expose:
     - "8084"
   links:
@@ -80,15 +80,15 @@ orchestrator:
   command: -keystonehost keystone -keypasshost keypass -orionhost pep-orion -iotahost 127.0.0.1 -pepperseohost pep-perseo-fe -sthhost 127.0.0.1 -perseohost perseo-fe
 
 portal:
-  image: telefonicaiot/portal:latest
+  image: orchestrator
   links:
     - keystone
     - pep-orion
     - orchestrator
-  ports:
-    - "80:80"
-    - "8008:8008"
-    - "443:443"
+#  ports:
+#    - "80:80"
+#    - "8008:8008"
+#    - "443:443"
   environment:
     - portal_hostname=my_iot_portal
   command: -urlcep localhost:9090 -urlidm keystone:5001 -urlcb pep-orion:1026 -urlorc orchestrator:8084 -urliot localhost:8081 -urlsth localhost:8666
@@ -131,4 +131,3 @@ pep-perseo-fe:
     - ACCESS_PORT=7070
     - AUTHENTICATION_HOST=keystone
     - AUTHENTICATION_PORT=5001
-

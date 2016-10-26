@@ -57,7 +57,7 @@ uwsgi --http :8084 --chdir /home/user/iotp-orchestrator/src --wsgi-file wsgi.py 
 ```
 
 ### Build procedure
-Build RPM by running script [package-orchestrator](https://github.com/telefonicaid/orchestrator/blob/develop/package-orchestrator.sh)
+Build RPM by running script [package-orchestrator](https://github.com/telefonicaid/orchestrator/blob/master/package-orchestrator.sh)
 ```
 package-orchestrator.sh
 ```
@@ -70,12 +70,12 @@ Just install as usual:
 rpm -iVh iotp-orchestrator.rpm
 ```
 
-Once installed, configure your environment [settings](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings) following [Configuration](CONFIG.md)
+Once installed, configure your environment [settings](https://github.com/telefonicaid/orchestrator/blob/master/src/settings) following [Configuration](CONFIG.md)
 
 
 
 ## Start the server
-RPM install orchestrator as a service controlled by a [daemon](https://github.com/telefonicaid/orchestrator/blob/develop/bin/orchestrator-daemon.sh)
+RPM install orchestrator as a service controlled by a [daemon](https://github.com/telefonicaid/orchestrator/blob/master/bin/orchestrator-daemon.sh)
 
 ```
 $ sudo service orchestrator start
