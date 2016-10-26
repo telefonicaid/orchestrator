@@ -2,7 +2,7 @@ mongo:
   image: mongo:3.2
 
 orion:
-  image: fiware/orion:develop
+  image: fiware/orion:latest
   links:
     - mongo
     - perseo-fe
@@ -12,7 +12,7 @@ orion:
 
 
 pep-orion:
-  image: telefonicaiot/fiware-pep-steelskin:develop
+  image: telefonicaiot/fiware-pep-steelskin:latest
   links:
     - orion
     - keystone
@@ -45,7 +45,7 @@ mysql:
     MYSQL_PASSWORD: keypass
 
 keypass:
-  image: telefonicaiot/fiware-keypass:develop
+  image: telefonicaiot/fiware-keypass:latest
   links:
     - mysql
   expose:
@@ -57,7 +57,7 @@ keypass:
   command: -dbhost mysql
 
 keystone:
-  image: telefonicaiot/fiware-keystone-spassword:develop
+  image: telefonicaiot/fiware-keystone-spassword:latest
   expose:
     - "5001"
   links:
@@ -67,7 +67,7 @@ keystone:
   command: -dbhost mysql
 
 orchestrator:
-  image: telefonicaiot/orchestrator:develop
+  image: telefonicaiot/orchestrator:latest
   expose:
     - "8084"
   links:
@@ -80,7 +80,7 @@ orchestrator:
   command: -keystonehost keystone -keypasshost keypass -orionhost pep-orion -iotahost 127.0.0.1 -pepperseohost pep-perseo-fe -sthhost 127.0.0.1 -perseohost perseo-fe
 
 portal:
-  image: telefonicaiot/portal:develop
+  image: telefonicaiot/portal:latest
   links:
     - keystone
     - pep-orion
@@ -95,13 +95,13 @@ portal:
 
 
 perseo-core:
-  image: telefonicaiot/perseo-core:develop
+  image: telefonicaiot/perseo-core:latest
   ports:
     - "8080:8080"
   command: -perseo_fe_url 172.17.0.1:19090
 
 perseo-fe:
-  image: telefonicaiot/perseo-fe:develop
+  image: telefonicaiot/perseo-fe:latest
   links:
     - perseo-core
     - mongo
@@ -113,7 +113,7 @@ perseo-fe:
     - PERSEO_NOTICES_PATH=/notices
 
 pep-perseo-fe:
-  image: telefonicaiot/fiware-pep-steelskin:develop
+  image: telefonicaiot/fiware-pep-steelskin:latest
   links:
     - perseo-fe
     - keystone
@@ -131,3 +131,4 @@ pep-perseo-fe:
     - ACCESS_PORT=7070
     - AUTHENTICATION_HOST=keystone
     - AUTHENTICATION_PORT=5001
+
