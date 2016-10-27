@@ -7,7 +7,7 @@ And there are others endpoints that are not invoked but are keept to use into Or
 
 
 
-By default in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) endpoints are set to:
+By default in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/common.py) endpoints are set to:
 ```
 KEYSTONE = {}
 KEYPASS = {}
@@ -20,7 +20,7 @@ PERSEO = {}
 CYGNUS = {}
 ```
 
-Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py) like
+Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py) like
 ```
 KEYSTONE = {
     "host": "localhost",
@@ -87,7 +87,7 @@ IOTMODULES = [ "CYGNUS", "PERSEO" ]
 
 ## Logging
 
-By default logging configuration is defined in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) like this:
+By default logging configuration is defined in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/common.py) like this:
 
 ```
 LOGGING = {
@@ -141,7 +141,7 @@ LOGGING = {
 }
 ```
 
-There is a easy way to change log level using configuration files. Just adding to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py)
+There is a easy way to change log level using configuration files. Just adding to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py)
 
 ```
 LOGGING['handlers']['console']['level'] = 'DEBUG'
@@ -153,7 +153,7 @@ LOGGING['loggers']['orchestrator_core']['level'] = 'DEBUG'
 
 ## Throttling
 
-By default throlling is configured for all orchestrator API in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) to 200 request by second.
+By default throlling is configured for all orchestrator API in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/common.py) to 200 request by second.
 
 ```
 REST_FRAMEWORK = {
@@ -168,7 +168,7 @@ REST_FRAMEWORK = {
 }
 ```
 
-This value could be modified just adding to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py)
+This value could be modified just adding to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py)
 
 ```
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
@@ -198,7 +198,7 @@ USER="orchestrator"
 
 ## Environment users
 
-There are some users needed to to perform some operations related with trust tokens. For that it needed to keep some configuration about that users in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/common.py) and by default is:
+There are some users needed to to perform some operations related with trust tokens. For that it needed to keep some configuration about that users in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/common.py) and by default is:
 
 
 ```
@@ -213,7 +213,7 @@ IOTAGENT = {
 }
 ```
 
-This value could be overwrite just adding right values to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/develop/src/settings/dev.py)
+This value could be overwrite just adding right values to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py)
 
 ```
 PEP = {
