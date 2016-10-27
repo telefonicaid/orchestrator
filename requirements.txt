@@ -1,5 +1,5 @@
-Django==1.6.10
-djangorestframework==3.0.3
+Django==1.6.11
+djangorestframework==3.0.5
 httplib2
 simplejson
 jsonschema
