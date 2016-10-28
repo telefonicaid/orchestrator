@@ -21,7 +21,7 @@ You can use [this](https://github.com/telefonicaid/orchestrator/blob/master/dock
 
 ```
 orchestrator:
-  image: telefonicaiot/orchestrator:develop
+  image: telefonicaiot/orchestrator:latest
   expose:
     - "8084"
   links:
@@ -68,7 +68,7 @@ The following line will run the container exposing port `8084`, give it a name -
 
 As a result of this command, there is a orchestrator listening on port 8084 on localhost. Try to see if it works now with
 
-        curl localhost:8084
+        curl localhost:8084/v1.0/version
 
 A few points to consider:
 
