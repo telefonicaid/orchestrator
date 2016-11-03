@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+1.4.1
+
+FIX: django trace logs
+
 1.4.0
 
 FEATURE: Remove perseo rules when service or subservice is deleted - issue 24
