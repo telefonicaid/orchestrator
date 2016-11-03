@@ -41,6 +41,18 @@ logger.addFilter(ContextFilterTransactionId("n/a"))
 logger.addFilter(ContextFilterService("None"))
 logger.addFilter(ContextFilterSubService(""))
 
+logger2 = logging.getLogger('django')
+logger2.addFilter(ContextFilterCorrelatorId("n/a"))
+logger2.addFilter(ContextFilterTransactionId("n/a"))
+logger2.addFilter(ContextFilterService("None"))
+logger2.addFilter(ContextFilterSubService(""))
+
+logger3 = logging.getLogger('django.request')
+logger3.addFilter(ContextFilterCorrelatorId("n/a"))
+logger3.addFilter(ContextFilterTransactionId("n/a"))
+logger3.addFilter(ContextFilterService("None"))
+logger3.addFilter(ContextFilterSubService(""))
+
 
 def read_banner():
     banner_dir = os.path.dirname(__file__)
