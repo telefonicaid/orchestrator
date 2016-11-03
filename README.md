@@ -3,7 +3,8 @@
 [![Build Status](http://ci-iot-deven-01.hi.inet/jenkins/job/IOTP-Orchestrator-Package/badge/icon)](http://ci-iot-deven-01.hi.inet/jenkins/job/IOTP-Orchestrator-Package/)
 [![License badge](https://img.shields.io/badge/license-AGPL-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![Docker badge](https://img.shields.io/docker/pulls/fiware/sth-commet.svg)](https://hub.docker.com/r/telefonicaiot/orchestrator/)
-
+[![Support badge]( https://img.shields.io/badge/support-sof-yellowgreen.svg)](http://stackoverflow.com/questions/tagged/orchestrator/)
+[![Join the chat at https://gitter.im/telefonicaid/orchestrator](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/telefonicaid/orchestrator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Orchestrator tries to group all provision operations for IoT platform that tipically implies several steps or several systems interaction.
 Orchestrator exposes an API and provide scripts commands to perform all these operations. Script commands simplifies the inherent usage of keystone, such as usage of long identifiers no so easy to remember and to use, using names al resolving internally to deal with keystone.
