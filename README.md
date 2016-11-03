@@ -1,8 +1,8 @@
 # <a name="top"> Orchestrator </a>
 
-[![Build Status](http://ci-iot-deven-01/jenkins/job/IOTP-Orchestrator-Package/badge/icon)](http://ci-iot-deven-01/jenkins/job/IOTP-Orchestrator-Package/)
+[![Build Status](http://ci-iot-deven-01.hi.inet/jenkins/job/IOTP-Orchestrator-Package/badge/icon)](http://ci-iot-deven-01.hi.inet/jenkins/job/IOTP-Orchestrator-Package/)
 [![License badge](https://img.shields.io/badge/license-AGPL-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Docker badge](https://img.shields.io/docker/pulls/fiware/sth-commet.svg)](https://hub.docker.com/r/fiware/iotp-orchestrator/)
+[![Docker badge](https://img.shields.io/docker/pulls/fiware/sth-commet.svg)](https://hub.docker.com/r/telefonicaiot/orchestrator/)
 
 
 Orchestrator tries to group all provision operations for IoT platform that tipically implies several steps or several systems interaction.
