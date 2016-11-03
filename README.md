@@ -2,7 +2,7 @@
 
 [![Build Status](http://ci-iot-deven-01.hi.inet/jenkins/job/IOTP-Orchestrator-Package/badge/icon)](http://ci-iot-deven-01.hi.inet/jenkins/job/IOTP-Orchestrator-Package/)
 [![License badge](https://img.shields.io/badge/license-AGPL-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Docker badge](https://img.shields.io/docker/pulls/fiware/sth-commet.svg)](https://hub.docker.com/r/telefonicaiot/orchestrator/)
+[![Docker badge](https://img.shields.io/docker/pulls/telefonicaiot/orchestrator.svg)](https://hub.docker.com/r/telefonicaiot/orchestrator/)
 [![Support badge]( https://img.shields.io/badge/support-sof-yellowgreen.svg)](http://stackoverflow.com/questions/tagged/orchestrator/)
 [![Join the chat at https://gitter.im/telefonicaid/orchestrator](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/telefonicaid/orchestrator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
