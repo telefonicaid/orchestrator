@@ -406,6 +406,20 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
 
+    def grantDomainRoleToGroup(self,
+                        CLOUD_ADMIN_TOKEN,
+                        ID_DOM1,
+                        ID_GROUP,
+                        ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s/groups/%s/roles/%s' % (
+                ID_DOM1, ID_GROUP, ADMIN_ROLE_ID),
+            method='PUT',
+            auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+        # TODO: return?
+
     def createDomainRole(self,
                          SERVICE_ADMIN_TOKEN,
                          SUB_SERVICE_ROLE_NAME,
