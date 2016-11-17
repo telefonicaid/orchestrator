@@ -279,36 +279,42 @@ class CreateNewService(FlowBase):
                 self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 return self.composeErrorCode(ex)
 
-            self.logger.debug("ID of group %s: %s" % (NEW_SERVICE_ADMIN_USER,
-                                                      ID_ADM1))
+            self.logger.debug("ID of group %s: %s" % (ADMIN_GROUP_NAME,
+                                                      ID_ADMIN_GROUP))
+            self.logger.debug("ID of group %s: %s" % (SERVICE_CUSTOMER_GROUP_NAME,
+                                                      ID_SERVICE_CUSTOMER_GROUP))
+            self.logger.debug("ID of group %s: %s" % (SUB_SERVICE_ADMIN_GROUP_NAME,
+                                                      ID_SUB_SERVICE_ADMIN_GROUP))
+            self.logger.debug("ID of group %s: %s" % (SUB_SERVICE_CUSTOMER_GROUP_NAME,
+                                                      ID_SUB_SERVICE_CUSTOMER_GROUP))
 
 
-            self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN,
+            self.idm.grantDomainRoleToGroup(DOMAIN_ADMIN_TOKEN,
                                      ID_DOM1,
                                      ID_ADMIN_GROUP,
                                      ADMIN_ROLE_ID)
 
-            self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN,
+            self.idm.grantDomainRoleToGroup(DOMAIN_ADMIN_TOKEN,
                                      ID_DOM1,
                                      ID_SERVICE_CUSTOMER_GROUP,
                                      ID_NEW_SERVICE_ROLE_SERVICECUSTOMER)
 
-            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+            self.idm.grantInheritRoleToGroup(NEW_SERVICE_ADMIN_TOKEN,
                                       ID_DOM1,
                                       ID_ADMIN_GROUP,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
 
-            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+            self.idm.grantInheritRoleToGroup(NEW_SERVICE_ADMIN_TOKEN,
                                       ID_DOM1,
                                       ID_SERVICE_CUSTOMER_GROUP,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
 
-            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+            self.idm.grantInheritRoleToGroup(NEW_SERVICE_ADMIN_TOKEN,
                                       ID_DOM1,
                                       ID_SUB_SERVICE_ADMIN_GROUP,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
 
-            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+            self.idm.grantInheritRoleToGroup(NEW_SERVICE_ADMIN_TOKEN,
                                       ID_DOM1,
                                       ID_SUB_SERVICE_CUSTOMER_GROUP,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
