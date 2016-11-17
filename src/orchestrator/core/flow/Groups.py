@@ -149,3 +149,159 @@ class Groups(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return DETAIL_GROUP
+
+
+    def updateGroup(self,
+                   SERVICE_NAME,
+                   SERVICE_ID,
+                   SERVICE_ADMIN_USER,
+                   SERVICE_ADMIN_PASSWORD,
+                   SERVICE_ADMIN_TOKEN,
+                   GROUP_NAME,
+                   GROUP_ID):
+
+        '''Update an Group Service (aka domain group keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - GROUP_NAME: Group name
+        - GROUP_ID: Group Id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "GROUP_NAME": "%s" % GROUP_NAME,
+            "GROUP_ID": "%s" % GROUP_ID
+        }
+        self.logger.debug("FLOW updateGroup invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 2. Get group ID
+            #
+            if not GROUP_ID:
+                GROUP_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (GROUP_NAME, GROUP_ID))
+
+            #
+            # 3. UpdateGroup
+            #
+            self.idm.updateGroup(SERVICE_ADMIN_TOKEN,
+                                 GROUP_ID)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "GROUP_ID": GROUP_ID,
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return {"id": GROUP_ID}
+
+
+    def removeGroup(self,
+                   SERVICE_NAME,
+                   SERVICE_ID,
+                   SERVICE_ADMIN_USER,
+                   SERVICE_ADMIN_PASSWORD,
+                   SERVICE_ADMIN_TOKEN,
+                   GROUP_NAME,
+                   GROUP_ID):
+
+        '''Removes an group Service (aka domain group keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service name
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - GROUP_NAME: Group name
+        - GROUP_ID: Group id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "GROUP_NAME": "%s" % GROUP_NAME,
+            "GROUP_ID": "%s" % GROUP_ID
+        }
+        self.logger.debug("FLOW remove group invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 2. Get group ID
+            #
+            if not GROUP_ID:
+                GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                     SERVICE_ID,
+                                                     GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (GROUP_NAME, GROUP_ID))
+
+            #
+            # 3. Remove group ID
+            #
+            self.idm.removeGroup(SERVICE_ADMIN_TOKEN,
+                                 GROUP_ID)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "GROUP_ID": GROUP_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        return {}
