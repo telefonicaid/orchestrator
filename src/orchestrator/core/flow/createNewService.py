@@ -237,6 +237,82 @@ class CreateNewService(FlowBase):
                                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
+            #
+            # 6. Create groups for new service (aka domain)
+            #
+            ADMIN_GROUP_NAME = "AdminGroup"
+            SERVICE_CUSTOMER_GROUP_NAME = "ServiceCustomerGroup"
+            SUB_SERVICE_ADMIN_GROUP_NAME = "SubServiceAdminGroup"
+            SUB_SERVICE_CUSTOMER_GROUP_NAME = "SubServiceCustomerGroup"
+
+            try:
+                ID_ADMIN_GROUP = self.idm.createGroupDomain(DOMAIN_ADMIN_TOKEN,
+                                                      ID_DOM1,
+                                                      NEW_SERVICE_NAME,
+                                                      ADMIN_GROUP_NAME,
+                                                      None)
+
+                ID_SERVICE_CUSTOMER_GROUP = self.idm.createGroupDomain(DOMAIN_ADMIN_TOKEN,
+                                                      ID_DOM1,
+                                                      NEW_SERVICE_NAME,
+                                                      SERVICE_CUSTOMER_GROUP_NAME,
+                                                      None)
+
+                ID_SUB_SERVICE_ADMIN_GROUP = self.idm.createGroupDomain(DOMAIN_ADMIN_TOKEN,
+                                                      ID_DOM1,
+                                                      NEW_SERVICE_NAME,
+                                                      SUB_SERVICE_CUSTOMER_GROUP_NAME,
+                                                      None)
+
+                ID_SUB_SERVICE_CUSTOMER_GROUP = self.idm.createGroupDomain(DOMAIN_ADMIN_TOKEN,
+                                                      ID_DOM1,
+                                                      NEW_SERVICE_NAME,
+                                                      SUB_SERVICE_ADMIN_GROUP_NAME,
+                                                      None)
+
+
+            except Exception, ex:
+                self.logger.warn("ERROR creating groups  %s" % (
+                    ex))
+                self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
+                self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
+                return self.composeErrorCode(ex)
+
+            self.logger.debug("ID of group %s: %s" % (NEW_SERVICE_ADMIN_USER,
+                                                      ID_ADM1))
+
+
+            self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN,
+                                     ID_DOM1,
+                                     ID_ADMIN_GROUP,
+                                     ADMIN_ROLE_ID)
+
+            self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN,
+                                     ID_DOM1,
+                                     ID_SERVICE_CUSTOMER_GROUP,
+                                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER)
+
+            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                      ID_DOM1,
+                                      ID_ADMIN_GROUP,
+                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+
+            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                      ID_DOM1,
+                                      ID_SERVICE_CUSTOMER_GROUP,
+                                      ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
+
+            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                      ID_DOM1,
+                                      ID_SUB_SERVICE_ADMIN_GROUP,
+                                      ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+
+            self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                      ID_DOM1,
+                                      ID_SUB_SERVICE_CUSTOMER_GROUP,
+                                      ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
+
         except Exception, ex:
             if ID_DOM1:
                 self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
