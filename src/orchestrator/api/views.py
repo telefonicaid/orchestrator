@@ -45,6 +45,7 @@ from orchestrator.core.flow.Domains import Domains
 from orchestrator.core.flow.Projects import Projects
 from orchestrator.core.flow.Roles import Roles
 from orchestrator.core.flow.Users import Users
+from orchestrator.core.flow.Groups import Groups
 from orchestrator.api import parsers
 
 
@@ -968,6 +969,212 @@ class UserList_RESTView(APIView, IoTConf):
                 request.DATA.get("NEW_SERVICE_USER_PASSWORD", None),
                 request.DATA.get("NEW_SERVICE_USER_EMAIL", None),
                 request.DATA.get("NEW_SERVICE_USER_DESCRIPTION", None))
+            if 'id' in result:
+                Stats.num_post_userlist += 1
+                return Response(result, status=status.HTTP_201_CREATED,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+
+class Group_RESTView(APIView, IoTConf):
+    """
+    { Read, Update, Delete } Groups
+
+    """
+    schema_name = "Group"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def delete(self, request, service_id, group_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = Groups(self.KEYSTONE_PROTOCOL,
+                          self.KEYSTONE_HOST,
+                          self.KEYSTONE_PORT,
+                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.removeGroup(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("GROUP_NAME", None),
+                request.DATA.get("GROUP_ID", group_id))
+            if 'error' not in result:
+                Stats.num_delete_user += 1
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+    def put(self, request, service_id, group_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = Groups(self.KEYSTONE_PROTOCOL,
+                          self.KEYSTONE_HOST,
+                          self.KEYSTONE_PORT,
+                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.updateGroup(
+                request.DATA.get("SERVICE_NAME"),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("GROUP_NAME"),
+                request.DATA.get("GROUP_ID", group_id))
+            if 'error' not in result:
+                Stats.num_put_user += 1
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0}'.format(error.message),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+    def get(self, request, service_id, group_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = Groups(self.KEYSTONE_PROTOCOL,
+                          self.KEYSTONE_HOST,
+                          self.KEYSTONE_PORT,
+                          CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.group(request.DATA.get("SERVICE_ID",  service_id),
+                                request.DATA.get("GROUP_ID", group_id),
+                                request.DATA.get("SERVICE_ADMIN_USER", None),
+                                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                                request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                                 HTTP_X_AUTH_TOKEN))
+            if 'error' not in result:
+                Stats.num_get_user += 1
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+
+class GroupList_RESTView(APIView, IoTConf):
+    """
+    { Read, Create } Groups into a Service
+
+    """
+    schema_name = "GroupList"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request, service_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        index = request.GET.get('index', None)
+        count = request.GET.get('count', None)
+
+        try:
+            request.DATA  # json validation
+            flow = Groups(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.users(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("START_INDEX", index),
+                request.DATA.get("COUNT", count))
+
+            if 'error' not in result:
+                Stats.num_get_userlist += 1
+                return Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+    def post(self, request, service_id):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
+                                        self.KEYSTONE_HOST,
+                                        self.KEYSTONE_PORT,
+                                        CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.createNewServiceUser(
+                request.DATA.get("SERVICE_NAME", None),
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                 HTTP_X_AUTH_TOKEN),
+                request.DATA.get("NEW_SERVICE_GROUP_NAME", None),
+                request.DATA.get("NEW_SERVICE_GROUP_DESCRIPTION", None))
             if 'id' in result:
                 Stats.num_post_userlist += 1
                 return Response(result, status=status.HTTP_201_CREATED,
