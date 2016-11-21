@@ -993,6 +993,190 @@ class Roles(FlowBase):
         return {}
 
 
+    def roles_assignments_groups(self,
+                          DOMAIN_ID,
+                          DOMAIN_NAME,
+                          PROJECT_ID,
+                          PROJECT_NAME,
+                          ROLE_ID,
+                          ROLE_NAME,
+                          GROUP_ID,
+                          GROUP_NAME,
+                          ADMIN_USER,
+                          ADMIN_PASSWORD,
+                          ADMIN_TOKEN,
+                          EFFECTIVE):
+
+        '''Get roles assignments of a domain (and project).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: Name of domain
+        - PROJECT_ID: id of project (optional)
+        - PROJECT_NAME: name of project (optional)
+        - ROLE_ID: id of role (optional)
+        - ROLE_NAME: name of role (optional)
+        - GROUP_ID: id of group (optional)
+        - GROUP_NAME: name of group (optional)
+        - ADMIN_USER: Service admin username
+        - ADMIN_PASSWORD: Service admin password
+        - ADMIN_TOKEN: Service admin token
+        - EFFECTIVE: effective roles
+        Return:
+        - roles_assginments: array of role assignments
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "GROUP_ID": "%s" % GROUP_ID,
+            "GROUP_NAME": "%s" % GROUP_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
+            "EFFECTIVE:": "%s" % EFFECTIVE
+        }
+        self.logger.debug("FLOW roles_assignments invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+            if not ADMIN_TOKEN:
+                if not DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            # Ensure DOMAIN_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+            self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
+
+            # Extract PROJECT, USER, ROLE IDs from NAME
+            if not PROJECT_ID and PROJECT_NAME:
+                PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+                self.logger.debug("PROJECT_ID=%s" % PROJECT_ID)
+
+            if not GROUP_ID and GROUP_NAME:
+                USER_ID = self.idm.getDomainGroupId(ADMIN_TOKEN,
+                                                    DOMAIN_ID,
+                                                    GROUP_NAME)
+                self.logger.debug("GROUP_ID=%s" % GROUP_ID)
+
+            if not ROLE_ID and ROLE_NAME:
+                ROLE_ID = self.idm.getDomainRoleId(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   ROLE_NAME)
+                self.logger.debug("ROLE_ID=%s" % ROLE_ID)
+
+
+            # if USER_ID:
+            #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
+            #                                                  USER_ID,
+            #                                                  EFFECTIVE)
+            #     self.logger.debug("USER_ROLES=%s" % json.dumps(USER_ROLES, indent=3))
+
+            if PROJECT_ID:
+                PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
+                                                                   PROJECT_ID,
+                                                                   EFFECTIVE)
+                self.logger.debug("PROJECT_ROLES=%s" % json.dumps(PROJECT_ROLES,
+                                                             indent=3))
+                ROLE_ASSIGNMENTS = PROJECT_ROLES
+
+            else:
+                DOMAIN_ROLES = self.idm.getDomainRoleAssignments(ADMIN_TOKEN,
+                                                                 DOMAIN_ID,
+                                                                 EFFECTIVE)
+                self.logger.debug("DOMAIN_ROLES=%s" % json.dumps(DOMAIN_ROLES,
+                                                            indent=3))
+                ROLE_ASSIGNMENTS = DOMAIN_ROLES
+
+            role_assignments_expanded = []
+            for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
+                if ROLE_ID:
+                    if not (role_assignment['role']['id'] == ROLE_ID):
+                        continue
+                if PROJECT_ID:
+                    if not (role_assignment['scope']['project']['id'] == PROJECT_ID):
+                        continue
+                if GROUP_ID:
+                    if not (role_assignment['group']['id'] == GROUP_ID):
+                        continue
+                role_assignments_expanded.append(role_assignment)
+
+            # Cache these data? -> memcached/redis
+            domain_roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
+            domain_roles['roles'].append(
+                {
+                    "name": "admin",
+                    "id": self.idm.getRoleId(ADMIN_TOKEN, "admin")
+                })
+            domain_roles['roles'].append(
+                {
+                    "name": "service",
+                    "id": self.idm.getRoleId(ADMIN_TOKEN, "service")
+                })
+            domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
+            domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
+
+            inherit_roles = []
+            if USER_ID:
+                inherit_roles = self.idm.getGroupDomainInheritRoleAssignments(
+                    ADMIN_TOKEN,
+                    DOMAIN_ID,
+                    GROUP_ID)
+
+            for assign in role_assignments_expanded:
+                # Expand user detail
+                match_list = [x for x in domain_users['groups'] if x['id'] == str(assign['group']['id'])]
+                if len(match_list) > 0:
+                    assign['group'].update(match_list[0])
+                # Expand role detail
+                match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
+                if len(match_list) > 0:
+                    assign['role'].update(match_list[0])
+
+                # Expand if role is inherited
+                if len(inherit_roles) > 0:
+                    match_list = [x for x in inherit_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
+                    assign['role']['inherited'] = len(match_list) > 0
+
+                # Expand project detail
+                if 'project' in assign['scope']:
+                    match_list = [x for x in domain_projects['projects'] if x['id'] == str(assign['scope']['project']['id'])]
+                    if len(match_list) > 0:
+                        assign['scope']['project'].update(match_list[0])
+
+            self.logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded,
+                                                 indent=3))
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "role_assignments": role_assignments_expanded,
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {"role_assignments": role_assignments_expanded}
+
+
     def assignRoleServiceGroup(self,
                               SERVICE_NAME,
                               SERVICE_ID,
