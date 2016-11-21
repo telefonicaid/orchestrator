@@ -1724,6 +1724,209 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             )
 
 
+class AssignRoleGroup_RESTView(APIView, IoTConf):
+    """
+   { Read, Update, Delete} Group Role Assignments in a Service or Subservice
+
+    """
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request, service_id):
+        self.schema_name = "RoleAssignmentList"
+        group_id = request.GET.get('group_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
+        role_id = request.GET.get('role_id', None)
+        effective = request.GET.get('effective', False) == "true"
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+
+        try:
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            result = flow.roles_assignments(
+                request.DATA.get("SERVICE_ID", service_id),
+                request.DATA.get("SERVICE_NAME",None),
+                request.DATA.get("SUBSERVICE_ID", subservice_id),
+                request.DATA.get("SUBSERVICE_NAME", None),
+                request.DATA.get("ROLE_ID", role_id),
+                request.DATA.get("ROLE_NAME", None),
+                request.DATA.get("GROUP_ID", group_id),
+                request.DATA.get("GROUP_NAME", None),
+                request.DATA.get("SERVICE_ADMIN_USER", None),
+                request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                request.DATA.get("EFFECTIVE", effective))
+
+            if 'error' not in result:
+                Stats.num_get_roleassignment += 1
+                return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+    def post(self, request, service_id):
+        self.schema_name = "AssignRole"
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        group_id = request.GET.get('group_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
+        role_id = request.GET.get('role_id', None)
+        inherit = (request.GET.get('inherit', False) is True or
+                   request.DATA.get('INHERIT', False) is True)
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            if not (request.DATA.get("SUBSERVICE_NAME", None) or
+                    request.DATA.get("SUBSERVICE_ID", subservice_id)):
+                if inherit:
+                    result = flow.assignInheritRoleServiceGroup(
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME", None),
+                        request.DATA.get("ROLE_ID", role_id),
+                        request.DATA.get("SERVICE_GROUP_NAME", None),
+                        request.DATA.get("SERVICE_GROUP_ID", group_id))
+                else:
+                    result = flow.assignRoleServiceGroup(
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME", None),
+                        request.DATA.get("ROLE_ID", role_id),
+                        request.DATA.get("SERVICE_GROUP_NAME", None),
+                        request.DATA.get("SERVICE_GROUP_ID", group_id))
+            else:
+                result = flow.assignRoleSubServiceGroup(
+                    request.DATA.get("SERVICE_NAME", None),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME", None),
+                    request.DATA.get("SUBSERVICE_ID", subservice_id),
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("ROLE_NAME", None),
+                    request.DATA.get("ROLE_ID", role_id),
+                    request.DATA.get("SERVICE_GROUP_NAME", None),
+                    request.DATA.get("SERVICE_GROUP_ID", group_id))
+            if 'error' not in result:
+                Stats.num_post_roleassignment += 1
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+    def delete(self, request, service_id):
+        self.schema_name = "AssignRole"
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        group_id = request.GET.get('group_id', None)
+        subservice_id = request.GET.get('subservice_id', None)
+        role_id = request.GET.get('role_id', None)
+        inherit = (request.GET.get('inherit', False) is True or
+                   request.DATA.get('INHERIT', False) is True)
+        try:
+            request.DATA  # json validation
+            flow = Roles(self.KEYSTONE_PROTOCOL,
+                         self.KEYSTONE_HOST,
+                         self.KEYSTONE_PORT,
+                         CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+
+            if not (request.DATA.get("SUBSERVICE_NAME", None) or
+                    request.DATA.get("SUBSERVICE_ID", subservice_id)):
+                if inherit:
+                    result = flow.revokeInheritRoleServiceUser(
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME"),
+                        request.DATA.get("ROLE_ID", role_id),
+                        request.DATA.get("SERVICE_GROUP_NAME", None),
+                        request.DATA.get("SERVICE_GROUP_ID", group_id))
+                else:
+                    result = flow.revokeRoleServiceGroup(
+                        request.DATA.get("SERVICE_NAME", None),
+                        request.DATA.get("SERVICE_ID", service_id),
+                        request.DATA.get("SERVICE_ADMIN_USER", None),
+                        request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                        request.DATA.get("SERVICE_ADMIN_TOKEN",
+                                         HTTP_X_AUTH_TOKEN),
+                        request.DATA.get("ROLE_NAME"),
+                        request.DATA.get("ROLE_ID", role_id),
+                        request.DATA.get("SERVICE_GROUP_NAME", None),
+                        request.DATA.get("SERVICE_GROUP_ID", group_id))
+            else:
+                result = flow.revokeRoleSubServiceGroup(
+                    request.DATA.get("SERVICE_NAME"),
+                    request.DATA.get("SERVICE_ID", service_id),
+                    request.DATA.get("SUBSERVICE_NAME"),
+                    request.DATA.get("SUBSERVICE_ID", subservice_id),
+                    request.DATA.get("SERVICE_ADMIN_USER", None),
+                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
+                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
+                    request.DATA.get("ROLE_NAME", None),
+                    request.DATA.get("ROLE_ID", role_id),
+                    request.DATA.get("SERVICE_GROUP_NAME", None),
+                    request.DATA.get("SERVICE_GROUP_ID", group_id))
+            if 'error' not in result:
+                Stats.num_delete_roleassignment += 1
+                return Response(result, status=status.HTTP_204_NO_CONTENT,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                return Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            return Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+
 class Trust_RESTView(APIView, IoTConf):
     """
     { Creates }  a Trust Token
