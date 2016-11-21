@@ -1747,7 +1747,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result = flow.roles_assignments(
+            result = flow.roles_assignments_groups(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME",None),
                 request.DATA.get("SUBSERVICE_ID", subservice_id),
