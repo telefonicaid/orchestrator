@@ -992,6 +992,715 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
         return {}
 
+
+    def assignRoleServiceGroup(self,
+                              SERVICE_NAME,
+                              SERVICE_ID,
+                              SERVICE_ADMIN_USER,
+                              SERVICE_ADMIN_PASSWORD,
+                              SERVICE_ADMIN_TOKEN,
+                              ROLE_NAME,
+                              ROLE_ID,
+                              SERVICE_GROUP_NAME,
+                              SERVICE_GROUP_ID):
+
+        '''Assigns a service role to a group in IoT keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_GROUP_NAME: Group service name
+        - SERVICE_GROUP_ID: Group service Id
+        Return:
+        - ?
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "SERVICE_GROUP_NAME": "%s" % SERVICE_GROUP_NAME,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID
+        }
+        self.logger.debug("assignRoleServiceGroup invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 1. Get service (aka domain)
+            #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
+
+            #
+            # 2.  Get role
+            #
+            if not ROLE_ID and ROLE_NAME:
+                if ROLE_NAME == "Admin":
+                    SERVICE_ADMIN_ID = self.idm.getUserId(SERVICE_ADMIN_TOKEN,
+                                                          SERVICE_ADMIN_USER)
+                    # Get KEYSTONE CONF from base idm class
+                    roles = self.roles_assignments(SERVICE_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_ID,
+                                                   None,
+                                                   None,
+                                                   None,
+                                                   SERVICE_ADMIN_TOKEN,
+                                                   True)
+                    for role in roles['role_assignments']:
+                        if role['role']['name'] == 'admin':
+                            ROLE_ID=role['role']['id']
+                            break
+                else:
+                    ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                       SERVICE_ID,
+                                                       ROLE_NAME)
+            self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 3.  Get Group
+            #
+            if not SERVICE_GROUP_ID:
+                SERVICE_GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                             SERVICE_ID,
+                                                             SERVICE_GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
+                                                      SERVICE_GROUP_ID))
+
+            #
+            # 4.  Grant role to group in service
+            #
+            self.idm.grantDomainRole(SERVICE_ADMIN_TOKEN,
+                                     SERVICE_ID,
+                                     SERVICE_GROUP_ID,
+                                     ROLE_ID)
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
+            "ROLE_ID": "%s" % ROLE_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+
+    def assignRoleSubServiceGroup(self,
+                                  SERVICE_NAME,
+                                  SERVICE_ID,
+                                  SUBSERVICE_NAME,
+                                  SUBSERVICE_ID,
+                                  SERVICE_ADMIN_USER,
+                                  SERVICE_ADMIN_PASSWORD,
+                                  SERVICE_ADMIN_TOKEN,
+                                  ROLE_NAME,
+                                  ROLE_ID,
+                                  SERVICE_GROUP_NAME,
+                                  SERVICE_GROUP_ID):
+
+        '''Assigns a subservice role to a group in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SUBSERVICE_NAME: SubService name
+        - SUBSERVICE_ID: SubService Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_GROUP_NAME: Group service name
+        - SERVICE_GROUP_ID: Group service Id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,
+            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "SERVICE_GROUP_NAME": "%s" % SERVICE_GROUP_NAME,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID
+        }
+        self.logger.debug("assignRoleSubServiceUser invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            # Ensure SERVICE_NAME
+            if not SERVICE_NAME:
+                SERVICE_NAME = self.idm.getDomainNameFromToken(SERVICE_ADMIN_TOKEN,
+                                                               SERVICE_ID)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            #
+            # 1. Get service (aka domain)
+            #
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
+
+            #
+            # 2. Get SubService (aka project)
+            #
+            if not SUBSERVICE_ID:
+                SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
+            # Ensure SUBSERVICE_NAME
+            if not SUBSERVICE_NAME:
+                SUBSERVICE_NAME = self.idm.getProjectNameFromToken(SERVICE_ADMIN_TOKEN,
+                                                                   SERVICE_ID,
+                                                                   SUBSERVICE_ID)
+            self.logger.addFilter(ContextFilterSubService(SUBSERVICE_NAME))
+
+            self.logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
+                                                          SUBSERVICE_ID))
+
+            #
+            # 3. Get role
+            #
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+            self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 4. Get group
+            #
+            if not SERVICE_GROUP_ID:
+                SERVICE_GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                             SERVICE_ID,
+                                                             SERVICE_GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
+                                                      SERVICE_GROUP_ID))
+
+            #
+            # 5. Grant role to group in service
+            #
+            self.idm.grantProjectRoleToRole(SERVICE_ADMIN_TOKEN,
+                                            SUBSERVICE_ID,
+                                            SERVICE_GROUP_ID,
+                                            ROLE_ID)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
+            "ROLE_ID": "%s" % ROLE_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+
+    def assignInheritRoleServiceGroup(self,
+                                      SERVICE_NAME,
+                                      SERVICE_ID,
+                                      SERVICE_ADMIN_USER,
+                                      SERVICE_ADMIN_PASSWORD,
+                                      SERVICE_ADMIN_TOKEN,
+                                      INHERIT_ROLE_NAME,
+                                      INHERIT_ROLE_ID,
+                                      SERVICE_GROUP_NAME,
+                                      SERVICE_GROUP_ID):
+
+        '''Assigns a subservice role to a group in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - INEHRIT_ROLE_NAME: Role name
+        - INHERIT_ROLE_ID: Role Id
+        - SERVICE_GROUP_NAME: Group service name
+        - SERVICE_GROUP_ID: Group service Id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "INHERIT_ROLE_NAME": "%s" % INHERIT_ROLE_NAME,
+            "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID,
+            "SERVICE_GROUP_NAME": "%s" % SERVICE_GROUP_NAME,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID
+        }
+        self.logger.debug("assignRoleSubServiceGroup invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 1. Get service (aka domain)
+            #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
+
+            #
+            # 2. Get role
+            #
+            if not INHERIT_ROLE_ID:
+                INHERIT_ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           INHERIT_ROLE_NAME)
+            self.logger.debug("ID of role %s: %s" % (INHERIT_ROLE_NAME,
+                                                     INHERIT_ROLE_ID))
+
+            #
+            # 3. Get Group
+            #
+            if not SERVICE_GROUP_ID:
+                SERVICE_GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                             SERVICE_ID,
+                                                             SERVICE_GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
+                                                      SERVICE_GROUP_ID))
+
+            #
+            # 4. Grant inherit role to group in all subservices
+            #
+            self.idm.grantInheritRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                             SERVICE_ID,
+                                             SERVICE_GROUP_ID,
+                                             INHERIT_ROLE_ID)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "ID_GROUP": "%s" % SERVICE_GROUP_ID,
+            "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+
+    def revokeRoleServiceGroup(self,
+                               SERVICE_NAME,
+                               SERVICE_ID,
+                               SERVICE_ADMIN_USER,
+                               SERVICE_ADMIN_PASSWORD,
+                               SERVICE_ADMIN_TOKEN,
+                               ROLE_NAME,
+                               ROLE_ID,
+                               SERVICE_GROUP_NAME,
+                               SERVICE_GROUP_ID):
+
+        '''Revoke a service role to a group in IoT keystone).
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_GROUP_NAME: Group service name
+        - SERVICE_GROUP_ID: Group service Id
+        Return:
+        - ?
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "SERVICE_GROUP_NAME": "%s" % SERVICE_GROUP_NAME,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID
+        }
+        self.logger.debug("revokeRoleServiceGroup invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 1. Get service (aka domain)
+            #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
+
+            #
+            # 2. Get role
+            #
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+            self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 3. Get Group
+            #
+            if not SERVICE_GROUP_ID:
+                SERVICE_USER_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                            SERVICE_ID,
+                                                            SERVICE_GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
+                                                      SERVICE_USER_ID))
+
+            #
+            # 4. Revoke role to group in service
+            #
+            self.idm.revokeDomainRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                             SERVICE_ID,
+                                             SERVICE_GROUP_ID,
+                                             ROLE_ID)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
+            "ROLE_ID": "%s" % ROLE_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+
+    def revokeRoleSubServiceGroup(self,
+                                 SERVICE_NAME,
+                                 SERVICE_ID,
+                                 SUBSERVICE_NAME,
+                                 SUBSERVICE_ID,
+                                 SERVICE_ADMIN_USER,
+                                 SERVICE_ADMIN_PASSWORD,
+                                 SERVICE_ADMIN_TOKEN,
+                                 ROLE_NAME,
+                                 ROLE_ID,
+                                 SERVICE_GROUP_NAME,
+                                 SERVICE_GROUP_ID):
+
+        '''Revoke a subservice role to a group in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SUBSERVICE_NAME: SubService name
+        - SUBSERVICE_ID: SubService Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - ROLE_NAME: Role name
+        - ROLE_ID: Role Id
+        - SERVICE_GROUP_NAME: Group service name
+        - SERVICE_GROUP_ID: Group service Id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,
+            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "ROLE_NAME": "%s" % ROLE_NAME,
+            "ROLE_ID": "%s" % ROLE_ID,
+            "SERVICE_GROUP_NAME": "%s" % SERVICE_GROUP_NAME,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID
+        }
+        self.logger.debug("revokeRoleSubServiceGroup invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 1. Get service (aka domain)
+            #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
+
+            #
+            # 2. Get SubService (aka project)
+            #
+            if not SUBSERVICE_ID:
+                SUBSERVICE_ID = self.idm.getProjectId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME,
+                                                      SUBSERVICE_NAME)
+
+            self.logger.debug("ID of your subservice %s:%s" % (SUBSERVICE_NAME,
+                                                               SUBSERVICE_ID))
+
+            #
+            # 3. Get role
+            #
+            if not ROLE_ID:
+                ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   ROLE_NAME)
+            self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
+
+            #
+            # 4. Get Group
+            #
+            if not SERVICE_GROUP_ID:
+                SERVICE_GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                             SERVICE_ID,
+                                                             SERVICE_GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
+                                                      SERVICE_GROUP_ID))
+
+            #
+            # 5. Revoke role to user in service
+            #
+            self.idm.revokeProjectRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                              SUBSERVICE_ID,
+                                              SERVICE_GROUP_ID,
+                                              ROLE_ID)
+
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
+            "ROLE_ID": "%s" % ROLE_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+    def revokeInheritRoleServiceGroup(self,
+                                     SERVICE_NAME,
+                                     SERVICE_ID,
+                                     SERVICE_ADMIN_USER,
+                                     SERVICE_ADMIN_PASSWORD,
+                                     SERVICE_ADMIN_TOKEN,
+                                     INHERIT_ROLE_NAME,
+                                     INHERIT_ROLE_ID,
+                                     SERVICE_GROUP_NAME,
+                                     SERVICE_GROUP_ID):
+
+        '''Revoke a subservice role to a group in IoT keystone.
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - SERVICE_NAME: Service name
+        - SERVICE_ID: Service Id
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - INEHRIT_ROLE_NAME: Role name
+        - INHERIT_ROLE_ID: Role Id
+        - SERVICE_GROUP_NAME: Group service name
+        - SERVICE_GROUP_ID: Group service Id
+        '''
+        data_log = {
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
+            "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "INHERIT_ROLE_NAME": "%s" % INHERIT_ROLE_NAME,
+            "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID,
+            "SERVICE_GROUP_NAME": "%s" % SERVICE_GROUP_NAME,
+            "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID
+        }
+        self.logger.debug("revokeRoleSubServiceGroup invoked with: %s" % json.dumps(
+            data_log, indent=3)
+            )
+        try:
+            if not SERVICE_ADMIN_TOKEN:
+                if not SERVICE_ID:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken(
+                        SERVICE_NAME,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+                    SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
+                                                      SERVICE_NAME)
+                else:
+                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                        SERVICE_ID,
+                        SERVICE_ADMIN_USER,
+                        SERVICE_ADMIN_PASSWORD)
+            self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
+
+            #
+            # 1. Get service (aka domain)
+            #
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("ID of your service %s:%s" % (SERVICE_NAME,
+                                                            SERVICE_ID))
+
+            #
+            # 2. Get role
+            #
+            if not INHERIT_ROLE_ID:
+                INHERIT_ROLE_ID = self.idm.getDomainRoleId(SERVICE_ADMIN_TOKEN,
+                                                           SERVICE_ID,
+                                                           INHERIT_ROLE_NAME)
+            self.logger.debug("ID of role %s: %s" % (INHERIT_ROLE_NAME,
+                                                INHERIT_ROLE_ID))
+
+            #
+            # 3. Get Group
+            #
+            if not SERVICE_GROUP_ID:
+                SERVICE_GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                                                             SERVICE_ID,
+                                                             SERVICE_GROUP_NAME)
+            self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
+                                                      SERVICE_GROUP_ID))
+
+            #
+            # 4. Revoke inherit role to group in all subservices
+            #
+            self.idm.revokeInheritRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                              SERVICE_ID,
+                                              SERVICE_GROUP_ID,
+                                              INHERIT_ROLE_ID)
+        except Exception, ex:
+            self.logger.error(ex)
+            return self.composeErrorCode(ex)
+
+        data_log = {
+            "ID_GROUP": "%s" % SERVICE_GROUP_ID,
+            "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
+        }
+        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        return {}
+
+
     def removeRole(self,
                    SERVICE_NAME,
                    SERVICE_ID,
