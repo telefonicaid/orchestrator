@@ -567,7 +567,7 @@ class IdMKeystoneOperations(IdMOperations):
 
         body_data = {
             "group": {
-                "description": NEW_GROUP_DESCRIPTION if NEW_GROUP_DESCRIPTION else "user of domain %s" % SERVICE_NAME,
+                "description": NEW_GROUP_DESCRIPTION if NEW_GROUP_DESCRIPTION else "group of domain %s" % SERVICE_NAME,
                 "domain_id": "%s" % ID_DOM1,
                 "name": "%s" % NEW_GROUP_NAME,
             }
