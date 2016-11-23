@@ -1109,6 +1109,137 @@ class Test_NewServiceUser_RestView(object):
             data=self.payload_data_bad2)
         assert res.code == 400, (res.code, res.msg)
 
+class Test_NewServiceGroup_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_GROUP_NAME": "group_%s" % self.suffix,
+            "NEW_SERVICE_GROUP_DESCRIPTION": "Pepito",
+        }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_GROUP_NAME": "group_%s" % self.suffix,
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok3 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_GROUP_NAME": "group_%s" % self.suffix,
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": "wrong_password",
+            "NEW_SERVICE_GROUP_NAME": "group_%s" % self.suffix,
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_GROUP_NAME": "group_%s" % self.suffix,
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_post_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/group/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/group/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 204, (res.code, res.msg)
+
+    def test_post_ok_bad(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/group/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/group/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 409, (res.code, res.msg)
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/group/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 204, (res.code, res.msg)
+
+    def test_post_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/group/" % service_id,
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 201, (res.code, res.msg)
+
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        user_id = json_body_response['id']
+
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/service/%s/group/%s" % (service_id,
+                                             user_id),
+            json_data=True,
+            data=self.payload_data_ok3)
+        assert res.code == 204, (res.code, res.msg)
+
+    def test_post_bad(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/group/" % service_id,
+            json_data=True,
+            data=self.payload_data_bad)
+        assert res.code == 401, (res.code, res.msg)
+
+    def test_post_bad2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/group/" % service_id,
+            json_data=True,
+            data=self.payload_data_bad2)
+        assert res.code == 400, (res.code, res.msg)
+
 
 class Test_NewServiceTrust_RestView(object):
 
@@ -2094,6 +2225,59 @@ class Test_UserList_RestView(object):
         assert len(json_body_response['users']) <= 2
 
 
+class Test_GroupList_RestView(object):
+
+    def __init__(self):
+        self.payload_data_ok = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+        }
+        self.payload_data_ok2 = {
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "START_INDEX": "10",
+            "COUNT": "10"
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_get_ok(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/group" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_get_ok2(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok2)
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/group" % service_id,
+            json_data=True,
+            data=self.payload_data_ok2)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert len(json_body_response['groups']) <= 10
+
+    def test_get_ok3(self):
+        service_id = self.TestRestOps.getServiceId(self.payload_data_ok)
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/service/%s/group?count=2&index=0" % service_id,
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        data_response = res.read()
+        json_body_response = json.loads(data_response)
+        assert len(json_body_response['groups']) <= 2
+
+
 class Test_UserDetail_RestView(object):
 
     def __init__(self):
@@ -2119,7 +2303,6 @@ class Test_UserDetail_RestView(object):
             json_data=True,
             data=self.payload_data_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
-
 
 class Test_UserModify_RestView(object):
     def __init__(self):
