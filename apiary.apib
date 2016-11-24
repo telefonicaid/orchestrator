@@ -719,6 +719,122 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 204
 
 
+## Groups in Service [/v1.0/service/{serviceId}/group{?index}{?count}]
+
+### Group Service list [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + index (optional, `number`) ... Start index for pagination
+    + count (optional, `number`) ...  Number of results for pagination
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
+            "START_INDEX":"10",
+            "COUNT":"10"
+        }
++ Response 200 (application/json)
+    + Body
+        {
+            "groups" : [
+                {
+                  "description": "SubServiceCustomer group",
+                  "name": "SubServiceCustomerGroup",
+                  "id": "8ac8aa6470c64b5083a6778fc2cd7828",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
+                },
+                {
+                  "description": "SubServiceAdmin group",
+                  "name": "SubServiceAdminGroup",
+                  "id": "5e817c5e0d624ee68dfb7a72d0d31ce4",
+                  "domain_id": "f7a5b8e303ec43e8a912fe26fa79dc02"
+                },
+            ]
+        }
+
+
+### Create Groups [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
+            "NEW_SERVICE_GROUP_NAME":"group_name_new",
+            "NEW_SERVICE_GROUP_DESCRIPTION":"group description"
+        }
++ Response 201 (application/json)
+        {
+            "id": 00000
+        }
+
+
+## Group in Service [/v1.0/service/{serviceId}/group/{groupId}]
+
+### detail of a group [GET]
++ Parameters
+    + groupId (required, `string`) ... Group Id
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token"
+        }
++ Response 200 (application/json)
+        {
+          "groupName": "MyGroup",
+          "urn:scim:schemas:extension:keystone:1.0": {
+            "domain_id": "91d79dc2211d43a7985ebc27cdd146df"
+          },
+          "id": "a5e8c847f7264c5a9f01a22904e3ae93",
+          "schemas": [
+            "urn:scim:schemas:core:1.0",
+            "urn:scim:schemas:extension:keystone:1.0"
+          ]
+        }
+
+
+### update a group (by his admin) [PUT]
++ Parameters
+    + groupId (required, `string`) ... Group Id
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+        {
+             "SERVICE_NAME":"test_service",
+             "SERVICE_ADMIN_USER":"test_admin_service",
+             "SERVICE_ADMIN_PASSWORD":"passwd",
+             "SERVICE_ADMIN_TOKEN":"token",
+             "GROUP_NAME":"user_name",
+             "GROUP_DATA_VALUE": {
+                                  "name": "new group name",
+                                  "description": "new group description",
+                                }
+        }
++ Response 200
+
+
+### delete a group [DELETE]
++ Parameters
+    + groupId (required, `string`) ... Group Id
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD":"passwd",
+            "SERVICE_ADMIN_TOKEN":"token",
+            "GROUP_NAME":"group_name"
+
+        }
++ Response 204
+
+
 ## Trust Token [/v1.0/service/{serviceId}/trust]
 
 ### Create Trust Token [POST]

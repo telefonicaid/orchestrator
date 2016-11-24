@@ -406,6 +406,20 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
 
+    def grantDomainRoleToGroup(self,
+                        CLOUD_ADMIN_TOKEN,
+                        ID_DOM1,
+                        ID_GROUP,
+                        ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s/groups/%s/roles/%s' % (
+                ID_DOM1, ID_GROUP, ADMIN_ROLE_ID),
+            method='PUT',
+            auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+        # TODO: return?
+
     def createDomainRole(self,
                          SERVICE_ADMIN_TOKEN,
                          SUB_SERVICE_ROLE_NAME,
@@ -543,6 +557,33 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response['user']['id']
+
+    def createGroupDomain(self,
+                         SERVICE_ADMIN_TOKEN,
+                         ID_DOM1,
+                         SERVICE_NAME,
+                         NEW_GROUP_NAME,
+                         NEW_GROUP_DESCRIPTION):
+
+        body_data = {
+            "group": {
+                "description": NEW_GROUP_DESCRIPTION if NEW_GROUP_DESCRIPTION else "group of domain %s" % SERVICE_NAME,
+                "domain_id": "%s" % ID_DOM1,
+                "name": "%s" % NEW_GROUP_NAME,
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/groups',
+            method='POST',
+            data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response['group']['id']
 
     def createRoleDomain(self,
                          SERVICE_ADMIN_TOKEN,
@@ -719,6 +760,28 @@ class IdMKeystoneOperations(IdMOperations):
                 return user['id']
         assert False, "user name %s not Found" % USER_NAME
 
+
+    def getDomainGroupId(self,
+                        SERVICE_ADMIN_TOKEN,
+                        DOMAIN_ID,
+                        GROUP_NAME):
+
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/Groups?domain_id=%s' % DOMAIN_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        for group in json_body_response['Resources']:
+            if group['groupName'] == GROUP_NAME:
+                return group['id']
+        assert False, "group name %s not Found" % GROUP_NAME
+
+
     def grantProjectRole(self,
                          SERVICE_ADMIN_TOKEN,
                          ID_PRO1,
@@ -732,6 +795,21 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
         # TODO: return?
+
+
+    def grantProjectRoleToGroup(self,
+                         SERVICE_ADMIN_TOKEN,
+                         ID_PRO1,
+                         ID_GROUP,
+                         ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s/groups/%s/roles/%s' % (
+                ID_PRO1, ID_GROUP, ROLE_ID),
+            method='PUT',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
 
     def detailUser(self,
                    SERVICE_ADMIN_TOKEN,
@@ -748,6 +826,23 @@ class IdMKeystoneOperations(IdMOperations):
                                                       indent=3))
         return json_body_response
 
+
+    def detailGroup(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_GROUP):
+
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/Groups/%s' % ID_GROUP,
+            method='GET', data=None,
+            auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+
     def removeUser(self,
                    SERVICE_ADMIN_TOKEN,
                    ID_USER):
@@ -759,6 +854,19 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
         # return ?
+
+
+    def removeGroup(self,
+                   SERVICE_ADMIN_TOKEN,
+                   ID_GROUP):
+
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/Groups/%s' % ID_GROUP,
+            method='DELETE', data=None,
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
 
     def updateUser(self,
                    SERVICE_ADMIN_TOKEN,
@@ -785,6 +893,33 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
+
+
+    def updateGroup(self,
+                    SERVICE_ADMIN_TOKEN,
+                    ID_GROUP,
+                    GROUP_DATA):
+        body_data = {
+            "schemas": ["urn:scim:schemas:core:1.0",
+                        "urn:scim:schemas:extension:keystone:1.0"],
+        }
+        # Replace 'name' by 'groupName' since we are using SCIM API
+        if 'name' in GROUP_DATA:
+            GROUP_DATA['groupName'] = GROUP_DATA['name']
+        if 'description' in GROUP_DATA:
+            GROUP_DATA['displayName'] = GROUP_DATA['description']
+        body_data.update(GROUP_DATA)
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/Groups/%s' % ID_GROUP,
+            method='PATCH', data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
 
     def getDomains(self,
                    SERVICE_ADMIN_TOKEN):
@@ -905,6 +1040,48 @@ class IdMKeystoneOperations(IdMOperations):
             res["startIndex"] = json_body_response["startIndex"]
         return res
 
+
+    def getDomainGroups(self,
+                       SERVICE_ADMIN_TOKEN,
+                       DOMAIN_ID,
+                       START_INDEX=None,
+                       COUNT=None):
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/Groups?domain_id=%s%s' % (
+                DOMAIN_ID,
+                "&startIndex=%s&count=%s" % (START_INDEX, COUNT) if START_INDEX and COUNT else ""),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        # Group each user by name and id
+        groups = []
+        for group in json_body_response['Resources']:
+            groups.append(
+                {
+                    "name": group['groupName'],
+                    "userName": group['groupName'],
+                    "id": group['id'],
+                    "description": group["displayName"],
+                    "domain_id":
+                       group['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
+                    "enabled": group['active']
+                }
+            )
+        res = {"groupss": groups}
+        if "totalResults" in json_body_response:
+            res["totalResults"] = json_body_response["totalResults"]
+        if "itemsPerPage" in json_body_response:
+            res["itemsPerPage"] = json_body_response["itemsPerPage"]
+        if "startIndex" in json_body_response:
+            res["startIndex"] = json_body_response["startIndex"]
+        return res
+
+
     def getDomainProjects(self,
                           SERVICE_ADMIN_TOKEN,
                           DOMAIN_ID):
@@ -939,6 +1116,21 @@ class IdMKeystoneOperations(IdMOperations):
 
         res = self.IdMRestOperations.rest_request(
             url='/v3/users/%s/projects' % USER_ID,
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return {"projects": json_body_response['projects']}
+
+    def getGroupProjects(self,
+                        SERVICE_ADMIN_TOKEN,
+                        GROUP_ID):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/groups/%s/projects' % GROUP_ID,
             method='GET',
             auth_token=SERVICE_ADMIN_TOKEN)
         assert res.code == 200, (res.code, res.msg)
@@ -1060,6 +1252,19 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
 
+    def grantInheritRoleToGroup(self,
+                         CLOUD_ADMIN_TOKEN,
+                         ID_DOM1,
+                         ID_GROUP,
+                         ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-INHERIT/domains/%s/groups/%s/roles/%s/inherited_to_projects' % (
+                ID_DOM1, ID_GROUP, ADMIN_ROLE_ID),
+            method='PUT',
+            auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
     def deleteDomain(self,
                      SERVICE_ADMIN_TOKEN,
                      DOMAIN_ID):
@@ -1139,6 +1344,19 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
 
+    def revokeDomainRoleToGroup(self,
+                         CLOUD_ADMIN_TOKEN,
+                         ID_DOM1,
+                         ID_GROUP,
+                         ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/domains/%s/groups/%s/roles/%s' % (
+                ID_DOM1, ID_GROUP, ADMIN_ROLE_ID),
+            method='DELETE',
+            auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
     def revokeProjectRole(self,
                           SERVICE_ADMIN_TOKEN,
                           ID_PRO1,
@@ -1147,6 +1365,19 @@ class IdMKeystoneOperations(IdMOperations):
         res = self.IdMRestOperations.rest_request(
             url='/v3/projects/%s/users/%s/roles/%s' % (
                 ID_PRO1, ID_USER, ROLE_ID),
+            method='DELETE',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
+    def revokeProjectRoleToGroup(self,
+                          SERVICE_ADMIN_TOKEN,
+                          ID_PRO1,
+                          ID_GROUP,
+                          ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s/groups/%s/roles/%s' % (
+                ID_PRO1, ID_GROUP, ROLE_ID),
             method='DELETE',
             auth_token=SERVICE_ADMIN_TOKEN)
 
@@ -1165,6 +1396,19 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
 
+    def revokeInheritRoleToGroup(self,
+                          CLOUD_ADMIN_TOKEN,
+                          ID_DOM1,
+                          ID_GROUP,
+                          ADMIN_ROLE_ID):
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-INHERIT/domains/%s/groups/%s/roles/%s/inherited_to_projects' % (
+                ID_DOM1, ID_GROUP, ADMIN_ROLE_ID),
+            method='DELETE',
+            auth_token=CLOUD_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
     def getUserDomainInheritRoleAssignments(self,
                                             SERVICE_ADMIN_TOKEN,
                                             DOMAIN_ID,
@@ -1174,6 +1418,26 @@ class IdMKeystoneOperations(IdMOperations):
             url='/v3/OS-INHERIT/domains/%s/users/%s/roles/inherited_to_projects' % (
                 DOMAIN_ID,
                 USER_ID,
+                ),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
+    def getGroupDomainInheritRoleAssignments(self,
+                                            SERVICE_ADMIN_TOKEN,
+                                            DOMAIN_ID,
+                                            GROUP_ID):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/OS-INHERIT/domains/%s/groups/%s/roles/inherited_to_projects' % (
+                DOMAIN_ID,
+                GROUP_ID,
                 ),
             method='GET',
             auth_token=SERVICE_ADMIN_TOKEN)
