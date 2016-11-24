@@ -355,6 +355,83 @@ json = {
         },
         # "required": [ ],
     },
+    #######
+    "Group": {
+    #######
+        "name": "Group",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "GROUP_NAME": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "GROUP_ID": {
+                "type": "string",
+            },
+        },
+        # "required": [ ],
+    },
+    ##########
+    "GroupList": {
+    ##########
+        "name": "GroupList",
+        "dependencies": {
+            "SERVICE_ADMIN_USER": [
+                "SERVICE_ADMIN_PASSWORD"
+            ],
+            "SERVICE_ADMIN_PASSWORD": [
+                "SERVICE_ADMIN_USER",
+            ],
+            "NEW_SERVICE_USER_NAME": [
+                "NEW_SERVICE_USER_PASSWORD"
+            ]
+        },
+        "properties": {
+            "SERVICE_ADMIN_USER": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_ADMIN_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_NAME": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "NEW_SERVICE_GROUP_NAME": {
+                "type": "string",
+                "maxLength": 50,
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+        },
+        # "required": [ ],
+    },
     ###########
     "RoleList": {
     ###########

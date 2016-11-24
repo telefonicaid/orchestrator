@@ -59,7 +59,7 @@ class RemoveUser(FlowBase):
             "USER_NAME": "%s" % USER_NAME,
             "USER_ID": "%s" % USER_ID
         }
-        self.logger.debug("FLOW projects invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW remove user invoked with: %s" % json.dumps(
             data_log,
             indent=3)
         )
