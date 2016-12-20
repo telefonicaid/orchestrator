@@ -223,6 +223,8 @@ class Roles(FlowBase):
 
             role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
+                if 'group' in role_assignment:
+                    continue
                 if ROLE_ID:
                     if not (role_assignment['role']['id'] == ROLE_ID):
                         continue
@@ -230,7 +232,7 @@ class Roles(FlowBase):
                     if not (role_assignment['scope']['project']['id'] == PROJECT_ID):
                         continue
                 if USER_ID:
-                    if not (role_assignment['user']['id'] == USER_ID):
+                    if ('user' in role_assignment) and not (role_assignment['user']['id'] == USER_ID):
                         continue
                 role_assignments_expanded.append(role_assignment)
 
@@ -255,12 +257,12 @@ class Roles(FlowBase):
                     ADMIN_TOKEN,
                     DOMAIN_ID,
                     USER_ID)
-
             for assign in role_assignments_expanded:
                 # Expand user detail
-                match_list = [x for x in domain_users['users'] if x['id'] == str(assign['user']['id'])]
-                if len(match_list) > 0:
-                    assign['user'].update(match_list[0])
+                if 'user' in assign:
+                    match_list = [x for x in domain_users['users'] if x['id'] == str(assign['user']['id'])]
+                    if len(match_list) > 0:
+                        assign['user'].update(match_list[0])
                 # Expand role detail
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
