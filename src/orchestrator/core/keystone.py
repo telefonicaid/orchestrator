@@ -1025,10 +1025,10 @@ class IdMKeystoneOperations(IdMOperations):
                     "name": user['userName'],
                     "userName": user['userName'],
                     "id": user['id'],
-                    "description": user["displayName"],
+                    "description": user["displayName"] if "displayName" in user else "",
                     "domain_id":
                        user['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
-                    "enabled": user['active']
+                    "enabled": user['active'] if "active" in user else ""
                 }
             )
         res = {"users": users}
