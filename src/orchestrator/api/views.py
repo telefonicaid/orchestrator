@@ -2709,3 +2709,70 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
+
+class OrchMetrics_RESTView(APIView, IoTConf):
+    """
+     { Read, Update } Orchestrator Common Metrics
+    """
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def get(self, request):
+
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        reset = request.GET.get('reset', None)
+
+        try:
+            # TO DO
+            result = {}
+
+
+            # Metrics
+            # incomingTransactions: number of requests consumed by the component.
+            # incomingTransactionRequestSize: total size (bytes) in requests associated to incoming transactions (“in” from the point of view of the component).
+            # incomingTransactionResponseSize: total size (bytes) in responses associated to incoming transactions (“out” from the point of view of the component).
+            # incomingTransacionError: number of incoming transactions resulting in error.
+            # serviceTime: average time to serve a transaction.
+            # outgoingTransactions: number of requests sent by the component.
+            # outgoingTransactionRequestSize: total size (bytes) in requests associated to outgoing transactions (“out” from the point of view of the component).
+            # outgoingTransactionResponseSize: total size (bytes) in responses associated to outgoing transactions (“in” from the point of view of the component).
+            # outgoingTransacionError: number of outgoing transactions resulting in error.
+
+
+
+            
+            return Response(result, status=status.HTTP_200_OK,
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+
+    def delete(self, request):
+        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+
+        try:
+            # TO DO
+            result = {}
+            
+            return Response(result, status=status.HTTP_204_OK,
+                            headers={"Fiware-Correlator": CORRELATOR_ID})
+
+        except ParseError as error:
+            body = {
+                "error": "%s" % error.detail
+            }
+            return Response(
+                json.dumps(body),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
