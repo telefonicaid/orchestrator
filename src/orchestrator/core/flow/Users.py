@@ -24,7 +24,7 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
+from orchestrator.common.util import ContextFilterService
 
 class Users(FlowBase):
 
@@ -79,6 +79,13 @@ class Users(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+
             # SERVICE_ROLES = self.idm.getDomainRoles(SERVICE_ADMIN_TOKEN,
             #                                         SERVICE_ID)
 
@@ -108,11 +115,12 @@ class Users(FlowBase):
             "SERVICE_USERS": SERVICE_USERS,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return SERVICE_USERS
+        return SERVICE_USERS, SERVICE_NAME
 
 
     def user(self,
              SERVICE_ID,
+             SERVICE_NAME,
              USER_ID,
              SERVICE_ADMIN_USER,
              SERVICE_ADMIN_PASSWORD,
@@ -124,6 +132,7 @@ class Users(FlowBase):
 
         Params:
         - SERVICE_ID: Service ID
+        - SERVICE_NAME: Service NAME
         - USER_ID: User ID
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
@@ -132,6 +141,7 @@ class Users(FlowBase):
         '''
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
+            "SERVICE_NAME": "%s" % SERVICE_NAME,
             "USER_ID": "%s" % USER_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
@@ -149,6 +159,13 @@ class Users(FlowBase):
                     SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+
             DETAIL_USER = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
                                               USER_ID)
             self.logger.debug("DETAIL_USER=%s" % json.dumps(DETAIL_USER, indent=3))
@@ -161,4 +178,4 @@ class Users(FlowBase):
             "DETAIL_USER": DETAIL_USER,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DETAIL_USER
+        return DETAIL_USER, SERVICE_NAME

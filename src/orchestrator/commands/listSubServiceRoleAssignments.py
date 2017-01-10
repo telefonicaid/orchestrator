@@ -87,7 +87,7 @@ def main():
     #USER_NAME=sys.argv[7]
     EFFECTIVE = sys.argv[8] in ["True", "true", "TRUE"]
 
-    flow = Roles(KEYSTONE_PROTOCOL,
+    flow, service_name = Roles(KEYSTONE_PROTOCOL,
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 

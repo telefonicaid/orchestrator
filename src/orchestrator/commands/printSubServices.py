@@ -80,7 +80,7 @@ def main():
                     KEYSTONE_HOST,
                     KEYSTONE_PORT)
 
-    subservices = flow.projects(None,
+    subservices, service_name = flow.projects(None,
                                 SERVICE_NAME,
                                 SERVICE_ADMIN_USER,
                                 SERVICE_ADMIN_PASSWORD,

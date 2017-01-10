@@ -79,7 +79,7 @@ def main():
                    KEYSTONE_HOST,
                    KEYSTONE_PORT)
 
-    domain_detail = flow.domains(DOMAIN_NAME,
+    domain_detail, service_name = flow.domains(DOMAIN_NAME,
                                  DOMAIN_ADMIN_USER,
                                  DOMAIN_ADMIN_PASSWORD,
                                  None)

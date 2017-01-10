@@ -105,7 +105,7 @@ def main():
                             KEYSTONE_HOST,
                             KEYSTONE_PORT)
 
-    res = flow.createTrustToken(
+    res, service_name = flow.createTrustToken(
         SERVICE_NAME,
         None,
         SUBSERVICE_NAME,
