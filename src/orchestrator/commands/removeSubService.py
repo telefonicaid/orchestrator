@@ -83,7 +83,7 @@ def main():
                     KEYSTONE_HOST,
                     KEYSTONE_PORT)
 
-    project_detail = flow.delete_project(None,
+    project_detail, service_name = flow.delete_project(None,
                                          SERVICE_NAME,
                                          None,
                                          SUBSERVICE_NAME,

@@ -117,4 +117,4 @@ class CreateNewServiceUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": ID_USER}
+        return {"id": ID_USER}, SERVICE_NAME

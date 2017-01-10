@@ -100,7 +100,7 @@ def main():
                     ORION_HOST,
                     ORION_PORT)
 
-    roles = flow.list_activated_modules(SERVICE_NAME,
+    roles, service_name = flow.list_activated_modules(SERVICE_NAME,
                                         None,
                                         SUBSERVICE_NAME,
                                         None,

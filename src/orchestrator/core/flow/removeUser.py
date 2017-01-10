@@ -24,7 +24,7 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
+from orchestrator.common.util import ContextFilterService
 
 class RemoveUser(FlowBase):
 
@@ -79,6 +79,13 @@ class RemoveUser(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                   SERVICE_ID,
+                                                   SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+
             #
             # 2. Get user ID
             #
@@ -106,4 +113,4 @@ class RemoveUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {}
+        return {}, SERVICE_NAME

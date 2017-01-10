@@ -158,7 +158,7 @@ def main():
                     ORION_HOST,
                     ORION_PORT)
 
-    res = flow.register_device(
+    res, service_name = flow.register_device(
         SERVICE_NAME,
         None,
         SUBSERVICE_NAME,

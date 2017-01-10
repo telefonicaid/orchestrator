@@ -79,7 +79,7 @@ def main():
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    roles = flow.roles(SERVICE_NAME,
+    roles, service_name = flow.roles(SERVICE_NAME,
                        None,
                        SERVICE_ADMIN_USER,
                        SERVICE_ADMIN_PASSWORD,

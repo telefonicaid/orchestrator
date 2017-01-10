@@ -142,7 +142,7 @@ class FlowBase(object):
             if res['code'] == 400 and len(ex.message) > 1 and \
                ex.message[1].startswith('SPASSWORD'):
                 res['error'] = ex.message[1]
-        return res
+        return res, None
 
 
     def get_endpoint_iot_module(self, iot_module):

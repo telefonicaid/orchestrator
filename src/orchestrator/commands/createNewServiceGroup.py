@@ -33,7 +33,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 sys.path.append("/var/env-orchestrator/lib/python2.6/site-packages/iotp-orchestrator")
 
 from settings.common import LOGGING
-from orchestrator.core.flow.createNewServiceGroup import CreateNewServiceGroup
+from orchestrator.core.flow import Groups
 from orchestrator.api import schemas
 
 try: logging.config.dictConfig(LOGGING)
@@ -90,11 +90,11 @@ def main():
         },
         schemas.json["GroupList"])
 
-    flow = CreateNewServiceGroup(KEYSTONE_PROTOCOL,
+    flow = Groups(KEYSTONE_PROTOCOL,
                                 KEYSTONE_HOST,
                                 KEYSTONE_PORT)
 
-    res = flow.createNewServiceGroup(
+    res, service_name = flow.createNewServiceGroup(
         SERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,

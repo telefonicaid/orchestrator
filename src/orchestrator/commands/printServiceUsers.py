@@ -80,7 +80,7 @@ def main():
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    users = flow.users(SERVICE_NAME,
+    users, service_name = flow.users(SERVICE_NAME,
                        None,
                        SERVICE_ADMIN_USER,
                        SERVICE_ADMIN_PASSWORD,

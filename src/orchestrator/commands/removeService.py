@@ -92,7 +92,7 @@ def main():
                    KEYPASS_HOST,
                    KEYPASS_PORT)
 
-    domain_detail = flow.delete_domain(None,
+    domain_detail, service_name = flow.delete_domain(None,
                                        SERVICE_NAME,
                                        DOMAIN_ADMIN_USER,
                                        DOMAIN_ADMIN_PASSWORD,

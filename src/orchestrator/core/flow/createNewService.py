@@ -339,4 +339,4 @@ class CreateNewService(FlowBase):
         return {
             "token": NEW_SERVICE_ADMIN_TOKEN,
             "id": ID_DOM1,
-        }
+        }, DOMAIN_NAME

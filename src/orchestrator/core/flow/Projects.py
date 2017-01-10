@@ -77,6 +77,12 @@ class Projects(FlowBase):
                                                      ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
 
@@ -91,10 +97,11 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return PROJECTS
+        return PROJECTS, DOMAIN_NAME
 
     def get_project(self,
                     DOMAIN_ID,
+                    DOMAIN_NAME,
                     PROJECT_ID,
                     ADMIN_USER,
                     ADMIN_PASSWORD,
@@ -106,6 +113,7 @@ class Projects(FlowBase):
 
         Params:
         - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
         - PROJECT_ID: id of project
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
@@ -115,6 +123,7 @@ class Projects(FlowBase):
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "PROJECT_ID": "%s" % PROJECT_ID,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
@@ -130,6 +139,12 @@ class Projects(FlowBase):
                                                  ADMIN_USER,
                                                  ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT = self.idm.getProject(ADMIN_TOKEN,
                                           PROJECT_ID)
@@ -149,7 +164,7 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return PROJECT
+        return PROJECT, DOMAIN_NAME
 
     def update_project(self,
                        DOMAIN_ID,
@@ -205,6 +220,12 @@ class Projects(FlowBase):
                                                      ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
                                                    DOMAIN_NAME,
@@ -225,7 +246,7 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return PROJECT
+        return PROJECT, DOMAIN_NAME
 
     def delete_project(self,
                        DOMAIN_ID,
@@ -346,7 +367,7 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return PROJECT
+        return PROJECT, DOMAIN_NAME
 
 
     def register_service(self,
@@ -755,7 +776,7 @@ class Projects(FlowBase):
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
-        return result
+        return result, DOMAIN_NAME
 
 
     def register_device(self,
@@ -1085,7 +1106,7 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DEVICE_ID
+        return DEVICE_ID, DOMAIN_NAME
 
 
     def register_devices(self,
@@ -1215,7 +1236,7 @@ class Projects(FlowBase):
             "devices": DEVICES_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DEVICES_ID
+        return DEVICES_ID, DOMAIN_NAME
 
     def unregister_device(self,
                         DOMAIN_NAME,
@@ -1310,7 +1331,7 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}
+        return {}, DOMAIN_NAME
 
 
     def activate_module(self,
@@ -1451,7 +1472,7 @@ class Projects(FlowBase):
             "subscriptionid": subscriptionid
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return subscriptionid
+        return subscriptionid, DOMAIN_NAME
 
     def deactivate_module(self,
                           DOMAIN_NAME,
@@ -1565,7 +1586,7 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return subscriptionid
+        return subscriptionid, DOMAIN_NAME
 
 
     def list_activated_modules(self,
@@ -1664,4 +1685,4 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return modules
+        return modules, DOMAIN_NAME
