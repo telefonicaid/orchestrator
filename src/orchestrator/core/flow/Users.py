@@ -115,7 +115,7 @@ class Users(FlowBase):
             "SERVICE_USERS": SERVICE_USERS,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return SERVICE_USERS, SERVICE_NAME
+        return SERVICE_USERS, SERVICE_NAME, None
 
 
     def user(self,
@@ -178,4 +178,4 @@ class Users(FlowBase):
             "DETAIL_USER": DETAIL_USER,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DETAIL_USER, SERVICE_NAME
+        return DETAIL_USER, SERVICE_NAME, None

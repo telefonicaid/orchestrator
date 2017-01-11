@@ -91,7 +91,7 @@ def main():
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    roles, service_name = flow.roles_assignments(
+    roles, service_name, subservice_name = flow.roles_assignments(
         None,
         SERVICE_NAME,
         None,

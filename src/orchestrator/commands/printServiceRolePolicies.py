@@ -96,7 +96,8 @@ def main():
                    KEYPASS_HOST,
                    KEYPASS_PORT)
 
-    policies, service_name = flow.getDomainRolePolicies(None,
+    policies, service_name, subservice_name = flow.getDomainRolePolicies(
+                                          None,
                                           SERVICE_NAME,
                                           SERVICE_ADMIN_USER,
                                           SERVICE_ADMIN_PASSWORD,

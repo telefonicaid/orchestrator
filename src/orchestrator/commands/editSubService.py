@@ -85,7 +85,7 @@ def main():
                     KEYSTONE_HOST,
                     KEYSTONE_PORT)
 
-    project_detail, service_name = flow.update_project(
+    project_detail, service_name, subservice_name = flow.update_project(
         None,
         SERVICE_NAME,
         None,

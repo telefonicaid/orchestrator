@@ -137,4 +137,4 @@ class CreateNewServiceRole(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": ID_ROLE}, SERVICE_NAME
+        return {"id": ID_ROLE}, SERVICE_NAME, None

@@ -303,7 +303,7 @@ class ServiceList_RESTView(APIView, IoTConf):
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if not service_id:
                 # Get all domains
-                result, service_name = flow.domains(
+                result, service_name, subservice_name = flow.domains(
                     request.DATA.get("DOMAIN_NAME", None),
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
@@ -311,7 +311,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                                      HTTP_X_AUTH_TOKEN))
             else:
                 # Get detail of one domains
-                result, service_name = flow.get_domain(
+                result, service_name, subservice_name = flow.get_domain(
                     request.DATA.get("DOMAIN_ID", service_id),
                     request.DATA.get("DOMAIN_NAME", None),
                     request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -354,7 +354,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.update_domain(
+            result, service_name, subservice_name = flow.update_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -409,7 +409,7 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.PERSEO_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.delete_domain(
+            result, service_name, subservice_name = flow.delete_domain(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -461,7 +461,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                     self.KEYPASS_PORT,
                                     CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.createNewService(
+            result, service_name, subservice_name = flow.createNewService(
                 request.DATA.get("DOMAIN_NAME", None),
                 request.DATA.get("DOMAIN_ADMIN_USER", None),
                 request.DATA.get("DOMAIN_ADMIN_PASSWORD", None),
@@ -519,7 +519,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if not subservice_id:
-                    result, service_name = flow.projects(
+                    result, service_name, subservice_name = flow.projects(
                         service_id,
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -528,7 +528,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                          HTTP_X_AUTH_TOKEN))
                 else:
                     # Get detail of subservice
-                    result, service_name = flow.get_project(
+                    result, service_name, subservice_name = flow.get_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -577,7 +577,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if subservice_id:
-                    result, service_name = flow.update_project(
+                    result, service_name, subservice_name = flow.update_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -641,7 +641,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
-                    result, service_name = flow.delete_project(
+                    result, service_name, subservice_name = flow.delete_project(
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -706,7 +706,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            result, service_name = flow.createNewSubService(
+            result, service_name, subservice_name = flow.createNewSubService(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -853,7 +853,7 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.removeUser(
+            result, service_name, subservice_name = flow.removeUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -893,7 +893,7 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.updateUser(
+            result, service_name, subservice_name = flow.updateUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -933,7 +933,7 @@ class User_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.user(
+            result, service_name, subservice_name = flow.user(
                                request.DATA.get("SERVICE_ID",  service_id),
                                request.DATA.get("SERVICE_NAME", None),
                                request.DATA.get("USER_ID", user_id),
@@ -973,7 +973,7 @@ class User_RESTView(APIView, IoTConf):
                               self.KEYSTONE_PORT,
                               CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.changeUserPassword(
+            result, service_name, subservice_name = flow.changeUserPassword(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("USER_ID", user_id),
@@ -1030,7 +1030,7 @@ class UserList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.users(
+            result, service_name, subservice_name = flow.users(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1071,7 +1071,7 @@ class UserList_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_PORT,
                                         CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.createNewServiceUser(
+            result, service_name, subservice_name = flow.createNewServiceUser(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1126,7 +1126,7 @@ class Group_RESTView(APIView, IoTConf):
                           self.KEYSTONE_PORT,
                           CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.removeGroup(
+            result, service_name, subservice_name = flow.removeGroup(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1166,7 +1166,7 @@ class Group_RESTView(APIView, IoTConf):
                           self.KEYSTONE_PORT,
                           CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.updateGroup(
+            result, service_name, subservice_name = flow.updateGroup(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1205,7 +1205,7 @@ class Group_RESTView(APIView, IoTConf):
                           self.KEYSTONE_PORT,
                           CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.group(
+            result, service_name, subservice_name = flow.group(
                                 request.DATA.get("SERVICE_ID",  service_id),
                                 request.DATA.get("SERVICE_NAME",  None),
                                 request.DATA.get("GROUP_ID", group_id),
@@ -1260,7 +1260,7 @@ class GroupList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.groups(
+            result, service_name, subservice_name = flow.groups(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1301,7 +1301,7 @@ class GroupList_RESTView(APIView, IoTConf):
                           self.KEYSTONE_PORT,
                           CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.createNewServiceGroup(
+            result, service_name, subservice_name = flow.createNewServiceGroup(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1358,7 +1358,7 @@ class Role_RESTView(APIView, IoTConf):
                            self.KEYPASS_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.getDomainRolePolicies(
+            result, service_name, subservice_name = flow.getDomainRolePolicies(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1406,7 +1406,7 @@ class Role_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            result, service_name = flow.setPolicyRole(
+            result, service_name, subservice_name = flow.setPolicyRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1454,7 +1454,7 @@ class Role_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            result, service_name = flow.removeRole(
+            result, service_name, subservice_name = flow.removeRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1512,7 +1512,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            result, service_name = flow.getPolicyFromRole(
+            result, service_name, subservice_name = flow.getPolicyFromRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1558,7 +1558,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            result, service_name = flow.removePolicyFromRole(
+            result, service_name, subservice_name = flow.removePolicyFromRole(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1613,7 +1613,7 @@ class RoleList_RESTView(APIView, IoTConf):
                                         self.KEYSTONE_PORT,
                                         CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.createNewServiceRole(
+            result, service_name, subservice_name = flow.createNewServiceRole(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1657,7 +1657,7 @@ class RoleList_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.roles(
+            result, service_name, subservice_name = flow.roles(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1712,7 +1712,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.roles_assignments(
+            result, service_name, subservice_name = flow.roles_assignments(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME",None),
                 request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -1767,7 +1767,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
-                    result, service_name = flow.assignInheritRoleServiceUser(
+                    result, service_name, subservice_name = flow.assignInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1779,7 +1779,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_USER_NAME", None),
                         request.DATA.get("SERVICE_USER_ID", user_id))
                 else:
-                    result, service_name = flow.assignRoleServiceUser(
+                    result, service_name, subservice_name = flow.assignRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1791,7 +1791,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_USER_NAME", None),
                         request.DATA.get("SERVICE_USER_ID", user_id))
             else:
-                result, service_name = flow.assignRoleSubServiceUser(
+                result, service_name, subservice_name = flow.assignRoleSubServiceUser(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
@@ -1845,7 +1845,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
-                    result, service_name = flow.revokeInheritRoleServiceUser(
+                    result, service_name, subservice_name = flow.revokeInheritRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1857,7 +1857,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_USER_NAME", None),
                         request.DATA.get("SERVICE_USER_ID", user_id))
                 else:
-                    result, service_name = flow.revokeRoleServiceUser(
+                    result, service_name, subservice_name = flow.revokeRoleServiceUser(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1869,7 +1869,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_USER_NAME", None),
                         request.DATA.get("SERVICE_USER_ID", user_id))
             else:
-                result, service_name = flow.revokeRoleSubServiceUser(
+                result, service_name, subservice_name = flow.revokeRoleSubServiceUser(
                     request.DATA.get("SERVICE_NAME"),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME"),
@@ -1927,7 +1927,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                          self.KEYSTONE_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_Name = flow.roles_assignments_groups(
+            result, service_name, subservice_name = flow.roles_assignments_groups(
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SERVICE_NAME",None),
                 request.DATA.get("SUBSERVICE_ID", subservice_id),
@@ -1982,7 +1982,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
-                    result, service_name = flow.assignInheritRoleServiceGroup(
+                    result, service_name, subservice_name = flow.assignInheritRoleServiceGroup(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -1994,7 +1994,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_GROUP_NAME", None),
                         request.DATA.get("SERVICE_GROUP_ID", group_id))
                 else:
-                    result, service_name = flow.assignRoleServiceGroup(
+                    result, service_name, subservice_name = flow.assignRoleServiceGroup(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -2006,7 +2006,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_GROUP_NAME", None),
                         request.DATA.get("SERVICE_GROUP_ID", group_id))
             else:
-                result, service_name = flow.assignRoleSubServiceGroup(
+                result, service_name, subservice_name = flow.assignRoleSubServiceGroup(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
@@ -2060,7 +2060,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
             if not (request.DATA.get("SUBSERVICE_NAME", None) or
                     request.DATA.get("SUBSERVICE_ID", subservice_id)):
                 if inherit:
-                    result, service_name = flow.revokeInheritRoleServiceGroup(
+                    result, service_name, subservice_name = flow.revokeInheritRoleServiceGroup(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -2072,7 +2072,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_GROUP_NAME", None),
                         request.DATA.get("SERVICE_GROUP_ID", group_id))
                 else:
-                    result, service_name = flow.revokeRoleServiceGroup(
+                    result, service_name, subservice_name = flow.revokeRoleServiceGroup(
                         request.DATA.get("SERVICE_NAME", None),
                         request.DATA.get("SERVICE_ID", service_id),
                         request.DATA.get("SERVICE_ADMIN_USER", None),
@@ -2084,7 +2084,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                         request.DATA.get("SERVICE_GROUP_NAME", None),
                         request.DATA.get("SERVICE_GROUP_ID", group_id))
             else:
-                result, service_name = flow.revokeRoleSubServiceGroup(
+                result, service_name, subservice_name = flow.revokeRoleSubServiceGroup(
                     request.DATA.get("SERVICE_NAME"),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME"),
@@ -2140,7 +2140,7 @@ class Trust_RESTView(APIView, IoTConf):
                                     self.KEYSTONE_PORT,
                                     CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.createTrustToken(
+            result, service_name, subservice_name = flow.createTrustToken(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -2212,7 +2212,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.CA_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.register_device(
+            result, service_name, subservice_name = flow.register_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -2280,7 +2280,7 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                             self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.unregister_device(
+            result, service_name, subservice_name = flow.unregister_device(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -2350,7 +2350,7 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                             self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.register_devices(
+            result, service_name, subservice_name = flow.register_devices(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -2420,7 +2420,7 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                             self.PERSEO_PORT,
                             CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.register_service(
+            result, service_name, subservice_name = flow.register_service(
                 request.DATA.get("SERVICE_NAME", None),
                 request.DATA.get("SERVICE_ID", service_id),
                 request.DATA.get("SUBSERVICE_NAME", None),
@@ -2501,7 +2501,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                modules, service_name = flow.list_activated_modules(
+                modules, service_name, subservice_name = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SERVICE_USER_NAME", None),
@@ -2529,7 +2529,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                modules, service_name = flow.list_activated_modules(
+                modules, service_name, subservice_name = flow.list_activated_modules(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
@@ -2590,7 +2590,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                sub, service_name = flow.activate_module(
+                sub, service_name, subservice_name = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SERVICE_USER_NAME", None),
@@ -2619,7 +2619,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                sub, service_name = flow.activate_module(
+                sub, service_name, subservice_name = flow.activate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
@@ -2681,7 +2681,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PORT,
                                CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                result, service_name = flow.deactivate_module(
+                result, service_name, subservice_name = flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SERVICE_USER_NAME", None),
@@ -2710,7 +2710,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PORT,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                result, service_name = flow.deactivate_module(
+                result, service_name, subservice_name = flow.deactivate_module(
                     request.DATA.get("SERVICE_NAME", None),
                     request.DATA.get("SERVICE_ID", service_id),
                     request.DATA.get("SUBSERVICE_NAME", None),
@@ -2881,7 +2881,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                            self.KEYSTONE_PORT,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name = flow.domains(
+            result, service_name, subservice_name = flow.domains(
                     "admin_domain",
                     request.DATA.get("SERVICE_ADMIN_USER", None),
                     request.DATA.get("SERVICE_ADMIN_PASSWORD", None),

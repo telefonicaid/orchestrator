@@ -114,7 +114,7 @@ class UpdateUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": USER_ID}, SERVICE_NAME
+        return {"id": USER_ID}, SERVICE_NAME, None
 
 
     def changeUserPassword(self,
@@ -202,4 +202,4 @@ class UpdateUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": USER_ID}, SERVICE_NAME
+        return {"id": USER_ID}, SERVICE_NAME, None
