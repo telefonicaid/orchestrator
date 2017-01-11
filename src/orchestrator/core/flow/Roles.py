@@ -663,7 +663,7 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
     def revokeRoleServiceUser(self,
                               SERVICE_NAME,
@@ -772,7 +772,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
     def revokeRoleSubServiceUser(self,
                                  SERVICE_NAME,
