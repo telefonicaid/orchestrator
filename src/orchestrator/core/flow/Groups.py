@@ -102,6 +102,10 @@ class Groups(FlowBase):
             "SERVICE_GROUPS": SERVICE_GROUPS,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return SERVICE_GROUPS, SERVICE_NAME, None
 
 
@@ -165,6 +169,10 @@ class Groups(FlowBase):
             "DETAIL_GROUP": DETAIL_GROUP,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DETAIL_GROUP, SERVICE_NAME, None
 
 
@@ -249,6 +257,9 @@ class Groups(FlowBase):
             "GROUP_ID": GROUP_ID,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return {"id": GROUP_ID}, SERVICE_NAME, None
 
@@ -335,6 +346,9 @@ class Groups(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
     def createNewServiceGroup(self,
@@ -416,5 +430,8 @@ class Groups(FlowBase):
             "ID_GROUP": "%s" % ID_GROUP,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return {"id": ID_GROUP}, SERVICE_NAME, None

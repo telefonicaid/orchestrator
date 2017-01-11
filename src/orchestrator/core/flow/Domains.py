@@ -81,6 +81,10 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DOMAINS, None, None
 
     def get_domain(self,
@@ -143,6 +147,10 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DOMAIN, DOMAIN_NAME, None
 
     def update_domain(self,
@@ -210,6 +218,10 @@ class Domains(FlowBase):
             "DOMAIN": DOMAIN
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DOMAIN, DOMAIN_NAME, None
 
     def delete_domain(self,
@@ -351,6 +363,10 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DOMAIN, DOMAIN_NAME, None
 
 
@@ -465,6 +481,10 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return policies, SERVICE_NAME, None
 
     def activate_module(self,
@@ -578,6 +598,10 @@ class Domains(FlowBase):
             "subscriptionid": subscriptionid
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return subscriptionid, DOMAIN_NAME, None
 
     def deactivate_module(self,
@@ -672,6 +696,9 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return subscriptionid, DOMAIN_NAME, None
 
 
@@ -748,5 +775,8 @@ class Domains(FlowBase):
             "modules": modules
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return modules, DOMAIN_NAME, None

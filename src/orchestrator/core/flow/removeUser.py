@@ -113,4 +113,7 @@ class RemoveUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
