@@ -93,7 +93,7 @@ def main():
                       KEYSTONE_HOST,
                       KEYSTONE_PORT)
 
-    res, service_name = flow.changeUserPassword(
+    res, service_name, subservice_name = flow.changeUserPassword(
         SERVICE_NAME,
         None,
         None,

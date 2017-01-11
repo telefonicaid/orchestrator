@@ -97,7 +97,7 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return PROJECTS, DOMAIN_NAME
+        return PROJECTS, DOMAIN_NAME, None
 
     def get_project(self,
                     DOMAIN_ID,
@@ -148,6 +148,12 @@ class Projects(FlowBase):
 
             PROJECT = self.idm.getProject(ADMIN_TOKEN,
                                           PROJECT_ID)
+
+            PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
+                                                       DOMAIN_ID,
+                                                       PROJECT_ID,
+                                                       None)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
             # PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
             #                                       DOMAIN_ID)
             # for project in PROJECTS:
@@ -164,7 +170,7 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return PROJECT, DOMAIN_NAME
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
     def update_project(self,
                        DOMAIN_ID,
@@ -230,6 +236,11 @@ class Projects(FlowBase):
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
+            PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
+                                                       DOMAIN_ID,
+                                                       PROJECT_ID,
+                                                       PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))            
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
                                              DOMAIN_ID,
@@ -246,7 +257,7 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return PROJECT, DOMAIN_NAME
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
     def delete_project(self,
                        DOMAIN_ID,
@@ -367,7 +378,7 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return PROJECT, DOMAIN_NAME
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
 
     def register_service(self,
@@ -776,7 +787,7 @@ class Projects(FlowBase):
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
-        return result, DOMAIN_NAME
+        return result, DOMAIN_NAME, PROJECT_NAME
 
 
     def register_device(self,
@@ -1106,7 +1117,7 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DEVICE_ID, DOMAIN_NAME
+        return DEVICE_ID, DOMAIN_NAME, PROJECT_NAME
 
 
     def register_devices(self,
@@ -1236,7 +1247,7 @@ class Projects(FlowBase):
             "devices": DEVICES_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DEVICES_ID, DOMAIN_NAME
+        return DEVICES_ID, DOMAIN_NAME, PROJECT_NAME
 
     def unregister_device(self,
                         DOMAIN_NAME,
@@ -1331,7 +1342,7 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, DOMAIN_NAME
+        return {}, DOMAIN_NAME, PROJECT_NAME
 
 
     def activate_module(self,
@@ -1472,7 +1483,7 @@ class Projects(FlowBase):
             "subscriptionid": subscriptionid
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return subscriptionid, DOMAIN_NAME
+        return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
     def deactivate_module(self,
                           DOMAIN_NAME,
@@ -1586,7 +1597,7 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return subscriptionid, DOMAIN_NAME
+        return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
 
     def list_activated_modules(self,
@@ -1685,4 +1696,4 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return modules, DOMAIN_NAME
+        return modules, DOMAIN_NAME, PROJECT_NAME

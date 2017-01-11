@@ -122,7 +122,7 @@ def main():
                             KEYPASS_HOST,
                             KEYPASS_PORT)
 
-    res, service_name = flow.createNewService(
+    res, service_name, subservice_name = flow.createNewService(
         DOMAIN_NAME,
         DOMAIN_ADMIN_USER,
         DOMAIN_ADMIN_PASSWORD,

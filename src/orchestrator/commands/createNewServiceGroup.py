@@ -94,7 +94,7 @@ def main():
                                 KEYSTONE_HOST,
                                 KEYSTONE_PORT)
 
-    res, service_name = flow.createNewServiceGroup(
+    res, service_name, subservice_name = flow.createNewServiceGroup(
         SERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,

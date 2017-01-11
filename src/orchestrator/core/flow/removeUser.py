@@ -113,4 +113,4 @@ class RemoveUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None

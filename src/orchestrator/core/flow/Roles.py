@@ -111,7 +111,7 @@ class Roles(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return ROLES, DOMAIN_NAME
+        return ROLES, DOMAIN_NAME, None
 
     def roles_assignments(self,
                           DOMAIN_ID,
@@ -296,7 +296,7 @@ class Roles(FlowBase):
             "role_assignments": role_assignments_expanded,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME
+        return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME, PROJECT_NAME
 
     def assignRoleServiceUser(self,
                               SERVICE_NAME,
@@ -425,7 +425,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
     def assignRoleSubServiceUser(self,
                                  SERVICE_NAME,
@@ -557,7 +557,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, SUBSERVICE_NAME
 
     def assignInheritRoleServiceUser(self,
                                      SERVICE_NAME,
@@ -896,7 +896,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, SUBSERVICE_NAME
 
     def revokeInheritRoleServiceUser(self,
                                      SERVICE_NAME,
@@ -1001,7 +1001,7 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def roles_assignments_groups(self,
@@ -1185,7 +1185,7 @@ class Roles(FlowBase):
             "role_assignments": role_assignments_expanded,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME
+        return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME, PROJECT_NAME
 
 
     def assignRoleServiceGroup(self,
@@ -1315,7 +1315,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def assignRoleSubServiceGroup(self,
@@ -1448,7 +1448,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, SUBSERVICE_NAME
 
 
     def assignInheritRoleServiceGroup(self,
@@ -1555,7 +1555,7 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def revokeRoleServiceGroup(self,
@@ -1665,7 +1665,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def revokeRoleSubServiceGroup(self,
@@ -1790,7 +1790,7 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, SUBSERVICE_NAME
 
     def revokeInheritRoleServiceGroup(self,
                                      SERVICE_NAME,
@@ -1895,7 +1895,7 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def removeRole(self,
@@ -1979,7 +1979,7 @@ class Roles(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
     def setPolicyRole(self,
                       SERVICE_NAME,
@@ -2084,7 +2084,7 @@ class Roles(FlowBase):
             self.logger.error(ex)
             return self.composeErrorCode(ex)
 
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def removePolicyFromRole(self,
@@ -2192,7 +2192,7 @@ class Roles(FlowBase):
             self.logger.error(ex)
             return self.composeErrorCode(ex)
 
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
 
     def getPolicyFromRole(self,
@@ -2299,4 +2299,4 @@ class Roles(FlowBase):
             self.logger.error(ex)
             return self.composeErrorCode(ex)
 
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None

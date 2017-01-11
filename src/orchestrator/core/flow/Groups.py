@@ -102,7 +102,7 @@ class Groups(FlowBase):
             "SERVICE_GROUPS": SERVICE_GROUPS,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return SERVICE_GROUPS, SERVICE_NAME
+        return SERVICE_GROUPS, SERVICE_NAME, None
 
 
     def group(self,
@@ -165,7 +165,7 @@ class Groups(FlowBase):
             "DETAIL_GROUP": DETAIL_GROUP,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DETAIL_GROUP, SERVICE_NAME
+        return DETAIL_GROUP, SERVICE_NAME, None
 
 
     def updateGroup(self,
@@ -250,7 +250,7 @@ class Groups(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": GROUP_ID}, SERVICE_NAME
+        return {"id": GROUP_ID}, SERVICE_NAME, None
 
 
     def removeGroup(self,
@@ -335,7 +335,7 @@ class Groups(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {}, SERVICE_NAME
+        return {}, SERVICE_NAME, None
 
     def createNewServiceGroup(self,
                              SERVICE_NAME,
@@ -417,4 +417,4 @@ class Groups(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": ID_GROUP}, SERVICE_NAME
+        return {"id": ID_GROUP}, SERVICE_NAME, None

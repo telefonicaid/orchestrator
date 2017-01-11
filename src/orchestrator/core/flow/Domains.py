@@ -81,7 +81,7 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return DOMAINS, None
+        return DOMAINS, None, None
 
     def get_domain(self,
                    DOMAIN_ID,
@@ -143,7 +143,7 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return DOMAIN, DOMAIN_NAME
+        return DOMAIN, DOMAIN_NAME, None
 
     def update_domain(self,
                       DOMAIN_ID,
@@ -210,7 +210,7 @@ class Domains(FlowBase):
             "DOMAIN": DOMAIN
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DOMAIN, DOMAIN_NAME
+        return DOMAIN, DOMAIN_NAME, None
 
     def delete_domain(self,
                       DOMAIN_ID,
@@ -351,7 +351,7 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return DOMAIN, DOMAIN_NAME
+        return DOMAIN, DOMAIN_NAME, None
 
 
     def getDomainRolePolicies(self,
@@ -465,7 +465,7 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return policies, SERVICE_NAME
+        return policies, SERVICE_NAME, None
 
     def activate_module(self,
                         DOMAIN_NAME,
@@ -578,7 +578,7 @@ class Domains(FlowBase):
             "subscriptionid": subscriptionid
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return subscriptionid, DOMAIN_NAME
+        return subscriptionid, DOMAIN_NAME, None
 
     def deactivate_module(self,
                           DOMAIN_NAME,
@@ -672,7 +672,7 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return subscriptionid, DOMAIN_NAME
+        return subscriptionid, DOMAIN_NAME, None
 
 
     def list_activated_modules(self,
@@ -749,4 +749,4 @@ class Domains(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return modules, DOMAIN_NAME
+        return modules, DOMAIN_NAME, None
