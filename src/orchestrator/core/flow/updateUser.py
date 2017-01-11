@@ -114,6 +114,9 @@ class UpdateUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {"id": USER_ID}, SERVICE_NAME, None
 
 
@@ -201,5 +204,8 @@ class UpdateUser(FlowBase):
             "USER_ID": USER_ID,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return {"id": USER_ID}, SERVICE_NAME, None

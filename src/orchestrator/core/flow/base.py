@@ -59,7 +59,7 @@ class FlowBase(object):
                  CA_PORT="9999",
                  PERSEO_PROTOCOL="http",
                  PERSEO_HOST="localhost",
-                 PERSEO_PORT="9090",                 
+                 PERSEO_PORT="9090",
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 
@@ -119,6 +119,14 @@ class FlowBase(object):
             # CA for Geolocation
             self.endpoints['CA'] = \
               CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
+
+        self.sum = {
+            "serviceTime": 0,
+            "outgoingTransactions": 0,
+            "outgoingTransactionRequestSize": 0,
+            "outgoingTransactionResponseSize": 0,
+            "outgoingTransacionError": 0,
+        }
 
 
     def composeErrorCode(self, ex):
@@ -236,3 +244,17 @@ class FlowBase(object):
                     "error": ex.message
                 }
         return token_extended
+
+    def collectComponentMetrics(self):
+        # self.idm
+        # self.ac
+        # self.iota
+        # self.cb
+        # self.perseo
+        sum = self.idm.IdMRestOperations.getOutgoingMetrics()
+        # TO DO: join all component results
+
+        self.sum = sum
+
+    def getFlowMetrics(self):
+        return self.sum

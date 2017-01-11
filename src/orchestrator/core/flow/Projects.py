@@ -97,6 +97,9 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return PROJECTS, DOMAIN_NAME, None
 
     def get_project(self,
@@ -170,6 +173,10 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
     def update_project(self,
@@ -240,7 +247,7 @@ class Projects(FlowBase):
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        PROJECT_NAME)
-            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))            
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
                                              DOMAIN_ID,
@@ -257,6 +264,10 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
     def delete_project(self,
@@ -378,6 +389,10 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
 
@@ -787,6 +802,10 @@ class Projects(FlowBase):
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return result, DOMAIN_NAME, PROJECT_NAME
 
 
@@ -1117,6 +1136,10 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DEVICE_ID, DOMAIN_NAME, PROJECT_NAME
 
 
@@ -1247,6 +1270,10 @@ class Projects(FlowBase):
             "devices": DEVICES_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return DEVICES_ID, DOMAIN_NAME, PROJECT_NAME
 
     def unregister_device(self,
@@ -1342,6 +1369,10 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, DOMAIN_NAME, PROJECT_NAME
 
 
@@ -1483,6 +1514,10 @@ class Projects(FlowBase):
             "subscriptionid": subscriptionid
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
     def deactivate_module(self,
@@ -1597,6 +1632,9 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
 
@@ -1695,5 +1733,8 @@ class Projects(FlowBase):
             "modules": modules
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return modules, DOMAIN_NAME, PROJECT_NAME

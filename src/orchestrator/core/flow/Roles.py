@@ -111,6 +111,9 @@ class Roles(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return ROLES, DOMAIN_NAME, None
 
     def roles_assignments(self,
@@ -296,6 +299,10 @@ class Roles(FlowBase):
             "role_assignments": role_assignments_expanded,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME, PROJECT_NAME
 
     def assignRoleServiceUser(self,
@@ -425,6 +432,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
     def assignRoleSubServiceUser(self,
@@ -557,6 +568,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
     def assignInheritRoleServiceUser(self,
@@ -663,6 +678,10 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
     def revokeRoleServiceUser(self,
@@ -772,6 +791,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
     def revokeRoleSubServiceUser(self,
@@ -896,6 +919,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
     def revokeInheritRoleServiceUser(self,
@@ -1001,6 +1028,10 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
 
@@ -1185,6 +1216,10 @@ class Roles(FlowBase):
             "role_assignments": role_assignments_expanded,
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME, PROJECT_NAME
 
 
@@ -1315,6 +1350,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
 
@@ -1448,6 +1487,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
 
@@ -1555,6 +1598,10 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
 
@@ -1665,6 +1712,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
 
@@ -1790,6 +1841,10 @@ class Roles(FlowBase):
             "ROLE_ID": "%s" % ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
     def revokeInheritRoleServiceGroup(self,
@@ -1895,6 +1950,10 @@ class Roles(FlowBase):
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
 
@@ -1978,6 +2037,9 @@ class Roles(FlowBase):
             "ROLE_ID": ROLE_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -2083,6 +2145,9 @@ class Roles(FlowBase):
         except Exception, ex:
             self.logger.error(ex)
             return self.composeErrorCode(ex)
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -2192,6 +2257,9 @@ class Roles(FlowBase):
             self.logger.error(ex)
             return self.composeErrorCode(ex)
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {}, SERVICE_NAME, None
 
 
@@ -2298,5 +2366,8 @@ class Roles(FlowBase):
         except Exception, ex:
             self.logger.error(ex)
             return self.composeErrorCode(ex)
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None

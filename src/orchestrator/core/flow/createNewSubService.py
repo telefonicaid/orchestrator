@@ -163,4 +163,7 @@ class CreateNewSubService(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {"id": ID_PRO1}, SERVICE_NAME, NEW_SUBSERVICE_NAME

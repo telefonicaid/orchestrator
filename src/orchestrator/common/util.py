@@ -28,6 +28,7 @@ import csv
 import StringIO
 import requests
 import logging
+import time
 
 class RestOperations(object):
     '''
@@ -61,6 +62,16 @@ class RestOperations(object):
         else:
             self.CORRELATOR_ID = None
 
+        self.service = {}
+        self.sum = {
+            "serviceTime": 0,
+            "outgoingTransactions": 0,
+            "outgoingTransactionRequestSize": 0,
+            "outgoingTransactionResponseSize": 0,
+            "outgoingTransacionError": 0,
+        }
+
+
 
     def rest_request(self, url, method, user=None, password=None,
                      data=None, json_data=True, relative_url=True,
@@ -71,6 +82,7 @@ class RestOperations(object):
         In case of HTTP error, the exception is returned normally instead of
         raised and, if JSON error data is present in the response, .msg will
         contain the error detail.'''
+        service_start = time.time()
         user = user or None
         password = password or None
 
@@ -149,10 +161,12 @@ class RestOperations(object):
             except Exception, e:
                 print e
         except urllib2.URLError, e:
+            data = None
             res = e
             res.code = 500
             res.msg = self.ENDPOINT_NAME + " endpoint ERROR: " + res.args[0][1]
 
+        self.collectOutgoingMetrics(service_start, request.data, data)
         return res
 
 
@@ -168,6 +182,7 @@ class RestOperations(object):
         Without SSL security
 
         '''
+        service_start = time.time()
         user = user or None
         password = password or None
         auth = None
@@ -234,7 +249,20 @@ class RestOperations(object):
         except Exception, e:
             print e
 
+        self.collectOutgoingMetrics(service_start, rdata, res)
         return res
+
+
+    def collectOutgoingMetrics(self, service_start, data_request, data_response):
+
+        service_stop = time.time()
+        self.sum["outgoingTransactions"] += 1
+        self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request))
+        self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response))
+        self.sum["serviceTime"] += (service_stop - service_start)
+
+    def getOutgoingMetrics(self):
+        return self.sum
 
 
 class CSVOperations(object):
@@ -298,13 +326,13 @@ class ContextFilterSubService(logging.Filter):
 
     def filter(self, record):
         record.subservice = self.subservice
-        return True        
+        return True
 
 
 class ContextFilterCorrelatorId(logging.Filter):
     """
     This is a filter which injects contextual information into the log.
-    """            
+    """
     def __init__(self, CORRELATOR_ID):
         self.CORRELATOR_ID = CORRELATOR_ID
 
