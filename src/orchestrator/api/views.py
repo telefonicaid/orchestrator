@@ -137,13 +137,6 @@ class Stats(object):
         "outgoingTransacionError": 0,
     }
 
-    # Metrics:
-    # incomingTransactions
-    # incomingTransactionRequestSize
-    # incomingTransactionResponseSize
-    # incomingTransacionError
-    # serviceTime
-
     def collectMetrics(self, service_start, service_name, subservice_name,
                        request, response, flow):
 
@@ -158,8 +151,6 @@ class Stats(object):
             "outgoingTransactionResponseSize": 0,
             "outgoingTransacionError": 0,
         }
-
-        # TODO: integrate flow (outgoing) metrics into results)
 
         if service_name and not service_name in self.service:
             self.service[service_name] = {
@@ -225,6 +216,22 @@ class Stats(object):
         self.sum["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
         self.sum["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
         self.sum["serviceTime"] += flow_metrics["serviceTime"]
+
+
+    def resetMetrics(self):
+        self.service = {}
+        self.sum = {
+            "incomingTransactions": 0,
+            "incomingTransactionRequestSize": 0,
+            "incomingTransactionResponseSize": 0,
+            "incomingTransacionError": 0,
+            "serviceTime": 0,
+            "outgoingTransactions": 0,
+            "outgoingTransactionRequestSize": 0,
+            "outgoingTransactionResponseSize": 0,
+            "outgoingTransacionError": 0,
+        }
+
 
 
 class IoTConf(Stats):
@@ -3005,14 +3012,15 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
-        reset = request.GET.get('reset1', None)
+        reset = request.GET.get('reset', None)
 
         try:
-            # TO DO
             result = {
-                "service" : self.service,
-                "sum" : self.sum
+                "service": self.service,
+                "sum": self.sum
             }
+            if reset:
+                self.resetMetrics()
 
             response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
@@ -3040,7 +3048,7 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 "service" : self.service,
                 "sum" : self.sum
             }
-            # TODO: reset stats
+            self.resetMetrics()
             response = Response(result, status=status.HTTP_204_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
