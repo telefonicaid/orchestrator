@@ -246,15 +246,13 @@ class FlowBase(object):
         return token_extended
 
     def collectComponentMetrics(self):
-        # self.idm
-        # self.ac
-        # self.iota
-        # self.cb
-        # self.perseo
-        sum = self.idm.IdMRestOperations.getOutgoingMetrics()
-        # TO DO: join all component results
-
-        self.sum = sum
+        all = []
+        all.append(self.idm.IdMRestOperations.getOutgoingMetrics())
+        all.append(self.ac.AccessControlRestOperations.getOutgoingMetrics())
+        all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
+        all.append(self.cb.CBRestOperations.getOutgoingMetrics())
+        all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
+        self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
 
     def getFlowMetrics(self):
         return self.sum
