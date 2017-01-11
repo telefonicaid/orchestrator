@@ -129,18 +129,19 @@ class Stats(object):
         "incomingTransactions": 0,
         "incomingTransactionRequestSize": 0,
         "incomingTransactionResponseSize": 0,
-        "incomingTransacionError": 0,
+        "incomingTransactionErrors": 0,
         "serviceTime": 0,
         "outgoingTransactions": 0,
         "outgoingTransactionRequestSize": 0,
         "outgoingTransactionResponseSize": 0,
-        "outgoingTransacionError": 0,
+        "outgoingTransactionErrors": 0,
     }
 
     def collectMetrics(self, service_start, service_name, subservice_name,
                        request, response, flow):
 
         service_stop = time.time()
+        transactionError = False
         if flow:
             flow_metrics = flow.getFlowMetrics()
         else:
@@ -149,7 +150,7 @@ class Stats(object):
             "outgoingTransactions": 0,
             "outgoingTransactionRequestSize": 0,
             "outgoingTransactionResponseSize": 0,
-            "outgoingTransacionError": 0,
+            "outgoingTransactionErrors": 0,
         }
 
         if service_name and not service_name in self.service:
@@ -158,12 +159,12 @@ class Stats(object):
                     "incomingTransactions": 0,
                     "incomingTransactionRequestSize": 0,
                     "incomingTransactionResponseSize": 0,
-                    "incomingTransacionError": 0,
+                    "incomingTransactionErrors": 0,
                     "serviceTime": 0,
                     "outgoingTransactions": 0,
                     "outgoingTransactionRequestSize": 0,
                     "outgoingTransactionResponseSize": 0,
-                    "ouggoingTransacionError": 0,
+                    "outgoingTransactionErrors": 0,
                 },
                 "subservs": {}
             }
@@ -174,18 +175,27 @@ class Stats(object):
                 "incomingTransactions": 0,
                 "incomingTransactionRequestSize": 0,
                 "incomingTransactionResponseSize": 0,
-                "incomingTransacionError": 0,
+                "incomingTransactionErrors": 0,
                 "serviceTime": 0,
                 "outgoingTransactions": 0,
                 "outgoingTransactionRequestSize": 0,
                 "outgoingTransactionResponseSize": 0,
-                "ouggoingTransacionError": 0,
+                "outgoingTransactionErrors": 0,
             }
+
+        # TODO:
+        # Analize "response"" to know if is a Response about an error or not
+        if response.status_code not in ["200", "201", "204"]:
+            # API error
+            transactionError = True
 
         if service_name:
             if subservice_name:
                 # Service and Subservice
-                self.service[service_name]["subservs"][subservice_name]["incomingTransactions"] += 1
+                if not transactionError:
+                    self.service[service_name]["subservs"][subservice_name]["incomingTransactions"] += 1
+                else:
+                    self.service[service_name]["subservs"][subservice_name]["incomingTransactionErrors"] += 1
                 self.service[service_name]["subservs"][subservice_name]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
                 self.service[service_name]["subservs"][subservice_name]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
                 self.service[service_name]["subservs"][subservice_name]["serviceTime"] += (service_stop - service_start)
@@ -193,28 +203,37 @@ class Stats(object):
                 self.service[service_name]["subservs"][subservice_name]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
                 self.service[service_name]["subservs"][subservice_name]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
                 self.service[service_name]["subservs"][subservice_name]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
+                self.service[service_name]["subservs"][subservice_name]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
                 self.service[service_name]["subservs"][subservice_name]["serviceTime"] += flow_metrics["serviceTime"]
 
 
 
             # Service
-            self.service[service_name]["sum"]["incomingTransactions"] += 1
+            if not transactionError:
+                self.service[service_name]["sum"]["incomingTransactions"] += 1
+            else:
+                self.service[service_name]["sum"]["incomingTransactionErrors"] += 1
             self.service[service_name]["sum"]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
             self.service[service_name]["sum"]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
             self.service[service_name]["sum"]["serviceTime"] += (service_stop - service_start)
             self.service[service_name]["sum"]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
             self.service[service_name]["sum"]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
             self.service[service_name]["sum"]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
+            self.service[service_name]["sum"]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
             self.service[service_name]["sum"]["serviceTime"] += flow_metrics["serviceTime"]
 
         # Sum
-        self.sum["incomingTransactions"] += 1
+        if not transactionError:
+            self.sum["incomingTransactions"] += 1
+        else:
+            self.sum["incomingTransactionErrors"] += 1
         self.sum["incomingTransactionRequestSize"] += len(json.dumps(request.data))
         self.sum["incomingTransactionResponseSize"] += len(json.dumps(response.data))
         self.sum["serviceTime"] += (service_stop - service_start)
         self.sum["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
         self.sum["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
         self.sum["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
+        self.sum["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
         self.sum["serviceTime"] += flow_metrics["serviceTime"]
 
 
@@ -224,12 +243,12 @@ class Stats(object):
             "incomingTransactions": 0,
             "incomingTransactionRequestSize": 0,
             "incomingTransactionResponseSize": 0,
-            "incomingTransacionError": 0,
+            "incomingTransactionErrors": 0,
             "serviceTime": 0,
             "outgoingTransactions": 0,
             "outgoingTransactionRequestSize": 0,
             "outgoingTransactionResponseSize": 0,
-            "outgoingTransacionError": 0,
+            "outgoingTransactionErrors": 0,
         }
 
 
