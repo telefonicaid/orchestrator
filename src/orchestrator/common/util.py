@@ -254,12 +254,14 @@ class RestOperations(object):
 
 
     def collectOutgoingMetrics(self, service_start, data_request, data_response):
-
-        service_stop = time.time()
-        self.sum["outgoingTransactions"] += 1
-        self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request))
-        self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response))
-        self.sum["serviceTime"] += (service_stop - service_start)
+        try:
+            service_stop = time.time()
+            self.sum["outgoingTransactions"] += 1
+            self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request))
+            self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response))
+            self.sum["serviceTime"] += (service_stop - service_start)
+        except Exception, ex:
+            self.logger.error("ERROR collecting outgoing metrics %s", ex)
 
     def getOutgoingMetrics(self):
         return self.sum

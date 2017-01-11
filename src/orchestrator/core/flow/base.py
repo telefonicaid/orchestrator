@@ -247,12 +247,15 @@ class FlowBase(object):
 
     def collectComponentMetrics(self):
         all = []
-        all.append(self.idm.IdMRestOperations.getOutgoingMetrics())
-        all.append(self.ac.AccessControlRestOperations.getOutgoingMetrics())
-        all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
-        all.append(self.cb.CBRestOperations.getOutgoingMetrics())
-        all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
-        self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
+        try:
+            all.append(self.idm.IdMRestOperations.getOutgoingMetrics())
+            all.append(self.ac.AccessControlRestOperations.getOutgoingMetrics())
+            all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
+            all.append(self.cb.CBRestOperations.getOutgoingMetrics())
+            all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
+            self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
+        except Exception, ex:
+            self.logger.error("ERROR collecting component metrics %s", ex)
 
     def getFlowMetrics(self):
         return self.sum
