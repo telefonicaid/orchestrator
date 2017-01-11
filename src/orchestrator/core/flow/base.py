@@ -125,7 +125,7 @@ class FlowBase(object):
             "outgoingTransactions": 0,
             "outgoingTransactionRequestSize": 0,
             "outgoingTransactionResponseSize": 0,
-            "outgoingTransacionError": 0,
+            "outgoingTransactionErrors": 0,
         }
 
 
