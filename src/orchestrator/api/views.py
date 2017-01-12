@@ -185,7 +185,7 @@ class Stats(object):
 
         # TODO:
         # Analize "response"" to know if is a Response about an error or not
-        if response.status_code not in ["200", "201", "204"]:
+        if response.status_code not in [200, 201, 204]:
             # API error
             transactionError = True
 
