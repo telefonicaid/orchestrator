@@ -977,3 +977,55 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
       {
          "level": "DEBUG"
       }
+
+## Metrics [/v1.0/admin/metrics]
+
+### Get current metrics [GET]
++ Parameters
+  + reset (optional, `string`) ... ["true", "false"]
++ Response 200 (application/json)
+    + Body
+       {
+          "service": {
+            "service1": {
+                "subservs": {
+                    "subserv1": {},
+                    "subserv2": {}
+                },
+                "sum": {}
+            },
+            "service2": {
+               "subservs": {
+                   "subserv1": {},
+                   "subserv2": {}
+                },
+                "sum": {}
+            }
+          },
+          "sum": {}
+       }
+
+
+### Reset current metrics [DELETE]
++ Parameters
++ Response 204 (application/json)
+    + Body
+       {
+          "service": {
+            "service1": {
+                "subservs": {
+                    "subserv1": {},
+                    "subserv2": {}
+                },
+                "sum": {}
+            },
+            "service2": {
+               "subservs": {
+                   "subserv1": {},
+                   "subserv2": {}
+                },
+                "sum": {}
+            }
+          },
+          "sum": {}
+       }
