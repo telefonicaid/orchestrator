@@ -30,6 +30,7 @@ import requests
 import logging
 import time
 
+
 class RestOperations(object):
     '''
        IoT IdM (keystone + keypass)
@@ -61,6 +62,10 @@ class RestOperations(object):
             self.CORRELATOR_ID = CORRELATOR_ID
         else:
             self.CORRELATOR_ID = None
+
+        self.logger = logging.getLogger('orchestrator_core')
+        self.logger.addFilter(ContextFilterCorrelatorId(self.CORRELATOR_ID))
+        self.logger.addFilter(ContextFilterTransactionId(self.TRANSACTION_ID))
 
         self.service = {}
         self.sum = {
@@ -166,7 +171,7 @@ class RestOperations(object):
             res.code = 500
             res.msg = self.ENDPOINT_NAME + " endpoint ERROR: " + res.args[0][1]
 
-        self.collectOutgoingMetrics(service_start, request.data, data)
+        self.collectOutgoingMetrics(service_start, request.data, res)
         return res
 
 
@@ -253,12 +258,17 @@ class RestOperations(object):
         return res
 
 
-    def collectOutgoingMetrics(self, service_start, data_request, data_response):
+    def collectOutgoingMetrics(self, service_start, data_request, response):
         try:
             service_stop = time.time()
-            # TODO: check if data_response is an error or not
-            self.sum["outgoingTransactions"] += 1
-            self.sum["outgoingTransactionErrors"] += 0
+            transactionError = False
+            if response.code not in [200, 201, 204]:
+                transactionError = True
+            data_response = response.msg
+            if transactionError:
+                self.sum["outgoingTransactions"] += 1
+            else:
+                self.sum["outgoingTransactionErrors"] += 1
             self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request))
             self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response))
             self.sum["serviceTime"] += (service_stop - service_start)
