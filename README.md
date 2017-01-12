@@ -21,7 +21,7 @@ A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.ine
 - Assign/unassign roles to users in a service
 - Create/List Trust Tokens
 - Activate / deactivate IoT Modules
-- Retrieve statistics about API usage
+- Retrieve statistics and metrics about API usage
 
 Orchestrator is based mainly on:
 - Python
