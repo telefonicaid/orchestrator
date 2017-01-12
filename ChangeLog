@@ -3,7 +3,8 @@ CHANGES
 
 1.5.0
 
-FEATURE: Support keystone groups in a Service, including role assignments
+FEATURE: Metrics API [#58]
+FEATURE: Support keystone groups in a Service, including role assignments [#56]
 
 
 1.4.2
