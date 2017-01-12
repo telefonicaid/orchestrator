@@ -3029,9 +3029,8 @@ class OrchMetrics_RESTView(APIView, IoTConf):
     def get(self, request):
         service_start = time.time()
         response = service_name = subservice_name = flow = None
-        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
-        reset = request.GET.get('reset', None)
+        reset = request.GET.get('reset', False) == "true"
 
         try:
             result = {
@@ -3059,7 +3058,6 @@ class OrchMetrics_RESTView(APIView, IoTConf):
     def delete(self, request):
         service_start = time.time()
         response = service_name = subservice_name = flow = None
-        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
 
         try:
