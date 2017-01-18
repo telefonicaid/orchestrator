@@ -122,6 +122,7 @@ class FlowBase(object):
 
         self.sum = {
             "serviceTime": 0,
+            "serviceTimeTotal": 0,
             "outgoingTransactions": 0,
             "outgoingTransactionRequestSize": 0,
             "outgoingTransactionResponseSize": 0,
