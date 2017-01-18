@@ -70,6 +70,7 @@ class RestOperations(object):
         self.service = {}
         self.sum = {
             "serviceTime": 0,
+            "serviceTimeTotal": 0,
             "outgoingTransactions": 0,
             "outgoingTransactionRequestSize": 0,
             "outgoingTransactionResponseSize": 0,
@@ -271,7 +272,7 @@ class RestOperations(object):
                 self.sum["outgoingTransactionErrors"] += 1
             self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request))
             self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response))
-            self.sum["serviceTime"] += (service_stop - service_start)
+            self.sum["serviceTimeTotal"] += (service_stop - service_start)
         except Exception, ex:
             self.logger.error("ERROR collecting outgoing metrics %s", ex)
 
