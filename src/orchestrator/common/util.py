@@ -172,7 +172,7 @@ class RestOperations(object):
             res.code = 500
             res.msg = self.ENDPOINT_NAME + " endpoint ERROR: " + res.args[0][1]
 
-        self.collectOutgoingMetrics(service_start, request.data, res)
+        self.collectOutgoingMetrics(service_start, request.data, request.headers, res)
         return res
 
 
@@ -255,11 +255,11 @@ class RestOperations(object):
         except Exception, e:
             print e
 
-        self.collectOutgoingMetrics(service_start, rdata, res)
+        self.collectOutgoingMetrics(service_start, rdata, headers, res)
         return res
 
 
-    def collectOutgoingMetrics(self, service_start, data_request, response):
+    def collectOutgoingMetrics(self, service_start, data_request, headers_request, response):
         try:
             service_stop = time.time()
             transactionError = False
@@ -270,8 +270,8 @@ class RestOperations(object):
                 self.sum["outgoingTransactions"] += 1
             else:
                 self.sum["outgoingTransactionErrors"] += 1
-            self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request))
-            self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response))
+            self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request)) + len(str(headers_request))
+            self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response)) + len(str(response.headers.headers))
             self.sum["serviceTimeTotal"] += (service_stop - service_start)
         except Exception, ex:
             self.logger.error("ERROR collecting outgoing metrics %s", ex)
