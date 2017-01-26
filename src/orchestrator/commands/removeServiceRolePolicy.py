@@ -100,7 +100,7 @@ def main():
                  KEYPASS_HOST,
                  KEYPASS_PORT)                                  
 
-    role_detail = flow.removePolicyFromRole(
+    role_detail, service_name, subservice_name = flow.removePolicyFromRole(
                                   SERVICE_NAME,
                                   None,
                                   SERVICE_ADMIN_USER,

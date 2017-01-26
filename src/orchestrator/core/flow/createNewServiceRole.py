@@ -88,7 +88,6 @@ class CreateNewServiceRole(FlowBase):
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
-
             self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
             #
@@ -138,4 +137,7 @@ class CreateNewServiceRole(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": ID_ROLE}
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return {"id": ID_ROLE}, SERVICE_NAME, None

@@ -83,7 +83,8 @@ def main():
                  KEYSTONE_HOST,
                  KEYSTONE_PORT)
 
-    role_detail = flow.removeRole(SERVICE_NAME,
+    role_detail, service_name, subservice_name = flow.removeRole(
+                                  SERVICE_NAME,
                                   None,
                                   SERVICE_ADMIN_USER,
                                   SERVICE_ADMIN_PASSWORD,

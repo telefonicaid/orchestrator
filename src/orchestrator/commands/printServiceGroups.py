@@ -80,7 +80,8 @@ def main():
                   KEYSTONE_HOST,
                   KEYSTONE_PORT)
 
-    groups = flow.groups(SERVICE_NAME,
+    groups, service_name, subservice_name = flow.groups(
+                         SERVICE_NAME,
                          None,
                          SERVICE_ADMIN_USER,
                          SERVICE_ADMIN_PASSWORD,

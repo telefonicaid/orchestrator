@@ -105,7 +105,7 @@ def main():
                                 KEYPASS_HOST,
                                 KEYPASS_PORT)
 
-    res = flow.createNewServiceRole(
+    res, service_name, subservice_name = flow.createNewServiceRole(
         None,
         SERVICE_NAME,
         SERVICE_ADMIN_USER,

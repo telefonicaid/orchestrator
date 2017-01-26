@@ -97,7 +97,7 @@ def main():
                                 KEYSTONE_HOST,
                                 KEYSTONE_PORT)
 
-    res = flow.createNewServiceUser(
+    res, service_name, subservice_name = flow.createNewServiceUser(
         SERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,

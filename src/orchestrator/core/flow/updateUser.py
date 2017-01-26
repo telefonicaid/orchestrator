@@ -24,7 +24,7 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
+from orchestrator.common.util import ContextFilterService
 
 class UpdateUser(FlowBase):
 
@@ -82,6 +82,13 @@ class UpdateUser(FlowBase):
                         SERVICE_ADMIN_PASSWORD)
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
+
             #
             # 2. Get user ID
             #
@@ -107,7 +114,10 @@ class UpdateUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": USER_ID}
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return {"id": USER_ID}, SERVICE_NAME, None
 
 
     def changeUserPassword(self,
@@ -164,6 +174,12 @@ class UpdateUser(FlowBase):
                         SCOPED=False)
             self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
+            # Ensure SERVICE_NAME
+            SERVICE_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+                                                    SERVICE_ID,
+                                                    SERVICE_NAME)
+            self.logger.addFilter(ContextFilterService(SERVICE_NAME))
+            self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
             #
             # 2. Get user ID
             #
@@ -189,4 +205,7 @@ class UpdateUser(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return {"id": USER_ID}
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return {"id": USER_ID}, SERVICE_NAME, None
