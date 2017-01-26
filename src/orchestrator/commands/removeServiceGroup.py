@@ -83,7 +83,8 @@ def main():
                   KEYSTONE_HOST,
                   KEYSTONE_PORT)
 
-    group_detail = flow.removeUser(SERVICE_NAME,
+    group_detail, service_name, subservice_name = flow.removeUser(
+                                  SERVICE_NAME,
                                   None,
                                   SERVICE_ADMIN_USER,
                                   SERVICE_ADMIN_PASSWORD,

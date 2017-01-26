@@ -3259,7 +3259,49 @@ class Test_LogLevel_RestView(object):
         assert res.code == 400, (res.code, res.msg, res.raw_json)
 
 
+class Test_Metrics_RestView(object):
 
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_get_metrics_ok(self):
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/admin/metrics",
+                                            json_data=True,
+                                            auth_token=None,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert "service" in json_body_response
+        assert "sum" in json_body_response
+        
+    def test_get_and_reset_metrics_ok(self):
+        res = self.TestRestOps.rest_request(method="GET",
+                                            url="/v1.0/admin/metrics?reset=true",
+                                            json_data=True,
+                                            auth_token=None,
+                                            data=None)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        response = res.read()
+        json_body_response = json.loads(response)        
+        assert "service" in json_body_response
+        assert "sum" in json_body_response
+
+    def test_reset_metrics_ok(self):
+        res = self.TestRestOps.rest_request(method="DELETE",
+                                            url="/v1.0/admin/metrics",
+                                            json_data=True,
+                                            auth_token=None,
+                                            data=None)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)                
+        response = res.read()
+        json_body_response = json.loads(response)
+        assert "service" in json_body_response
+        assert "sum" in json_body_response
 
 
 if __name__ == '__main__':
@@ -3401,3 +3443,8 @@ if __name__ == '__main__':
     test_LogLevel = Test_LogLevel_RestView()
     test_LogLevel.test_change_log_level_ok()
     test_LogLevel.test_change_log_level_bad()
+
+    test_Metrics = Test_Metrics_RestView()
+    test_Metrics.test_get_metrics_ok()
+    test_Metrics.test_get_and_reset_metrics_ok()
+    test_Metrics.test_reset_metrics_ok()

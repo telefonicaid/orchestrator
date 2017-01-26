@@ -336,7 +336,10 @@ class CreateNewService(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
         return {
             "token": NEW_SERVICE_ADMIN_TOKEN,
             "id": ID_DOM1,
-        }
+        }, DOMAIN_NAME, None

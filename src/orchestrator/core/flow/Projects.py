@@ -77,6 +77,12 @@ class Projects(FlowBase):
                                                      ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
             PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
                                                   DOMAIN_ID)
 
@@ -91,10 +97,14 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return PROJECTS
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return PROJECTS, DOMAIN_NAME, None
 
     def get_project(self,
                     DOMAIN_ID,
+                    DOMAIN_NAME,
                     PROJECT_ID,
                     ADMIN_USER,
                     ADMIN_PASSWORD,
@@ -106,6 +116,7 @@ class Projects(FlowBase):
 
         Params:
         - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
         - PROJECT_ID: id of project
         - SERVICE_ADMIN_USER: Service admin username
         - SERVICE_ADMIN_PASSWORD: Service admin password
@@ -115,6 +126,7 @@ class Projects(FlowBase):
         '''
         data_log = {
             "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "PROJECT_ID": "%s" % PROJECT_ID,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
@@ -131,8 +143,20 @@ class Projects(FlowBase):
                                                  ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
             PROJECT = self.idm.getProject(ADMIN_TOKEN,
                                           PROJECT_ID)
+
+            PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
+                                                       DOMAIN_ID,
+                                                       PROJECT_ID,
+                                                       None)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
             # PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
             #                                       DOMAIN_ID)
             # for project in PROJECTS:
@@ -149,7 +173,11 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return PROJECT
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
     def update_project(self,
                        DOMAIN_ID,
@@ -205,10 +233,21 @@ class Projects(FlowBase):
                                                      ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
             if not PROJECT_ID:
                 PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
                                                    DOMAIN_NAME,
                                                    PROJECT_NAME)
+            PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
+                                                       DOMAIN_ID,
+                                                       PROJECT_ID,
+                                                       PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
             PROJECT = self.idm.updateProject(ADMIN_TOKEN,
                                              DOMAIN_ID,
@@ -225,7 +264,11 @@ class Projects(FlowBase):
             "PROJECT": PROJECT
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return PROJECT
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
     def delete_project(self,
                        DOMAIN_ID,
@@ -346,7 +389,11 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
-        return PROJECT
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
 
     def register_service(self,
@@ -755,7 +802,11 @@ class Projects(FlowBase):
             "subscriptionid_sth": subscriptionid_sth,
             "subscriptionid_perseo": subscriptionid_perseo
         }
-        return result
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return result, DOMAIN_NAME, PROJECT_NAME
 
 
     def register_device(self,
@@ -1085,7 +1136,11 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DEVICE_ID
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return DEVICE_ID, DOMAIN_NAME, PROJECT_NAME
 
 
     def register_devices(self,
@@ -1215,7 +1270,11 @@ class Projects(FlowBase):
             "devices": DEVICES_ID
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return DEVICES_ID
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return DEVICES_ID, DOMAIN_NAME, PROJECT_NAME
 
     def unregister_device(self,
                         DOMAIN_NAME,
@@ -1310,7 +1369,11 @@ class Projects(FlowBase):
 
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return {}
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return {}, DOMAIN_NAME, PROJECT_NAME
 
 
     def activate_module(self,
@@ -1451,7 +1514,11 @@ class Projects(FlowBase):
             "subscriptionid": subscriptionid
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
-        return subscriptionid
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
     def deactivate_module(self,
                           DOMAIN_NAME,
@@ -1565,7 +1632,10 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return subscriptionid
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
 
     def list_activated_modules(self,
@@ -1664,4 +1734,7 @@ class Projects(FlowBase):
         }
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
-        return modules
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return modules, DOMAIN_NAME, PROJECT_NAME

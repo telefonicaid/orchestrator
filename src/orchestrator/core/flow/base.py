@@ -59,7 +59,7 @@ class FlowBase(object):
                  CA_PORT="9999",
                  PERSEO_PROTOCOL="http",
                  PERSEO_HOST="localhost",
-                 PERSEO_PORT="9090",                 
+                 PERSEO_PORT="9090",
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 
@@ -120,6 +120,15 @@ class FlowBase(object):
             self.endpoints['CA'] = \
               CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
 
+        self.sum = {
+            "serviceTime": 0,
+            "serviceTimeTotal": 0,
+            "outgoingTransactions": 0,
+            "outgoingTransactionRequestSize": 0,
+            "outgoingTransactionResponseSize": 0,
+            "outgoingTransactionErrors": 0,
+        }
+
 
     def composeErrorCode(self, ex):
         '''
@@ -142,7 +151,7 @@ class FlowBase(object):
             if res['code'] == 400 and len(ex.message) > 1 and \
                ex.message[1].startswith('SPASSWORD'):
                 res['error'] = ex.message[1]
-        return res
+        return res, None, None
 
 
     def get_endpoint_iot_module(self, iot_module):
@@ -236,3 +245,18 @@ class FlowBase(object):
                     "error": ex.message
                 }
         return token_extended
+
+    def collectComponentMetrics(self):
+        all = []
+        try:
+            all.append(self.idm.IdMRestOperations.getOutgoingMetrics())
+            all.append(self.ac.AccessControlRestOperations.getOutgoingMetrics())
+            all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
+            all.append(self.cb.CBRestOperations.getOutgoingMetrics())
+            all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
+            self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
+        except Exception, ex:
+            self.logger.error("ERROR collecting component metrics %s", ex)
+
+    def getFlowMetrics(self):
+        return self.sum

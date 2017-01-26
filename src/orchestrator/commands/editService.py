@@ -83,7 +83,7 @@ def main():
                             KEYSTONE_HOST,
                             KEYSTONE_PORT)
 
-    domain_detail = flow.update_domain(
+    domain_detail, service_name, subservice_name = flow.update_domain(
         None,
         SERVICE_NAME,
         DOMAIN_ADMIN_USER,

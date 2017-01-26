@@ -99,7 +99,7 @@ def main():
 
     USER_DATA_VALUE = {"password": NEW_USER_PASSWORD}
 
-    res = flow.updateUser(
+    res, service_name, subservice_name = flow.updateUser(
         SERVICE_NAME,
         None,
         SERVICE_ADMIN_USER,
