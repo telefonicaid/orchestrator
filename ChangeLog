@@ -5,6 +5,7 @@ CHANGES
 
 FEATURE: Metrics API [#58]
 FEATURE: Support keystone groups in a Service, including role assignments [#56]
+FIX: Add pagination to list orion subscriptions [#37]
 
 
 1.4.2
