@@ -283,33 +283,41 @@ class CBOrionOperations(object):
             SUBSERVICE_NAME,
             ENTITY_ID)
         )
-
-        res = self.CBRestOperations.rest_request(
-            url='/v2/subscriptions?offset=0&limit=1000',
-            method='GET',
-            data=None,
-            auth_token=SERVICE_USER_TOKEN,
-            fiware_service=SERVICE_NAME,
-            fiware_service_path='/'+SUBSERVICE_NAME)
-
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
+        offset = 0
+        page = 40
+        fiware_total_count = page
         subscriptions_related = []
 
-        # ensure subcrtiptions is an array
-        if isinstance(json_body_response, list):
-            for subscription in json_body_response:
-                for entity in subscription['subject']['entities']:
-                    if ( ((not 'idPattern' in entity) or
-                          ('idPattern' in entity and not entity['idPattern'])) and
-                         entity['id'] == ENTITY_ID):
-                        subscriptions_related.append(subscription)
-                    if ('idPattern' in entity and entity['idPattern'] and
-                        entity['idPattern'] in [".*", "*"]):
-                        subscriptions_related.append(subscription)
+        while (offset + page <= fiware_total_count):
+            url='/v2/subscriptions?offset=%s&limit=%s&options=count' % (offset, page)
+            res = self.CBRestOperations.rest_request(
+                url=url,
+                method='GET',
+                data=None,
+                auth_token=SERVICE_USER_TOKEN,
+                fiware_service=SERVICE_NAME,
+                fiware_service_path='/'+SUBSERVICE_NAME)
+
+            assert res.code == 200, (res.code, res.msg)
+            data = res.read()
+            json_body_response = json.loads(data)
+            logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                          indent=3))
+
+            # ensure subcrtiptions is an array
+            if isinstance(json_body_response, list):
+                for subscription in json_body_response:
+                    for entity in subscription['subject']['entities']:
+                        if ( ((not 'idPattern' in entity) or
+                              ('idPattern' in entity and not entity['idPattern'])) and
+                             entity['id'] == ENTITY_ID):
+                            subscriptions_related.append(subscription)
+                        if ('idPattern' in entity and entity['idPattern'] and
+                            entity['idPattern'] in [".*", "*"]):
+                            subscriptions_related.append(subscription)
+
+            fiware_total_count = int(res.headers.get('Fiware-Total-Count', 0))
+            offset += page
 
         return subscriptions_related
 
