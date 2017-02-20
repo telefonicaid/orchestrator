@@ -1,14 +1,26 @@
 CHANGES
 =======
 
+1.4.3
+
+FIX: Add pagination to list orion subscriptions [#37]
+
+
+1.4.2
+
+FEATURE: get_version_string extended to include release information
+
+
 1.4.1
 
 FIX: django trace logs
+
 
 1.4.0
 
 FEATURE: Remove perseo rules when service or subservice is deleted - issue 24
 FIX: Notifypath not handled by docker orchestrator conf - issue 42
+
 
 1.3.0
 
