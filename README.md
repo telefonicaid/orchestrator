@@ -18,6 +18,7 @@ A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.ine
 - Create/List/Update/Delete subservices
 - Create/List/Update/Delete users in a service
 - Create/List/Update/Delete roles in a service
+- Create/List/Update/Delete groups in a service
 - Assign/unassign roles to users in a service
 - Create/List Trust Tokens
 - Activate / deactivate IoT Modules
