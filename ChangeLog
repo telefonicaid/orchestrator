@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+
+1.5.1
+
+FIX: set dependencies version to a fix version
+
 1.5.0
 
 FEATURE: Metrics API [#58]
