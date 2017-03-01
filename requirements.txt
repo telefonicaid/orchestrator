@@ -1,7 +1,7 @@
-Django==1.6.10
-djangorestframework==3.0.3
-httplib2
-simplejson
-jsonschema
+Django==1.6.11
+djangorestframework==3.0.5
+httplib2==0.9.2
+simplejson==3.6.5
+jsonschema==2.5.1
 uwsgi==2.0.10
-requests
+requests==2.6.1

@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+
+1.4.4
+FIX: Fix dependencies version to a fixed version
+
 1.4.3
 
 FIX: Add pagination to list orion subscriptions [#37]
