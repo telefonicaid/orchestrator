@@ -1,4 +1,4 @@
-Orchestrator Tests:
+# Orchestrator Tests:
 
 
 - [Unit Tests](./src/tests/core/test_idm.py)
@@ -22,5 +22,5 @@ Run scripts tests with:
         $ python ./test_commands.py
 ```
 
-There is a config file to run Unit Tests into Travis CI service:
+There is a config file to run Orchestrator build into Travis CI service:
 [Travis conf file](.travis.yml)
