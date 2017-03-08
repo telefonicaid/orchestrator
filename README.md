@@ -10,7 +10,7 @@
 Orchestrator tries to group all provision operations for IoT platform that tipically implies several steps or several systems interaction.
 Orchestrator exposes an API and provide scripts commands to perform all these operations. Script commands simplifies the inherent usage of keystone, such as usage of long identifiers no so easy to remember and to use, using names al resolving internally to deal with keystone.
 Orchestrator Script commands can interact with any remote Keystone and Keypass, since related host and port should be provideed as argument to earch script.
-Orchestrator is used maninly by [IoT Portal](https://pdihub.hi.inet/fiware/iotp-portal) and operation team
+Orchestrator is used mainly by [IoT Portal](https://pdihub.hi.inet/fiware/iotp-portal) and operation team
 
 A tipical scenario for IoT Platform can be [scenario_test](https://pdihub.hi.inet/ep/fiware-components/wiki/Keystone-scenario-test) or [these](https://github.com/telefonicaid/orchestrator/blob/master/src/tests/scenarios/SCENARIOS.md)
 
