@@ -31,7 +31,7 @@ STH_PORT=8666  # Pep and default internal container port
 STH_PROTOCOL=http
 STH_NOTIFYPATH=notify
 
-PERSEO_PORT=19090  # Pep and default internal container port
+PERSEO_PORT=9090  # Pep and default internal container port
 PERSEO_PROTOCOL=http
 PERSEO_NOTIFYPATH=notices
 
