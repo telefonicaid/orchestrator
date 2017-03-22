@@ -4,7 +4,7 @@ CHANGES
 
 1.5.1
 
-FIX: set dependencies version to a fix version
+FIX: Perseo expected port in docker
 
 1.5.0
 
@@ -12,6 +12,17 @@ FEATURE: Metrics API [#58]
 FEATURE: Support keystone groups in a Service, including role assignments [#56]
 FIX: Add pagination to list orion subscriptions [#37]
 
+1.4.5
+
+FIX: Perseo expected port in docker
+
+1.4.4
+
+FIX: Fix dependencies version to a fixed version
+
+1.4.3
+
+FIX: Add pagination to list orion subscriptions [#37]
 
 1.4.2
 
