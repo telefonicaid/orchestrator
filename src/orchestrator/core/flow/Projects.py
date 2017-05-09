@@ -149,20 +149,29 @@ class Projects(FlowBase):
                                                    DOMAIN_NAME)
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
-            PROJECT = self.idm.getProject(ADMIN_TOKEN,
-                                          PROJECT_ID)
-
             PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
                                                        DOMAIN_ID,
                                                        PROJECT_ID,
                                                        None)
             self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
+
             # PROJECTS = self.idm.getDomainProjects(ADMIN_TOKEN,
             #                                       DOMAIN_ID)
             # for project in PROJECTS:
             #     if project['id'] == PROJECT_ID:
             #         PROJECT = project
 
+            try:
+                PROJECT = self.idm.getProject(ADMIN_TOKEN, PROJECT_ID)
+            except Exception, ex:
+                PROJECT = {
+                    'project': {
+                        'description': PROJECT_NAME,
+                        'domain_id': DOMAIN_ID,
+                        'id': PROJECT_ID,
+                        'name': '/' + PROJECT_NAME
+                    }
+                }
             self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
