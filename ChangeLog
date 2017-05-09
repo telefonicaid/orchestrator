@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+1.4.6
+
+FIX: get project detail with scoped token
+
 1.4.5
 
 FIX: Perseo expected port in docker
