@@ -134,7 +134,7 @@ class Projects(FlowBase):
             # Ensure DOMAIN_NAME and PROJECT_NAME
             DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
                                                    DOMAIN_ID,
-                                                   DOMAIN_NAME)
+                                                   None)
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
             PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
