@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FEATURE: allow non positional args in docker entrypoint [#78]
+
 1.5.2
 
 FIX: get project detail with scoped token
