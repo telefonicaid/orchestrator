@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: set pepperseo conf after perseo conf in docker [#81]
 FEATURE: allow non positional args in docker entrypoint [#78]
 
 1.5.2
