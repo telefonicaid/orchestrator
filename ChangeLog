@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: replace error by warn trace when trying to remove elements in third parties [#80]
 FEATURE: allow non positional args in docker entrypoint [#78]
 
 1.5.2
