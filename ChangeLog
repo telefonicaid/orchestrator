@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: error trace reported when metrics are trying to calculate error response size [#84]
 FEATURE: allow non positional args in docker entrypoint [#78]
 
 1.5.2
