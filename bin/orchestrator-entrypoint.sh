@@ -133,17 +133,17 @@ sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
              \"protocol\": \"'$IOTA_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
-sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
-             \"host\": \"'$PEP_PERSEO_HOST'\", \
-             \"port\": \"'$PEP_PERSEO_PORT'\", \
-             \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
-}/g' /opt/orchestrator/settings/dev.py
-
 sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\/\"\n: ]*}/PERSEO = { \
              \"host\": \"'$PERSEO_HOST'\", \
              \"port\": \"'$PERSEO_PORT'\", \
              \"protocol\": \"'$PERSEO_PROTOCOL'\", \
              \"notifypath\": \"\/'$PERSEO_NOTIFYPATH'\" \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
+             \"host\": \"'$PEP_PERSEO_HOST'\", \
+             \"port\": \"'$PEP_PERSEO_PORT'\", \
+             \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
 sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
