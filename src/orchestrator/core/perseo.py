@@ -91,7 +91,7 @@ class PerseoOperations(object):
             logger.debug("rules: %s" % json.dumps(rules, indent=3))
 
         except Exception, ex:
-            logger.error("%s trying getRules from PERSEO: %s/%s" % (ex,
+            logger.warn("%s trying getRules from PERSEO: %s/%s" % (ex,
                                                                     SERVICE_NAME,
                                                                     SUBSERVICE_NAME))
             return rules_deleted
@@ -114,7 +114,7 @@ class PerseoOperations(object):
                 assert res.code == 204, (res.code, res.msg)
                 rules_deleted.append(rule['name'])
             except Exception, ex:
-                logger.error("%s trying to remove rule: %s" % (ex,
+                logger.warn("%s trying to remove rule: %s" % (ex,
                                                                rule['name']))
 
         return rules_deleted
