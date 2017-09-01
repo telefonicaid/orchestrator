@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: catch error disabling and deleting service when create service fails [#90]
 FEATURE: duplicate number of procesing resources
 FIX: error trace reported when metrics are trying to calculate error response size [#84]
 FIX: replace error by warn trace when trying to remove elements in third parties [#83]
