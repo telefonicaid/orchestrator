@@ -115,7 +115,7 @@ class CreateNewService(FlowBase):
                     self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                     self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 except Exception, ex:
-                    self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1)
+                    self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
                 return self.composeErrorCode(ex)
 
             self.logger.debug("ID of user %s: %s" % (NEW_SERVICE_ADMIN_USER,
@@ -282,7 +282,7 @@ class CreateNewService(FlowBase):
                     self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                     self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 except Exception, ex:
-                    self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1)
+                    self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
                 return self.composeErrorCode(ex)
 
             self.logger.debug("ID of group %s: %s" % (ADMIN_GROUP_NAME,
@@ -332,7 +332,7 @@ class CreateNewService(FlowBase):
                     self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                     self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 except Exception, ex:
-                    self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1)
+                    self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
             self.logger.error("error creating new service: %s" % ex)
             return self.composeErrorCode(ex)
 
