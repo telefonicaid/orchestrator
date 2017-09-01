@@ -260,7 +260,7 @@ class IoTACppOperations(object):
             if 'devices' in devices:
                 devices = devices['devices']
         except Exception, ex:
-            logger.error("%s trying getDevices from IOTA: %s/%s" % (ex,
+            logger.warn("%s trying getDevices from IOTA: %s/%s" % (ex,
                                                             SERVICE_NAME,
                                                             SUBSERVICE_NAME))
             return devices_deleted
@@ -284,7 +284,7 @@ class IoTACppOperations(object):
                                       device_id)
                 devices_deleted.append(device_id)
             except Exception, ex:
-                logger.error("%s trying to unregister device: %s" % (ex,
+                logger.warn("%s trying to unregister device: %s" % (ex,
                                                             device_id))
 
         return devices_deleted
