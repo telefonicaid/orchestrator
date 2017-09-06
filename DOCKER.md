@@ -74,5 +74,5 @@ A few points to consider:
 
 * The name `orchestrator1` can be anything and doesn't have to be related to the name given to the docker image in the previous section.
 * In `-p 8084:8084` the first value represents the port to listen in on localhost. If you wanted to run a second orchestrator on your machine you should change this value to something else, for example `-p 8184:8084`.
-* Anything after the name of the container image (in this case `orchestrator`) is interpreted as a parameter for the Orchestrator. Take a look at the [documentation](../.../.../doc/admin/cli.md) for other command-line options.
+* Anything after the name of the container image (in this case `orchestrator`) is interpreted as a parameter for the Orchestrator.
 

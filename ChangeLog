@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+1.5.3
+
+FEATURE: update uwsgi version to 2.0.15
+FIX: catch error disabling and deleting service when create service fails [#90]
+FEATURE: duplicate number of procesing resources
+FIX: error trace reported when metrics are trying to calculate error response size [#84]
+FIX: replace error by warn trace when trying to remove elements in third parties [#83]
+FIX: set pepperseo conf after perseo conf in docker [#82]
+FEATURE: allow non positional args in docker entrypoint [#78]
+
 1.5.2
 
 FIX: get project detail with scoped token
