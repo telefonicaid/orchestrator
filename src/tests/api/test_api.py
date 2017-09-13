@@ -7,13 +7,13 @@ from orchestrator.common.util import RestOperations
 
 ADMIN_DOMAIN="admin_domain"
 ADMIN_USER="cloud_admin"
-ADMIN_PASSWORD="password"
+ADMIN_PASSWORD="4pass1w0rd"
 
 TEST_SERVICE_NAME="smartcity"
 TEST_SUBSERVICE_NAME1="basuras"
 TEST_SUBSERVICE_NAME2="electricidad"
 TEST_SERVICE_ADMIN_USER="adm1"
-TEST_SERVICE_ADMIN_PASSWORD="password"
+TEST_SERVICE_ADMIN_PASSWORD="4pass1w0rd"
 TEST_SERVICE_USER_NAME="Alice"
 
 ORC_PROTOCOL="http"
@@ -26,6 +26,7 @@ class TestRestOperations(RestOperations):
 
     def __init__(self, PROTOCOL, HOST, PORT):
         RestOperations.__init__(self,
+                                "ORC",
                                 PROTOCOL,
                                 HOST,
                                 PORT)
