@@ -2359,7 +2359,7 @@ class Roles(FlowBase):
                 return self.ac.getRolePolicy(SERVICE_NAME,
                                              SERVICE_ADMIN_TOKEN,
                                              ROLE_ID,
-                                             POLICY_NAME)
+                                             POLICY_NAME), SERVICE_NAME, None
             else:
                 raise Exception("not admin role found to perform this action")
 
