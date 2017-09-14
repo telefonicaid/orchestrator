@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+1.5.3
+
 FEATURE: update uwsgi version to 2.0.15
 FIX: catch error disabling and deleting service when create service fails [#90]
 FEATURE: duplicate number of procesing resources
