@@ -3332,7 +3332,7 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice.test_post_ok3()
 
     # RegisterService was used by legacy BlackButton scenario
-    # which is no longer suppoted by orchestrator
+    # which is no longer supported by orchestrator
     # test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
     # test_SubServiceIoTAService.test_post_ok()
     # test_SubServiceIoTAService.test_post_ok2()
