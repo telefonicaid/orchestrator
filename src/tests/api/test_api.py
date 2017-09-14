@@ -7,13 +7,15 @@ from orchestrator.common.util import RestOperations
 
 ADMIN_DOMAIN="admin_domain"
 ADMIN_USER="cloud_admin"
-ADMIN_PASSWORD="password"
+ADMIN_PASSWORD="4pass1w0rd"
+PEP_PASSWORD="4pass1w0rd"
+IOTAGENT_PASSWORD="4pass1w0rd"
 
 TEST_SERVICE_NAME="smartcity"
 TEST_SUBSERVICE_NAME1="basuras"
 TEST_SUBSERVICE_NAME2="electricidad"
 TEST_SERVICE_ADMIN_USER="adm1"
-TEST_SERVICE_ADMIN_PASSWORD="password"
+TEST_SERVICE_ADMIN_PASSWORD="4pass1w0rd"
 TEST_SERVICE_USER_NAME="Alice"
 
 ORC_PROTOCOL="http"
@@ -26,6 +28,7 @@ class TestRestOperations(RestOperations):
 
     def __init__(self, PROTOCOL, HOST, PORT):
         RestOperations.__init__(self,
+                                "ORC",
                                 PROTOCOL,
                                 HOST,
                                 PORT)
@@ -221,7 +224,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
             "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -238,7 +241,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad = {
@@ -248,7 +251,7 @@ class Test_NewService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
@@ -353,7 +356,7 @@ class Test_DeleteService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
             "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -367,7 +370,7 @@ class Test_DeleteService_RestView(object):
             "NEW_SERVICE_NAME": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_DESCRIPTION": "smartcity_%s" % self.suffix,
             "NEW_SERVICE_ADMIN_USER": "adm_%s" % self.suffix,
-            "NEW_SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_ADMIN_EMAIL": "pepe@tid.es",
             "SERVICE_NAME": "smartcity_%s" % self.suffix,
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -562,21 +565,21 @@ class Test_SubServiceIoTADevice_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
         }
         self.payload_data2_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "DEVICE_ID": "button_dev_sync_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
@@ -591,9 +594,9 @@ class Test_SubServiceIoTADevice_RestView(object):
         self.payload_data2b_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "DEVICE_ID": "button_dev_sync_%s" % self.suffix,
         }
@@ -601,11 +604,11 @@ class Test_SubServiceIoTADevice_RestView(object):
         self.payload_data3_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "DEVICE_ID": "button_dev_async_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
             "PROTOCOL": "TT_BLACKBUTTON",
@@ -620,11 +623,11 @@ class Test_SubServiceIoTADevice_RestView(object):
         self.payload_data4_ok = {
             "SERVICE_NAME": "thinkingthings",
             "SERVICE_ADMIN_USER": "admin_tt",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "iot_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "iot_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_tt",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "DEVICE_ID": "thing_%s" % self.suffix,
             "ENTITY_TYPE": "thinkingthing",
             "PROTOCOL": "PDI-IoTA-ThinkingThings",
@@ -637,11 +640,11 @@ class Test_SubServiceIoTADevice_RestView(object):
         self.payload_data5_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "CSV_DEVICES": csv
         }
@@ -769,21 +772,21 @@ class Test_SubServiceIoTAService_RestView(object):
         self.payload_data_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
         }
         self.payload_data2_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "DEVICE_ID": "button_dev_%s" % self.suffix,
             "ENTITY_TYPE": "BlackButton",
@@ -799,11 +802,11 @@ class Test_SubServiceIoTAService_RestView(object):
         self.payload_data2b_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "SERVICE_USER_NAME": "admin_bb",
-            "SERVICE_USER_PASSWORD": "4passw0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
             "ENTITY_ID": "blackbutton-telepizza_%s" % self.suffix,
@@ -821,7 +824,7 @@ class Test_SubServiceIoTAService_RestView(object):
         self.payload_data3_ok = {
             "SERVICE_NAME": "blackbutton",
             "SERVICE_ADMIN_USER": "admin_bb",
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_NAME": "telepizza_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "telepizza_%s" % self.suffix,
             "ENTITY_TYPE": "service",
@@ -981,7 +984,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_EMAIL": "pepe@gmail.com",
             "NEW_SERVICE_USER_DESCRIPTION": "Pepito",
         }
@@ -990,7 +993,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_ok3 = {
@@ -998,7 +1001,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_EMAIL": "email@email.com",
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -1007,7 +1010,7 @@ class Test_NewServiceUser_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "wrong_password",
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data_bad2 = {
@@ -1257,7 +1260,7 @@ class Test_NewServiceTrust_RestView(object):
         self.payload_data_ok2 = {
             "SERVICE_NAME": ADMIN_DOMAIN,
             "SERVICE_ADMIN_USER": "pep",
-            "SERVICE_ADMIN_PASSWORD": "pep",
+            "SERVICE_ADMIN_PASSWORD": PEP_PASSWORD,
         }
         self.payload_data_ok3 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
@@ -1282,7 +1285,7 @@ class Test_NewServiceTrust_RestView(object):
         }
         self.payload_data_ok5b = {
             "SERVICE_ADMIN_USER":"iotagent",
-            "SERVICE_ADMIN_PASSWORD": "iotagent",
+            "SERVICE_ADMIN_PASSWORD": IOTAGENT_PASSWORD,
             "SERVICE_NAME": "default"
         }
         self.payload_data_ok6 = {
@@ -1297,7 +1300,7 @@ class Test_NewServiceTrust_RestView(object):
         self.payload_data_ok7 = {
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_ADMIN_USER":TEST_SERVICE_USER_NAME,
-            "SERVICE_ADMIN_PASSWORD": "4passw0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -1576,7 +1579,7 @@ class Test_ServiceDetail_RestView(object):
             "SERVICE_NAME": "Default",
             "SERVICE_ID": "default",
             "SERVICE_ADMIN_USER": "iotagent",
-            "SERVICE_ADMIN_PASSWORD": "iotagent",
+            "SERVICE_ADMIN_PASSWORD": IOTAGENT_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -2332,7 +2335,7 @@ class Test_UserModify_RestView(object):
             "NEW_SERVICE_USER_NAME": "alf_%s" % self.suffix,
             "NEW_SERVICE_USER_PASSWORD": "alf_%s" % self.suffix,
             "USER_DATA_VALUE": {"name": "bet_%s" % self.suffix,
-                                TEST_SERVICE_ADMIN_PASSWORD: "bet_%s" % self.suffix,
+                                "password": "bet_%s" % self.suffix,
                                 "description": "Bet bet_%s" % self.suffix}
         }
         self.suffix = str(uuid.uuid4())[:8]
@@ -2501,7 +2504,7 @@ class Test_UserDelete_RestView(object):
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "USER_NAME": "Alice_%s" % self.suffix,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
@@ -2539,16 +2542,16 @@ class Test_UserChangePasswordByHimself_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_USER_PASSWORD": "paswod234",
         }
 
         self.payload_data_ok2 = {
             "SERVICE_ADMIN_USER": "user_%s" % self.suffix,
-            "SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SERVICE_NAME": TEST_SERVICE_NAME,
         }
 
@@ -2557,7 +2560,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_USER_NAME": "user_%s" % self.suffix,
-            "NEW_SERVICE_USER_PASSWORD": "4pass1w0rd",
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SERVICE_NAME": TEST_SERVICE_NAME,
             "SERVICE_USER_NAME": "user_%s" % self.suffix,
             "SERVICE_USER_PASSWORD": "bad_password",
@@ -2565,7 +2568,7 @@ class Test_UserChangePasswordByHimself_RestView(object):
         }
         self.payload_data_bad2 = {
             "SERVICE_ADMIN_USER": "user_%s" % self.suffix,
-            "SERVICE_ADMIN_PASSWORD": "4pass1w0rd",
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SERVICE_NAME": TEST_SERVICE_NAME
         }
 
@@ -3029,14 +3032,14 @@ class Test_ModuleActivation_RestView(object):
             "NEW_SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
             "NEW_SUBSERVICE_DESCRIPTION": "electricidad_%s" % self.suffix,
             "SUBSERVICE_NAME": "electricidad_%s" % self.suffix,
-            "IOTMODULE": "STH",
+            "IOTMODULE": "PERSEO",
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
             "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
         self.payload_data21_ok = {
             "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
-            "IOTMODULE": "STH",
+            "IOTMODULE": "PERSEO",
             "SERVICE_USER_NAME": TEST_SERVICE_ADMIN_USER,
             "SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD
         }
@@ -3184,7 +3187,7 @@ class Test_ModuleActivation_RestView(object):
             method="POST",
             url="/v1.0/service/%s/subservice/%s/module_activation/%s" % (service_id,
                                                                          subservice_id,
-                                                                         'STH'),
+                                                                         'PERSEO'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
@@ -3193,7 +3196,7 @@ class Test_ModuleActivation_RestView(object):
             method="DELETE",
             url="/v1.0/service/%s/subservice/%s/module_activation/%s" % (service_id,
                                                                          subservice_id,
-                                                                         'STH'),
+                                                                         'PERSEO'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -3210,14 +3213,14 @@ class Test_ModuleActivation_RestView(object):
 
         res = self.TestRestOps.rest_request(
             method="POST",
-            url="/v1.0/service/%s/module_activation/%s" % (service_id, 'STH'),
+            url="/v1.0/service/%s/module_activation/%s" % (service_id, 'PERSEO'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
         res = self.TestRestOps.rest_request(
             method="DELETE",
-            url="/v1.0/service/%s/module_activation/%s" % (service_id, 'STH'),
+            url="/v1.0/service/%s/module_activation/%s" % (service_id, 'PERSEO'),
             json_data=True,
             data=self.payload_data3_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -3328,9 +3331,11 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice.test_post_ok2()
     test_SubServiceIoTADevice.test_post_ok3()
 
-    test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
-    test_SubServiceIoTAService.test_post_ok()
-    test_SubServiceIoTAService.test_post_ok2()
+    # RegisterService was used by legacy BlackButton scenario
+    # which is no longer supported by orchestrator
+    # test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
+    # test_SubServiceIoTAService.test_post_ok()
+    # test_SubServiceIoTAService.test_post_ok2()
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
     test_DeleteSubService.test_delete_ok()
