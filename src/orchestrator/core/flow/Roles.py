@@ -2242,7 +2242,7 @@ class Roles(FlowBase):
                 self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
-            # 3. Set Policy Role
+            # 3. Delete Policy Role
             #
             if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
 
@@ -2352,14 +2352,14 @@ class Roles(FlowBase):
                 self.logger.debug("ID of role %s: %s" % (ROLE_NAME, ROLE_ID))
 
             #
-            # 3. Set Policy Role
+            # 3. Get Policy Role
             #
             if self.idm.isTokenAdmin(SERVICE_ADMIN_TOKEN, SERVICE_ID):
 
-                return self.ac.getRolePolicy(SERVICE_NAME,
-                                             SERVICE_ADMIN_TOKEN,
-                                             ROLE_ID,
-                                             POLICY_NAME), SERVICE_NAME, None
+                POLICY = self.ac.getRolePolicy(SERVICE_NAME,
+                                               SERVICE_ADMIN_TOKEN,
+                                               ROLE_ID,
+                                               POLICY_NAME)
             else:
                 raise Exception("not admin role found to perform this action")
 
@@ -2370,4 +2370,4 @@ class Roles(FlowBase):
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
 
-        return {}, SERVICE_NAME, None
+        return {"policy": POLICY}, SERVICE_NAME, None
