@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: return policy into results of get PolicyFromRole [#97]
 FIX: typo in status returned by delete metrics
 
 1.5.3
