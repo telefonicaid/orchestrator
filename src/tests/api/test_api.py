@@ -3332,8 +3332,9 @@ if __name__ == '__main__':
     test_SubServiceIoTADevice.test_post_ok3()
 
     # RegisterService was used by legacy BlackButton scenario
-    #test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
-    #test_SubServiceIoTAService.test_post_ok()
+    # which is no longer suppoted by orchestrator
+    # test_SubServiceIoTAService = Test_SubServiceIoTAService_RestView()
+    # test_SubServiceIoTAService.test_post_ok()
     # test_SubServiceIoTAService.test_post_ok2()
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
