@@ -3300,11 +3300,7 @@ class Test_Metrics_RestView(object):
                                             json_data=True,
                                             auth_token=None,
                                             data=None)
-        assert res.code == 204, (res.code, res.msg, res.raw_json)                
-        response = res.read()
-        json_body_response = json.loads(response)
-        assert "service" in json_body_response
-        assert "sum" in json_body_response
+        assert res.code == 204, (res.code, res.msg)
 
 
 if __name__ == '__main__':
