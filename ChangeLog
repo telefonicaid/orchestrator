@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: return policy into results of get PolicyFromRole [#97]
+
 1.5.3
 
 FEATURE: update uwsgi version to 2.0.15
