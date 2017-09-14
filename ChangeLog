@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: typo in status returned by delete metrics
+
 1.5.3
 
 FEATURE: update uwsgi version to 2.0.15

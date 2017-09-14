@@ -3099,7 +3099,7 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         try:
             result = self.composeMetrics()
             self.resetMetrics()
-            response = Response(result, status=status.HTTP_204_OK,
+            response = Response(result, status=status.HTTP_204_NO_CONTENT,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
