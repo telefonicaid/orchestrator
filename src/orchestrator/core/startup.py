@@ -41,6 +41,12 @@ logger.addFilter(ContextFilterTransactionId("n/a"))
 logger.addFilter(ContextFilterService("None"))
 logger.addFilter(ContextFilterSubService(""))
 
+logger1 = logging.getLogger('orchestrator_core')
+logger1.addFilter(ContextFilterCorrelatorId("n/a"))
+logger1.addFilter(ContextFilterTransactionId("n/a"))
+logger1.addFilter(ContextFilterService("None"))
+logger1.addFilter(ContextFilterSubService(""))
+
 logger2 = logging.getLogger('django')
 logger2.addFilter(ContextFilterCorrelatorId("n/a"))
 logger2.addFilter(ContextFilterTransactionId("n/a"))
