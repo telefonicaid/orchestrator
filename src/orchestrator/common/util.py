@@ -275,7 +275,7 @@ class RestOperations(object):
             self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response)) + len(str(response.headers.headers)) if 'headers' in response.headers else 0
             self.sum["serviceTimeTotal"] += (service_stop - service_start)
         except Exception, ex:
-            self.logger.error("ERROR collecting outgoing metrics %s", ex)
+            self.logger.warn("ERROR collecting outgoing metrics %s", ex)
 
     def getOutgoingMetrics(self):
         return self.sum
