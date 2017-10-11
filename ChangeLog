@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-FIX: Init orchestrator_core logger with emppty values for startup errors
+FIX: Init orchestrator_core logger with empty values for startup errors
 
 1.6.0
 
