@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: Init orchestrator_core logger with emppty values for startup errors
+
 1.6.0
 
 FIX: return policy into results of get PolicyFromRole [#97]
