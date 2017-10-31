@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:7
 
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
@@ -40,7 +40,7 @@ ENV CYGNUS_PORT 5050
 ENV CYGNUS_PROTOCOL http
 ENV CYGNUS_NOTIFYPATH notify
 
-ENV python_lib /var/env-orchestrator/lib/python2.6/site-packages
+ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
 
 COPY . /opt/sworchestrator/
 
@@ -55,7 +55,7 @@ RUN \
     # Install dependencies
     yum install -y epel-release && yum update -y epel-release && \
     yum install -y yum-plugin-remove-with-leaves python python-pip python-devel python-virtualenv gcc ssh && \
-    yum install -y nc findutils sed && \
+    yum install -y tcping findutils sed && \
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin && \
     cp -rp /opt/sworchestrator/src/* $python_lib/iotp-orchestrator && cp -p /opt/sworchestrator/requirements.txt $python_lib/iotp-orchestrator && \

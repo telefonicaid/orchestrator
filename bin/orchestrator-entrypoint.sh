@@ -162,7 +162,7 @@ sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
 
 
 # Wait until Keystone is up
-while ! nc -z $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
+while ! tcping -t 1 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
 
 uwsgi --http :$PORT \
       --chdir /opt/orchestrator \
