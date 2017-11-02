@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FEATURE: update docker to centos7
 FIX: Init orchestrator_core logger with empty values for startup errors
 
 1.6.0
