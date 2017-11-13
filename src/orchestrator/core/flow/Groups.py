@@ -95,8 +95,9 @@ class Groups(FlowBase):
                                                                indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_GROUPS": SERVICE_GROUPS,
@@ -162,8 +163,9 @@ class Groups(FlowBase):
             self.logger.debug("DETAIL_GROUP=%s" % json.dumps(DETAIL_GROUP, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "DETAIL_GROUP": DETAIL_GROUP,
@@ -250,8 +252,9 @@ class Groups(FlowBase):
                                  GROUP_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "GROUP_ID": GROUP_ID,
@@ -338,8 +341,9 @@ class Groups(FlowBase):
                                  GROUP_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "GROUP_ID": GROUP_ID
@@ -422,8 +426,9 @@ class Groups(FlowBase):
             self.logger.debug("ID of group %s: %s" % (NEW_SERVICE_GROUP_NAME, ID_GROUP))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,

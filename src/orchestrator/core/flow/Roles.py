@@ -103,8 +103,9 @@ class Roles(FlowBase):
             self.logger.debug("ROLES=%s" % json.dumps(ROLES, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ROLES": ROLES
@@ -292,8 +293,9 @@ class Roles(FlowBase):
             self.logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded,
                                                  indent=3))
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "role_assignments": role_assignments_expanded,
@@ -423,8 +425,9 @@ class Roles(FlowBase):
                                      SERVICE_USER_ID,
                                      ROLE_ID)
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
@@ -559,8 +562,9 @@ class Roles(FlowBase):
                                       ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
@@ -670,8 +674,9 @@ class Roles(FlowBase):
                                       INHERIT_ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ID_USER": "%s" % SERVICE_USER_ID,
@@ -782,8 +787,9 @@ class Roles(FlowBase):
                                       ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
@@ -910,8 +916,9 @@ class Roles(FlowBase):
                                        ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
@@ -1020,8 +1027,9 @@ class Roles(FlowBase):
                                        SERVICE_USER_ID,
                                        INHERIT_ROLE_ID)
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ID_USER": "%s" % SERVICE_USER_ID,
@@ -1209,8 +1217,9 @@ class Roles(FlowBase):
             self.logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded,
                                                  indent=3))
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "role_assignments": role_assignments_expanded,
@@ -1341,8 +1350,9 @@ class Roles(FlowBase):
                                      SERVICE_GROUP_ID,
                                      ROLE_ID)
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
@@ -1478,8 +1488,9 @@ class Roles(FlowBase):
                                             ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
@@ -1590,8 +1601,9 @@ class Roles(FlowBase):
                                              INHERIT_ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ID_GROUP": "%s" % SERVICE_GROUP_ID,
@@ -1703,8 +1715,9 @@ class Roles(FlowBase):
                                              ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
@@ -1832,8 +1845,9 @@ class Roles(FlowBase):
                                               ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
@@ -1942,8 +1956,9 @@ class Roles(FlowBase):
                                               SERVICE_GROUP_ID,
                                               INHERIT_ROLE_ID)
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ID_GROUP": "%s" % SERVICE_GROUP_ID,
@@ -2030,8 +2045,9 @@ class Roles(FlowBase):
                                 ROLE_ID)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ROLE_ID": ROLE_ID
@@ -2143,8 +2159,9 @@ class Roles(FlowBase):
                 raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -2254,8 +2271,9 @@ class Roles(FlowBase):
                 raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -2364,8 +2382,9 @@ class Roles(FlowBase):
                 raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
