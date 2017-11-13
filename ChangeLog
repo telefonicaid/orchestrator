@@ -2,6 +2,7 @@ CHANGES
 =======
 
 FEATURE: Check domain_name at delete service and raise exception if is not found
+FEATURE: Log in debug level all requests with codes > 400 and < 500
 FIX: Init orchestrator_core logger with empty values for startup errors
 
 1.6.0

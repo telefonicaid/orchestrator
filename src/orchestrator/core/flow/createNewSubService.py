@@ -154,8 +154,9 @@ class CreateNewSubService(FlowBase):
                 self.logger.info("removing uncomplete created project %s" % ID_PRO1)
                 self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)
                 self.idm.deleteProject(SERVICE_ADMIN_TOKEN, ID_PRO1)
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
