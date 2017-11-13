@@ -333,8 +333,9 @@ class CreateNewService(FlowBase):
                     self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                 except Exception, ex:
                     self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
-            self.logger.error("error creating new service: %s" % ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ID_DOM1": "%s" % ID_DOM1,
