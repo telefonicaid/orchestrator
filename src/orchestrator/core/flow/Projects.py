@@ -89,8 +89,9 @@ class Projects(FlowBase):
             self.logger.debug("PROJECTS=%s" % json.dumps(PROJECTS, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "PROJECTS": PROJECTS
@@ -175,8 +176,9 @@ class Projects(FlowBase):
             self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "PROJECT": PROJECT
@@ -266,8 +268,9 @@ class Projects(FlowBase):
             self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "PROJECT": PROJECT
@@ -390,8 +393,9 @@ class Projects(FlowBase):
             self.logger.debug("PROJECT=%s" % PROJECT)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "PROJECT": PROJECT
@@ -795,8 +799,9 @@ class Projects(FlowBase):
 
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "ENTITY_ID": ENTITY_ID,
@@ -1138,8 +1143,9 @@ class Projects(FlowBase):
 
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
 
@@ -1272,8 +1278,9 @@ class Projects(FlowBase):
                 DEVICES_ID.append(res)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "devices": DEVICES_ID
@@ -1371,8 +1378,9 @@ class Projects(FlowBase):
 
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
 
@@ -1516,8 +1524,9 @@ class Projects(FlowBase):
             self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "subscriptionid": subscriptionid
@@ -1633,8 +1642,9 @@ class Projects(FlowBase):
                     break
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "subscriptionid": subscriptionid
@@ -1735,8 +1745,9 @@ class Projects(FlowBase):
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "modules": modules
