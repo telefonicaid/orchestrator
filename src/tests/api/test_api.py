@@ -213,6 +213,96 @@ class TestRestOperations(RestOperations):
                 return project['id']
 
 
+class Populate_RestView(object):
+
+    def __init__(self):
+        self.payload_smartcity = {
+            "DOMAIN_NAME": ADMIN_DOMAIN,
+            "DOMAIN_ADMIN_USER": ADMIN_USER,
+            "DOMAIN_ADMIN_PASSWORD": ADMIN_PASSWORD,
+            "NEW_SERVICE_NAME": TEST_SERVICE_NAME,
+            "NEW_SERVICE_DESCRIPTION": TEST_SERVICE_NAME,
+            "NEW_SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_ADMIN_EMAIL": "test@gmail.com",
+            "SERVICE_NAME": TEST_SERVICE_NAME,
+            "SERVICE_ADMIN_USER": TEST_SERVICE_ADMIN_USER,
+            "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SUBSERVICE_NAME": TEST_SUBSERVICE_NAME1,
+            "NEW_SUBSERVICE_DESCRIPTION": TEST_SUBSERVICE_NAME1,
+            "NEW_SERVICE_USER_NAME": TEST_SERVICE_USER_NAME,
+            "NEW_SERVICE_USER_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_USER_EMAIL": "test@gmail.com",
+            "NEW_SERVICE_USER_DESCRIPTION": "user test"
+        }
+        self.payload_blackbutton = {
+            "DOMAIN_NAME": ADMIN_DOMAIN,
+            "DOMAIN_ADMIN_USER": ADMIN_USER,
+            "DOMAIN_ADMIN_PASSWORD": ADMIN_PASSWORD,
+            "NEW_SERVICE_NAME": "blackbutton",
+            "NEW_SERVICE_DESCRIPTION": "blackbutton",
+            "NEW_SERVICE_ADMIN_USER": "admin_bb",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_ADMIN_EMAIL": "test@gmail.com"
+        }
+        self.payload_thinkingthings = {
+            "DOMAIN_NAME": ADMIN_DOMAIN,
+            "DOMAIN_ADMIN_USER": ADMIN_USER,
+            "DOMAIN_ADMIN_PASSWORD": ADMIN_PASSWORD,
+            "NEW_SERVICE_NAME": "thingkingthings",
+            "NEW_SERVICE_DESCRIPTION": "thinkingthings",
+            "NEW_SERVICE_ADMIN_USER": "admin_tt",
+            "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_ADMIN_EMAIL": "test@gmail.com"
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def smartcity(self):
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="/v1.0/service/",
+                                            json_data=True,
+                                            data=self.payload_smartcity)
+        assert res.code in (201, 409), (res.code, res.msg)
+        service_id = self.TestRestOps.getServiceId(self.payload_smartcity)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_smartcity)
+        assert res.code in (201, 409), (res.code, res.msg)
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/user/" % service_id,
+            json_data=True,
+            data=self.payload_smartcity)
+        assert res.code in (201, 409), (res.code, res.msg)
+
+        self.payload_smartcity["TEST_SUBSERVICE_NAME"]=TEST_SUBSERVICE_NAME1
+        self.payload_smartcity["TEST_SUBSERVICE_DESCRIPTION"]=TEST_SUBSERVICE_NAME1
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/service/%s/subservice/" % service_id,
+            json_data=True,
+            data=self.payload_smartcity)
+        assert res.code in (201, 409), (res.code, res.msg)
+
+    def blackbutton(self):
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="/v1.0/service/",
+                                            json_data=True,
+                                            data=self.payload_blackbutton)
+        assert res.code in (201, 409), (res.code, res.msg)
+
+    def thinkingthings(self):
+        res = self.TestRestOps.rest_request(method="POST",
+                                            url="/v1.0/service/",
+                                            json_data=True,
+                                            data=self.payload_thinkingthings)
+        assert res.code in (201, 409), (res.code, res.msg)
+
+
 class Test_NewService_RestView(object):
 
     def __init__(self):
@@ -279,7 +369,8 @@ class Test_NewService_RestView(object):
         json_body_response = json.loads(response)
         service_id = json_body_response['id']
         res = self.TestRestOps.rest_request(method="DELETE",
-                                            url="/v1.0/service/%s" % service_id,
+                                            #url="/v1.0/service/%s" % service_id,
+                                            url="/v1.0/service/",
                                             json_data=True,
                                             data=self.payload_data_ok)
         assert res.code == 204, (res.code, res.msg, res.raw_json)
@@ -3305,6 +3396,14 @@ class Test_Metrics_RestView(object):
 
 if __name__ == '__main__':
 
+    # Populate initial data
+    populate = Populate_RestView()
+    populate.smartcity()
+    populate.blackbutton()
+    populate.thinkingthings()
+
+
+    # Tests
     test_NewService = Test_NewService_RestView()
     test_NewService.test_post_ok()
     test_NewService.test_post_ok_bad()
@@ -3323,7 +3422,7 @@ if __name__ == '__main__':
     test_NewSubService.test_post_ok3()
 
     test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
-    test_SubServiceIoTADevice.test_post_ok()
+    #test_SubServiceIoTADevice.test_post_ok()
     test_SubServiceIoTADevice.test_post_ok2()
     test_SubServiceIoTADevice.test_post_ok3()
 
@@ -3428,7 +3527,7 @@ if __name__ == '__main__':
 
     test_NewServiceTrust = Test_NewServiceTrust_RestView()
     test_NewServiceTrust.test_post_ok()
-    test_NewServiceTrust.test_post_ok3()
+    #test_NewServiceTrust.test_post_ok3()
     test_NewServiceTrust.test_post_ok4()
     # It will work just for keystone juno or upper
     #test_NewServiceTrust.test_post_ok2()
