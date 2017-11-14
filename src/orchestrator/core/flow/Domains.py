@@ -73,8 +73,10 @@ class Domains(FlowBase):
             self.logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
+
 
         data_log = {
             "DOMAINS": DOMAINS
@@ -139,8 +141,9 @@ class Domains(FlowBase):
             self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "DOMAIN": DOMAIN
@@ -211,8 +214,9 @@ class Domains(FlowBase):
             self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "DOMAIN": DOMAIN
@@ -262,17 +266,16 @@ class Domains(FlowBase):
                                                 ADMIN_PASSWORD)
 
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
-            # Another way:
-            # if not DOMAIN_ID:
-            #     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
-            #                                      DOMAIN_NAME)
 
-            if not DOMAIN_ID:
+            if not DOMAIN_ID and DOMAIN_NAME:
                 DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
                 for domain in DOMAINS['domains']:
                     if domain['name'] == DOMAIN_NAME:
                         DOMAIN_ID = domain['id']
                         break
+
+            if not DOMAIN_ID:
+                raise Exception("DOMAIN_NAME %s not found in domains" % DOMAIN_NAME)
 
             if not DOMAIN_NAME:
                 DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
@@ -355,8 +358,9 @@ class Domains(FlowBase):
             self.logger.debug("DOMAIN=%s" % DOMAIN)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "DOMAIN": DOMAIN
@@ -473,8 +477,9 @@ class Domains(FlowBase):
                 raise Exception("not admin role found to perform this action")
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "POLICIES": policies
@@ -591,8 +596,9 @@ class Domains(FlowBase):
             self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "subscriptionid": subscriptionid
@@ -688,8 +694,9 @@ class Domains(FlowBase):
             # self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "subscriptionid": subscriptionid
@@ -768,8 +775,9 @@ class Domains(FlowBase):
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:
-            self.logger.error(ex)
-            return self.composeErrorCode(ex)
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
 
         data_log = {
             "modules": modules
