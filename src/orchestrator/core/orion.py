@@ -363,7 +363,7 @@ class CBOrionOperations(object):
         modules = []
         for sub in subscriptions:
             if "notification" in sub:
-                sub_callback = self.getSbscriptionCallbackEndpoint(sub)
+                sub_callback = self.getSubscriptionCallbackEndpoint(sub)
                 for iotmodule in iot_modules:
                     if sub_callback.startswith(
                         flow.getEndpointIotModule(iotmodule)):
