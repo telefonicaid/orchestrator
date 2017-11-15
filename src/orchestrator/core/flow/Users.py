@@ -55,7 +55,7 @@ class Users(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "SERVICE_ADMIN_TOKEN": self.getExtendedToken(SERVICE_ADMIN_TOKEN),
             "START_INDEX": "%s" % START_INDEX,
             "COUNT": "%s" % COUNT,
         }
@@ -80,7 +80,7 @@ class Users(FlowBase):
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+            SERVICE_NAME = self.ensureServiceName(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
@@ -150,7 +150,7 @@ class Users(FlowBase):
             "USER_ID": "%s" % USER_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "SERVICE_ADMIN_TOKEN": self.getExtendedToken(SERVICE_ADMIN_TOKEN),
         }
         self.logger.debug("FLOW user invoked with: %s" % json.dumps(
             data_log,
@@ -165,7 +165,7 @@ class Users(FlowBase):
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+            SERVICE_NAME = self.ensureServiceName(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))

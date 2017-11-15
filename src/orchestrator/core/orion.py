@@ -356,17 +356,17 @@ class CBOrionOperations(object):
                                                         subscription['id']))
         return subscriptions_deleted
 
-    def extract_modules_from_subscriptions(self,
+    def extractModulesFromSubscriptions(self,
                                            flow,
                                            iot_modules,
                                            subscriptions):
         modules = []
         for sub in subscriptions:
             if "notification" in sub:
-                sub_callback = self.get_subscription_callback_endpoint(sub)
+                sub_callback = self.getSbscriptionCallbackEndpoint(sub)
                 for iotmodule in iot_modules:
                     if sub_callback.startswith(
-                        flow.get_endpoint_iot_module(iotmodule)):
+                        flow.getEndpointIotModule(iotmodule)):
                         if ((len(sub['subject']['entities']) == 1) and
                             ('idPattern' in sub['subject']['entities'][0] and
                              sub['subject']['entities'][0]['idPattern'] == '.*') and
@@ -376,13 +376,13 @@ class CBOrionOperations(object):
                             modules.append(
                                 { "name": iotmodule,
                                   "subscriptionid": sub['id'],
-                                  "alias": flow.get_alias_iot_module(iotmodule)
+                                  "alias": flow.getAliasIotModule(iotmodule)
                               })
                             break
 
         return modules
 
-    def get_subscription_callback_endpoint(self, sub):
+    def getSubscriptionCallbackEndpoint(self, sub):
         sub_callback = ""
         if "notification" in sub:
             if "callback" in sub["notification"]:

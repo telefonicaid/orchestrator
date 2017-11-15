@@ -55,7 +55,7 @@ class RemoveUser(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "SERVICE_ADMIN_TOKEN": self.getExtendedToken(SERVICE_ADMIN_TOKEN),
             "USER_NAME": "%s" % USER_NAME,
             "USER_ID": "%s" % USER_ID
         }
@@ -80,7 +80,7 @@ class RemoveUser(FlowBase):
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+            SERVICE_NAME = self.ensureServiceName(SERVICE_ADMIN_TOKEN,
                                                    SERVICE_ID,
                                                    SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))

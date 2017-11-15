@@ -55,7 +55,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
+            "ADMIN_TOKEN": self.getExtendedToken(ADMIN_TOKEN)
         }
         self.logger.debug("FLOW domains invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -113,7 +113,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
+            "ADMIN_TOKEN": self.getExtendedToken(ADMIN_TOKEN)
         }
         self.logger.debug("FLOW get_domain invoked with: %s" % json.dumps(
             data_log,
@@ -183,7 +183,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
+            "ADMIN_TOKEN": self.getExtendedToken(ADMIN_TOKEN),
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
         }
         self.logger.debug("FLOW updateDomain invoked with: %s" % json.dumps(
@@ -253,7 +253,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "ADMIN_USER": "%s" % ADMIN_USER,
             "ADMIN_PASSWORD": "%s" % ADMIN_PASSWORD,
-            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN)
+            "ADMIN_TOKEN": self.getExtendedToken(ADMIN_TOKEN)
         }
         self.logger.debug("FLOW delete_domain invoked with: %s" % json.dumps(
             data_log,
@@ -403,7 +403,7 @@ class Domains(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "SERVICE_ADMIN_TOKEN": self.getExtendedToken(SERVICE_ADMIN_TOKEN),
             "ROLE_NAME": "%s" % ROLE_NAME,
             "ROLE_ID": "%s" % ROLE_ID,
         }
@@ -429,7 +429,7 @@ class Domains(FlowBase):
             self.logger.debug("SERVICE_ADMIN_TOKEN=%s" % SERVICE_ADMIN_TOKEN)
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+            SERVICE_NAME = self.ensureServiceName(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))            
@@ -517,7 +517,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
+            "SERVICE_USER_TOKEN": self.getExtendedToken(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         self.logger.debug("FLOW activate_module invoked with: %s" % json.dumps(
@@ -541,7 +541,7 @@ class Domains(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             # Ensure DOMAIN_NAME
-            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+            DOMAIN_NAME = self.ensureServiceName(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
@@ -550,7 +550,7 @@ class Domains(FlowBase):
             self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
 
-            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
+            REFERENCE_URL = self.getEndpointIotModule(IOTMODULE)
 
             DURATION="P1Y"
 
@@ -635,7 +635,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
+            "SERVICE_USER_TOKEN": self.getExtendedToken(SERVICE_USER_TOKEN),
             "IOTMODULE": "%s" % IOTMODULE,
         }
         self.logger.debug("FLOW deactivate_module invoked with: %s" % json.dumps(
@@ -658,7 +658,7 @@ class Domains(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             # Ensure DOMAIN_NAME
-            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+            DOMAIN_NAME = self.ensureServiceName(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
@@ -666,7 +666,7 @@ class Domains(FlowBase):
             self.logger.debug("DOMAIN_NAME=%s" % DOMAIN_NAME)
             self.logger.debug("SERVICE_USER_TOKEN=%s" % SERVICE_USER_TOKEN)
 
-            REFERENCE_URL = self.get_endpoint_iot_module(IOTMODULE)
+            REFERENCE_URL = self.getEndpointIotModule(IOTMODULE)
 
             self.logger.debug("Trying to get list subscriptions from CB...")
             cb_res = self.cb.getListSubscriptions(
@@ -679,7 +679,7 @@ class Domains(FlowBase):
             )
 
             for sub in cb_res:
-                subs_url = self.cb.get_subscription_callback_endpoint(sub)
+                subs_url = self.cb.getSubscriptionCallbackEndpoint(sub)
                 subscriptionid = sub['id']
                 if subs_url.startswith(REFERENCE_URL):
 
@@ -732,7 +732,7 @@ class Domains(FlowBase):
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
             "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
-            "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
+            "SERVICE_USER_TOKEN": self.getExtendedToken(SERVICE_USER_TOKEN),
         }
         self.logger.debug("FLOW list_activated_modules invoked with: %s" % json.dumps(
             data_log,
@@ -754,7 +754,7 @@ class Domains(FlowBase):
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
             # Ensure DOMAIN_NAME
-            DOMAIN_NAME = self.ensure_service_name(SERVICE_USER_TOKEN,
+            DOMAIN_NAME = self.ensureServiceName(SERVICE_USER_TOKEN,
                                                    DOMAIN_ID,
                                                    DOMAIN_NAME)
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
@@ -771,7 +771,7 @@ class Domains(FlowBase):
             self.logger.debug("getListSubscriptions res=%s" % json.dumps(
                 cb_res, indent=3)
             )
-            modules = self.cb.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
+            modules = self.cb.extractModulesFromSubscriptions(self, IOTMODULES, cb_res)
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
         except Exception, ex:

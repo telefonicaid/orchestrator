@@ -164,7 +164,7 @@ class FlowBase(object):
             logger.debug(ex)
 
 
-    def get_endpoint_iot_module(self, iot_module):
+    def getEndpointIotModule(self, iot_module):
         assert iot_module in IOTMODULES
         if iot_module in self.endpoints:
             return self.endpoints[iot_module]
@@ -182,7 +182,7 @@ class FlowBase(object):
             return iot_mddule_enpoint
 
 
-    def get_alias_iot_module(self, iot_module):
+    def getAliasIotModule(self, iot_module):
         assert iot_module in IOTMODULES
         if iot_module in self.iotmodules_aliases:
             return self.alias[iot_module]
@@ -196,7 +196,7 @@ class FlowBase(object):
             return alias
 
 
-    def ensure_service_name(self, USER_TOKEN, SERVICE_ID, SERVICE_NAME):
+    def ensureServiceName(self, USER_TOKEN, SERVICE_ID, SERVICE_NAME):
         if not SERVICE_NAME:
             self.logger.debug("Not SERVICE_NAME provided, getting it from token")
             try:
@@ -211,7 +211,7 @@ class FlowBase(object):
         return SERVICE_NAME
 
 
-    def ensure_subservice_name(self, USER_TOKEN, SERVICE_ID, SUBSERVICE_ID,
+    def ensureSubserviceName(self, USER_TOKEN, SERVICE_ID, SUBSERVICE_ID,
                                SUBSERVICE_NAME):
         if not SUBSERVICE_NAME:
             self.logger.debug("Not SUBSERVICE_NAME provided, getting it from token")
@@ -228,7 +228,7 @@ class FlowBase(object):
         return SUBSERVICE_NAME
 
 
-    def get_extended_token(self, USER_TOKEN):
+    def getExtendedToken(self, USER_TOKEN):
         token_extended = USER_TOKEN
         if USER_TOKEN:
             try:

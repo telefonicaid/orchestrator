@@ -61,7 +61,7 @@ class CreateNewServiceUser(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "SERVICE_ADMIN_TOKEN": self.getExtendedToken(SERVICE_ADMIN_TOKEN),
             "NEW_USER_NAME": "%s" % NEW_USER_NAME,
             "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD,
             "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
@@ -89,7 +89,7 @@ class CreateNewServiceUser(FlowBase):
                                                        SERVICE_ID))
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+            SERVICE_NAME = self.ensureServiceName(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))

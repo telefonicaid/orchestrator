@@ -58,7 +58,7 @@ class CreateNewServiceRole(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
-            "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
+            "SERVICE_ADMIN_TOKEN": self.getExtendedToken(SERVICE_ADMIN_TOKEN),
             "NEW_ROLE_NAME": "%s" % NEW_ROLE_NAME,
             "XACML_POLICY": "%s" % XACML_POLICY
         }
@@ -84,7 +84,7 @@ class CreateNewServiceRole(FlowBase):
                                                        SERVICE_ID))
 
             # Ensure SERVICE_NAME
-            SERVICE_NAME = self.ensure_service_name(SERVICE_ADMIN_TOKEN,
+            SERVICE_NAME = self.ensureServiceName(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
