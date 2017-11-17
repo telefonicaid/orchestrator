@@ -268,6 +268,7 @@ class Domains(FlowBase):
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             if not DOMAIN_ID and DOMAIN_NAME:
+                # This only returns all DOMAINS for cloud_admin
                 DOMAINS = self.idm.getDomains(ADMIN_TOKEN)
                 for domain in DOMAINS['domains']:
                     if domain['name'] == DOMAIN_NAME:
@@ -275,7 +276,7 @@ class Domains(FlowBase):
                         break
 
             if not DOMAIN_ID:
-                raise Exception("DOMAIN_NAME %s not found in domains" % DOMAIN_NAME)
+                raise Exception(404, "DOMAIN_NAME %s not found in domains by user %s" % (DOMAIN_NAME, self.get_extended_token(ADMIN_TOKEN)))
 
             if not DOMAIN_NAME:
                 DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
