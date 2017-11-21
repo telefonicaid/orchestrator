@@ -251,7 +251,7 @@ class Populate_RestView(object):
             "DOMAIN_NAME": ADMIN_DOMAIN,
             "DOMAIN_ADMIN_USER": ADMIN_USER,
             "DOMAIN_ADMIN_PASSWORD": ADMIN_PASSWORD,
-            "NEW_SERVICE_NAME": "thingkingthings",
+            "NEW_SERVICE_NAME": "thinkingthings",
             "NEW_SERVICE_DESCRIPTION": "thinkingthings",
             "NEW_SERVICE_ADMIN_USER": "admin_tt",
             "NEW_SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
