@@ -290,8 +290,8 @@ class Populate_RestView(object):
             data=self.payload_smartcity)
         assert res.code in (201, 409), (res.code, res.msg)
 
-        self.payload_smartcity["TEST_SUBSERVICE_NAME"]=TEST_SUBSERVICE_NAME1
-        self.payload_smartcity["TEST_SUBSERVICE_DESCRIPTION"]=TEST_SUBSERVICE_NAME1
+        self.payload_smartcity["NEW_SUBSERVICE_NAME"]=TEST_SUBSERVICE_NAME2
+        self.payload_smartcity["NEW_SUBSERVICE_DESCRIPTION"]=TEST_SUBSERVICE_NAME2
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/service/%s/subservice/" % service_id,
