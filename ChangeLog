@@ -1,7 +1,6 @@
 CHANGES
 =======
 
-FEATURE: Tune uwsgi to improve performance
 FEATURE: update docker to centos7
 FEATURE: Check domain_name at delete service and raise exception if is not found
 FEATURE: Log in debug level all requests with codes > 400 and < 500
