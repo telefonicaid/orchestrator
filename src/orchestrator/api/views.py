@@ -124,23 +124,23 @@ class Stats(object):
     num_api_errors = 0
     num_flow_errors = 0
 
-    service = {}
-    sum = {
-        "incomingTransactions": 0,
-        "incomingTransactionRequestSize": 0,
-        "incomingTransactionResponseSize": 0,
-        "incomingTransactionErrors": 0,
-        "serviceTime": 0,
-        "serviceTimeTotal": 0,
-        "outgoingTransactions": 0,
-        "outgoingTransactionRequestSize": 0,
-        "outgoingTransactionResponseSize": 0,
-        "outgoingTransactionErrors": 0,
-    }
+    if settings.ORC_EXTENDED_METRICS:
+        service = {}
+        sum = {
+            "incomingTransactions": 0,
+            "incomingTransactionRequestSize": 0,
+            "incomingTransactionResponseSize": 0,
+            "incomingTransactionErrors": 0,
+            "serviceTime": 0,
+            "serviceTimeTotal": 0,
+            "outgoingTransactions": 0,
+            "outgoingTransactionRequestSize": 0,
+            "outgoingTransactionResponseSize": 0,
+            "outgoingTransactionErrors": 0,
+        }
 
     def collectMetrics(self, service_start, service_name, subservice_name,
                        request, response, flow):
-
         service_stop = time.time()
         transactionError = False
         if flow:
@@ -405,7 +405,8 @@ class ServiceList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id=None):
         self.schema_name = "ServiceList"
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -452,12 +453,15 @@ class ServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
     def put(self, request, service_id=None):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -493,11 +497,14 @@ class ServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id=None):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -547,7 +554,9 @@ class ServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
@@ -562,7 +571,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
         ServiceList_RESTView.__init__(self)
 
     def post(self, request, *args, **kw):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -604,7 +614,9 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -621,7 +633,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
 
     def get(self, request, service_id=None, subservice_id=None):
         self.schema_name = "SubServiceList"
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -674,12 +687,15 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def put(self, request, service_id=None, subservice_id=None):
         self.schema_name = "SubServiceList"
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -724,12 +740,15 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id=None, subservice_id=None):
         self.schema_name = "SubServiceList"
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -786,7 +805,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -800,7 +821,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
         SubServiceList_RESTView.__init__(self)
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -942,7 +964,9 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 class User_RESTView(APIView, IoTConf):
@@ -957,7 +981,8 @@ class User_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, user_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -993,11 +1018,14 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def put(self, request, service_id, user_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1033,11 +1061,14 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def get(self, request, service_id, user_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1073,11 +1104,14 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def post(self, request, service_id, user_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1115,7 +1149,9 @@ class User_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1131,7 +1167,8 @@ class UserList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1171,11 +1208,14 @@ class UserList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1214,7 +1254,9 @@ class UserList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1230,7 +1272,8 @@ class Group_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def delete(self, request, service_id, group_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1266,11 +1309,14 @@ class Group_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def put(self, request, service_id, group_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1305,11 +1351,14 @@ class Group_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def get(self, request, service_id, group_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1345,7 +1394,9 @@ class Group_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1361,7 +1412,8 @@ class GroupList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1401,11 +1453,14 @@ class GroupList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1442,7 +1497,9 @@ class GroupList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1458,7 +1515,8 @@ class Role_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id, role_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1500,12 +1558,15 @@ class Role_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
     def post(self, request, service_id, role_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1550,11 +1611,14 @@ class Role_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id, role_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1595,7 +1659,9 @@ class Role_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1612,7 +1678,8 @@ class RolePolicy_RESTView(APIView, IoTConf):
 
 
     def get(self, request, service_id, role_id, policy_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1654,11 +1721,14 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id, role_id, policy_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -1700,7 +1770,9 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1716,7 +1788,8 @@ class RoleList_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "RoleList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -1754,11 +1827,14 @@ class RoleList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def get(self, request, service_id=None):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -1798,7 +1874,9 @@ class RoleList_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -1811,7 +1889,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "RoleAssignmentList"
         user_id = request.GET.get('user_id', None)
@@ -1858,11 +1937,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -1935,11 +2017,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -2013,7 +2098,9 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2026,7 +2113,8 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "RoleAssignmentList"
         group_id = request.GET.get('group_id', None)
@@ -2073,11 +2161,14 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -2150,11 +2241,14 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -2228,7 +2322,9 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2244,7 +2340,8 @@ class Trust_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2288,7 +2385,9 @@ class Trust_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2304,7 +2403,8 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2365,11 +2465,14 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request, service_id, subservice_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2423,7 +2526,9 @@ class SubServiceIoTADevice_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2439,7 +2544,8 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2493,7 +2599,9 @@ class SubServiceIoTADevices_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2509,7 +2617,8 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def post(self, request, service_id, subservice_id):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2573,7 +2682,9 @@ class SubServiceIoTAService_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2589,7 +2700,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request, service_id, subservice_id=None):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2674,11 +2786,14 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2764,12 +2879,15 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
     def delete(self, request, service_id, subservice_id=None, iot_module=None):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -2854,7 +2972,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2867,7 +2987,8 @@ class OrchVersion_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         #HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         try:
@@ -2944,7 +3065,9 @@ class OrchVersion_RESTView(APIView, IoTConf):
                                                           error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 
@@ -2957,7 +3080,8 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
 
@@ -2979,11 +3103,14 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def put(self, request):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
@@ -3053,7 +3180,9 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
 class OrchMetrics_RESTView(APIView, IoTConf):
@@ -3065,7 +3194,8 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         IoTConf.__init__(self)
 
     def get(self, request):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         reset = request.GET.get('reset', False) == "true"
@@ -3088,11 +3218,14 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response
 
     def delete(self, request):
-        service_start = time.time()
+        if settings.ORC_EXTENDED_METRICS:
+            service_start = time.time()
         response = service_name = subservice_name = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
 
@@ -3111,5 +3244,7 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectMetrics(service_start, service_name, subservice_name,
+                                request, response, flow)
         return response

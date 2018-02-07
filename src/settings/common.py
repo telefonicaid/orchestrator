@@ -260,3 +260,6 @@ SCIM_API_VERSION = "1.1"  # Supported v1.1 (1.1) and v2.0 (2.0) (by UPM)
 
 # Internal version of Orchestrator
 ORC_VERSION = "ORC_version"
+
+
+ORC_EXTENDED_METRICS = False
