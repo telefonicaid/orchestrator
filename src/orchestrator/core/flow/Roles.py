@@ -113,7 +113,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return ROLES, DOMAIN_NAME, None
 
@@ -303,7 +304,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME, PROJECT_NAME
 
@@ -437,7 +439,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -574,7 +577,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
@@ -685,7 +689,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -799,7 +804,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -928,7 +934,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
@@ -1038,7 +1045,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -1227,7 +1235,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {"role_assignments": role_assignments_expanded}, DOMAIN_NAME, PROJECT_NAME
 
@@ -1362,7 +1371,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -1500,7 +1510,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
@@ -1612,7 +1623,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -1727,7 +1739,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -1857,7 +1870,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, SUBSERVICE_NAME
 
@@ -1967,7 +1981,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -2055,7 +2070,8 @@ class Roles(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -2164,7 +2180,8 @@ class Roles(FlowBase):
             return error_code
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -2276,7 +2293,8 @@ class Roles(FlowBase):
             return error_code
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, SERVICE_NAME, None
 
@@ -2387,6 +2405,7 @@ class Roles(FlowBase):
             return error_code
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {"policy": POLICY}, SERVICE_NAME, None

@@ -119,6 +119,7 @@ class CreateNewServiceUser(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {"id": ID_USER}, SERVICE_NAME, None

@@ -99,7 +99,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return PROJECTS, DOMAIN_NAME, None
 
@@ -186,7 +187,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
@@ -278,7 +280,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
@@ -404,7 +407,8 @@ class Projects(FlowBase):
                                                        indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
@@ -818,7 +822,8 @@ class Projects(FlowBase):
         }
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return result, DOMAIN_NAME, PROJECT_NAME
 
@@ -1153,7 +1158,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return DEVICE_ID, DOMAIN_NAME, PROJECT_NAME
 
@@ -1288,7 +1294,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return DEVICES_ID, DOMAIN_NAME, PROJECT_NAME
 
@@ -1388,7 +1395,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return {}, DOMAIN_NAME, PROJECT_NAME
 
@@ -1534,7 +1542,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
@@ -1652,7 +1661,8 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return subscriptionid, DOMAIN_NAME, PROJECT_NAME
 
@@ -1755,6 +1765,7 @@ class Projects(FlowBase):
         self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
-        self.collectComponentMetrics()
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectComponentMetrics()
 
         return modules, DOMAIN_NAME, PROJECT_NAME

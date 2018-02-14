@@ -35,7 +35,7 @@ from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 
 from settings.dev import IOTMODULES
-
+from settings import dev as settings
 
 
 
@@ -120,14 +120,15 @@ class FlowBase(object):
             self.endpoints['CA'] = \
               CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
 
-        self.sum = {
-            "serviceTime": 0,
-            "serviceTimeTotal": 0,
-            "outgoingTransactions": 0,
-            "outgoingTransactionRequestSize": 0,
-            "outgoingTransactionResponseSize": 0,
-            "outgoingTransactionErrors": 0,
-        }
+        if settings.ORC_EXTENDED_METRICS:
+            self.sum = {
+                "serviceTime": 0,
+                "serviceTimeTotal": 0,
+                "outgoingTransactions": 0,
+                "outgoingTransactionRequestSize": 0,
+                "outgoingTransactionResponseSize": 0,
+                "outgoingTransactionErrors": 0,
+            }
 
 
     def composeErrorCode(self, ex):
