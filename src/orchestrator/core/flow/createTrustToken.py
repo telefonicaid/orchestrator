@@ -27,7 +27,7 @@ from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 from settings.common import IOTAGENT, PEP
-
+from settings import dev as settings
 
 class CreateTrustToken(FlowBase):
 

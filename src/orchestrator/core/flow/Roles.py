@@ -26,7 +26,7 @@ import json
 from orchestrator.core.flow.base import FlowBase
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
-
+from settings import dev as settings
 
 class Roles(FlowBase):
 

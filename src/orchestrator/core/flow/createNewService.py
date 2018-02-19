@@ -24,7 +24,7 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
-
+from settings import dev as settings
 
 class CreateNewService(FlowBase):
 

@@ -28,7 +28,7 @@ from orchestrator.common.util import CSVOperations
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 from settings.dev import IOTMODULES
-
+from settings import dev as settings
 
 class Projects(FlowBase):
 
