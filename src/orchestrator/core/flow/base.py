@@ -265,6 +265,7 @@ class FlowBase(object):
             all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
             all.append(self.cb.CBRestOperations.getOutgoingMetrics())
             all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
+            # TODO: Take care of the following operation takes too much time
             self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
         except Exception, ex:
             self.logger.error("ERROR collecting component metrics %s", ex)

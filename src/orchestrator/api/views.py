@@ -3201,10 +3201,12 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         reset = request.GET.get('reset', False) == "true"
 
         try:
-            result = self.composeMetrics()
-
-            if reset:
-                self.resetMetrics()
+            if settings.ORC_EXTENDED_METRICS:
+                result = self.composeMetrics()
+                if reset:
+                    self.resetMetrics()
+            else:
+                result = None
 
             response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
@@ -3230,8 +3232,11 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
 
         try:
-            result = self.composeMetrics()
-            self.resetMetrics()
+            if settings.ORC_EXTENDED_METRICS:
+                result = self.composeMetrics()
+                self.resetMetrics()
+            else:
+                result = None
             response = Response(result, status=status.HTTP_204_NO_CONTENT,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
