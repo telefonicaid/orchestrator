@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FEATURE: Add option to enable or disable extended metrics (experimental). Disabled by default
 FEATURE: update docker to centos7
 FEATURE: Check domain_name at delete service and raise exception if is not found
 FEATURE: Log in debug level all requests with codes > 400 and < 500
