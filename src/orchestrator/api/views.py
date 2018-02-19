@@ -29,6 +29,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import APIException
 from rest_framework.throttling import AnonRateThrottle
 
 from django.conf import settings
@@ -3206,7 +3207,7 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 if reset:
                     self.resetMetrics()
             else:
-                result = None
+                raise APIException(detail="extended metrics are disabled")
 
             response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
@@ -3236,7 +3237,7 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 result = self.composeMetrics()
                 self.resetMetrics()
             else:
-                result = None
+                raise APIException(detail="extended metrics are disabled")
             response = Response(result, status=status.HTTP_204_NO_CONTENT,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
