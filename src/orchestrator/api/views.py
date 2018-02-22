@@ -140,6 +140,9 @@ class Stats(object):
 
     def collectMetrics(self, service_start, service_name, subservice_name,
                        request, response, flow):
+        if not settings.ORC_EXTENDED_METRICS:
+            # Do nothing
+            return
 
         service_stop = time.time()
         transactionError = False
@@ -262,6 +265,9 @@ class Stats(object):
             "service": self.service,
             "sum": self.sum
         }
+
+        if not settings.ORC_EXTENDED_METRICS:
+            return result
 
         for serv in result["service"]:
             if result["service"][serv]["sum"]["serviceTimeTotal"] > 0:

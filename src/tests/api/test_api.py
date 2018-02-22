@@ -1,6 +1,6 @@
 import uuid
 import json
-from settings import dev as settings
+from settings import custom_dev as settings
 
 from orchestrator.common.util import RestOperations
 

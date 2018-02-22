@@ -35,8 +35,7 @@ from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 
 from settings.dev import IOTMODULES
-
-
+from settings import dev as settings
 
 
 
@@ -258,12 +257,16 @@ class FlowBase(object):
 
     def collectComponentMetrics(self):
         all = []
+        if not settings.ORC_EXTENDED_METRICS:
+            # Do nothing
+            return
         try:
             all.append(self.idm.IdMRestOperations.getOutgoingMetrics())
             all.append(self.ac.AccessControlRestOperations.getOutgoingMetrics())
             all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
             all.append(self.cb.CBRestOperations.getOutgoingMetrics())
             all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
+            # TODO: Take care of the following operation takes too much time
             self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
         except Exception, ex:
             self.logger.error("ERROR collecting component metrics %s", ex)
