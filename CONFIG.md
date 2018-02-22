@@ -175,7 +175,7 @@ REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
 ```
 
 
-### WSGI server options
+## WSGI server options
 
 For an installation which uses Orchestrator RPM, there is a file in /etc/default/orchestrator-daemon to setup orchestrator port as well as number of process and threads sused by WSGI server.
 
@@ -225,4 +225,20 @@ IOTAGENT = {
     "user": "iotagent_user",
     "password": "iotagent_password"
 }
+```
+
+## Metrics
+
+There are an option, that is disabled by default, to obtain a extended metrics report. This is still experimental due to enable it could imply decrease performance.
+[Extended Metrics](https://orchestrator2.docs.apiary.io/#reference/orchestrator/metrics)
+
+```
+ORC_EXTENDED_METRICS = False
+
+```
+This value could be overwrite just adding right values to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py)
+
+```
+ORC_EXTENDED_METRICS = True
+
 ```
