@@ -37,6 +37,8 @@ exe="$UWGSI --http :${PORT} \
 --master \
 --processes $PROCESSES \
 --threads $THREADS \
+--enable-threads \
+--disable-logging \
 --stats localhost:$STATS_PORT"
 
 server="$exe"
