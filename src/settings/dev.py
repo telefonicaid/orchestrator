@@ -86,3 +86,12 @@ CYGNUS = {
 }
 
 IOTMODULES = [ "CYGNUS", "PERSEO" ]
+
+
+# LDAP endpoint
+LDAP = {
+    "host": "localhost",
+    "port": "389",
+    "protocol":"ldap",
+    "dn": "dc=openstack, dc=org"
+}

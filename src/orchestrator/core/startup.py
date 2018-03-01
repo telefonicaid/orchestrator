@@ -101,7 +101,7 @@ def show_conf():
     custom_settings_entries = ['KEYSTONE', 'KEYPASS',
                                'IOTA', 'ORION', 'CA',
                                'PEP', 'IOTAGENT', 'SCIM_API_VERSION',
-                               'CYGNUS', 'CA', 'STH', 'PERSEO'
+                               'CYGNUS', 'CA', 'STH', 'PERSEO', 'LDAP'
                                ]
     for name in custom_settings_entries:
         conf[name] = getattr(settings, name)
