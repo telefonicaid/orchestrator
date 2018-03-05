@@ -54,7 +54,7 @@ class OpenLdapOperations(object):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
         # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
-        username = "cn=" + USERNAME + ", dc=openstack, dc=org"
+        username = "cn=" + USERNAME + ",dc=openstack,dc=org"
         logger.debug("bind admin %s" % username)
 
         # Any errors will throw an ldap.LDAPError exception 
@@ -67,7 +67,7 @@ class OpenLdapOperations(object):
     
         # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
-        username = "uid=" + USERNAME + ", ou=users, dc=openstack, dc=org"
+        username = "uid=" + USERNAME + ", ou=users,dc=openstack,dc=org"
         logger.debug("bind user %s" % username)
 
         # Any errors will throw an ldap.LDAPError exception 
@@ -97,6 +97,7 @@ class OpenLdapOperations(object):
                 "gidNumber": ["10000"],
                 "loginShell": ["/bin/bash"],
                 "homeDirectory": ["/home/"+ str(NEW_USER_NAME)],
+                "mail": str(NEW_USER_EMAIL),
                 "userPassword": str(NEW_USER_PASSWORD)
             }
             logger.debug("create user mymodlist: %s" % mymodlist)
@@ -155,7 +156,7 @@ class OpenLdapOperations(object):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
 
-            baseDN = "ou=users, dc=openstack,dc=org"
+            baseDN = "ou=users,dc=openstack,dc=org"
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
@@ -224,7 +225,7 @@ class OpenLdapOperations(object):
                     USER_PASSWORD):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
-            baseDN = "uid=" + USER_NAME + ",ou=users, dc=openstack, dc=org"
+            baseDN = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
@@ -254,15 +255,21 @@ class OpenLdapOperations(object):
                           LDAP_ADMIN_USER,
                           LDAP_ADMIN_PASSWORD,
                           USER_NAME,
-                          USER_DETAIL):
+                          USER_DATA):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
-
-            # you can expand this list with whatever amount of attributes you want to modify
-            # TODO
-            old_value = {"": [""]}
-            new_value = {"": [""]}
+            old_value = {}
+            new_value = {}
+            results = conn.search_s(dn, ldap.SCOPE_BASE)
+            for result in results:
+                result_dn = result[0]
+                result_attrs = result[1]
+                for attr in result_attrs:
+                    for userattr in USER_DATA:
+                        if attr == userattr:
+                            old_value[attr] = result_attrs[userattr]
+                            new_value[attr] = USER_DATA[userattr]
 
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)
@@ -280,11 +287,17 @@ class OpenLdapOperations(object):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
-
-            # you can expand this list with whatever amount of attributes you want to modify
-            # TODO
-            old_value = {"": [""]}
-            new_value = {"": [""]}
+            old_value = {}
+            new_value = {}
+            results = conn.search_s(dn, ldap.SCOPE_BASE)
+            for result in results:
+                result_dn = result[0]
+                result_attrs = result[1]
+                for attr in result_attrs:
+                    for userattr in USER_DATA:
+                        if attr == userattr:
+                            old_value[attr] = result_attrs[userattr]
+                            new_value[attr] = USER_DATA[userattr]
 
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)

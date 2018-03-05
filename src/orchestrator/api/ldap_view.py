@@ -128,7 +128,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("USER_NAME", None),
                                request.DATA.get("USER_PASSWORD", None),
-                               request.DATA.get("DATA_USER", None))
+                               request.DATA.get("USER_DATA", None))
             if 'error' not in result:
                 #Stats.num_put_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,

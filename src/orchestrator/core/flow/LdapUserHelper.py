@@ -217,3 +217,55 @@ class LdapUserHelper(FlowBase):
                 ex))
             # Delete user if was created
             return self.composeErrorCode(ex)                
+
+    def updateUser(self,
+                      LDAP_ADMIN_USER,
+                      LDAP_ADMIN_PASSWORD,
+                      USER_NAME,
+                      USER_PASSWORD,
+                      USER_DATA):
+
+        data_log = {
+            "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "USER_NAME": "%s" % USER_NAME,
+            "USER_PASSWORD": "%s" % USER_PASSWORD,
+            "USER_DATA:": "%s" % USER_DATA
+        }
+        self.logger.debug("FLOW updateUser invoked with: %s" % json.dumps(
+            data_log,
+            indent=3))
+        try:
+            if LDAP_ADMIN_USER and LDAP_ADMIN_PASSWORD:
+                res = self.ldap.updateUserByAdmin(
+                    LDAP_ADMIN_USER,
+                    LDAP_ADMIN_PASSWORD,
+                    USER_NAME,
+                    USER_DATA)
+
+                if GROUPNAMES in USER_DATA:
+                    for GROUP_NAME in GROUP_NAMES:
+                        self.logger.debug("FLOW updateUser assign to group: %s" % GROUP_NAME)
+                        res = self.ldap.assignGroupUser(
+                            LDAP_ADMIN_USER,
+                            LDAP_ADMIN_PASSWORD,
+                            NEW_USER_NAME,
+                            GROUP_NAME)
+                        self.logger.debug("res=%s" % res)
+            elif USERNAME and USER_PASSWORD:
+                res = self.ldap.updateUserByHimself(
+                    USER_NAME,
+                    USER_PASSWORD,
+                    USER_DATA)
+            self.logger.debug("res=%s" % res)
+
+            if not "error" in res:
+                return res, None, None
+            else:
+                raise Exception("not user was updated in ldap: %s" % res['error'])
+        except Exception, ex:
+            self.logger.warn("ERROR updating user %s: %s" % (
+                USER_NAME,
+                ex))
+            # Delete user if was created
+            return self.composeErrorCode(ex)

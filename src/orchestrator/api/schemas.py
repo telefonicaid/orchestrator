@@ -937,26 +937,43 @@ json = {
                     "properties": {
                         "value": {
                             "type": "string",
-                            "pattern": "^([A-Za-z0-9_]+)$",
-                        }
-                    },
-                    "maxItems": 8
-                },
-            },
-            "DATA_USER": {
-                "type": "array",
-                "items": {
-                    "type": "string",
-                    "properties": {
-                        "value": {
-                            "type": "string",
-                            "pattern": "^([A-Za-z0-9_]+)$",
+                            "pattern": "^([A-Za-z0-9_]+)$"
                         }
                     },
                     "maxItems": 8
                 }
+            },
+            "USER_DATA": {
+                "type": "object",
+                "properties": {
+                    "USER_PASSWORD": {
+                        "type": "string",
+                        "minLength": 6,
+                        },
+                    "USER_DESCRIPTION": {
+                        "type": "string",
+                        },
+                    "USER_EMAIL": {
+                        "type": "string",
+                        "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                        },
+                    "GROUP_NAMES": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "properties": {
+                                "value": {
+                                    "type": "string",
+                                    "pattern": "^([A-Za-z0-9_]+)$"
+                                    }
+                                },
+                            "maxItems": 8
+                            }
+                        }
+                    },
+                "additionalProperties": False,
             }
         }
         # "required": [ ],
-    },
+    }
 }
