@@ -50,7 +50,7 @@ class OpenLdapOperations(object):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
         assert conn != None
 
-    def bind_admin(self, USERNAME, PASSWORD):
+    def bindAdmin(self, USERNAME, PASSWORD):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
         # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
@@ -62,7 +62,7 @@ class OpenLdapOperations(object):
         conn.bind_s(username, PASSWORD)
         return conn
 
-    def bind_user(self, USERNAME, PASSWORD):
+    def bindUser(self, USERNAME, PASSWORD):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
     
         # you should set this to ldap.VERSION2 if you're using a v2 directory
@@ -87,7 +87,7 @@ class OpenLdapOperations(object):
                    NEW_USER_EMAIL,
                    NEW_USER_DESCRIPTION):
         try:
-            conn = self.bind_admin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "uid=" + NEW_USER_NAME + ",ou=users,dc=openstack,dc=org"
             mymodlist = {
                 "objectClass": ["account", "posixAccount", "shadowAccount"],
@@ -113,7 +113,7 @@ class OpenLdapOperations(object):
                           LDAP_ADMIN_PASSWORD,
                           USER_NAME):
         try:
-            conn = self.bind_admin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
             result = conn.delete_s(dn)
             logger.debug("ldap delete user by admin %s" % json.dumps(result))
@@ -127,7 +127,7 @@ class OpenLdapOperations(object):
                             USER_NAME,
                             USER_PASSWORD):
         try:
-            conn = self.bind_user(USER_NAME, USER_PASSWORD)
+            conn = self.bindUser(USER_NAME, USER_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
             result = conn.delete_s(dn)
             logger.debug("ldap delete user by himself %s" % json.dumps(result))
@@ -141,7 +141,7 @@ class OpenLdapOperations(object):
                  USER_NAME,
                  USER_PASSWORD):
         try:
-            conn = self.bind_user(USER_NAME, USER_PASSWORD)
+            conn = self.bindUser(USER_NAME, USER_PASSWORD)
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
@@ -153,7 +153,7 @@ class OpenLdapOperations(object):
                     LDAP_ADMIN_PASSWORD,
                     FILTER):
         try:
-            conn = self.bind_admin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
 
             baseDN = "ou=users, dc=openstack,dc=org"
             searchScope = ldap.SCOPE_SUBTREE
@@ -187,19 +187,27 @@ class OpenLdapOperations(object):
                     USER_NAME,
                     GROUP_NAME):
         try:
-            conn = self.bind_admin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "cn=" + str(GROUP_NAME) + ",ou=groups,dc=openstack,dc=org"
+            results = conn.search_s(dn, ldap.SCOPE_BASE)
 
-            # A dict to help build the "body" of the object
-            attrs = {}
-            attrs['objectclass'] = ['groupofnames']
-            attrs['member'] = [ 'uid=' + str(USER_NAME) +',ou=users,dc=openstack,dc=org' ]
+            # Get current group members
+            groupMembers = []
+            oldgroupMembers = []
+            for result in results:
+                result_dn = result[0]
+                result_attrs = result[1]
+                if "member" in result_attrs:
+                    for member in result_attrs["member"]:
+                        groupMembers.append(member)
+                        oldgroupMembers.append(member)
 
-            logger.debug("assign group user attrs: %s" % attrs)
-            # Do the actual synchronous add-operation to the ldapserver
-
-            old_value = {'member': ['uid=pepe18,ou=users,dc=openstack,dc=org']}
-            new_value = {'member': ['uid=' + str(USER_NAME) +',ou=users,dc=openstack,dc=org']}
+            old_value = dict()
+            new_value = dict()
+            old_value['member'] = oldgroupMembers
+            new_value['member'] = groupMembers
+            # Add new group member
+            new_value['member'].append('uid=' + str(USER_NAME) +',ou=users,dc=openstack,dc=org')
 
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
 
@@ -215,7 +223,7 @@ class OpenLdapOperations(object):
                     USER_NAME,
                     USER_PASSWORD):
         try:
-            conn = self.bind_user(USER_NAME, USER_PASSWORD)
+            conn = self.bindUser(USER_NAME, USER_PASSWORD)
             baseDN = "uid=" + USER_NAME + ",ou=users, dc=openstack, dc=org"
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
@@ -248,7 +256,7 @@ class OpenLdapOperations(object):
                           USER_NAME,
                           USER_DETAIL):
         try:
-            conn = self.bind_admin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
 
             # you can expand this list with whatever amount of attributes you want to modify
@@ -270,7 +278,7 @@ class OpenLdapOperations(object):
                           USER_PASSWORD,
                           USER_DETAIL):
         try:
-            conn = self.bind_user(USER_NAME, USER_PASSWORD)
+            conn = self.bindUser(USER_NAME, USER_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
 
             # you can expand this list with whatever amount of attributes you want to modify
