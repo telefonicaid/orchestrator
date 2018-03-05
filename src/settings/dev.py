@@ -95,3 +95,12 @@ LDAP = {
     "protocol":"ldap",
     "dn": "dc=openstack, dc=org"
 }
+
+MAILER = {
+    "host": "localhost",
+    "port": "587",
+    "tls": True,
+    "user": 'smtpuser@yourdomain.com',
+    "password": 'yourpassword',
+    "from": 'smtpuser'
+}

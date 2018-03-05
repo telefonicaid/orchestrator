@@ -34,7 +34,7 @@ class LdapUser_RESTView(APIView, IoTConf):
 
 
     def post(self, request):
-        response = service_name = subservice_name = flow = None
+        response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
@@ -44,7 +44,9 @@ class LdapUser_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             # if LDAP_ADMIN_USER and LDA_ADMIN_PASSWORD
-            result, service_name, subservice_name = flow.createNewUser(
+            if (request.DATA.get("LDAP_ADMIN_USER", None) and
+                    request.DATA.get("LDAP_ADMIN_PASSWORD", None)):
+                result = flow.createNewUser(
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("NEW_USER_NAME", None),
@@ -52,8 +54,14 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("NEW_USER_EMAIL", None), 
                                request.DATA.get("NEW_USER_DESCRIPTION", None),
                                request.DATA.get("GROUP_NAMES", None))
-            # else -> flow.askforCreateNewUser()
-            
+            else:
+                result = flow.askForCreateNewUser(
+                               request.DATA.get("NEW_USER_NAME", None),
+                               request.DATA.get("NEW_USER_PASSWORD", None),
+                               request.DATA.get("NEW_USER_EMAIL", None),
+                               request.DATA.get("NEW_USER_DESCRIPTION", None),
+                               request.DATA.get("GROUP_NAMES", None))
+
             if 'error' not in result:
                 #Stats.num_post_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
@@ -74,7 +82,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         return response
 
     def get(self, request):
-        response = service_name = subservice_name = flow = None
+        response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
@@ -86,12 +94,12 @@ class LdapUser_RESTView(APIView, IoTConf):
 
             # if FILTER, LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD
             if request.DATA.get("FILTER", None):
-                result, service_name, subservice_name = flow.listUsers(
+                result = flow.listUsers(
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("FILTER", None))
             else: 
-                result, service_name, subservice_name = flow.getUserDetail(
+                result = flow.getUserDetail(
                                request.DATA.get("USER_NAME", None),
                                request.DATA.get("USER_PASSWORD", None))
             if 'error' not in result:
@@ -114,7 +122,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         return response        
 
     def put(self, request):
-        response = service_name = subservice_name = flow = None
+        response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
@@ -123,7 +131,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                          self.LDAP_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name, subservice_name = flow.updateUser(
+            result = flow.updateUser(
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("USER_NAME", None),
@@ -150,7 +158,7 @@ class LdapUser_RESTView(APIView, IoTConf):
     
 
     def delete(self, request):
-        response = service_name = subservice_name = flow = None
+        response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
@@ -159,7 +167,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                          self.LDAP_PORT,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name, subservice_name = flow.deleteUser(
+            result = flow.deleteUser(
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("USER_NAME", None),
