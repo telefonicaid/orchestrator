@@ -23,7 +23,7 @@ from orchestrator.common.util import ContextFilterTransactionId
 
 class LdapUser_RESTView(APIView, IoTConf):
     """
-    { Create, Read, Update, Delete } Users
+    { Create, Read, Update, Delete } LDAP Users
 
     """
     schema_name = "LdapUser"
@@ -85,7 +85,7 @@ class LdapUser_RESTView(APIView, IoTConf):
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             # if FILTER, LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD
-            if FILTER:
+            if request.DATA.get("FILTER", None):
                 result, service_name, subservice_name = flow.listUsers(
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),

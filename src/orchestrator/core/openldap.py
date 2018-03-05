@@ -67,7 +67,7 @@ class OpenLdapOperations(object):
     
         # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
-        username = "uid=" + USERNAME + ", ou=Users, dc=openstack, dc=org"
+        username = "uid=" + USERNAME + ", ou=users, dc=openstack, dc=org"
         logger.debug("bind user %s" % username)
 
         # Any errors will throw an ldap.LDAPError exception 
@@ -153,14 +153,13 @@ class OpenLdapOperations(object):
                     LDAP_ADMIN_PASSWORD,
                     FILTER):
         try:
-            conn = self.bind_admin(USER_NAME, USER_PASSWORD)
+            conn = self.bind_admin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
 
-            baseDN = "ou=users, o=openstack.org"
+            baseDN = "ou=users, dc=openstack,dc=org"
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
-            searchFilter = FILTER # "cn=*jack*"
-
+            searchFilter = "cn=" + FILTER # "cn=*jack*"
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
             logger.debug("ldap list users %s" % json.dumps(ldap_result_id))
@@ -175,7 +174,7 @@ class OpenLdapOperations(object):
                     ## The appending to list is just for illustration.
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         result_set.append(result_data)
-            logger.debug("ldap list users %s" % result_set)
+            logger.debug("ldap number of users found %s" % len(result_set))
             self.unbind(conn)
             return { "details": result_set }
         except ldap.LDAPError, e:
@@ -217,11 +216,11 @@ class OpenLdapOperations(object):
                     USER_PASSWORD):
         try:
             conn = self.bind_user(USER_NAME, USER_PASSWORD)
-            baseDN = "ou=users, o=openstack.org"
+            baseDN = "uid=" + USER_NAME + ",ou=users, dc=openstack, dc=org"
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
-            searchFilter = "cn="+ USER_NAME
+            searchFilter = "cn=*" + USER_NAME + "*"
 
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
