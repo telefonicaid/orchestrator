@@ -29,6 +29,7 @@ from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
 from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.core.perseo import PerseoOperations as PerseoOperations
+from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
@@ -59,6 +60,9 @@ class FlowBase(object):
                  PERSEO_PROTOCOL="http",
                  PERSEO_HOST="localhost",
                  PERSEO_PORT="9090",
+                 LDAP_PROTOCOL="http",
+                 LDAP_HOST="localhost",
+                 LDAP_PORT="389",
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 
@@ -103,6 +107,12 @@ class FlowBase(object):
         self.perseo = PerseoOperations(PERSEO_PROTOCOL,
                                        PERSEO_HOST,
                                        PERSEO_PORT,
+                                       CORRELATOR_ID=self.CORRELATOR_ID,
+                                       TRANSACTION_ID=self.TRANSACTION_ID)
+
+        self.ldap = OpenLdapOperations(LDAP_PROTOCOL,
+                                       LDAP_HOST,
+                                       LDAP_PORT,
                                        CORRELATOR_ID=self.CORRELATOR_ID,
                                        TRANSACTION_ID=self.TRANSACTION_ID)
 
