@@ -38,10 +38,18 @@ class LdapUser_RESTView(APIView, IoTConf):
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
-            flow = LdapUserHelper(self.LDAP_PROTOCOL,
-                         self.LDAP_HOST,
-                         self.LDAP_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+            flow = LdapUserHelper(
+                           None, None, None,
+                           LDAP_HOST=self.LDAP_HOST,
+                           LDAP_PORT=self.LDAP_PORT,
+                           LDAP_BASEDN=self.LDAP_BASEDN,
+                           MAILER_HOST=self.MAILER_HOST,
+                           MAILER_PORT=self.MAILER_PORT,
+                           MAILER_USER=self.MAILER_USER,
+                           MAILER_PASSWORD=self.MAILER_PASSWORD,
+                           MAILER_FROM=self.MAILER_FROM,
+                           MAILER_TO=self.MAILER_TO,
+                           CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             # if LDAP_ADMIN_USER and LDA_ADMIN_PASSWORD
             if (request.DATA.get("LDAP_ADMIN_USER", None) and
@@ -64,7 +72,7 @@ class LdapUser_RESTView(APIView, IoTConf):
 
             if 'error' not in result:
                 #Stats.num_post_ldap += 1
-                response = Response(result, status=status.HTTP_200_OK,
+                response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
@@ -86,10 +94,12 @@ class LdapUser_RESTView(APIView, IoTConf):
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
-            flow = LdapUserHelper(self.LDAP_PROTOCOL,
-                         self.LDAP_HOST,
-                         self.LDAP_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+            flow = LdapUserHelper(
+                           None, None, None,
+                           LDAP_HOST=self.LDAP_HOST,
+                           LDAP_PORT=self.LDAP_PORT,
+                           LDAP_BASEDN=self.LDAP_BASEDN,
+                           CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             # if FILTER, LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD
@@ -126,9 +136,11 @@ class LdapUser_RESTView(APIView, IoTConf):
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
-            flow = LdapUserHelper(self.LDAP_PROTOCOL,
-                         self.LDAP_HOST,
-                         self.LDAP_PORT,
+            flow = LdapUserHelper(
+                         None, None, None,
+                         LDAP_HOST=self.LDAP_HOST,
+                         LDAP_PORT=self.LDAP_PORT,
+                         LDAP_BASEDN=self.LDAP_BASEDN,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.updateUser(
@@ -162,9 +174,11 @@ class LdapUser_RESTView(APIView, IoTConf):
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
             request.DATA  # json validation
-            flow = LdapUserHelper(self.LDAP_PROTOCOL,
-                         self.LDAP_HOST,
-                         self.LDAP_PORT,
+            flow = LdapUserHelper(
+                         None, None, None,
+                         LDAP_HOST=self.LDAP_HOST,
+                         LDAP_PORT=self.LDAP_PORT,
+                         LDAP_BASEDN=self.LDAP_BASEDN,
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.deleteUser(
@@ -175,6 +189,54 @@ class LdapUser_RESTView(APIView, IoTConf):
             if 'error' not in result:
                 #Stats.num_delete_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+            else:
+                Stats.num_flow_errors += 1
+                response = Response(result['error'],
+                                status=self.getStatusFromCode(result['code']),
+                                headers={"Fiware-Correlator": CORRELATOR_ID})
+        except ParseError as error:
+            Stats.num_api_errors += 1
+            response = Response(
+                'Input validation error - {0} {1}'.format(error.message,
+                                                          error.detail),
+                status=status.HTTP_400_BAD_REQUEST,
+                headers={"Fiware-Correlator": CORRELATOR_ID}
+            )
+        return response
+
+
+class LdapAuth_RESTView(APIView, IoTConf):
+    """
+    { post } LDAP Auth
+
+    """
+    schema_name = "LdapUser"
+    parser_classes = (parsers.JSONSchemaParser,)
+
+    def __init__(self):
+        IoTConf.__init__(self)
+
+    def post(self, request):
+        response = flow = None
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        try:
+            request.DATA  # json validation
+            flow = LdapUserHelper(
+                           None, None, None,
+                           LDAP_HOST=self.LDAP_HOST,
+                           LDAP_PORT=self.LDAP_PORT,
+                           LDAP_BASEDN=self.LDAP_BASEDN,
+                           CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            # if LDAP_ADMIN_USER and LDA_ADMIN_PASSWORD
+            result = flow.authUser(
+                               request.DATA.get("USER_NAME", None),
+                               request.DATA.get("USER_PASSWORD", None))
+
+            if 'error' not in result:
+                #Stats.num_post_ldap += 1
+                response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1

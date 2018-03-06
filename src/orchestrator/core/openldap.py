@@ -37,14 +37,14 @@ class OpenLdapOperations(object):
     '''
 
     def __init__(self,
-                 LDAP_PROTOCOL=None,
                  LDAP_HOST=None,
                  LDAP_PORT=None,
+                 LDAP_BASEDN=None,
                  CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
-        self.LDAP_PROTOCOL = LDAP_PROTOCOL
         self.LDAP_HOST = LDAP_HOST
         self.LDAP_PORT = int(LDAP_PORT)
+        self.LDAP_BASEDN = LDAP_BASEDN
 
     def checkLdap(self):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
@@ -54,7 +54,7 @@ class OpenLdapOperations(object):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
         # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
-        username = "cn=" + USERNAME + ",dc=openstack,dc=org"
+        username = "cn=" + USERNAME + "," + self.LDAP_BASEDN
         logger.debug("bind admin %s" % username)
 
         # Any errors will throw an ldap.LDAPError exception 
@@ -67,7 +67,7 @@ class OpenLdapOperations(object):
     
         # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
-        username = "uid=" + USERNAME + ", ou=users,dc=openstack,dc=org"
+        username = "uid=" + USERNAME + ", ou=users," + self.LDAP_BASEDN
         logger.debug("bind user %s" % username)
 
         # Any errors will throw an ldap.LDAPError exception 
@@ -88,7 +88,7 @@ class OpenLdapOperations(object):
                    NEW_USER_DESCRIPTION):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "uid=" + NEW_USER_NAME + ",ou=users,dc=openstack,dc=org"
+            dn = "uid=" + NEW_USER_NAME + ",ou=users," + self.LDAP_BASEDN
             mymodlist = {
                 "objectClass": ["account", "posixAccount", "shadowAccount"],
                 "uid": [ str(NEW_USER_NAME) ],
@@ -115,7 +115,7 @@ class OpenLdapOperations(object):
                           USER_NAME):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
+            dn = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
             result = conn.delete_s(dn)
             logger.debug("ldap delete user by admin %s" % json.dumps(result))
             self.unbind(conn)
@@ -129,7 +129,7 @@ class OpenLdapOperations(object):
                             USER_PASSWORD):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
-            dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
+            dn = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
             result = conn.delete_s(dn)
             logger.debug("ldap delete user by himself %s" % json.dumps(result))
             self.unbind(conn)
@@ -156,7 +156,7 @@ class OpenLdapOperations(object):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
 
-            baseDN = "ou=users,dc=openstack,dc=org"
+            baseDN = "ou=users," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
@@ -189,7 +189,7 @@ class OpenLdapOperations(object):
                     GROUP_NAME):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "cn=" + str(GROUP_NAME) + ",ou=groups,dc=openstack,dc=org"
+            dn = "cn=" + str(GROUP_NAME) + ",ou=groups," + self.LDAP_BASEDN
             results = conn.search_s(dn, ldap.SCOPE_BASE)
 
             # Get current group members
@@ -208,7 +208,7 @@ class OpenLdapOperations(object):
             old_value['member'] = oldgroupMembers
             new_value['member'] = groupMembers
             # Add new group member
-            new_value['member'].append('uid=' + str(USER_NAME) +',ou=users,dc=openstack,dc=org')
+            new_value['member'].append('uid=' + str(USER_NAME) +',ou=users,' + self.LDAP_BASEDN)
 
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
 
@@ -225,7 +225,7 @@ class OpenLdapOperations(object):
                     USER_PASSWORD):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
-            baseDN = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
+            baseDN = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
@@ -258,7 +258,7 @@ class OpenLdapOperations(object):
                           USER_DATA):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
+            dn = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
             old_value = {}
             new_value = {}
             results = conn.search_s(dn, ldap.SCOPE_BASE)
@@ -286,7 +286,7 @@ class OpenLdapOperations(object):
                           USER_DETAIL):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
-            dn = "uid=" + USER_NAME + ",ou=users,dc=openstack,dc=org"
+            dn = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
             old_value = {}
             new_value = {}
             results = conn.search_s(dn, ldap.SCOPE_BASE)

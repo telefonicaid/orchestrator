@@ -87,16 +87,32 @@ class IoTConf(Stats):
             self.PERSEO_PORT = "9090"
 
         try:
-            self.LDAP_PROTOCOL = settings.LDAP['protocol']
             self.LDAP_HOST = settings.LDAP['host']
             self.LDAP_PORT = settings.LDAP['port']
+            self.LDAP_BASEDN = settings.LDAP['basedn']
         except KeyError:
             logger.error("LDAP endpoint configuration error. " +
                          "Forcing to use default conf values (localhost)")
-            self.LDAP_PROTOCOL = "http"
             self.LDAP_HOST = "localhost"
-            self.LDAP_PORT = "389"            
+            self.LDAP_PORT = "389"
+            self.LDAP_BASEDN = "dc=openstack,dc=org"
 
+        try:
+            self.MAILER_HOST = settings.MAILER['host']
+            self.MAILER_PORT = settings.MAILER['port']
+            self.MAILER_USER = settings.MAILER['user']
+            self.MAILER_PASSWORD = settings.MAILER['password']
+            self.MAILER_FROM = settings.MAILER['from']
+            self.MAILER_TO = settings.MAILER['to']
+        except KeyError:
+            logger.error("MAILER endpoint configuration error. " +
+                         "Forcing to use default conf values (localhost)")
+            self.MAILER_HOST = "localhost"
+            self.MAILER_PORT = "587"
+            self.MAILER_USER = "smtpuser@yourdomain.com"
+            self.MAILER_PASSWORD = "yourpassword"
+            self.MAILER_FROM = "smtpuser"
+            self.MAILER_TO = "smtpuser"
 
     # Get Django status error from simple HTTP error code
     def getStatusFromCode(self, code):

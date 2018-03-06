@@ -107,8 +107,9 @@ class LdapUserHelper(FlowBase):
             indent=3))
 
         try:
-            # TODO: sent email
-            # Mailer.sendMail()
+            subject = "ask for a new user %s creation" % NEW_USER_NAME
+            text = json.dumps(data_log)
+            return self.mailer.sendMail(None, subject=subject, text=text)
 
         except Exception, ex:
             self.logger.warn("ERROR creating user %s: %s" % (
@@ -219,7 +220,7 @@ class LdapUserHelper(FlowBase):
             return self.composeErrorCode(ex)
 
 
-    def getUserAuth(self,
+    def authUser(self,
                     USER_NAME,
                     USER_PASSWORD):
 

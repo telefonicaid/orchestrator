@@ -10,29 +10,30 @@ logger = logging.getLogger('orchestrator_core')
 class MailerOperations(object):
 
     def __init__(self,
-                 MAILER_PROTOCOL=None,
                  MAILER_HOST=None,
                  MAILER_PORT=None,
+                 MAILER_USER=None,
+                 MAILER_PASSWORD=None,
+                 MAILER_FROM=None,
+                 MAILER_TO=None,
                  CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
-        self.MAILER_PROTOCOL = MAILER_PROTOCOL
-        self.MAILER_HOST = MAILER_HOST
-        self.MAILER_PORT = int(MAILER_PORT)
 
-        # TODO: read from config
-        self.smtp_from
-        self.smtp_server
-        self.smtp_port
-        self.smtp_user
-        self.smtp_password
-        
+        self.smtp_server = MAILER_HOST
+        self.smtp_port = MAILER_PORT
+        self.smtp_user = MAILER_USER
+        self.smtp_password = MAILER_PASSWORD
+        self.smtp_from = MAILER_FROM
+        self.smtp_to = MAILER_TO
 
     def checkMailer(self):
-        #conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
-        assert conn != None
-    
+        # TBD
+        None
 
-    def send_email(self, to, subject, text):
+
+    def sendMail(self, to=None, subject=None, text=None):
+        if not to:
+            to = self.smtp_to
 
         dest = [to] # must be a list
 
@@ -57,7 +58,7 @@ class MailerOperations(object):
                                   self.smtp_port)
         except smtplib.socket.gaierror:
             logger.error('SMTP socket error')
-            return False
+            return { "error": "SMTP socket error" }
 
         server.ehlo()
         server.starttls()
@@ -68,14 +69,14 @@ class MailerOperations(object):
                          self.smtp_password)
         except smtplib.SMTPAuthenticationError:
             logger.error('SMTP authentication error')
-            return False
+            return { "error": "SMTP authentication error" }
 
         try:
             server.sendmail(self.smtp_from, dest, msg)
         except Exception:  # try to avoid catching Exception unless you have too
             logger.error('SMTP autentication error')
-            return False
+            return { "error": "SMTP authentication error" }
         finally:
             server.quit()
-        logger.info('email was sent')            
-        return True
+        logger.info('email was sent')
+        return { "details": "email was sent" }
