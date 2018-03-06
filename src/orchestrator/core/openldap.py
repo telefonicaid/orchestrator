@@ -90,7 +90,8 @@ class OpenLdapOperations(object):
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "uid=" + NEW_USER_NAME + ",ou=users," + self.LDAP_BASEDN
             mymodlist = {
-                "objectClass": ["account", "posixAccount", "shadowAccount"],
+                "objectClass": ["top", "posixAccount", "shadowAccount",
+                                "organizationalPerson", "inetOrgPerson"],
                 "uid": [ str(NEW_USER_NAME) ],
                 "cn": [ str(NEW_USER_DESCRIPTION) ],
                 "uidNumber": ["5000"],
@@ -98,6 +99,7 @@ class OpenLdapOperations(object):
                 "loginShell": ["/bin/bash"],
                 "homeDirectory": ["/home/"+ str(NEW_USER_NAME)],
                 "mail": str(NEW_USER_EMAIL),
+                "sn": str(NEW_USER_NAME),
                 "userPassword": str(NEW_USER_PASSWORD)
             }
             logger.debug("create user mymodlist: %s" % mymodlist)
