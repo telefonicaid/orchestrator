@@ -162,7 +162,7 @@ class OpenLdapOperations(object):
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
-            searchFilter = "cn=" + FILTER # "cn=*jack*"
+            searchFilter = "cn=" + FILTER
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
             logger.debug("ldap list users %s" % json.dumps(ldap_result_id))
@@ -179,7 +179,7 @@ class OpenLdapOperations(object):
                         result_set.append(result_data)
             logger.debug("ldap number of users found %s" % len(result_set))
             self.unbind(conn)
-            return { "details": result_set }
+            return { "details": result_set if result_set != [] else FILTER + " not found" }
         except ldap.LDAPError, e:
             logger.warn("exception: %s" % e)
             return { "error": e }
@@ -231,7 +231,8 @@ class OpenLdapOperations(object):
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
-            searchFilter = "cn=*" + USER_NAME + "*"
+            #searchFilter = "cn=*" + USER_NAME + "*"
+            searchFilter = "uid=" + USER_NAME
 
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)

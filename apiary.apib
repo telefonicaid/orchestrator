@@ -1057,3 +1057,107 @@ The following metrics are collected by the component:
             "outgoingTransacionError": 10
           }
        }
+
+
+## Ldap User [/v1.0/ldap/user]
+
+### Create User [POST]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "NEW_USER_NAME": "newusername",
+         "NEW_USER_PASSWORD":"passwordforuser",
+         "NEW_USER_EMAIL":"user@domain.com",
+         "NEW_USER_DESCRIPTION":"user description",
+         "GROUP_NAMES": ["SubServiceCustomerGroup"]
+      }
++ Response 201 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+### Ask for User Creation [POST]
++ Request (application/json)
+      {
+         "NEW_USER_NAME": "newusername",
+         "NEW_USER_PASSWORD":"passwordforuser",
+         "NEW_USER_EMAIL":"user@domain.com",
+         "NEW_USER_DESCRIPTION":"user description",
+         "GROUP_NAMES": ["SubServiceCustomerGroup"]
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+### Delete User [DELETE]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "USER_NAME": "newusername",
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+### List Users [GET]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "FILTER": "*text*",
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [ list of users ]
+      }
+
+### Get User Details [GET]
++ Request (application/json)
+      {
+         "USER_NAME": "ldapadminuser",
+         "USER_PASSWORD": "ldapadminpassword"
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [ list of user attributes ]
+      }
+
+### Update User [PUT]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "USER_NAME": "ldapadminuser",
+         "USER_DATA": { "USER_EMAIL": "user@domain.org",
+                        "USER_DESCRIPtion" "new user description"
+                      }
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+
+## Ldap Auth [/v1.0/ldap/auth]
+
+### Auth User [POST]
++ Request (application/json)
+      {
+         "USER_NAME":"username",
+         "USER_PASSWORD":"userpassword"
+      }
++ Response 201 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }

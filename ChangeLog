@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+FEATURE: Ldap support for user management
+
+1.7.0
 
 FEATURE: Unify uwsgi configuration (docker, SaaS)
 FEATURE: Add option to enable or disable extended metrics (experimental). Disabled by default
