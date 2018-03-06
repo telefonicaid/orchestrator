@@ -242,7 +242,7 @@ class LdapUserHelper(FlowBase):
             else:
                 raise Exception("not user was auth by ldap: %s" % res['error'])
         except Exception, ex:
-            self.logger.warn("ERROR autenticating user%s: %s" % (
+            self.logger.warn("ERROR autenticating user: %s" % (
                 USER_NAME,
                 ex))
             # Delete user if was created

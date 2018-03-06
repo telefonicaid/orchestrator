@@ -144,7 +144,7 @@ class OpenLdapOperations(object):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
             self.unbind(conn)
-            return { "details": result }
+            return { "details": "OK" }
         except ldap.LDAPError, e:
             logger.warn("exception: %s" % e)
             return { "error": e }
