@@ -48,6 +48,18 @@ CYGNUS_PORT=5050  # Pep and default internal container port
 CYGNUS_PROTOCOL=http
 CYGNUS_NOTIFYPATH=notify
 
+LDAP_HOST=localhost
+LDAP_PORT=389
+LDAP_BASEDN='dc=openstack,dc=org'
+
+MAILER_HOST=localhost
+MAILER_PORT=587
+MAILER_USER=smtpuser@yourdomain.com
+MAILER_PASSWORD=yourpassword
+MAILER_FROM=smtpuser
+MAILER_TO=smtpuser
+
+
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
     VALUE=`echo $2`
@@ -76,6 +88,12 @@ while [[ $# -gt 0 ]]; do
         -cygnushost)
             CYGNUS_HOST=$VALUE
             ;;
+        -ldaphost)
+            LDAP_HOST=$VALUE
+            ;;
+        -mailerhost)
+            MAILER_HOST=$VALUE
+            ;;
         -keystoneport)
             KEYSTONE_PORT=$VALUE
             ;;
@@ -99,6 +117,27 @@ while [[ $# -gt 0 ]]; do
             ;;
         -cygnusport)
             CYGNUS_PORT=$VALUE
+            ;;
+        -ldapport)
+            LDAP_PORT=$VALUE
+            ;;
+        -mailerport)
+            MAILER_PORT=$VALUE
+            ;;
+        -ldapbasedn)
+            LDAP_BASEDN=$VALUE
+            ;;
+        -maileruser)
+            MAILER_USER=$VALUE
+            ;;
+        -mailerpasswd)
+            MAILER_PASSWORD=$VALUE
+            ;;
+        -mailerfrom)
+            MAILER_FROM=$VALUE
+            ;;
+        -mailerto)
+            MAILER_FROM=$VALUE
             ;;
         *)
             echo "not found"
@@ -159,6 +198,17 @@ sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"port\": \"'$CYGNUS_PORT'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,\/\"\n: ]*}/LDAP = { \
+             \"host\": \"'$LDAP_HOST'\", \
+             \"port\": \"'$LDAP_PORT'\", \
+             \"basedn\": \"'$LDAP_BASEDN'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,\/\"\n: ]*}/MAILER = { \
+             \"host\": \"'$MAILER_HOST'\", \
+             \"port\": \"'$MAILER_PORT'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
 

@@ -35,16 +35,33 @@ orchestrator:
   command: -keystonehost keystone -keypasshost keypass -orionhost pep-orion -iotahost iota -pepperseohost pep-perseo-fe -sthhost sth -perseohost perseo-fe -cygnushost cygnus
 ```
 
-As you can see there are several arguments to pass to orchestrator entry point in order to configure some relevant endpoints for orchestrator as keystone, keypass, orion, iota and so on. Make sure all of them are present and in that order:
+As you can see there are several arguments to pass to orchestrator entry point in order to configure some relevant endpoints for orchestrator as keystone, keypass, orion, iota and so on. Make sure all of them are present:
 ```
-   -keystonehost keystone
-   -keypasshost keypass
-   -orionhost pep-orion
-   -iotahost iota
-   -pepperseohost pep-perseo-fe
-   -sthhost sth
-   -perseohost perseo-fe
-   -cygnushost cygnus
+   -keystonehost <value>
+   -keypasshost <value>
+   -orionhost <value>
+   -iotahost <value>
+   -pepperseohost <value>
+   -sthhost <value>
+   -perseohost <value>
+   -cygnushost <value>
+   -mailerhost <value>
+   -ldaphost <value>
+   -keystoneport <value>
+   -keypassport <value>
+   -orionport <value>
+   -iotaport <value>
+   -pepperseoport <value>
+   -sthport <value>
+   -perseoport <value>
+   -cygnusport <value>
+   -ldapport <value>
+   -mailerport <value>
+   -ldapbasedn <value>
+   -maileruser <value>
+   -mailerpasswd <value>
+   -mailerfrom <value>
+   -mailerto <value>
 ```
 
 

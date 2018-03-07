@@ -25,6 +25,7 @@ Orchestrator is used to:
 - Create/List Trust Tokens
 - Activate / deactivate IoT Modules
 - Retrieve statistics and metrics about API usage
+- Create, List, Modify LDAP Users
 
 Orchestrator is based mainly on:
 - Python
@@ -37,6 +38,7 @@ Orchestrator relies on these other IoT parts:
 - Context Broker (Orion)
 - IoTAgent (IoTA)
 - CEP (Perseo)
+- LDAP
 
 These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/master/requirements.txt).
 

@@ -18,6 +18,8 @@ PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}
+LDAP = {}
+MAILER = {}
 ```
 
 Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py) like
@@ -56,6 +58,21 @@ PEP_PERSEO = {
     "host": "localhost",
     "port": "9090",
     "protocol":"http",
+}
+
+LDAP = {
+    "host": "localhost",
+    "port": "389",
+    "basedn": "dc=openstack,dc=org"
+}
+
+MAILER = {
+    "host": "localhost",
+    "port": "587",
+    "user": 'smtpuser@yourdomain.com',
+    "password": 'yourpassword',
+    "from": 'smtpuser',
+    "to": 'smart.iotplatform'
 }
 ```
 

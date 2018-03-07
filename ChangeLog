@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FEATURE: LDAP support for user management
+
 1.7.0
 
 FEATURE: Unify uwsgi configuration (docker, SaaS)

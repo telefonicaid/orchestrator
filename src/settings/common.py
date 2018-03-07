@@ -238,6 +238,8 @@ PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}
+LDAP = {}
+MAILER = {}
 
 # List of possible IoTModules: persistence services, etc
 IOTMODULES = [ "CYGNUS", "STH", "PERSEO", "CA"]

@@ -86,3 +86,20 @@ CYGNUS = {
 }
 
 IOTMODULES = [ "CYGNUS", "PERSEO" ]
+
+
+# LDAP endpoint
+LDAP = {
+    "host": "localhost",
+    "port": "389",
+    "basedn": "dc=openstack,dc=org"
+}
+
+MAILER = {
+    "host": "localhost",
+    "port": "587",
+    "user": 'smtpuser@yourdomain.com',
+    "password": 'yourpassword',
+    "from": 'smtpuser',
+    "to": 'smart.iotplatform'
+}

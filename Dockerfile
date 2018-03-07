@@ -40,6 +40,17 @@ ENV CYGNUS_PORT 5050
 ENV CYGNUS_PROTOCOL http
 ENV CYGNUS_NOTIFYPATH notify
 
+ENV LDAP_HOST localhost
+ENV LDAP_PORT 389
+ENV LDAP_BASEDN dc=openstack,dc=org
+
+ENV MAILER_HOST localhost
+ENV MAILER_PORT 589
+ENV MAILER_USER smtpuser
+ENV MAILER_PASSWORD smtpuserpassword
+ENV MAILER_FORM smtpfrom
+ENV MAILER_TO smtpto
+
 ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
 
 COPY . /opt/sworchestrator/
@@ -121,6 +132,22 @@ RUN \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
+
+    sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,\/\"\n: ]*}/LDAP = { \
+             \"host\": \"'$LDAP_HOST'\", \
+             \"port\": \"'$LDAP_PORT'\", \
+             \"basedn\": \"'$LDAP_BASEDN'\", \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
+    sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,\/\"\n: ]*}/MAILER = { \
+             \"host\": \"'$MAILER_HOST'\", \
+             \"port\": \"'$MAILER_PORT'\", \
+             \"user\": \"'$MAILER_USER'\", \
+             \"password\": \"'$MAILER_PASSWORD'\", \
+             \"from\": \"'$MAILER_FROM'\", \
+             \"to\": \"'$MAILER_TO'\", \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
 
     # Put IOT endpoints conf into ochestrator-entrypoint.sh
     sed -i 's/KEYSTONE_PORT=5001/KEYSTONE_PORT='$KEYSTONE_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
