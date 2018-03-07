@@ -18,6 +18,8 @@ PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}
+LDAP = {}
+MAILER = {}
 ```
 
 Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py) like
