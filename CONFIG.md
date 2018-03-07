@@ -59,6 +59,21 @@ PEP_PERSEO = {
     "port": "9090",
     "protocol":"http",
 }
+
+LDAP = {
+    "host": "localhost",
+    "port": "389",
+    "basedn": "dc=openstack,dc=org"
+}
+
+MAILER = {
+    "host": "localhost",
+    "port": "587",
+    "user": 'smtpuser@yourdomain.com',
+    "password": 'yourpassword',
+    "from": 'smtpuser',
+    "to": 'smart.iotplatform'
+}
 ```
 
 These other endpints are just keept to use with Orion subscriptions about IoT Modules:

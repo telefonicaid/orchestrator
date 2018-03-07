@@ -90,7 +90,6 @@ class LdapUserHelper(FlowBase):
             self.logger.warn("ERROR creating user %s: %s" % (
                 NEW_USER_NAME,
                 ex))
-            # Delete user if was created
             return self.composeErrorCodeLdap(ex)
 
 
@@ -120,7 +119,6 @@ class LdapUserHelper(FlowBase):
             self.logger.warn("ERROR creating user %s: %s" % (
                 NEW_USER_NAME,
                 ex))
-            # Delete user if was created
             return self.composeErrorCodeLdap(ex)
 
 
@@ -190,7 +188,6 @@ class LdapUserHelper(FlowBase):
             self.logger.warn("ERROR retrieving users %s: %s" % (
                 FILTER,
                 ex))
-            # Delete user if was created
             return self.composeErrorCodeLdap(ex)
 
 
@@ -220,7 +217,6 @@ class LdapUserHelper(FlowBase):
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,
                 ex))
-            # Delete user if was created
             return self.composeErrorCodeLdap(ex)
 
 
@@ -249,7 +245,6 @@ class LdapUserHelper(FlowBase):
             self.logger.warn("ERROR autenticating user: %s" % (
                 USER_NAME,
                 ex))
-            # Delete user if was created
             return self.composeErrorCodeLdap(ex)
 
     def updateUser(self,
@@ -301,5 +296,4 @@ class LdapUserHelper(FlowBase):
             self.logger.warn("ERROR updating user %s: %s" % (
                 USER_NAME,
                 ex))
-            # Delete user if was created
             return self.composeErrorCodeLdap(ex)
