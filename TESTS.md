@@ -15,6 +15,13 @@ Run e2e tests with:
         $ python ./test_api.py
 ```
 
+- [End2End LDAP Tests](./src/tests/api/test_ldap_api.py)
+Run e2e LDAP tests with:
+
+```
+        $ python ./test_ldap_api.py
+```
+
 - [Comamnd Tests](./src/tests/api/test_commands.py)
 Run scripts tests with:
 
