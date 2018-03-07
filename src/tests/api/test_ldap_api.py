@@ -26,16 +26,26 @@ class Test_LDAPUser_RestView(object):
             "NEW_USER_PASSWORD": USER_PASSWORD,
             "NEW_USER_EMAIL": USER_NAME+"_%s@acme.org" % self.suffix,
             "NEW_USER_DESCRIPTION": USER_NAME+"_%s description" % self.suffix,
-            "GROUP_NAMES": ["SubServiceCustomerGroup"]
+            "GROUP_NAMES": ["AdminGroup",
+                            "SubServiceAdminGroup"]
         }
         self.payload_data1_ok = {
             "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
             "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
             "FILTER": "*"+USER_NAME+"_%s*" % self.suffix
         }
+        self.payload_data1_bad = {
+            "LDAP_ADMIN_USER": "unexists",
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD
+        }
         self.payload_data1b_ok = {
             "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
             "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "USER_NAME": USER_NAME+"_%s" % self.suffix
+        }
+        self.payload_data1b_bad = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": "badpasswd",
             "USER_NAME": USER_NAME+"_%s" % self.suffix
         }
         self.payload_data2_ok = {
@@ -47,6 +57,17 @@ class Test_LDAPUser_RestView(object):
             "NEW_USER_NAME": USER_NAME+"_%s" % self.suffix,
             "NEW_USER_PASSWORD": USER_PASSWORD,
             "NEW_USER_EMAIL": USER_NAME+"_%s@acme.org" % self.suffix,
+            "NEW_USER_DESCRIPTION": USER_NAME+"_%s description" % self.suffix,
+            "GROUP_NAMES": ["SubServiceCustomerGroup",
+                            "ServiceCustomerGroup"
+                           ]
+        }
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_bad = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "NEW_USER_NAME": USER_NAME+"_%s" % self.suffix,
+            "NEW_USER_PASSWORD": "aaa",
             "NEW_USER_DESCRIPTION": USER_NAME+"_%s description" % self.suffix,
             "GROUP_NAMES": ["SubServiceCustomerGroup"]
         }
@@ -62,6 +83,14 @@ class Test_LDAPUser_RestView(object):
             data=self.payload_data_ok)
         assert res.code == 201, (res.code, res.msg, res.raw_json)
 
+    def test_post_bad(self):
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/ldap/user",
+            json_data=True,
+            data=self.payload_data_bad)
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
+
     def test_get_ok(self):
         res = self.TestRestOps.rest_request(
             method="GET",
@@ -69,6 +98,14 @@ class Test_LDAPUser_RestView(object):
             json_data=True,
             data=self.payload_data1_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_get_bad(self):
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/ldap/user",
+            json_data=True,
+            data=self.payload_data1_bad)
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
 
     def test_get2_ok(self):
         res = self.TestRestOps.rest_request(
@@ -86,14 +123,21 @@ class Test_LDAPUser_RestView(object):
             data=self.payload_data1b_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+    def test_delete_bad(self):
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/ldap/user",
+            json_data=True,
+            data=self.payload_data1b_bad)
+        assert res.code == 400, (res.code, res.msg, res.raw_json)
+
     def test_post2_ok(self):
         res = self.TestRestOps.rest_request(
             method="POST",
             url="/v1.0/ldap/user",
             json_data=True,
             data=self.payload_data4_ok)
-        assert res.code == 201, (res.code, res.msg, res.raw_json)        
-
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
 
 
 class Test_LDAPAuth_RestView(object):
@@ -151,10 +195,14 @@ if __name__ == '__main__':
     # Tests
     test_LdapUser = Test_LDAPUser_RestView()
     test_LdapUser.test_post_ok()
-    test_LdapUser.test_get_ok() 
+    test_LdapUser.test_post_bad()
+    test_LdapUser.test_get_ok()
+    test_LdapUser.test_get_bad()
     test_LdapUser.test_get2_ok()
     test_LdapUser.test_delete_ok()
+    test_LdapUser.test_delete_bad()
     test_LdapUser.test_post2_ok()
+
 
     test_LdapAuth = Test_LDAPAuth_RestView()
     test_LdapAuth.test_post_and_delete_ok()

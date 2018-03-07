@@ -30,6 +30,11 @@ logger = logging.getLogger('orchestrator_core')
 
 class LdapUserHelper(FlowBase):
 
+    def composeErrorCodeLdap(self, ex):
+        # get just first result of composeErrorCode, without service/subservice info
+        return self.composeErrorCode(ex)[0]
+
+
     def createNewUser(self,
                       LDAP_ADMIN_USER,
                       LDAP_ADMIN_PASSWORD,
@@ -77,16 +82,16 @@ class LdapUserHelper(FlowBase):
                                               LDAP_ADMIN_USER,
                                               LDAP_ADMIN_PASSWORD,
                                               NEW_USER_NAME)
-                        raise Exception("not group was asigned to user created in ldap: %s" % res['error'])
+                        raise Exception(400, "not group was asigned to user created in ldap: %s" % res['error'])
                 return {}
             else:
-                raise Exception("not user was created in ldap: %s" % res['error'])
+                raise Exception(400, "not user was created in ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR creating user %s: %s" % (
                 NEW_USER_NAME,
                 ex))
             # Delete user if was created
-            return self.composeErrorCode(ex)
+            return self.composeErrorCodeLdap(ex)
 
 
     def askForCreateNewUser(self,
@@ -116,7 +121,7 @@ class LdapUserHelper(FlowBase):
                 NEW_USER_NAME,
                 ex))
             # Delete user if was created
-            return self.composeErrorCode(ex)
+            return self.composeErrorCodeLdap(ex)
 
 
     def deleteUser(self,
@@ -149,13 +154,12 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return {}
             else:
-                raise Exception("not user deleted in ldap: %s" % res['error'])
+                raise Exception(400, "not user deleted in ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR deleting user %s: %s" % (
                 USER_NAME,
                 ex))
-            # Delete user if was created
-            return self.composeErrorCode(ex)
+            return self.composeErrorCodeLdap(ex)
 
 
     def listUsers(self,
@@ -181,13 +185,13 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception("not users were retrieved from ldap: %s" % res['error'])
+                raise Exception(400, "not users were retrieved from ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR retrieving users %s: %s" % (
                 FILTER,
                 ex))
             # Delete user if was created
-            return self.composeErrorCode(ex)
+            return self.composeErrorCodeLdap(ex)
 
 
     def getUserDetail(self,
@@ -211,13 +215,13 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception("not user detail was retrieved from ldap: %s" % res['error'])
+                raise Exception(400, "not user detail was retrieved from ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,
                 ex))
             # Delete user if was created
-            return self.composeErrorCode(ex)
+            return self.composeErrorCodeLdap(ex)
 
 
     def authUser(self,
@@ -240,13 +244,13 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception("not user was auth by ldap: %s" % res['error'])
+                raise Exception(401, "not user was auth by ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR autenticating user: %s" % (
                 USER_NAME,
                 ex))
             # Delete user if was created
-            return self.composeErrorCode(ex)                
+            return self.composeErrorCodeLdap(ex)
 
     def updateUser(self,
                       LDAP_ADMIN_USER,
@@ -292,10 +296,10 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception("not user was updated in ldap: %s" % res['error'])
+                raise Exception(400, "not user was updated in ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR updating user %s: %s" % (
                 USER_NAME,
                 ex))
             # Delete user if was created
-            return self.composeErrorCode(ex)
+            return self.composeErrorCodeLdap(ex)
