@@ -231,7 +231,6 @@ class OpenLdapOperations(object):
             searchScope = ldap.SCOPE_SUBTREE
             ## retrieve all attributes
             retrieveAttributes = None
-            #searchFilter = "cn=*" + USER_NAME + "*"
             searchFilter = "uid=" + USER_NAME
 
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
