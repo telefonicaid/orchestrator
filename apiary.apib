@@ -1116,7 +1116,12 @@ The following metrics are collected by the component:
 + Response 200 (application/json)
     + Body
       {
-         "details": [ list of users ]
+         "details": [ "baseDN": { "uid": [ "useruid"],
+                                  "objectClass": [ "..." ],
+                                  "mail": [ "..." ],
+                                  "cn": [ "..." ],
+                                  "...": [ "..." ]
+                                 } ]
       }
 
 ### Get User Details [GET]
@@ -1128,7 +1133,20 @@ The following metrics are collected by the component:
 + Response 200 (application/json)
     + Body
       {
-         "details": [ list of user attributes ]
+         "details": [
+                      [ "baseDN": { "uid": [ "useruid"],
+                                  "objectClass": [ "..." ],
+                                  "mail": [ "..." ],
+                                  "cn": [ "..." ],
+                                  "...": [ "..." ]
+                                 } ],
+                      [ "baseDN": { "uid": [ "useruid"],
+                                  "objectClass": [ "..." ],
+                                  "mail": [ "..." ],
+                                  "cn": [ "..." ],
+                                  "...": [ "..." ]
+                                 } ]
+                    ]
       }
 
 ### Update User [PUT]

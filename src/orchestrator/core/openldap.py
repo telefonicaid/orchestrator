@@ -176,7 +176,7 @@ class OpenLdapOperations(object):
                     ## you could do whatever you want with the individual entry
                     ## The appending to list is just for illustration.
                     if result_type == ldap.RES_SEARCH_ENTRY:
-                        result_set.append(result_data)
+                        result_set.append(result_data[0])
             logger.debug("ldap number of users found %s" % len(result_set))
             self.unbind(conn)
             return { "details": result_set if result_set != [] else FILTER + " not found" }
@@ -236,7 +236,7 @@ class OpenLdapOperations(object):
 
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
-            result_set = []
+            result = None
             while 1:
                 result_type, result_data = conn.result(ldap_result_id, 0)
                 if (result_data == []):
@@ -246,10 +246,10 @@ class OpenLdapOperations(object):
                     ## you could do whatever you want with the individual entry
                     ## The appending to list is just for illustration.
                     if result_type == ldap.RES_SEARCH_ENTRY:
-                        result_set.append(result_data)
-            logger.debug("ldap get user detail %s" % json.dumps(result_set))
+                        result = result_data[0]
+            logger.debug("ldap get user detail %s" % json.dumps(result))
             self.unbind(conn)
-            return { "details": result_set }
+            return { "details": result }
         except ldap.LDAPError, e:
             logger.warn("exception: %s" % e)
             return { "error": e }
