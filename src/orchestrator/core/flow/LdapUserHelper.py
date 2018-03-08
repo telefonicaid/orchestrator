@@ -272,8 +272,8 @@ class LdapUserHelper(FlowBase):
                     USER_NAME,
                     USER_DATA)
 
-                if GROUPNAMES in USER_DATA:
-                    for GROUP_NAME in GROUP_NAMES:
+                if 'GROUPNAMES' in USER_DATA:
+                    for GROUP_NAME in USER_DATA['GROUP_NAMES']:
                         self.logger.debug("FLOW updateUser assign to group: %s" % GROUP_NAME)
                         res = self.ldap.assignGroupUser(
                             LDAP_ADMIN_USER,
