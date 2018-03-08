@@ -220,6 +220,45 @@ class LdapUserHelper(FlowBase):
             return self.composeErrorCodeLdap(ex)
 
 
+    def getUserDetailByAdmin(self,
+                             LDAP_ADMIN_USER,
+                             LDAP_ADMIN_PASSWORD,
+                             USER_NAME):
+
+        data_log = {
+            "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "USER_NAME": "%s" % USER_NAME,
+        }
+        self.logger.debug("FLOW getUserDetailByAdmin invoked with: %s" % json.dumps(
+            data_log,
+            indent=3))
+
+        try:
+            groups = self.ldap.getUserGroups(
+                             LDAP_ADMIN_USER,
+                             LDAP_ADMIN_PASSWORD,
+                             USER_NAME)
+            self.logger.debug("groups=%s" % groups)
+
+            user = self.ldap.listUsers(
+                    LDAP_ADMIN_USER,
+                    LDAP_ADMIN_PASSWORD,
+                    "*"+USER_NAME+"*")
+            self.logger.debug("res=%s" % user)
+
+            if not "error" in groups and not "error" in user:
+                if (len(user['details'])) and (user['details'][0] > 1):
+                    user['details'][0][1]['member'] = groups['details']
+                return user
+            else:
+                raise Exception(400, "not user detail was retrieved from ldap: %s" % res['error'])
+        except Exception, ex:
+            self.logger.warn("ERROR retrieving user detail %s: %s" % (
+                USER_NAME,
+                ex))
+            return self.composeErrorCodeLdap(ex)
+
     def authUser(self,
                     USER_NAME,
                     USER_PASSWORD):
@@ -272,8 +311,8 @@ class LdapUserHelper(FlowBase):
                     USER_NAME,
                     USER_DATA)
 
-                if GROUPNAMES in USER_DATA:
-                    for GROUP_NAME in GROUP_NAMES:
+                if 'GROUPNAMES' in USER_DATA:
+                    for GROUP_NAME in USER_DATA['GROUP_NAMES']:
                         self.logger.debug("FLOW updateUser assign to group: %s" % GROUP_NAME)
                         res = self.ldap.assignGroupUser(
                             LDAP_ADMIN_USER,

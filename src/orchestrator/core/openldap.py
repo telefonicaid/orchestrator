@@ -160,8 +160,7 @@ class OpenLdapOperations(object):
 
             baseDN = "ou=users," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
-            ## retrieve all attributes
-            retrieveAttributes = None
+            retrieveAttributes = ['uid','sn','mail','cn']
             searchFilter = "cn=" + FILTER
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
@@ -222,6 +221,32 @@ class OpenLdapOperations(object):
             logger.warn("exception: %s" % e)
             return { "error": e }
 
+    def getUserGroups(self,
+                    LDAP_ADMIN_USER,
+                    LDAP_ADMIN_PASSWORD,
+                    USER_NAME):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            baseDN = self.LDAP_BASEDN
+            searchScope = ldap.SCOPE_SUBTREE
+            retrieveAttributes = ['cn']
+            searchFilter='(|(&(objectClass=*)(member=uid=%s,ou=Users,%s)))' % (
+                USER_NAME, self.LDAP_BASEDN)
+            results = conn.search_s(baseDN, ldap.SCOPE_SUBTREE,
+                                    searchFilter, retrieveAttributes)
+            groups = []
+            for result in results:
+                result_dn = result[0]
+                result_attrs = result[1]
+                groups.append(result_attrs['cn'])
+
+            logger.debug("ldap groups of user: %s" % json.dumps(groups))
+            self.unbind(conn)
+            return { "details": groups }
+        except ldap.LDAPError, e:
+            logger.warn("exception: %s" % e)
+            return { "error": e }
+
     def getUserDetail(self,
                     USER_NAME,
                     USER_PASSWORD):
@@ -229,8 +254,7 @@ class OpenLdapOperations(object):
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
             baseDN = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
-            ## retrieve all attributes
-            retrieveAttributes = None
+            retrieveAttributes = ['uid','sn','mail','cn']
             searchFilter = "uid=" + USER_NAME
 
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,

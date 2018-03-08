@@ -126,15 +126,27 @@ class LdapUser_RESTView(APIView, IoTConf):
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             # if FILTER, LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD
-            if request.DATA.get("FILTER", None):
+            if ( request.DATA.get("LDAP_ADMIN_USER", None) and
+                 request.DATA.get("LDAP_ADMIN_PASSWORD", None) and
+                 request.DATA.get("FILTER", None)):
                 result = flow.listUsers(
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("FILTER", None))
-            else: 
+            elif ( request.DATA.get("LDAP_ADMIN_USER", None) and
+                   request.DATA.get("LDAP_ADMIN_PASSWORD", None) and
+                   request.DATA.get("USER_NAME", None)):
+                result = flow.getUserDetailByAdmin(
+                               request.DATA.get("LDAP_ADMIN_USER", None),
+                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
+                               request.DATA.get("USER_NAME", None))
+            elif (request.DATA.get("USER_NAME", None) and
+                  request.DATA.get("USER_PASSWORD", None)):
                 result = flow.getUserDetail(
                                request.DATA.get("USER_NAME", None),
                                request.DATA.get("USER_PASSWORD", None))
+            else:
+                result = { "error": "not valid parameters", "code": 400 }
             if 'error' not in result:
                 #Stats.num_get_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
