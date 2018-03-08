@@ -79,6 +79,11 @@ class Test_LDAPUser_RestView(object):
             "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
             "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
             "USER_NAME": USER_NAME+"_%s" % self.suffix,
+        }
+        self.payload_data5_ok = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "USER_NAME": USER_NAME+"_%s" % self.suffix,
             "USER_DATA": {"USER_EMAIL": "pepe33@acme.es",
                           "USER_DESCRIPTION": "Pepe perez",
                           "GROUP_NAMES": ["ServiceCustomerGroup",
@@ -148,12 +153,20 @@ class Test_LDAPUser_RestView(object):
             data=self.payload_data2_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+    def test_get3_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/ldap/user",
+            json_data=True,
+            data=self.payload_data3_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
     def test_put_ok(self):
         res = self.TestRestOps.rest_request(
             method="PUT",
             url="/v1.0/ldap/user",
             json_data=True,
-            data=self.payload_data3_ok)
+            data=self.payload_data5_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
     def test_delete_ok(self):
@@ -240,6 +253,7 @@ if __name__ == '__main__':
     test_LdapUser.test_get_ok()
     test_LdapUser.test_get_bad()
     test_LdapUser.test_get2_ok()
+    test_LdapUser.test_get3_ok()
     test_LdapUser.test_put_ok()
     test_LdapUser.test_delete_ok()
     test_LdapUser.test_delete_bad()
