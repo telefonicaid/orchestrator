@@ -75,6 +75,16 @@ class Test_LDAPUser_RestView(object):
             "USER_NAME": USER_NAME+"_%s" % self.suffix,
             "USER_PASSWORD": USER_PASSWORD
         }
+        self.payload_data3_ok = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "USER_NAME": USER_NAME+"_%s" % self.suffix,
+            "USER_DATA": {"USER_EMAIL": "pepe33@acme.es",
+                          "USER_DESCRIPTION": "Pepe perez",
+                          "GROUP_NAMES": ["ServiceCustomerGroup",
+                                          "SubServiceAdminGroup"]
+                                          }
+        }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data4_ok = {
             "NEW_USER_NAME": USER_NAME+"_%s" % self.suffix,
@@ -136,6 +146,14 @@ class Test_LDAPUser_RestView(object):
             url="/v1.0/ldap/user",
             json_data=True,
             data=self.payload_data2_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_put_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="PUT",
+            url="/v1.0/ldap/user",
+            json_data=True,
+            data=self.payload_data3_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
     def test_delete_ok(self):
@@ -222,6 +240,7 @@ if __name__ == '__main__':
     test_LdapUser.test_get_ok()
     test_LdapUser.test_get_bad()
     test_LdapUser.test_get2_ok()
+    test_LdapUser.test_put_ok()
     test_LdapUser.test_delete_ok()
     test_LdapUser.test_delete_bad()
     test_LdapUser.test_post2_ok()
