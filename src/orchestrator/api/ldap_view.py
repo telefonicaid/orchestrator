@@ -133,6 +133,13 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("LDAP_ADMIN_USER", None),
                                request.DATA.get("LDAP_ADMIN_PASSWORD", None),
                                request.DATA.get("FILTER", None))
+            elif ( request.DATA.get("LDAP_ADMIN_USER", None) and
+                   request.DATA.get("LDAP_ADMIN_PASSWORD", None) and
+                   request.DATA.get("USER_NAME", None)):
+                result = flow.getUserDetailByAdmin(
+                               request.DATA.get("LDAP_ADMIN_USER", None),
+                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
+                               request.DATA.get("USER_NAME", None))
             elif (request.DATA.get("USER_NAME", None) and
                   request.DATA.get("USER_PASSWORD", None)):
                 result = flow.getUserDetail(

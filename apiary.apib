@@ -1116,37 +1116,49 @@ The following metrics are collected by the component:
 + Response 200 (application/json)
     + Body
       {
+         "details": [
+                      [ "baseDN": { "uid": [ "useruid"],
+                                  "mail": [ "usermail" ],
+                                  "cn": [ "usercn" ],
+                                 } ],
+                      [ "baseDN": { "uid": [ "useruid2"],
+                                  "mail": [ "usermail2..." ],
+                                  "cn": [ "usercn2..." ],
+                                 } ]
+                    ]
+      }
+
+
+### Get User Details by Admin [GET]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "USER_NAME": "ldapusername"
+      }
++ Response 200 (application/json)
+    + Body
+      {
          "details": [ "baseDN": { "uid": [ "useruid"],
-                                  "objectClass": [ "..." ],
-                                  "mail": [ "..." ],
-                                  "cn": [ "..." ],
-                                  "...": [ "..." ]
+                                  "mail": [ "usermail" ],
+                                  "cn": [ "usercn" ],
+                                  "member": [ "groupname1", "groupname2" ]
                                  } ]
       }
 
 ### Get User Details [GET]
 + Request (application/json)
       {
-         "USER_NAME": "ldapadminuser",
-         "USER_PASSWORD": "ldapadminpassword"
+         "USER_NAME": "ldapusername"
+         "USER_PASSWORD": "ldapuserpassword"
       }
 + Response 200 (application/json)
     + Body
       {
-         "details": [
-                      [ "baseDN": { "uid": [ "useruid"],
-                                  "objectClass": [ "..." ],
-                                  "mail": [ "..." ],
-                                  "cn": [ "..." ],
-                                  "...": [ "..." ]
-                                 } ],
-                      [ "baseDN": { "uid": [ "useruid"],
-                                  "objectClass": [ "..." ],
-                                  "mail": [ "..." ],
-                                  "cn": [ "..." ],
-                                  "...": [ "..." ]
+         "details": [ "baseDN": { "uid": [ "useruid"],
+                                  "mail": [ "usermail" ],
+                                  "cn": [ "usercn" ]
                                  } ]
-                    ]
       }
 
 ### Update User [PUT]
@@ -1156,7 +1168,8 @@ The following metrics are collected by the component:
          "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
          "USER_NAME": "ldapadminuser",
          "USER_DATA": { "USER_EMAIL": "user@domain.org",
-                        "USER_DESCRIPtion" "new user description"
+                        "USER_DESCRIPTION" "new user description",
+                        "GROUP_NAMES": ["NewGroup1", "NewGroup2"]
                       }
       }
 + Response 200 (application/json)
