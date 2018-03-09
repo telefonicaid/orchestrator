@@ -80,8 +80,9 @@ class MailerOperations(object):
             server = smtplib.SMTP(self.smtp_server,
                                   self.smtp_port)
         except smtplib.socket.gaierror:
-            logger.error('SMTP socket error')
-            return { "error": "SMTP socket error" }
+            logger.error('MAILER001: SMTP socket error %s %s' % (
+                self.smtp_server, self.smtp_port))
+            return { "error": "SMTP socket error %s %s" % (self.smtp_server, self.smtp_port)}
 
         server.ehlo()
         server.starttls()
@@ -91,15 +92,15 @@ class MailerOperations(object):
             server.login(self.smtp_user,
                          self.smtp_password)
         except smtplib.SMTPAuthenticationError:
-            logger.error('SMTP authentication error')
-            return { "error": "SMTP authentication error" }
+            logger.error('MAILER002: SMTP authentication error %s' % self.smtp_user)
+            return { "error": "SMTP authentication error %s" % self.smtp_user}
 
         try:
             server.sendmail(self.smtp_from, dest, msg)
-        except Exception:  # try to avoid catching Exception unless you have too
-            logger.error('SMTP autentication error')
-            return { "error": "SMTP authentication error" }
+        except Exception, ex:  # try to avoid catching Exception unless you have too
+            logger.error('MAILER003: SMTP sendmail error %s' % ex)
+            return { "error": "SMTP sendmail error %s" % ex }
         finally:
             server.quit()
-        logger.info('email was sent')
-        return { "details": "email was sent" }
+        logger.info('email was sent to %s' % dest)
+        return { "details": "email was sent to %s" % dest }
