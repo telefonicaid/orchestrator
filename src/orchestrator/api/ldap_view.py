@@ -223,7 +223,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("USER_PASSWORD", None))
             if 'error' not in result:
                 #Stats.num_delete_ldap += 1
-                response = Response(result, status=status.HTTP_200_OK,
+                response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 Stats.num_flow_errors += 1
