@@ -175,7 +175,7 @@ class Test_LDAPUser_RestView(object):
             url="/v1.0/ldap/user",
             json_data=True,
             data=self.payload_data1b_ok)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
     def test_delete_bad(self):
         res = self.TestRestOps.rest_request(
@@ -241,7 +241,7 @@ class Test_LDAPAuth_RestView(object):
             url="/v1.0/ldap/user",
             json_data=True,
             data=self.payload_data3c_ok)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
 if __name__ == '__main__':
