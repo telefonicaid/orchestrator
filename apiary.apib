@@ -1098,7 +1098,7 @@ The following metrics are collected by the component:
       {
          "LDAP_ADMIN_USER": "ldapadminuser",
          "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
-         "USER_NAME": "newusername",
+         "USER_NAME": "usertodelete",
       }
 + Response 204 (application/json)
 
@@ -1115,12 +1115,12 @@ The following metrics are collected by the component:
       {
          "details": [
                       [ "baseDN": { "uid": [ "useruid"],
-                                  "mail": [ "usermail" ],
-                                  "cn": [ "usercn" ],
+                                    "mail": [ "usermail" ],
+                                    "cn": [ "usercn" ],
                                  } ],
                       [ "baseDN": { "uid": [ "useruid2"],
-                                  "mail": [ "usermail2..." ],
-                                  "cn": [ "usercn2..." ],
+                                    "mail": [ "usermail2..." ],
+                                    "cn": [ "usercn2..." ],
                                  } ]
                     ]
       }
@@ -1163,8 +1163,8 @@ The following metrics are collected by the component:
       {
          "LDAP_ADMIN_USER": "ldapadminuser",
          "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
-         "USER_NAME": "ldapadminuser",
-         "USER_DATA": { "USER_EMAIL": "user@domain.org",
+         "USER_NAME": "ldapusername",
+         "USER_DATA": { "USER_EMAIL": "newemail@domain.org",
                         "USER_DESCRIPTION" "new user description",
                         "GROUP_NAMES": ["NewGroup1", "NewGroup2"]
                       }
