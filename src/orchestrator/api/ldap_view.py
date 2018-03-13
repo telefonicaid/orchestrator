@@ -74,7 +74,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                            MAILER_TO=self.MAILER_TO,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            # if LDAP_ADMIN_USER and LDA_ADMIN_PASSWORD
+
             if (request.DATA.get("LDAP_ADMIN_USER", None) and
                     request.DATA.get("LDAP_ADMIN_PASSWORD", None)):
                 result = flow.createNewUser(
@@ -94,7 +94,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("GROUP_NAMES", None))
 
             if 'error' not in result:
-                #Stats.num_post_ldap += 1
+                Stats.num_post_ldap += 1
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -125,7 +125,6 @@ class LdapUser_RESTView(APIView, IoTConf):
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            # if FILTER, LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD
             if ( request.DATA.get("LDAP_ADMIN_USER", None) and
                  request.DATA.get("LDAP_ADMIN_PASSWORD", None) and
                  request.DATA.get("FILTER", None)):
@@ -148,7 +147,7 @@ class LdapUser_RESTView(APIView, IoTConf):
             else:
                 result = { "error": "not valid parameters", "code": 400 }
             if 'error' not in result:
-                #Stats.num_get_ldap += 1
+                Stats.num_get_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -185,7 +184,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("USER_PASSWORD", None),
                                request.DATA.get("USER_DATA", None))
             if 'error' not in result:
-                #Stats.num_put_ldap += 1
+                Stats.num_put_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -222,7 +221,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.DATA.get("USER_NAME", None),
                                request.DATA.get("USER_PASSWORD", None))
             if 'error' not in result:
-                #Stats.num_delete_ldap += 1
+                Stats.num_delete_ldap += 1
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
@@ -264,13 +263,12 @@ class LdapAuth_RESTView(APIView, IoTConf):
                            LDAP_BASEDN=self.LDAP_BASEDN,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            # if LDAP_ADMIN_USER and LDA_ADMIN_PASSWORD
             result = flow.authUser(
                                request.DATA.get("USER_NAME", None),
                                request.DATA.get("USER_PASSWORD", None))
 
             if 'error' not in result:
-                #Stats.num_post_ldap += 1
+                Stats.num_post_ldap += 1
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:

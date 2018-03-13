@@ -52,26 +52,17 @@ class OpenLdapOperations(object):
 
     def bindAdmin(self, USERNAME, PASSWORD):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
-        # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
         username = "cn=" + USERNAME + "," + self.LDAP_BASEDN
         logger.debug("bind admin %s" % username)
-
-        # Any errors will throw an ldap.LDAPError exception 
-        # or related exception so you can ignore the result
         conn.bind_s(username, PASSWORD)
         return conn
 
     def bindUser(self, USERNAME, PASSWORD):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
-    
-        # you should set this to ldap.VERSION2 if you're using a v2 directory
         conn.protocol_version = ldap.VERSION3  
         username = "uid=" + USERNAME + ", ou=users," + self.LDAP_BASEDN
         logger.debug("bind user %s" % username)
-
-        # Any errors will throw an ldap.LDAPError exception 
-        # or related exception so you can ignore the result
         conn.simple_bind_s(username, PASSWORD)
         return conn
 
@@ -108,7 +99,7 @@ class OpenLdapOperations(object):
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("createUser exception: %s" % e)
             return { "error": e }
 
     def deleteUserByAdmin(self,
@@ -123,7 +114,7 @@ class OpenLdapOperations(object):
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("deleteUserByAdmin exception: %s" % e)
             return { "error": e }
 
     def deleteUserByHimself(self,
@@ -137,7 +128,7 @@ class OpenLdapOperations(object):
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("deleteUserByHimself exception: %s" % e)
             return { "error": e }
 
     def authUser(self,
@@ -148,7 +139,7 @@ class OpenLdapOperations(object):
             self.unbind(conn)
             return { "details": "OK" }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("authUser exception: %s" % e)
             return { "error": e }
 
     def listUsers(self,
@@ -157,7 +148,6 @@ class OpenLdapOperations(object):
                     FILTER):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-
             baseDN = "ou=users," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
             retrieveAttributes = ['uid','sn','mail','cn']
@@ -171,16 +161,13 @@ class OpenLdapOperations(object):
                 if (result_data == []):
                     break
                 else:
-                    ## here you don't have to append to a list
-                    ## you could do whatever you want with the individual entry
-                    ## The appending to list is just for illustration.
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         result_set.append(result_data[0])
             logger.debug("ldap number of users found %s" % len(result_set))
             self.unbind(conn)
             return { "details": result_set if result_set != [] else FILTER + " not found" }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("listUsers exception: %s" % e)
             return { "error": e }
 
     def assignGroupUser(self,
@@ -192,7 +179,6 @@ class OpenLdapOperations(object):
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             dn = "cn=" + str(GROUP_NAME) + ",ou=groups," + self.LDAP_BASEDN
             results = conn.search_s(dn, ldap.SCOPE_BASE)
-
             # Get current group members
             groupMembers = []
             oldgroupMembers = []
@@ -203,22 +189,19 @@ class OpenLdapOperations(object):
                     for member in result_attrs["member"]:
                         groupMembers.append(member)
                         oldgroupMembers.append(member)
-
             old_value = dict()
             new_value = dict()
             old_value['member'] = oldgroupMembers
             new_value['member'] = groupMembers
             # Add new group member
             new_value['member'].append('uid=' + str(USER_NAME) +',ou=users,' + self.LDAP_BASEDN)
-
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
-
             result = conn.modify_s(dn, mymodlist)
             logger.debug("ldap assing group user %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("assignGroupUser exception: %s" % e)
             return { "error": e }
 
     def getUserGroups(self,
@@ -244,7 +227,7 @@ class OpenLdapOperations(object):
             self.unbind(conn)
             return { "details": groups }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("getUserGroups exception: %s" % e)
             return { "error": e }
 
     def getUserDetail(self,
@@ -256,7 +239,6 @@ class OpenLdapOperations(object):
             searchScope = ldap.SCOPE_SUBTREE
             retrieveAttributes = ['uid','sn','mail','cn']
             searchFilter = "uid=" + USER_NAME
-
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
             result = None
@@ -265,16 +247,13 @@ class OpenLdapOperations(object):
                 if (result_data == []):
                     break
                 else:
-                    ## here you don't have to append to a list
-                    ## you could do whatever you want with the individual entry
-                    ## The appending to list is just for illustration.
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         result = result_data[0]
             logger.debug("ldap get user detail %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("getUserDetail exception: %s" % e)
             return { "error": e }
 
     def updateUserByAdmin(self,
@@ -296,14 +275,13 @@ class OpenLdapOperations(object):
                         if attr == userattr:
                             old_value[attr] = result_attrs[userattr]
                             new_value[attr] = USER_DATA[userattr]
-
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)
             logger.debug("ldap update user by admin %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("updateUserByAdmin exception: %s" % e)
             return { "error": e }
 
     def updateUserByUser(self,
@@ -324,12 +302,11 @@ class OpenLdapOperations(object):
                         if attr == userattr:
                             old_value[attr] = result_attrs[userattr]
                             new_value[attr] = USER_DATA[userattr]
-
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)
             logger.debug("ldap update user by user %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
         except ldap.LDAPError, e:
-            logger.warn("exception: %s" % e)
+            logger.warn("updateUserByUser exception: %s" % e)
             return { "error": e }
