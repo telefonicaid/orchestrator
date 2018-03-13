@@ -226,7 +226,8 @@ class OpenLdapOperations(object):
             for result in results:
                 result_dn = result[0]
                 result_attrs = result[1]
-                groups.append(result_attrs['cn'])
+                if ('cn' in result_attrs and len(result_attrs['cn']) > 0):
+                    groups.append(result_attrs['cn'][0])
 
             logger.debug("ldap groups of user: %s" % json.dumps(groups))
             self.unbind(conn)
