@@ -252,7 +252,7 @@ class LdapUserHelper(FlowBase):
                     user['details'][0][1]['member'] = groups['details']
                 return user
             else:
-                raise Exception(400, "not user detail was retrieved from ldap: %s" % res['error'])
+                raise Exception(400, "not user detail was retrieved from ldap: user %s groups %s" % (user, groups))
         except Exception, ex:
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,

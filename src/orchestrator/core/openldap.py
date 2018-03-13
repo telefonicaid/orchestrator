@@ -84,7 +84,7 @@ class OpenLdapOperations(object):
                 "objectClass": ["top", "posixAccount", "shadowAccount",
                                 "organizationalPerson", "inetOrgPerson"],
                 "uid": [ str(NEW_USER_NAME) ],
-                "cn": [ str(NEW_USER_DESCRIPTION) ],
+                "cn": [ str(NEW_USER_NAME) ],
                 "uidNumber": ["5000"],
                 "gidNumber": ["10000"],
                 "loginShell": ["/bin/bash"],
@@ -151,7 +151,7 @@ class OpenLdapOperations(object):
             baseDN = "ou=users," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
             retrieveAttributes = ['uid','sn','mail','cn']
-            searchFilter = "cn=" + FILTER
+            searchFilter = "uid=" + FILTER
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
             logger.debug("ldap list users %s" % json.dumps(ldap_result_id))
@@ -165,7 +165,12 @@ class OpenLdapOperations(object):
                         result_set.append(result_data[0])
             logger.debug("ldap number of users found %s" % len(result_set))
             self.unbind(conn)
-            return { "details": result_set if result_set != [] else FILTER + " not found" }
+            res = {}
+            if result_set != []:
+                res = { "details": result_set }
+            else:
+                res = { "error": FILTER + " not found" }
+            return res
         except ldap.LDAPError, e:
             logger.warn("listUsers exception: %s" % e)
             return { "error": e }
@@ -213,7 +218,7 @@ class OpenLdapOperations(object):
             baseDN = self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
             retrieveAttributes = ['cn']
-            searchFilter='(|(&(objectClass=*)(member=uid=%s,ou=Users,%s)))' % (
+            searchFilter='(|(&(objectClass=*)(member=uid=%s,ou=users,%s)))' % (
                 USER_NAME, self.LDAP_BASEDN)
             results = conn.search_s(baseDN, ldap.SCOPE_SUBTREE,
                                     searchFilter, retrieveAttributes)
