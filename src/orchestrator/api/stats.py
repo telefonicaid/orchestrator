@@ -95,6 +95,11 @@ class Stats(object):
 
     num_update_loglevel = 0
 
+    num_post_ldap = 0
+    num_get_ldap = 0
+    num_put_ldap = 0
+    num_delete_ldap = 0
+
     num_api_errors = 0
     num_flow_errors = 0
 
