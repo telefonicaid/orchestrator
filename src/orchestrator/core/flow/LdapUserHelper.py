@@ -55,7 +55,6 @@ class LdapUserHelper(FlowBase):
         self.logger.debug("FLOW createNewUser invoked with: %s" % json.dumps(
             data_log,
             indent=3))
-
         try:
             res = self.ldap.createUser(
                    LDAP_ADMIN_USER,
@@ -75,17 +74,17 @@ class LdapUserHelper(FlowBase):
                         NEW_USER_NAME,
                         GROUP_NAME)
                     self.logger.debug("res=%s" % res)
-
                     if 'error' in res:
                         self.logger.warn("FLOW createNewUser removing user: %s" % NEW_USER_NAME)
                         self.ldap.deleteUserByAdmin(
                                               LDAP_ADMIN_USER,
                                               LDAP_ADMIN_PASSWORD,
                                               NEW_USER_NAME)
-                        raise Exception(400, "not group was asigned to user created in ldap: %s" % res['error'])
+                        raise Exception(400, "None group was asigned to user created in ldap: %s" % res['error'])
+                self.logger.info("ldap user %s was created" % NEW_USER_NAME)
                 return {}
             else:
-                raise Exception(400, "not user was created in ldap: %s" % res['error'])
+                raise Exception(400, "None user was created in ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR creating user %s: %s" % (
                 NEW_USER_NAME,
@@ -106,17 +105,20 @@ class LdapUserHelper(FlowBase):
             "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION,
             "GROUP_NAMES": "%s" % GROUP_NAMES
         }
-        self.logger.debug("FLOW createNewUser invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW askForCreateNewUser invoked with: %s" % json.dumps(
             data_log,
             indent=3))
-
         try:
             subject = "ask for a new user %s creation" % NEW_USER_NAME
             text = json.dumps(data_log)
-            return self.mailer.sendMail(None, subject=subject, text=text)
-
+            res = self.mailer.sendMail(None, subject=subject, text=text)
+            if not "error" in res:
+                self.logger.info("ldap user %s was asked to be created" % NEW_USER_NAME)
+                return res
+            else:
+                raise Exception(400, "None user was asked to be created in ldap: %s" % res['error'])
         except Exception, ex:
-            self.logger.warn("ERROR creating user %s: %s" % (
+            self.logger.warn("ERROR asking for create user %s: %s" % (
                 NEW_USER_NAME,
                 ex))
             return self.composeErrorCodeLdap(ex)
@@ -136,7 +138,6 @@ class LdapUserHelper(FlowBase):
         self.logger.debug("FLOW deleteUser invoked with: %s" % json.dumps(
             data_log,
             indent=3))
-
         try:
             if LDAP_ADMIN_USER and LDAP_ADMIN_PASSWORD:
                 res = self.ldap.deleteUserByAdmin(
@@ -148,11 +149,11 @@ class LdapUserHelper(FlowBase):
                     USER_NAME,
                     USER_PASSWORD)
             self.logger.debug("res=%s" % res)
-
             if not "error" in res:
+                self.logger.info("ldap user %s was deleted" % USER_NAME)
                 return {}
             else:
-                raise Exception(400, "not user deleted in ldap: %s" % res['error'])
+                raise Exception(400, "None user deleted in ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR deleting user %s: %s" % (
                 USER_NAME,
@@ -164,7 +165,6 @@ class LdapUserHelper(FlowBase):
                       LDAP_ADMIN_USER,
                       LDAP_ADMIN_PASSWORD,
                       FILTER):
-
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
             "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
@@ -183,7 +183,7 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception(400, "not users were retrieved from ldap: %s" % res['error'])
+                raise Exception(404, "None users were retrieved from ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR retrieving users %s: %s" % (
                 FILTER,
@@ -194,7 +194,6 @@ class LdapUserHelper(FlowBase):
     def getUserDetail(self,
                       USER_NAME,
                       USER_PASSWORD):
-
         data_log = {
             "USER_NAME": "%s" % USER_NAME,
             "USER_PASSWORD": "%s" % USER_PASSWORD
@@ -202,7 +201,6 @@ class LdapUserHelper(FlowBase):
         self.logger.debug("FLOW getUserDetail invoked with: %s" % json.dumps(
             data_log,
             indent=3))
-
         try:
             res = self.ldap.getUserDetail(
                     USER_NAME,
@@ -212,7 +210,7 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception(400, "not user detail was retrieved from ldap: %s" % res['error'])
+                raise Exception(400, "None user detail was retrieved from ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,
@@ -252,17 +250,17 @@ class LdapUserHelper(FlowBase):
                     user['details'][0][1]['member'] = groups['details']
                 return user
             else:
-                raise Exception(400, "not user detail was retrieved from ldap: user %s groups %s" % (user, groups))
+                raise Exception(400, "None user detail was retrieved from ldap: user %s groups %s" % (user, groups))
         except Exception, ex:
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,
                 ex))
             return self.composeErrorCodeLdap(ex)
 
+
     def authUser(self,
                     USER_NAME,
                     USER_PASSWORD):
-
         data_log = {
             "USER_NAME": "%s" % USER_NAME,
             "USER_PASSWORD": "%s" % USER_PASSWORD
@@ -279,12 +277,13 @@ class LdapUserHelper(FlowBase):
             if not "error" in res:
                 return res
             else:
-                raise Exception(401, "not user was auth by ldap: %s" % res['error'])
+                raise Exception(401, "None user was auth by ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR autenticating user: %s" % (
                 USER_NAME,
                 ex))
             return self.composeErrorCodeLdap(ex)
+
 
     def updateUser(self,
                       LDAP_ADMIN_USER,
@@ -292,7 +291,6 @@ class LdapUserHelper(FlowBase):
                       USER_NAME,
                       USER_PASSWORD,
                       USER_DATA):
-
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
             "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
@@ -310,7 +308,6 @@ class LdapUserHelper(FlowBase):
                     LDAP_ADMIN_PASSWORD,
                     USER_NAME,
                     USER_DATA)
-
                 if 'GROUPNAMES' in USER_DATA:
                     for GROUP_NAME in USER_DATA['GROUP_NAMES']:
                         self.logger.debug("FLOW updateUser assign to group: %s" % GROUP_NAME)
@@ -328,9 +325,10 @@ class LdapUserHelper(FlowBase):
             self.logger.debug("res=%s" % res)
 
             if not "error" in res:
+                self.logger.info("ldap user %s was updated" % USER_NAME)
                 return res
             else:
-                raise Exception(400, "not user was updated in ldap: %s" % res['error'])
+                raise Exception(400, "None user was updated in ldap: %s" % res['error'])
         except Exception, ex:
             self.logger.warn("ERROR updating user %s: %s" % (
                 USER_NAME,
