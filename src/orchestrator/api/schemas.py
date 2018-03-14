@@ -901,8 +901,14 @@ json = {
                 "LDAP_ADMIN_PASSWORD"
             ],
             "LDAP_ADMIN_PASSWORD": [
-                "LDAP_ADMIN_USER",
-            ]
+                "LDAP_ADMIN_USER"
+            ],
+            "NEW_USER_PASSWORD": [
+                "NEW_USER_NAME"
+            ],
+            "USER_PASSWORD": [
+                "USER_NAME"
+            ],
         },
         "properties": {
             "LDAP_ADMIN_USER": {
@@ -914,6 +920,9 @@ json = {
             "USER_NAME": {
                 "type": "string",
                 "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "USER_PASSWORD": {
+                "type": "string",
             },
             "NEW_USER_NAME": {
                 "type": "string",
