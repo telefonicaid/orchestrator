@@ -25,10 +25,6 @@ ORION_HOST=localhost
 ORION_PORT=1026  # Pep and default internal container port
 ORION_PROTOCOL=http
 
-IOTA_HOST=localhost
-IOTA_PORT=4052
-IOTA_PROTOCOL=http
-
 PEP_PERSEO_HOST=localhost
 PEP_PERSEO_PORT=1026  # Pep Perseo
 PEP_PERSEO_PROTOCOL=http
@@ -73,9 +69,6 @@ while [[ $# -gt 0 ]]; do
         -orionhost)
             ORION_HOST=$VALUE
             ;;
-        -iotahost)
-            IOTA_HOST=$VALUE
-            ;;
         -pepperseohost)
             PEP_PERSEO_HOST=$VALUE
             ;;
@@ -102,9 +95,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -orionport)
             ORION_PORT=$VALUE
-            ;;
-        -iotaport)
-            IOTA_PORT=$VALUE
             ;;
         -pepperseoport)
             PEP_PERSEO_PORT=$VALUE
@@ -165,12 +155,6 @@ sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
              \"host\": \"'$ORION_HOST'\", \
              \"port\": \"'$ORION_PORT'\", \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
-}/g' /opt/orchestrator/settings/dev.py
-
-sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
-             \"host\": \"'$IOTA_HOST'\", \
-             \"port\": \"'$IOTA_PORT'\", \
-             \"protocol\": \"'$IOTA_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
 sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\/\"\n: ]*}/PERSEO = { \

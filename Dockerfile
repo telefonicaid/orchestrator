@@ -17,10 +17,6 @@ ENV ORION_HOST localhost
 ENV ORION_PORT 1026
 ENV ORION_PROTOCOL http
 
-ENV IOTA_HOST localhost
-ENV IOTA_PORT 4052
-ENV IOTA_PROTOCOL http
-
 ENV PEP_PERSEO_HOST localhost
 ENV PEP_PERSEO_PORT 1026
 ENV PEP_PERSEO_PROTOCOL http
@@ -98,12 +94,6 @@ RUN \
              \"host\": \"'$ORION_HOST'\", \
              \"port\": \"'$ORION_PORT'\", \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
-}/g' /opt/orchestrator/settings/dev.py  && \
-
-    sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
-             \"host\": \"'$IOTA_HOST'\", \
-             \"port\": \"'$IOTA_PORT'\", \
-             \"protocol\": \"'$IOTA_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
     sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
