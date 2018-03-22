@@ -231,9 +231,7 @@ REST_FRAMEWORK = {
 
 KEYSTONE = {}
 KEYPASS = {}
-IOTA = {}
 ORION = {}
-CA = {}
 PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
@@ -242,7 +240,7 @@ LDAP = {}
 MAILER = {}
 
 # List of possible IoTModules: persistence services, etc
-IOTMODULES = [ "CYGNUS", "STH", "PERSEO", "CA"]
+IOTMODULES = [ "CYGNUS", "STH", "PERSEO"]
 
 # Pep user credencials. Pep is a user of admin_domain
 # Needed to for resolve pep user id

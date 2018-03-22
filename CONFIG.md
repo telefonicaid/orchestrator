@@ -11,9 +11,7 @@ By default in [settings/common.py](https://github.com/telefonicaid/orchestrator/
 ```
 KEYSTONE = {}
 KEYPASS = {}
-IOTA = {}
 ORION = {}
-CA = {}
 PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
@@ -36,21 +34,9 @@ KEYPASS = {
     "protocol":"http"
 }
 
-IOTA = {
-    "host": "localhost",
-    "port": "4052",
-    "protocol":"http"
-}
-
 ORION = {
     "host": "localhost",
     "port": "1026",
-    "protocol":"http"
-}
-
-CA = {
-    "host": "localhost",
-    "port": "9999",
     "protocol":"http"
 }
 

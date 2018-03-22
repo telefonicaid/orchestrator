@@ -68,17 +68,6 @@ class IoTConf(Stats):
             self.KEYPASS_PORT = "17070"
 
         try:
-            self.IOTA_PROTOCOL = settings.IOTA['protocol']
-            self.IOTA_HOST = settings.IOTA['host']
-            self.IOTA_PORT = settings.IOTA['port']
-        except KeyError:
-            logger.error("IOTA endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.IOTA_PROTOCOL = "http"
-            self.IOTA_HOST = "localhost"
-            self.IOTA_PORT = "4052"
-
-        try:
             self.ORION_PROTOCOL = settings.ORION['protocol']
             self.ORION_HOST = settings.ORION['host']
             self.ORION_PORT = settings.ORION['port']
@@ -88,17 +77,6 @@ class IoTConf(Stats):
             self.ORION_PROTOCOL = "http"
             self.ORION_HOST = "localhost"
             self.ORION_PORT = "1026"
-
-        try:
-            self.CA_PROTOCOL = settings.CA['protocol']
-            self.CA_HOST = settings.CA['host']
-            self.CA_PORT = settings.CA['port']
-        except KeyError:
-            logger.error("CA endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.CA_PROTOCOL = "http"
-            self.CA_HOST = "localhost"
-            self.CA_PORT = "9999"
 
         try:
             self.PERSEO_PROTOCOL = settings.PEP_PERSEO['protocol']
