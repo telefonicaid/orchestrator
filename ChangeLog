@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FEATURE: Remove uwsgi stats: takes too much time
+
 1.8.0
 
 FEATURE: LDAP support for user management
