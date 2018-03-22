@@ -39,10 +39,6 @@ from orchestrator.api.stats import Stats
 
 
 logger = logging.getLogger('orchestrator_api')
-logger.addFilter(ContextFilterCorrelatorId("n/a"))
-logger.addFilter(ContextFilterTransactionId("n/a"))
-logger.addFilter(ContextFilterService("None"))
-logger.addFilter(ContextFilterSubService(""))
 
 class IoTConf(Stats):
     throttle_classes = (AnonRateThrottle,)
