@@ -28,7 +28,7 @@ Orchestrator is used to:
 - Create, List, Modify LDAP Users
 
 Orchestrator is based mainly on:
-- Python
+- Python (python 2.7 recomended)
 - Django / DjangoRestFramework
 - httplib
 
@@ -37,7 +37,7 @@ Orchestrator relies on these other IoT parts:
 - Access Control (Keypass)
 - Context Broker (Orion)
 - CEP (Perseo)
-- LDAP
+- LDAP (Openldap - optional)
 
 These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/master/requirements.txt).
 

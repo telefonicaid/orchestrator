@@ -17,7 +17,6 @@ VIRTUALENV=/var/env-orchestrator
 ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
 UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
-STATS_PORT=8085
 PROCESSES=2
 THREADS=8
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
@@ -38,8 +37,7 @@ exe="$UWGSI --http :${PORT} \
 --processes $PROCESSES \
 --threads $THREADS \
 --enable-threads \
---disable-logging \
---stats localhost:$STATS_PORT"
+--disable-logging"
 
 server="$exe"
 

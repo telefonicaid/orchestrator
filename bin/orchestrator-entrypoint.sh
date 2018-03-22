@@ -3,7 +3,6 @@
 
 # DEFAULT SETTINGS
 PORT=8084
-STATS_PORT=8085
 PROCESSES=2
 THREADS=8
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
@@ -207,5 +206,4 @@ uwsgi --http :$PORT \
       --processes $PROCESSES \
       --threads $THREADS \
       --enable-threads \
-      --disable-logging \
-      --stats localhost:$STATS_PORT
+      --disable-logging
