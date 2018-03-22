@@ -26,7 +26,6 @@ import uuid
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
-from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
