@@ -229,94 +229,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 204
 
 
-## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
-### register device in IoTA [POST]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"test_service",
-                "SERVICE_USER_NAME":"test_admin_service",
-                "SERVICE_USER_PASSWORD":"passwd",
-                "SERVICE_USER_TOKEN":"token",
-                "SUBSERVICE_NAME":"test_subservice",
-                "DEVICE_ID":"device_id_XXX",
-                "ENTITY_TYPE":"BlackButton",
-                "ENTITY_NAME":"device_id_XXX",
-                "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_ICCID":"",
-                "ATT_IMEI":"",
-                "ATT_IMSI":"",
-                "ATT_INTERACTION_TYPE": "asynchronous",
-                "ATT_SERVICE_ID":"test_service",
-                "ATT_GEOLOCATION":""
-            }
-        Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
-        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"},
-                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
-
-+ Response 201 (application/json)
-    + DEVICE_ID
-
-
-
-### unregister device in IoTA [DELETE]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"test_service",
-                "SERVICE_USER_NAME":"test_admin_service",
-                "SERVICE_USER_PASSWORD":"passwd",
-                "SERVICE_USER_TOKEN":"token",
-                "SUBSERVICE_NAME":"test_subservice",
-                "DEVICE_ID":"device_id_XXX"
-            }
-        Required: [ "DEVICE_ID" ]
-+ Response 204 (application/json)
-
-
-## Register entity service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
-### Register entity service for IoTA and ca, sth, perseo subscriptions [POST]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"test_service",
-                "SERVICE_USER_NAME":"test_admin_service",
-                "SERVICE_USER_PASSWORD":"passwd",
-                "SERVICE_USER_TOKEN":"token",
-                "SUBSERVICE_NAME":"test_subservice",
-                "ENTITY_TYPE":"entity_type",
-                "ENTITY_ID":"entity_id",
-                "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_NAME":"test_service_test_subbservice",
-                "ATT_PROVIDER":"provider_name",
-                "ATT_ENDPOINT":"http://localhost:6500/sync/request",
-                "ATT_METHOD":"POST",
-                "ATT_AUTHENTICATION":"context-adapter",
-                "ATT_INTERACTION_TYPE":"synchronous",
-                "ATT_MAPPING":"[]",
-                "ATT_TIMEOUT":"120"
-            }
-        Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
-        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"}
-                 ATT_AUTHENTICATION = {"context-adapter", "third-party"}
-                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
-
-
-+ Response 201 (application/json)
-    + Body
-            {
-                 "subscriptionid_ca" : "1323423gsdfbb35tergs",
-                 "subscriptionid_sth" : "1323423gsdfb4345b35tergs",
-                 "subscriptionid_perseo" : "1323423gsdfb4sdb35tergs"
-            }
-
-
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
 
 ### List Roles[GET]
@@ -935,7 +847,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
          ],
          "version": "0.5.1",
          "API_stats": {
-            "num_post_device": 3,
             "num_delete_user": 40,
             "num_get_role": 20,
             "num_delete_subservice": 330,
@@ -949,7 +860,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             "num_post_subservice": 30,
             "num_post_entity_service": 10,
             "num_get_subservice": 30,
-            "num_post_devices": 30,
             "num_post_user": 40,
             "num_get_user ": 20,
             "num_put_user": 10,
@@ -958,7 +868,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             "num_post_service": 20,
             "num_delete_roleassignment": 10,
             "num_post_role": 10,
-            "num_delete_device": 10,
             "num_put_subservice": 10
           }
        }

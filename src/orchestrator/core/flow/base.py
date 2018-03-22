@@ -26,7 +26,6 @@ import uuid
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
-from orchestrator.core.iota_cpp import IoTACppOperations as IoTAOperations
 from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
@@ -49,15 +48,9 @@ class FlowBase(object):
                  KEYPASS_PROTOCOL=None,
                  KEYPASS_HOST=None,
                  KEYPASS_PORT=None,
-                 IOTA_PROTOCOL="http",
-                 IOTA_HOST="localhost",
-                 IOTA_PORT="4041",
                  ORION_PROTOCOL="http",
                  ORION_HOST="localhost",
                  ORION_PORT="1026",
-                 CA_PROTOCOL="http",
-                 CA_HOST="localhost",
-                 CA_PORT="9999",
                  PERSEO_PROTOCOL="http",
                  PERSEO_HOST="localhost",
                  PERSEO_PORT="9090",
@@ -99,12 +92,6 @@ class FlowBase(object):
                                  CORRELATOR_ID=self.CORRELATOR_ID,
                                  TRANSACTION_ID=self.TRANSACTION_ID)
 
-        self.iota = IoTAOperations(IOTA_PROTOCOL,
-                                   IOTA_HOST,
-                                   IOTA_PORT,
-                                   CORRELATOR_ID=self.CORRELATOR_ID,
-                                   TRANSACTION_ID=self.TRANSACTION_ID)
-
         self.cb = CBOperations(ORION_PROTOCOL,
                                ORION_HOST,
                                ORION_PORT,
@@ -132,18 +119,8 @@ class FlowBase(object):
                                        CORRELATOR_ID=self.CORRELATOR_ID,
                                        TRANSACTION_ID=self.TRANSACTION_ID)
 
-        if CA_PROTOCOL:
-            # CA for Blackbutton notification flow
-            self.ca_endpoint = CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+"/v1"+"/notify"
-
-
         self.endpoints = {}
         self.iotmodules_aliases = {}
-
-        if CA_PROTOCOL:
-            # CA for Geolocation
-            self.endpoints['CA'] = \
-              CA_PROTOCOL + "://"+CA_HOST+":"+CA_PORT+""+"/v1/notifyGeolocation"
 
         self.sum = {
             "serviceTime": 0,
@@ -289,7 +266,6 @@ class FlowBase(object):
         try:
             all.append(self.idm.IdMRestOperations.getOutgoingMetrics())
             all.append(self.ac.AccessControlRestOperations.getOutgoingMetrics())
-            all.append(self.iota.IoTACppRestOperations.getOutgoingMetrics())
             all.append(self.cb.CBRestOperations.getOutgoingMetrics())
             all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
             # TODO: Take care of the following operation takes too much time

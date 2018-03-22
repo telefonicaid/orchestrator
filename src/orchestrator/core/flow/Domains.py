@@ -291,17 +291,6 @@ class Domains(FlowBase):
                 self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
                 #
-                # Delete all devices in subservice
-                #
-                devices_deleted = self.iota.deleteAllDevices(
-                    ADMIN_TOKEN,
-                    DOMAIN_NAME,
-                    PROJECT_NAME)
-
-                if (len(devices_deleted) > 0):
-                    self.logger.info("devices deleted %s", devices_deleted)
-
-                #
                 # Delete all subscriptions in subservice
                 #
                 subscriptions_deleted = self.cb.deleteAllSubscriptions(
@@ -321,13 +310,6 @@ class Domains(FlowBase):
                 if (len(rules_deleted) > 0):
                     self.logger.info("rules deleted %s",
                                      rules_deleted)
-
-            #
-            # Delete all devices
-            #
-
-            devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
-                                                         DOMAIN_NAME)
 
             #
             # Delete all subscriptions
