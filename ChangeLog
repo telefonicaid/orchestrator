@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: Remove legacy endpoints: IoTA and CA
+
 1.8.0
 
 FEATURE: LDAP support for user management
