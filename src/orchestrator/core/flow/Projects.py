@@ -353,16 +353,6 @@ class Projects(FlowBase):
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
 
             #
-            # Delete all devices
-            #
-            devices_deleted = self.iota.deleteAllDevices(ADMIN_TOKEN,
-                                                         DOMAIN_NAME,
-                                                         PROJECT_NAME)
-            if (len(devices_deleted) > 0):
-                self.logger.info("devices deleted %s", devices_deleted)
-
-
-            #
             # Delete all subscriptions
             #
             subscriptions_deleted = self.cb.deleteAllSubscriptions(

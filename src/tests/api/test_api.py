@@ -3089,11 +3089,6 @@ if __name__ == '__main__':
     test_NewSubService.test_post_bad2()
     test_NewSubService.test_post_ok3()
 
-    test_SubServiceIoTADevice = Test_SubServiceIoTADevice_RestView()
-    test_SubServiceIoTADevice.test_post_ok()
-    test_SubServiceIoTADevice.test_post_ok2()
-    test_SubServiceIoTADevice.test_post_ok3()
-
 
     test_DeleteSubService = Test_DeleteSubService_RestView()
     test_DeleteSubService.test_delete_ok()
