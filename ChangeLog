@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+1.9.0
+
 FIX: Remove legacy endpoints: IoTA and CA
 FEATURE: Remove uwsgi stats: takes too much time
 
