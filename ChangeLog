@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+1.9.1
+
 FIX: Add missed doc about group role assigment
 FIX: Expose group role assignment API
 
