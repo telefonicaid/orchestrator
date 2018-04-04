@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-FIX: check metrics conf before collect metrics from requester API handler
+FIX: check if metrics are enable before collect metrics from requester API handler
 
 1.9.1
 
