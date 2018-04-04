@@ -40,7 +40,6 @@ As you can see there are several arguments to pass to orchestrator entry point i
    -keystonehost <value>
    -keypasshost <value>
    -orionhost <value>
-   -iotahost <value>
    -pepperseohost <value>
    -sthhost <value>
    -perseohost <value>
@@ -50,7 +49,6 @@ As you can see there are several arguments to pass to orchestrator entry point i
    -keystoneport <value>
    -keypassport <value>
    -orionport <value>
-   -iotaport <value>
    -pepperseoport <value>
    -sthport <value>
    -perseoport <value>
