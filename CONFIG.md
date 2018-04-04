@@ -3,7 +3,7 @@
 ## Endpoints
 The most important things that can be customized are endpoints about Keystone and Keypass.
 Some specific operations involve calls to others endpoints like Orion, Iota or Perseo.
-And there are others endpoints that are not invoked but are kept to use into Orion subscriptions like STH, Perseo, Cygnus and LDAP.
+And there are others endpoints that are not invoked but are kept to use into Orion subscriptions like STH, Perseo, Cygnus, LDAP and MAILER.
 
 Make sure your LDAP follows [a compatible schema](https://github.com/telefonicaid/fiware-keystone-spassword/blob/master/docs/iotp_ldap.md#populate-ldap)
 
