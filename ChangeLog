@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+FIX: Add missed doc about group role assigment
+FIX: Expose group role assignment API
+
 1.9.0
 
 FIX: Remove legacy endpoints: IoTA and CA

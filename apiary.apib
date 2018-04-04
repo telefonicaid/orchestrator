@@ -354,9 +354,9 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 204
 
 
-## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
+## User Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
 
-### List of assignment roles [GET]
+### List of assignment roles to users [GET]
 + Parameters
     + service_id (required, `string`) ... Service Id
     + user_id (optional, `string`) ... User Id
@@ -452,7 +452,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 201
 
 
-### Revoke Role user [DELETE]
+### Revoke Role to user [DELETE]
 + Parameters
     + service_id (required, `string`) ... Service Id
     + user_id (optional, `string`) ... User Id
@@ -470,6 +470,107 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             "ROLE_ID":"sadfasdfasd5674567fas",
             "SERVICE_USER_NAME":"user_nameX",
             "SERVICE_USER_ID":"asd54634574567fasdf",
+            "INHERIT":true
+        }
++ Response 204
+
+
+
+## Group Role assigment [/v1.0/service/{serviceId}/group_role_assignments{?group_id,subservice_id,role_id,effective,inherit}]
+
+### List of assignment roles to groups [GET]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + group_id (optional, `string`) ... Group Id
+    + subservice_id (optional, `string`) ... Subservice Id (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + effective (optional, `boolean`) ... effective in subservice or not
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"2342342asdgdsfh34234",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"s2345567ad678fasdfasdfas",
+            "GROUP_NAME":"group_name",
+            "GROUP_ID":"asdfas52345346sdf",
+            "EFFECTIVE":true
+        }
+        Required: ["ROLE_NAME", "GROUP_NAME"]
++ Response 200 (application/json)
+        {
+          "role_assignments": [
+            {
+              "scope": {
+                "domain": {
+                  "id": "16966e6fdac74225afb4edf801dd9b2a"
+                }
+              },
+              "role": {
+                "id": "0993967f1ea24a82a72ca4198c16ca20",
+                "name": "ServiceCustomer",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "group": {
+                "description": "group of domain test_service",
+                "name": "CarlGroup",
+                "enabled": true,
+                "id": "7ee5a828843945a79026d99ae0057bb9",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "links": {
+                "assignment": "http://localhost:5001/v3/domains/16966e6fdac74225afb4edf801dd9b2a/groups/7ee5a828843945a79026d99ae0057bb9/roles/0993967f1ea24a82a72ca4198c16ca20"
+              }
+            }
+          ]
+        }
+
+
+### Assign role to group [POST]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + group_id (optional, `string`) ... Group Id
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
++ Request (application/json)
+        {
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"234234234234sdfgdfghdfgh",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfae456457567567s",
+            "GROUP_NAME":"group_nameX",
+            "GROUP_ID":"asdfa34563457756sdf",
+            "INHERIT":true
+        }
+        Required: ["ROLE_NAME", "GROUP_NAME"]
++ Response 201
+
+
+### Revoke Role to group [DELETE]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + group_id (optional, `string`) ... Group Id
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
++ Request (application/json)
+        {
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"23423423423fghfgh4",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasd5674567fas",
+            "GROUP_NAME":"group_nameX",
+            "GROUP_ID":"asd54634574567fasdf",
             "INHERIT":true
         }
 + Response 204
