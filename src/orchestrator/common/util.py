@@ -29,7 +29,7 @@ import StringIO
 import requests
 import logging
 import time
-
+from settings import dev as settings
 
 class RestOperations(object):
     '''
@@ -172,7 +172,8 @@ class RestOperations(object):
             res.code = 500
             res.msg = self.ENDPOINT_NAME + " endpoint ERROR: " + res.args[0][1]
 
-        self.collectOutgoingMetrics(service_start, request.data, request.headers, res)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectOutgoingMetrics(service_start, request.data, request.headers, res)
         return res
 
 
@@ -255,7 +256,8 @@ class RestOperations(object):
         except Exception, e:
             print e
 
-        self.collectOutgoingMetrics(service_start, rdata, headers, res)
+        if settings.ORC_EXTENDED_METRICS:
+            self.collectOutgoingMetrics(service_start, rdata, headers, res)
         return res
 
 
@@ -272,7 +274,7 @@ class RestOperations(object):
                 self.sum["outgoingTransactionErrors"] += 1
             self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request)) + len(str(headers_request))
             # Check headers
-            self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response)) + len(str(response.headers.headers)) if 'headers' in response.headers else 0
+            self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response)) + len(str(response.headers.headers)) if 'headers' in response and 'headers' in response.headers else 0
             self.sum["serviceTimeTotal"] += (service_stop - service_start)
         except Exception, ex:
             self.logger.warn("ERROR collecting outgoing metrics %s", ex)
