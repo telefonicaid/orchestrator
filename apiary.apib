@@ -8,7 +8,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 # Group Orchestrator
 
-All requests can be performed providing a 'x-auth-token' header instead of SERVICE_X_USER / SERVICE_X_PASSWORD or SERVICE_X_TOKEN payload fields. But one of these three auth ways should be present.
+All requests, except related with metrics, and ldap, needs credencitals and can be performed providing a 'x-auth-token' header instead of SERVICE_X_USER / SERVICE_X_PASSWORD or SERVICE_X_TOKEN payload fields. But one of these three auth ways should be present.
 
 In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can be omitted, due to "SERVICE_NAME" is referenced to serviceId. In the same way, "SUBSERVICE_NAME" field at body can be omitted in cases where "subserviceId" is part or the URL
 
