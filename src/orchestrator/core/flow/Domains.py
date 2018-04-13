@@ -336,9 +336,16 @@ class Domains(FlowBase):
             self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             # Delete policy of roles in Access Control
-            self.ac.deleteTenantPolicies(DOMAIN_NAME, ADMIN_TOKEN)
+            #self.ac.deleteTenantPolicies(DOMAIN_NAME, ADMIN_TOKEN)
+
+            # Delete MongoDB database service
+            self.mongodb.removeDatabase(DOMAIN_NAME)
+
 
             self.logger.debug("DOMAIN=%s" % DOMAIN)
+
+
+            self.logger.debug("MongoDB indexes created on databse %s", NEW_SERVICE_NAME)
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)

@@ -89,3 +89,7 @@ MAILER = {
     "from": 'smtpuser',
     "to": 'smart.iotplatform'
 }
+
+MONGODB = {
+    "URI": "mongodb://localhost:27017"
+}

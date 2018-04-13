@@ -63,6 +63,7 @@ class FlowBase(object):
                  MAILER_PASSWORD="yourpassword",
                  MAILER_FROM="smtpuser",
                  MAILER_TO="smtpuser",
+                 MONGODB_URI="mongodb://127.0.0.1:27017",
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 
@@ -118,6 +119,10 @@ class FlowBase(object):
                                        MAILER_TO,
                                        CORRELATOR_ID=self.CORRELATOR_ID,
                                        TRANSACTION_ID=self.TRANSACTION_ID)
+
+        self.mongodb = MongoDBOperations(MONGODB_URI,
+                                         CORRELATOR_ID=self.CORRELATOR_ID,
+                                         TRANSACTION_ID=self.TRANSACTION_ID)
 
         self.endpoints = {}
         self.iotmodules_aliases = {}

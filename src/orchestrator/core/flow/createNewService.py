@@ -325,6 +325,13 @@ class CreateNewService(FlowBase):
                                       ID_SUB_SERVICE_CUSTOMER_GROUP,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
 
+            #
+            # 7. Create MongoDB indexes
+            #
+            self.mongodb.createIndexes(NEW_SERVICE_NAME)
+            self.logger.debug("MongoDB indexes created on databse %s", NEW_SERVICE_NAME)
+
+
         except Exception, ex:
             if ID_DOM1:
                 self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
