@@ -39,7 +39,7 @@ class MongoDBOperations(object):
                  MONGODB_URI=None,
                  CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
-        self.MONGODB_URI = MONGO_URI
+        self.MONGODB_URI = MONGODB_URI
         self.client = pymongo.MongoClient(self.MONGODB_URI)
 
     def checkMongo(self):
