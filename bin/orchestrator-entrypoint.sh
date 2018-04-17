@@ -54,6 +54,7 @@ MAILER_PASSWORD=yourpassword
 MAILER_FROM=smtpuser
 MAILER_TO=smtpuser
 
+MONGODB_URI=localhost:27017
 
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
@@ -126,8 +127,11 @@ while [[ $# -gt 0 ]]; do
             MAILER_FROM=$VALUE
             ;;
         -mailerto)
-            MAILER_FROM=$VALUE
+            MAILER_TO=$VALUE
             ;;
+        -mongodburi)
+            MONGODB_URI=$VALUE
+            ;;        
         *)
             echo "not found"
             # Do nothing
@@ -192,6 +196,10 @@ sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,\/\"\n: ]*}/LDAP = { \
 sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,\/\"\n: ]*}/MAILER = { \
              \"host\": \"'$MAILER_HOST'\", \
              \"port\": \"'$MAILER_PORT'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\/\"\n: ]*}/MONGODB = { \
+             \"URI\": \"'$MONGODB_URI'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
 

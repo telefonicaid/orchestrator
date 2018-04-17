@@ -30,6 +30,7 @@ from orchestrator.core.orion import CBOrionOperations as CBOperations
 from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
 from orchestrator.core.mailer import MailerOperations as MailerOperations
+from orchestrator.core.mongo import MongoDBOperations as MongoDBOperations
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
