@@ -29,10 +29,10 @@ orchestrator:
     - keypass
     - pep-orion
     - pep-perseo-fe
-    - iota
+    - mongo
   ports:
     - "8084:8084"
-  command: -keystonehost keystone -keypasshost keypass -orionhost pep-orion -pepperseohost pep-perseo-fe -sthhost sth -perseohost perseo-fe -cygnushost cygnus
+  command: -keystonehost keystone -keypasshost keypass -orionhost pep-orion -pepperseohost pep-perseo-fe -sthhost sth -perseohost perseo-fe -cygnushost cygnus -mongodburi mongo
 ```
 
 As you can see there are several arguments to pass to orchestrator entry point in order to configure some relevant endpoints for orchestrator as keystone, keypass, orion, iota and so on. Make sure all of them are present:
@@ -60,6 +60,7 @@ As you can see there are several arguments to pass to orchestrator entry point i
    -mailerpasswd <value>
    -mailerfrom <value>
    -mailerto <value>
+   -mongodburi <value>
 ```
 
 

@@ -38,6 +38,8 @@ Orchestrator relies on these other IoT parts:
 - Context Broker (Orion)
 - CEP (Perseo)
 - LDAP (Openldap - optional)
+- MAILER (optional)
+- MongoDB
 
 These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/master/requirements.txt).
 
