@@ -126,7 +126,7 @@ while [[ $# -gt 0 ]]; do
             MAILER_FROM=$VALUE
             ;;
         -mailerto)
-            MAILER_FROM=$VALUE
+            MAILER_TO=$VALUE
             ;;
         *)
             echo "not found"
@@ -192,6 +192,10 @@ sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,\/\"\n: ]*}/LDAP = { \
 sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,\/\"\n: ]*}/MAILER = { \
              \"host\": \"'$MAILER_HOST'\", \
              \"port\": \"'$MAILER_PORT'\", \
+             \"user\": \"'$MAILER_USER'\", \
+             \"password\": \"'$MAILER_PASSWORD'\", \
+             \"from\": \"'$MAILER_FROM'\", \
+             \"to\": \"'$MAILER_TO'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
 
