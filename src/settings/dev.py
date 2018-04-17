@@ -84,8 +84,8 @@ LDAP = {
 MAILER = {
     "host": "localhost",
     "port": "587",
-    "user": 'smtpuser@yourdomain.com',
-    "password": 'yourpassword',
-    "from": 'smtpuser',
-    "to": 'smart.iotplatform'
+    "user": "smtpuser@yourdomain.com",
+    "password": "yourpassword",
+    "from": "smtpuser",
+    "to": "smtpuser"
 }

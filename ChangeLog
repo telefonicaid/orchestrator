@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+1.9.3
+
+FIX: docker LDAP and MAILER conf
+
 1.9.2
 
 FIX: check if metrics are enable before collect metrics from requester API handler
