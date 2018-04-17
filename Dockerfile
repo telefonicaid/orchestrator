@@ -3,7 +3,7 @@ FROM centos:7
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
-ENV ORCHESTRATOR_VERSION 1.9.2
+ENV ORCHESTRATOR_VERSION 2.0.0
 
 ENV KEYSTONE_HOST localhost
 ENV KEYSTONE_PORT 5001
@@ -44,7 +44,7 @@ ENV MAILER_HOST localhost
 ENV MAILER_PORT 589
 ENV MAILER_USER smtpuser
 ENV MAILER_PASSWORD smtpuserpassword
-ENV MAILER_FORM smtpfrom
+ENV MAILER_FROM smtpfrom
 ENV MAILER_TO smtpto
 
 ENV MONGODB_URI localhost:27017
@@ -161,6 +161,17 @@ RUN \
     sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/CYGNUS_PORT=5050/CYGNUS_PORT='$CYGNUS_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/CYGNUS_PROTOCOL=http/CYGNUS_PROTOCOL='$CYGNUS_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/CYGNUS_NOTIFYPATH=http/CYGNUS_NOTIFYPATH='$CYGNUS_NOTIFYPATH'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/LDAP_HOST=http/LDAP_HOST='$LDAP_HOST'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/LDAP_PORT=http/LDAP_PORT='$LDAP_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/LDAP_BASEDN=http/LDAP_BASEDN='$LDAP_BASEDN'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_HOST=http/MAILER_HOST='$MAILER_HOST'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_PORT=http/MAILER_PORT='$MAILER_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_USER=http/MAILER_USER='$MAILER_USER'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_PASSWORD=http/MAILER_PASSWORD='$MAILER_PASSWORD'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_FROM=http/MAILER_FROM='$MAILER_FROM'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_TO=http/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MONGODB_URI=http/MONGODB_URI='$MONGODB_URI'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
