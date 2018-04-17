@@ -126,7 +126,7 @@ while [[ $# -gt 0 ]]; do
             MAILER_FROM=$VALUE
             ;;
         -mailerto)
-            MAILER_FROM=$VALUE
+            MAILER_TO=$VALUE
             ;;
         *)
             echo "not found"
