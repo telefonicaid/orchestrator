@@ -59,12 +59,13 @@ class MongoDBOperations(object):
             db.entities.create_index("_id.servicePath")
             db.entities.create_index("_id.creDate")
         except Exception, e:
-            logger.warn("createIndex exception: %s" % e)
+            logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
-    def removeDatabase(self, SERVICE_NAME):
+    def removeDatabases(self, SERVICE_NAME):
         try:        
             databaseName = 'orion-' + SERVICE_NAME
             self.client.drop_database(databaseName)
+            databaseName = 'sth_' + SERVICE_NAME
+            self.client.drop_database(databaseName)
         except Exception, e:
-            logger.warn("createIndex exception: %s" % e)            
-        
+            logger.warn("remove database %s exception: %s" % (dataabseName,e))
