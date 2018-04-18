@@ -99,10 +99,10 @@ def show_conf():
     conf = {}
     from django.conf import settings
     custom_settings_entries = ['KEYSTONE', 'KEYPASS',
-                               'ORION', 
+                               'ORION',
                                'PEP', 'IOTAGENT', 'SCIM_API_VERSION',
                                'CYGNUS', 'STH', 'PERSEO',
-                               'LDAP', 'MAILER'
+                               'LDAP', 'MAILER', 'MONGODB'
                                ]
     for name in custom_settings_entries:
         conf[name] = getattr(settings, name)

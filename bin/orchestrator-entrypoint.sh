@@ -202,7 +202,7 @@ sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
              \"to\": \"'$MAILER_TO'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
-sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MONGODB = { \
+sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\-\/\"\n: ]*}/MONGODB = { \
              \"URI\": \"'$MONGODB_URI'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
