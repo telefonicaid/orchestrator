@@ -341,11 +341,7 @@ class Domains(FlowBase):
             # Delete MongoDB database service
             self.mongodb.removeDatabases(DOMAIN_NAME)
             self.logger.debug("MongoDB database %s deleted", DOMAIN_NAME)
-
             self.logger.debug("DOMAIN=%s" % DOMAIN)
-
-
-
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
