@@ -171,12 +171,8 @@ RUN \
     sed -i 's/MAILER_USER=http/MAILER_USER='$MAILER_USER'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MAILER_PASSWORD=http/MAILER_PASSWORD='$MAILER_PASSWORD'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MAILER_FROM=http/MAILER_FROM='$MAILER_FROM'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
-<<<<<<< HEAD
     sed -i 's/MAILER_TO=http/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MONGODB_URI=http/MONGODB_URI='$MONGODB_URI'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
-=======
-sed -i 's/MAILER_TO=http/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
->>>>>>> master
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
