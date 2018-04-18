@@ -142,7 +142,7 @@ RUN \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
     sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MONGODB = { \
-             \"host\": \"'$MONGODB_URI'\", \
+             \"URI\": \"'$MONGODB_URI'\", \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
     # Put IOT endpoints conf into ochestrator-entrypoint.sh
