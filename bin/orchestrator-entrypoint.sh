@@ -187,15 +187,19 @@ sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
-sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,\/\"\n: ]*}/LDAP = { \
+sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
              \"host\": \"'$LDAP_HOST'\", \
              \"port\": \"'$LDAP_PORT'\", \
              \"basedn\": \"'$LDAP_BASEDN'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
-sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,\/\"\n: ]*}/MAILER = { \
+sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
              \"host\": \"'$MAILER_HOST'\", \
              \"port\": \"'$MAILER_PORT'\", \
+             \"user\": \"'$MAILER_USER'\", \
+             \"password\": \"'$MAILER_PASSWORD'\", \
+             \"from\": \"'$MAILER_FROM'\", \
+             \"to\": \"'$MAILER_TO'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
 sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\/\"\n: ]*}/MONGODB = { \

@@ -3,6 +3,7 @@ FROM centos:7
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
+
 ENV ORCHESTRATOR_VERSION 2.0.0
 
 ENV KEYSTONE_HOST localhost
@@ -125,13 +126,13 @@ RUN \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,\/\"\n: ]*}/LDAP = { \
+    sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
              \"host\": \"'$LDAP_HOST'\", \
              \"port\": \"'$LDAP_PORT'\", \
              \"basedn\": \"'$LDAP_BASEDN'\", \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,\/\"\n: ]*}/MAILER = { \
+    sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
              \"host\": \"'$MAILER_HOST'\", \
              \"port\": \"'$MAILER_PORT'\", \
              \"user\": \"'$MAILER_USER'\", \
@@ -170,8 +171,12 @@ RUN \
     sed -i 's/MAILER_USER=http/MAILER_USER='$MAILER_USER'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MAILER_PASSWORD=http/MAILER_PASSWORD='$MAILER_PASSWORD'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MAILER_FROM=http/MAILER_FROM='$MAILER_FROM'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+<<<<<<< HEAD
     sed -i 's/MAILER_TO=http/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MONGODB_URI=http/MONGODB_URI='$MONGODB_URI'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+=======
+sed -i 's/MAILER_TO=http/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+>>>>>>> master
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
