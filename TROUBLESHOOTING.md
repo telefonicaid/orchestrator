@@ -88,16 +88,20 @@ If Keypass connection is not available the following error entry will appear in 
 time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg=keypass endpoint not found
 time=24/Feb/2015 10:49:27 | lvl=INFO | component=Orchestrator | msg=Checking endpoints ERROR keypass endpoint not found
 ```
-
+Other optional endpoints as orion, perseo, openldap, mailer or mongodb are also checked, but if a connection error hanpens then a warn log is producec, since these endpoints are optionals.
+```
+time=2018-04-25T09:12:50.083Z | lvl=WARNING | corr=n/a | trans=n/a | srv=None | subsrv=/ | comp=Orchestrator | op=orchestrator_api:check_endpoints() | msg=MongoDB endpoint not found: 127.0.0.1:27017: [Errno 111] Connection refused
+```
+In that case some features related with these endpoins could not be available.
 
 ## Endpoint configuration errors
 
-At start time Orchestrator tries to connect to Auth (Keystone),  Access Control (Keypass) Endpoints
-other endpoints (as orion, perseo or iotagent)
+At start time Orchestrator tries to connect to Auth (Keystone)  and Access Control (Keypass) endpoints and
+other optional endpoints (as orion, perseo, openldap, mailer or mongodb).
 
-if Any of the above endpoints are not available the following error entry will appear in the log.
+If any configuration of the above endpoints are not available the following error entry will appear in the log.
 ```
-time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg="KEYSTONE endpoint configuration error. Forcing to use default conf values (localhost)"
+time=24/Feb/2015 10:49:27 | lvl=ERROR | component=Orchestrator | msg="XXXX endpoint configuration error. Forcing to use default conf values (YYYY)"
 ```
 
 
