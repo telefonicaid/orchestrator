@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FEATURE: Add checks about optional endpoints: orion, perseo, openldap, mailer
+
 1.9.3
 
 FIX: docker LDAP and MAILER conf
