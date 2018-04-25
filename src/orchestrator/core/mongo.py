@@ -43,12 +43,7 @@ class MongoDBOperations(object):
         self.client = pymongo.MongoClient(self.MONGODB_URI)
 
     def checkMongo(self):
-        try:
-            client.list_databases()
-            return True
-        except Exception, e:
-            logger.warn("checkMongo exception: %s" % e)
-            return False
+        self.client.list_databases()
 
     def createIndexes(self, SERVICE_NAME):
         try:        

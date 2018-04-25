@@ -29,6 +29,7 @@ from django.conf import settings
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
+from orchestrator.core.mongo import MongoDBOperations as MongoDBOperations
 
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
@@ -92,6 +93,15 @@ def check_endpoints():
     except Exception, ex:
         logger.error("keypass endpoint not found: %s" % ex)
         return "ERROR keypass endpoint not found: %s" % ex
+
+    # MongoDB: optional
+    MONGODB_URI = settings.MONGODB['URI']
+    mongo = MongoDBOperations(MONGODB_URI)
+    try:
+        mongo.checkMongo()
+        logger.info("MongoDB endpoint OK")
+    except Exception, ex:
+        logger.warn("MongoDB endpoint not found: %s" % ex)
 
     return "OK"
 
