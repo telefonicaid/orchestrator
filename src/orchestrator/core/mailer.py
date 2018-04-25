@@ -50,9 +50,8 @@ class MailerOperations(object):
         self.smtp_to = MAILER_TO
 
     def checkMailer(self):
-        # TBD
-        None
-
+        conn = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        assert conn != None
 
     def sendMail(self, to=None, subject=None, text=None):
         if not to:
