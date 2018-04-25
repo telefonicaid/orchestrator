@@ -33,13 +33,17 @@ Orchestrator is based mainly on:
 - httplib
 
 Orchestrator relies on these other IoT parts:
-- Identity Manager (Keystone)
-- Access Control (Keypass)
-- Context Broker (Orion)
-- CEP (Perseo)
-- LDAP (Openldap - optional)
-- MAILER (optional)
-- MongoDB
+- Identity Manager: Keystone (mandatory)
+- Access Control: Keypass (mandatory)
+- Context Broker: Orion (optional)
+- CEP: Perseo (optional)
+- Cygnus (optional)
+- OpenLDAP (optional)
+- Mailer (optional)
+- MongoDB (optional)
+
+Some of these IoT parts are optional, this means that orchestrator can work without them but excluding the part of feature in which are involved. This way Keystone and Keypass are mandatory to deal with Orchestrator.
+
 
 These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/master/requirements.txt).
 
