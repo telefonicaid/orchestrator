@@ -57,7 +57,7 @@ class PerseoOperations(object):
             url='/m2m/vrules',
             method='GET',
             data=None)
-        assert res.code == 404, (res.code, res.msg)
+        assert res.code == 200, (res.code, res.msg)
         pass
 
 
