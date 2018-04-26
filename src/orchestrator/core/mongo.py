@@ -63,4 +63,4 @@ class MongoDBOperations(object):
             databaseName = 'sth_' + SERVICE_NAME
             self.client.drop_database(databaseName)
         except Exception, e:
-            logger.warn("remove database %s exception: %s" % (dataabseName,e))
+            logger.warn("remove database %s exception: %s" % (databaseName,e))
