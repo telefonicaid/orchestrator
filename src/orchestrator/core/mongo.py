@@ -46,7 +46,9 @@ class MongoDBOperations(object):
         self.client.list_databases()
 
     def createIndexes(self, SERVICE_NAME):
-        try:        
+        # Creating recommended indexes to improve performance, as described in Orion Administration Manual
+        # at https://fiware-orion.readthedocs.io/en/master/admin/perf_tuning/index.html
+        try:
             databaseName = 'orion-' + SERVICE_NAME
             db = self.client[databaseName]
             db.entities.create_index("_id.id")
@@ -57,7 +59,7 @@ class MongoDBOperations(object):
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
     def removeDatabases(self, SERVICE_NAME):
-        try:        
+        try:
             databaseName = 'orion-' + SERVICE_NAME
             self.client.drop_database(databaseName)
             databaseName = 'sth_' + SERVICE_NAME
