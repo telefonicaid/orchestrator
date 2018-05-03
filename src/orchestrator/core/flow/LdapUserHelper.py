@@ -279,7 +279,7 @@ class LdapUserHelper(FlowBase):
             else:
                 raise Exception(401, "None user was auth by ldap: %s" % res['error'])
         except Exception, ex:
-            self.logger.warn("ERROR autenticating user: %s" % (
+            self.logger.warn("ERROR autenticating user %s: %s" % (
                 USER_NAME,
                 ex))
             return self.composeErrorCodeLdap(ex)
