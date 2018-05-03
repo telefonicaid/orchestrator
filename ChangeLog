@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+1.9.4
+
 FIX: handler error in auth user operation
 
 1.9.3
