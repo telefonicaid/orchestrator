@@ -48,7 +48,8 @@ class OpenLdapOperations(object):
 
     def checkLdap(self):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
-        assert conn != None
+        # Just for check connection
+        conn.simple_bind_s("","")
 
     def bindAdmin(self, USERNAME, PASSWORD):
         conn = ldap.open(self.LDAP_HOST, self.LDAP_PORT)
