@@ -276,7 +276,7 @@ class Domains(FlowBase):
                         break
 
             if not DOMAIN_ID:
-                raise Exception(404, "DOMAIN_NAME %s not found in domains by user %s" % (DOMAIN_NAME, self.get_extended_token(ADMIN_TOKEN)))
+                raise Exception(404, "DOMAIN_NAME %s not found in domains by user %s" % (DOMAIN_NAME, self.getExtendedToken(ADMIN_TOKEN)))
 
             if not DOMAIN_NAME:
                 DOMAIN = self.idm.getDomain(ADMIN_TOKEN, DOMAIN_ID)
