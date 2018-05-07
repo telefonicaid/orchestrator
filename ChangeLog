@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+1.9.5
+
 FEATURE: Add checks about optional endpoints: orion, perseo, openldap, mailer
 
 1.9.4
