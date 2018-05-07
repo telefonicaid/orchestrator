@@ -8,7 +8,7 @@ Component to expose an API to automatise provisioning in all the IoT Platform mo
 
 # Group Orchestrator
 
-All requests can be performed providing a 'x-auth-token' header instead of SERVICE_X_USER / SERVICE_X_PASSWORD or SERVICE_X_TOKEN payload fields. But one of these three auth ways should be present.
+All requests, except related with metrics, and ldap, needs credencitals and can be performed providing a 'x-auth-token' header instead of SERVICE_X_USER / SERVICE_X_PASSWORD or SERVICE_X_TOKEN payload fields. But one of these three auth ways should be present.
 
 In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can be omitted, due to "SERVICE_NAME" is referenced to serviceId. In the same way, "SUBSERVICE_NAME" field at body can be omitted in cases where "subserviceId" is part or the URL
 
@@ -229,94 +229,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 204
 
 
-## Register IoTA device in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_device/]
-### register device in IoTA [POST]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"test_service",
-                "SERVICE_USER_NAME":"test_admin_service",
-                "SERVICE_USER_PASSWORD":"passwd",
-                "SERVICE_USER_TOKEN":"token",
-                "SUBSERVICE_NAME":"test_subservice",
-                "DEVICE_ID":"device_id_XXX",
-                "ENTITY_TYPE":"BlackButton",
-                "ENTITY_NAME":"device_id_XXX",
-                "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_ICCID":"",
-                "ATT_IMEI":"",
-                "ATT_IMSI":"",
-                "ATT_INTERACTION_TYPE": "asynchronous",
-                "ATT_SERVICE_ID":"test_service",
-                "ATT_GEOLOCATION":""
-            }
-        Required: [ "DEVICE_ID", "ENTITY_TYPE", "PROTOCOL" ]
-        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"},
-                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
-
-+ Response 201 (application/json)
-    + DEVICE_ID
-
-
-
-### unregister device in IoTA [DELETE]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"test_service",
-                "SERVICE_USER_NAME":"test_admin_service",
-                "SERVICE_USER_PASSWORD":"passwd",
-                "SERVICE_USER_TOKEN":"token",
-                "SUBSERVICE_NAME":"test_subservice",
-                "DEVICE_ID":"device_id_XXX"
-            }
-        Required: [ "DEVICE_ID" ]
-+ Response 204 (application/json)
-
-
-## Register entity service [/v1.0/service/{serviceId}/subservice/{subserviceId}/register_service/]
-### Register entity service for IoTA and ca, sth, perseo subscriptions [POST]
-+ Parameters
-    + serviceId (required, `string`) ... Service Id
-    + subserviceId (required, `string`) ... SubService Id
-+ Request (application/json)
-            {
-                "SERVICE_NAME":"test_service",
-                "SERVICE_USER_NAME":"test_admin_service",
-                "SERVICE_USER_PASSWORD":"passwd",
-                "SERVICE_USER_TOKEN":"token",
-                "SUBSERVICE_NAME":"test_subservice",
-                "ENTITY_TYPE":"entity_type",
-                "ENTITY_ID":"entity_id",
-                "PROTOCOL":"TT_BLACKBUTTON",
-                "ATT_NAME":"test_service_test_subbservice",
-                "ATT_PROVIDER":"provider_name",
-                "ATT_ENDPOINT":"http://localhost:6500/sync/request",
-                "ATT_METHOD":"POST",
-                "ATT_AUTHENTICATION":"context-adapter",
-                "ATT_INTERACTION_TYPE":"synchronous",
-                "ATT_MAPPING":"[]",
-                "ATT_TIMEOUT":"120"
-            }
-        Required: [ "ENTITY_ID", "ENTITY_TYPE", "PROTOCOL" ]
-        Options: ATT_INTERACTION_TYPE = { "asynchronous", "synchronous"}
-                 ATT_AUTHENTICATION = {"context-adapter", "third-party"}
-                 PROTOCOL = {"TT_BLACKBUTTON", "PDI-IoTA-ThinkingThings"}
-
-
-+ Response 201 (application/json)
-    + Body
-            {
-                 "subscriptionid_ca" : "1323423gsdfbb35tergs",
-                 "subscriptionid_sth" : "1323423gsdfb4345b35tergs",
-                 "subscriptionid_perseo" : "1323423gsdfb4sdb35tergs"
-            }
-
-
 ## Roles in service [/v1.0/service/{serviceId}/role{?index}{?count}]
 
 ### List Roles[GET]
@@ -442,9 +354,9 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 204
 
 
-## Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
+## User Role assigment [/v1.0/service/{serviceId}/role_assignments{?user_id,subservice_id,role_id,effective,inherit}]
 
-### List of assignment roles [GET]
+### List of assignment roles to users [GET]
 + Parameters
     + service_id (required, `string`) ... Service Id
     + user_id (optional, `string`) ... User Id
@@ -540,7 +452,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 + Response 201
 
 
-### Revoke Role user [DELETE]
+### Revoke Role to user [DELETE]
 + Parameters
     + service_id (required, `string`) ... Service Id
     + user_id (optional, `string`) ... User Id
@@ -558,6 +470,107 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             "ROLE_ID":"sadfasdfasd5674567fas",
             "SERVICE_USER_NAME":"user_nameX",
             "SERVICE_USER_ID":"asd54634574567fasdf",
+            "INHERIT":true
+        }
++ Response 204
+
+
+
+## Group Role assigment [/v1.0/service/{serviceId}/group_role_assignments{?group_id,subservice_id,role_id,effective,inherit}]
+
+### List of assignment roles to groups [GET]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + group_id (optional, `string`) ... Group Id
+    + subservice_id (optional, `string`) ... Subservice Id (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + effective (optional, `boolean`) ... effective in subservice or not
++ Request (application/json)
+        {
+            "SERVICE_NAME":"test_service",
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"2342342asdgdsfh34234",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"s2345567ad678fasdfasdfas",
+            "GROUP_NAME":"group_name",
+            "GROUP_ID":"asdfas52345346sdf",
+            "EFFECTIVE":true
+        }
+        Required: ["ROLE_NAME", "GROUP_NAME"]
++ Response 200 (application/json)
+        {
+          "role_assignments": [
+            {
+              "scope": {
+                "domain": {
+                  "id": "16966e6fdac74225afb4edf801dd9b2a"
+                }
+              },
+              "role": {
+                "id": "0993967f1ea24a82a72ca4198c16ca20",
+                "name": "ServiceCustomer",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "group": {
+                "description": "group of domain test_service",
+                "name": "CarlGroup",
+                "enabled": true,
+                "id": "7ee5a828843945a79026d99ae0057bb9",
+                "domain_id": "16966e6fdac74225afb4edf801dd9b2a"
+              },
+              "links": {
+                "assignment": "http://localhost:5001/v3/domains/16966e6fdac74225afb4edf801dd9b2a/groups/7ee5a828843945a79026d99ae0057bb9/roles/0993967f1ea24a82a72ca4198c16ca20"
+              }
+            }
+          ]
+        }
+
+
+### Assign role to group [POST]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + group_id (optional, `string`) ... Group Id
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
++ Request (application/json)
+        {
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"234234234234sdfgdfghdfgh",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasdfae456457567567s",
+            "GROUP_NAME":"group_nameX",
+            "GROUP_ID":"asdfa34563457756sdf",
+            "INHERIT":true
+        }
+        Required: ["ROLE_NAME", "GROUP_NAME"]
++ Response 201
+
+
+### Revoke Role to group [DELETE]
++ Parameters
+    + service_id (required, `string`) ... Service Id
+    + group_id (optional, `string`) ... Group Id
+    + subservice_id (optional, `string`) ... Subservice (aka Project)
+    + role_id (optional, `string`) ... Role Id
+    + inherit (optional, `boolean`) ... assign role in all subservices or nor
++ Request (application/json)
+        {
+            "SUBSERVICE_NAME":"test_subservice",
+            "SUBSERVICE_ID":"23423423423fghfgh4",
+            "SERVICE_ADMIN_USER":"test_admin_service",
+            "SERVICE_ADMIN_PASSWORD": "passwd",
+            "SERVICE_ADMIN_TOKEN": "token",
+            "ROLE_NAME":"ServiceCustomer",
+            "ROLE_ID":"sadfasdfasd5674567fas",
+            "GROUP_NAME":"group_nameX",
+            "GROUP_ID":"asd54634574567fasdf",
             "INHERIT":true
         }
 + Response 204
@@ -935,7 +948,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
          ],
          "version": "0.5.1",
          "API_stats": {
-            "num_post_device": 3,
             "num_delete_user": 40,
             "num_get_role": 20,
             "num_delete_subservice": 330,
@@ -949,7 +961,6 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             "num_post_subservice": 30,
             "num_post_entity_service": 10,
             "num_get_subservice": 30,
-            "num_post_devices": 30,
             "num_post_user": 40,
             "num_get_user ": 20,
             "num_put_user": 10,
@@ -958,13 +969,12 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
             "num_post_service": 20,
             "num_delete_roleassignment": 10,
             "num_post_role": 10,
-            "num_delete_device": 10,
             "num_put_subservice": 10
           }
        }
 
 
-## LogLevel [/v1.0/admin/logs]
+## LogLevel [/v1.0/admin/log]
 
 ### Set new Log Level [PUT]
 + Parameters
@@ -1057,3 +1067,135 @@ The following metrics are collected by the component:
             "outgoingTransacionError": 10
           }
        }
+
+
+## LDAP User [/v1.0/ldap/user]
+
+### Create User [POST]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "NEW_USER_NAME": "newusername",
+         "NEW_USER_PASSWORD":"passwordforuser",
+         "NEW_USER_EMAIL":"user@domain.com",
+         "NEW_USER_DESCRIPTION":"user description",
+         "GROUP_NAMES": ["SubServiceCustomerGroup"]
+      }
++ Response 201 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+### Ask for User Creation [POST]
++ Request (application/json)
+      {
+         "NEW_USER_NAME": "newusername",
+         "NEW_USER_PASSWORD":"passwordforuser",
+         "NEW_USER_EMAIL":"user@domain.com",
+         "NEW_USER_DESCRIPTION":"user description",
+         "GROUP_NAMES": ["SubServiceCustomerGroup"]
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+### Delete User [DELETE]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "USER_NAME": "usertodelete",
+      }
++ Response 204 (application/json)
+
+
+### List Users [GET]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "FILTER": "*text*",
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [
+                      [ "baseDN": { "uid": [ "useruid"],
+                                    "mail": [ "usermail" ],
+                                    "cn": [ "usercn" ],
+                                 } ],
+                      [ "baseDN": { "uid": [ "useruid2"],
+                                    "mail": [ "usermail2..." ],
+                                    "cn": [ "usercn2..." ],
+                                 } ]
+                    ]
+      }
+
+
+### Get User Details by Admin [GET]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "USER_NAME": "ldapusername"
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [ "baseDN": { "uid": [ "useruid"],
+                                  "mail": [ "usermail" ],
+                                  "cn": [ "usercn" ],
+                                  "member": [ "groupname1", "groupname2" ]
+                                 } ]
+      }
+
+### Get User Details [GET]
++ Request (application/json)
+      {
+         "USER_NAME": "ldapusername"
+         "USER_PASSWORD": "ldapuserpassword"
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [ "baseDN": { "uid": [ "useruid"],
+                                  "mail": [ "usermail" ],
+                                  "cn": [ "usercn" ]
+                                 } ]
+      }
+
+### Update User [PUT]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "USER_NAME": "ldapusername",
+         "USER_DATA": { "USER_EMAIL": "newemail@domain.org",
+                        "USER_DESCRIPTION" "new user description",
+                        "GROUP_NAMES": ["NewGroup1", "NewGroup2"]
+                      }
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+
+## LDAP Auth [/v1.0/ldap/auth]
+
+### Auth User [POST]
++ Request (application/json)
+      {
+         "USER_NAME":"username",
+         "USER_PASSWORD":"userpassword"
+      }
++ Response 201 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }

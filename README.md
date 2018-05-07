@@ -25,9 +25,10 @@ Orchestrator is used to:
 - Create/List Trust Tokens
 - Activate / deactivate IoT Modules
 - Retrieve statistics and metrics about API usage
+- Create, List, Modify LDAP Users
 
 Orchestrator is based mainly on:
-- Python
+- Python (python 2.7 recomended)
 - Django / DjangoRestFramework
 - httplib
 
@@ -35,15 +36,15 @@ Orchestrator relies on these other IoT parts:
 - Identity Manager (Keystone)
 - Access Control (Keypass)
 - Context Broker (Orion)
-- IoTAgent (IoTA)
 - CEP (Perseo)
+- LDAP (Openldap - optional)
 
 These are all dependencies [requirements.txt](https://github.com/telefonicaid/orchestrator/blob/master/requirements.txt).
 
 Orchestrator needs a WSGI server like Apache, Lighttpd or NGIX: [wsgi.py](https://github.com/telefonicaid/orchestrator/blob/master/src/wsgi.py).
 
 Orchestrator interacts mainly with Identity Manager [Keystone](https://github.com/telefonicaid/fiware-keystone-scim) and Access Control [Keypass](https://github.com/telefonicaid/fiware-keypass).
-Since ContextBroker and IotAgent are secured elements (by [PepProxy](https://github.com/telefonicaid/fiware-pep-steelskin)) orchestrator can interact directly with tem using user provided credencials. If credencials or access control level is not enoght then orchestrator operation will not be performed.
+Since ContextBroker and CEP are secured elements (by [PepProxy](https://github.com/telefonicaid/fiware-pep-steelskin)) orchestrator can interact directly with tem using user provided credencials. If credencials or access control level is not enoght then orchestrator operation will not be performed.
 
 In this README document you could find how to get started with the application and basic concepts. For a more detailed information you can read the following docs:
 

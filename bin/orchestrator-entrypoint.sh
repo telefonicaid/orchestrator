@@ -24,10 +24,6 @@ ORION_HOST=localhost
 ORION_PORT=1026  # Pep and default internal container port
 ORION_PROTOCOL=http
 
-IOTA_HOST=localhost
-IOTA_PORT=4052
-IOTA_PROTOCOL=http
-
 PEP_PERSEO_HOST=localhost
 PEP_PERSEO_PORT=1026  # Pep Perseo
 PEP_PERSEO_PROTOCOL=http
@@ -47,6 +43,18 @@ CYGNUS_PORT=5050  # Pep and default internal container port
 CYGNUS_PROTOCOL=http
 CYGNUS_NOTIFYPATH=notify
 
+LDAP_HOST=localhost
+LDAP_PORT=389
+LDAP_BASEDN='dc=openstack,dc=org'
+
+MAILER_HOST=localhost
+MAILER_PORT=587
+MAILER_USER=smtpuser@yourdomain.com
+MAILER_PASSWORD=yourpassword
+MAILER_FROM=smtpuser
+MAILER_TO=smtpuser
+
+
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
     VALUE=`echo $2`
@@ -60,9 +68,6 @@ while [[ $# -gt 0 ]]; do
         -orionhost)
             ORION_HOST=$VALUE
             ;;
-        -iotahost)
-            IOTA_HOST=$VALUE
-            ;;
         -pepperseohost)
             PEP_PERSEO_HOST=$VALUE
             ;;
@@ -75,6 +80,12 @@ while [[ $# -gt 0 ]]; do
         -cygnushost)
             CYGNUS_HOST=$VALUE
             ;;
+        -ldaphost)
+            LDAP_HOST=$VALUE
+            ;;
+        -mailerhost)
+            MAILER_HOST=$VALUE
+            ;;
         -keystoneport)
             KEYSTONE_PORT=$VALUE
             ;;
@@ -83,9 +94,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -orionport)
             ORION_PORT=$VALUE
-            ;;
-        -iotaport)
-            IOTA_PORT=$VALUE
             ;;
         -pepperseoport)
             PEP_PERSEO_PORT=$VALUE
@@ -98,6 +106,27 @@ while [[ $# -gt 0 ]]; do
             ;;
         -cygnusport)
             CYGNUS_PORT=$VALUE
+            ;;
+        -ldapport)
+            LDAP_PORT=$VALUE
+            ;;
+        -mailerport)
+            MAILER_PORT=$VALUE
+            ;;
+        -ldapbasedn)
+            LDAP_BASEDN=$VALUE
+            ;;
+        -maileruser)
+            MAILER_USER=$VALUE
+            ;;
+        -mailerpasswd)
+            MAILER_PASSWORD=$VALUE
+            ;;
+        -mailerfrom)
+            MAILER_FROM=$VALUE
+            ;;
+        -mailerto)
+            MAILER_TO=$VALUE
             ;;
         *)
             echo "not found"
@@ -127,12 +156,6 @@ sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
-sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
-             \"host\": \"'$IOTA_HOST'\", \
-             \"port\": \"'$IOTA_PORT'\", \
-             \"protocol\": \"'$IOTA_PROTOCOL'\" \
-}/g' /opt/orchestrator/settings/dev.py
-
 sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\/\"\n: ]*}/PERSEO = { \
              \"host\": \"'$PERSEO_HOST'\", \
              \"port\": \"'$PERSEO_PORT'\", \
@@ -160,6 +183,21 @@ sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
+sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
+             \"host\": \"'$LDAP_HOST'\", \
+             \"port\": \"'$LDAP_PORT'\", \
+             \"basedn\": \"'$LDAP_BASEDN'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
+             \"host\": \"'$MAILER_HOST'\", \
+             \"port\": \"'$MAILER_PORT'\", \
+             \"user\": \"'$MAILER_USER'\", \
+             \"password\": \"'$MAILER_PASSWORD'\", \
+             \"from\": \"'$MAILER_FROM'\", \
+             \"to\": \"'$MAILER_TO'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
 
 # Wait until Keystone is up
 while ! tcping -t 1 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
@@ -168,5 +206,8 @@ uwsgi --http :$PORT \
       --chdir /opt/orchestrator \
       --wsgi-file wsgi.py \
       --env $ENVIRONMENT \
-      --master --processes $PROCESSES \
-      --threads $THREADS
+      --master \
+      --processes $PROCESSES \
+      --threads $THREADS \
+      --enable-threads \
+      --disable-logging

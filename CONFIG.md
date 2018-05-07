@@ -3,21 +3,21 @@
 ## Endpoints
 The most important things that can be customized are endpoints about Keystone and Keypass.
 Some specific operations involve calls to others endpoints like Orion, Iota or Perseo.
-And there are others endpoints that are not invoked but are keept to use into Orion subscriptions like STH, Perseo and Cygnus.
+And there are others endpoints that are not invoked but are kept to use into Orion subscriptions like STH, Perseo, Cygnus, LDAP and MAILER.
 
-
+Make sure your LDAP follows [a compatible schema](https://github.com/telefonicaid/fiware-keystone-spassword/blob/master/docs/iotp_ldap.md#populate-ldap)
 
 By default in [settings/common.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/common.py) endpoints are set to:
 ```
 KEYSTONE = {}
 KEYPASS = {}
-IOTA = {}
 ORION = {}
-CA = {}
 PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}
+LDAP = {}
+MAILER = {}
 ```
 
 Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py) like
@@ -34,21 +34,9 @@ KEYPASS = {
     "protocol":"http"
 }
 
-IOTA = {
-    "host": "localhost",
-    "port": "4052",
-    "protocol":"http"
-}
-
 ORION = {
     "host": "localhost",
     "port": "1026",
-    "protocol":"http"
-}
-
-CA = {
-    "host": "localhost",
-    "port": "9999",
     "protocol":"http"
 }
 
@@ -56,6 +44,21 @@ PEP_PERSEO = {
     "host": "localhost",
     "port": "9090",
     "protocol":"http",
+}
+
+LDAP = {
+    "host": "localhost",
+    "port": "389",
+    "basedn": "dc=openstack,dc=org"
+}
+
+MAILER = {
+    "host": "localhost",
+    "port": "587",
+    "user": 'smtpuser@yourdomain.com',
+    "password": 'yourpassword',
+    "from": 'smtpuser',
+    "to": 'smart.iotplatform'
 }
 ```
 
@@ -175,7 +178,7 @@ REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='30/sec'
 ```
 
 
-### WSGI server options
+## WSGI server options
 
 For an installation which uses Orchestrator RPM, there is a file in /etc/default/orchestrator-daemon to setup orchestrator port as well as number of process and threads sused by WSGI server.
 
@@ -186,9 +189,8 @@ VIRTUALENV=/var/env-orchestrator
 ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
 UWGSI=uwsgi
 PORT=8084
-STATS_PORT=8085
-PROCESSES=1
-THREADS=4
+PROCESSES=2
+THREADS=8
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
 PNAME="orchestrator"
@@ -225,4 +227,20 @@ IOTAGENT = {
     "user": "iotagent_user",
     "password": "iotagent_password"
 }
+```
+
+## Metrics
+
+There are an option, that is disabled by default, to obtain a extended metrics report. This is still experimental due to enable it could imply decrease performance.
+[Extended Metrics](https://orchestrator2.docs.apiary.io/#reference/orchestrator/metrics)
+
+```
+ORC_EXTENDED_METRICS = False
+
+```
+This value could be overwrite just adding right values to [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py)
+
+```
+ORC_EXTENDED_METRICS = True
+
 ```

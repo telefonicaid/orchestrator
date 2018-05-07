@@ -231,16 +231,16 @@ REST_FRAMEWORK = {
 
 KEYSTONE = {}
 KEYPASS = {}
-IOTA = {}
 ORION = {}
-CA = {}
 PEP_PERSEO = {}
 STH = {}
 PERSEO = {}
 CYGNUS = {}
+LDAP = {}
+MAILER = {}
 
 # List of possible IoTModules: persistence services, etc
-IOTMODULES = [ "CYGNUS", "STH", "PERSEO", "CA"]
+IOTMODULES = [ "CYGNUS", "STH", "PERSEO"]
 
 # Pep user credencials. Pep is a user of admin_domain
 # Needed to for resolve pep user id
@@ -260,3 +260,6 @@ SCIM_API_VERSION = "1.1"  # Supported v1.1 (1.1) and v2.0 (2.0) (by UPM)
 
 # Internal version of Orchestrator
 ORC_VERSION = "ORC_version"
+
+# Extend metrics
+ORC_EXTENDED_METRICS = False

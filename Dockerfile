@@ -3,7 +3,7 @@ FROM centos:7
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
-ENV ORCHESTRATOR_VERSION 1.6.0
+ENV ORCHESTRATOR_VERSION 1.9.3
 
 ENV KEYSTONE_HOST localhost
 ENV KEYSTONE_PORT 5001
@@ -16,10 +16,6 @@ ENV KEYPASS_PROTOCOL http
 ENV ORION_HOST localhost
 ENV ORION_PORT 1026
 ENV ORION_PROTOCOL http
-
-ENV IOTA_HOST localhost
-ENV IOTA_PORT 4052
-ENV IOTA_PROTOCOL http
 
 ENV PEP_PERSEO_HOST localhost
 ENV PEP_PERSEO_PORT 1026
@@ -40,6 +36,17 @@ ENV CYGNUS_PORT 5050
 ENV CYGNUS_PROTOCOL http
 ENV CYGNUS_NOTIFYPATH notify
 
+ENV LDAP_HOST localhost
+ENV LDAP_PORT 389
+ENV LDAP_BASEDN dc=openstack,dc=org
+
+ENV MAILER_HOST localhost
+ENV MAILER_PORT 589
+ENV MAILER_USER smtpuser
+ENV MAILER_PASSWORD smtpuserpassword
+ENV MAILER_FROM smtpfrom
+ENV MAILER_TO smtpto
+
 ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
 
 COPY . /opt/sworchestrator/
@@ -54,7 +61,7 @@ RUN \
     adduser --comment "${ORCHESTRATOR_USER}" ${ORCHESTRATOR_USER} && \
     # Install dependencies
     yum install -y epel-release && yum update -y epel-release && \
-    yum install -y yum-plugin-remove-with-leaves python python-pip python-devel python-virtualenv gcc ssh && \
+    yum install -y yum-plugin-remove-with-leaves python python-pip python-devel openldap-devel python-virtualenv gcc ssh && \
     yum install -y tcping findutils sed && \
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin && \
@@ -89,12 +96,6 @@ RUN \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
-    sed -i ':a;N;$!ba;s/IOTA = {[A-Za-z0-9,\"\n: ]*}/IOTA = { \
-             \"host\": \"'$IOTA_HOST'\", \
-             \"port\": \"'$IOTA_PORT'\", \
-             \"protocol\": \"'$IOTA_PROTOCOL'\" \
-}/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
              \"host\": \"'$PEP_PERSEO_HOST'\", \
              \"port\": \"'$PEP_PERSEO_PORT'\", \
@@ -122,6 +123,22 @@ RUN \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
+    sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
+             \"host\": \"'$LDAP_HOST'\", \
+             \"port\": \"'$LDAP_PORT'\", \
+             \"basedn\": \"'$LDAP_BASEDN'\", \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
+    sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
+             \"host\": \"'$MAILER_HOST'\", \
+             \"port\": \"'$MAILER_PORT'\", \
+             \"user\": \"'$MAILER_USER'\", \
+             \"password\": \"'$MAILER_PASSWORD'\", \
+             \"from\": \"'$MAILER_FROM'\", \
+             \"to\": \"'$MAILER_TO'\", \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
+
     # Put IOT endpoints conf into ochestrator-entrypoint.sh
     sed -i 's/KEYSTONE_PORT=5001/KEYSTONE_PORT='$KEYSTONE_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/KEYSTONE_PROTOCOL=http/KEYSTONE_PROTOCOL='$KEYSTONE_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
@@ -139,6 +156,16 @@ RUN \
     sed -i 's/PERSEO_PROTOCOL=http/PERSEO_PROTOCOL='$PERSEO_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/CYGNUS_PORT=5050/CYGNUS_PORT='$CYGNUS_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/CYGNUS_PROTOCOL=http/CYGNUS_PROTOCOL='$CYGNUS_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/CYGNUS_NOTIFYPATH=http/CYGNUS_NOTIFYPATH='$CYGNUS_NOTIFYPATH'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/LDAP_HOST=http/LDAP_HOST='$LDAP_HOST'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/LDAP_PORT=http/LDAP_PORT='$LDAP_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/LDAP_BASEDN=http/LDAP_BASEDN='$LDAP_BASEDN'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_HOST=http/MAILER_HOST='$MAILER_HOST'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_PORT=http/MAILER_PORT='$MAILER_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_USER=http/MAILER_USER='$MAILER_USER'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_PASSWORD=http/MAILER_PASSWORD='$MAILER_PASSWORD'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/MAILER_FROM=http/MAILER_FROM='$MAILER_FROM'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+sed -i 's/MAILER_TO=http/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \

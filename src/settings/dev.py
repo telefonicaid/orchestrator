@@ -30,24 +30,10 @@ KEYPASS = {
     "protocol":"http"
 }
 
-# IoTA endpoint
-IOTA = {
-    "host": "localhost",
-    "port": "4052",
-    "protocol":"http"
-}
-
 # Context Broker enpodint (with or without pep, but recommended with)
 ORION = {
     "host": "localhost",
     "port": "1026",
-    "protocol":"http"
-}
-
-# Context Adapter enpodint (BlackButton scenario)
-CA = {
-    "host": "localhost",
-    "port": "9999",
     "protocol":"http"
 }
 
@@ -86,3 +72,20 @@ CYGNUS = {
 }
 
 IOTMODULES = [ "CYGNUS", "PERSEO" ]
+
+
+# LDAP endpoint
+LDAP = {
+    "host": "localhost",
+    "port": "389",
+    "basedn": "dc=openstack,dc=org"
+}
+
+MAILER = {
+    "host": "localhost",
+    "port": "587",
+    "user": "smtpuser@yourdomain.com",
+    "password": "yourpassword",
+    "from": "smtpuser",
+    "to": "smtpuser"
+}

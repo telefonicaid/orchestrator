@@ -55,6 +55,9 @@ from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 
+from orchestrator.api.iotconf import IoTConf
+from orchestrator.api.stats import Stats
+
 logger = logging.getLogger('orchestrator_api')
 logger.addFilter(ContextFilterCorrelatorId("n/a"))
 logger.addFilter(ContextFilterTransactionId("n/a"))
@@ -62,333 +65,9 @@ logger.addFilter(ContextFilterService("None"))
 logger.addFilter(ContextFilterSubService(""))
 
 
-class Stats(object):
-
-    # Start Time
-    uptime = datetime.utcnow()
-
-    # All stats
-    num_post_service = 0
-    num_get_service = 0
-    num_put_service = 0
-    num_delete_service = 0
-
-    num_post_subservice = 0
-    num_get_subservice = 0
-    num_put_subservice = 0
-    num_delete_subservice = 0
-
-    num_delete_user = 0
-    num_put_user = 0
-    num_get_user = 0
-    num_post_user = 0
-
-    num_get_userlist = 0
-    num_post_userlist = 0
-
-    num_delete_group = 0
-    num_put_group = 0
-    num_get_group = 0
-    num_post_group = 0
-
-    num_get_grouplist = 0
-    num_post_grouplist = 0
-
-    num_delete_role = 0
-    num_post_role = 0
-    num_get_role = 0
-    num_get_role_policies = 0
-    num_post_role_policies = 0
-
-    num_delete_policy_from_role = 0
-    num_get_policy_from_role = 0
-
-    num_delete_roleassignment = 0
-    num_post_roleassignment = 0
-    num_get_roleassignment = 0
-
-    num_post_trust = 0
-
-    num_post_device = 0
-    num_delete_device = 0
-
-    num_post_devices = 0
-    num_post_entity_service = 0
-
-    num_get_module_activation = 0
-    num_post_module_activation = 0
-    num_delete_module_activation = 0
-
-    num_update_loglevel = 0
-
-    num_api_errors = 0
-    num_flow_errors = 0
-
-    service = {}
-    sum = {
-        "incomingTransactions": 0,
-        "incomingTransactionRequestSize": 0,
-        "incomingTransactionResponseSize": 0,
-        "incomingTransactionErrors": 0,
-        "serviceTime": 0,
-        "serviceTimeTotal": 0,
-        "outgoingTransactions": 0,
-        "outgoingTransactionRequestSize": 0,
-        "outgoingTransactionResponseSize": 0,
-        "outgoingTransactionErrors": 0,
-    }
-
-    def collectMetrics(self, service_start, service_name, subservice_name,
-                       request, response, flow):
-
-        service_stop = time.time()
-        transactionError = False
-        if flow:
-            flow_metrics = flow.getFlowMetrics()
-        else:
-            flow_metrics = {
-                "serviceTime": 0,
-                "serviceTimeTotal": 0,
-                "outgoingTransactions": 0,
-                "outgoingTransactionRequestSize": 0,
-                "outgoingTransactionResponseSize": 0,
-                "outgoingTransactionErrors": 0,
-            }
-
-        if service_name and not service_name in self.service:
-            self.service[service_name] = {
-                "sum": {
-                    "incomingTransactions": 0,
-                    "incomingTransactionRequestSize": 0,
-                    "incomingTransactionResponseSize": 0,
-                    "incomingTransactionErrors": 0,
-                    "serviceTime": 0,
-                    "serviceTimeTotal": 0,
-                    "outgoingTransactions": 0,
-                    "outgoingTransactionRequestSize": 0,
-                    "outgoingTransactionResponseSize": 0,
-                    "outgoingTransactionErrors": 0,
-                },
-                "subservs": {}
-            }
-
-        if (service_name and subservice_name and
-            not subservice_name in self.service[service_name]["subservs"]):
-            self.service[service_name]["subservs"][subservice_name] = {
-                "incomingTransactions": 0,
-                "incomingTransactionRequestSize": 0,
-                "incomingTransactionResponseSize": 0,
-                "incomingTransactionErrors": 0,
-                "serviceTime": 0,
-                "serviceTimeTotal": 0,
-                "outgoingTransactions": 0,
-                "outgoingTransactionRequestSize": 0,
-                "outgoingTransactionResponseSize": 0,
-                "outgoingTransactionErrors": 0,
-            }
-
-        # Analize "response"" to know if is a Response about an error or not
-        if response.status_code not in [200, 201, 204]:
-            # API error
-            transactionError = True
-
-        if service_name:
-            if subservice_name:
-                # Service and Subservice
-                if not transactionError:
-                    self.service[service_name]["subservs"][subservice_name]["incomingTransactions"] += 1
-                else:
-                    self.service[service_name]["subservs"][subservice_name]["incomingTransactionErrors"] += 1
-                self.service[service_name]["subservs"][subservice_name]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
-                self.service[service_name]["subservs"][subservice_name]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
-                self.service[service_name]["subservs"][subservice_name]["serviceTimeTotal"] += (service_stop - service_start)
-
-                self.service[service_name]["subservs"][subservice_name]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
-                self.service[service_name]["subservs"][subservice_name]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
-                self.service[service_name]["subservs"][subservice_name]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
-                self.service[service_name]["subservs"][subservice_name]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
-                self.service[service_name]["subservs"][subservice_name]["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
 
 
 
-            # Service
-            if not transactionError:
-                self.service[service_name]["sum"]["incomingTransactions"] += 1
-            else:
-                self.service[service_name]["sum"]["incomingTransactionErrors"] += 1
-            self.service[service_name]["sum"]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
-            self.service[service_name]["sum"]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
-            self.service[service_name]["sum"]["serviceTimeTotal"] += (service_stop - service_start)
-            self.service[service_name]["sum"]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
-            self.service[service_name]["sum"]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
-            self.service[service_name]["sum"]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
-            self.service[service_name]["sum"]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
-            self.service[service_name]["sum"]["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
-
-        # Sum
-        if not transactionError:
-            self.sum["incomingTransactions"] += 1
-        else:
-            self.sum["incomingTransactionErrors"] += 1
-        self.sum["incomingTransactionRequestSize"] += len(json.dumps(request.data))
-        self.sum["incomingTransactionResponseSize"] += len(json.dumps(response.data))
-        self.sum["serviceTimeTotal"] += (service_stop - service_start)
-        self.sum["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
-        self.sum["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
-        self.sum["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
-        self.sum["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
-        self.sum["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
-
-
-    def resetMetrics(self):
-        self.service = {}
-        self.sum = {
-            "incomingTransactions": 0,
-            "incomingTransactionRequestSize": 0,
-            "incomingTransactionResponseSize": 0,
-            "incomingTransactionErrors": 0,
-            "serviceTime": 0,
-            "serviceTimeTotal": 0,
-            "outgoingTransactions": 0,
-            "outgoingTransactionRequestSize": 0,
-            "outgoingTransactionResponseSize": 0,
-            "outgoingTransactionErrors": 0,
-        }
-
-
-    def composeMetrics(self):
-
-        result = {
-            "service": self.service,
-            "sum": self.sum
-        }
-
-        for serv in result["service"]:
-            if result["service"][serv]["sum"]["serviceTimeTotal"] > 0:
-                result["service"][serv]["sum"]["serviceTime"] = result["service"][serv]["sum"]["serviceTimeTotal"] / (
-                    result["service"][serv]["sum"]["incomingTransactions"] +
-                    result["service"][serv]["sum"]["incomingTransactionErrors"] +
-                    result["service"][serv]["sum"]["outgoingTransactions"] +
-                    result["service"][serv]["sum"]["outgoingTransactionErrors"]
-                )
-
-            for subserv in result["service"][serv]["subservs"]:
-                if result["service"][serv]["subservs"][subserv]["serviceTimeTotal"] > 0:
-                    result["service"][serv]["subservs"][subserv]["serviceTime"] = result["service"][serv]["subservs"][subserv]["serviceTimeTotal"] / (
-                        result["service"][serv]["subservs"][subserv]["incomingTransactions"] +
-                        result["service"][serv]["subservs"][subserv]["incomingTransactionErrors"] +
-                        result["service"][serv]["subservs"][subserv]["outgoingTransactions"] +
-                        result["service"][serv]["subservs"][subserv]["outgoingTransactionErrors"]
-                    )
-
-        if result["sum"]["serviceTimeTotal"] > 0:
-            result["sum"]["serviceTime"] = result["sum"]["serviceTimeTotal"] / (
-                result["sum"]["incomingTransactions"] +
-                result["sum"]["incomingTransactionErrors"] +
-                result["sum"]["outgoingTransactions"] +
-                result["sum"]["outgoingTransactionErrors"]
-            )
-        return result
-
-
-class IoTConf(Stats):
-    throttle_classes = (AnonRateThrottle,)
-
-    # Class to extract Keystone/Keypass conf from django settings
-    def __init__(self):
-        try:
-            self.KEYSTONE_PROTOCOL = settings.KEYSTONE['protocol']
-            self.KEYSTONE_HOST = settings.KEYSTONE['host']
-            self.KEYSTONE_PORT = settings.KEYSTONE['port']
-        except KeyError:
-            logger.error("KEYSTONE endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.KEYSTONE_PROTOCOL = "http"
-            self.KEYSTONE_HOST = "localhost"
-            self.KEYSTONE_PORT = "5001"
-
-        try:
-            self.KEYPASS_PROTOCOL = settings.KEYPASS['protocol']
-            self.KEYPASS_HOST = settings.KEYPASS['host']
-            self.KEYPASS_PORT = settings.KEYPASS['port']
-        except KeyError:
-            logger.error("KEYPASS endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.KEYPASS_PROTOCOL = "http"
-            self.KEYPASS_HOST = "localhost"
-            self.KEYPASS_PORT = "17070"
-
-        try:
-            self.IOTA_PROTOCOL = settings.IOTA['protocol']
-            self.IOTA_HOST = settings.IOTA['host']
-            self.IOTA_PORT = settings.IOTA['port']
-        except KeyError:
-            logger.error("IOTA endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.IOTA_PROTOCOL = "http"
-            self.IOTA_HOST = "localhost"
-            self.IOTA_PORT = "4052"
-
-        try:
-            self.ORION_PROTOCOL = settings.ORION['protocol']
-            self.ORION_HOST = settings.ORION['host']
-            self.ORION_PORT = settings.ORION['port']
-        except KeyError:
-            logger.error("ORION endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.ORION_PROTOCOL = "http"
-            self.ORION_HOST = "localhost"
-            self.ORION_PORT = "1026"
-
-        try:
-            self.CA_PROTOCOL = settings.CA['protocol']
-            self.CA_HOST = settings.CA['host']
-            self.CA_PORT = settings.CA['port']
-        except KeyError:
-            logger.error("CA endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.CA_PROTOCOL = "http"
-            self.CA_HOST = "localhost"
-            self.CA_PORT = "9999"
-
-        try:
-            self.PERSEO_PROTOCOL = settings.PEP_PERSEO['protocol']
-            self.PERSEO_HOST = settings.PEP_PERSEO['host']
-            self.PERSEO_PORT = settings.PEP_PERSEO['port']
-        except KeyError:
-            logger.error("PEP_PERSEO endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
-            self.PERSEO_PROTOCOL = "http"
-            self.PERSEO_HOST = "localhost"
-            self.PERSEO_PORT = "9090"
-
-
-    # Get Django status error from simple HTTP error code
-    def getStatusFromCode(self, code):
-        if code == 400:
-            rstatus = status.HTTP_400_BAD_REQUEST
-        elif code == 401:
-            rstatus = status.HTTP_401_UNAUTHORIZED
-        elif code == 404:
-            rstatus = status.HTTP_404_NOT_FOUND
-        elif code == 403:
-            rstatus = status.HTTP_403_FORBIDDEN
-        elif code == 409:
-            rstatus = status.HTTP_409_CONFLICT
-        elif code == 500:
-            rstatus = status.HTTP_500_INTERNAL_SERVER_ERROR
-        else:
-            rstatus = status.HTTP_400_BAD_REQUEST
-        return rstatus
-
-    def getCorrelatorIdHeader(self, request):
-        return request.META.get('FIWARE-CORRELATOR', None)
-
-    def getXAuthToken(self, request):
-        return request.META.get('HTTP_X_AUTH_TOKEN', None)
-
-    def getCorrelatorId(self, flow, CORRELATOR_ID):
-        return str(flow.CORRELATOR_ID) if not CORRELATOR_ID else CORRELATOR_ID
 
 
 class ServiceList_RESTView(APIView, IoTConf):
@@ -510,15 +189,9 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.KEYPASS_PROTOCOL,
                            self.KEYPASS_HOST,
                            self.KEYPASS_PORT,
-                           self.IOTA_PROTOCOL,
-                           self.IOTA_HOST,
-                           self.IOTA_PORT,
                            self.ORION_PROTOCOL,
                            self.ORION_HOST,
                            self.ORION_PORT,
-                           self.CA_PROTOCOL,
-                           self.CA_HOST,
-                           self.CA_PORT,
                            self.PERSEO_PROTOCOL,
                            self.PERSEO_HOST,
                            self.PERSEO_PORT,
@@ -741,15 +414,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.KEYPASS_PROTOCOL,
                             self.KEYPASS_HOST,
                             self.KEYPASS_PORT,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
                             self.ORION_PROTOCOL,
                             self.ORION_HOST,
                             self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
                             self.PERSEO_PROTOCOL,
                             self.PERSEO_HOST,
                             self.PERSEO_PORT,
@@ -812,9 +479,6 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        None,
                                        None,
                                        None,
-                                       self.IOTA_PROTOCOL,
-                                       self.IOTA_HOST,
-                                       self.IOTA_PORT,
                                        self.ORION_PROTOCOL,
                                        self.ORION_HOST,
                                        self.ORION_PORT,
@@ -834,95 +498,6 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 request.DATA.get("NEW_SUBSERVICE_ADMIN_PASSWORD", None),
                 request.DATA.get("NEW_SUBSERVICE_ADMIN_EMAIL", None)
                 )
-
-            # TODO: see optional values for register entity service
-            if 'id' in result and request.DATA.get("ENTITY_ID", None):
-                flow = Projects(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT,
-                                None,
-                                None,
-                                None,
-                                self.IOTA_PROTOCOL,
-                                self.IOTA_HOST,
-                                self.IOTA_PORT,
-                                self.ORION_PROTOCOL,
-                                self.ORION_HOST,
-                                self.ORION_PORT,
-                                self.CA_PROTOCOL,
-                                self.CA_HOST,
-                                self.CA_PORT,
-                                self.PERSEO_PROTOCOL,
-                                self.PERSEO_HOST,
-                                self.PERSEO_PORT,
-                                CORRELATOR_ID=CORRELATOR_ID)
-                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                result2 = flow.register_service(
-                    request.DATA.get("SERVICE_NAME", None),
-                    request.DATA.get("SERVICE_ID", service_id),
-                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
-                    result['id'],
-                    request.DATA.get("SERVICE_ADMIN_USER", None),
-                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("ENTITY_TYPE", None),
-                    request.DATA.get("ENTITY_ID", None),
-                    request.DATA.get("PROTOCOL", None),
-                    request.DATA.get("ATT_NAME", None),
-                    request.DATA.get("ATT_PROVIDER", None),
-                    request.DATA.get("ATT_ENDPOINT", None),
-                    request.DATA.get("ATT_METHOD", None),
-                    request.DATA.get("ATT_AUTHENTICATION", None),
-                    request.DATA.get("ATT_INTERACTION_TYPE", None),
-                    request.DATA.get("ATT_MAPPING", None),
-                    request.DATA.get("ATT_TIMEOUT", None)
-                    )
-                # Accumulate previous result
-                if ('error' not in result2):
-                    result['subscriptionid_ca'] = result2['subscriptionid_ca']
-                    result['subscriptionid_sth'] = result2['subscriptionid_sth']
-                    result['subscriptionid_perseo'] = result2['subscriptionid_perseo']
-                else:
-                    result['error'] = result2['error']
-
-            # TODO: see optional values for register device
-            if 'id' in result and request.DATA.get("DEVICE_ID", None):
-                flow = Projects(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT,
-                                None,
-                                None,
-                                None,
-                                self.IOTA_PROTOCOL,
-                                self.IOTA_HOST,
-                                self.IOTA_PORT,
-                                self.ORION_PROTOCOL,
-                                self.ORION_HOST,
-                                self.ORION_PORT,
-                                self.CA_PROTOCOL,
-                                self.CA_HOST,
-                                self.CA_PORT,
-                                CORRELATOR_ID=CORRELATOR_ID)
-                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                result_rd = flow.register_device(
-                    request.DATA.get("SERVICE_NAME", None),
-                    request.DATA.get("SERVICE_ID", service_id),
-                    request.DATA.get("NEW_SUBSERVICE_NAME", None),
-                    result['id'],
-                    request.DATA.get("SERVICE_ADMIN_USER", None),
-                    request.DATA.get("SERVICE_ADMIN_PASSWORD", None),
-                    request.DATA.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.DATA.get("DEVICE_ID", None),
-                    request.DATA.get("ENTITY_TYPE", None),
-                    request.DATA.get("ENTITY_NAME", request.DATA.get("DEVICE_ID", None)),
-                    request.DATA.get("PROTOCOL", None),
-                    request.DATA.get("ATT_ICCID", None),
-                    request.DATA.get("ATT_IMEI", None),
-                    request.DATA.get("ATT_IMSI", None),
-                    request.DATA.get("ATT_INTERACTION_TYPE", None),
-                    request.DATA.get("ATT_SERVICE_ID", None),
-                    request.DATA.get("ATT_GEOLOCATION", None)
-                    )
 
             if 'id' in result and ('error' not in result):
                 Stats.num_post_subservice += 1
@@ -2292,291 +1867,6 @@ class Trust_RESTView(APIView, IoTConf):
         return response
 
 
-class SubServiceIoTADevice_RESTView(APIView, IoTConf):
-    """
-    { Create, Delete} Device in a Service or a Subservice
-
-    """
-    schema_name = "IoTADevice"
-    parser_classes = (parsers.JSONSchemaParser,)
-
-    def __init__(self):
-        IoTConf.__init__(self)
-
-    def post(self, request, service_id, subservice_id):
-        service_start = time.time()
-        response = service_name = subservice_name = flow = None
-        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
-        try:
-            request.DATA  # json validation
-            flow = Projects(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT,
-                            None,
-                            None,
-                            None,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
-                            self.ORION_PROTOCOL,
-                            self.ORION_HOST,
-                            self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
-            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name, subservice_name = flow.register_device(
-                request.DATA.get("SERVICE_NAME", None),
-                request.DATA.get("SERVICE_ID", service_id),
-                request.DATA.get("SUBSERVICE_NAME", None),
-                request.DATA.get("SUBSERVICE_ID",  subservice_id),
-                request.DATA.get("SERVICE_USER_NAME", None),
-                request.DATA.get("SERVICE_USER_PASSWORD", None),
-                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("DEVICE_ID", None),
-                request.DATA.get("ENTITY_TYPE", None),
-                request.DATA.get("ENTITY_NAME",
-                                 request.DATA.get("DEVICE_ID", None)),
-                request.DATA.get("PROTOCOL", None),
-                request.DATA.get("ATT_ICCID", None),
-                request.DATA.get("ATT_IMEI", None),
-                request.DATA.get("ATT_IMSI", None),
-                request.DATA.get("ATT_INTERACTION_TYPE", None),
-                request.DATA.get("ATT_SERVICE_ID", None),
-                request.DATA.get("ATT_GEOLOCATION", None)
-            )
-            if 'error' not in result:
-                Stats.num_post_device += 1
-                response = Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-            else:
-                Stats.num_flow_errors += 1
-                response = Response(result['error'],
-                                status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-
-        except ParseError as error:
-            Stats.num_api_errors += 1
-            response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
-                status=status.HTTP_400_BAD_REQUEST,
-                headers={"Fiware-Correlator": CORRELATOR_ID}
-            )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
-        return response
-
-    def delete(self, request, service_id, subservice_id):
-        service_start = time.time()
-        response = service_name = subservice_name = flow = None
-        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
-        try:
-            request.DATA  # json validation
-            flow = Projects(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT,
-                            None,
-                            None,
-                            None,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
-                            self.ORION_PROTOCOL,
-                            self.ORION_HOST,
-                            self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
-                            self.PERSEO_PROTOCOL,
-                            self.PERSEO_HOST,
-                            self.PERSEO_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
-            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name, subservice_name = flow.unregister_device(
-                request.DATA.get("SERVICE_NAME", None),
-                request.DATA.get("SERVICE_ID", service_id),
-                request.DATA.get("SUBSERVICE_NAME", None),
-                request.DATA.get("SUBSERVICE_ID",  subservice_id),
-                request.DATA.get("SERVICE_USER_NAME", None),
-                request.DATA.get("SERVICE_USER_PASSWORD", None),
-                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("DEVICE_ID", None)
-            )
-            if 'error' not in result:
-                Stats.num_delete_device += 1
-                response = Response(result, status=status.HTTP_204_NO_CONTENT,
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-            else:
-                Stats.num_flow_errors += 1
-                response = Response(result['error'],
-                                status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-
-        except ParseError as error:
-            Stats.num_api_errors += 1
-            response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
-                status=status.HTTP_400_BAD_REQUEST,
-                headers={"Fiware-Correlator": CORRELATOR_ID}
-            )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
-        return response
-
-
-class SubServiceIoTADevices_RESTView(APIView, IoTConf):
-    """
-    { Creates } Devices in a Service or SubService from a CSV
-
-    """
-    schema_name = "IoTADevices"
-    parser_classes = (parsers.JSONSchemaParser,)
-
-    def __init__(self):
-        IoTConf.__init__(self)
-
-    def post(self, request, service_id, subservice_id):
-        service_start = time.time()
-        response = service_name = subservice_name = flow = None
-        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
-        try:
-            request.DATA  # json validation
-            flow = Projects(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT,
-                            None,
-                            None,
-                            None,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
-                            self.ORION_PROTOCOL,
-                            self.ORION_HOST,
-                            self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
-                            self.PERSEO_PROTOCOL,
-                            self.PERSEO_HOST,
-                            self.PERSEO_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
-            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name, subservice_name = flow.register_devices(
-                request.DATA.get("SERVICE_NAME", None),
-                request.DATA.get("SERVICE_ID", service_id),
-                request.DATA.get("SUBSERVICE_NAME", None),
-                request.DATA.get("SUBSERVICE_ID",  subservice_id),
-                request.DATA.get("SERVICE_USER_NAME", None),
-                request.DATA.get("SERVICE_USER_PASSWORD", None),
-                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("CSV_DEVICES", None),
-            )
-            if 'error' not in result:
-                Stats.num_post_devices += 1
-                response = Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-            else:
-                Stats.num_flow_errors += 1
-                response = Response(result['error'],
-                                status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-
-        except ParseError as error:
-            Stats.num_api_errors += 1
-            response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
-                status=status.HTTP_400_BAD_REQUEST,
-                headers={"Fiware-Correlator": CORRELATOR_ID}
-            )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
-        return response
-
-
-class SubServiceIoTAService_RESTView(APIView, IoTConf):
-    """
-    { Create } Service Entity for  IoTA Service or SubService
-
-    """
-    schema_name = "IoTAService"
-    parser_classes = (parsers.JSONSchemaParser,)
-
-    def __init__(self):
-        IoTConf.__init__(self)
-
-    def post(self, request, service_id, subservice_id):
-        service_start = time.time()
-        response = service_name = subservice_name = flow = None
-        HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
-        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
-        try:
-            request.DATA  # json validation
-            flow = Projects(self.KEYSTONE_PROTOCOL,
-                            self.KEYSTONE_HOST,
-                            self.KEYSTONE_PORT,
-                            None,
-                            None,
-                            None,
-                            self.IOTA_PROTOCOL,
-                            self.IOTA_HOST,
-                            self.IOTA_PORT,
-                            self.ORION_PROTOCOL,
-                            self.ORION_HOST,
-                            self.ORION_PORT,
-                            self.CA_PROTOCOL,
-                            self.CA_HOST,
-                            self.CA_PORT,
-                            self.PERSEO_PROTOCOL,
-                            self.PERSEO_HOST,
-                            self.PERSEO_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
-            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-            result, service_name, subservice_name = flow.register_service(
-                request.DATA.get("SERVICE_NAME", None),
-                request.DATA.get("SERVICE_ID", service_id),
-                request.DATA.get("SUBSERVICE_NAME", None),
-                request.DATA.get("SUBSERVICE_ID",  subservice_id),
-                request.DATA.get("SERVICE_USER_NAME", None),
-                request.DATA.get("SERVICE_USER_PASSWORD", None),
-                request.DATA.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                request.DATA.get("ENTITY_TYPE", None),
-                request.DATA.get("ENTITY_ID", None),
-                request.DATA.get("PROTOCOL", None),
-                request.DATA.get("ATT_NAME", None),
-                request.DATA.get("ATT_PROVIDER", None),
-                request.DATA.get("ATT_ENDPOINT", None),
-                request.DATA.get("ATT_METHOD", None),
-                request.DATA.get("ATT_AUTHENTICATION", None),
-                request.DATA.get("ATT_INTERACTION_TYPE", None),
-                request.DATA.get("ATT_MAPPING", None),
-                request.DATA.get("ATT_TIMEOUT", None)
-            )
-            if 'error' not in result:
-                Stats.num_post_entity_service += 1
-                response = Response(result, status=status.HTTP_201_CREATED,
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-            else:
-                Stats.num_flow_errors += 1
-                response = Response(result['error'],
-                                status=self.getStatusFromCode(result['code']),
-                                headers={"Fiware-Correlator": CORRELATOR_ID})
-
-        except ParseError as error:
-            Stats.num_api_errors += 1
-            response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
-                status=status.HTTP_400_BAD_REQUEST,
-                headers={"Fiware-Correlator": CORRELATOR_ID}
-            )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
-        return response
-
-
 class IOTModuleActivation_RESTView(APIView, IoTConf):
     """
     { Create, Read, Delete } IOT Module Activation
@@ -2602,15 +1892,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                None,
                                None,
                                None,
-                               self.IOTA_PROTOCOL,
-                               self.IOTA_HOST,
-                               self.IOTA_PORT,
                                self.ORION_PROTOCOL,
                                self.ORION_HOST,
                                self.ORION_PORT,
-                               self.CA_PROTOCOL,
-                               self.CA_HOST,
-                               self.CA_PORT,
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT,
@@ -2630,15 +1914,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 None,
                                 None,
                                 None,
-                                self.IOTA_PROTOCOL,
-                                self.IOTA_HOST,
-                                self.IOTA_PORT,
                                 self.ORION_PROTOCOL,
                                 self.ORION_HOST,
                                 self.ORION_PORT,
-                                self.CA_PROTOCOL,
-                                self.CA_HOST,
-                                self.CA_PORT,
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT,
@@ -2691,15 +1969,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                None,
                                None,
                                None,
-                               self.IOTA_PROTOCOL,
-                               self.IOTA_HOST,
-                               self.IOTA_PORT,
                                self.ORION_PROTOCOL,
                                self.ORION_HOST,
                                self.ORION_PORT,
-                               self.CA_PROTOCOL,
-                               self.CA_HOST,
-                               self.CA_PORT,
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT,
@@ -2720,15 +1992,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 None,
                                 None,
                                 None,
-                                self.IOTA_PROTOCOL,
-                                self.IOTA_HOST,
-                                self.IOTA_PORT,
                                 self.ORION_PROTOCOL,
                                 self.ORION_HOST,
                                 self.ORION_PORT,
-                                self.CA_PROTOCOL,
-                                self.CA_HOST,
-                                self.CA_PORT,
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT,
@@ -2782,15 +2048,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                None,
                                None,
                                None,
-                               self.IOTA_PROTOCOL,
-                               self.IOTA_HOST,
-                               self.IOTA_PORT,
                                self.ORION_PROTOCOL,
                                self.ORION_HOST,
                                self.ORION_PORT,
-                               self.CA_PROTOCOL,
-                               self.CA_HOST,
-                               self.CA_PORT,
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT,
@@ -2811,15 +2071,9 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 None,
                                 None,
                                 None,
-                                self.IOTA_PROTOCOL,
-                                self.IOTA_HOST,
-                                self.IOTA_PORT,
                                 self.ORION_PROTOCOL,
                                 self.ORION_HOST,
                                 self.ORION_PORT,
-                                self.CA_PROTOCOL,
-                                self.CA_HOST,
-                                self.CA_PORT,
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT,

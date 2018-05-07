@@ -54,12 +54,13 @@ class CBOrionOperations(object):
 
     def checkCB(self):
         res = self.CBRestOperations.rest_request(
-            url='/v1/contextEntities',
+            url='/version',
             method='GET',
             data=None)
-        assert res.code == 404, (res.code, res.msg)
+        # Expecting also headers about
+        #  fiware-service, fiware-servicepath and x-auth-token
+        assert res.code == 400, (res.code, res.msg)
         pass
-
 
     def registerContext(self,
                         SERVICE_USER_TOKEN,

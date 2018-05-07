@@ -664,200 +664,6 @@ json = {
         # ],
     },
 
-    #############
-    "IoTADevice": {
-    #############
-        "name": "IoTADevice",
-        "dependencies": {
-            "SERVICE_USER_NAME": [
-                "SERVICE_USER_PASSWORD"
-            ],
-            "SERVICE_USER_PASSWORD": [
-                "SERVICE_USER_NAME",
-            ]
-        },
-        "properties": {
-            "SERVICE_USER_NAME": {
-                "type": "string",
-            },
-            "SERVICE_USER_PASSWORD": {
-                "type": "string",
-            },
-            "SERVICE_USER_TOKEN": {
-                "type": "string",
-            },
-            "SERVICE_ID": {
-                "type": "string",
-            },
-            "SERVICE_NAME": {
-                "type": "string",
-            },
-            "SUBSERVICE_ID": {
-                "type": "string",
-            },
-            "SUBSERVICE_NAME": {
-                "type": "string",
-            },
-            "DEVICE_ID": {
-                "type": "string",
-                "pattern": "^[^'\"=;()]*$",
-            },
-            "ENTITY_TYPE": {
-                "type": "string",
-                "pattern": "^[^'\"=;()]*$",
-            },
-            "ENTITY_NAME": {
-                "type": "string",
-                "pattern": "^[^'\"=;()]*$",
-            },
-            "PROTOCOL": {
-                "type": "string",
-            },
-            "ATT_ICCID": {
-                "type": "string",
-            },
-            "ATT_IMEI": {
-                "type": "string",
-            },
-            "ATT_IMSI": {
-                "type": "string",
-            },
-            "ATT_INTERACTION_TYPE": {
-                "type": "string",
-                "enum": ["synchronous", "asynchronous"]
-            },
-            "ATT_SERVICE_ID": {
-                "type": "string",
-            },
-            "ATT_GEOLOCATION": {
-                "type": "string",
-            },
-        },
-        "required": [
-            "DEVICE_ID",
-            # "ENTITY_TYPE",
-            # "PROTOCOL"
-        ],
-    },
-
-
-    ##############
-    "IoTAService": {
-    ##############
-        "name": "IoTAService",
-        "dependencies": {
-            "SERVICE_USER_NAME": [
-                "SERVICE_USER_PASSWORD"
-            ],
-            "SERVICE_USER_PASSWORD": [
-                "SERVICE_USER_NAME",
-            ]
-        },
-        "properties": {
-            "SERVICE_USER_NAME": {
-                "type": "string",
-            },
-            "SERVICE_USER_PASSWORD": {
-                "type": "string",
-            },
-            "SERVICE_USER_TOKEN": {
-                "type": "string",
-            },
-            "SERVICE_ID": {
-                "type": "string",
-            },
-            "SERVICE_NAME": {
-                "type": "string",
-            },
-            "SUBSERVICE_ID": {
-                "type": "string",
-            },
-            "SUBSERVICE_NAME": {
-                "type": "string",
-            },
-            "ENTITY_TYPE": {
-                "type": "string",
-                "pattern": "^[^'\"=;()]*$",
-            },
-            "ENTITY_ID": {
-                "type": "string",
-                "pattern": "^[^'\"=;()]*$",
-            },
-            "ATT_NAME": {
-                "type": "string",
-            },
-            "ATT_PROVIDER": {
-                "type": "string",
-            },
-            "ATT_ENDPOINT": {
-                "type": "string",
-            },
-            "ATT_METHOD": {
-                "type": "string",
-            },
-            "ATT_AUTHENTICATION": {
-                "type": "string",
-                "enum": ["context-adapter", "third-party"]
-            },
-            "ATT_INTERACTION_TYPE": {
-                "type": "string",
-                "enum": ["synchronous", "asynchronous"]
-            },
-            "ATT_MAPPING": {
-                "type": "string",
-            },
-            "ATT_TIMEOUT": {
-                "type": "string",
-            },
-
-        },
-        "required": [
-            "ENTITY_TYPE",
-            "ENTITY_ID",
-            "PROTOCOL",
-        ],
-    },
-
-
-    #############
-    "IoTADevices": {
-    #############
-        "name": "IoTADevices",
-        "dependencies": {
-            "SERVICE_USER_NAME": [
-                "SERVICE_USER_PASSWORD"
-            ],
-            "SERVICE_USER_PASSWORD": [
-                "SERVICE_USER_NAME",
-            ]
-        },
-        "properties": {
-            "SERVICE_USER_NAME": {
-                "type": "string",
-            },
-            "SERVICE_USER_PASSWORD": {
-                "type": "string",
-            },
-            "SERVICE_USER_TOKEN": {
-                "type": "string",
-            },
-            "SERVICE_ID": {
-                "type": "string",
-            },
-            "SERVICE_NAME": {
-                "type": "string",
-            },
-            "SUBSERVICE_ID": {
-                "type": "string",
-            },
-            "SUBSERVICE_NAME": {
-                "type": "string",
-            },
-        },
-        # "required": [
-        # ],
-    },
-
     #####################
     "IOTModuleActivation": {
     #####################
@@ -892,5 +698,97 @@ json = {
         },
         # "required": [ ],
     },
-
+    #######
+    "LdapUser": {
+    #######
+        "name": "LdapUser",
+        "dependencies": {
+            "LDAP_ADMIN_USER": [
+                "LDAP_ADMIN_PASSWORD"
+            ],
+            "LDAP_ADMIN_PASSWORD": [
+                "LDAP_ADMIN_USER"
+            ],
+            "NEW_USER_PASSWORD": [
+                "NEW_USER_NAME"
+            ],
+            "USER_PASSWORD": [
+                "USER_NAME"
+            ],
+        },
+        "properties": {
+            "LDAP_ADMIN_USER": {
+                "type": "string",
+            },
+            "LDAP_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "USER_NAME": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "USER_PASSWORD": {
+                "type": "string",
+            },
+            "NEW_USER_NAME": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "NEW_USER_PASSWORD":{
+                "type": "string",
+                "minLength": 6,
+            },
+            "NEW_USER_EMAIL": {
+                "type": "string",
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+            },
+            "NEW_USER_DESCRIPTION": {
+                "type": "string"
+            },
+            "GROUP_NAMES": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "pattern": "^([A-Za-z0-9_]+)$"
+                        }
+                    },
+                    "maxItems": 8
+                }
+            },
+            "USER_DATA": {
+                "type": "object",
+                "properties": {
+                    "USER_PASSWORD": {
+                        "type": "string",
+                        "minLength": 6,
+                        },
+                    "USER_DESCRIPTION": {
+                        "type": "string",
+                        },
+                    "USER_EMAIL": {
+                        "type": "string",
+                        "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                        },
+                    "GROUP_NAMES": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "properties": {
+                                "value": {
+                                    "type": "string",
+                                    "pattern": "^([A-Za-z0-9_]+)$"
+                                    }
+                                },
+                            "maxItems": 8
+                            }
+                        }
+                    },
+                "additionalProperties": False,
+            }
+        }
+        # "required": [ ],
+    }
 }
