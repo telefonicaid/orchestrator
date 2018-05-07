@@ -1,9 +1,11 @@
 CHANGES
 =======
 
+FEATURE: Add checks about optional endpoints: orion, perseo, openldap, mailer
+
 1.9.4
 
-FIX: handler error in auth user operation
+FIX: handler error in auth user operation [#153]
 
 1.9.3
 

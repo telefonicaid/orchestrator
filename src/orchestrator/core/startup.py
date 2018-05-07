@@ -29,6 +29,10 @@ from django.conf import settings
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
+from orchestrator.core.orion import CBOrionOperations as CBOrionOperations
+from orchestrator.core.perseo import PerseoOperations as PerseoOperations
+from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
+from orchestrator.core.mailer import MailerOperations as MailerOperations
 
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
@@ -92,6 +96,49 @@ def check_endpoints():
     except Exception, ex:
         logger.error("keypass endpoint not found: %s" % ex)
         return "ERROR keypass endpoint not found: %s" % ex
+
+    # ContextBroker: optional
+    ORION_HOST = settings.ORION['host']
+    ORION_PORT = settings.ORION['port']
+    ORION_PROTOCOL = settings.ORION['protocol']
+    orion = CBOrionOperations(ORION_PROTOCOL, ORION_HOST, ORION_PORT)
+    try:
+        orion.checkCB()
+        logger.info("Orion endpoint OK")
+    except Exception, ex:
+        logger.warn("Orion endpoint not found: %s" % ex)
+
+    # Perseo: optional
+    PERSEO_HOST = settings.PERSEO['host']
+    PERSEO_PORT = settings.PERSEO['port']
+    PERSEO_PROTOCOL = settings.PERSEO['protocol']
+    orion = PerseoOperations(PERSEO_PROTOCOL, PERSEO_HOST, PERSEO_PORT)
+    try:
+        orion.checkPERSEO()
+        logger.info("PERSEO endpoint OK")
+    except Exception, ex:
+        logger.warn("PERSEO endpoint not found: %s" % ex)
+
+    # OpenLDAP: optional
+    LDAP_HOST = settings.LDAP['host']
+    LDAP_PORT = settings.LDAP['port']
+    LDAP_BASEDN = settings.LDAP['basedn']
+    openldap = OpenLdapOperations(LDAP_HOST, LDAP_PORT, LDAP_BASEDN)
+    try:
+        openldap.checkLdap()
+        logger.info("LDAP endpoint OK")
+    except Exception, ex:
+        logger.warn("LDAP endpoint not found: %s" % ex)
+
+    # Mailer: optional
+    MAILER_HOST = settings.MAILER['host']
+    MAILER_PORT = settings.MAILER['port']
+    mailer = MailerOperations(MAILER_HOST, MAILER_PORT)
+    try:
+        mailer.checkMailer()
+        logger.info("MAILER endpoint OK")
+    except Exception, ex:
+        logger.warn("MAILER endpoint not found: %s" % ex)
 
     return "OK"
 
