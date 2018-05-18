@@ -121,7 +121,7 @@ class IoTConf(Stats):
             self.MONGODB_URI = settings.MONGODB["URI"]
         except KeyError:
             logger.error("MONGODB URI configuration error. " +
-                         "Forcing to use default conf values (localhost)")
+                         "Forcing to use default conf values (127.0.0.1:27017)")
             self.MONGODB_URI = "mongnodb://127.0.0.1:27017"
 
 
