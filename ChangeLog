@@ -6,6 +6,10 @@ CHANGES
 FEATURE: Create Orion indexes needed for each service in MongoDB [#145]
 FEATURE: Add checks about optional endpoints: orion, perseo, openldap, mailer
 
+1.9.4
+
+FIX: handler error in auth user operation [#153]
+
 1.9.3
 
 FIX: docker LDAP and MAILER conf
