@@ -4,6 +4,9 @@ CHANGES
 2.0.0
 
 FEATURE: Create Orion indexes needed for each service in MongoDB [#145]
+
+1.9.5
+
 FEATURE: Add checks about optional endpoints: orion, perseo, openldap, mailer
 
 1.9.4
