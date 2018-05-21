@@ -6,3 +6,4 @@ jsonschema==2.5.1
 uwsgi==2.0.15
 requests==2.6.1
 python-ldap==2.5.2
+pymongo==3.6.1

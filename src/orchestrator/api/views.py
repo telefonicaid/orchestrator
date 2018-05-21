@@ -195,6 +195,8 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.PERSEO_PROTOCOL,
                            self.PERSEO_HOST,
                            self.PERSEO_PORT,
+                           MONGODB_URI=self.MONGODB_URI,
+                           TRANSACTION_ID=None,
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.delete_domain(
@@ -247,6 +249,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                     self.KEYPASS_PROTOCOL,
                                     self.KEYPASS_HOST,
                                     self.KEYPASS_PORT,
+                                    MONGODB_URI=self.MONGODB_URI,
+                                    TRANSACTION_ID=None,
                                     CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.createNewService(

@@ -18,6 +18,7 @@ PERSEO = {}
 CYGNUS = {}
 LDAP = {}
 MAILER = {}
+MONGODB = {}
 ```
 
 Tipically are fixed in [settings/dev.py](https://github.com/telefonicaid/orchestrator/blob/master/src/settings/dev.py) like
@@ -58,11 +59,15 @@ MAILER = {
     "user": 'smtpuser@yourdomain.com',
     "password": 'yourpassword',
     "from": 'smtpuser',
-    "to": 'smart.iotplatform'
+    "to": 'smtpuser'
+}
+
+MONGODB = {
+    "URI": "mongodb://localhost:27017"
 }
 ```
 
-These other endpints are just keept to use with Orion subscriptions about IoT Modules:
+These other endpints are just kept to use with Orion subscriptions about IoT Modules:
 
 ```
 STH = {

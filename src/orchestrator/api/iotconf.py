@@ -117,6 +117,14 @@ class IoTConf(Stats):
             self.MAILER_FROM = "smtpuser"
             self.MAILER_TO = "smtpuser"
 
+        try:
+            self.MONGODB_URI = settings.MONGODB["URI"]
+        except KeyError:
+            logger.error("MONGODB URI configuration error. " +
+                         "Forcing to use default conf values (127.0.0.1:27017)")
+            self.MONGODB_URI = "mongnodb://127.0.0.1:27017"
+
+
     # Get Django status error from simple HTTP error code
     def getStatusFromCode(self, code):
         if code == 400:

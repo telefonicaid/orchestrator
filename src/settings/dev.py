@@ -89,3 +89,7 @@ MAILER = {
     "from": "smtpuser",
     "to": "smtpuser"
 }
+
+MONGODB = {
+    "URI": "mongodb://localhost:27017"
+}

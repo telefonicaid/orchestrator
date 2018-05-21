@@ -238,6 +238,7 @@ PERSEO = {}
 CYGNUS = {}
 LDAP = {}
 MAILER = {}
+MONGODB = {}
 
 # List of possible IoTModules: persistence services, etc
 IOTMODULES = [ "CYGNUS", "STH", "PERSEO"]

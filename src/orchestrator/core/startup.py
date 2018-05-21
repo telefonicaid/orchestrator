@@ -29,6 +29,7 @@ from django.conf import settings
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
+from orchestrator.core.mongo import MongoDBOperations as MongoDBOperations
 from orchestrator.core.orion import CBOrionOperations as CBOrionOperations
 from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
@@ -97,6 +98,15 @@ def check_endpoints():
         logger.error("keypass endpoint not found: %s" % ex)
         return "ERROR keypass endpoint not found: %s" % ex
 
+    # MongoDB: optional
+    MONGODB_URI = settings.MONGODB['URI']
+    mongo = MongoDBOperations(MONGODB_URI)
+    try:
+        mongo.checkMongo()
+        logger.info("MongoDB endpoint OK")
+    except Exception, ex:
+        logger.warn("MongoDB endpoint not found: %s" % ex)
+
     # ContextBroker: optional
     ORION_HOST = settings.ORION['host']
     ORION_PORT = settings.ORION['port']
@@ -146,10 +156,10 @@ def show_conf():
     conf = {}
     from django.conf import settings
     custom_settings_entries = ['KEYSTONE', 'KEYPASS',
-                               'ORION', 
+                               'ORION',
                                'PEP', 'IOTAGENT', 'SCIM_API_VERSION',
                                'CYGNUS', 'STH', 'PERSEO',
-                               'LDAP', 'MAILER'
+                               'LDAP', 'MAILER', 'MONGODB'
                                ]
     for name in custom_settings_entries:
         conf[name] = getattr(settings, name)
