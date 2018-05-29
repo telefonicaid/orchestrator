@@ -94,8 +94,8 @@ class IoTConf(Stats):
             self.LDAP_PORT = settings.LDAP['port']
             self.LDAP_BASEDN = settings.LDAP['basedn']
         except KeyError:
-            logger.error("LDAP endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
+            logger.warn("LDAP endpoint configuration error. " +
+                        "Forcing to use default conf values (localhost)")
             self.LDAP_HOST = "localhost"
             self.LDAP_PORT = "389"
             self.LDAP_BASEDN = "dc=openstack,dc=org"
@@ -108,8 +108,8 @@ class IoTConf(Stats):
             self.MAILER_FROM = settings.MAILER['from']
             self.MAILER_TO = settings.MAILER['to']
         except KeyError:
-            logger.error("MAILER endpoint configuration error. " +
-                         "Forcing to use default conf values (localhost)")
+            logger.warn("MAILER endpoint configuration error. " +
+                        "Forcing to use default conf values (localhost)")
             self.MAILER_HOST = "localhost"
             self.MAILER_PORT = "587"
             self.MAILER_USER = "smtpuser@yourdomain.com"
