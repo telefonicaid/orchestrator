@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+2.0.1
+
+FIX: check ldap port before cast to int
+
 2.0.0
 
 FEATURE: Create Orion indexes needed for each service in MongoDB [#145]
