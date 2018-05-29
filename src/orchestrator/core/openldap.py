@@ -43,7 +43,7 @@ class OpenLdapOperations(object):
                  CORRELATOR_ID=None,
                  TRANSACTION_ID=None):
         self.LDAP_HOST = LDAP_HOST
-        self.LDAP_PORT = int(LDAP_PORT)
+        self.LDAP_PORT = int(LDAP_PORT) if LDAP_PORT else 0
         self.LDAP_BASEDN = LDAP_BASEDN
 
     def checkLdap(self):
