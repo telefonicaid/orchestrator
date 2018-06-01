@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: upgrade uwgi to 2.0.17
+
 2.0.1
 
 FIX: check ldap port before cast to int
