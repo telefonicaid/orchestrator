@@ -8,6 +8,7 @@ FEATURE: upgrade some python dependences:
         - jsonschema to 2.6.0
         - request to 2.12.5
         - djangorestframework to 3.1.3
+FIX: increase number of uwsgi processes from 2 to 6
 
 2.0.1
 
