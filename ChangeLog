@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+2.1.0
+
 FEATURE: add harakiri and max-requests options to uwsgi
 FEATURE: upgrade some python dependences:
         - uwsgi to 2.0.17
