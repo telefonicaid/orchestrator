@@ -1,6 +1,6 @@
 CHANGES
 =======
-
+FIX: increase number of uwsgi processes from 2 to 6
 FIX: upgrade uwgi to 2.0.17
 
 2.0.1
