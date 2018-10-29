@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: execute orchestartor command into docker container (#167)
+
 2.1.1
 
 FIX: max-requests uswgi option fixed from 5000 to 1000
