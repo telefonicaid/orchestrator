@@ -51,6 +51,8 @@ ENV MAILER_TO smtpto
 ENV MONGODB_URI localhost:27017
 
 ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
+ENV DJANGO_SETTINGS_MODULE settings
+ENV PYTHONPATH "${PYTHONPATH}:/opt/orchestrator"
 
 COPY . /opt/sworchestrator/
 
