@@ -58,8 +58,8 @@ MAILER_TO=smtpuser
 
 MONGODB_URI='localhost:27017'
 
-PEP_PASSWORD=peppasswd
-IOTAGENT_PASSWORD=iotagentpasswd
+PEP_PASSWORD=pep
+IOTAGENT_PASSWORD=iotagent
 
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
