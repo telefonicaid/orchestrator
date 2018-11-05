@@ -93,3 +93,13 @@ MAILER = {
 MONGODB = {
     "URI": "mongodb://localhost:27017"
 }
+
+PEP = {
+    "user": "pep",
+    "password": "pep"
+}
+
+IOTAGENT = {
+    "user": "iotagent",
+    "password": "iotagent"
+}

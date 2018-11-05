@@ -1,7 +1,8 @@
 CHANGES
 =======
 
-FIX: execute orchestartor command into docker container (#167)
+FIX: add docker arg to set default pwd for pep and iotagent (#171)
+FIX: execute orchestrator command into docker container (#167)
 
 2.1.1
 
