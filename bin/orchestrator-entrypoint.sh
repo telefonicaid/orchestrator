@@ -58,6 +58,9 @@ MAILER_TO=smtpuser
 
 MONGODB_URI='localhost:27017'
 
+PEP_PASSWORD=peppasswd
+IOTAGENT_PASSWORD=iotagentpasswd
+
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
     VALUE=`echo $2`
@@ -134,6 +137,12 @@ while [[ $# -gt 0 ]]; do
         -mongodburi)
             MONGODB_URI=$VALUE
             ;;
+        -peppwd)
+            PEP_PASSWORD=$VALUE
+            ;;
+        -iotagentpwd)
+            IOTAGENT_PASSWORD=$VALUE
+            ;;
         *)
             echo "not found"
             # Do nothing
@@ -207,6 +216,17 @@ sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
 sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\/\"\n: ]*}/MONGODB = { \
              \"URI\": \"mongodb:\/\/'$MONGODB_URI'\" \
 }/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/PEP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/PEP = { \
+             \"user\": \"pep\", \
+             \"password\": \"'$PEP_PASSWORD'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/IOTAGENT = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/IOTAGENT = { \
+             \"user\": \"iotagent\", \
+             \"password\": \"'$IOTAGENT_PASSWORD'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
 
 
 # Wait until Keystone is up
