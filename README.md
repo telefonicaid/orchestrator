@@ -7,7 +7,7 @@
 [![Support badge]( https://img.shields.io/badge/support-sof-yellowgreen.svg)](http://stackoverflow.com/questions/tagged/orchestrator/)
 [![Join the chat at https://gitter.im/telefonicaid/orchestrator](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/telefonicaid/orchestrator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Orchestrator tries to group all provision operations for IoT platform that tipically implies several steps or several systems interaction.
+Orchestrator tries to group all provision operations for IoT platform that typically implies several steps or several systems' interaction.
 Orchestrator exposes an API and provides scripts to perform all these operations. Scripts simplifies the inherent usage of keystone, such as usage of long identifiers not so easy to remember and to use, using names and resolving internally to deal with keystone.
 Orchestrator scripts can interact with any remote 3rd party, since related host and port should be provideed as argument to earch script.
 Orchestrator is used mainly by [IoT Portal](https://pdihub.hi.inet/fiware/iotp-portal) and operation team.
