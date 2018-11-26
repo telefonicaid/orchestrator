@@ -197,7 +197,7 @@ sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
 
 # Check if CYGNUS multiagent
 if [ "$CYGNUS_MULTIAGENT" == "true" ]; then
-   sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS_MYSQL = { \
+    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS_MYSQL = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$CYGNUS_PORT'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
