@@ -143,6 +143,9 @@ while [[ $# -gt 0 ]]; do
         -iotagentpwd)
             IOTAGENT_PASSWORD=$VALUE
             ;;
+        -cygnusmultiagent)
+            CYGNUS_MULTIAGENT=$VALUE
+            ;;
         *)
             echo "not found"
             # Do nothing
@@ -191,12 +194,43 @@ sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
              \"notifypath\": \"\/'$STH_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
-sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
+
+# Check if CYGNUS multiagent
+if [ "$CYGNUS_MULTIAGENT" == "true" ]; then
+   sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS_MYSQL = { \
+             \"host\": \"'$CYGNUS_HOST'\", \
+             \"port\": \"'$CYGNUS_PORT'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
+}
+CYGNUS_MONGO = { \
+             \"host\": \"'$CYGNUS_HOST'\", \
+             \"port\": \"'$((CYGNUS_PORT + 1))'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
+}
+CYGNUS_CKAN = { \
+             \"host\": \"'$CYGNUS_HOST'\", \
+             \"port\": \"'$((CYGNUS_PORT + 2))'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
+}
+CYGNUS_HADOOP = { \
+             \"host\": \"'$CYGNUS_HOST'\", \
+             \"port\": \"'$((CYGNUS_PORT + 3))'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
+}/g' /opt/orchestrator/settings/dev.py
+
+    sed -i ':a;N;$!ba;s/"CYGNUS"/"CYGNUS_MYSQL", "CYGNUS_MONGO", "CYGNUS_CKAN", "CYGNUS_HADOOP"/g' /opt/orchestrator/settings/dev.py
+else
+    sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$CYGNUS_PORT'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
+fi
 
 sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
              \"host\": \"'$LDAP_HOST'\", \
