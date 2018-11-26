@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+2.2.0
+
 FIX: add docker arg to set multiagent cygnus option (#175)
 FIX: add docker arg to set default pwd for pep and iotagent (#171)
 FIX: execute orchestrator command into docker container (#167)
