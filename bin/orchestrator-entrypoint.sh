@@ -202,19 +202,19 @@ if [ "$CYGNUS_MULTIAGENT" == "true" ]; then
              \"port\": \"'$CYGNUS_PORT'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
-}
+} \
 CYGNUS_MONGO = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$((CYGNUS_PORT + 1))'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
-}
+} \
 CYGNUS_CKAN = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$((CYGNUS_PORT + 2))'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
-}
+} \
 CYGNUS_HADOOP = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$((CYGNUS_PORT + 3))'\", \
