@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: add docker arg to set debug level option (#98)
+
 2.2.0
 
 FIX: add docker arg to set multiagent cygnus option (#175)

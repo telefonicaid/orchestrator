@@ -146,6 +146,9 @@ while [[ $# -gt 0 ]]; do
         -cygnusmultiagent)
             CYGNUS_MULTIAGENT=$VALUE
             ;;
+        -debuglevel)
+            DEBUG_LEVEL=$VALUE
+            ;;
         *)
             echo "not found"
             # Do nothing
@@ -273,6 +276,16 @@ sed -i ':a;N;$!ba;s/IOTAGENT = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/IOTAGENT = { \
              \"password\": \"'$IOTAGENT_PASSWORD'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
+
+
+if [ "$DEBUG_LEVEL" ]; then
+echo "
+LOGGING['handlers']['console']['level'] = '$DEBUG_LEVEL'
+LOGGING['handlers']['logfile']['level'] = '$DEBUG_LEVEL'
+LOGGING['loggers']['orchestrator_api']['level'] = '$DEBUG_LEVEL'
+LOGGING['loggers']['orchestrator_core']['level'] = '$DEBUG_LEVEL'
+" >> /opt/orchestrator/settings/dev.py
+fi
 
 
 # Wait until Keystone is up
