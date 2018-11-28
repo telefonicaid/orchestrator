@@ -221,8 +221,8 @@ REST_FRAMEWORK = {
 
 
 
-# TO DO:
-# split settings into settings/common.py settings/dev.py settings/qa_integration.py
+
+# Settings are splited into settings/common.py settings/dev.py 
 
 # Custom settings
 # ---------------
