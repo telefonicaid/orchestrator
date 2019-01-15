@@ -21,7 +21,7 @@
 #
 # Author: IoT team
 #
-from django.conf.urls import (url, include, patterns)
+from django.conf.urls import (url, include)
 from django.contrib.auth.decorators import login_required
 
 from orchestrator.api.views import (ServiceList_RESTView,
@@ -47,7 +47,7 @@ from orchestrator.api.ldap_view import (LdapUser_RESTView,
                                         LdapAuth_RESTView)
 
 
-urlpatterns = patterns('',
+urlpatterns = [
      url(r'^service[/]?$', ServiceCreate_RESTView.as_view(), name='new_service_rest_view'),
      url(r'^service/(?P<service_id>\w+)[/]?$', ServiceList_RESTView.as_view(), name='service_rest_view'),
      url(r'^service/(?P<service_id>\w+)/module_activation[/]?$', IOTModuleActivation_RESTView.as_view(), name='servicemodule_rest_view'),
@@ -71,4 +71,4 @@ urlpatterns = patterns('',
      url(r'^admin/metrics?$', OrchMetrics_RESTView.as_view(), name='orch_metrics_rest_view'),
      url(r'^ldap/user?$', LdapUser_RESTView.as_view(), name='ldap_user_rest_view'),
      url(r'^ldap/auth?$', LdapAuth_RESTView.as_view(), name='ldap_auth_rest_view'),
-)
+]
