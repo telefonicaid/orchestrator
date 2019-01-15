@@ -60,7 +60,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
-            request.DATA  # json validation
+            request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
@@ -75,23 +75,23 @@ class LdapUser_RESTView(APIView, IoTConf):
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            if (request.DATA.get("LDAP_ADMIN_USER", None) and
-                    request.DATA.get("LDAP_ADMIN_PASSWORD", None)):
+            if (request.data.get("LDAP_ADMIN_USER", None) and
+                    request.data.get("LDAP_ADMIN_PASSWORD", None)):
                 result = flow.createNewUser(
-                               request.DATA.get("LDAP_ADMIN_USER", None),
-                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
-                               request.DATA.get("NEW_USER_NAME", None),
-                               request.DATA.get("NEW_USER_PASSWORD", None),
-                               request.DATA.get("NEW_USER_EMAIL", None), 
-                               request.DATA.get("NEW_USER_DESCRIPTION", None),
-                               request.DATA.get("GROUP_NAMES", None))
+                               request.data.get("LDAP_ADMIN_USER", None),
+                               request.data.get("LDAP_ADMIN_PASSWORD", None),
+                               request.data.get("NEW_USER_NAME", None),
+                               request.data.get("NEW_USER_PASSWORD", None),
+                               request.data.get("NEW_USER_EMAIL", None),
+                               request.data.get("NEW_USER_DESCRIPTION", None),
+                               request.data.get("GROUP_NAMES", None))
             else:
                 result = flow.askForCreateNewUser(
-                               request.DATA.get("NEW_USER_NAME", None),
-                               request.DATA.get("NEW_USER_PASSWORD", None),
-                               request.DATA.get("NEW_USER_EMAIL", None),
-                               request.DATA.get("NEW_USER_DESCRIPTION", None),
-                               request.DATA.get("GROUP_NAMES", None))
+                               request.data.get("NEW_USER_NAME", None),
+                               request.data.get("NEW_USER_PASSWORD", None),
+                               request.data.get("NEW_USER_EMAIL", None),
+                               request.data.get("NEW_USER_DESCRIPTION", None),
+                               request.data.get("GROUP_NAMES", None))
 
             if 'error' not in result:
                 Stats.num_post_ldap += 1
@@ -116,7 +116,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
-            request.DATA  # json validation
+            request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
@@ -125,25 +125,25 @@ class LdapUser_RESTView(APIView, IoTConf):
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
-            if ( request.DATA.get("LDAP_ADMIN_USER", None) and
-                 request.DATA.get("LDAP_ADMIN_PASSWORD", None) and
-                 request.DATA.get("FILTER", None)):
+            if ( request.data.get("LDAP_ADMIN_USER", None) and
+                 request.data.get("LDAP_ADMIN_PASSWORD", None) and
+                 request.data.get("FILTER", None)):
                 result = flow.listUsers(
-                               request.DATA.get("LDAP_ADMIN_USER", None),
-                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
-                               request.DATA.get("FILTER", None))
-            elif ( request.DATA.get("LDAP_ADMIN_USER", None) and
-                   request.DATA.get("LDAP_ADMIN_PASSWORD", None) and
-                   request.DATA.get("USER_NAME", None)):
+                               request.data.get("LDAP_ADMIN_USER", None),
+                               request.data.get("LDAP_ADMIN_PASSWORD", None),
+                               request.data.get("FILTER", None))
+            elif ( request.data.get("LDAP_ADMIN_USER", None) and
+                   request.data.get("LDAP_ADMIN_PASSWORD", None) and
+                   request.data.get("USER_NAME", None)):
                 result = flow.getUserDetailByAdmin(
-                               request.DATA.get("LDAP_ADMIN_USER", None),
-                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
-                               request.DATA.get("USER_NAME", None))
-            elif (request.DATA.get("USER_NAME", None) and
-                  request.DATA.get("USER_PASSWORD", None)):
+                               request.data.get("LDAP_ADMIN_USER", None),
+                               request.data.get("LDAP_ADMIN_PASSWORD", None),
+                               request.data.get("USER_NAME", None))
+            elif (request.data.get("USER_NAME", None) and
+                  request.data.get("USER_PASSWORD", None)):
                 result = flow.getUserDetail(
-                               request.DATA.get("USER_NAME", None),
-                               request.DATA.get("USER_PASSWORD", None))
+                               request.data.get("USER_NAME", None),
+                               request.data.get("USER_PASSWORD", None))
             else:
                 result = { "error": "not valid parameters", "code": 400 }
             if 'error' not in result:
@@ -169,7 +169,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
-            request.DATA  # json validation
+            request.data  # json validation
             flow = LdapUserHelper(
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
@@ -178,11 +178,11 @@ class LdapUser_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.updateUser(
-                               request.DATA.get("LDAP_ADMIN_USER", None),
-                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
-                               request.DATA.get("USER_NAME", None),
-                               request.DATA.get("USER_PASSWORD", None),
-                               request.DATA.get("USER_DATA", None))
+                               request.data.get("LDAP_ADMIN_USER", None),
+                               request.data.get("LDAP_ADMIN_PASSWORD", None),
+                               request.data.get("USER_NAME", None),
+                               request.data.get("USER_PASSWORD", None),
+                               request.data.get("USER_DATA", None))
             if 'error' not in result:
                 Stats.num_put_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
@@ -207,7 +207,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
-            request.DATA  # json validation
+            request.data  # json validation
             flow = LdapUserHelper(
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
@@ -216,10 +216,10 @@ class LdapUser_RESTView(APIView, IoTConf):
                          CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.deleteUser(
-                               request.DATA.get("LDAP_ADMIN_USER", None),
-                               request.DATA.get("LDAP_ADMIN_PASSWORD", None),
-                               request.DATA.get("USER_NAME", None),
-                               request.DATA.get("USER_PASSWORD", None))
+                               request.data.get("LDAP_ADMIN_USER", None),
+                               request.data.get("LDAP_ADMIN_PASSWORD", None),
+                               request.data.get("USER_NAME", None),
+                               request.data.get("USER_PASSWORD", None))
             if 'error' not in result:
                 Stats.num_delete_ldap += 1
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
@@ -255,7 +255,7 @@ class LdapAuth_RESTView(APIView, IoTConf):
         response = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
-            request.DATA  # json validation
+            request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
@@ -264,8 +264,8 @@ class LdapAuth_RESTView(APIView, IoTConf):
                            CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result = flow.authUser(
-                               request.DATA.get("USER_NAME", None),
-                               request.DATA.get("USER_PASSWORD", None))
+                               request.data.get("USER_NAME", None),
+                               request.data.get("USER_PASSWORD", None))
 
             if 'error' not in result:
                 Stats.num_post_ldap += 1
