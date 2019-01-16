@@ -21,27 +21,18 @@
 #
 # Author: IoT team
 #
-import logging
-import json
-import time
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ParseError
-from rest_framework.throttling import AnonRateThrottle
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from datetime import datetime
 
 from orchestrator.core.flow.LdapUserHelper import LdapUserHelper
 from orchestrator.api import parsers
 from orchestrator.api.iotconf import IoTConf
 from orchestrator.api.stats import Stats
-
-from orchestrator.common.util import ContextFilterCorrelatorId
-from orchestrator.common.util import ContextFilterTransactionId
 
 
 class LdapUser_RESTView(APIView, IoTConf):

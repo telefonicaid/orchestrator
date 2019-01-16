@@ -22,18 +22,18 @@
 # Author: IoT team
 #
 import logging
-import json
-import time
+#import json
+#import time
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
+#from rest_framework.views import APIView
+#from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import ParseError
+#from rest_framework.exceptions import ParseError
 from rest_framework.throttling import AnonRateThrottle
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from datetime import datetime
+#from django.core.exceptions import ImproperlyConfigured
+#from datetime import datetime
 
 from orchestrator.api.stats import Stats
 
