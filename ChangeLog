@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: show PEP_PERSEO conf at startup
 FIX: add docker arg to set debug level option (#98)
 
 2.2.0
