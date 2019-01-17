@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-UPDATE: Django to 1.11.18 due to security vulnerability (#39)
+UPDATE: Django to 1.11.18 (and djangorestframweork to 3.9.0) due to security vulnerability (#39)
 FIX: add docker arg to set debug level option (#98)
 
 2.2.0
