@@ -163,10 +163,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        # 'null': {
-        #     'level':'INFO',
-        #     'class':'django.utils.log.NullHandler',
-        # },
         'logfile': {
             'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
