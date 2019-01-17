@@ -157,7 +157,7 @@ def show_conf():
     from django.conf import settings
     custom_settings_entries = ['KEYSTONE', 'KEYPASS',
                                'ORION',
-                               'PEP', 'IOTAGENT', 'SCIM_API_VERSION',
+                               'PEP', 'PEP_PERSEO', 'SCIM_API_VERSION',
                                'CYGNUS', 'STH', 'PERSEO',
                                'LDAP', 'MAILER', 'MONGODB'
                                ]
