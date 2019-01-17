@@ -28,7 +28,7 @@ Orchestrator is used to:
 - Create, List, Modify LDAP Users
 
 Orchestrator is based mainly on:
-- Python (python 2.7 recomended)
+- Python 2.7 needed
 - Django / DjangoRestFramework
 - httplib
 

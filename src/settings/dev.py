@@ -14,8 +14,6 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ['*']
 
-REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']['anon']='200/sec'
-
 # Keystone Endpoint
 KEYSTONE = {
     "host": "localhost",

@@ -163,10 +163,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        'null': {
-            'level':'INFO',
-            'class':'django.utils.log.NullHandler',
-        },
         'logfile': {
             'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
@@ -209,14 +205,11 @@ LOGGING = {
 }
 
 REST_FRAMEWORK = {
+    'UNAUTHENTICATED_USER': None,
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
     ),
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '200/sec',
-    }
 }
 
 
