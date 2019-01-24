@@ -253,8 +253,6 @@ class FlowBase(object):
 
                 # Include subservice scope if available
                 if 'project' in token_detail['token']:
-                    #token_extended['project'] = \
-                        #token_detail['token']['project']['name'].split('/')[1]
                     token_extended['project'] = \
                         token_detail['token']['project']['name'][1:]
 
