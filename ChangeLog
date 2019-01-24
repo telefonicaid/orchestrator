@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+2.3.0
+
+ADD: multilevel support allowing subservices with '/'
 UPDATE: Django to 1.11.18 (and djangorestframweork to 3.9.0) due to security vulnerability (#39)
 FIX: show PEP_PERSEO conf at startup
 FIX: add docker arg to set debug level option (#98)
