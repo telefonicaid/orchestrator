@@ -232,7 +232,7 @@ class FlowBase(object):
                 # This op could be executed by cloud_admin user
                 SUBSERVICE = self.idm.getProject(USER_TOKEN,
                                                  SUBSERVICE_ID)
-                SUBSERVICE_NAME = SUBSERVICE['project']['name'].split('/')[1]
+                SUBSERVICE_NAME = SUBSERVICE['project']['name'][1:]
         return SUBSERVICE_NAME
 
 
@@ -254,7 +254,7 @@ class FlowBase(object):
                 # Include subservice scope if available
                 if 'project' in token_detail['token']:
                     token_extended['project'] = \
-                        token_detail['token']['project']['name'].split('/')[1]
+                        token_detail['token']['project']['name'][1:]
 
             except Exception, ex:
                 # Probably expired?
