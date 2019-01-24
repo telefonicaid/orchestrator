@@ -287,7 +287,6 @@ class Domains(FlowBase):
             projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
             for project in projects['projects']:
 
-                #PROJECT_NAME = project['name'].split('/')[1]
                 PROJECT_NAME = project['name'][1:]
                 self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
 
