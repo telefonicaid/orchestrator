@@ -12,7 +12,7 @@ Due to its stateless behavior, iotp-orchestrator does not require any backup pro
  * Internet access
  * Connectivity to http://github.com
  * [Git](http://git-scm.com/)
- * Python 2.6 (or upper) and pip
+ * Python 2.7 (or upper) and pip
  * C and C++ compilation platform: gcc, g++, make and python headers
  * UNIX platforms but not mandatory
  * WSGI Web server (Apache2/Nginx) but not mandatory
