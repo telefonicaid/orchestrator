@@ -117,8 +117,8 @@ echo "[INFO] Configuring application"
     fi
 
     echo "[INFO] Link to /opt"
-    ln -s %{_install_dir} %{_orchestrator_link_dir}
-    ln -s %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
+    ln -sf %{_install_dir} %{_orchestrator_link_dir}
+    ln -sf %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
 
     echo "[INFO] Fix version"
     sed -i -e 's/ORC_version/%{_version}/g' %{_install_dir}/settings/common.py
