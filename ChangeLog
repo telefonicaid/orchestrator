@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+UPDATE: Update Django to 1.11.19 due to security vulnerability (#186)
+UPDATE: Update python deps:
+          httplib2 to 0.12.0
+          simplejson to 3.16.0
+          uwsgi to 2.0.17.1
+          requests 2.21.0
+          pymongo to 3.7.2
+
 2.3.0
 
 ADD: multilevel support allowing subservices with '/'
