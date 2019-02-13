@@ -23,9 +23,9 @@
 # Call method get_rpm_version_string to obtain them for rpmbuild
 #
 
-if [[ $(ps -hp  $$ | grep bash) ]]; then
+if [[ $(ps -p  $$ | grep bash) ]]; then
   shopt -s extglob
-elif [[ $(ps -hp  $$ | grep zsh) ]]; then
+elif [[ $(ps -p  $$ | grep zsh) ]]; then
   setopt kshglob
 fi
 
