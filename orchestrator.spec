@@ -21,6 +21,7 @@ BuildArch: noarch
 %define python_lib /var/env-orchestrator/lib/python2.6/site-packages
 %if 0%{?with_python27}
 %define python_lib /var/env-orchestrator/lib/python2.7/site-packages
+%define __python /usr/bin/python2.7
 %endif # if with_python27
 
 %description
