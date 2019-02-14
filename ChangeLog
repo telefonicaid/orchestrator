@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+2.4.0
+
 FIX: startup orchestrator is not executed (#190)
 UPDATE: Update Django to 1.11.20 due to security vulnerability (#186)
 UPDATE: Update python deps:
