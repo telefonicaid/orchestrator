@@ -205,7 +205,7 @@ json = {
             "NEW_SUBSERVICE_NAME": {
                 "type": "string",
                 "maxLength": 50,
-                "pattern": "^([A-Za-z0-9_/]+)$",
+                "pattern": "^([A-Za-z0-9_/.:]+)$",
             },
             "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",

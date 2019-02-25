@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+ADD: Allow subservices names with ':' and '.'
+
 2.4.0
 
 FIX: startup orchestrator is not executed (#190)
