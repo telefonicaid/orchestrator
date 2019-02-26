@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+2.5.0
+
 ADD: Allow subservices names with ':' and '.'
 
 2.4.0
