@@ -3,6 +3,7 @@ CHANGES
 
 2.5.0
 
+ADD: Increate subservice name limit to 64
 ADD: Allow subservices names with ':' and '.'
 
 2.4.0
