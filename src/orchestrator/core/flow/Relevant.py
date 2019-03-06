@@ -27,14 +27,16 @@ from orchestrator.core.flow.base import FlowBase
 
 class Relevant(FlowBase):
 
-    def relevant(self,
-                 SERVICE_ID,
-                 SERVICE_NAME,
-                 SUBSERVICE_ID,
-                 SUBSERVICE_NAME,
-                 USER_NAME,
-                 USER_PASSWORD,
-                 USER_TOKEN):
+    def getRelevant(self,
+                    SERVICE_ID,
+                    SERVICE_NAME,
+                    SUBSERVICE_ID,
+                    SUBSERVICE_NAME,
+                    USER_NAME,
+                    USER_PASSWORD,
+                    USER_TOKEN,
+                    LOGLEVEL,
+                    COMPONENT):
 
         '''Get something relevant of a domain.
 
@@ -48,6 +50,8 @@ class Relevant(FlowBase):
             USER_NAME
             USER_PASSWORD
             USER_TOKEN
+            LOGLEVEL
+            COMPONENT
         Return:
 
         '''
@@ -59,6 +63,8 @@ class Relevant(FlowBase):
             "USER_NAME": "%s" % USER_NAME,
             "USER_PASSWORD": "%s" % USER_PASSWORD,
             "USER_TOKEN": self.get_extended_token(USER_TOKEN)
+            "LOGLEVEL": LOGLEVEL,
+            "COMPONENT": COMPONENT
         }
         self.logger.debug("FLOW projects invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -93,12 +99,13 @@ class Relevant(FlowBase):
                 self.logger.addFilter(ContextFilterSubService(SUBSERVICE_NAME))
 
             if self.idm.isTokenAdmin(USER_TOKEN, SERVICE_ID):
-                self.logger.debug("USER_TOKEN is token admin")
-                OUTPUT = self.splunk.searchRelevant(USER_TOKEN,
-                                                    SERVICE_NAME,
-                                                    SUBSERVICE_NAME)
+                self.logger.info("USER_TOKEN is token admin")
+                OUTPUT = self.splunk.searchRelevant(SERVICE_NAME,
+                                                    SUBSERVICE_NAME,
+                                                    LOGLEVEL,
+                                                    COMPONENT)
             else:
-                self.logger.debug("USER_TOKEN is not token admin")                
+                self.logger.info("USER_TOKEN is not token admin")
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)

@@ -670,10 +670,10 @@ json = {
         "name": "IOTModuleActivation",
         "dependencies": {
             "SERVICE_USER_NAME": [
-                "SERVICE_ADMIN_PASSWORD"
+                "SERVICE_USER_PASSWORD"
             ],
             "SERVICE_USER_PASSWORD": [
-                "SERVICE_ADMIN_USER",
+                "SERVICE_USER_NAME",
             ]
         },
         "properties": {
@@ -698,9 +698,9 @@ json = {
         },
         # "required": [ ],
     },
-    #######
+    ###########
     "LdapUser": {
-    #######
+    ###########
         "name": "LdapUser",
         "dependencies": {
             "LDAP_ADMIN_USER": [
@@ -789,6 +789,40 @@ json = {
                 "additionalProperties": False,
             }
         }
+        # "required": [ ],
+    },
+    ###########
+    "Relevant": {
+    ###########
+        "name": "Relevant",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "COMPONENT": {
+                "type": "string",
+            },
+        },
         # "required": [ ],
     }
 }

@@ -68,7 +68,6 @@ class SplunkOperations(object):
         pass
 
     def searchRelevant(self,
-                       SERVICE_USER_TOKEN,
                        SERVICE_NAME,
                        SUBSERVICE_NAME,
                        COMPONENT,
