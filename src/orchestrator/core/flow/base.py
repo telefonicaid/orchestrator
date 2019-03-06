@@ -31,6 +31,7 @@ from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
 from orchestrator.core.mailer import MailerOperations as MailerOperations
 from orchestrator.core.mongo import MongoDBOperations as MongoDBOperations
+from orchestrator.core.splunk import SplunkOperations as SplunkOperations
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
@@ -65,6 +66,11 @@ class FlowBase(object):
                  MAILER_FROM="smtpuser",
                  MAILER_TO="smtpuser",
                  MONGODB_URI="mongodb://127.0.0.1:27017",
+                 SPLUNK_PROTOCOL="http",
+                 SPLUNK_HOST="localhost",
+                 SPLUNK_PORT="587",
+                 SPLUNK_USER="smtpuser@yourdomain.com",
+                 SPLUNK_PASSWORD="yourpassword",
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 
@@ -124,6 +130,14 @@ class FlowBase(object):
         self.mongodb = MongoDBOperations(MONGODB_URI,
                                          CORRELATOR_ID=self.CORRELATOR_ID,
                                          TRANSACTION_ID=self.TRANSACTION_ID)
+
+        self.splunk = SplunkOperations(SPLUNK_PROTOCOL,
+                                       SPLUNK_HOST,
+                                       SPLUNK_PORT,
+                                       SPLUNK_USER,
+                                       SPLUNK_PASSWORD,
+                                       CORRELATOR_ID=self.CORRELATOR_ID,
+                                       TRANSACTION_ID=self.TRANSACTION_ID)
 
         self.endpoints = {}
         self.iotmodules_aliases = {}

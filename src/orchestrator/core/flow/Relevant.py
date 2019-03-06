@@ -41,6 +41,13 @@ class Relevant(FlowBase):
         In case of HTTP error, return HTTP error
 
         Params:
+            SERVICE_ID
+            SERVICE_NAME
+            SUBSERVICE_ID
+            SUBSERVICE_NAME
+            USER_NAME
+            USER_PASSWORD
+            USER_TOKEN
         Return:
 
         '''
