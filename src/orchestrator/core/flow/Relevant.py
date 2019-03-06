@@ -1,5 +1,5 @@
 #
-# Copyright 2015 Telefonica Investigacion y Desarrollo, S.A.U
+# Copyright 2019 Telefonica Espana
 #
 # This file is part of IoT orchestrator
 #
