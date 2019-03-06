@@ -92,6 +92,14 @@ MONGODB = {
     "URI": "mongodb://localhost:27017"
 }
 
+SPLUNK = {
+    "host": "localhost",
+    "port": "8089",
+    "protocol":"http",
+    "user": "splunk_user",
+    "password": "splunk_password",
+}
+
 PEP = {
     "user": "pep",
     "password": "pep"
