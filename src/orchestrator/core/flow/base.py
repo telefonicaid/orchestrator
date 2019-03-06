@@ -68,9 +68,9 @@ class FlowBase(object):
                  MONGODB_URI="mongodb://127.0.0.1:27017",
                  SPLUNK_PROTOCOL="http",
                  SPLUNK_HOST="localhost",
-                 SPLUNK_PORT="587",
-                 SPLUNK_USER="smtpuser@yourdomain.com",
-                 SPLUNK_PASSWORD="yourpassword",
+                 SPLUNK_PORT="8089",
+                 SPLUNK_USER="splunk_user",
+                 SPLUNK_PASSWORD="splunk_pwd",
                  TRANSACTION_ID=None,
                  CORRELATOR_ID=None):
 

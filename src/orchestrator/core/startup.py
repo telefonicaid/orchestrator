@@ -159,7 +159,7 @@ def show_conf():
                                'ORION',
                                'PEP', 'PEP_PERSEO', 'SCIM_API_VERSION',
                                'CYGNUS', 'STH', 'PERSEO',
-                               'LDAP', 'MAILER', 'MONGODB'
+                               'LDAP', 'MAILER', 'MONGODB', 'SPLUNK'
                                ]
     for name in custom_settings_entries:
         conf[name] = getattr(settings, name)
