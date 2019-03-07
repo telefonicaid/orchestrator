@@ -877,7 +877,7 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
 
 ## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation/{iot_module}]
 
-### list activated IoT Modules [POST]
+### list activated IoT Modules [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... SubService Id
@@ -1199,3 +1199,24 @@ The following metrics are collected by the component:
       {
          "details": "OK"
       }
+
+
+## Search into Splunk [/v1.0/service/{serviceId}/subservice/{subserviceId}/relevant/{component}]
+
+### search into splunk  [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "SUBSERVICE_NAME":"test_subservice",
+                "COMPONENT":"cygnus",
+                "LOGLEVEL":"debug",
+                "CUSTOMTEXT":"core dumped"
+            }
++ Response 200 (application/json)
+    + Body { <splunk_output>  }
