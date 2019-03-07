@@ -114,6 +114,21 @@ class IoTConf(Stats):
                          "Forcing to use default conf values (127.0.0.1:27017)")
             self.MONGODB_URI = "mongnodb://127.0.0.1:27017"
 
+        try:
+            self.SPLUNK_PROTOCOL = settings.SPLUNK['protocol']
+            self.SPLUNK_HOST = settings.SPLUNK['host']
+            self.SPLUNK_PORT = settings.SPLUNK['port']
+            self.SPLUNK_USER = settings.SPLUNK['user']
+            self.SPLUNK_PASSWORD = settings.SPLUNK['password']
+        except KeyError:
+            logger.warn("SPLUNK endpoint configuration error. " +
+                        "Forcing to use default conf values (localhost)")
+            self.SPLUNK_HOST = "localhost"
+            self.SPLUNK_PORT = "8089"
+            self.SPLUNK_PROTOCOL = "https"
+            self.SPLUNK_USER = "user"
+            self.SPLUNK_PASSWORD = "pass"
+
 
     # Get Django status error from simple HTTP error code
     def getStatusFromCode(self, code):

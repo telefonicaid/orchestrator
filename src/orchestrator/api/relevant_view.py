@@ -66,7 +66,7 @@ class Relevant_RESTView(APIView, IoTConf):
                                 SPLUNK_PASSWORD=self.SPLUNK_PASSWORD,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                relvant, service_name, subservice_name = flow.getRelevant(
+                relevant, service_name, subservice_name = flow.getRelevant(
                     request.data.get("SERVICE_NAME", None),
                     request.data.get("SERVICE_ID", service_id),
                     request.data.get("SERVICE_USER_NAME", None),
@@ -88,7 +88,7 @@ class Relevant_RESTView(APIView, IoTConf):
                                 SPLUNK_PASSWORD=self.SPLUNK_PASSWORD,
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                modules, service_name, subservice_name = flow.getRelevant(
+                relevant, service_name, subservice_name = flow.getRelevant(
                     request.data.get("SERVICE_NAME", None),
                     request.data.get("SERVICE_ID", service_id),
                     request.data.get("SUBSERVICE_NAME", None),
@@ -99,13 +99,13 @@ class Relevant_RESTView(APIView, IoTConf):
                     request.data.get("COMPONENT", None)                    
                 )
             result = {}
-            if 'error' not in modules:
-                result['actived_modules'] = modules
+            if 'error' not in relevant:
+                result = relevant
                 Stats.num_get_module_activation += 1
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                result = modules
+                result = relevant
                 Stats.num_flow_errors += 1
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
