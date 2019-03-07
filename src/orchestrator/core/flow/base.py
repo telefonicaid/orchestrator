@@ -252,9 +252,11 @@ class FlowBase(object):
 
     def get_extended_token(self, USER_TOKEN):
         token_extended = USER_TOKEN
+        self.logger.debug("token_extended %s" % token_extended)
         if USER_TOKEN:
             try:
                 token_detail = self.idm.getTokenDetail(USER_TOKEN)
+                self.logger.debug("token_detail %s" % token_detail)
 
                 token_extended  = {
                     "token": USER_TOKEN,

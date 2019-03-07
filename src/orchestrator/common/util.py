@@ -233,10 +233,10 @@ class RestOperations(object):
             headers.update({'Fiware-ServicePath': fiware_service_path})
 
         if self.TRANSACTION_ID:
-            headers.update({'Fiware-Transaction': self.TRANSACTION_ID})
+            headers.update({'Fiware-Transaction': str(self.TRANSACTION_ID)})
 
         if self.CORRELATOR_ID:
-            headers.update({'Fiware-Correlator': self.CORRELATOR_ID})
+            headers.update({'Fiware-Correlator': str(self.CORRELATOR_ID)})
 
         res = None
 

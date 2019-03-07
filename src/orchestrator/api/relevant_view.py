@@ -21,6 +21,7 @@
 #
 # Author: IoT team
 #
+import time
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -45,7 +46,7 @@ class Relevant_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
-    def get(self, request, service_id, subservice_id=None):
+    def get(self, request, service_id, component, subservice_id=None):
         service_start = time.time()
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
@@ -67,12 +68,15 @@ class Relevant_RESTView(APIView, IoTConf):
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 relevant, service_name, subservice_name = flow.getRelevant(
-                    request.data.get("SERVICE_NAME", None),
                     request.data.get("SERVICE_ID", service_id),
+                    request.data.get("SERVICE_NAME", None),
+                    None,
+                    None,
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.data.get("COMPONENT", None)
+                    None,
+                    request.data.get("COMPONENT", component)
                 )
             else:
                 flow = Relevant(self.KEYSTONE_PROTOCOL,
@@ -96,7 +100,8 @@ class Relevant_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.data.get("COMPONENT", None)                    
+                    None,
+                    request.data.get("COMPONENT", component)
                 )
             result = {}
             if 'error' not in relevant:

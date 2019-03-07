@@ -74,22 +74,24 @@ class SplunkOperations(object):
                        LOGLEVEL,
                        CUSTOMTEXT):
         
-        search_data = "search "
+        search_data = 'search '
 
         if (SERVICE_NAME):
-            search_data += " srv=%s" % SERVICE_NAME
+            search_data += ' srv=%s' % SERVICE_NAME
         if (SUBSERVICE_NAME):
-            search_data += " subsrv=%s" % SUBSERVICE_NAME                     
+            search_data += ' subsrv=%s' % SUBSERVICE_NAME
         if (LOGLEVEL):
-            search_data += " lvl=%s" % LOGLEVEL
+            search_data += ' lvl=%s' % LOGLEVEL
         if (COMPONENT):
-            search_data += " comp=%s" % COMPONENT
+            search_data += ' comp=%s' % COMPONENT
         if (CUSTOMTEXT):
-            search_data += " %s" % CUSTOMTEXT
+            search_data += ' %s' % CUSTOMTEXT
+
+        search_data = "search=" + search_data
 
         logger.debug("searchRelevant with: %s " % search_data)
 
-        res = self.SplunkRestOperations.rest_request(
+        res = self.SplunkRestOperations.rest_request2(
             url='/servicesNS/admin/search/search/jobs/export?output_mode=json',
             method='POST',
             user=self.SPLUNK_USER,
@@ -97,9 +99,8 @@ class SplunkOperations(object):
             json_data=False,
             data=search_data)
 
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
+        assert res.status_code == 200, (res.code, res.msg)
+        json_body_response = json.loads(res.content)
         logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                          indent=3))
+                                                      indent=3))
         return json_body_response

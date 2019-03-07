@@ -24,6 +24,8 @@
 import json
 
 from orchestrator.core.flow.base import FlowBase
+from orchestrator.common.util import ContextFilterService
+from orchestrator.common.util import ContextFilterSubService
 
 class Relevant(FlowBase):
 
@@ -62,7 +64,7 @@ class Relevant(FlowBase):
             "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,            
             "USER_NAME": "%s" % USER_NAME,
             "USER_PASSWORD": "%s" % USER_PASSWORD,
-            "USER_TOKEN": self.get_extended_token(USER_TOKEN)
+            "USER_TOKEN": self.get_extended_token(USER_TOKEN),
             "LOGLEVEL": LOGLEVEL,
             "COMPONENT": COMPONENT
         }
@@ -70,12 +72,12 @@ class Relevant(FlowBase):
             data_log, indent=3)
         )
         try:
-            if not SERVICE_TOKEN:
+            if not USER_TOKEN:
                 if not SERVICE_ID:
                     USER_TOKEN = self.idm.getToken(SERVICE_NAME,
                                                    USER_NAME,
                                                    USER_PASSWORD)
-                    SERVICE_ID = self.idm.getDomainId(SERVICE_TOKEN,
+                    SERVICE_ID = self.idm.getDomainId(USER_TOKEN,
                                                       SERVICE_NAME)
 
                 else:
@@ -89,7 +91,7 @@ class Relevant(FlowBase):
                                                     SERVICE_ID,
                                                     SERVICE_NAME)
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
-        
+
             if SUBSERVICE_ID and not SUBSERVICE_NAME:
                 SUBSERVICE_NAME = self.ensure_subservice_name(USER_TOKEN,
                                                               SERVICE_ID,
@@ -102,8 +104,9 @@ class Relevant(FlowBase):
                 self.logger.info("USER_TOKEN is token admin")
                 OUTPUT = self.splunk.searchRelevant(SERVICE_NAME,
                                                     SUBSERVICE_NAME,
+                                                    COMPONENT,
                                                     LOGLEVEL,
-                                                    COMPONENT)
+                                                    None)
             else:
                 self.logger.info("USER_TOKEN is not token admin")
 
