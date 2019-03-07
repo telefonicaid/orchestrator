@@ -875,6 +875,59 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
         }
 
 
+## Activate IoT Module in a Service [/v1.0/service/{serviceId}/module_activation/{iot_module}]
+
+### list activated IoT Modules [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+            }
++ Response 200 (application/json)
+    + Body
+      {
+         "activated_modules": [ {"name": "STH", "subscriptionid": "23423435", "alias": "HISTORIC"},
+                                {"name": "PERSEO", "subscriptionid": "34243434", "alias": "RULES"} ]
+      }
+
+### activate an IoT Module [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + iot_module (optional, `string`) ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 201 (application/json)
+    + Body
+      {
+         "subscriptionid": "23423435"
+      }
+
+### deactivate an IoT Module [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service id
+    + iot_module (optional, `string`) ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 204
+
 ## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation/{iot_module}]
 
 ### list activated IoT Modules [GET]
@@ -1200,10 +1253,27 @@ The following metrics are collected by the component:
          "details": "OK"
       }
 
+## Search something relevant about a Service in Splunk [/v1.0/service/{serviceId}/relevant/{component}]
 
-## Search into Splunk [/v1.0/service/{serviceId}/subservice/{subserviceId}/relevant/{component}]
+### Search something relevant about a Service [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "COMPONENT":"cygnus",
+                "LOGLEVEL":"debug",
+                "CUSTOMTEXT":"core dumped"
+            }
++ Response 200 (application/json)
+    + Body { <splunk_output>  }
 
-### search into splunk  [GET]
+## Search something relevant into subservice of a Service in Splunk [/v1.0/service/{serviceId}/subservice/{subserviceId}/relevant/{component}]
+
+### search something relevant into subservice of a Service [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... SubService Id
