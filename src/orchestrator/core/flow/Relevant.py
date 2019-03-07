@@ -37,8 +37,9 @@ class Relevant(FlowBase):
                     USER_NAME,
                     USER_PASSWORD,
                     USER_TOKEN,
+                    COMPONENT,
                     LOGLEVEL,
-                    COMPONENT):
+                    CUSTOMTEXT):
 
         '''Get something relevant of a domain.
 
@@ -54,6 +55,7 @@ class Relevant(FlowBase):
             USER_TOKEN
             LOGLEVEL
             COMPONENT
+            CUSTOMTEXT
         Return:
 
         '''
@@ -66,7 +68,8 @@ class Relevant(FlowBase):
             "USER_PASSWORD": "%s" % USER_PASSWORD,
             "USER_TOKEN": self.get_extended_token(USER_TOKEN),
             "LOGLEVEL": LOGLEVEL,
-            "COMPONENT": COMPONENT
+            "COMPONENT": COMPONENT,
+            "CUSTOMTEXT": CUSTOMTEXT
         }
         self.logger.debug("FLOW projects invoked with: %s" % json.dumps(
             data_log, indent=3)
@@ -106,7 +109,7 @@ class Relevant(FlowBase):
                                                     SUBSERVICE_NAME,
                                                     COMPONENT,
                                                     LOGLEVEL,
-                                                    None)
+                                                    CUSTOMTEXT)
             else:
                 self.logger.info("USER_TOKEN is not token admin")
 

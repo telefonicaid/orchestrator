@@ -75,8 +75,9 @@ class Relevant_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    None,
-                    request.data.get("COMPONENT", component)
+                    request.data.get("COMPONENT", component),
+                    request.data.get("LOGLEVEL", None),
+                    request.data.get("CUSTOMTEXT", None)
                 )
             else:
                 flow = Relevant(self.KEYSTONE_PROTOCOL,
@@ -100,8 +101,9 @@ class Relevant_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    None,
-                    request.data.get("COMPONENT", component)
+                    request.data.get("COMPONENT", component),
+                    request.data.get("LOGLEVEL", None),
+                    request.data.get("CUSTOMTEXT", None)
                 )
             result = {}
             if 'error' not in relevant:
