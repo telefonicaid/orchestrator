@@ -95,7 +95,7 @@ MONGODB = {
 SPLUNK = {
     "host": "localhost",
     "port": "8089",
-    "protocol":"http",
+    "protocol":"https",
     "user": "splunk_user",
     "password": "splunk_password",
 }
