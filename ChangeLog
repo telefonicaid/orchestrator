@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+ADD: search about something relevant in a Service/subservice into Splunk (#196)
+
 2.5.0
 
 ADD: Increate subservice name limit to 64
