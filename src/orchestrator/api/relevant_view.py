@@ -69,17 +69,17 @@ class Relevant_RESTView(APIView, IoTConf):
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 relevant, service_name, subservice_name = flow.getRelevant(
                     request.data.get("SERVICE_ID", service_id),
-                    request.data.get("SERVICE_NAME", None),
+                    None,
                     None,
                     None,
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.data.get("COMPONENT", component),
-                    request.data.get("LOGLEVEL", None),
+                    request.data.get("LOG_LEVEL", None),
                     request.data.get("CORRELATOR_ID", None),
                     request.data.get("TRANSACTION_ID", None),
-                    request.data.get("CUSTOMTEXT", None)
+                    request.data.get("CUSTOM_TEXT", None)
                 )
             else:
                 flow = Relevant(self.KEYSTONE_PROTOCOL,
@@ -96,18 +96,18 @@ class Relevant_RESTView(APIView, IoTConf):
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 relevant, service_name, subservice_name = flow.getRelevant(
-                    request.data.get("SERVICE_NAME", None),
                     request.data.get("SERVICE_ID", service_id),
-                    request.data.get("SUBSERVICE_NAME", None),
+                    None,
                     request.data.get("SUBSERVICE_ID",  subservice_id),
+                    None,
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.data.get("COMPONENT", component),
-                    request.data.get("LOGLEVEL", None),
+                    request.data.get("LOG_LEVEL", None),
                     request.data.get("CORRELATOR_ID", None),
                     request.data.get("TRANSACTION_ID", None),
-                    request.data.get("CUSTOMTEXT", None)
+                    request.data.get("CUSTOM_TEXT", None)
                 )
             result = {}
             if 'error' not in relevant:
@@ -130,7 +130,8 @@ class Relevant_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.collectMetrics(service_start, service_name, subservice_name,
+                            request, response, flow)
         return response
 
 

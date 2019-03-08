@@ -830,7 +830,7 @@ json = {
                          "IoTAgent"
                          ]
             },
-            "LOGLEVEL": {
+            "LOG_LEVEL": {
                 "type": "string",
                 "enum": ["INFO", "ERROR", "WARN", "DEBUG", "CRITICAL"]
             },
@@ -842,6 +842,9 @@ json = {
                 "type": "string",
                 "pattern": "^([A-Za-z0-9-]+)$",
             },
+            "CUSTOM_TEXT": {
+                "type": "string",
+            }
         },
         # "required": [ ],
     }

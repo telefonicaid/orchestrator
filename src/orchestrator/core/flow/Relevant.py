@@ -38,10 +38,10 @@ class Relevant(FlowBase):
                     USER_PASSWORD,
                     USER_TOKEN,
                     COMPONENT,
-                    LOGLEVEL,
+                    LOG_LEVEL,
                     CORRELATOR_ID,
                     TRANSACTION_ID,
-                    CUSTOMTEXT):
+                    CUSTOM_TEXT):
 
         '''Get something relevant of a domain.
 
@@ -49,34 +49,32 @@ class Relevant(FlowBase):
 
         Params:
             SERVICE_ID
-            SERVICE_NAME
             SUBSERVICE_ID
-            SUBSERVICE_NAME
             USER_NAME
             USER_PASSWORD
             USER_TOKEN
-            LOGLEVEL
             COMPONENT
+            LOG_LEVEL
             CORRELATOR_ID
             TRANSACTION_ID
-            CUSTOMTEXT
+            CUSTOM_TEXT
         Return:
 
         '''
         data_log = {
             "SERVICE_ID": "%s" % SERVICE_ID,
-            "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SUBSERVICE_ID": "%s" % SUBSERVICE_ID,
-            "SUBSERVICE_NAME": "%s" % SUBSERVICE_NAME,            
             "USER_NAME": "%s" % USER_NAME,
             "USER_PASSWORD": "%s" % USER_PASSWORD,
             "USER_TOKEN": self.get_extended_token(USER_TOKEN),
-            "LOGLEVEL": LOGLEVEL,
             "COMPONENT": COMPONENT,
+            "LOG_LEVEL": LOG_LEVEL,
             "CORRELATOR_ID": CORRELATOR_ID,
             "TRANSACTION_ID": TRANSACTION_ID,
-            "CUSTOMTEXT": CUSTOMTEXT
+            "CUSTOM_TEXT": CUSTOM_TEXT
         }
+        SERVICE_NAME = None
+        SUBSERVICE_NAME = None
         self.logger.debug("FLOW projects invoked with: %s" % json.dumps(
             data_log, indent=3)
         )
