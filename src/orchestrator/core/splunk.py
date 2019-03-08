@@ -70,10 +70,10 @@ class SplunkOperations(object):
                        SERVICE_NAME,
                        SUBSERVICE_NAME,
                        COMPONENT,
-                       LOGLEVEL,
-                       CUSTOMTEXT,
+                       LOG_LEVEL,
                        CORRELATOR_ID,
-                       TRANSACTION_ID):
+                       TRANSACTION_ID,
+                       CUSTOM_TEXT):
 
         search_data = 'search '
 
@@ -81,16 +81,16 @@ class SplunkOperations(object):
             search_data += ' srv=%s' % SERVICE_NAME
         if (SUBSERVICE_NAME):
             search_data += ' subsrv=%s' % SUBSERVICE_NAME
-        if (LOGLEVEL):
-            search_data += ' lvl=%s' % LOGLEVEL
+        if (LOG_LEVEL):
+            search_data += ' lvl=%s' % LOG_LEVEL
         if (COMPONENT):
             search_data += ' comp=%s' % COMPONENT
         if (CORRELATOR_ID):
             search_data += ' corr=%s' % CORRELATOR_ID
         if (TRANSACTION_ID):
             search_data += ' trans=%s' % TRANSACTION_ID
-        if (CUSTOMTEXT):
-            search_data += ' %s' % CUSTOMTEXT
+        if (CUSTOM_TEXT):
+            search_data += ' %s' % CUSTOM_TEXT
 
         search_data = "search=" + search_data
 
@@ -105,7 +105,14 @@ class SplunkOperations(object):
             data=search_data)
 
         assert res.status_code == 200, (res.code, res.msg)
-        json_body_response = json.loads(res.content)
+        res_entry = res.content.split('\n')
+        # TODO: check res_entry lengh
+        json_body_response = {}
+        for entry in res_entry:
+            if (len(entry) > 0):
+                entry_json = json.loads(entry)
+                json_body_response.update(entry_json)
+
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response

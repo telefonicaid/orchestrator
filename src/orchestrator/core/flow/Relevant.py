@@ -112,8 +112,10 @@ class Relevant(FlowBase):
                 OUTPUT = self.splunk.searchRelevant(SERVICE_NAME,
                                                     SUBSERVICE_NAME,
                                                     COMPONENT,
-                                                    LOGLEVEL,
-                                                    CUSTOMTEXT)
+                                                    LOG_LEVEL,
+                                                    CORRELATOR_ID,
+                                                    TRANSACTION_ID,
+                                                    CUSTOM_TEXT)
             else:
                 self.logger.warn("USER_TOKEN is not token admin")
                 raise Exception("Token is not a admin token")
@@ -124,7 +126,7 @@ class Relevant(FlowBase):
             return error_code
 
         # format OUTPUT
-        #OUTPUT is a { { "preview":false, "offset":137, "result": {} } } ¿?
+        #OUTPUT is a { { "preview":false, "offset":137, "result": {} } } ?
 
         data_log = {
             "OUTPUT": OUTPUT
