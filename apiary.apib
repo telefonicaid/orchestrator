@@ -1258,14 +1258,21 @@ The following metrics are collected by the component:
 ### Search something relevant about a Service [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
+    + COMPONENT (optional, `string`) ... IoT component (cygnus-ngsi, Orchestrator, Orion, STH, PEPorion, PEPsth, PEPperseo, PEPiotagent, perseo-fe, perseo-core, IoTAgent)
+    + TRANSACTION_ID (optional, `string`) ... Transaction Id
+    + CORRELATOR_ID (optional, `string`) ... Correlator Id
+    + LOGLEVEL (optional, `string`) ... Log level (INFO, ERROR, WARN, DEBUG, CRITICAL)
+    + CUSTOMTEXT (optional, `string`) ... Custom text
 + Request (application/json)
             {
                 "SERVICE_NAME":"test_service",
                 "SERVICE_USER_NAME":"test_admin_service",
                 "SERVICE_USER_PASSWORD":"passwd",
                 "SERVICE_USER_TOKEN":"token",
-                "COMPONENT":"cygnus",
-                "LOGLEVEL":"debug",
+                "COMPONENT":"cygnus-ngsi",
+                "TRANSACTION_ID":"1552008898-556-00000004824",
+                "CORRELATOR_ID":"630a1245-6f72-4b33-a93e-f151a5e6b098",
+                "LOGLEVEL":"ERROR",
                 "CUSTOMTEXT":"core dumped"
             }
 + Response 200 (application/json)
@@ -1277,6 +1284,11 @@ The following metrics are collected by the component:
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... SubService Id
+    + COMPONENT (optional, `string`) ... IoT component (cygnus-ngsi, Orchestrator, Orion, STH, PEPorion, PEPsth, PEPperseo, PEPiotagent, perseo-fe, perseo-core, IoTAgent)
+    + TRANSACTION_ID (optional, `string`) ... Transaction Id
+    + CORRELATOR_ID (optional, `string`) ... Correlator Id
+    + LOGLEVEL (optional, `string`) ... Log level (INFO, ERROR, WARN, DEBUG, CRITICAL)
+    + CUSTOMTEXT (optional, `string`) ... Custom text
 + Request (application/json)
             {
                 "SERVICE_NAME":"test_service",
@@ -1284,8 +1296,10 @@ The following metrics are collected by the component:
                 "SERVICE_USER_PASSWORD":"passwd",
                 "SERVICE_USER_TOKEN":"token",
                 "SUBSERVICE_NAME":"test_subservice",
-                "COMPONENT":"cygnus",
-                "LOGLEVEL":"debug",
+                "COMPONENT":"cygnus-ngsi",
+                "TRANSACTION_ID":"1552008898-556-00000004824",
+                "CORRELATOR_ID":"630a1245-6f72-4b33-a93e-f151a5e6b098",
+                "LOGLEVEL":"ERROR",
                 "CUSTOMTEXT":"core dumped"
             }
 + Response 200 (application/json)
