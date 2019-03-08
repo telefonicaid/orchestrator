@@ -39,6 +39,8 @@ class Relevant(FlowBase):
                     USER_TOKEN,
                     COMPONENT,
                     LOGLEVEL,
+                    CORRELATOR_ID,
+                    TRANSACTION_ID,
                     CUSTOMTEXT):
 
         '''Get something relevant of a domain.
@@ -55,6 +57,8 @@ class Relevant(FlowBase):
             USER_TOKEN
             LOGLEVEL
             COMPONENT
+            CORRELATOR_ID
+            TRANSACTION_ID
             CUSTOMTEXT
         Return:
 
@@ -69,6 +73,8 @@ class Relevant(FlowBase):
             "USER_TOKEN": self.get_extended_token(USER_TOKEN),
             "LOGLEVEL": LOGLEVEL,
             "COMPONENT": COMPONENT,
+            "CORRELATOR_ID": CORRELATOR_ID,
+            "TRANSACTION_ID": TRANSACTION_ID,
             "CUSTOMTEXT": CUSTOMTEXT
         }
         self.logger.debug("FLOW projects invoked with: %s" % json.dumps(

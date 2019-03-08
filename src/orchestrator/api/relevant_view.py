@@ -77,6 +77,8 @@ class Relevant_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.data.get("COMPONENT", component),
                     request.data.get("LOGLEVEL", None),
+                    request.data.get("CORRELATOR_ID", None),
+                    request.data.get("TRANSACTION_ID", None),
                     request.data.get("CUSTOMTEXT", None)
                 )
             else:
@@ -103,6 +105,8 @@ class Relevant_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
                     request.data.get("COMPONENT", component),
                     request.data.get("LOGLEVEL", None),
+                    request.data.get("CORRELATOR_ID", None),
+                    request.data.get("TRANSACTION_ID", None),
                     request.data.get("CUSTOMTEXT", None)
                 )
             result = {}

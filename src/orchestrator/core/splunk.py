@@ -54,7 +54,7 @@ class SplunkOperations(object):
                                                    SPLUNK_HOST,
                                                    SPLUNK_PORT,
                                                    CORRELATOR_ID,
-                                                   TRANSACTION_ID)     
+                                                   TRANSACTION_ID)
 
     def checkSplunk(self):
         res = self.SplunkRestOperations.rest_request(
@@ -63,7 +63,6 @@ class SplunkOperations(object):
             user=self.SPLUNK_USER,
             password=self.SPLUNK_PASSWORD,
             data=None)
-
         assert res.code == 200, (res.code, res.msg)
         pass
 
@@ -72,8 +71,10 @@ class SplunkOperations(object):
                        SUBSERVICE_NAME,
                        COMPONENT,
                        LOGLEVEL,
-                       CUSTOMTEXT):
-        
+                       CUSTOMTEXT,
+                       CORRELATOR_ID,
+                       TRANSACTION_ID):
+
         search_data = 'search '
 
         if (SERVICE_NAME):
@@ -84,6 +85,10 @@ class SplunkOperations(object):
             search_data += ' lvl=%s' % LOGLEVEL
         if (COMPONENT):
             search_data += ' comp=%s' % COMPONENT
+        if (CORRELATOR_ID):
+            search_data += ' corr=%s' % CORRELATOR_ID
+        if (TRANSACTION_ID):
+            search_data += ' trans=%s' % TRANSACTION_ID
         if (CUSTOMTEXT):
             search_data += ' %s' % CUSTOMTEXT
 
