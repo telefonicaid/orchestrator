@@ -821,6 +821,26 @@ json = {
             },
             "COMPONENT": {
                 "type": "string",
+                "enum": ["cygnus-ngsi",
+                         "Orchestrator",
+                         "Orion",
+                         "STH",
+                         "PEPorion", "PEPsth", "PEPperseo", "PEPiotagent"
+                         "perseo-fe", "perseo-core"
+                         "IoTAgent"
+                         ]
+            },
+            "LOGLEVEL": {
+                "type": "string",
+                "enum": ["INFO", "ERROR", "WARN", "DEBUG", "CRITICAL"]
+            },
+            "CORRELATOR_ID": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9-]+)$",
+            },
+            "TRANSACTION_ID": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9-]+)$",
             },
         },
         # "required": [ ],
