@@ -115,12 +115,16 @@ class Relevant(FlowBase):
                                                     LOGLEVEL,
                                                     CUSTOMTEXT)
             else:
-                self.logger.info("USER_TOKEN is not token admin")
+                self.logger.warn("USER_TOKEN is not token admin")
+                raise Exception("Token is not a admin token")
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
+
+        # format OUTPUT
+        #OUTPUT is a { { "preview":false, "offset":137, "result": {} } } ¿?
 
         data_log = {
             "OUTPUT": OUTPUT

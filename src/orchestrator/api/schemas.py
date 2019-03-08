@@ -846,6 +846,7 @@ json = {
                 "type": "string",
             }
         },
-        # "required": [ ],
+        "required": [
+        ],
     }
 }
