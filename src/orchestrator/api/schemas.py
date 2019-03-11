@@ -825,8 +825,8 @@ json = {
                          "Orchestrator",
                          "Orion",
                          "STH",
-                         "PEPorion", "PEPsth", "PEPperseo", "PEPiotagent"
-                         "perseo-fe", "perseo-core"
+                         "PEPorion", "PEPsth", "PEPperseo", "PEPiotagent",
+                         "perseo-fe", "perseo-core",
                          "IoTAgent"
                          ]
             },
