@@ -80,7 +80,7 @@ class SplunkOperations(object):
         if (SERVICE_NAME):
             search_data += ' srv=%s' % SERVICE_NAME
         if (SUBSERVICE_NAME):
-            search_data += ' subsrv=%s' % SUBSERVICE_NAME
+            search_data += ' subsrv=%s' % SUBSERVICE_NAME # check subservice format
         if (LOG_LEVEL):
             search_data += ' lvl=%s' % LOG_LEVEL
         if (COMPONENT):
@@ -94,7 +94,10 @@ class SplunkOperations(object):
 
         search_data = "search=" + search_data
 
-        logger.debug("searchRelevant with: %s " % search_data)
+        logger.info("searchRelevant with: %s " % search_data)
+
+        # TODO: add exec_mode="oneshot"
+        # "earliest_time=<from_time_in_epoch>" -d "latest_time=<to_time_in_epoch>"
 
         res = self.SplunkRestOperations.rest_request2(
             url='/servicesNS/admin/search/search/jobs/export?output_mode=json',
@@ -106,12 +109,16 @@ class SplunkOperations(object):
 
         assert res.status_code == 200, (res.code, res.msg)
         res_entry = res.content.split('\n')
-        # TODO: check res_entry lengh
+        # Check res_entry lengh: only include 10 items
         json_body_response = {}
+        entries = 0
         for entry in res_entry:
+            entries += 1
             if (len(entry) > 0):
                 entry_json = json.loads(entry)
                 json_body_response.update(entry_json)
+                if (entries == 10):
+                    break
 
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
