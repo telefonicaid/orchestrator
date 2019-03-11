@@ -22,6 +22,7 @@
 # Author: IoT team
 #
 import time
+import jsonschema
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -31,7 +32,7 @@ from rest_framework.exceptions import ParseError
 from django.conf import settings
 
 from orchestrator.core.flow.Relevant import Relevant
-from orchestrator.api import parsers
+from orchestrator.api import schemas, parsers
 from orchestrator.api.iotconf import IoTConf
 from orchestrator.api.stats import Stats
 
@@ -52,6 +53,11 @@ class Relevant_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         try:
+            try:
+                jsonschema.validate({'COMPONENT': component},
+                                    schemas.json[self.schema_name])
+            except (ValueError, jsonschema.exceptions.ValidationError) as error:
+                raise ParseError(detail=error.message)
             request.data  # json validation
             if not subservice_id:
                 flow = Relevant(self.KEYSTONE_PROTOCOL,
