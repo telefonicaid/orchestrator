@@ -73,5 +73,5 @@ urlpatterns = [
      url(r'^ldap/user?$', LdapUser_RESTView.as_view(), name='ldap_user_rest_view'),
      url(r'^ldap/auth?$', LdapAuth_RESTView.as_view(), name='ldap_auth_rest_view'),
      url(r'^service/(?P<service_id>\w+)/relevant/(?P<component>[-\w]+)$', Relevant_RESTView.as_view(), name='servicerelevant_rest_view'),
-     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>[-\w]+)/relevant/(?P<component>\w+)$', Relevant_RESTView.as_view(), name='subservicerelevant_rest_view'),
+     url(r'^service/(?P<service_id>\w+)/subservice/(?P<subservice_id>[-\w]+)/relevant/(?P<component>[-\w]+)$', Relevant_RESTView.as_view(), name='subservicerelevant_rest_view'),
 ]
