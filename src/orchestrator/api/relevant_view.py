@@ -59,62 +59,33 @@ class Relevant_RESTView(APIView, IoTConf):
             except (ValueError, jsonschema.exceptions.ValidationError) as error:
                 raise ParseError(detail=error.message)
             request.data  # json validation
-            if not subservice_id:
-                flow = Relevant(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT,
-                                None,
-                                None,
-                                None,
-                                SPLUNK_PROTOCOL=self.SPLUNK_PROTOCOL,
-                                SPLUNK_HOST=self.SPLUNK_HOST,
-                                SPLUNK_PORT=self.SPLUNK_PORT,
-                                SPLUNK_USER=self.SPLUNK_USER,
-                                SPLUNK_PASSWORD=self.SPLUNK_PASSWORD,
-                                CORRELATOR_ID=CORRELATOR_ID)
-                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                relevant, service_name, subservice_name = flow.getRelevant(
-                    service_id,
-                    None,
-                    None,
-                    None,
-                    request.data.get("SERVICE_USER_NAME", None),
-                    request.data.get("SERVICE_USER_PASSWORD", None),
-                    request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    component,
-                    request.data.get("LOG_LEVEL", None),
-                    request.data.get("CORRELATOR_ID", None),
-                    request.data.get("TRANSACTION_ID", None),
-                    request.data.get("CUSTOM_TEXT", None)
-                )
-            else:
-                flow = Relevant(self.KEYSTONE_PROTOCOL,
-                                self.KEYSTONE_HOST,
-                                self.KEYSTONE_PORT,
-                                None,
-                                None,
-                                None,
-                                SPLUNK_PROTOCOL=self.SPLUNK_PROTOCOL,
-                                SPLUNK_HOST=self.SPLUNK_HOST,
-                                SPLUNK_PORT=self.SPLUNK_PORT,
-                                SPLUNK_USER=self.SPLUNK_USER,
-                                SPLUNK_PASSWORD=self.SPLUNK_PASSWORD,
-                                CORRELATOR_ID=CORRELATOR_ID)
-                CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
-                relevant, service_name, subservice_name = flow.getRelevant(
-                    service_id,
-                    None,
-                    subservice_id,
-                    None,
-                    request.data.get("SERVICE_USER_NAME", None),
-                    request.data.get("SERVICE_USER_PASSWORD", None),
-                    request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    component,
-                    request.data.get("LOG_LEVEL", None),
-                    request.data.get("CORRELATOR_ID", None),
-                    request.data.get("TRANSACTION_ID", None),
-                    request.data.get("CUSTOM_TEXT", None)
-                )
+            flow = Relevant(self.KEYSTONE_PROTOCOL,
+                            self.KEYSTONE_HOST,
+                            self.KEYSTONE_PORT,
+                            None,
+                            None,
+                            None,
+                            SPLUNK_PROTOCOL=self.SPLUNK_PROTOCOL,
+                            SPLUNK_HOST=self.SPLUNK_HOST,
+                            SPLUNK_PORT=self.SPLUNK_PORT,
+                            SPLUNK_USER=self.SPLUNK_USER,
+                            SPLUNK_PASSWORD=self.SPLUNK_PASSWORD,
+                            CORRELATOR_ID=CORRELATOR_ID)
+            CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
+            relevant, service_name, subservice_name = flow.getRelevant(
+                service_id,
+                None,
+                subservice_id,
+                None,
+                request.data.get("SERVICE_USER_NAME", None),
+                request.data.get("SERVICE_USER_PASSWORD", None),
+                request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
+                component,
+                request.data.get("LOG_LEVEL", None),
+                request.data.get("CORRELATOR_ID", None),
+                request.data.get("TRANSACTION_ID", None),
+                request.data.get("CUSTOM_TEXT", None)
+            )
             result = {}
             if 'error' not in relevant:
                 result = relevant
