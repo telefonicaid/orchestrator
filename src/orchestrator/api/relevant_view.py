@@ -74,14 +74,14 @@ class Relevant_RESTView(APIView, IoTConf):
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 relevant, service_name, subservice_name = flow.getRelevant(
-                    request.data.get("SERVICE_ID", service_id),
+                    service_id,
                     None,
                     None,
                     None,
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.data.get("COMPONENT", component),
+                    component,
                     request.data.get("LOG_LEVEL", None),
                     request.data.get("CORRELATOR_ID", None),
                     request.data.get("TRANSACTION_ID", None),
@@ -102,14 +102,14 @@ class Relevant_RESTView(APIView, IoTConf):
                                 CORRELATOR_ID=CORRELATOR_ID)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 relevant, service_name, subservice_name = flow.getRelevant(
-                    request.data.get("SERVICE_ID", service_id),
+                    service_id,
                     None,
-                    request.data.get("SUBSERVICE_ID",  subservice_id),
+                    subservice_id,
                     None,
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_PASSWORD", None),
                     request.data.get("SERVICE_USER_TOKEN", HTTP_X_AUTH_TOKEN),
-                    request.data.get("COMPONENT", component),
+                    component,
                     request.data.get("LOG_LEVEL", None),
                     request.data.get("CORRELATOR_ID", None),
                     request.data.get("TRANSACTION_ID", None),
