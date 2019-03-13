@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+ADD: extra check for getUserDetailsByAdmin to create response
+
 2.5.0
 
 ADD: Increate subservice name limit to 64
