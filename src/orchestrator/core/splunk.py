@@ -80,7 +80,7 @@ class SplunkOperations(object):
         if (SERVICE_NAME):
             search_data += ' srv=%s' % SERVICE_NAME
         if (SUBSERVICE_NAME):
-            search_data += ' subsrv=%s' % SUBSERVICE_NAME # check subservice format
+            search_data += ' subsrv=/%s' % SUBSERVICE_NAME
         if (LOG_LEVEL):
             search_data += ' lvl=%s' % LOG_LEVEL
         if (COMPONENT):
