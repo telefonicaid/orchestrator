@@ -57,13 +57,13 @@ class SplunkOperations(object):
                                                    TRANSACTION_ID)
 
     def checkSplunk(self):
-        res = self.SplunkRestOperations.rest_request(
-            url='/services/search',
+        res = self.SplunkRestOperations.rest_request2(
+            url='/services/search/jobs',
             method='GET',
             user=self.SPLUNK_USER,
             password=self.SPLUNK_PASSWORD,
             data=None)
-        assert res.code == 200, (res.code, res.msg)
+        assert res.status_code == 200, (res.status_code, res.reason)
         pass
 
     def searchRelevant(self,
@@ -107,7 +107,7 @@ class SplunkOperations(object):
             json_data=False,
             data=search_data)
 
-        assert res.status_code == 200, (res.code, res.msg)
+        assert res.status_code == 200, (res.status_code, res.reason)
         res_entry = res.content.split('\n')
         # Check res_entry lengh: only include 10 items
         json_body_response = {}
