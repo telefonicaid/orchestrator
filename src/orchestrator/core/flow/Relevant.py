@@ -75,7 +75,7 @@ class Relevant(FlowBase):
         }
         SERVICE_NAME = None
         SUBSERVICE_NAME = None
-        self.logger.debug("FLOW projects invoked with: %s" % json.dumps(
+        self.logger.debug("FLOW getRelevant invoked with: %s" % json.dumps(
             data_log, indent=3)
         )
         try:
