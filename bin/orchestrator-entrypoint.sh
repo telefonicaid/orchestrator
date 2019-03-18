@@ -98,7 +98,7 @@ while [[ $# -gt 0 ]]; do
         -mailerhost)
             MAILER_HOST=$VALUE
             ;;
-        -splunkrhost)
+        -splunkhost)
             SPLUNK_HOST=$VALUE
             ;;
         -keystoneport)
