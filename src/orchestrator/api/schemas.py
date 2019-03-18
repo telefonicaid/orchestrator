@@ -828,7 +828,9 @@ json = {
                          "PEPorion", "PEPsth", "PEPperseo", "PEPiotagent",
                          "perseo-fe", "perseo-core",
                          "IoTAgent",
-                         "ctxmboard-gasnatural"
+                         "ctxmboard-gasnatural",
+                         "ckan",
+                         "urbo2"
                          ]
             },
             "LOG_LEVEL": {
