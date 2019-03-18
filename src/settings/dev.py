@@ -96,8 +96,8 @@ SPLUNK = {
     "host": "localhost",
     "port": "8089",
     "protocol":"https",
-    "user": "splunk_user",
-    "password": "splunk_password",
+    "user": "splunkuser",
+    "password": "splunkpassword",
 }
 
 PEP = {
