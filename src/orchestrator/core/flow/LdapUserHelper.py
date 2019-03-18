@@ -246,8 +246,9 @@ class LdapUserHelper(FlowBase):
             self.logger.debug("res=%s" % user)
 
             if not "error" in groups and not "error" in user:
-                if (len(user['details'])) and (user['details'][0] > 1):
-                    user['details'][0][1]['member'] = groups['details']
+                if (len(user['details']) > 0) and (len(user['details'][0]) > 1):
+                    if 'uid' in user['details'][0][1]:
+                        user['details'][0][1]['member'] = groups['details']
                 return user
             else:
                 raise Exception(400, "None user detail was retrieved from ldap: user %s groups %s" % (user, groups))
