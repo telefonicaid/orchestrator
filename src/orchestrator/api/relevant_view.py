@@ -47,6 +47,9 @@ class Relevant_RESTView(APIView, IoTConf):
     def __init__(self):
         IoTConf.__init__(self)
 
+    def get(self, request, service_id, component, subservice_id=None):
+        return self.post(self, request, service_id, component, subservice_id=None)
+
     def post(self, request, service_id, component, subservice_id=None):
         service_start = time.time()
         response = service_name = subservice_name = flow = None
