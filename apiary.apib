@@ -1255,7 +1255,7 @@ The following metrics are collected by the component:
 
 ## Search something relevant about a Service in Splunk [/v1.0/service/{serviceId}/relevant/{component}]
 
-### Search something relevant about a Service [GET]
+### Search something relevant about a Service [POST]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + COMPONENT (required, `string`) ... IoT component (cygnus-ngsi, Orchestrator, Orion, STH, PEPorion, PEPsth, PEPperseo, PEPiotagent, perseo-fe, perseo-core, IoTAgent)
@@ -1270,7 +1270,6 @@ The following metrics are collected by the component:
                 "SERVICE_USER_TOKEN":"token",
                 "TRANSACTION_ID":"1552008898-556-00000004824",
                 "CORRELATOR_ID":"630a1245-6f72-4b33-a93e-f151a5e6b098",
-                "COMPONENT":"Orion",
                 "LOG_LEVEL":"ERROR",
                 "CUSTOM_TEXT":"core dumped"
             }
@@ -1279,7 +1278,7 @@ The following metrics are collected by the component:
 
 ## Search something relevant into subservice of a Service in Splunk [/v1.0/service/{serviceId}/subservice/{subserviceId}/relevant/{component}]
 
-### search something relevant into subservice of a Service [GET]
+### search something relevant into subservice of a Service [POST]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... SubService Id
@@ -1295,7 +1294,6 @@ The following metrics are collected by the component:
                 "SERVICE_USER_TOKEN":"token",
                 "TRANSACTION_ID":"1552008898-556-00000004824",
                 "CORRELATOR_ID":"630a1245-6f72-4b33-a93e-f151a5e6b098",
-                "COMPONENT":"Orion",
                 "LOG_LEVEL":"ERROR",
                 "CUSTOM_TEXT":"core dumped"
             }
