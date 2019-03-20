@@ -1671,6 +1671,6 @@ class IdMKeystoneOperations(IdMOperations):
         # Check Role admin asigned in DOMAIN
         token_res = self.getTokenDetail(TOKEN)
         for role in token_res['token']['roles']:
-            if role['name'] == 'admin':
+            if role['name'] == 'admin' or 'SubServiceAdmin' in role['name']:
                 return True
         return False
