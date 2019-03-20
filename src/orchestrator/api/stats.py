@@ -84,6 +84,7 @@ class Stats(object):
     num_get_module_activation = 0
     num_post_module_activation = 0
     num_delete_module_activation = 0
+    num_post_relevant = 0
 
     num_update_loglevel = 0
 
