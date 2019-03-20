@@ -92,7 +92,7 @@ class Relevant_RESTView(APIView, IoTConf):
             result = {}
             if 'error' not in relevant:
                 result = relevant
-                Stats.num_get_module_activation += 1
+                Stats.num_post_relevant += 1
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
