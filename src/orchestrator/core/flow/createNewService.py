@@ -65,12 +65,12 @@ class CreateNewService(FlowBase):
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
             "DOMAIN_ADMIN_USER": "%s" % DOMAIN_ADMIN_USER,
-            "DOMAIN_ADMIN_PASSWORD": "%s" % DOMAIN_ADMIN_PASSWORD,
+            "DOMAIN_ADMIN_PASSWORD": "%s" % "***", # DOMAIN_ADMIN_PASSWORD,
             "DOMAIN_ADMIN_TOKEN": self.get_extended_token(DOMAIN_ADMIN_TOKEN),
             "NEW_SERVICE_NAME": "%s" % NEW_SERVICE_NAME,
             "NEW_SERVICE_DESCRIPTION": "%s" % NEW_SERVICE_DESCRIPTION,
             "NEW_SERVICE_ADMIN_USER": "%s" % NEW_SERVICE_ADMIN_USER,
-            "NEW_SERVICE_ADMIN_PASSWORD": "%s" % NEW_SERVICE_ADMIN_PASSWORD,
+            "NEW_SERVICE_ADMIN_PASSWORD": "%s" % "***", # NEW_SERVICE_ADMIN_PASSWORD,
             "NEW_SERVICE_ADMIN_EMAIL": "%s" % NEW_SERVICE_ADMIN_EMAIL
         }
         self.logger.debug("FLOW createNewService invoked with: %s" % json.dumps(

@@ -64,12 +64,12 @@ class CreateNewSubService(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_PASSWORD": "%s" % "***", #SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
             "NEW_SUBSERVICE_DESCRIPTION": "%s" % NEW_SUBSERVICE_DESCRIPTION,
             "NEW_SUBSERVICE_ADMIN_USER": "%s" % NEW_SUBSERVICE_ADMIN_USER,
-            "NEW_SUBSERVICE_ADMIN_PASSWORD": "%s" % NEW_SUBSERVICE_ADMIN_PASSWORD,
+            "NEW_SUBSERVICE_ADMIN_PASSWORD": "%s" % "***", #NEW_SUBSERVICE_ADMIN_PASSWORD,
             "NEW_SUBSERVICE_ADMIN_EMAIL": "%s" % NEW_SUBSERVICE_ADMIN_EMAIL
         }
         self.logger.debug("FLOW createNewSubService invoked with: %s" % json.dumps(

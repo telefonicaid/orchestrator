@@ -56,7 +56,7 @@ class UpdateUser(FlowBase):
             "SERVICE_NAME": "%s" % SERVICE_NAME,
             "SERVICE_ID": "%s" % SERVICE_ID,
             "SERVICE_ADMIN_USER": "%s" % SERVICE_ADMIN_USER,
-            "SERVICE_ADMIN_PASSWORD": "%s" % SERVICE_ADMIN_PASSWORD,
+            "SERVICE_ADMIN_PASSWORD": "%s" % "***", #SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "USER_NAME": "%s" % USER_NAME,
             "USER_ID": "%s" % USER_ID,
@@ -148,7 +148,7 @@ class UpdateUser(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "USER_ID": "%s" % USER_ID,
             "SERVICE_USER_NAME": "%s" % SERVICE_USER_NAME,
-            "SERVICE_USER_PASSWORD": "%s" % SERVICE_USER_PASSWORD,
+            "SERVICE_USER_PASSWORD": "%s" % "***", #SERVICE_USER_PASSWORD,
             "SERVICE_USER_TOKEN": self.get_extended_token(SERVICE_USER_TOKEN),
             "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD
         }
