@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+ADD: anon passwords in debug logs
 ADD: extra check for getUserDetailsByAdmin to create response
 
 2.5.0
