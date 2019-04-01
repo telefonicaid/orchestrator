@@ -45,9 +45,9 @@ class LdapUserHelper(FlowBase):
                       GROUP_NAMES):
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
-            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "LDAP_ADMIN_PASSWORD": "%s" % "***", #LDAP_ADMIN_PASSWORD,
             "NEW_USER_NAME": "%s" % NEW_USER_NAME,
-            "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD,
+            "NEW_USER_PASSWORD": "%s" % "***", #NEW_USER_PASSWORD,
             "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
             "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION,
             "GROUP_NAMES": "%s" % GROUP_NAMES
@@ -100,7 +100,7 @@ class LdapUserHelper(FlowBase):
                       GROUP_NAMES):
         data_log = {
             "NEW_USER_NAME": "%s" % NEW_USER_NAME,
-            "NEW_USER_PASSWORD": "%s" % NEW_USER_PASSWORD,
+            "NEW_USER_PASSWORD": "%s" % "***", #NEW_USER_PASSWORD,
             "NEW_USER_EMAIL": "%s" % NEW_USER_EMAIL,
             "NEW_USER_DESCRIPTION": "%s" % NEW_USER_DESCRIPTION,
             "GROUP_NAMES": "%s" % GROUP_NAMES
@@ -131,9 +131,9 @@ class LdapUserHelper(FlowBase):
                       USER_PASSWORD):
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
-            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "LDAP_ADMIN_PASSWORD": "%s" % "***", #LDAP_ADMIN_PASSWORD,
             "USER_NAME": "%s" % USER_NAME,
-            "USER_PASSWORD": "%s" % USER_PASSWORD,
+            "USER_PASSWORD": "%s" % "***", #USER_PASSWORD,
         }
         self.logger.debug("FLOW deleteUser invoked with: %s" % json.dumps(
             data_log,
@@ -167,7 +167,7 @@ class LdapUserHelper(FlowBase):
                       FILTER):
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
-            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "LDAP_ADMIN_PASSWORD": "%s" % "***", #LDAP_ADMIN_PASSWORD,
             "FILTER:": "%s" % FILTER
         }
         self.logger.debug("FLOW listUsers invoked with: %s" % json.dumps(
@@ -196,7 +196,7 @@ class LdapUserHelper(FlowBase):
                       USER_PASSWORD):
         data_log = {
             "USER_NAME": "%s" % USER_NAME,
-            "USER_PASSWORD": "%s" % USER_PASSWORD
+            "USER_PASSWORD": "%s" % "***", #USER_PASSWORD
         }
         self.logger.debug("FLOW getUserDetail invoked with: %s" % json.dumps(
             data_log,
@@ -225,7 +225,7 @@ class LdapUserHelper(FlowBase):
 
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
-            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "LDAP_ADMIN_PASSWORD": "%s" % "***", #LDAP_ADMIN_PASSWORD,
             "USER_NAME": "%s" % USER_NAME,
         }
         self.logger.debug("FLOW getUserDetailByAdmin invoked with: %s" % json.dumps(
@@ -264,7 +264,7 @@ class LdapUserHelper(FlowBase):
                     USER_PASSWORD):
         data_log = {
             "USER_NAME": "%s" % USER_NAME,
-            "USER_PASSWORD": "%s" % USER_PASSWORD
+            "USER_PASSWORD": "%s" % "***", #USER_PASSWORD
         }
         self.logger.debug("FLOW getUserAuth invoked with: %s" % json.dumps(
             data_log,
@@ -294,9 +294,9 @@ class LdapUserHelper(FlowBase):
                       USER_DATA):
         data_log = {
             "LDAP_ADMIN_USER": "%s" % LDAP_ADMIN_USER,
-            "LDAP_ADMIN_PASSWORD": "%s" % LDAP_ADMIN_PASSWORD,
+            "LDAP_ADMIN_PASSWORD": "%s" % "***", #LDAP_ADMIN_PASSWORD,
             "USER_NAME": "%s" % USER_NAME,
-            "USER_PASSWORD": "%s" % USER_PASSWORD,
+            "USER_PASSWORD": "%s" % "***", #USER_PASSWORD,
             "USER_DATA:": "%s" % USER_DATA
         }
         self.logger.debug("FLOW updateUser invoked with: %s" % json.dumps(
