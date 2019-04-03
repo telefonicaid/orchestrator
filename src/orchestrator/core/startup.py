@@ -34,6 +34,7 @@ from orchestrator.core.orion import CBOrionOperations as CBOrionOperations
 from orchestrator.core.perseo import PerseoOperations as PerseoOperations
 from orchestrator.core.openldap import OpenLdapOperations as OpenLdapOperations
 from orchestrator.core.mailer import MailerOperations as MailerOperations
+from orchestrator.core.splunk import SplunkOperations as SplunkOperations
 
 from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
@@ -150,6 +151,20 @@ def check_endpoints():
     except Exception, ex:
         logger.warn("MAILER endpoint not found: %s" % ex)
 
+    # Splunk: optional
+    SPLUNK_PROTOCOL = settings.SPLUNK['protocol']
+    SPLUNK_HOST = settings.SPLUNK['host']
+    SPLUNK_PORT = settings.SPLUNK['port']
+    SPLUNK_USER = settings.SPLUNK['user']
+    SPLUNK_PASSWORD = settings.SPLUNK['password']
+    splunk = SplunkOperations(SPLUNK_PROTOCOL, SPLUNK_HOST, SPLUNK_PORT,
+                              SPLUNK_USER, SPLUNK_PASSWORD)
+    try:
+        splunk.checkSplunk()
+        logger.info("SPLUNK endpoint OK")
+    except Exception, ex:
+        logger.warn("SPLUNK endpoint not found: %s" % ex)
+
     return "OK"
 
 def show_conf():
@@ -159,7 +174,7 @@ def show_conf():
                                'ORION',
                                'PEP', 'PEP_PERSEO', 'SCIM_API_VERSION',
                                'CYGNUS', 'STH', 'PERSEO',
-                               'LDAP', 'MAILER', 'MONGODB'
+                               'LDAP', 'MAILER', 'MONGODB', 'SPLUNK'
                                ]
     for name in custom_settings_entries:
         conf[name] = getattr(settings, name)

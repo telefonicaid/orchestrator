@@ -50,6 +50,13 @@ ENV MAILER_TO smtpto
 
 ENV MONGODB_URI localhost:27017
 
+ENV SPLUNK_HOST localhost
+ENV SPLUNK_PORT 8089
+ENV SPLUNK_PROTOCOL https
+ENV SPLUNK_USER splkuser
+ENV SPLUNK_PASSWORD splkpass
+
+
 ENV PEP_PASSWORD pep
 ENV IOTAGENT_PASSWORD iotagent
 
@@ -146,6 +153,14 @@ RUN \
              \"to\": \"'$MAILER_TO'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
 
+    sed -i ':a;N;$!ba;s/SPLUNK = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/SPLUNK = { \
+             \"protocol\": \"'$SPLUNK_PROTOCOL'\", \
+             \"host\": \"'$SPLUNK_HOST'\", \
+             \"port\": \"'$SPLUNK_PORT'\", \
+             \"user\": \"'$SPLUNK_USER'\", \
+             \"password\": \"'$SPLUNK_PASSWORD'\" \
+}/g' /opt/orchestrator/settings/dev.py  && \
+
     sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\/\"\n: ]*}/MONGODB = { \
              \"URI\": \"mongodb:\/\/'$MONGODB_URI'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
@@ -178,6 +193,11 @@ RUN \
     sed -i 's/MAILER_FROM=smtpuser/MAILER_FROM='$MAILER_FROM'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MAILER_TO=smtpuser/MAILER_TO='$MAILER_TO'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/MONGODB_URI=localhost:27017/MONGODB_URI='$MONGODB_URI'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/SPLUNK_HOST=localhost/SPLUNK_HOST='$SPLUNK_HOST'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/SPLUNK_PORT=587/SPLUNK_PORT='$SPLUNK_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/SPLUNK_PROTOCOL=https/SPLUNK_PROTOCOL='$SPLUNK_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/SPLUNK_USER=smtpuser@yourdomain.com/SPLUNK_USER='$SPLUNK_USER'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
+    sed -i 's/SPLUNK_PASSWORD=yourpassword/SPLUNK_PASSWORD='$SPLUNK_PASSWORD'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \

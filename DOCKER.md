@@ -46,6 +46,7 @@ As you can see there are several arguments to pass to orchestrator entry point i
    -cygnushost <value>
    -mailerhost <value>
    -ldaphost <value>
+   -splunkhost <value>
    -keystoneport <value>
    -keypassport <value>
    -orionport <value>
@@ -55,12 +56,15 @@ As you can see there are several arguments to pass to orchestrator entry point i
    -cygnusport <value>
    -ldapport <value>
    -mailerport <value>
+   -splunkport <value>
    -ldapbasedn <value>
    -maileruser <value>
    -mailerpasswd <value>
    -mailerfrom <value>
    -mailerto <value>
    -mongodburi <value>
+   -splunkuser <value>
+   -splunkpasswd <value>
 ```
 
 

@@ -875,9 +875,62 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
         }
 
 
+## Activate IoT Module in a Service [/v1.0/service/{serviceId}/module_activation/{iot_module}]
+
+### list activated IoT Modules [GET]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+            }
++ Response 200 (application/json)
+    + Body
+      {
+         "activated_modules": [ {"name": "STH", "subscriptionid": "23423435", "alias": "HISTORIC"},
+                                {"name": "PERSEO", "subscriptionid": "34243434", "alias": "RULES"} ]
+      }
+
+### activate an IoT Module [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + iot_module (optional, `string`) ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 201 (application/json)
+    + Body
+      {
+         "subscriptionid": "23423435"
+      }
+
+### deactivate an IoT Module [DELETE]
++ Parameters
+    + serviceId (required, `string`) ... Service id
+    + iot_module (optional, `string`) ... IOTModule
++ Request (application/json)
+            {
+                "SERVICE_NAME":"test_service",
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "IOTMODULE":"STH"
+            }
+        Required: [ "iot_module/IOTMODULE" ]
++ Response 204
+
 ## Activate IoT Module in a Sub-service of service [/v1.0/service/{serviceId}/subservice/{subserviceId}/module_activation/{iot_module}]
 
-### list activated IoT Modules [POST]
+### list activated IoT Modules [GET]
 + Parameters
     + serviceId (required, `string`) ... Service Id
     + subserviceId (required, `string`) ... SubService Id
@@ -1199,3 +1252,50 @@ The following metrics are collected by the component:
       {
          "details": "OK"
       }
+
+## Search something relevant about a Service in Splunk [/v1.0/service/{serviceId}/relevant/{component}]
+
+### Search something relevant about a Service [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + COMPONENT (required, `string`) ... IoT component (cygnus-ngsi, Orchestrator, Orion, STH, PEPorion, PEPsth, PEPperseo, PEPiotagent, perseo-fe, perseo-core, IoTAgent)
+    + TRANSACTION_ID (optional, `string`) ... Transaction Id
+    + CORRELATOR_ID (optional, `string`) ... Correlator Id
+    + LOG_LEVEL (optional, `string`) ... Log level (INFO, ERROR, WARN, DEBUG, CRITICAL)
+    + CUSTOM_TEXT (optional, `string`) ... Custom text
++ Request (application/json)
+            {
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "TRANSACTION_ID":"1552008898-556-00000004824",
+                "CORRELATOR_ID":"630a1245-6f72-4b33-a93e-f151a5e6b098",
+                "LOG_LEVEL":"ERROR",
+                "CUSTOM_TEXT":"core dumped"
+            }
++ Response 200 (application/json)
+    + Body { <splunk_output>  }
+
+## Search something relevant into subservice of a Service in Splunk [/v1.0/service/{serviceId}/subservice/{subserviceId}/relevant/{component}]
+
+### search something relevant into subservice of a Service [POST]
++ Parameters
+    + serviceId (required, `string`) ... Service Id
+    + subserviceId (required, `string`) ... SubService Id
+    + COMPONENT (required, `string`) ... IoT component (cygnus-ngsi, Orchestrator, Orion, STH, PEPorion, PEPsth, PEPperseo, PEPiotagent, perseo-fe, perseo-core, IoTAgent)
+    + TRANSACTION_ID (optional, `string`) ... Transaction Id
+    + CORRELATOR_ID (optional, `string`) ... Correlator Id
+    + LOG_LEVEL (optional, `string`) ... Log level (INFO, ERROR, WARN, DEBUG, CRITICAL)
+    + CUSTOM_TEXT (optional, `string`) ... Custom text
++ Request (application/json)
+            {
+                "SERVICE_USER_NAME":"test_admin_service",
+                "SERVICE_USER_PASSWORD":"passwd",
+                "SERVICE_USER_TOKEN":"token",
+                "TRANSACTION_ID":"1552008898-556-00000004824",
+                "CORRELATOR_ID":"630a1245-6f72-4b33-a93e-f151a5e6b098",
+                "LOG_LEVEL":"ERROR",
+                "CUSTOM_TEXT":"core dumped"
+            }
++ Response 200 (application/json)
+    + Body { <splunk_output>  }

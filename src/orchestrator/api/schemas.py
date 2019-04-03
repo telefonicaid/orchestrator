@@ -670,10 +670,10 @@ json = {
         "name": "IOTModuleActivation",
         "dependencies": {
             "SERVICE_USER_NAME": [
-                "SERVICE_ADMIN_PASSWORD"
+                "SERVICE_USER_PASSWORD"
             ],
             "SERVICE_USER_PASSWORD": [
-                "SERVICE_ADMIN_USER",
+                "SERVICE_USER_NAME",
             ]
         },
         "properties": {
@@ -698,9 +698,9 @@ json = {
         },
         # "required": [ ],
     },
-    #######
+    ###########
     "LdapUser": {
-    #######
+    ###########
         "name": "LdapUser",
         "dependencies": {
             "LDAP_ADMIN_USER": [
@@ -790,5 +790,64 @@ json = {
             }
         }
         # "required": [ ],
+    },
+    ###########
+    "Relevant": {
+    ###########
+        "name": "Relevant",
+        "dependencies": {
+            "SERVICE_USER_NAME": [
+                "SERVICE_USER_PASSWORD"
+            ],
+            "SERVICE_USER_PASSWORD": [
+                "SERVICE_USER_NAME",
+            ]
+        },
+        "properties": {
+            "SERVICE_USER_NAME": {
+                "type": "string",
+            },
+            "SERVICE_USER_PASSWORD": {
+                "type": "string",
+            },
+            "SERVICE_USER_TOKEN": {
+                "type": "string",
+            },
+            "SERVICE_ID": {
+                "type": "string",
+            },
+            "SUBSERVICE_ID": {
+                "type": "string",
+            },
+            "COMPONENT": {
+                "type": "string",
+                "enum": ["cygnus-ngsi",
+                         "Orchestrator",
+                         "Orion",
+                         "STH",
+                         "PEPorion", "PEPsth", "PEPperseo", "PEPiotagent",
+                         "perseo-fe", "perseo-core",
+                         "IoTAgent",
+                         "ctxmboard-gasnatural",
+                         "ckan",
+                         "urbo2"
+                         ]
+            },
+            "LOG_LEVEL": {
+                "type": "string",
+                "enum": ["INFO", "ERROR", "WARN", "DEBUG", "CRITICAL"]
+            },
+            "CORRELATOR_ID": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9-]+)$",
+            },
+            "TRANSACTION_ID": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9-]+)$",
+            },
+            "CUSTOM_TEXT": {
+                "type": "string",
+            }
+        },
     }
 }

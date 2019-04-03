@@ -26,6 +26,7 @@ Orchestrator is used to:
 - Activate / deactivate IoT Modules
 - Retrieve statistics and metrics about API usage
 - Create, List, Modify LDAP Users
+- Search for something relevant in a service (or subservice)
 
 Orchestrator is based mainly on:
 - Python 2.7 needed
@@ -41,6 +42,7 @@ Orchestrator relies on these other IoT parts:
 - OpenLDAP (optional)
 - Mailer (optional)
 - MongoDB (optional)
+- Splunk (optional)
 
 Some of these IoT parts are optional, this means that orchestrator can work without them but excluding the part of feature in which are involved. This way Keystone and Keypass are mandatory to deal with Orchestrator.
 

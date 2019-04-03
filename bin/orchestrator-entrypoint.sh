@@ -58,6 +58,12 @@ MAILER_TO=smtpuser
 
 MONGODB_URI='localhost:27017'
 
+SPLUNK_HOST=localhost
+SPLUNK_PORT=8089
+SPLUNK_PROTOCOL=https
+SPLUNK_USER=user
+SPLUNK_PASSWORD=yourpassword
+
 PEP_PASSWORD=pep
 IOTAGENT_PASSWORD=iotagent
 
@@ -92,6 +98,9 @@ while [[ $# -gt 0 ]]; do
         -mailerhost)
             MAILER_HOST=$VALUE
             ;;
+        -splunkhost)
+            SPLUNK_HOST=$VALUE
+            ;;
         -keystoneport)
             KEYSTONE_PORT=$VALUE
             ;;
@@ -119,6 +128,9 @@ while [[ $# -gt 0 ]]; do
         -mailerport)
             MAILER_PORT=$VALUE
             ;;
+        -splunkport)
+            SPLUNK_PORT=$VALUE
+            ;;
         -ldapbasedn)
             LDAP_BASEDN=$VALUE
             ;;
@@ -145,6 +157,12 @@ while [[ $# -gt 0 ]]; do
             ;;
         -cygnusmultiagent)
             CYGNUS_MULTIAGENT=$VALUE
+            ;;
+        -splunkuser)
+            SPLUNK_USER=$VALUE
+            ;;
+        -splunkpasswd)
+            SPLUNK_PASSWORD=$VALUE
             ;;
         -debuglevel)
             DEBUG_LEVEL=$VALUE
@@ -274,6 +292,14 @@ sed -i ':a;N;$!ba;s/PEP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/PEP = { \
 sed -i ':a;N;$!ba;s/IOTAGENT = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/IOTAGENT = { \
              \"user\": \"iotagent\", \
              \"password\": \"'$IOTAGENT_PASSWORD'\", \
+}/g' /opt/orchestrator/settings/dev.py
+
+sed -i ':a;N;$!ba;s/SPLUNK = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/SPLUNK = { \
+             \"protocol\": \"'$SPLUNK_PROTOCOL'\", \
+             \"host\": \"'$SPLUNK_HOST'\", \
+             \"port\": \"'$SPLUNK_PORT'\", \
+             \"user\": \"'$SPLUNK_USER'\", \
+             \"password\": \"'$SPLUNK_PASSWORD'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
 
