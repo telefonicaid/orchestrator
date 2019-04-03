@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+ADD: Allow subservices names with '-'
 ADD: anon passwords in debug logs
 ADD: extra check for getUserDetailsByAdmin to create response
 
