@@ -2,6 +2,7 @@ CHANGES
 =======
 
 ADD: search about something relevant in a Service/subservice into Splunk (#196)
+ADD: Allow subservices names with '-'
 ADD: anon passwords in debug logs
 ADD: extra check for getUserDetailsByAdmin to create response
 
