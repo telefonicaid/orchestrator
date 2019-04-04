@@ -235,9 +235,15 @@ CYGNUS_ORION = { \
              \"port\": \"'$((CYGNUS_PORT + 6))'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
+} \
+CYGNUS_POSTGIS = { \
+             \"host\": \"'$CYGNUS_HOST'\", \
+             \"port\": \"'$((CYGNUS_PORT + 7))'\", \
+             \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
+             \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py
 
-    sed -i ':a;N;$!ba;s/"CYGNUS"/"CYGNUS_MYSQL", "CYGNUS_MONGO", "CYGNUS_CKAN", "CYGNUS_HADOOP", "CYGNUS_POSTGRESQL", "CYGNUS_ORION"/g' /opt/orchestrator/settings/dev.py
+    sed -i ':a;N;$!ba;s/"CYGNUS"/"CYGNUS_MYSQL", "CYGNUS_MONGO", "CYGNUS_CKAN", "CYGNUS_HADOOP", "CYGNUS_POSTGRESQL", "CYGNUS_ORION", "CYGNUS_POSTGIS"/g' /opt/orchestrator/settings/dev.py
 else
     sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"host\": \"'$CYGNUS_HOST'\", \
