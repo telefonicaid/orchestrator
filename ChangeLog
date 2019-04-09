@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+2.6.0
+
 ADD: PostGIS cygnus iotmodule
 ADD: Allow subservices names with '-'
 ADD: anon passwords in debug logs
