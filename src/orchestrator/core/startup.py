@@ -143,7 +143,8 @@ def check_endpoints():
     # Mailer: optional
     MAILER_HOST = settings.MAILER['host']
     MAILER_PORT = settings.MAILER['port']
-    mailer = MailerOperations(MAILER_HOST, MAILER_PORT)
+    MAILER_TLS = settings.MAILER['tls']
+    mailer = MailerOperations(MAILER_HOST, MAILER_PORT, MAILER_TLS)
     try:
         mailer.checkMailer()
         logger.info("MAILER endpoint OK")

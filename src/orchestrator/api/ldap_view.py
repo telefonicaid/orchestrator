@@ -59,6 +59,7 @@ class LdapUser_RESTView(APIView, IoTConf):
                            LDAP_BASEDN=self.LDAP_BASEDN,
                            MAILER_HOST=self.MAILER_HOST,
                            MAILER_PORT=self.MAILER_PORT,
+                           MAILER_TLS=self.MAILER_TLS,
                            MAILER_USER=self.MAILER_USER,
                            MAILER_PASSWORD=self.MAILER_PASSWORD,
                            MAILER_FROM=self.MAILER_FROM,
