@@ -60,6 +60,7 @@ class FlowBase(object):
                  LDAP_BASEDN="dc=openstack,dc=org",
                  MAILER_HOST="localhost",
                  MAILER_PORT="587",
+                 MAILER_TLS="true",
                  MAILER_USER="smtpuser@yourdomain.com",
                  MAILER_PASSWORD="yourpassword",
                  MAILER_FROM="smtpuser",
@@ -114,6 +115,7 @@ class FlowBase(object):
 
         self.mailer = MailerOperations(MAILER_HOST,
                                        MAILER_PORT,
+                                       MAILER_TLS,
                                        MAILER_USER,
                                        MAILER_PASSWORD,
                                        MAILER_FROM,

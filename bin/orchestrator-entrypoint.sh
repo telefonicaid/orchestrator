@@ -51,6 +51,7 @@ LDAP_BASEDN='dc=openstack,dc=org'
 
 MAILER_HOST=localhost
 MAILER_PORT=587
+MAILER_TLS=true
 MAILER_USER=smtpuser@yourdomain.com
 MAILER_PASSWORD=yourpassword
 MAILER_FROM=smtpuser
@@ -133,6 +134,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -mailerto)
             MAILER_TO=$VALUE
+            ;;
+        -mailertls)
+            MAILER_TLS=$VALUE
             ;;
         -mongodburi)
             MONGODB_URI=$VALUE
@@ -262,6 +266,7 @@ sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
 sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
              \"host\": \"'$MAILER_HOST'\", \
              \"port\": \"'$MAILER_PORT'\", \
+             \"tls\": \"'$MAILER_TLS'\", \
              \"user\": \"'$MAILER_USER'\", \
              \"password\": \"'$MAILER_PASSWORD'\", \
              \"from\": \"'$MAILER_FROM'\", \

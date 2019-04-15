@@ -82,6 +82,7 @@ LDAP = {
 MAILER = {
     "host": "localhost",
     "port": "587",
+    "tls": "true",
     "user": "smtpuser@yourdomain.com",
     "password": "yourpassword",
     "from": "smtpuser",

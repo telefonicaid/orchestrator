@@ -93,6 +93,7 @@ class IoTConf(Stats):
         try:
             self.MAILER_HOST = settings.MAILER['host']
             self.MAILER_PORT = settings.MAILER['port']
+            self.MAILER_TLS = settings.MAILER['tls']
             self.MAILER_USER = settings.MAILER['user']
             self.MAILER_PASSWORD = settings.MAILER['password']
             self.MAILER_FROM = settings.MAILER['from']
@@ -102,6 +103,7 @@ class IoTConf(Stats):
                         "Forcing to use default conf values (localhost)")
             self.MAILER_HOST = "localhost"
             self.MAILER_PORT = "587"
+            self.MAILER_TLS = "true"
             self.MAILER_USER = "smtpuser@yourdomain.com"
             self.MAILER_PASSWORD = "yourpassword"
             self.MAILER_FROM = "smtpuser"

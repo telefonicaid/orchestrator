@@ -35,6 +35,7 @@ class MailerOperations(object):
     def __init__(self,
                  MAILER_HOST=None,
                  MAILER_PORT=None,
+                 MAILER_TLS=None,
                  MAILER_USER=None,
                  MAILER_PASSWORD=None,
                  MAILER_FROM=None,
@@ -44,6 +45,7 @@ class MailerOperations(object):
 
         self.smtp_server = MAILER_HOST
         self.smtp_port = MAILER_PORT
+        self.smtp_tls = MAILER_TLS
         self.smtp_user = MAILER_USER
         self.smtp_password = MAILER_PASSWORD
         self.smtp_from = MAILER_FROM
@@ -83,9 +85,10 @@ class MailerOperations(object):
                 self.smtp_server, self.smtp_port))
             return { "error": "SMTP socket error %s %s" % (self.smtp_server, self.smtp_port)}
 
-        server.ehlo()
-        server.starttls()
-        server.ehlo
+        if self.smtp_tls:
+            server.ehlo()
+            server.starttls()
+            server.ehlo
 
         try:
             server.login(self.smtp_user,
