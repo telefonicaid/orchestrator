@@ -70,6 +70,11 @@ class MongoDBOperations(object):
                                              ("_id.attrName"),
                                              ("_id.resolution"),
                                              ("_id.origin")])
+            collectionName = 'sth_/' + SUBSERVICE_NAME
+            db[collectionName].create_index([("entityId"),
+                                             ("entityType"),
+                                             ("attrName"),
+                                             ("recvTime")])
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
