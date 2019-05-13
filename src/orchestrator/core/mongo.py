@@ -69,7 +69,7 @@ class MongoDBOperations(object):
             db[collectionName].create_index([("_id.entityId"),
                                              ("_id.attrName"),
                                              ("_id.resolution"),
-                                             ("_id.origin")]
+                                             ("_id.origin")])
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
