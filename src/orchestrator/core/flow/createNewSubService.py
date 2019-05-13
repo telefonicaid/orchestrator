@@ -149,6 +149,8 @@ class CreateNewSubService(FlowBase):
                                           ID_USER,
                                           ID_ROLE)
 
+                self.mongodb.createSTHIndexes(SERVICE_NAME, NEW_SUBSERVICE_NAME)
+
         except Exception, ex:
             if ID_PRO1:
                 self.logger.info("removing uncomplete created project %s" % ID_PRO1)

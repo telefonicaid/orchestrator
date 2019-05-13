@@ -45,16 +45,31 @@ class MongoDBOperations(object):
     def checkMongo(self):
         self.client.list_databases()
 
-    def createIndexes(self, SERVICE_NAME):
+    def createOrionIndexes(self, SERVICE_NAME):
         # Creating recommended indexes to improve performance, as described in Orion Administration Manual
         # at https://fiware-orion.readthedocs.io/en/master/admin/perf_tuning/index.html
         try:
+            # For Orion
             databaseName = 'orion-' + SERVICE_NAME
             db = self.client[databaseName]
             db.entities.create_index("_id.id")
             db.entities.create_index("_id.type")
             db.entities.create_index("_id.servicePath")
             db.entities.create_index("_id.creDate")
+        except Exception, e:
+            logger.warn("createIndex database %s exception: %s" % (databaseName,e))
+
+
+    def createSTHIndexes(self, SERVICE_NAME, SUBSERVICE_NAME):
+        try:
+            # For STH
+            databaseName = 'sth_' + SERVICE_NAME
+            db = self.client[databaseName]
+            collectionName = 'sth_/' + SUBSERVICE_NAME
+            db[collectionName].create_index("_id.entityId")
+            db[collectionName].create_index("_id.attrName")
+            db[collectionName].create_index("_id.resolution")
+            db[collectionName].create_index("_id.origin")
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
