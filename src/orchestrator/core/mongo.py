@@ -65,11 +65,11 @@ class MongoDBOperations(object):
             # For STH
             databaseName = 'sth_' + SERVICE_NAME
             db = self.client[databaseName]
-            collectionName = 'sth_/' + SUBSERVICE_NAME
-            db[collectionName].create_index("_id.entityId")
-            db[collectionName].create_index("_id.attrName")
-            db[collectionName].create_index("_id.resolution")
-            db[collectionName].create_index("_id.origin")
+            collectionName = 'sth_/' + SUBSERVICE_NAME + '.aggr'
+            db[collectionName].create_index([("_id.entityId"),
+                                             ("_id.attrName"),
+                                             ("_id.resolution"),
+                                             ("_id.origin")]
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
