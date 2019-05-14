@@ -62,11 +62,12 @@ class MongoDBOperations(object):
 
     def createSTHIndexes(self, SERVICE_NAME, SUBSERVICE_NAME):
         try:
-            # For STH
+            # For STH, as described in https://github.com/telefonicaid/fiware-sth-comet/blob/master/doc/manuals/db_indexes.md
             databaseName = 'sth_' + SERVICE_NAME
             db = self.client[databaseName]
             collectionName = 'sth_/' + SUBSERVICE_NAME + '.aggr'
             db[collectionName].create_index([("_id.entityId"),
+                                             ("_id.entityType"),
                                              ("_id.attrName"),
                                              ("_id.resolution"),
                                              ("_id.origin")])
