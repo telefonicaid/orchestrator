@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+Add STH mongodb indexes to optimize queries on its collections (#192)
 Add TLS option to mailer configuration
 
 2.6.0

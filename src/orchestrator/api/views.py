@@ -484,6 +484,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        self.ORION_PROTOCOL,
                                        self.ORION_HOST,
                                        self.ORION_PORT,
+                                       MONGODB_URI=self.MONGODB_URI,
                                        CORRELATOR_ID=CORRELATOR_ID)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
