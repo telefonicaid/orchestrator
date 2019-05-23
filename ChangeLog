@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Update Djangorestframework to 3.9.4 due to security vulnerability
 Add STH mongodb indexes to optimize queries on its collections (#192)
 Add TLS option to mailer configuration
 
