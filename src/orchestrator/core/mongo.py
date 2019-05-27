@@ -52,9 +52,9 @@ class MongoDBOperations(object):
             # For Orion
             databaseName = 'orion-' + SERVICE_NAME
             db = self.client[databaseName]
-            db.entities.create_index("_id.id")
-            db.entities.create_index("_id.type")
-            db.entities.create_index("_id.servicePath")
+            db.entities.create_index([("_id.servicePath"), 
+                                      ("_id.id"),
+                                      ("_id.type")]
             db.entities.create_index("_id.creDate")
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
