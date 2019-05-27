@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Orion indexes creation logic aligned with last changes in Orion documentation
+
 2.7.0
 
 UPDATE: Update Djangorestframework to 3.9.4 due to security vulnerability
