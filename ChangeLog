@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Add pylint to travis
 UPDATE: Orion indexes creation logic aligned with last changes in Orion documentation
 
 2.7.0
