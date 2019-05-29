@@ -5,4 +5,4 @@ install:
   - pip install nose pylint
 script:
   - ./package-orchestrator.sh
-  - pylint ./src
+  - pylint --disable=C0103,C0111,C0112 --rcfile=./.pylintrc ./src 
