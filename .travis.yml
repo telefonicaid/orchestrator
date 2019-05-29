@@ -5,4 +5,4 @@ install:
   - pip install nose pylint
 script:
   - ./package-orchestrator.sh
-  - pylint .
+  - pylint ./src
