@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Add pylint to travis
 UPDATE: Remove empty lines in dockerfile (will be forbidden in future verions of docker)
 UPDATE: Orion indexes creation logic aligned with last changes in Orion documentation
 
