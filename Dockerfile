@@ -84,59 +84,50 @@ RUN \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
     mkdir -p /var/log/orchestrator && \
-
     # Set IOTP EndPoints in orchestrator config
     sed -i ':a;N;$!ba;s/KEYSTONE = {[A-Za-z0-9,\"\n: ]*}/KEYSTONE = { \
              \"host\": \"'$KEYSTONE_HOST'\", \
              \"port\": \"'$KEYSTONE_PORT'\", \
              \"protocol\": \"'$KEYSTONE_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/KEYPASS = {[A-Za-z0-9,\"\n: ]*}/KEYPASS = { \
              \"host\": \"'$KEYPASS_HOST'\", \
              \"port\": \"'$KEYPASS_PORT'\", \
              \"protocol\": \"'$KEYPASS_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/ORION = {[A-Za-z0-9,\"\n: ]*}/ORION = { \
              \"host\": \"'$ORION_HOST'\", \
              \"port\": \"'$ORION_PORT'\", \
              \"protocol\": \"'$ORION_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/PEP_PERSEO = {[A-Za-z0-9,\"\n: ]*}/PEP_PERSEO = { \
              \"host\": \"'$PEP_PERSEO_HOST'\", \
              \"port\": \"'$PEP_PERSEO_PORT'\", \
              \"protocol\": \"'$PEP_PERSEO_PROTOCOL'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
              \"host\": \"'$STH_HOST'\", \
              \"port\": \"'$STH_PORT'\", \
              \"protocol\": \"'$STH_PROTOCOL'\", \
              \"notifypath\": \"\/'$STH_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/PERSEO = {[A-Za-z0-9,\/\"\n: ]*}/PERSEO = { \
              \"host\": \"'$PERSEO_HOST'\", \
              \"port\": \"'$PERSEO_PORT'\", \
              \"protocol\": \"'$PERSEO_PROTOCOL'\", \
              \"notifypath\": \"\/'$PERSEO_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$CYGNUS_PORT'\", \
              \"protocol\": \"'$CYGNUS_PROTOCOL'\", \
              \"notifypath\": \"\/'$CYGNUS_NOTIFYPATH'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/LDAP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/LDAP = { \
              \"host\": \"'$LDAP_HOST'\", \
              \"port\": \"'$LDAP_PORT'\", \
              \"basedn\": \"'$LDAP_BASEDN'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/MAILER = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/MAILER = { \
              \"host\": \"'$MAILER_HOST'\", \
              \"port\": \"'$MAILER_PORT'\", \
@@ -145,11 +136,9 @@ RUN \
              \"from\": \"'$MAILER_FROM'\", \
              \"to\": \"'$MAILER_TO'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\/\"\n: ]*}/MONGODB = { \
              \"URI\": \"mongodb:\/\/'$MONGODB_URI'\" \
 }/g' /opt/orchestrator/settings/dev.py  && \
-
     # Put IOT endpoints conf into ochestrator-entrypoint.sh
     sed -i 's/KEYSTONE_PORT=5001/KEYSTONE_PORT='$KEYSTONE_PORT'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
     sed -i 's/KEYSTONE_PROTOCOL=http/KEYSTONE_PROTOCOL='$KEYSTONE_PROTOCOL'/g' /opt/orchestrator/bin/orchestrator-entrypoint.sh && \
@@ -181,7 +170,6 @@ RUN \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
-
     echo "INFO: Cleaning unused software..." && \
     rm -rf /opt/sworchestrator && \
     yum erase -y --remove-leaves yum-plugin-remove-with-leaves gcc && \
