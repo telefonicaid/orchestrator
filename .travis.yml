@@ -2,5 +2,7 @@ language: python
 install:
   - sudo apt-get update
   - DEBIAN_FRONTEND=noninteractive sudo apt-get install -y rpm
+  - pip install nose pylint
 script:
   - ./package-orchestrator.sh
+  - pylint
