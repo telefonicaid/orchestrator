@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Update Django to 1.11.21 due to security vulnerability
+
 2.8.0
 
 UPDATE: Add pylint to travis
