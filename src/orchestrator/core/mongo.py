@@ -52,9 +52,9 @@ class MongoDBOperations(object):
             # For Orion
             databaseName = 'orion-' + SERVICE_NAME
             db = self.client[databaseName]
-            db.entities.create_index([("_id.servicePath"), 
-                                      ("_id.id"),
-                                      ("_id.type")])
+            db.entities.create_index([("_id.servicePath", pymongo.ASCENDING),
+                                      ("_id.id", pymongo.ASCENDING),
+                                      ("_id.type", pymongo.ASCENDING)])
             db.entities.create_index("_id.creDate")
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
@@ -66,16 +66,16 @@ class MongoDBOperations(object):
             databaseName = 'sth_' + SERVICE_NAME
             db = self.client[databaseName]
             collectionName = 'sth_/' + SUBSERVICE_NAME + '.aggr'
-            db[collectionName].create_index([("_id.entityId"),
-                                             ("_id.entityType"),
-                                             ("_id.attrName"),
-                                             ("_id.resolution"),
-                                             ("_id.origin")])
+            db[collectionName].create_index([("_id.entityId", pymongo.ASCENDING),
+                                             ("_id.entityType", pymongo.ASCENDING),
+                                             ("_id.attrName", pymongo.ASCENDING),
+                                             ("_id.resolution", pymongo.ASCENDING),
+                                             ("_id.origin", pymongo.ASCENDING)])
             collectionName = 'sth_/' + SUBSERVICE_NAME
-            db[collectionName].create_index([("entityId"),
-                                             ("entityType"),
-                                             ("attrName"),
-                                             ("recvTime")])
+            db[collectionName].create_index([("entityId", pymongo.ASCENDING),
+                                             ("entityType", pymongo.ASCENDING),
+                                             ("attrName", pymongo.ASCENDING),
+                                             ("recvTime", pymongo.ASCENDING)])
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 

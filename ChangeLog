@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: Mongo exception when indexes are created (at service provision) (#214)
 UPDATE: Update Django to 1.11.21 due to security vulnerability
 
 2.8.0
