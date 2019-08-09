@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+ADD: Allow subservices names with '#'
 UPDATE: Update Django to 1.11.23 due to security vulnerability
 
 2.9.0
