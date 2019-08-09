@@ -173,7 +173,7 @@ class Projects(FlowBase):
                         'name': '/' + PROJECT_NAME
                     }
                 }
-                if PROJECT_NAME.startwith('#'):
+                if PROJECT_NAME.startswith('#'):
                     PROJECT['project']['name']=PROJECT_NAME
             self.logger.debug("PROJECT=%s" % PROJECT)
 

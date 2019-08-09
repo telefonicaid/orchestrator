@@ -456,7 +456,7 @@ class IdMKeystoneOperations(IdMOperations):
                 "description": "%s" % NEW_SUBSERVICE_DESCRIPTION
             }
         }
-        if NEW_SUBSERVICE_NAME.startwith('#'):
+        if NEW_SUBSERVICE_NAME.startswith('#'):
             body_data['project']['name']=NEW_SUBSERVICE_NAME
         res = self.IdMRestOperations.rest_request(
             url='/v3/projects',
