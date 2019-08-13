@@ -456,6 +456,8 @@ class IdMKeystoneOperations(IdMOperations):
                 "description": "%s" % NEW_SUBSERVICE_DESCRIPTION
             }
         }
+        if NEW_SUBSERVICE_NAME.startswith('#'):
+            body_data['project']['name']=NEW_SUBSERVICE_NAME
         res = self.IdMRestOperations.rest_request(
             url='/v3/projects',
             method='POST', data=body_data,
@@ -646,7 +648,8 @@ class IdMKeystoneOperations(IdMOperations):
                 SERVICE_ADMIN_TOKEN,
                 json_body_response['token']['user']['id'])
             for project in projects['projects']:
-                if project['name'] == '/' + PROJECT_NAME:
+                if ((project['name'] == '/' + PROJECT_NAME) or
+                    (PROJECT_NAME.startswith('#') and project['name'] == PROJECT_NAME)):
                     return project['id']
             assert False, "Project %s not found" % PROJECT_NAME
 
