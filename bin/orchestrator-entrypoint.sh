@@ -147,8 +147,8 @@ while [[ $# -gt 0 ]]; do
         -iotagentpwd)
             IOTAGENT_PASSWORD=$VALUE
             ;;
-        -cygnusmultiagent)
-            CYGNUS_MULTIAGENT=$VALUE
+        -cygnusmultisink|-cygnusmultiagent)
+            CYGNUS_MULTISINK=$VALUE
             ;;
         -debuglevel)
             DEBUG_LEVEL=$VALUE
@@ -202,8 +202,8 @@ sed -i ':a;N;$!ba;s/STH = {[A-Za-z0-9,\/\"\n: ]*}/STH = { \
 }/g' /opt/orchestrator/settings/dev.py
 
 
-# Check if CYGNUS multiagent
-if [ "$CYGNUS_MULTIAGENT" == "true" ]; then
+# Check if CYGNUS multisink
+if [ "$CYGNUS_MULTISINK" == "true" ]; then
     sed -i ':a;N;$!ba;s/CYGNUS = {[A-Za-z0-9,\/\"\n: ]*}/CYGNUS_MYSQL = { \
              \"host\": \"'$CYGNUS_HOST'\", \
              \"port\": \"'$CYGNUS_PORT'\", \
