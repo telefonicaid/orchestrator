@@ -147,8 +147,7 @@ while [[ $# -gt 0 ]]; do
         -iotagentpwd)
             IOTAGENT_PASSWORD=$VALUE
             ;;
-        -cygnusmultisink)
-        -cygnusmultiagent)
+        -cygnusmultisink|-cygnusmultiagent)
             CYGNUS_MULTISINK=$VALUE
             ;;
         -debuglevel)
