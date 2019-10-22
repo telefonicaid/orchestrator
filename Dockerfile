@@ -57,6 +57,8 @@ ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
 ENV DJANGO_SETTINGS_MODULE settings
 ENV PYTHONPATH "${PYTHONPATH}:/opt/orchestrator"
 
+ENV UWSGI_BUFFER_SIZE=4096
+
 COPY . /opt/sworchestrator/
 
 # OLD

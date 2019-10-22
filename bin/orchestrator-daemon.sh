@@ -42,7 +42,8 @@ exe="$UWGSI --http :${PORT} \
 --max-requests $MAX_REQUESTS \
 --vacuum \
 --enable-threads \
---disable-logging"
+--disable-logging \ 
+--buffer-size ${UWSGI_BUFFER_SIZE}"
 
 server="$exe"
 
