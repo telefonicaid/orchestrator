@@ -62,6 +62,8 @@ MONGODB_URI='localhost:27017'
 PEP_PASSWORD=pep
 IOTAGENT_PASSWORD=iotagent
 
+UWSGI_BUFFER_SIZE=4096
+
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
     VALUE=`echo $2`
@@ -152,6 +154,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -debuglevel)
             DEBUG_LEVEL=$VALUE
+            ;;
+        -uwsgibuffersize)
+            UWSGI_BUFFER_SIZE=$VALUE
             ;;
         *)
             echo "not found"
@@ -313,4 +318,5 @@ uwsgi --http :$PORT \
       --max-requests $MAX_REQUESTS \
       --vacuum \
       --enable-threads \
-      --disable-logging
+      --disable-logging \
+      --buffer-size  $UWSGI_BUFFER_SIZE
