@@ -297,7 +297,7 @@ sed -i ':a;N;$!ba;s/IOTAGENT = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/IOTAGENT = { \
 if [ "$DEBUG_LEVEL" ]; then
 echo "
 LOGGING['handlers']['console']['level'] = '$DEBUG_LEVEL'
-LOGGING['handlers']['logfile']['level'] = '$DEBUG_LEVEL'
+LOGGING['handlers']['logfile']['level'] = 'CRITICAL'
 LOGGING['loggers']['orchestrator_api']['level'] = '$DEBUG_LEVEL'
 LOGGING['loggers']['orchestrator_core']['level'] = '$DEBUG_LEVEL'
 " >> /opt/orchestrator/settings/dev.py
