@@ -172,39 +172,38 @@ class CreateNewService(FlowBase):
             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET = []
             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET = []
             ID_NEW_SERVICE_ROLE_ADMIN_SET = []
-            for (component in components) {
-                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
-                        NEW_SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_ADMIN_ROLE_NAME + component,
-                        ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
-                                                             ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
-                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T)
-
-                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
-                        NEW_SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
-                        ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
-                                                             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
-                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T)
-
-                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
-                        NEW_SERVICE_ADMIN_TOKEN,
-                        SERVICE_CUSTOMER_ROLE_NAME + component,
-                        ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
-                                                             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
-                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T)
-
-                    ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
-                        NEW_SERVICE_ADMIN_TOKEN,
-                        "admin" + component,
-                        ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % ("admin" + component,
-                                                             ID_NEW_SERVICE_ROLE_ADMIN))
-                    ID_NEW_SERVICE_ROLE_ADMIN_SET.append(ID_NEW_SERVICE_ROLE_ADMIN_T)
-            }
+            for component in components:
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SUB_SERVICE_ADMIN_ROLE_NAME + component,
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
+                                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T)
+                
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
+                                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T)
+                
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SERVICE_CUSTOMER_ROLE_NAME + component,
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
+                                                         ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T)
+                
+                ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    "admin" + component,
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % ("admin" + component,
+                                                         ID_NEW_SERVICE_ROLE_ADMIN))
+                ID_NEW_SERVICE_ROLE_ADMIN_SET.append(ID_NEW_SERVICE_ROLE_ADMIN_T)
 
 
             #
@@ -286,20 +285,19 @@ class CreateNewService(FlowBase):
 
 
             # Set policies to new component Roles
-            for (component in components) {
-                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[i],
-                                            POLICY_FILE_NAME='policy-'+component+'admin2.xml')
-                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[i],
-                                            POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
-                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[i],
-                                            POLICY_FILE_NAME='policy-'+component+'-customer.xml')
-                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                            ID_NEW_SERVICE_ROLE_ADMIN_SET[i],
-                                            POLICY_FILE_NAME='policy-'+component+'-admin.xml')
-            }
+            for component in components:
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[i],
+                                        POLICY_FILE_NAME='policy-'+component+'admin2.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[i],
+                                        POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[i],
+                                        POLICY_FILE_NAME='policy-'+component+'-customer.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_ADMIN_SET[i],
+                                        POLICY_FILE_NAME='policy-'+component+'-admin.xml')
 
             #
             # 6. Create groups for new service (aka domain)
