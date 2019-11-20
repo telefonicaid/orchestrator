@@ -165,10 +165,13 @@ class CreateNewService(FlowBase):
             self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
 
-            #### Create new SubService roles per component
+            #
+            # 4.2 Create new roles per component
+            #
             ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET = []
             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET = []
             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET = []
+            ID_NEW_SERVICE_ROLE_ADMIN_SET = []
             for (var i = 0; i < components.length; i++) {
                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
@@ -193,8 +196,15 @@ class CreateNewService(FlowBase):
                     self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + components[i],
                                                              ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET.put(ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T)
-            }
 
+                    ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        "admin" + components[i],
+                        ID_DOM1)
+                    self.logger.debug("ID of role %s: %s" % ("admin" + components[i],
+                                                             ID_NEW_SERVICE_ROLE_ADMIN))
+                    ID_NEW_SERVICE_ROLE_ADMIN_SET.put(ID_NEW_SERVICE_ROLE_ADMIN_T)
+            }
 
 
             #
@@ -275,7 +285,7 @@ class CreateNewService(FlowBase):
 
 
 
-            # Set policies to new SubService Roles
+            # Set policies to new component Roles
             for (var i = 0; i < components.length; i++) {
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[i],
@@ -286,6 +296,9 @@ class CreateNewService(FlowBase):
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[i],
                                             POLICY_FILE_NAME='policy-'+components[i]+'-customer.xml')
+                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                            ID_NEW_SERVICE_ROLE_ADMIN_SET[i],
+                                            POLICY_FILE_NAME='policy-'+components[i]+'-admin.xml')
             }
 
             #
