@@ -168,22 +168,31 @@ class CreateNewService(FlowBase):
             #### Create new SubService roles per component
             ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET = []
             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET = []
+            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET = []
             for (var i = 0; i < components.length; i++) {
-                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = self.idm.createDomainRole(
+                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
                         SUB_SERVICE_ADMIN_ROLE_NAME + components[i],
                         ID_DOM1)
                     self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + components[i],
                                                              ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
-                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.put(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.put(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T)
 
-                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = self.idm.createDomainRole(
+                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
                         SUB_SERVICE_CUSTOMER_ROLE_NAME + components[i],
                         ID_DOM1)
                     self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + components[i],
                                                              ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
-                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.put(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
+                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.put(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T)
+
+                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                        ID_DOM1)
+                    self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                                                             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
+                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET.put(ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T)
             }
 
 
@@ -274,6 +283,9 @@ class CreateNewService(FlowBase):
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[i],
                                             POLICY_FILE_NAME='policy-'+components[i]+'-customer2.xml')
+                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[i],
+                                            POLICY_FILE_NAME='policy-'+components[i]+'-customer.xml')
             }
 
             #
