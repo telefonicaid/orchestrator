@@ -178,7 +178,7 @@ class CreateNewService(FlowBase):
                     SUB_SERVICE_ADMIN_ROLE_NAME + component,
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
-                                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
+                                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T))
                 ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T)
                 
                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
@@ -186,7 +186,7 @@ class CreateNewService(FlowBase):
                     SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
-                                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
+                                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T))
                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T)
                 
                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
@@ -194,7 +194,7 @@ class CreateNewService(FlowBase):
                     SERVICE_CUSTOMER_ROLE_NAME + component,
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
-                                                         ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
+                                                         ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T))
                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T)
                 
                 ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
@@ -202,7 +202,7 @@ class CreateNewService(FlowBase):
                     "admin" + component,
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % ("admin" + component,
-                                                         ID_NEW_SERVICE_ROLE_ADMIN))
+                                                         ID_NEW_SERVICE_ROLE_ADMIN_T))
                 ID_NEW_SERVICE_ROLE_ADMIN_SET.append(ID_NEW_SERVICE_ROLE_ADMIN_T)
 
 
