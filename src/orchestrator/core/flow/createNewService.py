@@ -172,36 +172,36 @@ class CreateNewService(FlowBase):
             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET = []
             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET = []
             ID_NEW_SERVICE_ROLE_ADMIN_SET = []
-            for (var i = 0; i < components.length; i++) {
+            for (component in components) {
                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_ADMIN_ROLE_NAME + components[i],
+                        SUB_SERVICE_ADMIN_ROLE_NAME + component,
                         ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + components[i],
+                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
                                                              ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T)
 
                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
-                        SUB_SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                        SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
                         ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
                                                              ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T)
 
                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
-                        SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                        SERVICE_CUSTOMER_ROLE_NAME + component,
                         ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                    self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
                                                              ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET.append(ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T)
 
                     ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
                         NEW_SERVICE_ADMIN_TOKEN,
-                        "admin" + components[i],
+                        "admin" + component,
                         ID_DOM1)
-                    self.logger.debug("ID of role %s: %s" % ("admin" + components[i],
+                    self.logger.debug("ID of role %s: %s" % ("admin" + component,
                                                              ID_NEW_SERVICE_ROLE_ADMIN))
                     ID_NEW_SERVICE_ROLE_ADMIN_SET.append(ID_NEW_SERVICE_ROLE_ADMIN_T)
             }
@@ -286,19 +286,19 @@ class CreateNewService(FlowBase):
 
 
             # Set policies to new component Roles
-            for (var i = 0; i < components.length; i++) {
+            for (component in components) {
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[i],
-                                            POLICY_FILE_NAME='policy-'+components[i]+'admin2.xml')
+                                            POLICY_FILE_NAME='policy-'+component+'admin2.xml')
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[i],
-                                            POLICY_FILE_NAME='policy-'+components[i]+'-customer2.xml')
+                                            POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[i],
-                                            POLICY_FILE_NAME='policy-'+components[i]+'-customer.xml')
+                                            POLICY_FILE_NAME='policy-'+component+'-customer.xml')
                     self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                             ID_NEW_SERVICE_ROLE_ADMIN_SET[i],
-                                            POLICY_FILE_NAME='policy-'+components[i]+'-admin.xml')
+                                            POLICY_FILE_NAME='policy-'+component+'-admin.xml')
             }
 
             #
