@@ -61,6 +61,7 @@ class CreateNewService(FlowBase):
         SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
         SERVICE_CUSTOMER_ROLE_NAME = "ServiceCustomer"
+        components = ["orion", "sth","perseo","iotagent","keypass"]
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
@@ -164,6 +165,29 @@ class CreateNewService(FlowBase):
             self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
 
+            #### Create new SubService roles per component
+            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET = []
+            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET = []
+            for (var i = 0; i < components.length; i++) {
+                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        SUB_SERVICE_ADMIN_ROLE_NAME + components[i],
+                        ID_DOM1)
+                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + components[i],
+                                                             ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
+                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET.put(ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+
+                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        SUB_SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                        ID_DOM1)
+                    self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + components[i],
+                                                             ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
+                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET.put(ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER)
+            }
+
+
+
             #
             # 4.5 Inherit subserviceadim
             #
@@ -239,6 +263,18 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-keypass-customer2.xml')
+
+
+
+            # Set policies to new SubService Roles
+            for (var i = 0; i < components.length; i++) {
+                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[i],
+                                            POLICY_FILE_NAME='policy-'+components[i]+'admin2.xml')
+                    self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[i],
+                                            POLICY_FILE_NAME='policy-'+components[i]+'-customer2.xml')
+            }
 
             #
             # 6. Create groups for new service (aka domain)
