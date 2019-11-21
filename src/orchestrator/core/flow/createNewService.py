@@ -199,9 +199,9 @@ class CreateNewService(FlowBase):
                 
                 ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
                     NEW_SERVICE_ADMIN_TOKEN,
-                    "admin" + component.upper(),
+                    "ServiceAdmin" + component.upper(),
                     ID_DOM1)
-                self.logger.debug("ID of role %s: %s" % ("admin" + component,
+                self.logger.debug("ID of role %s: %s" % ("ServiceAdmin" + component,
                                                          ID_NEW_SERVICE_ROLE_ADMIN_T))
                 ID_NEW_SERVICE_ROLE_ADMIN_SET[component]=ID_NEW_SERVICE_ROLE_ADMIN_T
 
