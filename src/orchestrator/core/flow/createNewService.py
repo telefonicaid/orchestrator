@@ -61,7 +61,7 @@ class CreateNewService(FlowBase):
         SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
         SERVICE_CUSTOMER_ROLE_NAME = "ServiceCustomer"
-        components = ["orion", "sth","perseo","iotagent"] # without keypass
+        components = ["orion", "sth", "perseo", "iotagent"] # without keypass
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
@@ -288,16 +288,16 @@ class CreateNewService(FlowBase):
             for component in components:
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-admin2.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-admin.xml')
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
-                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-                                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[component],
                                         POLICY_FILE_NAME='policy-'+component+'-customer.xml')
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[component],
+                                        POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_ADMIN_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-admin.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-admin2.xml')
 
             #
             # 6. Create groups for new service (aka domain)
