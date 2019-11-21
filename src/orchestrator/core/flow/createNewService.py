@@ -61,7 +61,7 @@ class CreateNewService(FlowBase):
         SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
         SERVICE_CUSTOMER_ROLE_NAME = "ServiceCustomer"
-        components = ["orion", "sth","perseo","iotagent","keypass"]
+        components = ["orion", "sth","perseo","iotagent"] # without keypass
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
