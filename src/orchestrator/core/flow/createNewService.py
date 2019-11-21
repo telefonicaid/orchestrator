@@ -175,7 +175,7 @@ class CreateNewService(FlowBase):
             for component in components:
                 ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
                     NEW_SERVICE_ADMIN_TOKEN,
-                    SUB_SERVICE_ADMIN_ROLE_NAME + component,
+                    SUB_SERVICE_ADMIN_ROLE_NAME + component.upper(),
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
                                                          ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T))
@@ -183,7 +183,7 @@ class CreateNewService(FlowBase):
                 
                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
                     NEW_SERVICE_ADMIN_TOKEN,
-                    SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
+                    SUB_SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
                                                          ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T))
@@ -191,7 +191,7 @@ class CreateNewService(FlowBase):
                 
                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
                     NEW_SERVICE_ADMIN_TOKEN,
-                    SERVICE_CUSTOMER_ROLE_NAME + component,
+                    SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
                                                          ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T))
@@ -199,7 +199,7 @@ class CreateNewService(FlowBase):
                 
                 ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
                     NEW_SERVICE_ADMIN_TOKEN,
-                    "admin" + component,
+                    "admin" + component.upper(),
                     ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % ("admin" + component,
                                                          ID_NEW_SERVICE_ROLE_ADMIN_T))
