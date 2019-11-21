@@ -1,9 +1,10 @@
 CHANGES
 =======
 
-UPDATE: Add new roles (ServiceAdmin, ServiceCustomer, SubServiceAdmin, SubServiceAdmin) for each component (Orion, Sth, Perseo, Iotagent)
+UPDATE: Add new single roles (ServiceAdmin, ServiceCustomer, SubServiceAdmin, SubServiceCustomer) for each component (Orion, Sth, Perseo, Iotagent)
 UPDATE: Allow header buffer size customization from execution args. If is not received the default is 4KB
 FIX: rename multiagent to multisink cygnus option
+
 
 2.10.0
 
