@@ -213,6 +213,13 @@ class CreateNewService(FlowBase):
                                       ID_DOM1,
                                       ID_ADM1,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+
+            for component in components:
+                self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                          ID_DOM1,
+                                          ID_ADM1,
+                                          ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component])
+
             #
             # 5. Provision default platform roles AccessControl policies
             #
@@ -288,16 +295,16 @@ class CreateNewService(FlowBase):
             for component in components:
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-admin.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-subserviceadmin.xml')
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-customer.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-subservicecustomer.xml')
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-servicecustomer.xml')
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_ADMIN_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'-admin2.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-serviceadmin.xml')
 
             #
             # 6. Create groups for new service (aka domain)
