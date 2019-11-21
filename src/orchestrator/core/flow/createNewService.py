@@ -288,7 +288,7 @@ class CreateNewService(FlowBase):
             for component in components:
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component],
-                                        POLICY_FILE_NAME='policy-'+component+'admin2.xml')
+                                        POLICY_FILE_NAME='policy-'+component+'-admin2.xml')
                 self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[component],
                                         POLICY_FILE_NAME='policy-'+component+'-customer2.xml')
