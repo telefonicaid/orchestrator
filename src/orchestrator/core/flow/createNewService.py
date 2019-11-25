@@ -61,6 +61,7 @@ class CreateNewService(FlowBase):
         SUB_SERVICE_ADMIN_ROLE_NAME = "SubServiceAdmin"
         SUB_SERVICE_CUSTOMER_ROLE_NAME = "SubServiceCustomer"
         SERVICE_CUSTOMER_ROLE_NAME = "ServiceCustomer"
+        components = ["orion", "sth", "perseo", "iotagent"] # without keypass
 
         data_log = {
             "DOMAIN_NAME": "%s" % DOMAIN_NAME,
@@ -165,12 +166,60 @@ class CreateNewService(FlowBase):
                                                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
 
             #
+            # 4.2 Create new roles per component
+            #
+            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET = {}
+            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET = {}
+            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET = {}
+            ID_NEW_SERVICE_ROLE_ADMIN_SET = {}
+            for component in components:
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SUB_SERVICE_ADMIN_ROLE_NAME + component.upper(),
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
+                                                         ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T))
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component]=ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T
+                
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SUB_SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
+                                                         ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T))
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[component]=ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T
+                
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
+                                                         ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T))
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[component]=ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T
+                
+                ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    "ServiceAdmin" + component.upper(),
+                    ID_DOM1)
+                self.logger.debug("ID of role %s: %s" % ("ServiceAdmin" + component,
+                                                         ID_NEW_SERVICE_ROLE_ADMIN_T))
+                ID_NEW_SERVICE_ROLE_ADMIN_SET[component]=ID_NEW_SERVICE_ROLE_ADMIN_T
+
+
+            #
             # 4.5 Inherit subserviceadim
             #
             self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
                                       ID_DOM1,
                                       ID_ADM1,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
+
+            for component in components:
+                self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+                                          ID_DOM1,
+                                          ID_ADM1,
+                                          ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component])
+
             #
             # 5. Provision default platform roles AccessControl policies
             #
@@ -239,6 +288,23 @@ class CreateNewService(FlowBase):
             self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
                                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
                                     POLICY_FILE_NAME='policy-keypass-customer2.xml')
+
+
+
+            # Set policies to new component Roles
+            for component in components:
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component],
+                                        POLICY_FILE_NAME='policy-'+component+'-subserviceadmin.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[component],
+                                        POLICY_FILE_NAME='policy-'+component+'-subservicecustomer.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[component],
+                                        POLICY_FILE_NAME='policy-'+component+'-servicecustomer.xml')
+                self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                        ID_NEW_SERVICE_ROLE_ADMIN_SET[component],
+                                        POLICY_FILE_NAME='policy-'+component+'-serviceadmin.xml')
 
             #
             # 6. Create groups for new service (aka domain)
