@@ -1,8 +1,12 @@
 CHANGES
 =======
 
+UPDATE: remove httplib2 and simplejson deps
+UPDATE: Add new single roles (ServiceAdmin, ServiceCustomer, SubServiceAdmin, SubServiceCustomer) for each component (Orion, Sth, Perseo, Iotagent)
+UPDATE: Update Django from 1.11.23 to 1.11.26
 UPDATE: Allow header buffer size customization from execution args. If is not received the default is 4KB
-FIX: rename multiagent to multisink cygnus option
+FIX: duplicate multiagent into multisink cygnus option
+
 
 2.10.0
 
