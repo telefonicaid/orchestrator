@@ -158,7 +158,7 @@ class Groups(FlowBase):
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
-            DETAIL_GROUP = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
+            DETAIL_GROUP = self.idm.detailGroup(SERVICE_ADMIN_TOKEN,
                                                GROUP_ID)
             self.logger.debug("DETAIL_GROUP=%s" % json.dumps(DETAIL_GROUP, indent=3))
 
@@ -240,7 +240,7 @@ class Groups(FlowBase):
             # 2. Get group ID
             #
             if not GROUP_ID:
-                GROUP_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     GROUP_NAME)
             self.logger.debug("ID of group %s: %s" % (GROUP_NAME, GROUP_ID))
