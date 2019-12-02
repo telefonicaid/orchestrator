@@ -1187,7 +1187,7 @@ class Roles(FlowBase):
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
             inherit_roles = []
-            if USER_ID:
+            if GROUP_ID:
                 inherit_roles = self.idm.getGroupDomainInheritRoleAssignments(
                     ADMIN_TOKEN,
                     DOMAIN_ID,
