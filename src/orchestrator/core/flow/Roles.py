@@ -1183,7 +1183,7 @@ class Roles(FlowBase):
                     "name": "service",
                     "id": self.idm.getRoleId(ADMIN_TOKEN, "service")
                 })
-            domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
+            domain_groups = self.idm.getDomainGroups(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
             inherit_roles = []
@@ -1195,7 +1195,7 @@ class Roles(FlowBase):
 
             for assign in role_assignments_expanded:
                 # Expand user detail
-                match_list = [x for x in domain_users['groups'] if x['id'] == str(assign['group']['id'])]
+                match_list = [x for x in domain_groups['groups'] if x['id'] == str(assign['group']['id'])]
                 if len(match_list) > 0:
                     assign['group'].update(match_list[0])
                 # Expand role detail
