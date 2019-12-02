@@ -207,7 +207,8 @@ class Groups(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % "***", #SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "GROUP_NAME": "%s" % GROUP_NAME,
-            "GROUP_ID": "%s" % GROUP_ID
+            "GROUP_ID": "%s" % GROUP_ID,
+            "GROUP_DATA_VALUE": "%s" % GROUP_DATA_VALUE
         }
         self.logger.debug("FLOW updateGroup invoked with: %s" % json.dumps(
             data_log,
@@ -249,7 +250,8 @@ class Groups(FlowBase):
             # 3. UpdateGroup
             #
             self.idm.updateGroup(SERVICE_ADMIN_TOKEN,
-                                 GROUP_ID)
+                                 GROUP_ID,
+                                 GROUP_DATA_VALUE)
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
