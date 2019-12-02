@@ -1160,6 +1160,8 @@ class Roles(FlowBase):
 
             role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
+                if 'user' in role_assignment:
+                    continue
                 if ROLE_ID:
                     if not (role_assignment['role']['id'] == ROLE_ID):
                         continue
@@ -1198,6 +1200,7 @@ class Roles(FlowBase):
                 match_list = [x for x in domain_groups['groups'] if x['id'] == str(assign['group']['id'])]
                 if len(match_list) > 0:
                     assign['group'].update(match_list[0])
+
                 # Expand role detail
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
