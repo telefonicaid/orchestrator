@@ -185,7 +185,8 @@ class Groups(FlowBase):
                    SERVICE_ADMIN_PASSWORD,
                    SERVICE_ADMIN_TOKEN,
                    GROUP_NAME,
-                   GROUP_ID):
+                   GROUP_ID,
+                   GROUP_DATA_VALUE):
 
         '''Update an Group Service (aka domain group keystone).
 

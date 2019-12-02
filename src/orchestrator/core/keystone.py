@@ -907,8 +907,8 @@ class IdMKeystoneOperations(IdMOperations):
                         "urn:scim:schemas:extension:keystone:1.0"],
         }
         # Replace 'name' by 'displayName' since we are using SCIM API
-        if 'name' in GROUP_DATA:
-            GROUP_DATA['displayName'] = GROUP_DATA['name']
+        if 'groupName' in GROUP_DATA:
+            GROUP_DATA['displayName'] = GROUP_DATA['groupName']
         # if 'description' in GROUP_DATA:
         #     GROUP_DATA['displayName'] = GROUP_DATA['description']
         body_data.update(GROUP_DATA)
