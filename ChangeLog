@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-FIX: use displayName as groupNamein groups
+FIX: Hardering groups
 FIX: Disable log into container file
 UPDATE: remove httplib2 and simplejson deps
 UPDATE: Add new single roles (ServiceAdmin, ServiceCustomer, SubServiceAdmin, SubServiceCustomer) for each component (Orion, Sth, Perseo, Iotagent)
