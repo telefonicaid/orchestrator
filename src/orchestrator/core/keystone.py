@@ -1071,11 +1071,10 @@ class IdMKeystoneOperations(IdMOperations):
                     "id": group['id'],
                     "description": group["displayName"],
                     "domain_id":
-                       group['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
-                    "enabled": group['active']
+                       group['urn:scim:schemas:extension:keystone:1.0']['domain_id']
                 }
             )
-        res = {"groupss": groups}
+        res = {"groups": groups}
         if "totalResults" in json_body_response:
             res["totalResults"] = json_body_response["totalResults"]
         if "itemsPerPage" in json_body_response:
