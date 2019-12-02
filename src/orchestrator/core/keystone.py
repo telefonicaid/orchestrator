@@ -909,8 +909,8 @@ class IdMKeystoneOperations(IdMOperations):
         # Replace 'name' by 'displayName' since we are using SCIM API
         if 'groupName' in GROUP_DATA:
             GROUP_DATA['displayName'] = GROUP_DATA['groupName']
-        # if 'description' in GROUP_DATA:
-        #     GROUP_DATA['displayName'] = GROUP_DATA['description']
+        if 'description' in GROUP_DATA:
+            GROUP_DATA['displayName'] = GROUP_DATA['description']
         body_data.update(GROUP_DATA)
         res = self.IdMRestOperations.rest_request(
             url=self.SCIM_URI+'/Groups/%s' % ID_GROUP,
