@@ -1124,7 +1124,7 @@ class Roles(FlowBase):
                 self.logger.debug("PROJECT_ID=%s" % PROJECT_ID)
 
             if not GROUP_ID and GROUP_NAME:
-                USER_ID = self.idm.getDomainGroupId(ADMIN_TOKEN,
+                GROUP_ID = self.idm.getDomainGroupId(ADMIN_TOKEN,
                                                     DOMAIN_ID,
                                                     GROUP_NAME)
                 self.logger.debug("GROUP_ID=%s" % GROUP_ID)
@@ -1167,7 +1167,7 @@ class Roles(FlowBase):
                     if not (role_assignment['scope']['project']['id'] == PROJECT_ID):
                         continue
                 if GROUP_ID:
-                    if not (role_assignment['group']['id'] == GROUP_ID):
+                    if  ('group' in role_assignment) and not (role_assignment['group']['id'] == GROUP_ID):
                         continue
                 role_assignments_expanded.append(role_assignment)
 
