@@ -1348,10 +1348,10 @@ class Roles(FlowBase):
             #
             # 4.  Grant role to group in service
             #
-            self.idm.grantDomainRole(SERVICE_ADMIN_TOKEN,
-                                     SERVICE_ID,
-                                     SERVICE_GROUP_ID,
-                                     ROLE_ID)
+            self.idm.grantDomainRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                            SERVICE_ID,
+                                            SERVICE_GROUP_ID,
+                                            ROLE_ID)
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
@@ -1485,10 +1485,10 @@ class Roles(FlowBase):
             #
             # 5. Grant role to group in service
             #
-            self.idm.grantProjectRoleToRole(SERVICE_ADMIN_TOKEN,
-                                            SUBSERVICE_ID,
-                                            SERVICE_GROUP_ID,
-                                            ROLE_ID)
+            self.idm.grantProjectRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                             SUBSERVICE_ID,
+                                             SERVICE_GROUP_ID,
+                                             ROLE_ID)
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
