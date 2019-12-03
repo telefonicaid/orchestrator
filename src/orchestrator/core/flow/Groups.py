@@ -158,7 +158,7 @@ class Groups(FlowBase):
             self.logger.addFilter(ContextFilterService(SERVICE_NAME))
             self.logger.debug("SERVICE_NAME=%s" % SERVICE_NAME)
 
-            DETAIL_GROUP = self.idm.detailUser(SERVICE_ADMIN_TOKEN,
+            DETAIL_GROUP = self.idm.detailGroup(SERVICE_ADMIN_TOKEN,
                                                GROUP_ID)
             self.logger.debug("DETAIL_GROUP=%s" % json.dumps(DETAIL_GROUP, indent=3))
 
@@ -185,7 +185,8 @@ class Groups(FlowBase):
                    SERVICE_ADMIN_PASSWORD,
                    SERVICE_ADMIN_TOKEN,
                    GROUP_NAME,
-                   GROUP_ID):
+                   GROUP_ID,
+                   GROUP_DATA_VALUE):
 
         '''Update an Group Service (aka domain group keystone).
 
@@ -207,7 +208,8 @@ class Groups(FlowBase):
             "SERVICE_ADMIN_PASSWORD": "%s" % "***", #SERVICE_ADMIN_PASSWORD,
             "SERVICE_ADMIN_TOKEN": self.get_extended_token(SERVICE_ADMIN_TOKEN),
             "GROUP_NAME": "%s" % GROUP_NAME,
-            "GROUP_ID": "%s" % GROUP_ID
+            "GROUP_ID": "%s" % GROUP_ID,
+            "GROUP_DATA_VALUE": "%s" % GROUP_DATA_VALUE
         }
         self.logger.debug("FLOW updateGroup invoked with: %s" % json.dumps(
             data_log,
@@ -240,7 +242,7 @@ class Groups(FlowBase):
             # 2. Get group ID
             #
             if not GROUP_ID:
-                GROUP_ID = self.idm.getDomainUserId(SERVICE_ADMIN_TOKEN,
+                GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
                                                     SERVICE_ID,
                                                     GROUP_NAME)
             self.logger.debug("ID of group %s: %s" % (GROUP_NAME, GROUP_ID))
@@ -249,7 +251,8 @@ class Groups(FlowBase):
             # 3. UpdateGroup
             #
             self.idm.updateGroup(SERVICE_ADMIN_TOKEN,
-                                 GROUP_ID)
+                                 GROUP_ID,
+                                 GROUP_DATA_VALUE)
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)

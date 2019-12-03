@@ -1124,7 +1124,7 @@ class Roles(FlowBase):
                 self.logger.debug("PROJECT_ID=%s" % PROJECT_ID)
 
             if not GROUP_ID and GROUP_NAME:
-                USER_ID = self.idm.getDomainGroupId(ADMIN_TOKEN,
+                GROUP_ID = self.idm.getDomainGroupId(ADMIN_TOKEN,
                                                     DOMAIN_ID,
                                                     GROUP_NAME)
                 self.logger.debug("GROUP_ID=%s" % GROUP_ID)
@@ -1160,6 +1160,8 @@ class Roles(FlowBase):
 
             role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
+                if 'user' in role_assignment:
+                    continue
                 if ROLE_ID:
                     if not (role_assignment['role']['id'] == ROLE_ID):
                         continue
@@ -1167,7 +1169,7 @@ class Roles(FlowBase):
                     if not (role_assignment['scope']['project']['id'] == PROJECT_ID):
                         continue
                 if GROUP_ID:
-                    if not (role_assignment['group']['id'] == GROUP_ID):
+                    if  ('group' in role_assignment) and not (role_assignment['group']['id'] == GROUP_ID):
                         continue
                 role_assignments_expanded.append(role_assignment)
 
@@ -1183,11 +1185,11 @@ class Roles(FlowBase):
                     "name": "service",
                     "id": self.idm.getRoleId(ADMIN_TOKEN, "service")
                 })
-            domain_users = self.idm.getDomainUsers(ADMIN_TOKEN, DOMAIN_ID)
+            domain_groups = self.idm.getDomainGroups(ADMIN_TOKEN, DOMAIN_ID)
             domain_projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
 
             inherit_roles = []
-            if USER_ID:
+            if GROUP_ID:
                 inherit_roles = self.idm.getGroupDomainInheritRoleAssignments(
                     ADMIN_TOKEN,
                     DOMAIN_ID,
@@ -1195,9 +1197,10 @@ class Roles(FlowBase):
 
             for assign in role_assignments_expanded:
                 # Expand user detail
-                match_list = [x for x in domain_users['groups'] if x['id'] == str(assign['group']['id'])]
+                match_list = [x for x in domain_groups['groups'] if x['id'] == str(assign['group']['id'])]
                 if len(match_list) > 0:
                     assign['group'].update(match_list[0])
+
                 # Expand role detail
                 match_list = [x for x in domain_roles['roles'] if str(x['id']) == str(assign['role']['id'])]
                 if len(match_list) > 0:
@@ -1345,10 +1348,10 @@ class Roles(FlowBase):
             #
             # 4.  Grant role to group in service
             #
-            self.idm.grantDomainRole(SERVICE_ADMIN_TOKEN,
-                                     SERVICE_ID,
-                                     SERVICE_GROUP_ID,
-                                     ROLE_ID)
+            self.idm.grantDomainRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                            SERVICE_ID,
+                                            SERVICE_GROUP_ID,
+                                            ROLE_ID)
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
@@ -1482,10 +1485,10 @@ class Roles(FlowBase):
             #
             # 5. Grant role to group in service
             #
-            self.idm.grantProjectRoleToRole(SERVICE_ADMIN_TOKEN,
-                                            SUBSERVICE_ID,
-                                            SERVICE_GROUP_ID,
-                                            ROLE_ID)
+            self.idm.grantProjectRoleToGroup(SERVICE_ADMIN_TOKEN,
+                                             SUBSERVICE_ID,
+                                             SERVICE_GROUP_ID,
+                                             ROLE_ID)
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)

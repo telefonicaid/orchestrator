@@ -866,7 +866,8 @@ class Group_RESTView(APIView, IoTConf):
                 request.data.get("SERVICE_ADMIN_PASSWORD", None),
                 request.data.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.data.get("GROUP_NAME", None),
-                request.data.get("GROUP_ID", group_id))
+                request.data.get("GROUP_ID", group_id),
+                request.data.get("GROUP_DATA_VALUE"))
             if 'error' not in result:
                 Stats.num_put_group += 1
                 response = Response(result, status=status.HTTP_200_OK,

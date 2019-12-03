@@ -780,7 +780,7 @@ class IdMKeystoneOperations(IdMOperations):
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         for group in json_body_response['Resources']:
-            if group['groupName'] == GROUP_NAME:
+            if group['displayName'] == GROUP_NAME:
                 return group['id']
         assert False, "group name %s not Found" % GROUP_NAME
 
@@ -906,9 +906,9 @@ class IdMKeystoneOperations(IdMOperations):
             "schemas": ["urn:scim:schemas:core:1.0",
                         "urn:scim:schemas:extension:keystone:1.0"],
         }
-        # Replace 'name' by 'groupName' since we are using SCIM API
-        if 'name' in GROUP_DATA:
-            GROUP_DATA['groupName'] = GROUP_DATA['name']
+        # Replace 'name' by 'displayName' since we are using SCIM API
+        if 'groupName' in GROUP_DATA:
+            GROUP_DATA['displayName'] = GROUP_DATA['groupName']
         if 'description' in GROUP_DATA:
             GROUP_DATA['displayName'] = GROUP_DATA['description']
         body_data.update(GROUP_DATA)
@@ -1061,21 +1061,20 @@ class IdMKeystoneOperations(IdMOperations):
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
-        # Group each user by name and id
+        # Group each group by name and id
         groups = []
         for group in json_body_response['Resources']:
             groups.append(
                 {
-                    "name": group['groupName'],
-                    "userName": group['groupName'],
+                    "name": group['displayName'],
+                    "groupName": group['displayName'],
                     "id": group['id'],
                     "description": group["displayName"],
                     "domain_id":
-                       group['urn:scim:schemas:extension:keystone:1.0']['domain_id'],
-                    "enabled": group['active']
+                       group['urn:scim:schemas:extension:keystone:1.0']['domain_id']
                 }
             )
-        res = {"groupss": groups}
+        res = {"groups": groups}
         if "totalResults" in json_body_response:
             res["totalResults"] = json_body_response["totalResults"]
         if "itemsPerPage" in json_body_response:
