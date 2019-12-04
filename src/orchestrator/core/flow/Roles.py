@@ -1703,11 +1703,11 @@ class Roles(FlowBase):
             # 3. Get Group
             #
             if not SERVICE_GROUP_ID:
-                SERVICE_USER_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
+                SERVICE_GROUP_ID = self.idm.getDomainGroupId(SERVICE_ADMIN_TOKEN,
                                                             SERVICE_ID,
                                                             SERVICE_GROUP_NAME)
             self.logger.debug("ID of group %s: %s" % (SERVICE_GROUP_NAME,
-                                                      SERVICE_USER_ID))
+                                                      SERVICE_GROUP_ID))
 
             #
             # 4. Revoke role to group in service
