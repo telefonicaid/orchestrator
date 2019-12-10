@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+UPDATE: Use NGSIv2 by orion driver (#232)
+
+
 FIX: Hardening groups
 FIX: Disable log into container file
 UPDATE: remove httplib2 and simplejson deps
