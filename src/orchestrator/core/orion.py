@@ -73,21 +73,29 @@ class CBOrionOperations(object):
                          ATTRIBUTES=[],
                          NOTIFY_CONDITIONS=[]):
         body_data = {
-            "entities": ENTITIES,
-            "attributes": ATTRIBUTES,
-            "reference": REFERENCE_URL, # like http://<sth.host>:<sth.port>/notify
-            "duration": DURATION,
-            "notifyConditions": NOTIFY_CONDITIONS
+            "subject": {
+                "entities": ENTITIES,
+                "condition": NOTIFY_CONDITIONS
+            },
+            "notification": {
+                "attrs": ATTRIBUTES,
+                "http": {
+                    "url": REFERENCE_URL
+                },
+                "attrsFormat": "normalized"
+            },
+            "expires": "",
+            "status": "active",
+            "throttling": 0
         }
-        logger.debug("POST %s/%s to /v1/subscribeContext with: %s" % (
+        logger.debug("POST %s/%s to /v2/subscriptions with: %s" % (
             SERVICE_NAME,
             SUBSERVICE_NAME,
             json.dumps(body_data, indent=3))
         )
 
-        #TODO: v1/registry/subscribeContextAvailability ?
         res = self.CBRestOperations.rest_request(
-            url='/v1/subscribeContext',
+            url='/v2/subscriptions',
             method='POST',
             data=body_data,
             auth_token=SERVICE_USER_TOKEN,
