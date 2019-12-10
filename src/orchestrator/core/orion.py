@@ -116,20 +116,15 @@ class CBOrionOperations(object):
                            SUBSERVICE_NAME,
                            SUBSCRIPTION_ID):
 
-        body_data = {
-            "subscriptionId": SUBSCRIPTION_ID
-        }
-
-        logger.debug("POST %s/%s to /v1/unsubscribeContext with: %s" % (
+        logger.debug("DELETE %s/%s to /v2/subscriptions/%s" % (
             SERVICE_NAME,
             SUBSERVICE_NAME,
             json.dumps(body_data, indent=3))
         )
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/unsubscribeContext',
-            method='POST',
-            data=body_data,
+            url='/v2/subscriptions/' + SUBSCRIPTION_ID,
+            method='DELETE',
             auth_token=SERVICE_USER_TOKEN,
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
