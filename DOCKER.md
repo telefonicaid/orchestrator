@@ -64,6 +64,38 @@ As you can see there are several arguments to pass to orchestrator entry point i
 ```
 
 
+
+| command option | settings configuration | default value             |
+|:---------------|:-----------------------|---------------------------|
+| -keystonehost  | KEYSTONE.host          | localhost                 |
+| -keypasshost   | KEYPASS.host           | localhost                 |
+| -orionhost     | ORION.host             | localhost                 |
+| -pepperseohost | PEP_ORION.host         | localhost                 |
+| -sthhost       | STH.host               | localhost                 |
+| -perseohost    | PERSEO.host            | localhost                 |
+| -cygnushost    | CYGNUS.host            | localhost                 |
+| -mailerhost    | MAILER.host            | localhost                 |
+| -ldaphost      | LDAP.host              | localhost                 |
+| -keystoneport  | KEYSTONE.port          | 5001                      |
+| -keypassport   | KEYPASS.port           | 17070                     |
+| -orionport     | ORION.port             | 1026                      |
+| -pepperseoport | PEP_PERSEO.port        | 9090                      |
+| -sthport       | STH.port               | 18666                     |
+| -perseoport    | PERSEO.port            | 19090                     |
+| -cygnusport    | CYGNUS.port            | 5050                      |
+| -ldapport      | LDAP.port              | 389                       |
+| -mailerport    | MAILER.port            | 587                       |
+| -ldapbasedn    | LDAP.basedn            | dc=openstack,dc=org       |
+| -maileruser    | MAILER.user            | smtpuser@yourdomain.com   |
+| -mailerpasswd  | MAILER.password        | yourpassword              |
+| -mailerfrom    | MAILER.from            | smtpuser                  |
+| -mailerto      | MAILER.to              | smtpuser                  |
+| -mongodburi    | MONGODB.URI            | mongodb://localhost:27017 |
+|                |                        |                           |
+
+
+
+
 ## Build the image
 
 This is an alternative approach than the one presented in section [The Fastest Way](#the_fastest_way). You do not need to go through these steps if you have used docker-compose.
