@@ -543,16 +543,7 @@ class Domains(FlowBase):
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
-            # self.logger.debug("Trying to getContextTypes...")
-            # cb_res = self.cb.getContextTypes(
-            #     SERVICE_USER_TOKEN,
-            #     DOMAIN_NAME,
-            #     "",
-            #     None)
-            # self.logger.debug("getContextTypes res=%s" % cb_res)
-            # for entity_type in cb_res['types']:
-            #     for att in entity_type["attributes"] :
-            #         ATTRIBUTES.append(att)
+
 
             # Set default ENTITIES for subscription
             ENTITIES = [ {
