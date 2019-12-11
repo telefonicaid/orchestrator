@@ -76,7 +76,7 @@ class CBOrionOperations(object):
             "subject": {
                 "entities": ENTITIES,
                 "condition": {
-                    NOTIFY_CONDITIONS
+                    "attrs": NOTIFY_ATTRIBUTES
                 }
             },
             "notification": {

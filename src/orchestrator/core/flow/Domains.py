@@ -567,7 +567,7 @@ class Domains(FlowBase):
                 DURATION,
                 ENTITIES,
                 ATTRIBUTES,
-                NOTIFY_CONDITIONS
+                NOTIFY_ATTRIBUTES
             )
             self.logger.debug("subscribeContext res=%s" % cb_res)
             subscriptionid = cb_res['subscribeResponse']['subscriptionId']
