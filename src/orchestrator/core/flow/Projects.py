@@ -514,7 +514,7 @@ class Projects(FlowBase):
                 DURATION,
                 ENTITIES,
                 ATTRIBUTES,
-                NOTIFY_CONDITIONS
+                NOTIFY_ATTRIBUTES
             )
             self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
                                                                      indent=3))

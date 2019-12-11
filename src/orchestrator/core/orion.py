@@ -105,8 +105,10 @@ class CBOrionOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 201, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
+        location = res.headers.get('Location', 0))
+        json_body_response = {
+            'subscriptionId': location.split("/v2/subscriptions/", 1)[1]
+        }
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
@@ -132,8 +134,7 @@ class CBOrionOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 204, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
+        json_body_response = None
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
