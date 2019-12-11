@@ -176,16 +176,14 @@ class CBOrionOperations(object):
             if isinstance(json_body_response, list):
                 for subscription in json_body_response:
                     for entity in subscription['subject']['entities']:
-                        # created using NGSIv1
                         if ( ((not 'idPattern' in entity) or
                               ('idPattern' in entity and not entity['idPattern'])) and
                              entity['id'] == ENTITY_ID):
                             subscriptions_related.append(subscription)
-                        if ('idPattern' in entity and entity['idPattern'] and
+                        elif ('idPattern' in entity and entity['idPattern'] and
                             entity['idPattern'] in [".*", "*"]):
                             subscriptions_related.append(subscription)
-                        # created using NGSIv2
-                        if ('id' in entity and entity['id'] and
+                        elif ('id' in entity and entity['id'] and
                             entity['id'] in [".*", "*"]):
                             subscriptions_related.append(subscription)
 
@@ -240,7 +238,6 @@ class CBOrionOperations(object):
                 for iotmodule in iot_modules:
                     if sub_callback.startswith(
                         flow.get_endpoint_iot_module(iotmodule)):
-                        # created using NGSIv1
                         if ((len(sub['subject']['entities']) == 1) and
                             ('idPattern' in sub['subject']['entities'][0] and
                              sub['subject']['entities'][0]['idPattern'] == '.*') and
@@ -253,8 +250,7 @@ class CBOrionOperations(object):
                                   "alias": flow.get_alias_iot_module(iotmodule)
                               })
                             break
-                        # created using NGSIv2
-                        if ((len(sub['subject']['entities']) == 1) and
+                        elif ((len(sub['subject']['entities']) == 1) and
                             ('id' in sub['subject']['entities'][0] and
                              sub['subject']['entities'][0]['id'] == '.*') and
                             ( ('type' in sub['subject']['entities'][0] and
