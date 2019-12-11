@@ -123,7 +123,7 @@ class CBOrionOperations(object):
         logger.debug("DELETE %s/%s to /v2/subscriptions/%s" % (
             SERVICE_NAME,
             SUBSERVICE_NAME,
-            json.dumps(body_data, indent=3))
+            SUBSCRIPTION_ID)
         )
 
         res = self.CBRestOperations.rest_request(
