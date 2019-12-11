@@ -236,8 +236,8 @@ class CBOrionOperations(object):
                     if sub_callback.startswith(
                         flow.get_endpoint_iot_module(iotmodule)):
                         if ((len(sub['subject']['entities']) == 1) and
-                            ('idPattern' in sub['subject']['entities'][0] and
-                             sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            ('id' in sub['subject']['entities'][0] and
+                             sub['subject']['entities'][0]['id'] == '.*') and
                             ( ('type' in sub['subject']['entities'][0] and
                                sub['subject']['entities'][0]['type'] == '') or
                               'type' not in sub['subject']['entities'][0])):
