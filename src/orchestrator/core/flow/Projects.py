@@ -518,7 +518,7 @@ class Projects(FlowBase):
             )
             self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
                                                                      indent=3))
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            subscriptionid = cb_res['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:

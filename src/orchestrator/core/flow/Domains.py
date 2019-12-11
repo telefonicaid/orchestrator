@@ -570,7 +570,7 @@ class Domains(FlowBase):
                 NOTIFY_ATTRIBUTES
             )
             self.logger.debug("subscribeContext res=%s" % cb_res)
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            subscriptionid = cb_res['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
@@ -666,10 +666,6 @@ class Domains(FlowBase):
                                                "",
                                                sub['id'])
                     break
-
-            # self.logger.debug("subscribeContext res=%s" % cb_res)
-            # subscriptionid = cb_res['subscribeResponse']['subscriptionId']
-            # self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:
             error_code = self.composeErrorCode(ex)
