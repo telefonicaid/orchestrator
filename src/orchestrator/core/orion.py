@@ -104,7 +104,7 @@ class CBOrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 200, (res.code, res.msg)
+        assert res.code == 201, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
@@ -131,7 +131,7 @@ class CBOrionOperations(object):
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 200, (res.code, res.msg)
+        assert res.code == 204, (res.code, res.msg)
         data = res.read()
         json_body_response = json.loads(data)
         logger.debug("json response: %s" % json.dumps(json_body_response,
