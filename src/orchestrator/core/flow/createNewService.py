@@ -330,13 +330,13 @@ class CreateNewService(FlowBase):
                 ID_SUB_SERVICE_ADMIN_GROUP = self.idm.createGroupDomain(DOMAIN_ADMIN_TOKEN,
                                                       ID_DOM1,
                                                       NEW_SERVICE_NAME,
-                                                      SUB_SERVICE_CUSTOMER_GROUP_NAME,
+                                                      SUB_SERVICE_ADMIN_GROUP_NAME,
                                                       None)
 
                 ID_SUB_SERVICE_CUSTOMER_GROUP = self.idm.createGroupDomain(DOMAIN_ADMIN_TOKEN,
                                                       ID_DOM1,
                                                       NEW_SERVICE_NAME,
-                                                      SUB_SERVICE_ADMIN_GROUP_NAME,
+                                                      SUB_SERVICE_CUSTOMER_GROUP_NAME,
                                                       None)
 
 
