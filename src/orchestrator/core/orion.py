@@ -105,7 +105,7 @@ class CBOrionOperations(object):
             fiware_service_path='/'+SUBSERVICE_NAME)
 
         assert res.code == 201, (res.code, res.msg)
-        location = res.headers.get('Location', 0))
+        location = res.headers.get('Location', 0)
         json_body_response = {
             'subscriptionId': location.split("/v2/subscriptions/", 1)[1]
         }
