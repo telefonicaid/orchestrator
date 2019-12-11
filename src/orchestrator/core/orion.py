@@ -71,7 +71,7 @@ class CBOrionOperations(object):
                          DURATION="P50Y",
                          ENTITIES=[],
                          ATTRIBUTES=[],
-                         NOTIFY_CONDITIONS=[]):
+                         NOTIFY_ATTRIBUTES=[]):
         body_data = {
             "subject": {
                 "entities": ENTITIES,
