@@ -3,6 +3,7 @@ CHANGES
 
 UPDATE: Use NGSIv2 by orion driver (#232)
 
+3.0.0
 
 FIX: Hardening groups
 FIX: Disable log into container file
@@ -11,7 +12,6 @@ UPDATE: Add new single roles (ServiceAdmin, ServiceCustomer, SubServiceAdmin, Su
 UPDATE: Update Django from 1.11.23 to 1.11.26
 UPDATE: Allow header buffer size customization from execution args. If is not received the default is 4KB
 FIX: duplicate multiagent into multisink cygnus option
-
 
 2.10.0
 
