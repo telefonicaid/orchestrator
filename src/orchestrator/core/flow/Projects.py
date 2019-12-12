@@ -490,16 +490,6 @@ class Projects(FlowBase):
 
             # Set default ATTRIBUTES for subscription
             ATTRIBUTES = []
-            # self.logger.debug("Trying to getContextTypes...")
-            # cb_res = self.cb.getContextTypes(
-            #     SERVICE_USER_TOKEN,
-            #     DOMAIN_NAME,
-            #     PROJECT_NAME,
-            #     None)
-            # self.logger.debug("getContextTypes res=%s" % cb_res)
-            # for entity_type in cb_res['types']:
-            #     for att in entity_type["attributes"] :
-            #         ATTRIBUTES.append(att)
 
             # Set default ENTITIES for subscription
             ENTITIES = [ {
@@ -524,11 +514,11 @@ class Projects(FlowBase):
                 DURATION,
                 ENTITIES,
                 ATTRIBUTES,
-                NOTIFY_CONDITIONS
+                NOTIFY_ATTRIBUTES
             )
             self.logger.debug("subscribeContext res=%s" % json.dumps(cb_res,
                                                                      indent=3))
-            subscriptionid = cb_res['subscribeResponse']['subscriptionId']
+            subscriptionid = cb_res['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
         except Exception, ex:

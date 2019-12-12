@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Use NGSIv2 by orion driver (#232)
+
 3.0.0
 
 FIX: Hardening groups

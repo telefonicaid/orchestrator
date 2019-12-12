@@ -62,120 +62,6 @@ class CBOrionOperations(object):
         assert res.code == 400, (res.code, res.msg)
         pass
 
-    def registerContext(self,
-                        SERVICE_USER_TOKEN,
-                        SERVICE_NAME,
-                        SUBSERVICE_NAME,
-                        ENTITIES=[],
-                        ATTRIBUTES=[],
-                        APP="",
-                        DURATION="P1M"):
-        body_data = {
-            "contextRegistrations": [
-                {
-                    "entities": ENTITIES,
-                    "attributes": ATTRIBUTES,
-                    "providingApplication": APP
-                }
-            ],
-            "duration": DURATION
-        }
-
-        logger.debug("POST %s/%s to /v1/registry/registerContext with: %s" % (
-            SERVICE_NAME,
-            SUBSERVICE_NAME,
-            json.dumps(body_data, indent=3))
-        )
-        res = self.CBRestOperations.rest_request(
-            url='/v1/registry/registerContext',
-            method='POST',
-            data=body_data,
-            auth_token=SERVICE_USER_TOKEN,
-            fiware_service=SERVICE_NAME,
-            fiware_service_path='/'+SUBSERVICE_NAME)
-
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
-
-
-    def updateContext(self,
-                      SERVICE_USER_TOKEN,
-                      SERVICE_NAME,
-                      SUBSERVICE_NAME,
-                      ENTITY_TYPE,
-                      ENTITY_ID,
-                      ACTION="APPEND",
-                      IS_PATTERN="false",
-                      ATTRIBUTES=[]):
-
-        body_data = {
-            "contextElements": [
-                {
-                    "type": ENTITY_TYPE,
-                    "id": ENTITY_ID,
-                    "isPattern": IS_PATTERN,
-                    "attributes": ATTRIBUTES
-                }
-            ],
-            "updateAction": ACTION
-        }
-
-        logger.debug("POST %s/%s to /v1/updateContext with: %s" % (
-            SERVICE_NAME,
-            SUBSERVICE_NAME,
-            json.dumps(body_data, indent=3))
-        )
-        res = self.CBRestOperations.rest_request(
-            url='/v1/updateContext',
-            method='POST',
-            data=body_data,
-            auth_token=SERVICE_USER_TOKEN,
-            fiware_service=SERVICE_NAME,
-            fiware_service_path='/'+SUBSERVICE_NAME)
-
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
-
-
-    def getContextTypes(self,
-                        SERVICE_USER_TOKEN,
-                        SERVICE_NAME,
-                        SUBSERVICE_NAME,
-                        ENTITY_TYPE=None):
-
-        logger.debug("Getting ContextTyesy for %s %s %s" % (
-            SERVICE_NAME,
-            SUBSERVICE_NAME,
-            ENTITY_TYPE)
-        )
-        res = self.CBRestOperations.rest_request(
-            url='/v1/contextTypes%s?details=on&offset=0&limit=1000' % (
-                '/' + ENTITY_TYPE if ENTITY_TYPE else ""),
-            method='GET',
-            data=None,
-            auth_token=SERVICE_USER_TOKEN,
-            fiware_service=SERVICE_NAME,
-            fiware_service_path='/'+SUBSERVICE_NAME)
-
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        if 'statusCode' in json_body_response:
-            if (int(json_body_response['statusCode']['code']) != 200):
-                return []
-
-        return json_body_response
-
 
     def subscribeContext(self,
                          SERVICE_USER_TOKEN,
@@ -185,32 +71,44 @@ class CBOrionOperations(object):
                          DURATION="P50Y",
                          ENTITIES=[],
                          ATTRIBUTES=[],
-                         NOTIFY_CONDITIONS=[]):
+                         NOTIFY_ATTRIBUTES=[]):
         body_data = {
-            "entities": ENTITIES,
-            "attributes": ATTRIBUTES,
-            "reference": REFERENCE_URL, # like http://<sth.host>:<sth.port>/notify
-            "duration": DURATION,
-            "notifyConditions": NOTIFY_CONDITIONS
+            "subject": {
+                "entities": ENTITIES,
+                "condition": {
+                    "attrs": NOTIFY_ATTRIBUTES
+                }
+            },
+            "notification": {
+                "attrs": ATTRIBUTES,
+                "http": {
+                    "url": REFERENCE_URL
+                },
+                "attrsFormat": "normalized"
+            },
+            "expires": "",
+            "status": "active",
+            "throttling": 0
         }
-        logger.debug("POST %s/%s to /v1/subscribeContext with: %s" % (
+        logger.debug("POST %s/%s to /v2/subscriptions with: %s" % (
             SERVICE_NAME,
             SUBSERVICE_NAME,
             json.dumps(body_data, indent=3))
         )
 
-        #TODO: v1/registry/subscribeContextAvailability ?
         res = self.CBRestOperations.rest_request(
-            url='/v1/subscribeContext',
+            url='/v2/subscriptions',
             method='POST',
             data=body_data,
             auth_token=SERVICE_USER_TOKEN,
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
+        assert res.code == 201, (res.code, res.msg)
+        location = res.headers.get('Location', 0)
+        json_body_response = {
+            'subscriptionId': location.split("/v2/subscriptions/", 1)[1]
+        }
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
@@ -222,52 +120,21 @@ class CBOrionOperations(object):
                            SUBSERVICE_NAME,
                            SUBSCRIPTION_ID):
 
-        body_data = {
-            "subscriptionId": SUBSCRIPTION_ID
-        }
-
-        logger.debug("POST %s/%s to /v1/unsubscribeContext with: %s" % (
+        logger.debug("DELETE %s/%s to /v2/subscriptions/%s" % (
             SERVICE_NAME,
             SUBSERVICE_NAME,
-            json.dumps(body_data, indent=3))
+            SUBSCRIPTION_ID)
         )
 
         res = self.CBRestOperations.rest_request(
-            url='/v1/unsubscribeContext',
-            method='POST',
-            data=body_data,
+            url='/v2/subscriptions/' + SUBSCRIPTION_ID,
+            method='DELETE',
             auth_token=SERVICE_USER_TOKEN,
             fiware_service=SERVICE_NAME,
             fiware_service_path='/'+SUBSERVICE_NAME)
 
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
-        logger.debug("json response: %s" % json.dumps(json_body_response,
-                                                      indent=3))
-        return json_body_response
-
-    def getContextEntity(self,
-                         SERVICE_USER_TOKEN,
-                         SERVICE_NAME,
-                         SUBSERVICE_NAME,
-                         ENTITY_ID):
-        logger.debug("Getting ContextEntity for %s %s %s" % (
-            SERVICE_NAME,
-            SUBSERVICE_NAME,
-            ENTITY_ID)
-        )
-        res = self.CBRestOperations.rest_request(
-            url='/v1/contextEntities/%s' % ENTITY_ID ,
-            method='GET',
-            data=None,
-            auth_token=SERVICE_USER_TOKEN,
-            fiware_service=SERVICE_NAME,
-            fiware_service_path='/'+SUBSERVICE_NAME)
-
-        assert res.code == 200, (res.code, res.msg)
-        data = res.read()
-        json_body_response = json.loads(data)
+        assert res.code == 204, (res.code, res.msg)
+        json_body_response = None
         logger.debug("json response: %s" % json.dumps(json_body_response,
                                                       indent=3))
         return json_body_response
@@ -313,8 +180,11 @@ class CBOrionOperations(object):
                               ('idPattern' in entity and not entity['idPattern'])) and
                              entity['id'] == ENTITY_ID):
                             subscriptions_related.append(subscription)
-                        if ('idPattern' in entity and entity['idPattern'] and
+                        elif ('idPattern' in entity and entity['idPattern'] and
                             entity['idPattern'] in [".*", "*"]):
+                            subscriptions_related.append(subscription)
+                        elif ('id' in entity and entity['id'] and
+                            entity['id'] in [".*", "*"]):
                             subscriptions_related.append(subscription)
 
             fiware_total_count = int(res.headers.get('Fiware-Total-Count', 0))
@@ -371,6 +241,18 @@ class CBOrionOperations(object):
                         if ((len(sub['subject']['entities']) == 1) and
                             ('idPattern' in sub['subject']['entities'][0] and
                              sub['subject']['entities'][0]['idPattern'] == '.*') and
+                            ( ('type' in sub['subject']['entities'][0] and
+                               sub['subject']['entities'][0]['type'] == '') or
+                              'type' not in sub['subject']['entities'][0])):
+                            modules.append(
+                                { "name": iotmodule,
+                                  "subscriptionid": sub['id'],
+                                  "alias": flow.get_alias_iot_module(iotmodule)
+                              })
+                            break
+                        elif ((len(sub['subject']['entities']) == 1) and
+                            ('id' in sub['subject']['entities'][0] and
+                             sub['subject']['entities'][0]['id'] == '.*') and
                             ( ('type' in sub['subject']['entities'][0] and
                                sub['subject']['entities'][0]['type'] == '') or
                               'type' not in sub['subject']['entities'][0])):
