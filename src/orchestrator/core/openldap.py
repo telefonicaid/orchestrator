@@ -347,7 +347,7 @@ class OpenLdapOperations(object):
                           GROUP_NAME):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "uid=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            dn = "cn=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
             result = conn.delete_s(dn)
             logger.debug("ldap delete group by admin %s" % json.dumps(result))
             self.unbind(conn)
@@ -363,7 +363,7 @@ class OpenLdapOperations(object):
                           GROUP_DESCRIPTION):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "uid=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            dn = "cn=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
             old_value = {}
             new_value = {}
             results = conn.search_s(dn, ldap.SCOPE_BASE)
@@ -393,7 +393,7 @@ class OpenLdapOperations(object):
             baseDN = "ou=groups," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
             retrieveAttributes = ['description','cn']
-            searchFilter = "uid=" + FILTER
+            searchFilter = "cn=" + FILTER
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
             logger.debug("ldap list groups %s" % json.dumps(ldap_result_id))
