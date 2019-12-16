@@ -325,7 +325,7 @@ class OpenLdapOperations(object):
                    NEW_GROUP_DESCRIPTION):
         try:
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
-            dn = "uid=" + NEW_GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            dn = "cn=" + NEW_GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
             mymodlist = {
                 "objectClass": ["top", "groupofnames"],
                 'member' : [ 'ou=groups,dc=openstack,dc=org' ],
