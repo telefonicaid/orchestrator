@@ -512,9 +512,9 @@ json = {
             },
         },
     },
-    ####################
+    #####################
     "RoleAssignmentList": {
-    ####################
+    #####################
         "name": "RoleAssignmentList",
         "dependencies": {
             "SERVICE_ADMIN_USER": [
@@ -698,9 +698,9 @@ json = {
         },
         # "required": [ ],
     },
-    #######
+    ###########
     "LdapUser": {
-    #######
+    ###########
         "name": "LdapUser",
         "dependencies": {
             "LDAP_ADMIN_USER": [
@@ -791,9 +791,9 @@ json = {
         }
         # "required": [ ],
     },
-    #######
+    ############
     "LdapGroup": {
-    #######
+    ############
         "name": "LdapGroup",
         "dependencies": {
             "LDAP_ADMIN_USER": [
@@ -823,4 +823,5 @@ json = {
             },
         }
         # "required": [ ],
+    }
 }
