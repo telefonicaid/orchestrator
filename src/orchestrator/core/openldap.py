@@ -317,3 +317,67 @@ class OpenLdapOperations(object):
         except ldap.LDAPError, e:
             logger.warn("updateUserByUser exception: %s" % e)
             return { "error": e }
+
+    def createGroup(self,
+                   LDAP_ADMIN_USER,
+                   LDAP_ADMIN_PASSWORD,
+                   NEW_GROUP_NAME,
+                   NEW_GROUP_DESCRIPTION):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            dn = "uid=" + NEW_GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            mymodlist = {
+                "objectClass": ["top", "groupofnames"],
+                "description": str(NEW_GROUP_DESCRIPTION)
+            }
+            logger.debug("create group mymodlist: %s" % mymodlist)
+            result = conn.add_s(dn, ldap.modlist.addModlist(mymodlist))
+            logger.debug("ldap create group %s" % json.dumps(result))
+            self.unbind(conn)
+            return { "details": result }
+        except ldap.LDAPError, e:
+            logger.warn("createGroup exception: %s" % e)
+            return { "error": e }
+
+    def deleteGroupByAdmin(self,
+                          LDAP_ADMIN_USER,
+                          LDAP_ADMIN_PASSWORD,
+                          GROUP_NAME):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            dn = "uid=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            result = conn.delete_s(dn)
+            logger.debug("ldap delete group by admin %s" % json.dumps(result))
+            self.unbind(conn)
+            return { "details": result }
+        except ldap.LDAPError, e:
+            logger.warn("deleteGroupByAdmin exception: %s" % e)
+            return { "error": e }
+
+    def updateGroupByAdmin(self,
+                          LDAP_ADMIN_USER,
+                          LDAP_ADMIN_PASSWORD,
+                          GROUP_NAME,
+                          GROUP_DESCRIPTION):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            dn = "uid=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            old_value = {}
+            new_value = {}
+            results = conn.search_s(dn, ldap.SCOPE_BASE)
+            for result in results:
+                result_dn = result[0]
+                result_attrs = result[1]
+                for attr in result_attrs:
+                    for userattr in ['description']:
+                        if attr == userattr:
+                            old_value[attr] = result_attrs[userattr]
+                            new_value[attr] = GROUP_DESCRIPTION
+            mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
+            result = conn.modify_s(dn, mymodlist)
+            logger.debug("ldap update group by admin %s" % json.dumps(result))
+            self.unbind(conn)
+            return { "details": result }
+        except ldap.LDAPError, e:
+            logger.warn("updateGroupByAdmin exception: %s" % e)
+            return { "error": e }

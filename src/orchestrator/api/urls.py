@@ -43,6 +43,7 @@ from orchestrator.api.views import (ServiceList_RESTView,
                                     OrchMetrics_RESTView
                                     )
 from orchestrator.api.ldap_view import (LdapUser_RESTView,
+                                        LdapGroup_RESTView,
                                         LdapAuth_RESTView)
 
 
@@ -69,5 +70,6 @@ urlpatterns = [
      url(r'^admin/log?$', OrchLogLevel_RESTView.as_view(), name='orch_loglevel_rest_view'),
      url(r'^admin/metrics?$', OrchMetrics_RESTView.as_view(), name='orch_metrics_rest_view'),
      url(r'^ldap/user?$', LdapUser_RESTView.as_view(), name='ldap_user_rest_view'),
+     url(r'^ldap/group?$', LdapGroup_RESTView.as_view(), name='ldap_group_rest_view'),
      url(r'^ldap/auth?$', LdapAuth_RESTView.as_view(), name='ldap_auth_rest_view'),
 ]
