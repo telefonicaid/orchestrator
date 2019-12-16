@@ -154,7 +154,7 @@ class LdapGroupHelper(FlowBase):
             if not "error" in group:
                 return group
             else:
-                raise Exception(400, "None group detail was retrieved from ldap: groups %s" % (groups))
+                raise Exception(400, "None group detail was retrieved from ldap: group %s" % (group))
         except Exception, ex:
             self.logger.warn("ERROR retrieving group detail %s: %s" % (
                 GROUP_NAME,
