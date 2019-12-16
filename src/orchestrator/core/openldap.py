@@ -382,3 +382,36 @@ class OpenLdapOperations(object):
         except ldap.LDAPError, e:
             logger.warn("updateGroupByAdmin exception: %s" % e)
             return { "error": e }
+
+    def listGroups(self,
+                    LDAP_ADMIN_USER,
+                    LDAP_ADMIN_PASSWORD,
+                    FILTER):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            baseDN = "ou=groups," + self.LDAP_BASEDN
+            searchScope = ldap.SCOPE_SUBTREE
+            retrieveAttributes = ['uid','sn','description','cn']
+            searchFilter = "uid=" + FILTER
+            ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
+                                         retrieveAttributes)
+            logger.debug("ldap list groups %s" % json.dumps(ldap_result_id))
+            result_set = []
+            while 1:
+                result_type, result_data = conn.result(ldap_result_id, 0)
+                if (result_data == []):
+                    break
+                else:
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        result_set.append(result_data[0])
+            logger.debug("ldap number of groups found %s" % len(result_set))
+            self.unbind(conn)
+            res = {}
+            if result_set != []:
+                res = { "details": result_set }
+            else:
+                res = { "error": FILTER + " not found" }
+            return res
+        except ldap.LDAPError, e:
+            logger.warn("listGroups exception: %s" % e)
+            return { "error": e }
