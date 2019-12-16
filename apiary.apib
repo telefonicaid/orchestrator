@@ -1199,3 +1199,81 @@ The following metrics are collected by the component:
       {
          "details": "OK"
       }
+
+
+## LDAP Group [/v1.0/ldap/group]
+
+### Create Group [POST]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "NEW_GROUP_NAME": "newgroupname",
+         "NEW_GROUP_DESCRIPTION":"group description"
+      }
++ Response 201 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
+
+
+### Delete Group [DELETE]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "GROUP_NAME": "grouptodelete",
+      }
++ Response 204 (application/json)
+
+
+### List Groups [GET]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "FILTER": "*text*",
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [
+                      [ "baseDN": { "uid": [ "groupuid"],
+                                    "cn": [ "groupcn" ],
+                                 } ],
+                      [ "baseDN": { "uid": [ "groupuid2"],
+                                    "cn": [ "groupcn2..." ],
+                                 } ]
+                    ]
+      }
+
+
+### Get Group Details by Admin [GET]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "GROUP_NAME": "ldapgroupname"
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": [ "baseDN": { "uid": [ "groupuid"],
+                                  "cn": [ "groupcn" ]
+                                 } ]
+      }
+
+### Update Group [PUT]
++ Request (application/json)
+      {
+         "LDAP_ADMIN_USER": "ldapadminuser",
+         "LDAP_ADMIN_PASSWORD": "ldapadminpassword",
+         "GROUP_NAME": "ldapgroupname",
+         "GROUP_DESCRIPTION": "new group description",
+      }
++ Response 200 (application/json)
+    + Body
+      {
+         "details": "OK"
+      }
