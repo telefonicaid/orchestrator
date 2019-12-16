@@ -328,7 +328,7 @@ class OpenLdapOperations(object):
             dn = "uid=" + NEW_GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
             mymodlist = {
                 "objectClass": ["top", "groupofnames"],
-                'member' = [ 'ou=groups,dc=openstack,dc=org' ],
+                'member' : [ 'ou=groups,dc=openstack,dc=org' ],
                 "description": str(NEW_GROUP_DESCRIPTION)
             }
             logger.debug("create group mymodlist: %s" % mymodlist)
