@@ -328,6 +328,7 @@ class OpenLdapOperations(object):
             dn = "cn=" + NEW_GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
             mymodlist = {
                 "objectClass": ["top", "groupofnames"],
+                "cn": [ str(NEW_GROUP_NAME) ],
                 'member' : [ 'ou=groups,dc=openstack,dc=org' ],
                 "description": str(NEW_GROUP_DESCRIPTION)
             }
@@ -391,7 +392,7 @@ class OpenLdapOperations(object):
             conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
             baseDN = "ou=groups," + self.LDAP_BASEDN
             searchScope = ldap.SCOPE_SUBTREE
-            retrieveAttributes = ['uid','sn','description','cn']
+            retrieveAttributes = ['description','cn']
             searchFilter = "uid=" + FILTER
             ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
                                          retrieveAttributes)
