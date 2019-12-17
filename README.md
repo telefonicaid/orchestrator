@@ -26,6 +26,7 @@ Orchestrator is used to:
 - Activate / deactivate IoT Modules
 - Retrieve statistics and metrics about API usage
 - Create, List, Modify LDAP Users
+- Create, List, Modify LDAP Groups
 
 Orchestrator is based mainly on:
 - Python 2.7 needed
