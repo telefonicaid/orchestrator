@@ -402,7 +402,7 @@ class LdapGroup_RESTView(APIView, IoTConf):
                                request.data.get("LDAP_ADMIN_USER", None),
                                request.data.get("LDAP_ADMIN_PASSWORD", None),
                                request.data.get("GROUP_NAME", None),
-                               request.data.get("GROUP_DESCRIPTON", None))
+                               request.data.get("GROUP_DESCRIPTION", None))
             if 'error' not in result:
                 Stats.num_put_ldap += 1
                 response = Response(result, status=status.HTTP_200_OK,
