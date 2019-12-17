@@ -821,6 +821,9 @@ json = {
             "NEW_GROUP_DESCRIPTION": {
                 "type": "string"
             },
+            "GROUP_DESCRIPTION": {
+                "type": "string"
+            },
         }
         # "required": [ ],
     }
