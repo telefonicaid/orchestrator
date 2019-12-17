@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+ADD: API crud for ldap groups (#235)
 UPDATE: Use NGSIv2 by orion driver (#232)
 
 3.0.0
