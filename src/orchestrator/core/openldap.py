@@ -317,3 +317,104 @@ class OpenLdapOperations(object):
         except ldap.LDAPError, e:
             logger.warn("updateUserByUser exception: %s" % e)
             return { "error": e }
+
+    def createGroup(self,
+                   LDAP_ADMIN_USER,
+                   LDAP_ADMIN_PASSWORD,
+                   NEW_GROUP_NAME,
+                   NEW_GROUP_DESCRIPTION):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            dn = "cn=" + NEW_GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            mymodlist = {
+                "objectClass": ["top", "groupofnames"],
+                "cn": [ str(NEW_GROUP_NAME) ],
+                'member' : [ 'ou=groups,dc=openstack,dc=org' ],
+                "description": str(NEW_GROUP_DESCRIPTION)
+            }
+            logger.debug("create group mymodlist: %s" % mymodlist)
+            result = conn.add_s(dn, ldap.modlist.addModlist(mymodlist))
+            logger.debug("ldap create group %s" % json.dumps(result))
+            self.unbind(conn)
+            return { "details": result }
+        except ldap.LDAPError, e:
+            logger.warn("createGroup exception: %s" % e)
+            return { "error": e }
+
+    def deleteGroupByAdmin(self,
+                          LDAP_ADMIN_USER,
+                          LDAP_ADMIN_PASSWORD,
+                          GROUP_NAME):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            dn = "cn=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            result = conn.delete_s(dn)
+            logger.debug("ldap delete group by admin %s" % json.dumps(result))
+            self.unbind(conn)
+            return { "details": result }
+        except ldap.LDAPError, e:
+            logger.warn("deleteGroupByAdmin exception: %s" % e)
+            return { "error": e }
+
+    def updateGroupByAdmin(self,
+                          LDAP_ADMIN_USER,
+                          LDAP_ADMIN_PASSWORD,
+                          GROUP_NAME,
+                          GROUP_DESCRIPTION):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            dn = "cn=" + GROUP_NAME + ",ou=groups," + self.LDAP_BASEDN
+            old_value = {}
+            new_value = {}
+            results = conn.search_s(dn, ldap.SCOPE_BASE)
+            logger.debug("ldap update group search results %s" % json.dumps(results))
+            for result in results:
+                result_dn = result[0]
+                result_attrs = result[1]
+                for attr in result_attrs:
+                    for userattr in ['description']:
+                        if attr == userattr:
+                            old_value[attr] = result_attrs[userattr]
+                            new_value[attr] = [str(GROUP_DESCRIPTION)]
+            logger.debug("ldap update group old_value %s new_value %s " % (json.dumps(old_value), json.dumps(new_value)))
+            mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
+            result = conn.modify_s(dn, mymodlist)
+            logger.debug("ldap update group by admin %s" % json.dumps(result))
+            self.unbind(conn)
+            return { "details": result }
+        except ldap.LDAPError, e:
+            logger.warn("updateGroupByAdmin exception: %s" % e)
+            return { "error": e }
+
+    def listGroups(self,
+                    LDAP_ADMIN_USER,
+                    LDAP_ADMIN_PASSWORD,
+                    FILTER):
+        try:
+            conn = self.bindAdmin(LDAP_ADMIN_USER, LDAP_ADMIN_PASSWORD)
+            baseDN = "ou=groups," + self.LDAP_BASEDN
+            searchScope = ldap.SCOPE_SUBTREE
+            retrieveAttributes = ['description','cn']
+            searchFilter = "cn=" + FILTER
+            ldap_result_id = conn.search(baseDN, searchScope, searchFilter,
+                                         retrieveAttributes)
+            logger.debug("ldap list groups %s" % json.dumps(ldap_result_id))
+            result_set = []
+            while 1:
+                result_type, result_data = conn.result(ldap_result_id, 0)
+                if (result_data == []):
+                    break
+                else:
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        result_set.append(result_data[0])
+            logger.debug("ldap number of groups found %s" % len(result_set))
+            self.unbind(conn)
+            res = {}
+            if result_set != []:
+                res = { "details": result_set }
+            else:
+                res = { "error": FILTER + " not found" }
+            return res
+        except ldap.LDAPError, e:
+            logger.warn("listGroups exception: %s" % e)
+            return { "error": e }

@@ -512,9 +512,9 @@ json = {
             },
         },
     },
-    ####################
+    #####################
     "RoleAssignmentList": {
-    ####################
+    #####################
         "name": "RoleAssignmentList",
         "dependencies": {
             "SERVICE_ADMIN_USER": [
@@ -698,9 +698,9 @@ json = {
         },
         # "required": [ ],
     },
-    #######
+    ###########
     "LdapUser": {
-    #######
+    ###########
         "name": "LdapUser",
         "dependencies": {
             "LDAP_ADMIN_USER": [
@@ -788,6 +788,42 @@ json = {
                     },
                 "additionalProperties": False,
             }
+        }
+        # "required": [ ],
+    },
+    ############
+    "LdapGroup": {
+    ############
+        "name": "LdapGroup",
+        "dependencies": {
+            "LDAP_ADMIN_USER": [
+                "LDAP_ADMIN_PASSWORD"
+            ],
+            "LDAP_ADMIN_PASSWORD": [
+                "LDAP_ADMIN_USER"
+            ]
+        },
+        "properties": {
+            "LDAP_ADMIN_USER": {
+                "type": "string",
+            },
+            "LDAP_ADMIN_PASSWORD": {
+                "type": "string",
+            },
+            "GROUP_NAME": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "NEW_GROUP_NAME": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_]+)$",
+            },
+            "NEW_GROUP_DESCRIPTION": {
+                "type": "string"
+            },
+            "GROUP_DESCRIPTION": {
+                "type": "string"
+            },
         }
         # "required": [ ],
     }
