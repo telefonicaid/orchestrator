@@ -367,6 +367,7 @@ class OpenLdapOperations(object):
             old_value = {}
             new_value = {}
             results = conn.search_s(dn, ldap.SCOPE_BASE)
+            logger.debug("ldap update group search results %s" % json.dumps(results))
             for result in results:
                 result_dn = result[0]
                 result_attrs = result[1]
@@ -374,7 +375,8 @@ class OpenLdapOperations(object):
                     for userattr in ['description']:
                         if attr == userattr:
                             old_value[attr] = result_attrs[userattr]
-                            new_value[attr] = GROUP_DESCRIPTION
+                            new_value[attr] = [str(GROUP_DESCRIPTION)]
+            logger.debug("ldap update group old_value %s new_value %s " % (json.dumps(old_value), json.dumps(new_value)))
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)
             logger.debug("ldap update group by admin %s" % json.dumps(result))
