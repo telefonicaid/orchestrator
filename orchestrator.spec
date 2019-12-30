@@ -101,8 +101,8 @@ if [ "$RET_VAL" == "0" ]; then
 fi
 
 echo "[INFO] Link to /opt"
-ln -sf %{_install_dir} %{_orchestrator_link_dir}
-ln -sf %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
+ln -sfn %{_install_dir} %{_orchestrator_link_dir}
+ln -sfn %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
 
 echo "[INFO] Fix version"
 sed -i -e 's/ORC_version/%{_version}/g' %{_install_dir}/settings/common.py
