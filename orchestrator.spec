@@ -82,34 +82,34 @@ fi
 %post
 echo "[INFO] Configuring application"
 
-    echo "[INFO] Creating log directory"
-    mkdir -p %{_orchestrator_log_dir}
-    chown -R %{_project_user}:%{_project_user} %{_orchestrator_log_dir}
-    chmod g+s %{_orchestrator_log_dir}
-    setfacl -d -m g::rwx %{_orchestrator_log_dir}
-    setfacl -d -m o::rx %{_orchestrator_log_dir}
+echo "[INFO] Creating log directory"
+mkdir -p %{_orchestrator_log_dir}
+chown -R %{_project_user}:%{_project_user} %{_orchestrator_log_dir}
+chmod g+s %{_orchestrator_log_dir}
+setfacl -d -m g::rwx %{_orchestrator_log_dir}
+setfacl -d -m o::rx %{_orchestrator_log_dir}
 
-    echo "[INFO] Configuring application service"
-    cd /etc/init.d
-    chkconfig --add %{_service_name}
+echo "[INFO] Configuring application service"
+cd /etc/init.d
+chkconfig --add %{_service_name}
 
-    ls /tmp/dev.py
-    RET_VAL=$?
+ls /tmp/dev.py
+RET_VAL=$?
 
-    if [ "$RET_VAL" == "0" ]; then
-        mv /tmp/dev.py %{_install_dir}/settings/dev.py
-    fi
+if [ "$RET_VAL" == "0" ]; then
+    mv /tmp/dev.py %{_install_dir}/settings/dev.py
+fi
 
-    echo "[INFO] Link to /opt"
-    ln -sf %{_install_dir} %{_orchestrator_link_dir}
-    ln -sf %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
+echo "[INFO] Link to /opt"
+ln -sf %{_install_dir} %{_orchestrator_link_dir}
+ln -sf %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
 
-    echo "[INFO] Fix version"
-    sed -i -e 's/ORC_version/%{_version}/g' %{_install_dir}/settings/common.py
-    sed -i -e 's/\${project.version}/%{_version}/g' %{_install_dir}/orchestrator/core/banner.txt
+echo "[INFO] Fix version"
+sed -i -e 's/ORC_version/%{_version}/g' %{_install_dir}/settings/common.py
+sed -i -e 's/\${project.version}/%{_version}/g' %{_install_dir}/orchestrator/core/banner.txt
 
-    echo "[INFO] restart service %{_service_name}"
-    service %{_service_name} restart &> /dev/null
+echo "[INFO] restart service %{_service_name}"
+service %{_service_name} restart &> /dev/null
     
 echo "Done"
 
