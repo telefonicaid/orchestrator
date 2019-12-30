@@ -56,7 +56,8 @@ RET_VAL=$?
 if [ "$RET_VAL" != "0" ]
 then
   mkdir -p %{_install_dir}
-  /usr/sbin/useradd -s "/bin/bash" -d %{_install_dir} %{_project_user}
+  /usr/sbin/groupadd -f orchestrator
+  /usr/sbin/useradd -s "/bin/bash" -d %{_install_dir} -g orchestrator %{_project_user}
   RET_VAL=$?
   if [ "$RET_VAL" != "0" ]
   then
