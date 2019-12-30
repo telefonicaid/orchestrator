@@ -104,6 +104,10 @@ then
 fi
 
 echo "[INFO] Link to /opt"
+# Remove bad created links
+rm -f %{_install_dir}/iotp-orchestrator
+rm -f %{_orchestrator_link_dir}/orchestrator/commands/commands
+# Create good links
 ln -sfn %{_install_dir} %{_orchestrator_link_dir}
 ln -sfn %{_orchestrator_link_dir}/orchestrator/commands %{_orchestrator_link_dir}/bin
 
