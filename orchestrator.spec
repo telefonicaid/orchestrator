@@ -49,13 +49,6 @@ mkdir -p $RPM_BUILD_ROOT/etc/default
 cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-daemon
 
 
-%files
-%{python_lib}/iotp-orchestrator
-%defattr(755,%{_project_user},%{_project_user},755)
-%config /etc/init.d/%{_service_name}
-%config /etc/default/%{_service_name}-daemon
-
-
 %pre
 echo "[INFO] Creating %{_project_user} user"
 grep ^%{_project_user}: /etc/passwd
@@ -147,4 +140,10 @@ then
 
   echo "Done"
 fi
+
+%files
+%{python_lib}/iotp-orchestrator
+%defattr(755,%{_project_user},%{_project_user},755)
+%config /etc/init.d/%{_service_name}
+%config /etc/default/%{_service_name}-daemon
 
