@@ -37,17 +37,6 @@ IoT Platform Orchestrator
 # RPM Building folder
 %define _build_root_project %{buildroot}%{_install_dir}
 
-# %prep
-# echo "[INFO] Preparing installation"
-# # Create rpm/BUILDROOT folder
-# rm -Rf $RPM_BUILD_ROOT && mkdir -p $RPM_BUILD_ROOT
-# [ -d %{_build_root_project} ] || mkdir -p %{_build_root_project}
-# # Copy src files
-# cp -R %{_srcdir}/bin \
-#       %{_srcdir}/LICENSE \
-#       %{_build_root_project}
-
-# cp -R %{_topdir}/SOURCES/etc %{buildroot}
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{python_lib}
@@ -59,6 +48,7 @@ cp -a %{_root}/bin/orchestrator-daemon.sh $RPM_BUILD_ROOT/etc/init.d/orchestrato
 mkdir -p $RPM_BUILD_ROOT/etc/default
 cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-daemon
 
+
 %files
 %{python_lib}/iotp-orchestrator
 %defattr(755,%{_project_user},%{_project_user},755)
@@ -66,9 +56,7 @@ cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-
 %config /etc/default/%{_service_name}-daemon
 %{_install_dir}
 
-# -------------------------------------------------------------------------------------------- #
-# pre-install section:
-# -------------------------------------------------------------------------------------------- #
+
 %pre
 echo "[INFO] Creating %{_project_user} user"
 grep ^%{_project_user}: /etc/passwd
@@ -89,13 +77,8 @@ else
           cp %{_install_dir}/settings/dev.py /tmp
       fi
 fi
-#
-# TODO Check if there was a previous configuration
-#
 
-# -------------------------------------------------------------------------------------------- #
-# post-install section:
-# -------------------------------------------------------------------------------------------- #
+
 %post
 echo "[INFO] Configuring application"
 
@@ -157,9 +140,4 @@ if [ $1 == 0 ]; then
 
   echo "Done"
 fi
-
-# if [ $1 -gt 0 ] ; then
-#   # upgrading: no remove extension
-#   exit 0
-# fi
 
