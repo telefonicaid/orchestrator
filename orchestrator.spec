@@ -136,7 +136,7 @@ if [ $1 == 0 ]; then
   rm -Rf /etc/init.d/%{_service_name}
 
   echo "[INFO] Removing orchestrator link"
-  rm %{_orchestrator_link_dir}
+  rm -f %{_orchestrator_link_dir}
 
   echo "Done"
 fi
