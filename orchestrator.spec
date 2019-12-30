@@ -54,7 +54,6 @@ cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-
 %defattr(755,%{_project_user},%{_project_user},755)
 %config /etc/init.d/%{_service_name}
 %config /etc/default/%{_service_name}-daemon
-%{_install_dir}
 
 
 %pre
