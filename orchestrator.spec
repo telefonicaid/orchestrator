@@ -60,21 +60,24 @@ cp -a %{_root}/bin/orchestrator-daemon $RPM_BUILD_ROOT/etc/default/orchestrator-
 echo "[INFO] Creating %{_project_user} user"
 grep ^%{_project_user}: /etc/passwd
 RET_VAL=$?
-if [ "$RET_VAL" != "0" ]; then
-      mkdir -p %{_install_dir}
-      /usr/sbin/useradd -s "/bin/bash" -d %{_install_dir} %{_project_user}
-      RET_VAL=$?
-      if [ "$RET_VAL" != "0" ]; then
-         echo "[ERROR] Unable create %{_project_user} user" \
-         exit $RET_VAL
-      fi
+if [ "$RET_VAL" != "0" ]
+then
+  mkdir -p %{_install_dir}
+  /usr/sbin/useradd -s "/bin/bash" -d %{_install_dir} %{_project_user}
+  RET_VAL=$?
+  if [ "$RET_VAL" != "0" ]
+  then
+    echo "[ERROR] Unable create %{_project_user} user"
+    exit $RET_VAL
+  fi
 else
-      ls %{_install_dir}/settings/dev.py
-      RET_VAL=$?
+  ls %{_install_dir}/settings/dev.py
+  RET_VAL=$?
 
-      if [ "$RET_VAL" == "0" ]; then
-          cp %{_install_dir}/settings/dev.py /tmp
-      fi
+  if [ "$RET_VAL" == "0" ]
+  then
+    cp %{_install_dir}/settings/dev.py /tmp
+  fi
 fi
 
 
@@ -95,8 +98,9 @@ chkconfig --add %{_service_name}
 ls /tmp/dev.py
 RET_VAL=$?
 
-if [ "$RET_VAL" == "0" ]; then
-    mv /tmp/dev.py %{_install_dir}/settings/dev.py
+if [ "$RET_VAL" == "0" ]
+then
+  mv /tmp/dev.py %{_install_dir}/settings/dev.py
 fi
 
 echo "[INFO] Link to /opt"
@@ -117,8 +121,8 @@ echo "Done"
 echo "[INFO] stoping service %{_service_name}"
 service %{_service_name} stop &> /dev/null
 
-if [ $1 == 0 ]; then
-
+if [ $1 == 0 ]
+then
   echo "[INFO] Removing application log files"
   # Log
   [ -d %{_orchestrator_log_dir} ] && rm -rf %{_orchestrator_log_dir}
