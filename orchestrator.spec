@@ -57,7 +57,7 @@ if [ "$RET_VAL" != "0" ]
 then
   mkdir -p %{_install_dir}
   /usr/sbin/groupadd -f orchestrator
-  /usr/sbin/useradd -s "/bin/bash" -d %{_install_dir} -g orchestrator %{_project_user}
+  /usr/sbin/useradd -s "/bin/bash" -g orchestrator %{_project_user}
   RET_VAL=$?
   if [ "$RET_VAL" != "0" ]
   then
@@ -143,8 +143,10 @@ then
 fi
 
 %files
-%{python_lib}/iotp-orchestrator
 %defattr(755,%{_project_user},%{_project_user},755)
+%attr(644,root,root) /etc/init.d/%{_service_name}
+%attr(644,root,root) /etc/default/%{_service_name}-daemon
 %config /etc/init.d/%{_service_name}
 %config /etc/default/%{_service_name}-daemon
+%{python_lib}/iotp-orchestrator
 
