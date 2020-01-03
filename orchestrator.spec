@@ -144,7 +144,7 @@ fi
 
 %files
 %defattr(755,%{_project_user},%{_project_user},755)
-%attr(644,root,root) /etc/init.d/%{_service_name}
+%attr(755,root,root) /etc/init.d/%{_service_name}
 %attr(644,root,root) /etc/default/%{_service_name}-daemon
 %config /etc/init.d/%{_service_name}
 %config /etc/default/%{_service_name}-daemon
