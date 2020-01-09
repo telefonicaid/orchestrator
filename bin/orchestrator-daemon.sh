@@ -19,7 +19,7 @@ UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
 PROCESSES=6
 THREADS=8
-HARAKIRI=40
+HARAKIRI=60
 MAX_REQUESTS=1000
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
