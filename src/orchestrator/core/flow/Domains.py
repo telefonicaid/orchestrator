@@ -547,8 +547,7 @@ class Domains(FlowBase):
 
             # Set default ENTITIES for subscription
             ENTITIES = [ {
-                "isPattern": "true",
-                "id": ".*"
+                "idPattern": ".*"
             } ]
 
             # Set default Notify conditions
