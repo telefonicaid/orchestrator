@@ -19,8 +19,8 @@ UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
 PROCESSES=6
 THREADS=8
-HARAKIRI=40
-MAX_REQUESTS=1000
+HARAKIRI=80
+MAX_REQUESTS=500
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
 PNAME="orchestrator"
@@ -41,8 +41,7 @@ exe="$UWGSI --http :${PORT} \
 --harakiri $HARAKIRI \
 --max-requests $MAX_REQUESTS \
 --vacuum \
---enable-threads \
---disable-logging"
+--enable-threads"
 
 server="$exe"
 
