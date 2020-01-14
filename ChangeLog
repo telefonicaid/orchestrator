@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Do not delete keystone roles explicitly when delete keystone domain
 UPDATE: Increase harakiri uwsgi option to 80 from 40
 UPDATE: Adjust orchestrator spec file for RPM (#238)
 ADD: API crud for ldap groups (#235)
