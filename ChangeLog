@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Check if cloud_admin user before try to delete rules and subscriptions when delete service (#246)
 UPDATE: Makes optional create default groups when create a new domain
 UPDATE: Do not delete keystone roles explicitly when delete keystone domain
 UPDATE: Adjust uwsgi options: add uwsgi logs and fix max_request to 500 instead of 1000
