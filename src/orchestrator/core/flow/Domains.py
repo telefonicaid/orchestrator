@@ -283,47 +283,66 @@ class Domains(FlowBase):
                 DOMAIN_NAME = DOMAIN['domain']['name']
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
-            # Get all subservices
-            projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
-            for project in projects['projects']:
-
-                PROJECT_NAME = project['name'][1:]
-                self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
-
-                #
-                # Delete all subscriptions in subservice
-                #
-                subscriptions_deleted = self.cb.deleteAllSubscriptions(
-                                                              ADMIN_TOKEN,
-                                                              DOMAIN_NAME,
-                                                              PROJECT_NAME)
-                if (len(subscriptions_deleted) > 0):
-                    self.logger.info("subscriptions deleted %s",
-                                     subscriptions_deleted)
-
-                #
-                # Delete all rules in a subservice
-                #
-                rules_deleted = self.perseo.deleteAllRules(ADMIN_TOKEN,
-                                                           DOMAIN_NAME,
-                                                           PROJECT_NAME)
-                if (len(rules_deleted) > 0):
-                    self.logger.info("rules deleted %s",
-                                     rules_deleted)
-
-            #
-            # Delete all subscriptions
-            #
-            subscriptions_deleted = self.cb.deleteAllSubscriptions(
-                                                              ADMIN_TOKEN,
-                                                              DOMAIN_NAME)
-            if (len(subscriptions_deleted) > 0):
-                self.logger.info("subscriptions deleted %s", subscriptions_deleted)
 
             #
             # Disable Domain
             #
             DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
+
+
+            #
+            # Delete all rules and subscriptions
+            #
+            # cloud_admin could not retrieve subscriptions and rules
+            if DOMAIN_NAME != "admin_domain" and ADMIN_USER != "cloud_admin":
+                # Get all subservices
+                projects = self.idm.getDomainProjects(ADMIN_TOKEN, DOMAIN_ID)
+                for project in projects['projects']:
+
+                    PROJECT_NAME = project['name'][1:]
+                    self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
+
+                    #
+                    # Delete all subscriptions in subservice
+                    #
+                    subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                        ADMIN_TOKEN,
+                        DOMAIN_NAME,
+                        PROJECT_NAME)
+                    if (len(subscriptions_deleted) > 0):
+                        self.logger.info("subscriptions deleted %s",
+                                         subscriptions_deleted)
+
+                    #
+                    # Delete all rules in a subservice
+                    #
+                    rules_deleted = self.perseo.deleteAllRules(ADMIN_TOKEN,
+                                                               DOMAIN_NAME,
+                                                               PROJECT_NAME)
+                    if (len(rules_deleted) > 0):
+                        self.logger.info("rules deleted %s",
+                                         rules_deleted)
+
+                #
+                # Delete all subscriptions
+                #
+                subscriptions_deleted = self.cb.deleteAllSubscriptions(
+                    ADMIN_TOKEN,
+                    DOMAIN_NAME)
+                if (len(subscriptions_deleted) > 0):
+                    self.logger.info("subscriptions deleted %s", subscriptions_deleted)
+
+
+                #
+                # Delete all rules
+                #
+                rules_deleted = self.perseo.deleteAllRules(ADMIN_TOKEN,
+                                                           DOMAIN_NAME,
+                                                           "")
+                if (len(rules_deleted) > 0):
+                    self.logger.info("rules deleted %s",
+                                     rules_deleted)
+
 
             self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
 
