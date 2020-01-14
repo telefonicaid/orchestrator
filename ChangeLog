@@ -1,8 +1,8 @@
 CHANGES
 =======
 
-
 UPDATE: Update Uwsgi version from 2.0.17.1 to 2.0.18
+UPDATE: Makes optional create default groups when create a new domain
 UPDATE: Do not delete keystone roles explicitly when delete keystone domain
 UPDATE: Adjust uwsgi options: add uwsgi logs and fix max_request to 500 instead of 1000
 UPDATE: Increase harakiri uwsgi option to 80 from 40
