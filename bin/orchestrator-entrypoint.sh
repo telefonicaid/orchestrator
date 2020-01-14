@@ -6,7 +6,7 @@ PORT=8084
 PROCESSES=6
 THREADS=8
 HARAKIRI=80
-MAX_REQUESTS=1000
+MAX_REQUESTS=500
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 
 # LOAD CUSTOMIZED SETTINGS
@@ -318,5 +318,4 @@ uwsgi --http :$PORT \
       --max-requests $MAX_REQUESTS \
       --vacuum \
       --enable-threads \
-      --disable-logging \
       --buffer-size  $UWSGI_BUFFER_SIZE
