@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Update Uwsgi version from 2.0.17.1 to 2.0.18
 UPDATE: Adjust orchestrator spec file for RPM (#238)
 ADD: API crud for ldap groups (#235)
 UPDATE: Use NGSIv2 by orion driver (#232)
