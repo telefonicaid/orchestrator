@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Update Uwsgi version from 2.0.17.1 to 2.0.18
 UPDATE: Check if cloud_admin user before try to delete rules and subscriptions when delete service (#246)
 UPDATE: Makes optional create default groups when create a new domain
 UPDATE: Do not delete keystone roles explicitly when delete keystone domain
