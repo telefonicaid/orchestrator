@@ -54,7 +54,7 @@ class PerseoOperations(object):
 
     def checkPERSEO(self):
         res = self.PerseoRestOperations.rest_request(
-            url='/m2m/vrules',
+            url='/rules',
             method='GET',
             data=None)
         assert res.code == 200, (res.code, res.msg)
@@ -74,11 +74,11 @@ class PerseoOperations(object):
 
             # GET all rules: /perseo-core/rules
             body_data = {}
-            logger.debug("GET %s/%s to /m2m/vrules" % (
+            logger.debug("GET %s/%s to /rules" % (
                 SERVICE_NAME,
                 SUBSERVICE_NAME))
             res = self.PerseoRestOperations.rest_request(
-                url='/m2m/vrules',
+                url='/rules',
                 method='GET',
                 data=body_data,
                 auth_token=SERVICE_USER_TOKEN,
@@ -99,13 +99,13 @@ class PerseoOperations(object):
         for rule in rules['data']:
             # DELETE /perseo-core/rules/{name}: removes a rule
             try:
-                logger.debug("DELETE %s/%s to /m2m/vrules/{name} with: %s" % (
+                logger.debug("DELETE %s/%s to /rules/{name} with: %s" % (
                     SERVICE_NAME,
                     SUBSERVICE_NAME,
                     rule['name'])
                 )
                 res = self.PerseoRestOperations.rest_request(
-                    url='/m2m/vrules/'+ rule['name'],
+                    url='/rules/'+ rule['name'],
                     method='DELETE',
                     data=body_data,
                     auth_token=SERVICE_USER_TOKEN,
