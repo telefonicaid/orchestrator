@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+3.1.0
+
 UPDATE: perseo url from /m2m/vrules to /rules to affect all rules
 UPDATE: Update requests version from 2.21.0 to 2.22.0
 UPDATE: Update Uwsgi version from 2.0.17.1 to 2.0.18
