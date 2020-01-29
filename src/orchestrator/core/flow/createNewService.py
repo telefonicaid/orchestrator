@@ -228,69 +228,69 @@ class CreateNewService(FlowBase):
             #
 
             # Policies for SubServiceAdmin Role
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            #                        POLICY_FILE_NAME='policy-orion-admin.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            #                        POLICY_FILE_NAME='policy-perseo-admin.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            #                        POLICY_FILE_NAME='policy-iotagent-admin.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            #                        POLICY_FILE_NAME='policy-sth-admin.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-            #                        POLICY_FILE_NAME='policy-keypass-admin.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-orion-admin.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-perseo-admin.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-iotagent-admin.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-sth-admin.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                                    POLICY_FILE_NAME='policy-keypass-admin.xml')
             # Policies for SubServiceCustomer Role
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-orion-customer.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-perseo-customer.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-iotagent-customer.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-sth-customer.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-keypass-customer.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-orion-customer.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-perseo-customer.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-iotagent-customer.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-sth-customer.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-keypass-customer.xml')
             # Policies for Admin Role
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ADMIN_ROLE_ID,
-            #                        POLICY_FILE_NAME='policy-orion-admin2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ADMIN_ROLE_ID,
-            #                        POLICY_FILE_NAME='policy-perseo-admin2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ADMIN_ROLE_ID,
-            #                        POLICY_FILE_NAME='policy-iotagent-admin2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ADMIN_ROLE_ID,
-            #                        POLICY_FILE_NAME='policy-sth-admin2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ADMIN_ROLE_ID,
-            #                        POLICY_FILE_NAME='policy-keypass-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-orion-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-perseo-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-iotagent-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-sth-admin2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ADMIN_ROLE_ID,
+                                    POLICY_FILE_NAME='policy-keypass-admin2.xml')
             # Policies for ServiceCustomer Role
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-orion-customer2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-perseo-customer2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-iotagent-customer2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-sth-customer2.xml')
-            #self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
-            #                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
-            #                        POLICY_FILE_NAME='policy-keypass-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-orion-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-perseo-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-iotagent-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-sth-customer2.xml')
+            self.ac.provisionPolicy(NEW_SERVICE_NAME, NEW_SERVICE_ADMIN_TOKEN,
+                                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER,
+                                    POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
 
 
