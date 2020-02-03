@@ -78,6 +78,9 @@ json = {
             "CREATE_DEFAULT_GROUPS": {
                 "type": "boolean"
             },
+            "CREATE_DEFAULT_GENERIC_ROLES": {
+                "type": "boolean"
+            },
         },
         # "oneof": {
         #     "required": [
