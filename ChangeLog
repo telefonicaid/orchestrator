@@ -2,6 +2,7 @@ CHANGES
 =======
 
 UPDATE: Update Django from 1.11.26 to 1.11.27 due to security vulnerability
+UPDATE: Makes optional create default generic roles when create a new domain
 
 3.1.0
 
