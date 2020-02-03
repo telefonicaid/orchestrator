@@ -262,7 +262,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                 request.data.get("NEW_SERVICE_ADMIN_USER"),
                 request.data.get("NEW_SERVICE_ADMIN_PASSWORD"),
                 request.data.get("NEW_SERVICE_ADMIN_EMAIL", None),
-                request.data.get("CREATE_DEFAULT_GROUPS", False)
+                request.data.get("CREATE_DEFAULT_GROUPS", False),
+                request.data.get("CREATE_DEFAULT_GENERIC_ROLES", False)
             )
             if 'token' in result:
                 Stats.num_post_service += 1
