@@ -223,7 +223,7 @@ class CreateNewService(FlowBase):
 
             for component in components:
                 self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
-                                         ID_NEW_SERVICE_ROLE_ADMIN_T)
+                                         ID_NEW_SERVICE_ROLE_ADMIN_SET[component])
                 self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
                                           ID_DOM1,
                                           ID_ADM1,
