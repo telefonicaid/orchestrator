@@ -58,8 +58,8 @@ In the cases where "serviceId" is part of URL "SERVICE_NAME" field at body can b
                 "CREATE_DEFAULT_GENERIC_ROLES":True
             }
        Required: ["NEW_SERVICE_NAME", "NEW_SERVICE_ADMIN_USER",  "NEW_SERVICE_ADMIN_PASSWORD"]
-       CREATE_DEFAULT_GRUPS: create or not default generic groups named: AdminGroup, ServiceCustomerGroup, SubServiceAdminGroup, SubServiceCustomerGroup.
-       CREATE_DEFAULT_GENERIC_ROLES: assign all component policies to Generic Roles (ServiceCustomer, SubServiceCustomer, admin and SubServiceAdmin)
+       CREATE_DEFAULT_GRUPS: create or not default generic groups named: AdminGroup, ServiceCustomerGroup, SubServiceAdminGroup, SubServiceCustomerGroup. False by default.
+       CREATE_DEFAULT_GENERIC_ROLES: assign all component policies to Generic Roles (ServiceCustomer, SubServiceCustomer, admin and SubServiceAdmin). False by default.
 + Response 201 (application/json)
     + Body
             {
