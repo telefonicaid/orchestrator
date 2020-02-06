@@ -102,7 +102,7 @@ class Groups(FlowBase):
         data_log = {
             "SERVICE_GROUPS": SERVICE_GROUPS,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -170,7 +170,7 @@ class Groups(FlowBase):
         data_log = {
             "DETAIL_GROUP": DETAIL_GROUP,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -262,7 +262,7 @@ class Groups(FlowBase):
         data_log = {
             "GROUP_ID": GROUP_ID,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -351,7 +351,7 @@ class Groups(FlowBase):
         data_log = {
             "GROUP_ID": GROUP_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -437,7 +437,7 @@ class Groups(FlowBase):
             "SERVICE_ID": "%s" % SERVICE_ID,
             "ID_GROUP": "%s" % ID_GROUP,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()

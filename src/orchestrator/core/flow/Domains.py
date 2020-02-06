@@ -81,7 +81,7 @@ class Domains(FlowBase):
         data_log = {
             "DOMAINS": DOMAINS
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.debug("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
 
         # Consolidate opetions metrics into flow metrics
@@ -148,7 +148,7 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.debug("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
 
         # Consolidate opetions metrics into flow metrics
@@ -221,7 +221,7 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -310,7 +310,7 @@ class Domains(FlowBase):
                         DOMAIN_NAME,
                         PROJECT_NAME)
                     if (len(subscriptions_deleted) > 0):
-                        self.logger.info("subscriptions deleted %s",
+                        self.logger.debug("subscriptions deleted %s",
                                          subscriptions_deleted)
 
                     #
@@ -320,7 +320,7 @@ class Domains(FlowBase):
                                                                DOMAIN_NAME,
                                                                PROJECT_NAME)
                     if (len(rules_deleted) > 0):
-                        self.logger.info("rules deleted %s",
+                        self.logger.debug("rules deleted %s",
                                          rules_deleted)
 
                 #
@@ -330,7 +330,7 @@ class Domains(FlowBase):
                     ADMIN_TOKEN,
                     DOMAIN_NAME)
                 if (len(subscriptions_deleted) > 0):
-                    self.logger.info("subscriptions deleted %s", subscriptions_deleted)
+                    self.logger.debug("subscriptions deleted %s", subscriptions_deleted)
 
 
                 #
@@ -340,7 +340,7 @@ class Domains(FlowBase):
                                                            DOMAIN_NAME,
                                                            "")
                 if (len(rules_deleted) > 0):
-                    self.logger.info("rules deleted %s",
+                    self.logger.debug("rules deleted %s",
                                      rules_deleted)
 
 
@@ -363,7 +363,7 @@ class Domains(FlowBase):
         data_log = {
             "DOMAIN": DOMAIN
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.debug("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
 
         # Consolidate opetions metrics into flow metrics
@@ -482,7 +482,7 @@ class Domains(FlowBase):
         data_log = {
             "POLICIES": policies
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.debug("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
 
         # Consolidate opetions metrics into flow metrics
@@ -591,7 +591,7 @@ class Domains(FlowBase):
         data_log = {
             "subscriptionid": subscriptionid
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -685,7 +685,7 @@ class Domains(FlowBase):
         data_log = {
             "subscriptionid": subscriptionid
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -766,7 +766,7 @@ class Domains(FlowBase):
         data_log = {
             "modules": modules
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
