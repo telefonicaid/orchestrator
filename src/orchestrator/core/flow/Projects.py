@@ -96,7 +96,7 @@ class Projects(FlowBase):
         data_log = {
             "PROJECTS": PROJECTS
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -185,7 +185,7 @@ class Projects(FlowBase):
         data_log = {
             "PROJECT": PROJECT
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -277,7 +277,7 @@ class Projects(FlowBase):
         data_log = {
             "PROJECT": PROJECT
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -362,7 +362,7 @@ class Projects(FlowBase):
                                                               DOMAIN_NAME,
                                                               PROJECT_NAME)
             if (len(subscriptions_deleted) > 0):
-                self.logger.info("subscriptions deleted %s",
+                self.logger.debug("subscriptions deleted %s",
                                  subscriptions_deleted)
 
             #
@@ -372,7 +372,7 @@ class Projects(FlowBase):
                                                        DOMAIN_NAME,
                                                        PROJECT_NAME)
             if (len(rules_deleted) > 0):
-                self.logger.info("rules deleted %s",
+                self.logger.debug("rules deleted %s",
                                  rules_deleted)
 
             PROJECT = self.idm.disableProject(ADMIN_TOKEN,
@@ -392,7 +392,7 @@ class Projects(FlowBase):
         data_log = {
             "PROJECT": PROJECT
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log,
+        self.logger.debug("Summary report : %s" % json.dumps(data_log,
                                                        indent=3))
 
         # Consolidate opetions metrics into flow metrics
@@ -528,7 +528,7 @@ class Projects(FlowBase):
         data_log = {
             "subscriptionid": subscriptionid
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -646,7 +646,7 @@ class Projects(FlowBase):
         data_log = {
             "subscriptionid": subscriptionid
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -749,7 +749,7 @@ class Projects(FlowBase):
         data_log = {
             "modules": modules
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()

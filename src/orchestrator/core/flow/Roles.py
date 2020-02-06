@@ -110,7 +110,7 @@ class Roles(FlowBase):
         data_log = {
             "ROLES": ROLES
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -300,7 +300,7 @@ class Roles(FlowBase):
         data_log = {
             "role_assignments": role_assignments_expanded,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -434,7 +434,7 @@ class Roles(FlowBase):
             "SERVICE_USER_ID": "%s" % SERVICE_USER_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -571,7 +571,7 @@ class Roles(FlowBase):
             "SERVICE_USER_ID": "%s" % SERVICE_USER_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -682,7 +682,7 @@ class Roles(FlowBase):
             "ID_USER": "%s" % SERVICE_USER_ID,
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -796,7 +796,7 @@ class Roles(FlowBase):
             "SERVICE_USER_ID": "%s" % SERVICE_USER_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -925,7 +925,7 @@ class Roles(FlowBase):
             "SERVICE_USER_ID": "%s" % SERVICE_USER_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1035,7 +1035,7 @@ class Roles(FlowBase):
             "ID_USER": "%s" % SERVICE_USER_ID,
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1227,7 +1227,7 @@ class Roles(FlowBase):
         data_log = {
             "role_assignments": role_assignments_expanded,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1362,7 +1362,7 @@ class Roles(FlowBase):
             "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1500,7 +1500,7 @@ class Roles(FlowBase):
             "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1612,7 +1612,7 @@ class Roles(FlowBase):
             "ID_GROUP": "%s" % SERVICE_GROUP_ID,
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1727,7 +1727,7 @@ class Roles(FlowBase):
             "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1857,7 +1857,7 @@ class Roles(FlowBase):
             "SERVICE_GROUP_ID": "%s" % SERVICE_GROUP_ID,
             "ROLE_ID": "%s" % ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -1967,7 +1967,7 @@ class Roles(FlowBase):
             "ID_GROUP": "%s" % SERVICE_GROUP_ID,
             "INHERIT_ROLE_ID": "%s" % INHERIT_ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -2055,7 +2055,7 @@ class Roles(FlowBase):
         data_log = {
             "ROLE_ID": ROLE_ID
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
