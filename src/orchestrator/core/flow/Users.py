@@ -115,7 +115,7 @@ class Users(FlowBase):
         data_log = {
             "SERVICE_USERS": SERVICE_USERS,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
@@ -183,7 +183,7 @@ class Users(FlowBase):
         data_log = {
             "DETAIL_USER": DETAIL_USER,
         }
-        self.logger.info("Summary report : %s" % json.dumps(data_log, indent=3))
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
 
         # Consolidate opetions metrics into flow metrics
         self.collectComponentMetrics()
