@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: (Revert) Delete keystone roles explicitly when delete keystone domain
+
 3.2.0
 
 UPDATE: Adjust uwsgi options: add uwsgi logs and fix max_request to 250 instead of 500
