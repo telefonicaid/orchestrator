@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+3.2.1
+
 UPDATE: (Revert) Delete keystone roles explicitly when delete keystone domain
 
 3.2.0
