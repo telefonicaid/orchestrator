@@ -284,10 +284,7 @@ class Domains(FlowBase):
             self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
 
 
-            #
-            # Disable Domain
-            #
-            DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
+
 
 
             #
@@ -343,6 +340,17 @@ class Domains(FlowBase):
                     self.logger.debug("rules deleted %s",
                                      rules_deleted)
 
+            #
+            # Delete all roles
+            #
+            roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
+            for role in roles['roles']:
+                self.idm.removeRole(ADMIN_TOKEN, DOMAIN_ID, role['id'])
+
+            #
+            # Disable Domain
+            #
+            DOMAIN = self.idm.disableDomain(ADMIN_TOKEN, DOMAIN_ID)
 
             self.idm.deleteDomain(ADMIN_TOKEN, DOMAIN_ID)
 
