@@ -18,7 +18,7 @@ ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
 UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
 PROCESSES=6
-THREADS=8
+THREADS=0
 HARAKIRI=80
 MAX_REQUESTS=250
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
