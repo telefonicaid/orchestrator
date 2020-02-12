@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Update Django from 1.11.27 to 1.11.28 due to security vulnerability
+
 3.2.1
 
 UPDATE: (Revert) Delete keystone roles explicitly when delete keystone domain
