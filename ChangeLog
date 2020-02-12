@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Use new keystone scim API to delete roles at once
 UPDATE: Update Django from 1.11.27 to 1.11.28 due to security vulnerability
 
 3.2.1
