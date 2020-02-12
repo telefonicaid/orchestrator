@@ -348,7 +348,6 @@ class Domains(FlowBase):
             except Exception, ex:
                 # 404 if old version of keystone-scim
                 roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
-                self.idm.removeRoles(ADMIN_TOKEN, DOMAIN_ID)
                 for role in roles['roles']:
                     self.idm.removeRole(ADMIN_TOKEN, DOMAIN_ID, role['id'])
 
