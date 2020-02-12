@@ -1468,7 +1468,7 @@ class IdMKeystoneOperations(IdMOperations):
                     DOMAIN_ID):
 
         res = self.IdMRestOperations.rest_request(
-            url=self.SCIM_URI+'/Roles/all/domain_id=%s' % DOMAIN_ID,
+            url=self.SCIM_URI+'/RolesAll?domain_id=%s' % DOMAIN_ID,
             method='DELETE', data=None,
             auth_token=SERVICE_ADMIN_TOKEN)
 
