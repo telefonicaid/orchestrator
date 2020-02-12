@@ -343,9 +343,7 @@ class Domains(FlowBase):
             #
             # Delete all roles
             #
-            roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
-            for role in roles['roles']:
-                self.idm.removeRole(ADMIN_TOKEN, DOMAIN_ID, role['id'])
+            self.idm.removeRoles(ADMIN_TOKEN, DOMAIN_ID)
 
             #
             # Disable Domain
