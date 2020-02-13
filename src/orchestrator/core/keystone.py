@@ -422,11 +422,11 @@ class IdMKeystoneOperations(IdMOperations):
 
     def createDomainRole(self,
                          SERVICE_ADMIN_TOKEN,
-                         SUB_SERVICE_ROLE_NAME,
+                         ROLE_NAME,
                          ID_DOM1):
         body_data = {
             "schemas": ["urn:scim:schemas:extension:keystone:1.0"],
-            "name": "%s" % SUB_SERVICE_ROLE_NAME,
+            "name": "%s" % ROLE_NAME,
             "domain_id": "%s" % ID_DOM1
         }
         res = self.IdMRestOperations.rest_request(
@@ -446,10 +446,10 @@ class IdMKeystoneOperations(IdMOperations):
                          ROLES,
                          ID_DOM1):
         body_data = []
-        for role in ROLES:
+        for ROLE_NAME in ROLES:
             role = {
                 "schemas": ["urn:scim:schemas:extension:keystone:1.0"],
-                "name": "%s" % SUB_SERVICE_ROLE_NAME,
+                "name": "%s" % ROLE_NAME,
                 "domain_id": "%s" % ID_DOM1
             }
             body_data.append(role)
