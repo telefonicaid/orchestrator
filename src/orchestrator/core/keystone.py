@@ -441,6 +441,34 @@ class IdMKeystoneOperations(IdMOperations):
                                                       indent=3))
         return json_body_response['id']
 
+    def createDomainRoles(self,
+                         SERVICE_ADMIN_TOKEN,
+                         ROLES,
+                         ID_DOM1):
+        body_data = []
+        for role in ROLES:
+            role = {
+                "schemas": ["urn:scim:schemas:extension:keystone:1.0"],
+                "name": "%s" % SUB_SERVICE_ROLE_NAME,
+                "domain_id": "%s" % ID_DOM1
+            }
+            body_data.append(role)
+
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/RolesAll',
+            method='POST', data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 201, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        res = []
+        for role in json_body_response:
+            res.append(role['id'])
+        return res
+
     # aka createSubService
     def createProject(self,
                       SERVICE_ADMIN_TOKEN,
