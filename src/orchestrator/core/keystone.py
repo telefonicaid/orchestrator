@@ -1463,6 +1463,17 @@ class IdMKeystoneOperations(IdMOperations):
 
         assert res.code == 204, (res.code, res.msg)
 
+    def removeRoles(self,
+                    SERVICE_ADMIN_TOKEN,
+                    DOMAIN_ID):
+
+        res = self.IdMRestOperations.rest_request(
+            url=self.SCIM_URI+'/RolesAll?domain_id=%s' % DOMAIN_ID,
+            method='DELETE', data=None,
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 204, (res.code, res.msg)
+
     def createTrustToken(self,
                          SERVICE_ADMIN_TOKEN,
                          SUBSERVICE_ID,
