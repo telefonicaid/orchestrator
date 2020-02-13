@@ -151,13 +151,15 @@ class CreateNewService(FlowBase):
             ROLES = [SUB_SERVICE_ADMIN_ROLE_NAME,
                      SUB_SERVICE_CUSTOMER_ROLE_NAME,
                      SERVICE_CUSTOMER_ROLE_NAME]
-            ID_ROLES = [ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
-                        ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
-                        ID_NEW_SERVICE_ROLE_SERVICECUSTOMER]
+            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = None
+            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = None
+            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER = None
             try:
-                ID_ROLES = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
-                                                      ROLES,
-                                                      ID_DOM1)
+                [ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER] = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
+                                                                                   ROLES,
+                                                                                   ID_DOM1)
             except Exception, ex:
                 # 404 if old version of keystone-scim
                 self.logger.info("creating roles in a slow way")
@@ -197,14 +199,17 @@ class CreateNewService(FlowBase):
                          SUB_SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
                          SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
                          "ServiceAdmin" + component.upper()]
-                ID_ROLES = [ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T,
-                            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T,
-                            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T,
-                            ID_NEW_SERVICE_ROLE_ADMIN_T]
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = None
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = None
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = None
+                ID_NEW_SERVICE_ROLE_ADMIN_T = None
                 try:
-                    ID_ROLES = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
-                                                          ROLES,
-                                                          ID_DOM1)
+                    [ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T,
+                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T,
+                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T,
+                     ID_NEW_SERVICE_ROLE_ADMIN_T] = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
+                                                                               ROLES,
+                                                                               ID_DOM1)
                 except Exception, ex:
                     # 404 if old version of keystone-scim
                     self.logger.info("creating roles in a slow way")
