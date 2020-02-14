@@ -148,26 +148,41 @@ class CreateNewService(FlowBase):
             #
             # 4. Create SubService roles
             #
-            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = self.idm.createDomainRole(
-                NEW_SERVICE_ADMIN_TOKEN,
-                SUB_SERVICE_ADMIN_ROLE_NAME,
-                ID_DOM1)
+            ROLES = [SUB_SERVICE_ADMIN_ROLE_NAME,
+                     SUB_SERVICE_CUSTOMER_ROLE_NAME,
+                     SERVICE_CUSTOMER_ROLE_NAME]
+            ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = None
+            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = None
+            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER = None
+            try:
+                [ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN,
+                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER,
+                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER] = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
+                                                                                   ROLES,
+                                                                                   ID_DOM1)
+            except Exception, ex:
+                # 404 if old version of keystone-scim
+                self.logger.info("creating roles in a slow way")
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SUB_SERVICE_ADMIN_ROLE_NAME,
+                    ID_DOM1)
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SUB_SERVICE_CUSTOMER_ROLE_NAME,
+                    ID_DOM1)
+                #
+                # 4.1 Create ServiceCustomer role
+                #
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER = self.idm.createDomainRole(
+                    NEW_SERVICE_ADMIN_TOKEN,
+                    SERVICE_CUSTOMER_ROLE_NAME,
+                    ID_DOM1)
+
             self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN))
-
-            ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER = self.idm.createDomainRole(
-                NEW_SERVICE_ADMIN_TOKEN,
-                SUB_SERVICE_CUSTOMER_ROLE_NAME,
-                ID_DOM1)
             self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER))
-            #
-            # 4.1 Create ServiceCustomer role
-            #
-            ID_NEW_SERVICE_ROLE_SERVICECUSTOMER = self.idm.createDomainRole(
-                NEW_SERVICE_ADMIN_TOKEN,
-                SERVICE_CUSTOMER_ROLE_NAME,
-                ID_DOM1)
             self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME,
                                                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER))
 
@@ -179,39 +194,54 @@ class CreateNewService(FlowBase):
             ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET = {}
             ID_NEW_SERVICE_ROLE_ADMIN_SET = {}
             for component in components:
-                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
-                    NEW_SERVICE_ADMIN_TOKEN,
-                    SUB_SERVICE_ADMIN_ROLE_NAME + component.upper(),
-                    ID_DOM1)
+
+                ROLES = [SUB_SERVICE_ADMIN_ROLE_NAME + component.upper(),
+                         SUB_SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
+                         SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
+                         "ServiceAdmin" + component.upper()]
+                ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = None
+                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = None
+                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = None
+                ID_NEW_SERVICE_ROLE_ADMIN_T = None
+                try:
+                    [ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T,
+                     ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T,
+                     ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T,
+                     ID_NEW_SERVICE_ROLE_ADMIN_T] = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
+                                                                               ROLES,
+                                                                               ID_DOM1)
+                except Exception, ex:
+                    # 404 if old version of keystone-scim
+                    self.logger.info("creating roles in a slow way")
+                    ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        SUB_SERVICE_ADMIN_ROLE_NAME + component.upper(),
+                        ID_DOM1)
+                    ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        SUB_SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
+                        ID_DOM1)
+                    ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
+                        ID_DOM1)
+                    ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
+                        NEW_SERVICE_ADMIN_TOKEN,
+                        "ServiceAdmin" + component.upper(),
+                        ID_DOM1)
+
                 self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_ADMIN_ROLE_NAME + component,
                                                          ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T))
                 ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component]=ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T
-                
-                ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T = self.idm.createDomainRole(
-                    NEW_SERVICE_ADMIN_TOKEN,
-                    SUB_SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
-                    ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SUB_SERVICE_CUSTOMER_ROLE_NAME + component,
                                                          ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T))
                 ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_SET[component]=ID_NEW_SERVICE_ROLE_SUBSERVICECUSTOMER_T
-                
-                ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T = self.idm.createDomainRole(
-                    NEW_SERVICE_ADMIN_TOKEN,
-                    SERVICE_CUSTOMER_ROLE_NAME + component.upper(),
-                    ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % (SERVICE_CUSTOMER_ROLE_NAME + component,
                                                          ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T))
                 ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_SET[component]=ID_NEW_SERVICE_ROLE_SERVICECUSTOMER_T
-                
-                ID_NEW_SERVICE_ROLE_ADMIN_T = self.idm.createDomainRole(
-                    NEW_SERVICE_ADMIN_TOKEN,
-                    "ServiceAdmin" + component.upper(),
-                    ID_DOM1)
                 self.logger.debug("ID of role %s: %s" % ("ServiceAdmin" + component,
                                                          ID_NEW_SERVICE_ROLE_ADMIN_T))
                 ID_NEW_SERVICE_ROLE_ADMIN_SET[component]=ID_NEW_SERVICE_ROLE_ADMIN_T
-
-
 
             #
             # 4.5 Inherit subserviceadim
