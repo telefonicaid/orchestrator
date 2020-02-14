@@ -445,15 +445,14 @@ class IdMKeystoneOperations(IdMOperations):
                          SERVICE_ADMIN_TOKEN,
                          ROLES,
                          ID_DOM1):
-        body_data = []
+        body_data = {"roles":[]}
         for ROLE_NAME in ROLES:
             role = {
                 "schemas": ["urn:scim:schemas:extension:keystone:1.0"],
                 "name": "%s" % ROLE_NAME,
                 "domain_id": "%s" % ID_DOM1
             }
-            body_data.append(role)
-
+            body_data["roles"].append(role)
         res = self.IdMRestOperations.rest_request(
             url=self.SCIM_URI+'/RolesAll',
             method='POST', data=body_data,
