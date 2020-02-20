@@ -4,62 +4,62 @@
 # DEFAULT SETTINGS
 #
 # UWSGI
-[[ "${PORT}" == ""]] && export PORT=8084
-[[ "${PROCESSES}" == ""]] && export PROCESSES=6
-[[ "${THREADS}" == ""]] && export THREADS=8
-[[ "${HARAKIRI}" == ""]] && export HARAKIRI=80
-[[ "${MAX_REQUESTS}" == ""]] && export MAX_REQUESTS=250
-[[ "${ENVIRONMENT}" == ""]] && export ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
-[[ "${UWSGI_BUFFER_SIZE}" == ""]] && export UWSGI_BUFFER_SIZE=4096
+[[ "${PORT}" == "" ]] && export PORT=8084
+[[ "${PROCESSES}" == "" ]] && export PROCESSES=6
+[[ "${THREADS}" == "" ]] && export THREADS=8
+[[ "${HARAKIRI}" == "" ]] && export HARAKIRI=80
+[[ "${MAX_REQUESTS}" == "" ]] && export MAX_REQUESTS=250
+[[ "${ENVIRONMENT}" == "" ]] && export ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
+[[ "${UWSGI_BUFFER_SIZE}" == "" ]] && export UWSGI_BUFFER_SIZE=4096
 
 # Default values
-[[ "${KEYSTONE_HOST}" == ""]] && export KEYSTONE_HOST=localhost
-[[ "${KEYSTONE_PORT}" == ""]] && export KEYSTONE_PORT=5001
-[[ "${KEYSTONE_PROTOCOL}" == ""]] && export KEYSTONE_PROTOCOL=http
+[[ "${KEYSTONE_HOST}" == "" ]] && export KEYSTONE_HOST=localhost
+[[ "${KEYSTONE_PORT}" == "" ]] && export KEYSTONE_PORT=5001
+[[ "${KEYSTONE_PROTOCOL}" == "" ]] && export KEYSTONE_PROTOCOL=http
 
-[[ "${KEYPASS_HOST}" == ""]] && export KEYPASS_HOST=localhost
-[[ "${KEYPASS_PORT}" == ""]] && export KEYPASS_PORT=7070 # Pep and default internal container port
-[[ "${KEYPASS_PROTOCOL}" == ""]] && export KEYPASS_PROTOCOL=http
+[[ "${KEYPASS_HOST}" == "" ]] && export KEYPASS_HOST=localhost
+[[ "${KEYPASS_PORT}" == "" ]] && export KEYPASS_PORT=7070 # Pep and default internal container port
+[[ "${KEYPASS_PROTOCOL}" == "" ]] && export KEYPASS_PROTOCOL=http
 
-[[ "${ORION_HOST}" == ""]] && export ORION_HOST=localhost
-[[ "${ORION_PORT}" == ""]] && export ORION_PORT=1026  # Pep and default internal container port
-[[ "${ORION_PROTOCOL}" == ""]] && export ORION_PROTOCOL=http
+[[ "${ORION_HOST}" == "" ]] && export ORION_HOST=localhost
+[[ "${ORION_PORT}" == "" ]] && export ORION_PORT=1026  # Pep and default internal container port
+[[ "${ORION_PROTOCOL}" == "" ]] && export ORION_PROTOCOL=http
 
-[[ "${PEP_PERSEO_HOST}" == ""]] && export PEP_PERSEO_HOST=localhost
-[[ "${PEP_PERSEO_PORT}" == ""]] && export PEP_PERSEO_PORT=1026  # Pep Perseo
-[[ "${PEP_PERSEO_PROTOCOL}" == ""]] && export PEP_PERSEO_PROTOCOL=http
+[[ "${PEP_PERSEO_HOST}" == "" ]] && export PEP_PERSEO_HOST=localhost
+[[ "${PEP_PERSEO_PORT}" == "" ]] && export PEP_PERSEO_PORT=1026  # Pep Perseo
+[[ "${PEP_PERSEO_PROTOCOL}" == "" ]] && export PEP_PERSEO_PROTOCOL=http
 
-[[ "${STH_HOST}" == ""]] && export STH_HOST=localhost
-[[ "${STH_PORT}" == ""]] && export STH_PORT=8666  # Pep and default internal container port
-[[ "${STH_PROTOCOL}" == ""]] && export STH_PROTOCOL=http
-[[ "${STH_NOTIFYPATH}" == ""]] && export STH_NOTIFYPATH=notify
+[[ "${STH_HOST}" == "" ]] && export STH_HOST=localhost
+[[ "${STH_PORT}" == "" ]] && export STH_PORT=8666  # Pep and default internal container port
+[[ "${STH_PROTOCOL}" == "" ]] && export STH_PROTOCOL=http
+[[ "${STH_NOTIFYPATH}" == "" ]] && export STH_NOTIFYPATH=notify
 
-[[ "${PERSEO_HOST}" == ""]] && export PERSEO_HOST=localhost
-[[ "${PERSEO_PORT}" == ""]] && export PERSEO_PORT=9090  # Pep and default internal container port
-[[ "${PERSEO_PROTOCOL}" == ""]] && export PERSEO_PROTOCOL=http
-[[ "${PERSEO_NOTIFYPATH}" == ""]] && export PERSEO_NOTIFYPATH=notices
+[[ "${PERSEO_HOST}" == "" ]] && export PERSEO_HOST=localhost
+[[ "${PERSEO_PORT}" == "" ]] && export PERSEO_PORT=9090  # Pep and default internal container port
+[[ "${PERSEO_PROTOCOL}" == "" ]] && export PERSEO_PROTOCOL=http
+[[ "${PERSEO_NOTIFYPATH}" == "" ]] && export PERSEO_NOTIFYPATH=notices
 
-[[ "${CYGNUS_HOST}" == ""]] && export CYGNUS_HOST=localhost
-[[ "${CYGNUS_PORT}" == ""]] && export CYGNUS_PORT=5050  # Pep and default internal container port
-[[ "${CYGNUS_PROTOCOL}" == ""]] && export CYGNUS_PROTOCOL=http
-[[ "${CYGNUS_NOTIFYPATH}" == ""]] && export CYGNUS_NOTIFYPATH=notify
+[[ "${CYGNUS_HOST}" == "" ]] && export CYGNUS_HOST=localhost
+[[ "${CYGNUS_PORT}" == "" ]] && export CYGNUS_PORT=5050  # Pep and default internal container port
+[[ "${CYGNUS_PROTOCOL}" == "" ]] && export CYGNUS_PROTOCOL=http
+[[ "${CYGNUS_NOTIFYPATH}" == "" ]] && export CYGNUS_NOTIFYPATH=notify
 
-[[ "${LDAP_HOST}" == ""]] && export LDAP_HOST=localhost
-[[ "${LDAP_PORT}" == ""]] && export LDAP_PORT=389
-[[ "${LDAP_BASEDN}" == ""]] && export LDAP_BASEDN='dc=openstack,dc=org'
+[[ "${LDAP_HOST}" == "" ]] && export LDAP_HOST=localhost
+[[ "${LDAP_PORT}" == "" ]] && export LDAP_PORT=389
+[[ "${LDAP_BASEDN}" == "" ]] && export LDAP_BASEDN='dc=openstack,dc=org'
 
-[[ "${MAILER_HOST}" == ""]] && export MAILER_HOST=localhost
-[[ "${MAILER_PORT}" == ""]] && export MAILER_PORT=587
-[[ "${MAILER_TLS}" == ""]] && export MAILER_TLS=true
-[[ "${MAILER_USER}" == ""]] && export MAILER_USER=smtpuser@yourdomain.com
-[[ "${MAILER_PASSWORD}" == ""]] && export MAILER_PASSWORD=yourpassword
-[[ "${MAILER_FROM}" == ""]] && export MAILER_FROM=smtpuser
-[[ "${MAILER_TO}" == ""]] && export MAILER_TO=smtpuser
+[[ "${MAILER_HOST}" == "" ]] && export MAILER_HOST=localhost
+[[ "${MAILER_PORT}" == "" ]] && export MAILER_PORT=587
+[[ "${MAILER_TLS}" == "" ]] && export MAILER_TLS=true
+[[ "${MAILER_USER}" == "" ]] && export MAILER_USER=smtpuser@yourdomain.com
+[[ "${MAILER_PASSWORD}" == "" ]] && export MAILER_PASSWORD=yourpassword
+[[ "${MAILER_FROM}" == "" ]] && export MAILER_FROM=smtpuser
+[[ "${MAILER_TO}" == "" ]] && export MAILER_TO=smtpuser
 
-[[ "${MONGODB_URI}" == ""]] && export MONGODB_URI='localhost:27017'
+[[ "${MONGODB_URI}" == "" ]] && export MONGODB_URI='localhost:27017'
 
-[[ "${PEP_PASSWORD}" == ""]] && export PEP_PASSWORD=pep
-[[ "${IOTAGENT_PASSWORD}" == ""]] && export IOTAGENT_PASSWORD=iotagent
+[[ "${PEP_PASSWORD}" == "" ]] && export PEP_PASSWORD=pep
+[[ "${IOTAGENT_PASSWORD}" == "" ]] && export IOTAGENT_PASSWORD=iotagent
 
 
 
