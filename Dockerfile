@@ -11,7 +11,7 @@ ENV KEYSTONE_PORT 5001
 ENV KEYSTONE_PROTOCOL http
 
 ENV KEYPASS_HOST localhost
-ENV KEYPASS_PORT 17070
+ENV KEYPASS_PORT 7070
 ENV KEYPASS_PROTOCOL http
 
 ENV ORION_HOST localhost
@@ -23,12 +23,12 @@ ENV PEP_PERSEO_PORT 1026
 ENV PEP_PERSEO_PROTOCOL http
 
 ENV STH_HOST localhost
-ENV STH_PORT 18666
+ENV STH_PORT 8666
 ENV STH_PROTOCOL http
 ENV STH_NOTIFYPATH notify
 
 ENV PERSEO_HOST localhost
-ENV PERSEO_PORT 19090
+ENV PERSEO_PORT 9090
 ENV PERSEO_PROTOCOL http
 ENV PERSEO_NOTIFYPATH notices
 
@@ -42,7 +42,7 @@ ENV LDAP_PORT 389
 ENV LDAP_BASEDN dc=openstack,dc=org
 
 ENV MAILER_HOST localhost
-ENV MAILER_PORT 589
+ENV MAILER_PORT 587
 ENV MAILER_USER smtpuser
 ENV MAILER_PASSWORD smtpuserpassword
 ENV MAILER_FROM smtpfrom
@@ -79,8 +79,6 @@ RUN \
     pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
     pip install repoze.lru && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
-    cp $python_lib/iotp-orchestrator/bin/orchestrator-daemon.sh /etc/init.d/orchestrator && \
-    cp $python_lib/iotp-orchestrator/bin/orchestrator-daemon /etc/default/orchestrator-daemon && \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
     mkdir -p /var/log/orchestrator && \
