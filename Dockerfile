@@ -79,8 +79,6 @@ RUN \
     pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
     pip install repoze.lru && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
-    cp $python_lib/iotp-orchestrator/bin/orchestrator-daemon.sh /etc/init.d/orchestrator && \
-    cp $python_lib/iotp-orchestrator/bin/orchestrator-daemon /etc/default/orchestrator-daemon && \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
     mkdir -p /var/log/orchestrator && \

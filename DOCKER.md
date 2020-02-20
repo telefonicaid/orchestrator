@@ -96,6 +96,56 @@ As you can see there are several arguments to pass to orchestrator entry point i
 
 
 
+Additionally, the following environment variables are available for orchestrator docker
+
+| Environment variable        | Configuration attribute   | Default value             |
+|:----------------------------|:--------------------------|:--------------------------|
+| PORT                        |                           | 8084                      |
+| PROCESSES                   |                           | 6                         |
+| THREADS                     |                           | 8                         |
+| HARAKIRI                    |                           | 80                        |
+| MAX_REQUESTS                |                           | 250                       |
+| UWSGI_BUFFER_SIZE           |                           | 4096                      |
+| KEYSTONE_HOST               | KEYSTONE.host             | localhost                 |
+| KEYSTONE_PORT               | KEYSTONE.port             | 5001                      |
+| KEYSTONE_PROTOCOL           | KEYSTONE.protocol         | http                      |
+| KEYPASS_HOST                | KEYPASS.host              | localhost                 |
+| KEYPASS_PORT                | KEYPASS.port              | 17070                     |
+| KEYPASS_PROTOCOL            | KEYPASS.protocol          | http                      |
+| ORION_HOST                  | ORION.host                | localhost                 |
+| ORION_PORT                  | ORION.port                | 1026                      |
+| ORION_PROTOCOL              | ORION.protocol            | http                      |
+| PEP_PERSEO_HOST             | PEP_ORION.host            | localhost                 |
+| PEP_PERSEO_PORT             | PEP_PERSEO.port           | 9090                      |
+| PEP_PERSEO_PROTOCOL         | PEP_PERSEO.protocol       | http                      |
+| STH_HOST                    | STH.host                  | localhost                 |
+| STH_PORT                    | STH.port                  | 18666                     |
+| STH_NOTIFYPATH              | STH.notifypath            | notify                    |
+| STH_PROTOCOL                | STH.protocol              | http                      |
+| PERSEO_HOST                 | PERSEO.host               | localhost                 |
+| PERSEO_PORT                 | PERSEO.port               | 19090                     |
+| PERSEO_PROTOCOL             | PERSEO.protocol           | http                      |
+| PERSEO_NOTIFYPATH           | PERSEO.notifypath         | notices                   |
+| CYGNUS_HOST                 | CYGNUS.host               | localhost                 |
+| CYGNUS_PORT                 | CYGNUS.port               | 5050                      |
+| CYGNUS_PROTOCOL             | CYGNUS.protocol           | http                      |
+| CYGNUS_NOTIFYPATH           | CYGNUS.notifypath         | notify                    |
+| CYGNUS_MULTIKING            | CYGNUS.multisink          | false                     |
+| MAILER_HOST                 | MAILER.host               | localhost                 |
+| MAILER_PORT                 | MAILER.port               | 587                       |
+| MAILER_USER                 | MAILER.user               | smtpuser@yourdomain.com   |
+| MAILER_PASSWORD             | MAILER.password           | yourpassword              |
+| MAILER_FROM                 | MAILER.from               | smtpuser                  |
+| MAILER_TO                   | MAILER.to                 | smtpuser                  |
+| LDAP_HOST                   | LDAP.host                 | localhost                 |
+| LDAP_PORT                   | LDAP.port                 | 389                       |
+| LDAP_BASEDN                 | LDAP.basedn               | dc=openstack,dc=org       |
+| MONGODB_URI                 | MONGODB.URI               | mongodb://localhost:27017 |
+| PEP_PASSWORD                |                           | pep                       |
+| IOTAGENT_PASSWORD           |                           | iotagent                  |
+
+
+
 ## Build the image
 
 This is an alternative approach than the one presented in section [The Fastest Way](#the_fastest_way). You do not need to go through these steps if you have used docker-compose.

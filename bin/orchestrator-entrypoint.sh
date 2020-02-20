@@ -1,17 +1,16 @@
 #!/bin/bash
 
-
+#
 # DEFAULT SETTINGS
+#
+# UWSGI
 PORT=8084
 PROCESSES=6
 THREADS=8
 HARAKIRI=80
 MAX_REQUESTS=250
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
-
-# LOAD CUSTOMIZED SETTINGS
-[ -f /etc/default/orchestrator-daemon ] && . /etc/default/orchestrator-daemon
-
+UWSGI_BUFFER_SIZE=4096
 
 # Default values
 KEYSTONE_HOST=localhost
@@ -62,7 +61,7 @@ MONGODB_URI='localhost:27017'
 PEP_PASSWORD=pep
 IOTAGENT_PASSWORD=iotagent
 
-UWSGI_BUFFER_SIZE=4096
+
 
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
