@@ -130,9 +130,10 @@ Additionally, the following environment variables are available for orchestrator
 | CYGNUS_PORT                 | CYGNUS.port               | 5050                      |
 | CYGNUS_PROTOCOL             | CYGNUS.protocol           | http                      |
 | CYGNUS_NOTIFYPATH           | CYGNUS.notifypath         | notify                    |
-| CYGNUS_MULTIKING            | CYGNUS.multisink          | false                     |
+| CYGNUS_MULTISING            | CYGNUS.multisink          | false                     |
 | MAILER_HOST                 | MAILER.host               | localhost                 |
 | MAILER_PORT                 | MAILER.port               | 587                       |
+| MAILER_TLS                  | MAILER.tls                | true                      |
 | MAILER_USER                 | MAILER.user               | smtpuser@yourdomain.com   |
 | MAILER_PASSWORD             | MAILER.password           | yourpassword              |
 | MAILER_FROM                 | MAILER.from               | smtpuser                  |
@@ -140,9 +141,9 @@ Additionally, the following environment variables are available for orchestrator
 | LDAP_HOST                   | LDAP.host                 | localhost                 |
 | LDAP_PORT                   | LDAP.port                 | 389                       |
 | LDAP_BASEDN                 | LDAP.basedn               | dc=openstack,dc=org       |
-| MONGODB_URI                 | MONGODB.URI               | mongodb://localhost:27017 |
-| PEP_PASSWORD                |                           | pep                       |
-| IOTAGENT_PASSWORD           |                           | iotagent                  |
+| MONGODB_URI                 | MONGODB.URI               | localhost:27017           |
+| PEP_PASSWORD                | PEP.password              | pep                       |
+| IOTAGENT_PASSWORD           | IOTAGENT.password         | iotagent                  |
 
 
 
