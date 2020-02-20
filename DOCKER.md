@@ -77,11 +77,11 @@ As you can see there are several arguments to pass to orchestrator entry point i
 | -mailerhost    | MAILER.host            | localhost                 |
 | -ldaphost      | LDAP.host              | localhost                 |
 | -keystoneport  | KEYSTONE.port          | 5001                      |
-| -keypassport   | KEYPASS.port           | 17070                     |
+| -keypassport   | KEYPASS.port           | 7070                      |
 | -orionport     | ORION.port             | 1026                      |
 | -pepperseoport | PEP_PERSEO.port        | 9090                      |
-| -sthport       | STH.port               | 18666                     |
-| -perseoport    | PERSEO.port            | 19090                     |
+| -sthport       | STH.port               | 8666                      |
+| -perseoport    | PERSEO.port            | 9090                      |
 | -cygnusport    | CYGNUS.port            | 5050                      |
 | -ldapport      | LDAP.port              | 389                       |
 | -mailerport    | MAILER.port            | 587                       |
