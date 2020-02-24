@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+3.3.0
+
 UPDATE: Enable all configuration options in environment variables for docker.
 UPDATE: Use new keystone scim API to create roles at once if available.
 UPDATE: Use new keystone scim API to delete roles at once if available.
