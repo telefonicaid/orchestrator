@@ -4,7 +4,7 @@ MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
 
-ENV ORCHESTRATOR_VERSION 3.2.1
+ENV ORCHESTRATOR_VERSION 3.3.0
 
 ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
 ENV DJANGO_SETTINGS_MODULE settings
