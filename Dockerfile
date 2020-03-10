@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:7.7.1908
 
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
