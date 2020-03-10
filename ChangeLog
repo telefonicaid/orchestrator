@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Upgrade Dockerfile from Centos 7 to Centos 7.7.1908
+
 3.3.0
 
 UPDATE: Enable all configuration options in environment variables for docker.
