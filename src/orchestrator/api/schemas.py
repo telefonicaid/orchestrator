@@ -69,7 +69,7 @@ json = {
             },
             "NEW_SERVICE_ADMIN_PASSWORD": {
                 "type": "string",
-                "minLength": 6,
+                "minLength": 8,
             },
             "NEW_SERVICE_ADMIN_EMAIL": {
                 "type": "string",
@@ -223,7 +223,7 @@ json = {
             },
             "NEW_SUBSERVICE_ADMIN_PASSWORD":{
                 "type": "string",
-                "minLength": 6,
+                "minLength": 8,
             },
             "NEW_SUBSERVICE_ADMIN_EMAIL":{
                 "type": "string",
@@ -282,7 +282,7 @@ json = {
                         },
                     "password": {
                         "type": "string",
-                        "minLength": 6,
+                        "minLength": 8,
                         },
                     "displayName": {
                         "type": "string",
@@ -309,7 +309,7 @@ json = {
             },
             "NEW_USER_PASSWORD":{
                 "type": "string",
-                "minLength": 6,
+                "minLength": 8,
             },
         },
         # "required": [ ],
@@ -352,7 +352,7 @@ json = {
             },
             "NEW_SERVICE_USER_PASSWORD":{
                 "type": "string",
-                "minLength": 6,
+                "minLength": 8,
             },
             "NEW_SERVICE_USER_EMAIL":{
                 "type": "string",
@@ -742,7 +742,7 @@ json = {
             },
             "NEW_USER_PASSWORD":{
                 "type": "string",
-                "minLength": 6,
+                "minLength": 8,
             },
             "NEW_USER_EMAIL": {
                 "type": "string",
@@ -769,7 +769,7 @@ json = {
                 "properties": {
                     "USER_PASSWORD": {
                         "type": "string",
-                        "minLength": 6,
+                        "minLength": 8,
                         },
                     "USER_DESCRIPTION": {
                         "type": "string",
