@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+3.4.0
+
 UPDATE: Increase min length password from 6 to 8 chars (#274)
 UPDATE: Upgrade Dockerfile from Centos 7 to Centos 7.7.1908
 
