@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Update Django from 1.11.28 to 1.11.29 due to security vulnerability
+
 3.4.0
 
 UPDATE: Increase min length password from 6 to 8 chars (#274)
