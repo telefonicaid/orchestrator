@@ -32,6 +32,7 @@ RUN \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
     mkdir -p /var/log/orchestrator && \
+    chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} /var/log/orchestrator && \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
