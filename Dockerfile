@@ -15,7 +15,7 @@ COPY . /opt/sworchestrator/
 WORKDIR $python_lib/iotp-orchestrator
 
 RUN \
-    adduser --comment "${ORCHESTRATOR_USER}" ${ORCHESTRATOR_USER} && \
+    adduser --comment "${ORCHESTRATOR_USER}" -u 1500 ${ORCHESTRATOR_USER} && \
     # Install dependencies
     yum install -y epel-release && yum update -y epel-release && \
     yum install -y yum-plugin-remove-with-leaves python python-pip python-devel openldap-devel python-virtualenv gcc ssh && \
@@ -25,6 +25,7 @@ RUN \
     cp -rp /opt/sworchestrator/src/* $python_lib/iotp-orchestrator && cp -p /opt/sworchestrator/requirements.txt $python_lib/iotp-orchestrator && \
     cp -rp /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
+    chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
     pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
     pip install repoze.lru && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
