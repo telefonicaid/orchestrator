@@ -3,6 +3,8 @@ FROM centos:7.7.1908
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
+# By default all linux users non root, has a UID above 1000, so it's taken 10001 which would never end up allocated automatically.
+ENV ORCHESTRATOR_USER_UID 10001
 
 ENV ORCHESTRATOR_VERSION 3.4.0
 
@@ -15,7 +17,7 @@ COPY . /opt/sworchestrator/
 WORKDIR $python_lib/iotp-orchestrator
 
 RUN \
-    adduser --comment "${ORCHESTRATOR_USER}" ${ORCHESTRATOR_USER} && \
+    adduser --comment "${ORCHESTRATOR_USER}" -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
     # Install dependencies
     yum install -y epel-release && yum update -y epel-release && \
     yum install -y yum-plugin-remove-with-leaves python python-pip python-devel openldap-devel python-virtualenv gcc ssh && \
@@ -25,12 +27,14 @@ RUN \
     cp -rp /opt/sworchestrator/src/* $python_lib/iotp-orchestrator && cp -p /opt/sworchestrator/requirements.txt $python_lib/iotp-orchestrator && \
     cp -rp /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
+    chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
     pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
     pip install repoze.lru && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
     mkdir -p /var/log/orchestrator && \
+    chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} /var/log/orchestrator && \
     # Put orchestrator version
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
