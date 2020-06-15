@@ -3,6 +3,8 @@ FROM centos:7.7.1908
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
+# By default all linux users non root, has a UID above 1000, so it's taken 10001 which would never end up allocated automatically.
+ENV ORCHESTRATOR_USER_UID 10001
 
 ENV ORCHESTRATOR_VERSION 3.4.0
 
@@ -15,7 +17,7 @@ COPY . /opt/sworchestrator/
 WORKDIR $python_lib/iotp-orchestrator
 
 RUN \
-    adduser --comment "${ORCHESTRATOR_USER}" -u 1500 ${ORCHESTRATOR_USER} && \
+    adduser --comment "${ORCHESTRATOR_USER}" -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
     # Install dependencies
     yum install -y epel-release && yum update -y epel-release && \
     yum install -y yum-plugin-remove-with-leaves python python-pip python-devel openldap-devel python-virtualenv gcc ssh && \
