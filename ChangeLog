@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-UPDATE: fix $python_lib/iotp-orchestrator ownership to 1500 user for docker
+UPDATE: Update iotp-orchestrator files and log ownership to orchestrator user. Also added default UID (10001) for orchestrator user on docker file
 UPDATE: Update Django from 1.11.28 to 1.11.29 due to security vulnerability
 
 3.4.0
