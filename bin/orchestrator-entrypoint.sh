@@ -303,8 +303,9 @@ LOGGING['loggers']['orchestrator_core']['level'] = '$DEBUG_LEVEL'
 fi
 
 
-# Wait until Keystone is up
+# Wait until Keystone and Keypass are up
 while ! tcping -t 1 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
+while ! tcping -t 1 $KEYPASS_HOST $KEYPASS_PORT ; do sleep 10; done
 
 uwsgi --http :$PORT \
       --chdir /opt/orchestrator \
