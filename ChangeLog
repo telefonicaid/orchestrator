@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Update orchestrator entrypoint for docker to wait also for keypass before start.
 UPDATE: Update iotp-orchestrator files and log ownership to orchestrator user. Also added default UID (10001) for orchestrator user on docker file
 UPDATE: Update Django from 1.11.28 to 1.11.29 due to security vulnerability
 
