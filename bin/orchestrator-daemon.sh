@@ -19,7 +19,8 @@ UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
 PROCESSES=6
 THREADS=8
-HARAKIRI=80
+HARAKIRI=190
+HTTP_TIMEOUT=200
 MAX_REQUESTS=250
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
@@ -39,6 +40,7 @@ exe="$UWGSI --http :${PORT} \
 --processes $PROCESSES \
 --threads $THREADS \
 --harakiri $HARAKIRI \
+--http-timeout $HTTP_TIMEOUT \
 --max-requests $MAX_REQUESTS \
 --vacuum \
 --enable-threads"
