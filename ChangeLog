@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Add uwsgi http_timeout option and set by default to 200
 UPDATE: Update Django from 1.11.29 to 1.11.30
 
 
