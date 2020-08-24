@@ -1,9 +1,6 @@
 CHANGES
 =======
 
-UPDATE: Update Django from 1.11.29 to 1.11.30
-
-
 3.5.0
 
 UPDATE: Update orchestrator entrypoint for docker to wait also for keypass before start.
