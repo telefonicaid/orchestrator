@@ -8,6 +8,7 @@
 [[ "${PROCESSES}" == "" ]] && export PROCESSES=6
 [[ "${THREADS}" == "" ]] && export THREADS=8
 [[ "${HARAKIRI}" == "" ]] && export HARAKIRI=80
+[[ "${HTTP_TIMEOUT}" == "" ]] && export HTTP_TIMEOUT=200
 [[ "${MAX_REQUESTS}" == "" ]] && export MAX_REQUESTS=250
 [[ "${ENVIRONMENT}" == "" ]] && export ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 [[ "${UWSGI_BUFFER_SIZE}" == "" ]] && export UWSGI_BUFFER_SIZE=4096
@@ -315,6 +316,7 @@ uwsgi --http :$PORT \
       --processes $PROCESSES \
       --threads $THREADS \
       --harakiri $HARAKIRI \
+      --http-timeout $HTTP_TIMEOUT \
       --max-requests $MAX_REQUESTS \
       --vacuum \
       --enable-threads \

@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Add uwsgi http_timeout option and set by default to 200
+
 3.5.0
 
 UPDATE: Update orchestrator entrypoint for docker to wait also for keypass before start.
