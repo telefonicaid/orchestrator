@@ -2190,8 +2190,10 @@ class OrchVersion_RESTView(APIView, IoTConf):
             }
 
             # print it into a trace
-            logger.info("Orchestrator statistics: %s" % json.dumps(
-                result, indent=3))
+            # logger.info("Orchestrator statistics: %s" % json.dumps(
+            #     result, indent=3))
+            json_string = json.dumps(result, indent=3)
+            logger.info("Orchestrator statistics: %s" % json_string)
 
             if 'error' not in result:
                 response = Response(result, status=status.HTTP_200_OK)
