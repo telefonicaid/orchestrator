@@ -2136,7 +2136,7 @@ class OrchVersion_RESTView(APIView, IoTConf):
             result = {
                 "version": settings.ORC_VERSION,
                 "uptime": str(self.uptime),
-                "IoTModules": settings.IOTMODULES,
+                #"IoTModules": settings.IOTMODULES,
                 "API_stats": {
                     "num_post_service": self.num_post_service,
                     "num_get_service": self.num_get_service,
