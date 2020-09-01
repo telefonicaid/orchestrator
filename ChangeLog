@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: remove double '//' from STH index collection (#287)
 UPDATE: Add uwsgi http_timeout option and set by default to 200
 
 3.5.0
