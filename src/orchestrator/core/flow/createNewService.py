@@ -439,7 +439,7 @@ class CreateNewService(FlowBase):
             #
             self.logger.debug("Creating MongoDB indexes on databse %s", NEW_SERVICE_NAME)
             self.mongodb.createOrionIndexes(NEW_SERVICE_NAME)
-            self.mongodb.createSTHIndexes(NEW_SERVICE_NAME, '/')
+            self.mongodb.createSTHIndexes(NEW_SERVICE_NAME, '')
 
 
         except Exception, ex:
