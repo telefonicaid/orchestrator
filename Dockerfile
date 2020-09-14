@@ -6,7 +6,7 @@ ENV ORCHESTRATOR_USER orchestrator
 # By default all linux users non root, has a UID above 1000, so it's taken 10001 which would never end up allocated automatically.
 ENV ORCHESTRATOR_USER_UID 10001
 
-ENV ORCHESTRATOR_VERSION 3.5.0
+ENV ORCHESTRATOR_VERSION 3.6.0
 
 ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
 ENV DJANGO_SETTINGS_MODULE settings

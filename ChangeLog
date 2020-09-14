@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+3.6.0
+
 FIX: move to debug log about orc statistics
 FIX: Allow chars .:-# only for compose grants name, but no subservices (#285)
 UPDATE: Increase subservice and grants length from 64 to 128 chars
