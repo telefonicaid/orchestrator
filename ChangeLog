@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: include `from` in loggger  based on forwarded header
+
 3.6.0
 
 FIX: move to debug log about orc statistics
