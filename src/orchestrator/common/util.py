@@ -367,5 +367,5 @@ class ContextFilterFrom(logging.Filter):
         self.FROM = FROM
 
     def filter(self, record):
-        record.from = self.FROM
+        record.origin = self.FROM
         return True

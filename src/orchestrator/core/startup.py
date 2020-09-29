@@ -39,30 +39,35 @@ from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
+from orchestrator.common.util import ContextFilterFrom
 
 logger = logging.getLogger('orchestrator_api')
 logger.addFilter(ContextFilterCorrelatorId("n/a"))
 logger.addFilter(ContextFilterTransactionId("n/a"))
 logger.addFilter(ContextFilterService("None"))
 logger.addFilter(ContextFilterSubService(""))
+logger.addFilter(ContextFilterFrom("n/a"))
 
 logger1 = logging.getLogger('orchestrator_core')
 logger1.addFilter(ContextFilterCorrelatorId("n/a"))
 logger1.addFilter(ContextFilterTransactionId("n/a"))
 logger1.addFilter(ContextFilterService("None"))
 logger1.addFilter(ContextFilterSubService(""))
+logger1.addFilter(ContextFilterFrom("n/a"))
 
 logger2 = logging.getLogger('django')
 logger2.addFilter(ContextFilterCorrelatorId("n/a"))
 logger2.addFilter(ContextFilterTransactionId("n/a"))
 logger2.addFilter(ContextFilterService("None"))
 logger2.addFilter(ContextFilterSubService(""))
+logger2.addFilter(ContextFilterFrom("n/a"))
 
 logger3 = logging.getLogger('django.request')
 logger3.addFilter(ContextFilterCorrelatorId("n/a"))
 logger3.addFilter(ContextFilterTransactionId("n/a"))
 logger3.addFilter(ContextFilterService("None"))
 logger3.addFilter(ContextFilterSubService(""))
+logger3.addFilter(ContextFilterFrom("n/a"))
 
 
 def read_banner():
