@@ -61,6 +61,7 @@ logger.addFilter(ContextFilterCorrelatorId("n/a"))
 logger.addFilter(ContextFilterTransactionId("n/a"))
 logger.addFilter(ContextFilterService("None"))
 logger.addFilter(ContextFilterSubService(""))
+logger.addFilter(ContextFilterFrom("n/a"))
 
 
 
@@ -86,12 +87,14 @@ class ServiceList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
-                           CORRELATOR_ID=CORRELATOR_ID)
+                           CORRELATOR_ID=CORRELATOR_ID,
+                           FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if not service_id:
                 # Get all domains
@@ -139,12 +142,14 @@ class ServiceList_RESTView(APIView, IoTConf):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
-                           CORRELATOR_ID=CORRELATOR_ID)
+                           CORRELATOR_ID=CORRELATOR_ID,
+                           FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.update_domain(
                 request.data.get("SERVICE_ID", service_id),
@@ -179,6 +184,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         self.schema_name = "ServiceList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Domains(self.KEYSTONE_PROTOCOL,
@@ -195,7 +201,8 @@ class ServiceList_RESTView(APIView, IoTConf):
                            self.PERSEO_PORT,
                            MONGODB_URI=self.MONGODB_URI,
                            TRANSACTION_ID=None,
-                           CORRELATOR_ID=CORRELATOR_ID)
+                           CORRELATOR_ID=CORRELATOR_ID,
+                           FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.delete_domain(
                 request.data.get("SERVICE_ID", service_id),
@@ -239,6 +246,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = CreateNewService(self.KEYSTONE_PROTOCOL,
@@ -249,7 +257,8 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                                     self.KEYPASS_PORT,
                                     MONGODB_URI=self.MONGODB_URI,
                                     TRANSACTION_ID=None,
-                                    CORRELATOR_ID=CORRELATOR_ID)
+                                    CORRELATOR_ID=CORRELATOR_ID,
+                                    FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.createNewService(
                 request.data.get("DOMAIN_NAME", None),
@@ -303,12 +312,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
+                            CORRELATOR_ID=CORRELATOR_ID,
+                            FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if not subservice_id:
@@ -361,12 +372,14 @@ class SubServiceList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             # request.data # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
+                            CORRELATOR_ID=CORRELATOR_ID,
+                            FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if subservice_id:
@@ -411,6 +424,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             # request.data # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -425,7 +439,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             self.PERSEO_PROTOCOL,
                             self.PERSEO_HOST,
                             self.PERSEO_PORT,
-                            CORRELATOR_ID=CORRELATOR_ID)
+                            CORRELATOR_ID=CORRELATOR_ID,
+                            FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                     result, service_name, subservice_name = flow.delete_project(
@@ -476,6 +491,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = CreateNewSubService(self.KEYSTONE_PROTOCOL,
@@ -488,7 +504,8 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                                        self.ORION_HOST,
                                        self.ORION_PORT,
                                        MONGODB_URI=self.MONGODB_URI,
-                                       CORRELATOR_ID=CORRELATOR_ID)
+                                       CORRELATOR_ID=CORRELATOR_ID,
+                                       FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result, service_name, subservice_name = flow.createNewSubService(
@@ -542,12 +559,14 @@ class User_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = RemoveUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
-                              CORRELATOR_ID=CORRELATOR_ID)
+                              CORRELATOR_ID=CORRELATOR_ID,
+                              FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.removeUser(
                 request.data.get("SERVICE_NAME", None),
@@ -582,12 +601,14 @@ class User_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
-                              CORRELATOR_ID=CORRELATOR_ID)
+                              CORRELATOR_ID=CORRELATOR_ID,
+                              FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.updateUser(
                 request.data.get("SERVICE_NAME", None),
@@ -622,12 +643,14 @@ class User_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Users(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.user(
                                request.data.get("SERVICE_ID",  service_id),
@@ -662,12 +685,14 @@ class User_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = UpdateUser(self.KEYSTONE_PROTOCOL,
                               self.KEYSTONE_HOST,
                               self.KEYSTONE_PORT,
-                              CORRELATOR_ID=CORRELATOR_ID)
+                              CORRELATOR_ID=CORRELATOR_ID,
+                              FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.changeUserPassword(
                 request.data.get("SERVICE_NAME", None),
@@ -716,6 +741,7 @@ class UserList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
 
@@ -724,7 +750,8 @@ class UserList_RESTView(APIView, IoTConf):
             flow = Users(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.users(
                 request.data.get("SERVICE_NAME", None),
@@ -760,12 +787,14 @@ class UserList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = CreateNewServiceUser(self.KEYSTONE_PROTOCOL,
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT,
-                                        CORRELATOR_ID=CORRELATOR_ID)
+                                        CORRELATOR_ID=CORRELATOR_ID,
+                                        FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.createNewServiceUser(
                 request.data.get("SERVICE_NAME", None),
@@ -815,12 +844,14 @@ class Group_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Groups(self.KEYSTONE_PROTOCOL,
                           self.KEYSTONE_HOST,
                           self.KEYSTONE_PORT,
-                          CORRELATOR_ID=CORRELATOR_ID)
+                          CORRELATOR_ID=CORRELATOR_ID,
+                          FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.removeGroup(
                 request.data.get("SERVICE_NAME", None),
@@ -855,12 +886,14 @@ class Group_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Groups(self.KEYSTONE_PROTOCOL,
                           self.KEYSTONE_HOST,
                           self.KEYSTONE_PORT,
-                          CORRELATOR_ID=CORRELATOR_ID)
+                          CORRELATOR_ID=CORRELATOR_ID,
+                          FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.updateGroup(
                 request.data.get("SERVICE_NAME", None),
@@ -895,12 +928,14 @@ class Group_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Groups(self.KEYSTONE_PROTOCOL,
                           self.KEYSTONE_HOST,
                           self.KEYSTONE_PORT,
-                          CORRELATOR_ID=CORRELATOR_ID)
+                          CORRELATOR_ID=CORRELATOR_ID,
+                          FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.group(
                                 request.data.get("SERVICE_ID",  service_id),
@@ -947,15 +982,17 @@ class GroupList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
 
         try:
             request.data  # json validation
             flow = Groups(self.KEYSTONE_PROTOCOL,
-                         self.KEYSTONE_HOST,
-                         self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                          self.KEYSTONE_HOST,
+                          self.KEYSTONE_PORT,
+                          CORRELATOR_ID=CORRELATOR_ID,
+                          FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.groups(
                 request.data.get("SERVICE_NAME", None),
@@ -991,12 +1028,14 @@ class GroupList_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Groups(self.KEYSTONE_PROTOCOL,
                           self.KEYSTONE_HOST,
                           self.KEYSTONE_PORT,
-                          CORRELATOR_ID=CORRELATOR_ID)
+                          CORRELATOR_ID=CORRELATOR_ID,
+                          FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.createNewServiceGroup(
                 request.data.get("SERVICE_NAME", None),
@@ -1044,6 +1083,7 @@ class Role_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
 
@@ -1053,7 +1093,8 @@ class Role_RESTView(APIView, IoTConf):
                            self.KEYPASS_PROTOCOL,
                            self.KEYPASS_HOST,
                            self.KEYPASS_PORT,
-                           CORRELATOR_ID=CORRELATOR_ID)
+                           CORRELATOR_ID=CORRELATOR_ID,
+                           FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.getDomainRolePolicies(
                 request.data.get("SERVICE_ID", service_id),
@@ -1091,6 +1132,7 @@ class Role_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
 
@@ -1100,7 +1142,8 @@ class Role_RESTView(APIView, IoTConf):
                          self.KEYPASS_PROTOCOL,
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result, service_name, subservice_name = flow.setPolicyRole(
@@ -1140,6 +1183,7 @@ class Role_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -1148,7 +1192,8 @@ class Role_RESTView(APIView, IoTConf):
                          self.KEYPASS_PROTOCOL,
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result, service_name, subservice_name = flow.removeRole(
@@ -1198,6 +1243,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -1206,7 +1252,8 @@ class RolePolicy_RESTView(APIView, IoTConf):
                          self.KEYPASS_PROTOCOL,
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result, service_name, subservice_name = flow.getPolicyFromRole(
@@ -1244,6 +1291,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = Roles(self.KEYSTONE_PROTOCOL,
@@ -1252,7 +1300,8 @@ class RolePolicy_RESTView(APIView, IoTConf):
                          self.KEYPASS_PROTOCOL,
                          self.KEYPASS_HOST,
                          self.KEYPASS_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             result, service_name, subservice_name = flow.removePolicyFromRole(
@@ -1303,12 +1352,14 @@ class RoleList_RESTView(APIView, IoTConf):
         self.schema_name = "RoleList"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = CreateNewServiceRole(self.KEYSTONE_PROTOCOL,
                                         self.KEYSTONE_HOST,
                                         self.KEYSTONE_PORT,
-                                        CORRELATOR_ID=CORRELATOR_ID)
+                                        CORRELATOR_ID=CORRELATOR_ID,
+                                        FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.createNewServiceRole(
                 request.data.get("SERVICE_ID", service_id),
@@ -1345,6 +1396,7 @@ class RoleList_RESTView(APIView, IoTConf):
         self.schema_name = "RoleAssignmentList"  # Like that scheme!
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         index = request.GET.get('index', None)
         count = request.GET.get('count', None)
         try:
@@ -1352,7 +1404,8 @@ class RoleList_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.roles(
                 request.data.get("SERVICE_NAME", None),
@@ -1402,12 +1455,14 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         effective = request.GET.get('effective', False) == "true"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
 
         try:
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.roles_assignments(
                 request.data.get("SERVICE_ID", service_id),
@@ -1449,6 +1504,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
@@ -1459,7 +1515,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if not (request.data.get("SUBSERVICE_NAME", None) or
                     request.data.get("SUBSERVICE_ID", subservice_id)):
@@ -1526,6 +1583,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         user_id = request.GET.get('user_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
@@ -1536,7 +1594,8 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             if not (request.data.get("SUBSERVICE_NAME", None) or
@@ -1617,12 +1676,14 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         effective = request.GET.get('effective', False) == "true"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
 
         try:
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.roles_assignments_groups(
                 request.data.get("SERVICE_ID", service_id),
@@ -1664,6 +1725,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         group_id = request.GET.get('group_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
@@ -1674,7 +1736,8 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if not (request.data.get("SUBSERVICE_NAME", None) or
                     request.data.get("SUBSERVICE_ID", subservice_id)):
@@ -1741,6 +1804,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         self.schema_name = "AssignRole"
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         group_id = request.GET.get('group_id', None)
         subservice_id = request.GET.get('subservice_id', None)
         role_id = request.GET.get('role_id', None)
@@ -1751,7 +1815,8 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
             flow = Roles(self.KEYSTONE_PROTOCOL,
                          self.KEYSTONE_HOST,
                          self.KEYSTONE_PORT,
-                         CORRELATOR_ID=CORRELATOR_ID)
+                         CORRELATOR_ID=CORRELATOR_ID,
+                         FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
 
             if not (request.data.get("SUBSERVICE_NAME", None) or
@@ -1830,12 +1895,14 @@ class Trust_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             flow = CreateTrustToken(self.KEYSTONE_PROTOCOL,
                                     self.KEYSTONE_HOST,
                                     self.KEYSTONE_PORT,
-                                    CORRELATOR_ID=CORRELATOR_ID)
+                                    CORRELATOR_ID=CORRELATOR_ID,
+                                    FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.createTrustToken(
                 request.data.get("SERVICE_NAME", None),
@@ -1890,6 +1957,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             if not subservice_id:
@@ -1905,7 +1973,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT,
-                               CORRELATOR_ID=CORRELATOR_ID)
+                               CORRELATOR_ID=CORRELATOR_ID,
+                               FROM=FROM)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 modules, service_name, subservice_name = flow.list_activated_modules(
                     request.data.get("SERVICE_NAME", None),
@@ -1927,7 +1996,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT,
-                                CORRELATOR_ID=CORRELATOR_ID)
+                                CORRELATOR_ID=CORRELATOR_ID,
+                                FROM=FROM)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 modules, service_name, subservice_name = flow.list_activated_modules(
                     request.data.get("SERVICE_NAME", None),
@@ -1967,6 +2037,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             if not subservice_id:
@@ -1982,7 +2053,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT,
-                               CORRELATOR_ID=CORRELATOR_ID)
+                               CORRELATOR_ID=CORRELATOR_ID,
+                               FROM=FROM)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 sub, service_name, subservice_name = flow.activate_module(
                     request.data.get("SERVICE_NAME", None),
@@ -2005,7 +2077,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT,
-                                CORRELATOR_ID=CORRELATOR_ID)
+                                CORRELATOR_ID=CORRELATOR_ID,
+                                FROM=FROM)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 sub, service_name, subservice_name = flow.activate_module(
                     request.data.get("SERVICE_NAME", None),
@@ -2046,6 +2119,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         try:
             request.data  # json validation
             if not subservice_id:
@@ -2061,7 +2135,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                self.PERSEO_PROTOCOL,
                                self.PERSEO_HOST,
                                self.PERSEO_PORT,
-                               CORRELATOR_ID=CORRELATOR_ID)
+                               CORRELATOR_ID=CORRELATOR_ID,
+                               FROM=FROM)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 result, service_name, subservice_name = flow.deactivate_module(
                     request.data.get("SERVICE_NAME", None),
@@ -2084,7 +2159,8 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                                 self.PERSEO_PROTOCOL,
                                 self.PERSEO_HOST,
                                 self.PERSEO_PORT,
-                                CORRELATOR_ID=CORRELATOR_ID)
+                                CORRELATOR_ID=CORRELATOR_ID,
+                                FROM=FROM)
                 CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
                 result, service_name, subservice_name = flow.deactivate_module(
                     request.data.get("SERVICE_NAME", None),
@@ -2221,6 +2297,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
         service_start = time.time()
         response = service_name = subservice_name = flow = None
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
 
         try:
             result = {
@@ -2248,6 +2325,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
         response = service_name = subservice_name = flow = None
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
         logLevel = request.GET.get('level', None)
 
         try:
@@ -2255,7 +2333,8 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             flow = Domains(self.KEYSTONE_PROTOCOL,
                            self.KEYSTONE_HOST,
                            self.KEYSTONE_PORT,
-                           CORRELATOR_ID=CORRELATOR_ID)
+                           CORRELATOR_ID=CORRELATOR_ID,
+                           FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             result, service_name, subservice_name = flow.domains(
                     "admin_domain",

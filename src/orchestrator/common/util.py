@@ -357,3 +357,15 @@ class ContextFilterCorrelatorId(logging.Filter):
     def filter(self, record):
         record.correlator = self.CORRELATOR_ID
         return True
+
+
+class ContextFilterFrom(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+    def __init__(self, FROM):
+        self.FROM = FROM
+
+    def filter(self, record):
+        record.from = self.FROM
+        return True
