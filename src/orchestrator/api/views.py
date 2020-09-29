@@ -2208,6 +2208,9 @@ class OrchVersion_RESTView(APIView, IoTConf):
         service_start = time.time()
         response = service_name = subservice_name = flow = None
         #HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
+        CORRELATOR_ID = self.getCorrelatorIdHeader(request)
+        FROM = self.getFromHeader(request)
+        logger.addFilter(ContextFilterFrom(FROM))
         try:
             # Extract version and stats data
             result = {

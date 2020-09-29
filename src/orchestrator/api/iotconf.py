@@ -145,7 +145,7 @@ class IoTConf(Stats):
         return str(flow.CORRELATOR_ID) if not CORRELATOR_ID else CORRELATOR_ID
 
     def getFromHeader(self, request):
-        origin = request.META.get('X-REAL-IP', None)
-        origin = request.META.get('X-FORWARDED-FOR', origin)
-        origin = request.META.get('FORWARDED', origin)
+        origin = request.META.get('HTTP_X_REAL_IP', None)
+        origin = request.META.get('HTTP_X_FORWARDED_FOR', origin)
+        origin = request.META.get('HTTP_FORWARDED', origin)
         return origin
