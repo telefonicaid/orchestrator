@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Add skip initial notification to iot module (template subscription) (#293)
+
 3.6.0
 
 FIX: move to debug log about orc statistics
