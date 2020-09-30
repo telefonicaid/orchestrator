@@ -2,6 +2,7 @@ CHANGES
 =======
 
 UPDATE: include `from` in loggger  based on forwarded header
+UPDATE: Add skip initial notification to iot module (template subscription) (#293)
 
 3.6.0
 
