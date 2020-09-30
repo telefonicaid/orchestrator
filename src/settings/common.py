@@ -158,7 +158,7 @@ LOGGING = {
         'standard': {
             #'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             #'format' : "time=%(asctime)s | lvl=%(levelname)s | op=%(name)s:%(lineno)s | component=Orchestrator | msg=%(message)s",
-            'format' : 'time=%(asctime)s.%(msecs)03dZ | lvl=%(levelname)s | corr=%(correlator)s | trans=%(transaction)s | srv=%(service)s | subsrv=/%(subservice)s | comp=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
+            'format' : 'time=%(asctime)s.%(msecs)03dZ | lvl=%(levelname)s | corr=%(correlator)s | trans=%(transaction)s | from=%(origin)s | srv=%(service)s | subsrv=/%(subservice)s | comp=Orchestrator | op=%(name)s:%(funcName)s() | msg=%(message)s',
             'datefmt' : "%Y-%m-%dT%H:%M:%S"
         },
     },

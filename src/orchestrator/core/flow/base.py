@@ -35,6 +35,7 @@ from orchestrator.common.util import ContextFilterCorrelatorId
 from orchestrator.common.util import ContextFilterTransactionId
 from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
+from orchestrator.common.util import ContextFilterFrom
 
 from settings.dev import IOTMODULES
 from settings import dev as settings
@@ -67,7 +68,8 @@ class FlowBase(object):
                  MAILER_TO="smtpuser",
                  MONGODB_URI="mongodb://127.0.0.1:27017",
                  TRANSACTION_ID=None,
-                 CORRELATOR_ID=None):
+                 CORRELATOR_ID=None,
+                 FROM=None):
 
         # Generate Transaction ID
         self.TRANSACTION_ID = uuid.uuid4()
@@ -77,6 +79,8 @@ class FlowBase(object):
         else:
             self.CORRELATOR_ID = CORRELATOR_ID
 
+        self.FROM = FROM
+
         self.logger = logging.getLogger('orchestrator_core')
 
         # Put collector into logger
@@ -84,6 +88,7 @@ class FlowBase(object):
         self.logger.addFilter(ContextFilterTransactionId(self.TRANSACTION_ID))
         self.logger.addFilter(ContextFilterService(None))
         self.logger.addFilter(ContextFilterSubService(""))
+        self.logger.addFilter(ContextFilterFrom(self.FROM))
 
         self.idm = IdMOperations(KEYSTONE_PROTOCOL,
                                  KEYSTONE_HOST,
