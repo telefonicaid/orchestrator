@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+UPDATE: Include repoze.lru version 0.7 inside requirements.txt file
 UPDATE: include `from` in loggger  based on forwarded header
 UPDATE: Add skip initial notification to iot module (template subscription) (#293)
 
