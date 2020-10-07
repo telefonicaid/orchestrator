@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+REMOVE: Remove unussed dependency repoze.lru
 UPDATE: include `from` in loggger  based on forwarded header
 UPDATE: Add skip initial notification to iot module (template subscription) (#293)
 
