@@ -29,7 +29,6 @@ RUN \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
     chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
     pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
-    pip install repoze.lru && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \
