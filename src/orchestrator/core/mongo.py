@@ -55,7 +55,7 @@ class MongoDBOperations(object):
             db.entities.create_index([("_id.servicePath", pymongo.ASCENDING),
                                       ("_id.id", pymongo.ASCENDING),
                                       ("_id.type", pymongo.ASCENDING)])
-            db.entities.create_index("_id.creDate")
+            db.entities.create_index("creDate")
         except Exception, e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
