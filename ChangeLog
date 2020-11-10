@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+3.7.0
+
 FIX: Orion index creation (was `_id.creDate: 1` and has to be `creDate: 1`)
 REMOVE: Remove unussed dependency repoze.lru
 UPDATE: include `from` in loggger  based on forwarded header
