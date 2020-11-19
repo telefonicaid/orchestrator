@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+Upgrade Dockerfile base image from centos7.7.1908 to centos7.9.2009
+
 3.7.0
 
 FIX: Orion index creation (was `_id.creDate: 1` and has to be `creDate: 1`)
