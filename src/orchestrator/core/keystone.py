@@ -1130,7 +1130,7 @@ class IdMKeystoneOperations(IdMOperations):
             project_data = {
                 "name": project['name'],
                 "id": project['id'],
-                "domain_id": project['domain_id']
+                "domain_id": DOMAIN_ID
             }
             # TODO: include domain_name into each project ?
             if 'description' in project:
