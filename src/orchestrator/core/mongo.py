@@ -52,6 +52,8 @@ class MongoDBOperations(object):
             # For Orion
             databaseName = 'orion-' + SERVICE_NAME
             db = self.client[databaseName]
+            db.entities.create_index([("location.coords", pymongo.GEOSPHERE)])
+            db.entities.create_index("expDate", expireAfterSeconds=0)
             db.entities.create_index([("_id.servicePath", pymongo.ASCENDING),
                                       ("_id.id", pymongo.ASCENDING),
                                       ("_id.type", pymongo.ASCENDING)])
