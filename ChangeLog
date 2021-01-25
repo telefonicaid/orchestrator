@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: create geo-index in Orion DB upon service provision (#301)
+FIX: create expiration index in Orion DB upon service provision
 Upgrade Dockerfile base image from centos7.7.1908 to centos7.9.2009
 
 3.7.0
