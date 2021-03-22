@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPDATE: Update djangorestframework from 3.9.4 to 3.11.2 due to security vulnerability
+
 3.8.0
 
 FIX: create geo-index in Orion DB upon service provision (#301)
