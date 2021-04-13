@@ -19,6 +19,18 @@
               Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" />
         </Match>
       </AllOf>
+      <AllOf>
+        <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
+          <AttributeValue
+              DataType="http://www.w3.org/2001/XMLSchema#string"
+              >fiware:orion:.*</AttributeValue>
+          <AttributeDesignator
+              AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"
+              MustBePresent="true"
+              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" />
+        </Match>
+      </AllOf>
     </AnyOf>
   </Target>
 
