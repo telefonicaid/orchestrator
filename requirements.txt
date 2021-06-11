@@ -1,6 +1,6 @@
 Django==1.11.29
 djangorestframework==3.9.4
-jsonschema==2.5.0
+jsonschema==2.5.1
 uwsgi==2.0.19.1
 requests==2.22.0
 python-ldap==2.5.2

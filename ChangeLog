@@ -1,6 +1,6 @@
 CHANGES
 =======
-
+UPDATE: Update jsonschema dep 2.5.0 to 2.5.1
 Upgrade STH xacml policies with orion frns
 
 3.8.0
