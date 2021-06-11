@@ -36,6 +36,7 @@ string=$(get_rpm_version_string)
 VERSION_VALUE=${string% *}
 RELEASE_VALUE=${string#* }
 PYTHON27_VALUE=0
+PYTHON3_VALUE=0
 
 args=("$@")
 ELEMENTS=${#args[@]}
@@ -51,6 +52,9 @@ for (( i=0;i<$ELEMENTS;i++)); do
     if [ "$arg" == "--with-python27" ]; then
         PYTHON27_VALUE=1
     fi
+    if [ "$arg" == "--with-python3" ]; then
+        PYTHON3_VALUE=1
+    fi
 done
 
 
@@ -64,5 +68,6 @@ rpmbuild -bb orchestrator.spec \
   --define "_root $BASE"\
   --define "_project_user $ORCHESTRATOR_USER"\
   --define "with_python27 $PYTHON27_VALUE"\
+  --define "with_python3 $PYTHON3_VALUE"\
   --define "_version $VERSION_VALUE"\
   --define "_release $RELEASE_VALUE"
