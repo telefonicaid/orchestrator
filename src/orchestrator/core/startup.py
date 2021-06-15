@@ -91,7 +91,7 @@ def check_endpoints():
     try:
         idm.checkIdM()
         logger.info("Keystone endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.error("keystone endpoint not found: %s" % ex)
         return "ERROR keystone endpoint not found: %s" % ex
 
@@ -99,7 +99,7 @@ def check_endpoints():
     try:
         ac.checkAccC()
         logger.info("Keypass endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.error("keypass endpoint not found: %s" % ex)
         return "ERROR keypass endpoint not found: %s" % ex
 
@@ -109,7 +109,7 @@ def check_endpoints():
     try:
         mongo.checkMongo()
         logger.info("MongoDB endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.warn("MongoDB endpoint not found: %s" % ex)
 
     # ContextBroker: optional
@@ -120,7 +120,7 @@ def check_endpoints():
     try:
         orion.checkCB()
         logger.info("Orion endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.warn("Orion endpoint not found: %s" % ex)
 
     # Perseo: optional
@@ -131,7 +131,7 @@ def check_endpoints():
     try:
         orion.checkPERSEO()
         logger.info("PERSEO endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.warn("PERSEO endpoint not found: %s" % ex)
 
     # OpenLDAP: optional
@@ -142,7 +142,7 @@ def check_endpoints():
     try:
         openldap.checkLdap()
         logger.info("LDAP endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.warn("LDAP endpoint not found: %s" % ex)
 
     # Mailer: optional
@@ -152,7 +152,7 @@ def check_endpoints():
     try:
         mailer.checkMailer()
         logger.info("MAILER endpoint OK")
-    except Exception, ex:
+    except Exception as ex:
         logger.warn("MAILER endpoint not found: %s" % ex)
 
     return "OK"

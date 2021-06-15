@@ -99,7 +99,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap create user %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("createUser exception: %s" % e)
             return { "error": e }
 
@@ -114,7 +114,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap delete user by admin %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("deleteUserByAdmin exception: %s" % e)
             return { "error": e }
 
@@ -128,7 +128,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap delete user by himself %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("deleteUserByHimself exception: %s" % e)
             return { "error": e }
 
@@ -139,7 +139,7 @@ class OpenLdapOperations(object):
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
             self.unbind(conn)
             return { "details": "OK" }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("authUser exception: %s" % e)
             return { "error": e }
 
@@ -172,7 +172,7 @@ class OpenLdapOperations(object):
             else:
                 res = { "error": FILTER + " not found" }
             return res
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("listUsers exception: %s" % e)
             return { "error": e }
 
@@ -206,7 +206,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap assing group user %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("assignGroupUser exception: %s" % e)
             return { "error": e }
 
@@ -233,7 +233,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap groups of user: %s" % json.dumps(groups))
             self.unbind(conn)
             return { "details": groups }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("getUserGroups exception: %s" % e)
             return { "error": e }
 
@@ -259,7 +259,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap get user detail %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("getUserDetail exception: %s" % e)
             return { "error": e }
 
@@ -287,7 +287,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap update user by admin %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("updateUserByAdmin exception: %s" % e)
             return { "error": e }
 
@@ -314,7 +314,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap update user by user %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("updateUserByUser exception: %s" % e)
             return { "error": e }
 
@@ -337,7 +337,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap create group %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("createGroup exception: %s" % e)
             return { "error": e }
 
@@ -352,7 +352,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap delete group by admin %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("deleteGroupByAdmin exception: %s" % e)
             return { "error": e }
 
@@ -382,7 +382,7 @@ class OpenLdapOperations(object):
             logger.debug("ldap update group by admin %s" % json.dumps(result))
             self.unbind(conn)
             return { "details": result }
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("updateGroupByAdmin exception: %s" % e)
             return { "error": e }
 
@@ -415,6 +415,6 @@ class OpenLdapOperations(object):
             else:
                 res = { "error": FILTER + " not found" }
             return res
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             logger.warn("listGroups exception: %s" % e)
             return { "error": e }
