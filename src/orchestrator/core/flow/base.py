@@ -40,8 +40,6 @@ from orchestrator.common.util import ContextFilterFrom
 from settings.dev import IOTMODULES
 from settings import dev as settings
 
-
-
 class FlowBase(object):
     def __init__(self,
                  KEYSTONE_PROTOCOL,
@@ -155,12 +153,17 @@ class FlowBase(object):
         # print(exc_type, fname, exc_tb.tb_lineno)
         res = {"error": str(ex), "code": 500}
         if isinstance(ex.args, tuple) and (
-                (len(ex.args) > 0) and
-            not isinstance(ex.args[0], tuple)):  # Python 2.6
-            res['code'] = ex.args[0]
-            if res['code'] == 400 and len(ex.args) > 1 and \
-               ex.args[1].startswith('SPASSWORD'):
-                res['error'] = ex.args[1]
+                (len(ex.args) > 0)):
+            if not isinstance(ex.args[0], tuple):  # Python 2.6
+                res['code'] = ex.args[0]
+                if res['code'] == 400 and len(ex.args) > 1 and \
+                   ex.args[1].startswith('SPASSWORD'):
+                    res['error'] = ex.args[1]
+            else: # Python 3
+                res['code'] = ex.args[0][0]
+                if res['code'] == 400 and len(ex.args[0]) > 1 and \
+                   ex.args[0][1].startswith('SPASSWORD'):
+                    res['error'] = ex.args[0][1]
         elif isinstance(ex.message, tuple):  # Python 2.7
             res['code'] = ex.message[0]
             if res['code'] == 400 and len(ex.message) > 1 and \
