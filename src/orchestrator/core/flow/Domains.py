@@ -72,7 +72,7 @@ class Domains(FlowBase):
 
             self.logger.debug("DOMAINS=%s" % json.dumps(DOMAINS, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -140,7 +140,7 @@ class Domains(FlowBase):
 
             self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -213,7 +213,7 @@ class Domains(FlowBase):
 
             self.logger.debug("DOMAIN=%s" % json.dumps(DOMAIN, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -345,7 +345,7 @@ class Domains(FlowBase):
             #
             try:
                 self.idm.removeRoles(ADMIN_TOKEN, DOMAIN_ID)
-            except Exception, ex:
+            except Exception as ex:
                 # 404 if old version of keystone-scim
                 self.logger.info("Deleting roles in a slow way")
                 roles = self.idm.getDomainRoles(ADMIN_TOKEN, DOMAIN_ID)
@@ -487,7 +487,7 @@ class Domains(FlowBase):
             else:
                 raise Exception("not admin role found to perform this action")
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -596,7 +596,7 @@ class Domains(FlowBase):
             subscriptionid = cb_res['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -690,7 +690,7 @@ class Domains(FlowBase):
                                                sub['id'])
                     break
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -771,7 +771,7 @@ class Domains(FlowBase):
             modules = self.cb.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

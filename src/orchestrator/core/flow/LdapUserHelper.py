@@ -85,7 +85,7 @@ class LdapUserHelper(FlowBase):
                 return {}
             else:
                 raise Exception(400, "None user was created in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR creating user %s: %s" % (
                 NEW_USER_NAME,
                 ex))
@@ -117,7 +117,7 @@ class LdapUserHelper(FlowBase):
                 return res
             else:
                 raise Exception(400, "None user was asked to be created in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR asking for create user %s: %s" % (
                 NEW_USER_NAME,
                 ex))
@@ -154,7 +154,7 @@ class LdapUserHelper(FlowBase):
                 return {}
             else:
                 raise Exception(400, "None user deleted in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR deleting user %s: %s" % (
                 USER_NAME,
                 ex))
@@ -184,7 +184,7 @@ class LdapUserHelper(FlowBase):
                 return res
             else:
                 raise Exception(404, "None users were retrieved from ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR retrieving users %s: %s" % (
                 FILTER,
                 ex))
@@ -211,7 +211,7 @@ class LdapUserHelper(FlowBase):
                 return res
             else:
                 raise Exception(400, "None user detail was retrieved from ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,
                 ex))
@@ -252,7 +252,7 @@ class LdapUserHelper(FlowBase):
                 return user
             else:
                 raise Exception(400, "None user detail was retrieved from ldap: user %s groups %s" % (user, groups))
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR retrieving user detail %s: %s" % (
                 USER_NAME,
                 ex))
@@ -279,7 +279,7 @@ class LdapUserHelper(FlowBase):
                 return res
             else:
                 raise Exception(401, "None user was auth by ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR authenticating user %s: %s" % (
                 USER_NAME,
                 ex))
@@ -330,7 +330,7 @@ class LdapUserHelper(FlowBase):
                 return res
             else:
                 raise Exception(400, "None user was updated in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR updating user %s: %s" % (
                 USER_NAME,
                 ex))

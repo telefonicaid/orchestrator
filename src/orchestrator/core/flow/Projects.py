@@ -88,7 +88,7 @@ class Projects(FlowBase):
 
             self.logger.debug("PROJECTS=%s" % json.dumps(PROJECTS, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -164,7 +164,7 @@ class Projects(FlowBase):
 
             try:
                 PROJECT = self.idm.getProject(ADMIN_TOKEN, PROJECT_ID)
-            except Exception, ex:
+            except Exception as ex:
                 PROJECT = {
                     'project': {
                         'description': PROJECT_NAME,
@@ -177,7 +177,7 @@ class Projects(FlowBase):
                     PROJECT['project']['name']=PROJECT_NAME
             self.logger.debug("PROJECT=%s" % PROJECT)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -269,7 +269,7 @@ class Projects(FlowBase):
 
             self.logger.debug("PROJECT=%s" % PROJECT)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -384,7 +384,7 @@ class Projects(FlowBase):
 
             self.logger.debug("PROJECT=%s" % PROJECT)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -520,7 +520,7 @@ class Projects(FlowBase):
             subscriptionid = cb_res['subscriptionId']
             self.logger.debug("subscription id=%s" % subscriptionid)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -638,7 +638,7 @@ class Projects(FlowBase):
                                                sub['id'])
                     break
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -741,7 +741,7 @@ class Projects(FlowBase):
             modules = self.cb.extract_modules_from_subscriptions(self, IOTMODULES, cb_res)
             self.logger.debug("modules=%s" % json.dumps(modules, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

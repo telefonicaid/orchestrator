@@ -218,7 +218,7 @@ class FlowBase(object):
                 SERVICE_NAME = self.idm.getDomainNameFromToken(
                     USER_TOKEN,
                     SERVICE_ID)
-            except Exception, ex:
+            except Exception as ex:
                 # This op could be executed by cloud_admin user
                 SERVICE = self.idm.getDomain(USER_TOKEN,
                                              SERVICE_ID)
@@ -235,7 +235,7 @@ class FlowBase(object):
                      USER_TOKEN,
                      SERVICE_ID,
                      SUBSERVICE_ID)
-            except Exception, ex:
+            except Exception as ex:
                 # This op could be executed by cloud_admin user
                 SUBSERVICE = self.idm.getProject(USER_TOKEN,
                                                  SUBSERVICE_ID)
@@ -263,7 +263,7 @@ class FlowBase(object):
                     token_extended['project'] = \
                         token_detail['token']['project']['name'][1:]
 
-            except Exception, ex:
+            except Exception as ex:
                 # Probably expired?
                 token_extended  = {
                     "token": USER_TOKEN,
@@ -283,7 +283,7 @@ class FlowBase(object):
             all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
             # TODO: Take care of the following operation takes too much time
             self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
-        except Exception, ex:
+        except Exception as ex:
             self.logger.error("ERROR collecting component metrics %s", ex)
 
     def getFlowMetrics(self):

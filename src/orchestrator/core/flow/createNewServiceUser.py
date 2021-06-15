@@ -107,7 +107,7 @@ class CreateNewServiceUser(FlowBase):
                                                 NEW_USER_DESCRIPTION)
             self.logger.debug("ID of user %s: %s" % (NEW_USER_NAME, ID_USER))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

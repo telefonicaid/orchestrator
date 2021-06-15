@@ -178,7 +178,7 @@ class CreateTrustToken(FlowBase):
 
             self.logger.debug("ID of Trust %s" % (ID_TRUST))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -275,7 +275,7 @@ class CreateTrustToken(FlowBase):
 
             self.logger.debug("Trusts %s" % (TRUSTS))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

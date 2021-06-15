@@ -102,7 +102,7 @@ class Roles(FlowBase):
 
             self.logger.debug("ROLES=%s" % json.dumps(ROLES, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -292,7 +292,7 @@ class Roles(FlowBase):
 
             self.logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded,
                                                  indent=3))
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -424,7 +424,7 @@ class Roles(FlowBase):
                                      SERVICE_ID,
                                      SERVICE_USER_ID,
                                      ROLE_ID)
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -561,7 +561,7 @@ class Roles(FlowBase):
                                       SERVICE_USER_ID,
                                       ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -673,7 +673,7 @@ class Roles(FlowBase):
                                       SERVICE_USER_ID,
                                       INHERIT_ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -786,7 +786,7 @@ class Roles(FlowBase):
                                       SERVICE_USER_ID,
                                       ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -915,7 +915,7 @@ class Roles(FlowBase):
                                        SERVICE_USER_ID,
                                        ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1026,7 +1026,7 @@ class Roles(FlowBase):
                                        SERVICE_ID,
                                        SERVICE_USER_ID,
                                        INHERIT_ROLE_ID)
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1219,7 +1219,7 @@ class Roles(FlowBase):
 
             self.logger.debug("ROLES=%s" % json.dumps(role_assignments_expanded,
                                                  indent=3))
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1352,7 +1352,7 @@ class Roles(FlowBase):
                                             SERVICE_ID,
                                             SERVICE_GROUP_ID,
                                             ROLE_ID)
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1490,7 +1490,7 @@ class Roles(FlowBase):
                                              SERVICE_GROUP_ID,
                                              ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1603,7 +1603,7 @@ class Roles(FlowBase):
                                              SERVICE_GROUP_ID,
                                              INHERIT_ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1717,7 +1717,7 @@ class Roles(FlowBase):
                                              SERVICE_GROUP_ID,
                                              ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1847,7 +1847,7 @@ class Roles(FlowBase):
                                               SERVICE_GROUP_ID,
                                               ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -1958,7 +1958,7 @@ class Roles(FlowBase):
                                               SERVICE_ID,
                                               SERVICE_GROUP_ID,
                                               INHERIT_ROLE_ID)
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -2047,7 +2047,7 @@ class Roles(FlowBase):
                                 SERVICE_ID,
                                 ROLE_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -2161,7 +2161,7 @@ class Roles(FlowBase):
             else:
                 raise Exception("not admin role found to perform this action")
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -2273,7 +2273,7 @@ class Roles(FlowBase):
             else:
                 raise Exception("not admin role found to perform this action")
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -2384,7 +2384,7 @@ class Roles(FlowBase):
             else:
                 raise Exception("not admin role found to perform this action")
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

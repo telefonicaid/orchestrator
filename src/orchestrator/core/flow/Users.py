@@ -107,7 +107,7 @@ class Users(FlowBase):
 
             # Listar los usuarios de un Subservicio
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -175,7 +175,7 @@ class Users(FlowBase):
                                               USER_ID)
             self.logger.debug("DETAIL_USER=%s" % json.dumps(DETAIL_USER, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
