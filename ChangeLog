@@ -1,5 +1,8 @@
 CHANGES
 =======
+Upgrade Python (2 -> 3),
+        Django (1.11 -> 2.2.24)
+        DjangoRestFramework (3.9 -> 3.11)
 UPDATE: Update jsonschema dep 2.5.0 to 2.5.1
 Upgrade STH xacml policies with orion frns
 
