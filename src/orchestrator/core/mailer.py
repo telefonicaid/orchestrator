@@ -99,7 +99,7 @@ class MailerOperations(object):
 
         try:
             server.sendmail(self.smtp_from, dest, msg)
-        except Exception, ex:  # try to avoid catching Exception unless you have too
+        except Exception as ex:  # try to avoid catching Exception unless you have too
             logger.error('MAILER003: SMTP sendmail error %s' % ex)
             return { "error": "SMTP sendmail error %s" % ex }
         finally:
