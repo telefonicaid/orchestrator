@@ -99,7 +99,7 @@ class RestOperations(object):
         if data:
             if json_data:
                 request = urllib.request.Request(
-                    url, data=json.dumps(data))
+                    url, data=json.dumps(data).encode())
             else:
                 request = urllib.request.Request(url, data=data)
         else:
