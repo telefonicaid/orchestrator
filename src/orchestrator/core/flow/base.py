@@ -70,7 +70,7 @@ class FlowBase(object):
                  FROM=None):
 
         # Generate Transaction ID
-        self.TRANSACTION_ID = uuid.uuid4()
+        self.TRANSACTION_ID = str(uuid.uuid4())
 
         if not CORRELATOR_ID:
             self.CORRELATOR_ID = self.TRANSACTION_ID

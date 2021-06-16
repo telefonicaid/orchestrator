@@ -99,9 +99,9 @@ class RestOperations(object):
         if data:
             if json_data:
                 request = urllib.request.Request(
-                    url, data=json.dumps(data).encode())
+                    url=url, data=json.dumps(data).encode())
             else:
-                request = urllib.request.Request(url, data=data)
+                request = urllib.request.Request(url=url, body=data)
         else:
             request = urllib.request.Request(url)
         request.get_method = lambda: method
@@ -165,7 +165,7 @@ class RestOperations(object):
             except ValueError:
                 res.msg = data
             except Exception as e:
-                print(e)
+                self.logger.warn("exception %s", e)
         except urllib.request.URLError as e:
             data = None
             res = e
@@ -242,19 +242,23 @@ class RestOperations(object):
 
         try:
             if not auth:
-                res = requests.post(url,
-                                    headers=headers,
-                                    data=rdata,
-                                    verify=False)
+                res = requests.request(method=method,
+                                       url=url,
+                                       headers=headers,
+                                       data=rdata,
+                                       verify=False)
             else:
-                res = requests.post(url,
-                                    auth=auth,
-                                    headers=headers,
-                                    data=rdata,
-                                    verify=False)
+                res = requests.request(method=method,
+                                       url=url,
+                                       auth=auth,
+                                       headers=headers,
+                                       data=rdata,
+                                       verify=False)
+            res.code = res.status_code
+            res.msg = res.reason
 
         except Exception as e:
-            print(e)
+            self.logger.warn("exception %s", e)
 
         if settings.ORC_EXTENDED_METRICS:
             self.collectOutgoingMetrics(service_start, rdata, headers, res)
