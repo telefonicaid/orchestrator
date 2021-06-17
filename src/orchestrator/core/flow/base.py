@@ -152,31 +152,33 @@ class FlowBase(object):
         # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         # print(exc_type, fname, exc_tb.tb_lineno)
         res = {"error": str(ex), "code": 500}
-        if isinstance(ex.args, tuple) and (
-                (len(ex.args) > 0)):
-            if not isinstance(ex.args[0], tuple):  # Python 2.6
-                res['code'] = ex.args[0]
-                if res['code'] == 400 and len(ex.args) > 1 and \
-                   ex.args[1].startswith('SPASSWORD'):
-                    res['error'] = ex.args[1]
-            else: # Python 3
-                res['code'] = ex.args[0][0]
-                if res['code'] == 400 and len(ex.args[0]) > 1 and \
-                   ex.args[0][1].startswith('SPASSWORD'):
-                    res['error'] = ex.args[0][1]
-        elif isinstance(ex.message, tuple):  # Python 2.7
-            res['code'] = ex.message[0]
-            if res['code'] == 400 and len(ex.message) > 1 and \
-               ex.message[1].startswith('SPASSWORD'):
-                res['error'] = ex.message[1]
-        return res, None, None
+        try:
+            if isinstance(ex.args, tuple) and (
+                    (len(ex.args) > 0)):
+                if not isinstance(ex.args[0], tuple):  # Python 2.6
+                    res['code'] = ex.args[0]
+                    if res['code'] == 400 and len(ex.args) > 1 and \
+                       ex.args[1].startswith('SPASSWORD'):
+                        res['error'] = ex.args[1]
+                else: # Python 3
+                    res['code'] = ex.args[0][0]
+                    if res['code'] == 400 and len(ex.args[0]) > 1 and \
+                       ex.args[0][1].startswith('SPASSWORD'):
+                        res['error'] = ex.args[0][1]
+            elif isinstance(ex.message, tuple):  # Python 2.7
+                res['code'] = ex.message[0]
+                if res['code'] == 400 and len(ex.message) > 1 and \
+                   ex.message[1].startswith('SPASSWORD'):
+                    res['error'] = ex.message[1]
+        finally:
+            return res, None, None
 
 
     def logError(self, logger, error_code, ex):
         '''
         Log as error level error_code if is < 400 or > 500
         '''
-        if (error_code[0]['code'] < 400 or error_code[0]['code'] > 500):
+        if (error_code[0]['code'] < 400 or error_code[0]['code'] >= 500):
             logger.error(ex)
         else:
             logger.debug(ex)
