@@ -128,8 +128,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -171,8 +170,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -223,8 +221,7 @@ class ServiceList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -287,8 +284,7 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -359,8 +355,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -411,8 +406,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -469,8 +463,7 @@ class SubServiceList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -536,8 +529,7 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -589,8 +581,7 @@ class User_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -632,7 +623,7 @@ class User_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0}'.format(error.message),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -673,8 +664,7 @@ class User_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -717,8 +707,7 @@ class User_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -775,8 +764,7 @@ class UserList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -820,8 +808,7 @@ class UserList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -874,8 +861,7 @@ class Group_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -917,7 +903,7 @@ class Group_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0}'.format(error.message),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -958,8 +944,7 @@ class Group_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1016,8 +1001,7 @@ class GroupList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1059,8 +1043,7 @@ class GroupList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1119,8 +1102,7 @@ class Role_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1171,8 +1153,7 @@ class Role_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1218,8 +1199,7 @@ class Role_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1279,8 +1259,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1327,8 +1306,7 @@ class RolePolicy_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1383,8 +1361,7 @@ class RoleList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1429,8 +1406,7 @@ class RoleList_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1491,8 +1467,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1570,8 +1545,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1650,8 +1624,7 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1712,8 +1685,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1791,8 +1763,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1871,8 +1842,7 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -1933,8 +1903,7 @@ class Trust_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -2025,8 +1994,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -2106,8 +2074,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -2187,8 +2154,7 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -2281,8 +2247,7 @@ class OrchVersion_RESTView(APIView, IoTConf):
 
         except ParseError as error:
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
         self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
