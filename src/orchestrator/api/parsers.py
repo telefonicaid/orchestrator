@@ -49,7 +49,7 @@ class JSONSchemaParser(JSONParser):
                 data,
                 schemas.json[parser_context['view'].schema_name])
         except (ValueError, jsonschema.exceptions.ValidationError) as error:
-            logger.debug(error.message)
-            raise ParseError(detail=error.message)
+            logger.debug(str(error.args[0]))
+            raise ParseError(detail=str(error.args[0]))
         else:
             return data
