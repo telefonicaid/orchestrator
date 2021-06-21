@@ -3,5 +3,5 @@ djangorestframework==3.11.2
 jsonschema==2.6.0
 uwsgi==2.0.19.1
 requests==2.25.1
-python-ldap==3.0.0
+python-ldap==3.3.1
 pymongo==3.7.2
