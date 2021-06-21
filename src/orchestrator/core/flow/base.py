@@ -178,11 +178,14 @@ class FlowBase(object):
         '''
         Log as error level error_code if is < 400 or > 500
         '''
-        if (error_code[0]['code'] < 400 or error_code[0]['code'] >= 500):
-            logger.error(ex)
-        else:
+        try:
+            if (isinstance(error_code[0]['code'], int) and
+                (error_code[0]['code'] < 400 or error_code[0]['code'] >= 500)):
+                logger.error(ex)
+            else:
+                logger.debug(ex)
+        except:
             logger.debug(ex)
-
 
     def get_endpoint_iot_module(self, iot_module):
         assert iot_module in IOTMODULES
