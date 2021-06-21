@@ -119,7 +119,7 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        body_data = res.read()
+        body_data = res.content.decode()
         logger.debug("data response: %s" % body_data)
         return body_data
 
@@ -137,7 +137,7 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        body_data = res.read()
+        body_data = res.content.decode()
         logger.debug("data response: %s" % body_data)
         return body_data
 
