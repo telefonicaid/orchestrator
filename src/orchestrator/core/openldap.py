@@ -295,7 +295,7 @@ class OpenLdapOperations(object):
             logger.warn("updateUserByAdmin exception: %s" % e)
             return { "error": e }
 
-    def updateUserByUser(self,
+    def updateUserByHimself(self,
                           USER_NAME,
                           USER_PASSWORD,
                           USER_DETAIL):
