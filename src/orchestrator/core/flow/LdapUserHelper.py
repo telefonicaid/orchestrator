@@ -318,7 +318,7 @@ class LdapUserHelper(FlowBase):
                             NEW_USER_NAME,
                             GROUP_NAME)
                         self.logger.debug("res=%s" % res)
-            elif USERNAME and USER_PASSWORD:
+            elif USER_NAME and USER_PASSWORD:
                 res = self.ldap.updateUserByHimself(
                     USER_NAME,
                     USER_PASSWORD,

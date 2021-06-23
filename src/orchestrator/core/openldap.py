@@ -315,9 +315,9 @@ class OpenLdapOperations(object):
                             new_value[attr] = USER_DATA[userattr]
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)
-            logger.debug("ldap update user by user %s" % json.dumps(result))
+            logger.debug("ldap update user by user %s" % json.dumps(result[0]))
             self.unbind(conn)
-            return { "details": result }
+            return { "details": result[0] }
         except ldap.LDAPError as e:
             logger.warn("updateUserByUser exception: %s" % e)
             return { "error": e }
@@ -384,9 +384,9 @@ class OpenLdapOperations(object):
             logger.debug("ldap update group old_value %s new_value %s " % (json.dumps(old_value), json.dumps(new_value)))
             mymodlist = ldap.modlist.modifyModlist(old_value, new_value)
             result = conn.modify_s(dn, mymodlist)
-            logger.debug("ldap update group by admin %s" % json.dumps(result))
+            logger.debug("ldap update group by admin %s" % json.dumps(result[0]))
             self.unbind(conn)
-            return { "details": result }
+            return { "details": result[0] }
         except ldap.LDAPError as e:
             logger.warn("updateGroupByAdmin exception: %s" % e)
             return { "error": e }
