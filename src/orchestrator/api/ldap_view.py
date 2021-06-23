@@ -55,6 +55,9 @@ class LdapUser_RESTView(APIView, IoTConf):
             request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
                            LDAP_BASEDN=self.LDAP_BASEDN,
@@ -111,6 +114,9 @@ class LdapUser_RESTView(APIView, IoTConf):
             request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
                            LDAP_BASEDN=self.LDAP_BASEDN,
@@ -162,7 +168,10 @@ class LdapUser_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapUserHelper(
-                         None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
                          LDAP_BASEDN=self.LDAP_BASEDN,
@@ -199,6 +208,9 @@ class LdapUser_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapUserHelper(
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
@@ -246,7 +258,10 @@ class LdapAuth_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapUserHelper(
-                           None, None, None,
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
                            LDAP_BASEDN=self.LDAP_BASEDN,
@@ -294,6 +309,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
             request.data  # json validation
             flow = LdapGroupHelper(
                            None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
                            LDAP_BASEDN=self.LDAP_BASEDN,
@@ -337,6 +355,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapGroupHelper(
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
@@ -386,6 +407,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
             request.data  # json validation
             flow = LdapGroupHelper(
                          None, None, None,
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
                          LDAP_BASEDN=self.LDAP_BASEDN,
@@ -421,6 +445,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapGroupHelper(
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
