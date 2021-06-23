@@ -298,7 +298,7 @@ class OpenLdapOperations(object):
     def updateUserByHimself(self,
                           USER_NAME,
                           USER_PASSWORD,
-                          USER_DETAIL):
+                          USER_DATA):
         try:
             conn = self.bindUser(USER_NAME, USER_PASSWORD)
             dn = "uid=" + USER_NAME + ",ou=users," + self.LDAP_BASEDN
