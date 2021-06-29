@@ -47,7 +47,7 @@ class OpenLdapOperations(object):
         self.LDAP_BASEDN = LDAP_BASEDN
 
     def checkLdap(self):
-        conn = ldap.initialize('ldap://'+self.LDAP_HOST+':'+self.LDAP_PORT)
+        conn = ldap.initialize('ldap://'+str(self.LDAP_HOST)+':'+str(self.LDAP_PORT))
         # Just for check connection
         conn.simple_bind_s("","")
 
