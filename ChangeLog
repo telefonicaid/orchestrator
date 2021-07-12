@@ -4,7 +4,7 @@ Upgrade Python (2 -> 3), #242
         Django (1.11 -> 2.2.24) #310
         DjangoRestFramework (3.9 -> 3.11) #309
         requests (2.22.0 -> 2.25.1)
-        python-ldap (2.5.2 > 3.3.1)
+        python-ldap (2.5.2 -> 3.3.1)
 UPDATE: Update jsonschema dep 2.5.0 to 2.6.0
 Upgrade STH xacml policies with orion frns
 
