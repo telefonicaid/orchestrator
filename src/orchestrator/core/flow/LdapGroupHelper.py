@@ -62,7 +62,7 @@ class LdapGroupHelper(FlowBase):
                 return {}
             else:
                 raise Exception(400, "None group was created in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR creating group %s: %s" % (
                 NEW_GROUP_NAME,
                 ex))
@@ -93,7 +93,7 @@ class LdapGroupHelper(FlowBase):
                 return {}
             else:
                 raise Exception(400, "None group deleted in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR deleting group %s: %s" % (
                 GROUP_NAME,
                 ex))
@@ -123,7 +123,7 @@ class LdapGroupHelper(FlowBase):
                 return res
             else:
                 raise Exception(404, "None groups were retrieved from ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR retrieving groups %s: %s" % (
                 FILTER,
                 ex))
@@ -155,7 +155,7 @@ class LdapGroupHelper(FlowBase):
                 return group
             else:
                 raise Exception(400, "None group detail was retrieved from ldap: group %s" % (group))
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR retrieving group detail %s: %s" % (
                 GROUP_NAME,
                 ex))
@@ -190,7 +190,7 @@ class LdapGroupHelper(FlowBase):
                 return res
             else:
                 raise Exception(400, "None group was updated in ldap: %s" % res['error'])
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR updating group %s: %s" % (
                 GROUP_NAME,
                 ex))

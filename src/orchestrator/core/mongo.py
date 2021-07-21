@@ -58,7 +58,7 @@ class MongoDBOperations(object):
                                       ("_id.id", pymongo.ASCENDING),
                                       ("_id.type", pymongo.ASCENDING)])
             db.entities.create_index("creDate")
-        except Exception, e:
+        except Exception as e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
 
@@ -78,7 +78,7 @@ class MongoDBOperations(object):
                                              ("entityType", pymongo.ASCENDING),
                                              ("attrName", pymongo.ASCENDING),
                                              ("recvTime", pymongo.ASCENDING)])
-        except Exception, e:
+        except Exception as e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
     def removeDatabases(self, SERVICE_NAME):
@@ -87,5 +87,5 @@ class MongoDBOperations(object):
             self.client.drop_database(databaseName)
             databaseName = 'sth_' + SERVICE_NAME
             self.client.drop_database(databaseName)
-        except Exception, e:
+        except Exception as e:
             logger.warn("remove database %s exception: %s" % (databaseName,e))

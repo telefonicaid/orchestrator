@@ -113,7 +113,7 @@ class CreateNewService(FlowBase):
                                                 NEW_SERVICE_ADMIN_PASSWORD,
                                                 NEW_SERVICE_ADMIN_EMAIL,
                                                 None)
-            except Exception, ex:
+            except Exception as ex:
                 self.logger.warn("ERROR creating user %s: %s" % (
                     NEW_SERVICE_ADMIN_USER,
                     ex))
@@ -121,7 +121,7 @@ class CreateNewService(FlowBase):
                 try:
                     self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                     self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
-                except Exception, ex:
+                except Exception as ex:
                     self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
                 return self.composeErrorCode(ex)
 
@@ -160,7 +160,7 @@ class CreateNewService(FlowBase):
                  ID_NEW_SERVICE_ROLE_SERVICECUSTOMER] = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
                                                                                    ROLES,
                                                                                    ID_DOM1)
-            except Exception, ex:
+            except Exception as ex:
                 # 404 if old version of keystone-scim
                 self.logger.info("creating roles in a slow way")
                 ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN = self.idm.createDomainRole(
@@ -210,7 +210,7 @@ class CreateNewService(FlowBase):
                      ID_NEW_SERVICE_ROLE_ADMIN_T] = self.idm.createDomainRoles(NEW_SERVICE_ADMIN_TOKEN,
                                                                                ROLES,
                                                                                ID_DOM1)
-                except Exception, ex:
+                except Exception as ex:
                     # 404 if old version of keystone-scim
                     self.logger.info("creating roles in a slow way")
                     ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_T = self.idm.createDomainRole(
@@ -383,14 +383,14 @@ class CreateNewService(FlowBase):
                                                                                None)
 
 
-                except Exception, ex:
+                except Exception as ex:
                     self.logger.warn("ERROR creating groups  %s" % (
                         ex))
                     self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
                     try:
                         self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                         self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
-                    except Exception, ex:
+                    except Exception as ex:
                         self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
                     return self.composeErrorCode(ex)
 
@@ -442,13 +442,13 @@ class CreateNewService(FlowBase):
             self.mongodb.createSTHIndexes(NEW_SERVICE_NAME, '')
 
 
-        except Exception, ex:
+        except Exception as ex:
             if ID_DOM1:
                 self.logger.info("removing uncomplete created domain %s" % ID_DOM1)
                 try:
                     self.idm.disableDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
                     self.idm.deleteDomain(DOMAIN_ADMIN_TOKEN, ID_DOM1)
-                except Exception, ex:
+                except Exception as ex:
                     self.logger.warn("%s trying to remove uncomplete created domain %s" % (ex, ID_DOM1))
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)

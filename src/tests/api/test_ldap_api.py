@@ -32,6 +32,7 @@ LDAP_ADMIN_PASSWORD="4pass1w0rd"
 
 USER_NAME="adm"
 USER_PASSWORD="4pass1w0rd"
+GROUP_NAME="group"
 
 ORC_PROTOCOL="http"
 ORC_HOST="localhost"
@@ -89,6 +90,15 @@ class Test_LDAPUser_RestView(object):
                           "GROUP_NAMES": ["ServiceCustomerGroup",
                                           "SubServiceAdminGroup"]
                                           }
+        }
+        self.payload_data5b_ok = {
+            "USER_NAME": USER_NAME+"_%s" % self.suffix,
+            "USER_PASSWORD": USER_PASSWORD,
+            "USER_DATA": {"USER_EMAIL": "pepe33@acme.es",
+                          "USER_DESCRIPTION": "Pepe perez",
+                          "GROUP_NAMES": ["ServiceCustomerGroup",
+                                          "SubServiceAdminGroup"]
+                          }
         }
         self.suffix = str(uuid.uuid4())[:8]
         self.payload_data4_ok = {
@@ -169,6 +179,14 @@ class Test_LDAPUser_RestView(object):
             data=self.payload_data5_ok)
         assert res.code == 200, (res.code, res.msg, res.raw_json)
 
+    def test_put2_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="PUT",
+            url="/v1.0/ldap/user",
+            json_data=True,
+            data=self.payload_data5b_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
     def test_delete_ok(self):
         res = self.TestRestOps.rest_request(
             method="DELETE",
@@ -244,6 +262,69 @@ class Test_LDAPAuth_RestView(object):
         assert res.code == 204, (res.code, res.msg, res.raw_json)
 
 
+class Test_LDAPGroup_RestView(object):
+
+    def __init__(self):
+        self.suffix = str(uuid.uuid4())[:8]
+        self.payload_data_ok = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "NEW_GROUP_NAME": GROUP_NAME+"_%s" % self.suffix,
+            "NEW_USER_DESCRIPTION": GROUP_NAME+"_%s description" % self.suffix,
+        }
+        self.payload_data1b_ok = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "GROUP_NAME": GROUP_NAME+"_%s" % self.suffix
+        }
+        self.payload_data1_ok = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "FILTER": "*"+GROUP_NAME+"_%s*" % self.suffix
+        }
+        self.payload_data5_ok = {
+            "LDAP_ADMIN_USER": LDAP_ADMIN_USER,
+            "LDAP_ADMIN_PASSWORD": LDAP_ADMIN_PASSWORD,
+            "GROUP_NAME": GROUP_NAME+"_%s" % self.suffix,
+            "GROUP_DESCRIPTION": GROUP_NAME+"_%s description alt" % self.suffix,
+        }
+        self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
+                                              HOST=ORC_HOST,
+                                              PORT=ORC_PORT)
+
+    def test_post_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="POST",
+            url="/v1.0/ldap/group",
+            json_data=True,
+            data=self.payload_data_ok)
+        assert res.code == 201, (res.code, res.msg, res.raw_json)
+
+    def test_delete_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="DELETE",
+            url="/v1.0/ldap/group",
+            json_data=True,
+            data=self.payload_data1b_ok)
+        assert res.code == 204, (res.code, res.msg, res.raw_json)
+
+    def test_get_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="GET",
+            url="/v1.0/ldap/group",
+            json_data=True,
+            data=self.payload_data1_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+    def test_put_ok(self):
+        res = self.TestRestOps.rest_request(
+            method="PUT",
+            url="/v1.0/ldap/group",
+            json_data=True,
+            data=self.payload_data5_ok)
+        assert res.code == 200, (res.code, res.msg, res.raw_json)
+
+
 if __name__ == '__main__':
 
     # Tests
@@ -255,6 +336,7 @@ if __name__ == '__main__':
     test_LdapUser.test_get2_ok()
     test_LdapUser.test_get3_ok()
     test_LdapUser.test_put_ok()
+    test_LdapUser.test_put2_ok()
     test_LdapUser.test_delete_ok()
     test_LdapUser.test_delete_bad()
     test_LdapUser.test_post2_ok()
@@ -262,3 +344,10 @@ if __name__ == '__main__':
 
     test_LdapAuth = Test_LDAPAuth_RestView()
     test_LdapAuth.test_post_and_delete_ok()
+
+
+    test_LdapGroup = Test_LDAPGroup_RestView()
+    test_LdapGroup.test_post_ok()
+    test_LdapGroup.test_get_ok()
+    test_LdapGroup.test_put_ok()
+    test_LdapGroup.test_delete_ok()

@@ -55,6 +55,9 @@ class LdapUser_RESTView(APIView, IoTConf):
             request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
                            LDAP_BASEDN=self.LDAP_BASEDN,
@@ -98,8 +101,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -111,6 +113,9 @@ class LdapUser_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapUserHelper(
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
@@ -151,8 +156,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -164,6 +168,9 @@ class LdapUser_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapUserHelper(
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
@@ -188,8 +195,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -202,6 +208,9 @@ class LdapUser_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapUserHelper(
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
@@ -225,8 +234,7 @@ class LdapUser_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -251,6 +259,9 @@ class LdapAuth_RESTView(APIView, IoTConf):
             request.data  # json validation
             flow = LdapUserHelper(
                            None, None, None,
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
                            LDAP_BASEDN=self.LDAP_BASEDN,
@@ -272,8 +283,7 @@ class LdapAuth_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -298,6 +308,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapGroupHelper(
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
@@ -330,8 +343,7 @@ class LdapGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -343,6 +355,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapGroupHelper(
+                           None, None, None,
+                           None, None, None,
+                           None, None, None,
                            None, None, None,
                            LDAP_HOST=self.LDAP_HOST,
                            LDAP_PORT=self.LDAP_PORT,
@@ -378,8 +393,7 @@ class LdapGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -392,6 +406,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapGroupHelper(
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
@@ -415,8 +432,7 @@ class LdapGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
@@ -429,6 +445,9 @@ class LdapGroup_RESTView(APIView, IoTConf):
         try:
             request.data  # json validation
             flow = LdapGroupHelper(
+                         None, None, None,
+                         None, None, None,
+                         None, None, None,
                          None, None, None,
                          LDAP_HOST=self.LDAP_HOST,
                          LDAP_PORT=self.LDAP_PORT,
@@ -451,8 +470,7 @@ class LdapGroup_RESTView(APIView, IoTConf):
         except ParseError as error:
             Stats.num_api_errors += 1
             response = Response(
-                'Input validation error - {0} {1}'.format(error.message,
-                                                          error.detail),
+                'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )

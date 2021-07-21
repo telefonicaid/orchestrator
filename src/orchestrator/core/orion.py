@@ -209,7 +209,7 @@ class CBOrionOperations(object):
                                                       SUBSERVICE_NAME)
             logger.debug("subscriptions: %s" % json.dumps(subscriptions,
                                                           indent=3))
-        except Exception, ex:
+        except Exception as ex:
             logger.warn("%s trying getListSubscriptions from CB: %s/%s" % (ex,
                                 SERVICE_NAME,
                                 SUBSERVICE_NAME))
@@ -222,7 +222,7 @@ class CBOrionOperations(object):
                                         SUBSERVICE_NAME,
                                         subscription['id'])
                 subscriptions_deleted.append(subscription['id'])
-            except Exception, ex:
+            except Exception as ex:
                 logger.warn("%s trying to unsubscribe context: %s" % (ex,
                                                         subscription['id']))
         return subscriptions_deleted

@@ -125,7 +125,7 @@ class CreateNewSubService(FlowBase):
                         NEW_SUBSERVICE_ADMIN_PASSWORD,
                         NEW_SUBSERVICE_ADMIN_EMAIL,
                         None)
-                except Exception, ex:
+                except Exception as ex:
                     self.logger.warn("ERROR creating user %s: %s" % (
                         NEW_SUBSERVICE_ADMIN_USER,
                         ex))
@@ -151,7 +151,7 @@ class CreateNewSubService(FlowBase):
 
                 self.mongodb.createSTHIndexes(SERVICE_NAME, NEW_SUBSERVICE_NAME)
 
-        except Exception, ex:
+        except Exception as ex:
             if ID_PRO1:
                 self.logger.info("removing uncomplete created project %s" % ID_PRO1)
                 self.idm.disableProject(SERVICE_ADMIN_TOKEN, SERVICE_ID, ID_PRO1)

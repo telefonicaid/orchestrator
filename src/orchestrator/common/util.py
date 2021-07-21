@@ -21,11 +21,11 @@
 #
 # Author: IoT team
 #
-import urllib2
+import urllib.request
 import base64
 import json
 import csv
-import StringIO
+import io
 import requests
 import logging
 import time
@@ -98,12 +98,12 @@ class RestOperations(object):
 
         if data:
             if json_data:
-                request = urllib2.Request(
-                    url, data=json.dumps(data))
+                request = urllib.request.Request(
+                    url=url, data=json.dumps(data).encode())
             else:
-                request = urllib2.Request(url, data=data)
+                request = urllib.request.Request(url=url, body=data)
         else:
-            request = urllib2.Request(url)
+            request = urllib.request.Request(url)
         request.get_method = lambda: method
 
         if json_data:
@@ -142,8 +142,8 @@ class RestOperations(object):
         res = None
 
         try:
-            res = urllib2.urlopen(request)
-        except urllib2.HTTPError, e:
+            res = urllib.request.urlopen(request)
+        except urllib.request.HTTPError as e:
             res = e
             data = res.read()
             try:
@@ -164,9 +164,9 @@ class RestOperations(object):
 
             except ValueError:
                 res.msg = data
-            except Exception, e:
-                print e
-        except urllib2.URLError, e:
+            except Exception as e:
+                self.logger.warn("exception %s", e)
+        except urllib.request.URLError as e:
             data = None
             res = e
             res.code = 500
@@ -242,19 +242,23 @@ class RestOperations(object):
 
         try:
             if not auth:
-                res = requests.post(url,
-                                    headers=headers,
-                                    data=rdata,
-                                    verify=False)
+                res = requests.request(method=method,
+                                       url=url,
+                                       headers=headers,
+                                       data=rdata,
+                                       verify=False)
             else:
-                res = requests.post(url,
-                                    auth=auth,
-                                    headers=headers,
-                                    data=rdata,
-                                    verify=False)
+                res = requests.request(method=method,
+                                       url=url,
+                                       auth=auth,
+                                       headers=headers,
+                                       data=rdata,
+                                       verify=False)
+            res.code = res.status_code
+            res.msg = res.reason
 
-        except Exception, e:
-            print e
+        except Exception as e:
+            self.logger.warn("exception %s", e)
 
         if settings.ORC_EXTENDED_METRICS:
             self.collectOutgoingMetrics(service_start, rdata, headers, res)
@@ -276,7 +280,7 @@ class RestOperations(object):
             # Check headers
             self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response)) + len(str(response.headers.headers)) if 'headers' in response and 'headers' in response.headers else 0
             self.sum["serviceTimeTotal"] += (service_stop - service_start)
-        except Exception, ex:
+        except Exception as ex:
             self.logger.warn("ERROR collecting outgoing metrics %s", ex)
 
     def getOutgoingMetrics(self):
@@ -294,7 +298,7 @@ class CSVOperations(object):
     @staticmethod
     def read_devices(CSV):
         devices = {}
-        csvreader = csv.reader(StringIO.StringIO(CSV),
+        csvreader = csv.reader(io.StringIO(CSV),
                                delimiter=',',
                                #quotechar='"',
                                skipinitialspace=True)

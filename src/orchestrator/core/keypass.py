@@ -55,7 +55,7 @@ class AccCKeypassOperations(AccCOperations):
         self.policy_dir = os.path.dirname(policies.__file__)
 
     def checkAccC(self):
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1/subject/',
             method='GET',
             data=None)
@@ -82,7 +82,7 @@ class AccCKeypassOperations(AccCOperations):
                                  SERVICE_ROLE_ID,
                                  POLICY_CONTENT):
 
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1/subject/'+SERVICE_ROLE_ID,
             method='POST',
             json_data=False,
@@ -97,7 +97,7 @@ class AccCKeypassOperations(AccCOperations):
                              SERVICE_NAME,
                              SERVICE_ADMIN_TOKEN):
 
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1',
             method='DELETE',
             json_data=False,
@@ -111,7 +111,7 @@ class AccCKeypassOperations(AccCOperations):
                         SERVICE_ADMIN_TOKEN,
                         SERVICE_ROLE_ID):
 
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1/subject/'+SERVICE_ROLE_ID,
             method='GET',
             json_data=False,
@@ -119,7 +119,7 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        body_data = res.read()
+        body_data = res.content.decode()
         logger.debug("data response: %s" % body_data)
         return body_data
 
@@ -129,7 +129,7 @@ class AccCKeypassOperations(AccCOperations):
                       SERVICE_ROLE_ID,
                       POLICY_NAME):
 
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1/subject/'+ SERVICE_ROLE_ID + '/policy/' + POLICY_NAME,
             method='GET',
             json_data=False,
@@ -137,7 +137,7 @@ class AccCKeypassOperations(AccCOperations):
             fiware_service=SERVICE_NAME)
 
         assert res.code == 200, (res.code, res.msg)
-        body_data = res.read()
+        body_data = res.content.decode()
         logger.debug("data response: %s" % body_data)
         return body_data
 
@@ -146,7 +146,7 @@ class AccCKeypassOperations(AccCOperations):
                            SERVICE_ADMIN_TOKEN,
                            SERVICE_ROLE_ID):
 
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1/subject/'+SERVICE_ROLE_ID,
             method='DELETE',
             json_data=False,
@@ -161,7 +161,7 @@ class AccCKeypassOperations(AccCOperations):
                          SERVICE_ROLE_ID,
                          POLICY_NAME):
 
-        res = self.AccessControlRestOperations.rest_request(
+        res = self.AccessControlRestOperations.rest_request2(
             url='/pap/v1/subject/'+ SERVICE_ROLE_ID + '/policy/' + POLICY_NAME,
             method='DELETE',
             json_data=False,

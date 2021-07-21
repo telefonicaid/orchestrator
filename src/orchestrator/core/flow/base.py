@@ -40,8 +40,6 @@ from orchestrator.common.util import ContextFilterFrom
 from settings.dev import IOTMODULES
 from settings import dev as settings
 
-
-
 class FlowBase(object):
     def __init__(self,
                  KEYSTONE_PROTOCOL,
@@ -72,7 +70,7 @@ class FlowBase(object):
                  FROM=None):
 
         # Generate Transaction ID
-        self.TRANSACTION_ID = uuid.uuid4()
+        self.TRANSACTION_ID = str(uuid.uuid4())
 
         if not CORRELATOR_ID:
             self.CORRELATOR_ID = self.TRANSACTION_ID
@@ -154,30 +152,40 @@ class FlowBase(object):
         # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         # print(exc_type, fname, exc_tb.tb_lineno)
         res = {"error": str(ex), "code": 500}
-        if isinstance(ex.args, tuple) and (
-                (len(ex.args) > 0) and
-            not isinstance(ex.args[0], tuple)):  # Python 2.6
-            res['code'] = ex.args[0]
-            if res['code'] == 400 and len(ex.args) > 1 and \
-               ex.args[1].startswith('SPASSWORD'):
-                res['error'] = ex.args[1]
-        elif isinstance(ex.message, tuple):  # Python 2.7
-            res['code'] = ex.message[0]
-            if res['code'] == 400 and len(ex.message) > 1 and \
-               ex.message[1].startswith('SPASSWORD'):
-                res['error'] = ex.message[1]
-        return res, None, None
+        try:
+            if isinstance(ex.args, tuple) and (
+                    (len(ex.args) > 0)):
+                if not isinstance(ex.args[0], tuple):  # Python 2.6
+                    res['code'] = ex.args[0]
+                    if res['code'] == 400 and len(ex.args) > 1 and \
+                       ex.args[1].startswith('SPASSWORD'):
+                        res['error'] = ex.args[1]
+                else: # Python 3
+                    res['code'] = ex.args[0][0]
+                    if res['code'] == 400 and len(ex.args[0]) > 1 and \
+                       ex.args[0][1].startswith('SPASSWORD'):
+                        res['error'] = ex.args[0][1]
+            elif isinstance(ex.message, tuple):  # Python 2.7
+                res['code'] = ex.message[0]
+                if res['code'] == 400 and len(ex.message) > 1 and \
+                   ex.message[1].startswith('SPASSWORD'):
+                    res['error'] = ex.message[1]
+        finally:
+            return res, None, None
 
 
     def logError(self, logger, error_code, ex):
         '''
         Log as error level error_code if is < 400 or > 500
         '''
-        if (error_code[0]['code'] < 400 or error_code[0]['code'] > 500):
-            logger.error(ex)
-        else:
+        try:
+            if (isinstance(error_code[0]['code'], int) and
+                (error_code[0]['code'] < 400 or error_code[0]['code'] >= 500)):
+                logger.error(ex)
+            else:
+                logger.debug(ex)
+        except:
             logger.debug(ex)
-
 
     def get_endpoint_iot_module(self, iot_module):
         assert iot_module in IOTMODULES
@@ -218,7 +226,7 @@ class FlowBase(object):
                 SERVICE_NAME = self.idm.getDomainNameFromToken(
                     USER_TOKEN,
                     SERVICE_ID)
-            except Exception, ex:
+            except Exception as ex:
                 # This op could be executed by cloud_admin user
                 SERVICE = self.idm.getDomain(USER_TOKEN,
                                              SERVICE_ID)
@@ -235,7 +243,7 @@ class FlowBase(object):
                      USER_TOKEN,
                      SERVICE_ID,
                      SUBSERVICE_ID)
-            except Exception, ex:
+            except Exception as ex:
                 # This op could be executed by cloud_admin user
                 SUBSERVICE = self.idm.getProject(USER_TOKEN,
                                                  SUBSERVICE_ID)
@@ -263,7 +271,7 @@ class FlowBase(object):
                     token_extended['project'] = \
                         token_detail['token']['project']['name'][1:]
 
-            except Exception, ex:
+            except Exception as ex:
                 # Probably expired?
                 token_extended  = {
                     "token": USER_TOKEN,
@@ -283,7 +291,7 @@ class FlowBase(object):
             all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
             # TODO: Take care of the following operation takes too much time
             self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
-        except Exception, ex:
+        except Exception as ex:
             self.logger.error("ERROR collecting component metrics %s", ex)
 
     def getFlowMetrics(self):

@@ -8,7 +8,7 @@ ENV ORCHESTRATOR_USER_UID 10001
 
 ENV ORCHESTRATOR_VERSION 3.8.0
 
-ENV python_lib /var/env-orchestrator/lib/python2.7/site-packages
+ENV python_lib /var/env-orchestrator/lib/python3.6/site-packages
 ENV DJANGO_SETTINGS_MODULE settings
 ENV PYTHONPATH "${PYTHONPATH}:/opt/orchestrator"
 
@@ -20,7 +20,7 @@ RUN \
     adduser --comment "${ORCHESTRATOR_USER}" -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
     # Install dependencies
     yum install -y epel-release && yum update -y epel-release && \
-    yum install -y yum-plugin-remove-with-leaves python python-pip python-devel openldap-devel python-virtualenv gcc ssh && \
+    yum install -y yum-plugin-remove-with-leaves python3 python3-pip python3-devel openldap-devel python3-virtualenv gcc ssh && \
     yum install -y tcping findutils sed && \
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin && \
@@ -28,7 +28,7 @@ RUN \
     cp -rp /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
     chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
-    pip install -r $python_lib/iotp-orchestrator/requirements.txt && \
+    pip3 install -r $python_lib/iotp-orchestrator/requirements.txt && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
     ln -s /opt/orchestrator/orchestrator/commands /opt/orchestrator/bin/ && \

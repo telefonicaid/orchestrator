@@ -12,7 +12,7 @@ Due to its stateless behavior, iotp-orchestrator does not require any backup pro
  * Internet access
  * Connectivity to http://github.com
  * [Git](http://git-scm.com/)
- * Python 2.7 (or upper) and pip
+ * Python 3 and pip3
  * C and C++ compilation platform: gcc, g++, make and python headers
  * UNIX platforms but not mandatory
  * WSGI Web server (Apache2/Nginx) but not mandatory
@@ -42,13 +42,13 @@ cd src
 
 Then install all dependencies by running:
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 
 Start server in 8084 port using django web server:
 ```
-python manage.py runserver 8084 --settings=settings.dev
+python3 manage.py runserver 8084 --settings=settings.dev
 ```
 
 or using another web server like uWSGI

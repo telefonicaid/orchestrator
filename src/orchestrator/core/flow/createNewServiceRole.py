@@ -127,7 +127,7 @@ class CreateNewServiceRole(FlowBase):
                                         ID_ROLE,
                                         POLICY_FILE_NAME='policy-keypass-customer2.xml')
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

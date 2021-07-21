@@ -29,9 +29,8 @@ Orchestrator is used to:
 - Create, List, Modify LDAP Groups
 
 Orchestrator is based mainly on:
-- Python 2.7 needed
+- Python 3 needed
 - Django / DjangoRestFramework
-- httplib
 
 Orchestrator relies on these other IoT parts:
 - Identity Manager: Keystone (mandatory)

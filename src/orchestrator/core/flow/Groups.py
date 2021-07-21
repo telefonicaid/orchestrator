@@ -94,7 +94,7 @@ class Groups(FlowBase):
             self.logger.debug("SERVICE_GROUPS=%s" % json.dumps(SERVICE_GROUPS,
                                                                indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -162,7 +162,7 @@ class Groups(FlowBase):
                                                GROUP_ID)
             self.logger.debug("DETAIL_GROUP=%s" % json.dumps(DETAIL_GROUP, indent=3))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -254,7 +254,7 @@ class Groups(FlowBase):
                                  GROUP_ID,
                                  GROUP_DATA_VALUE)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -343,7 +343,7 @@ class Groups(FlowBase):
             self.idm.removeGroup(SERVICE_ADMIN_TOKEN,
                                  GROUP_ID)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -428,7 +428,7 @@ class Groups(FlowBase):
                                                 NEW_SERVICE_GROUP_DESCRIPTION)
             self.logger.debug("ID of group %s: %s" % (NEW_SERVICE_GROUP_NAME, ID_GROUP))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

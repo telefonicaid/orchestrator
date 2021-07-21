@@ -105,7 +105,7 @@ class UpdateUser(FlowBase):
                                 USER_ID,
                                 USER_DATA_VALUE)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code
@@ -197,7 +197,7 @@ class UpdateUser(FlowBase):
                                         SERVICE_USER_PASSWORD,
                                         NEW_USER_PASSWORD)
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

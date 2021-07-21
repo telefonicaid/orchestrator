@@ -104,7 +104,7 @@ class RemoveUser(FlowBase):
                                 USER_ID)
             # self.logger.debug("ID of user %s: %s" % (USER_NAME, ID_USER))
 
-        except Exception, ex:
+        except Exception as ex:
             error_code = self.composeErrorCode(ex)
             self.logError(self.logger, error_code, ex)
             return error_code

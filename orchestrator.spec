@@ -18,11 +18,8 @@ Prefix: /opt
 BuildArch: noarch
 
 %define _target_os Linux
-%define python_lib /var/env-orchestrator/lib/python2.6/site-packages
-%if 0%{?with_python27}
-%define python_lib /var/env-orchestrator/lib/python2.7/site-packages
-%define __python /usr/bin/python2.7
-%endif # if with_python27
+%define python_lib /var/env-orchestrator/lib/python3.6/site-packages
+%define __python /usr/bin/python3.6
 
 %description
 IoT Platform Orchestrator
