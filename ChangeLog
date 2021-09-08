@@ -6,7 +6,6 @@ Upgrade Python (2 -> 3), #242
         requests (2.22.0 -> 2.25.1)
         python-ldap (2.5.2 -> 3.3.1)
 UPDATE: Update jsonschema dep 2.5.0 to 2.6.0
-Upgrade STH xacml policies with orion frns
 
 3.8.0
 
