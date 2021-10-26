@@ -19,7 +19,7 @@ WORKDIR $python_lib/iotp-orchestrator
 RUN \
     adduser --comment "${ORCHESTRATOR_USER}" -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
     # Install dependencies
-    yum install -y epel-release && yum update -y epel-release && \
+    yum install -y epel-release && yum update -y curl epel-release && \
     yum install -y yum-plugin-remove-with-leaves python3 python3-pip python3-devel openldap-devel python3-virtualenv gcc ssh && \
     yum install -y tcping findutils sed && \
     mkdir -p $python_lib/iotp-orchestrator && \
@@ -72,3 +72,4 @@ ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
 
 EXPOSE 8084
 
+HEALTHCHECK CMD curl --fail -X GET http://localhost:8084/v1.0/version
