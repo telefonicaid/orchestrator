@@ -73,5 +73,5 @@ ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
 EXPOSE 8084
 
 HEALTHCHECK --interval=60s --timeout=5s --start-period=10s \
-            CMD curl --fail -X GET http://localhost:8084/v1.0/version
+            CMD curl --fail -X GET http://localhost:8084/v1.0/version || exit 1
 
