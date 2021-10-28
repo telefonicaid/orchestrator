@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+ADD: Docker healthcheck for orchestrator API
+
 4.0.0
 
 Upgrade Python (2 -> 3), #242
