@@ -2319,13 +2319,14 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
 
             newLogLevel = logLevel.upper()
             if newLogLevel not in ["FATAL", "CRITICAL", "ERROR", "WARNING",
-                                   "INFO", "DEBUG"]:
+                                   "WARN", "INFO", "DEBUG"]:
                 raise ParseError(detail="not supported log level")
 
             LEVELS = {
                 'DEBUG': logging.DEBUG,
                 'INFO': logging.INFO,
                 'WARNING': logging.WARNING,
+                'WARN': logging.WARNING,
                 'ERROR': logging.ERROR,
                 'FATAL': logging.FATAL,
                 'CRITICAL': logging.CRITICAL
