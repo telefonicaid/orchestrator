@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+ADD: allow use WARN as WARNING log level
 ADD: Docker healthcheck for orchestrator API
 
 4.0.0
