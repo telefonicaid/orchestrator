@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+FIX: Error: TemplateDoesNotExist at rest_framework/api.html  when get /version from text/html
 ADD: allow use WARN as WARNING log level
 ADD: Docker healthcheck for orchestrator API
 
