@@ -210,6 +210,10 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',
     ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        # 'rest_framework.renderers.BrowsableAPIRenderer',  <- Disable to allow request in text/html as /version
+    ]
 }
 
 
