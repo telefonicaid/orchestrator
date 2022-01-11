@@ -20,7 +20,7 @@ RUN \
     adduser --comment "${ORCHESTRATOR_USER}" -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
     # Install dependencies
     yum install -y epel-release && yum update -y curl epel-release && \
-    yum install -y python3 python3-pip python3-devel openldap-devel python3-virtualenv gcc ssh && \
+    yum install -y python3 python3-pip python3-devel openldap-devel python3-virtualenv gcc openssh && \
     yum install -y tcping findutils sed && \
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin && \
