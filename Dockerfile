@@ -39,7 +39,7 @@ RUN \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
     echo "INFO: Cleaning unused software..." && \
     rm -rf /opt/sworchestrator && \
-    yum erase -y --remove-leaves yum-plugin-remove-with-leaves gcc && \
+    yum erase -y gcc && \
     # Delete pip cache
     rm -rf ~/.cache && \
     # Erase without dependencies of the document formatting system (man). This cannot be removed using yum 
