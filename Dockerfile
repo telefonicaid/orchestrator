@@ -34,6 +34,7 @@ RUN \
       gcc \
       sed \
       ldap-utils \
+      netcat-traditional \
       findutils && \
       # Install from source
     mkdir -p $python_lib/iotp-orchestrator && \
