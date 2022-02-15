@@ -1,13 +1,12 @@
-FROM centos:7.9.2009
+ARG  IMAGE_TAG=11.2-slim
+FROM debian:${IMAGE_TAG}
 
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
 ENV ORCHESTRATOR_USER orchestrator
 # By default all linux users non root, has a UID above 1000, so it's taken 10001 which would never end up allocated automatically.
 ENV ORCHESTRATOR_USER_UID 10001
-
 ENV ORCHESTRATOR_VERSION 4.1.0
-
 ENV python_lib /var/env-orchestrator/lib/python3.6/site-packages
 ENV DJANGO_SETTINGS_MODULE settings
 ENV PYTHONPATH "${PYTHONPATH}:/opt/orchestrator"
@@ -17,15 +16,31 @@ COPY . /opt/sworchestrator/
 WORKDIR $python_lib/iotp-orchestrator
 
 RUN \
-    adduser --comment "${ORCHESTRATOR_USER}" -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
+    adduser -u ${ORCHESTRATOR_USER_UID} ${ORCHESTRATOR_USER} && \
+    # Install security updates
+    apt-get -y update && \
+    apt-get -y upgrade && \
     # Install dependencies
-    yum install -y epel-release && yum update -y curl epel-release && \
-    yum install -y yum-plugin-remove-with-leaves python3 python3-pip python3-devel openldap-devel python3-virtualenv gcc ssh && \
-    yum install -y tcping findutils sed && \
+    apt-get -y install \
+      curl \
+      python3 \
+      python3-dev \
+      python3-pip \
+      openssl \
+      libssl-dev \
+      libldap2-dev \
+      libsasl2-dev \
+      git \
+      gcc \
+      sed \
+      ldap-utils \
+      findutils && \
+      # Install from source
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin && \
-    cp -rp /opt/sworchestrator/src/* $python_lib/iotp-orchestrator && cp -p /opt/sworchestrator/requirements.txt $python_lib/iotp-orchestrator && \
-    cp -rp /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
+    cp -r /opt/sworchestrator/src/* $python_lib/iotp-orchestrator && \
+    cp -p /opt/sworchestrator/requirements.txt $python_lib/iotp-orchestrator && \
+    cp -r /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
     chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
     pip3 install -r $python_lib/iotp-orchestrator/requirements.txt && \
@@ -38,34 +53,16 @@ RUN \
     sed -i 's/ORC_version/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/settings/common.py && \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
     echo "INFO: Cleaning unused software..." && \
-    rm -rf /opt/sworchestrator && \
-    yum erase -y --remove-leaves yum-plugin-remove-with-leaves gcc && \
-    # Delete pip cache
-    rm -rf ~/.cache && \
-    # Erase without dependencies of the document formatting system (man). This cannot be removed using yum 
-    # as yum uses hard dependencies and doing so will uninstall essential packages
-    rpm -qa groff redhat-logos | xargs -r rpm -e --nodeps && \
-    # Clean yum data
-    yum clean all && rm -rf /var/lib/yum/yumdb && rm -rf /var/lib/yum/history && \
-    # Rebuild rpm data files
-    rpm -vv --rebuilddb && \
-    # Delete unused locales. Only preserve en_US and the locale aliases
-    find /usr/share/locale -mindepth 1 -maxdepth 1 ! -name 'en_US' ! -name 'locale.alias' | xargs -r rm -r && \
-    bash -c 'localedef --list-archive | grep -v -e "en_US" | xargs localedef --delete-from-archive' && \
-    # We use cp instead of mv as to refresh locale changes for ssh connections
-    # We use /bin/cp instead of cp to avoid any alias substitution, which in some cases has been problematic
-    /bin/cp -f /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl && \
-    build-locale-archive && \
-    # We don't need to manage Linux account passwords requisites: lenght, mays/mins, etc
-    # This cannot be removed using yum as yum uses hard dependencies and doing so will uninstall essential packages
-    rm -rf /usr/share/cracklib && \
-    # We don't need glibc locale data
-    # This cannot be removed using yum as yum uses hard dependencies and doing so will uninstall essential packages
-    rm -rf /usr/share/i18n /usr/{lib,lib64}/gconv && \
-    # We don't need wallpapers
-    rm -rf /usr/share/wallpapers/* && \
+    apt-get clean && \
+    #if [ ${CLEAN_DEV_TOOLS} -eq 0 ] ; then exit 0 ; fi && \
+    # remove the same packages we installed at the beginning to build Orch
+    # apt-get -y remove --purge \
+    #   curl \
+    #   git \
+    #   gcc \
+    # apt-get -y autoremove --purge && \
     # Don't need old log files inside docker images
-    rm -f /tmp/* /var/log/*log
+    rm -f /var/log/*log
 
 # Define the entry point
 ENTRYPOINT ["/opt/orchestrator/bin/orchestrator-entrypoint.sh"]
@@ -74,4 +71,3 @@ EXPOSE 8084
 
 HEALTHCHECK --interval=60s --timeout=5s --start-period=10s \
             CMD curl --fail -X GET http://localhost:8084/v1.0/version || exit 1
-
