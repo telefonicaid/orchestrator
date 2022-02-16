@@ -3,6 +3,9 @@ FROM debian:${IMAGE_TAG}
 
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
 
+ARG CLEAN_DEV_TOOLS
+
+
 ENV ORCHESTRATOR_USER orchestrator
 # By default all linux users non root, has a UID above 1000, so it's taken 10001 which would never end up allocated automatically.
 ENV ORCHESTRATOR_USER_UID 10001
@@ -10,6 +13,7 @@ ENV ORCHESTRATOR_VERSION 4.1.0
 ENV python_lib /var/env-orchestrator/lib/python3.6/site-packages
 ENV DJANGO_SETTINGS_MODULE settings
 ENV PYTHONPATH "${PYTHONPATH}:/opt/orchestrator"
+ENV CLEAN_DEV_TOOLS ${CLEAN_DEV_TOOLS:-1}
 
 COPY . /opt/sworchestrator/
 
@@ -36,7 +40,7 @@ RUN \
       ldap-utils \
       netcat-traditional \
       findutils && \
-      # Install from source
+    # Install from source
     mkdir -p $python_lib/iotp-orchestrator && \
     mkdir -p $python_lib/iotp-orchestrator/bin && \
     cp -r /opt/sworchestrator/src/* $python_lib/iotp-orchestrator && \
@@ -55,13 +59,12 @@ RUN \
     sed -i 's/\${project.version}/'$ORCHESTRATOR_VERSION'/g' /opt/orchestrator/orchestrator/core/banner.txt && \
     echo "INFO: Cleaning unused software..." && \
     apt-get clean && \
-    #if [ ${CLEAN_DEV_TOOLS} -eq 0 ] ; then exit 0 ; fi && \
+    if [ ${CLEAN_DEV_TOOLS} -eq 0 ] ; then exit 0 ; fi && \
     # remove the same packages we installed at the beginning to build Orch
-    # apt-get -y remove --purge \
-    #   curl \
-    #   git \
-    #   gcc \
-    # apt-get -y autoremove --purge && \
+    apt-get -y remove --purge \
+       git \
+       gcc && \
+    apt-get -y autoremove --purge && \
     # Don't need old log files inside docker images
     rm -f /var/log/*log
 
