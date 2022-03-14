@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+Move Dockerfile base image from centos7.9.2009 to Debian 11-slim
+
 4.1.0
 
 FIX: Error: TemplateDoesNotExist at rest_framework/api.html  when get /version from text/html
