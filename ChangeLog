@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+Upgrade: pymongo from 3.7.2 to 3.12.3
+
 4.1.0
 
 FIX: Error: TemplateDoesNotExist at rest_framework/api.html  when get /version from text/html
