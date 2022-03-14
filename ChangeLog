@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+Upgrade: request from 2.25.1 to 2.27.1
+
 4.1.0
 
 FIX: Error: TemplateDoesNotExist at rest_framework/api.html  when get /version from text/html
