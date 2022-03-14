@@ -1,7 +1,7 @@
-Django==2.2.24
+Django==2.2.27
 djangorestframework==3.11.2
 jsonschema==2.6.0
 uwsgi==2.0.19.1
-requests==2.25.1
+requests==2.27.1
 python-ldap==3.4.0
-pymongo==3.7.2
+pymongo==3.12.3
