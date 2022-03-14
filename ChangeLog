@@ -1,5 +1,6 @@
 CHANGES
 =======
+ADD: config env vars for PEP and IOTAGENT user name
 
 Upgrade: request from 2.25.1 to 2.27.1
 Upgrade: pymongo from 3.7.2 to 3.12.3
