@@ -143,7 +143,9 @@ Additionally, the following environment variables are available for orchestrator
 | LDAP_PORT                   | LDAP.port                 | 389                       |
 | LDAP_BASEDN                 | LDAP.basedn               | dc=openstack,dc=org       |
 | MONGODB_URI                 | MONGODB.URI               | localhost:27017           |
+| PEP_USER                    | PEP.user                  | pep                       |
 | PEP_PASSWORD                | PEP.password              | pep                       |
+| IOTAGENT_USER               | IOTAGENT.user             | iotagent                  |
 | IOTAGENT_PASSWORD           | IOTAGENT.password         | iotagent                  |
 
 

@@ -59,7 +59,10 @@
 
 [[ "${MONGODB_URI}" == "" ]] && export MONGODB_URI='localhost:27017'
 
+
+[[ "${PEP_USER}" == "" ]] && export PEP_USER=pep
 [[ "${PEP_PASSWORD}" == "" ]] && export PEP_PASSWORD=pep
+[[ "${IOTAGENT_USER}" == "" ]] && export IOTAGENT_USER=iotagent
 [[ "${IOTAGENT_PASSWORD}" == "" ]] && export IOTAGENT_PASSWORD=iotagent
 
 
@@ -143,8 +146,14 @@ while [[ $# -gt 0 ]]; do
         -mongodburi)
             MONGODB_URI=$VALUE
             ;;
+        -pepuser)
+            PEP_USER=$VALUE
+            ;;
         -peppwd)
             PEP_PASSWORD=$VALUE
+            ;;
+        -iotagentuser)
+            IOTAGENT_USER=$VALUE
             ;;
         -iotagentpwd)
             IOTAGENT_PASSWORD=$VALUE
@@ -283,12 +292,12 @@ sed -i ':a;N;$!ba;s/MONGODB = {[A-Za-z0-9,\/\"\n: ]*}/MONGODB = { \
 }/g' /opt/orchestrator/settings/dev.py
 
 sed -i ':a;N;$!ba;s/PEP = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/PEP = { \
-             \"user\": \"pep\", \
+             \"user\": \"'$PEP_PASSWORD'\", \
              \"password\": \"'$PEP_PASSWORD'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
 sed -i ':a;N;$!ba;s/IOTAGENT = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/IOTAGENT = { \
-             \"user\": \"iotagent\", \
+             \"user\": \"'$IOTAGENT_USER'\", \
              \"password\": \"'$IOTAGENT_PASSWORD'\", \
 }/g' /opt/orchestrator/settings/dev.py
 
