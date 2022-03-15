@@ -65,6 +65,7 @@ RUN \
     apt-get -y remove --purge \
        git \
        gcc && \
+    apt-get -y autoremove --purge && \
     # Don't need old log files inside docker images
     rm -f /var/log/*log
 
