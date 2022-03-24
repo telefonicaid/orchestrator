@@ -314,8 +314,8 @@ fi
 
 
 # Wait until Keystone and Keypass are up
-while ! tcping -t 1 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
-while ! tcping -t 1 $KEYPASS_HOST $KEYPASS_PORT ; do sleep 10; done
+while ! nc -zvw10 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
+while ! nc -zvw10 $KEYPASS_HOST $KEYPASS_PORT ; do sleep 10; done
 
 uwsgi --http :$PORT \
       --chdir /opt/orchestrator \
