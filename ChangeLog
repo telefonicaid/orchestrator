@@ -4,7 +4,7 @@ ADD: config env vars for PEP and IOTAGENT user name
 UPGRADE: Dockerfile base image from centos7.9.2009 to Debian 11.2-slim
 UPGRADE: request from 2.25.1 to 2.27.1
 UPGRADE: pymongo from 3.7.2 to 3.12.3
-UPGRADE: django (2.2.24 -> 2.2.27) due security vulnerability
+UPGRADE: django (2.2.27 -> 2.2.28) due security vulnerability
 
 4.1.0
 
