@@ -1,5 +1,7 @@
 CHANGES
 =======
+4.2.0
+
 ADD: config env vars for PEP and IOTAGENT user name
 UPGRADE: Dockerfile base image from centos7.9.2009 to Debian 11.2-slim
 UPGRADE: request from 2.25.1 to 2.27.1
