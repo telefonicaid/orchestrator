@@ -89,3 +89,58 @@ class MongoDBOperations(object):
             self.client.drop_database(databaseName)
         except Exception as e:
             logger.warn("remove database %s exception: %s" % (databaseName,e))
+
+
+    def renameDatabases(self, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME):
+        try:
+            # Orion
+            databaseName = 'orion-' + SERVICE_NAME
+            db = self.client[databaseName]
+            for doc in db['entities'].find():
+                if (doc._id.servicePath(SUBSERVICE_NAME) != 0):
+                    oldDocId = doc._id;
+                    doc._id.servicePath = NEW_SUBSERVICE_NAME
+                    db['entities'].insert(doc);
+                    db['entities'].remove({_id: oldDocId});
+
+            # STH
+            databaseName = 'sth_' + SERVICE_NAME
+            db = self.client[databaseName]
+            oldName = 'sth_' + SUBSERVICE_NAME + '_'
+            newName = 'sth_' + NEW_SUBSERVICE_NAME + '_'
+            for collname in db.getCollectionNames():
+                if oldName in collname:
+                    db[collname].renameCollection(collname.replace(oldName, newName))
+            });
+
+            myquery = { "subservice": SUBSERVICE_NAME }
+            newvalues = { "$set": { "subservice": NEW_SUBSERVICE_NAME } }
+
+            # CEP
+            databaseName = 'cep'
+            db = self.client[databaseName]
+            mydb["rules"].update_many(myquery, newvalues)
+            mydb["executions"].update_many(myquery, newvalues)
+
+            # IotAgent Manager
+            databaseName = 'iotagent-manager'
+            db = self.client[databaseName]
+            mydb["configurations"].update_many(myquery, newvalues)
+            mydb["protocols"].update_many(myquery, newvalues)
+
+            # IotAgents: iota-json
+            databaseName = 'iotajson'
+            db = self.client[databaseName]
+            mydb["devices"].update_many(myquery, newvalues)
+            mydb["groups"].update_many(myquery, newvalues)
+            mydb["commands"].update_many(myquery, newvalues)
+
+            # IotAgents: iota-ul
+            databaseName = 'iotaul'
+            db = self.client[databaseName]
+            mydb["devices"].update_many(myquery, newvalues)
+            mydb["groups"].update_many(myquery, newvalues)
+            mydb["commands"].update_many(myquery, newvalues)
+
+        except Exception as e:
+            logger.warn("rename database %s exception: %s" % (databaseName,e))
