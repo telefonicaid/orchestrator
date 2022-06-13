@@ -116,7 +116,6 @@ class MongoDBOperations(object):
             for collname in db.getCollectionNames():
                 if oldName in collname:
                     db[collname].renameCollection(collname.replace(oldName, newName))
-            });
             logger.debug("renamed STH database %s" % databaseName)
 
             myquery = { "subservice": SUBSERVICE_NAME }
