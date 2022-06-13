@@ -369,6 +369,9 @@ class SubServiceList_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         FROM = self.getFromHeader(request)
+        update = request.GET.get('NEW_SUBSERVICE_DESCRIPTION', False)
+        rename = request.GET.get('NEW_SUBSERVICE_NAME', False)
+
         try:
             # request.data # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
@@ -379,16 +382,28 @@ class SubServiceList_RESTView(APIView, IoTConf):
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
             if service_id:
                 if subservice_id:
-                    result, service_name, subservice_name = flow.update_project(
-                        request.data.get("SERVICE_ID", service_id),
-                        request.data.get("SERVICE_NAME", None),
-                        request.data.get("SUBSERVICE_ID", subservice_id),
-                        request.data.get("SUBSERVICE_NAME", None),
-                        request.data.get("SERVICE_ADMIN_USER", None),
-                        request.data.get("SERVICE_ADMIN_PASSWORD", None),
-                        request.data.get("SERVICE_ADMIN_TOKEN",
-                                         HTTP_X_AUTH_TOKEN),
-                        request.data.get("NEW_SUBSERVICE_DESCRIPTION", None))
+                    if update:
+                        result, service_name, subservice_name = flow.update_project(
+                            request.data.get("SERVICE_ID", service_id),
+                            request.data.get("SERVICE_NAME", None),
+                            request.data.get("SUBSERVICE_ID", subservice_id),
+                            request.data.get("SUBSERVICE_NAME", None),
+                            request.data.get("SERVICE_ADMIN_USER", None),
+                            request.data.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.data.get("SERVICE_ADMIN_TOKEN",
+                                             HTTP_X_AUTH_TOKEN),
+                            request.data.get("NEW_SUBSERVICE_DESCRIPTION", None))
+                    if rename:
+                        result, service_name, subservice_name = flow.rename_project(
+                            request.data.get("SERVICE_ID", service_id),
+                            request.data.get("SERVICE_NAME", None),
+                            request.data.get("SUBSERVICE_ID", subservice_id),
+                            request.data.get("SUBSERVICE_NAME", None),
+                            request.data.get("SERVICE_ADMIN_USER", None),
+                            request.data.get("SERVICE_ADMIN_PASSWORD", None),
+                            request.data.get("SERVICE_ADMIN_TOKEN",
+                                             HTTP_X_AUTH_TOKEN),
+                            request.data.get("NEW_SUBSERVICE_NAME", None))
             else:
                 # Really service_id is not mandatory already in urls?
                 result['error'] = "ERROR not service_id provided"
