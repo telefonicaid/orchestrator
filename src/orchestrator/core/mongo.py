@@ -102,6 +102,11 @@ class MongoDBOperations(object):
                     doc._id.servicePath = NEW_SUBSERVICE_NAME
                     db['entities'].insert(doc);
                     db['entities'].remove({_id: oldDocId});
+            myquery = { "servicePath": SUBSERVICE_NAME }
+            newvalues = { "$set": { "servicePath": NEW_SUBSERVICE_NAME } }
+            db["csubs"].update_many(myquery, newvalues)
+            db["registrations"].update_many(myquery, newvalues)
+            logger.debug("renamed CB Orion database %s" % databaseName)
 
             # STH
             databaseName = 'sth_' + SERVICE_NAME
@@ -112,6 +117,7 @@ class MongoDBOperations(object):
                 if oldName in collname:
                     db[collname].renameCollection(collname.replace(oldName, newName))
             });
+            logger.debug("renamed STH database %s" % databaseName)
 
             myquery = { "subservice": SUBSERVICE_NAME }
             newvalues = { "$set": { "subservice": NEW_SUBSERVICE_NAME } }
@@ -119,28 +125,32 @@ class MongoDBOperations(object):
             # CEP
             databaseName = 'cep'
             db = self.client[databaseName]
-            mydb["rules"].update_many(myquery, newvalues)
-            mydb["executions"].update_many(myquery, newvalues)
+            db["rules"].update_many(myquery, newvalues)
+            db["executions"].update_many(myquery, newvalues)
+            logger.debug("renamed CEP database %s" % databaseName)
 
             # IotAgent Manager
             databaseName = 'iotagent-manager'
             db = self.client[databaseName]
-            mydb["configurations"].update_many(myquery, newvalues)
-            mydb["protocols"].update_many(myquery, newvalues)
+            db["configurations"].update_many(myquery, newvalues)
+            db["protocols"].update_many(myquery, newvalues)
+            logger.debug("renamed CEP database %s" % databaseName)
 
             # IotAgents: iota-json
             databaseName = 'iotajson'
             db = self.client[databaseName]
-            mydb["devices"].update_many(myquery, newvalues)
-            mydb["groups"].update_many(myquery, newvalues)
-            mydb["commands"].update_many(myquery, newvalues)
+            db["devices"].update_many(myquery, newvalues)
+            db["groups"].update_many(myquery, newvalues)
+            db["commands"].update_many(myquery, newvalues)
+            logger.debug("renamed CEP database %s" % databaseName)
 
             # IotAgents: iota-ul
             databaseName = 'iotaul'
             db = self.client[databaseName]
-            mydb["devices"].update_many(myquery, newvalues)
-            mydb["groups"].update_many(myquery, newvalues)
-            mydb["commands"].update_many(myquery, newvalues)
+            db["devices"].update_many(myquery, newvalues)
+            db["groups"].update_many(myquery, newvalues)
+            db["commands"].update_many(myquery, newvalues)
+            logger.debug("renamed CEP database %s" % databaseName)
 
         except Exception as e:
             logger.warn("rename database %s exception: %s" % (databaseName,e))

@@ -362,7 +362,7 @@ class Projects(FlowBase):
 
             self.mongo.renameDatabases(SERVICE_NAME, PROJECT_NAME, NEW_SUBSERVICE_NAME)
 
-            self.logger.debug("PROJECT=%s" % PROJECT)
+            self.logger.info("PROJECT=%s renamed from %s to %s" % (PROJECT, PROJECT_NAME, NEW_SUBSERVICE_NAME))
 
         except Exception as ex:
             error_code = self.composeErrorCode(ex)
