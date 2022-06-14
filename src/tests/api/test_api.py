@@ -14,6 +14,7 @@ IOTAGENT_PASSWORD="4pass1w0rd"
 TEST_SERVICE_NAME="smartcity"
 TEST_SUBSERVICE_NAME1="basuras"
 TEST_SUBSERVICE_NAME2="electricidad"
+TEST_SUBSERVICE_NAME3="jardines"
 TEST_SERVICE_ADMIN_USER="adm1"
 TEST_SERVICE_ADMIN_PASSWORD="4pass1w0rd"
 TEST_SERVICE_USER_NAME="Alice"
@@ -1381,6 +1382,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
+            "NEW_SUBSERVICE_NAME": TEST_SUBSERVICE_NAME3
         }
         self.payload_data_bad = {
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -1391,7 +1393,7 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_USER": ADMIN_USER,
             "SERVICE_ADMIN_PASSWORD": ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
-            "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
+            "NEW_SUBSERVICE_DESCRIPTION": "elektricidad"
         }
         self.TestRestOps = TestRestOperations(PROTOCOL=ORC_PROTOCOL,
                                               HOST=ORC_HOST,
