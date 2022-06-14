@@ -94,11 +94,13 @@ class MongoDBOperations(object):
     def renameDatabases(self, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME):
         try:
             # Orion
+
             databaseName = 'orion-' + SERVICE_NAME
             db = self.client[databaseName]
             for doc in db['entities'].find():
-                if (doc._id.servicePath(SUBSERVICE_NAME) != 0):
-                    oldDocId = doc._id;
+                logger.debug("renaming entity %s" % doc)                
+                if (doc['_id']['servicePath'] == "/" + SUBSERVICE_NAME):
+                    oldDocId = doc['_id'];
                     doc._id.servicePath = NEW_SUBSERVICE_NAME
                     db['entities'].insert(doc);
                     db['entities'].remove({_id: oldDocId});
@@ -113,7 +115,7 @@ class MongoDBOperations(object):
             db = self.client[databaseName]
             oldName = 'sth_' + SUBSERVICE_NAME + '_'
             newName = 'sth_' + NEW_SUBSERVICE_NAME + '_'
-            for collname in db.getCollectionNames():
+            for collname in db.collection_names():
                 if oldName in collname:
                     db[collname].renameCollection(collname.replace(oldName, newName))
             logger.debug("renamed STH database %s" % databaseName)

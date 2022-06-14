@@ -339,8 +339,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
                                          HTTP_X_AUTH_TOKEN))
             else:
                 # Really service_id is not mandatory already in urls?
-                result = {'error':  "ERROR not service_id provided",
-                          "code": "400"}
+                result = { "error": "ERROR not service_id provided",
+                           "code": "400" }
 
             if 'error' not in result:
                 Stats.num_get_subservice += 1
@@ -369,14 +369,25 @@ class SubServiceList_RESTView(APIView, IoTConf):
         HTTP_X_AUTH_TOKEN = self.getXAuthToken(request)
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
         FROM = self.getFromHeader(request)
-        update = request.GET.get('NEW_SUBSERVICE_DESCRIPTION', False)
-        rename = request.GET.get('NEW_SUBSERVICE_NAME', False)
+        update = request.data.get('NEW_SUBSERVICE_DESCRIPTION', False)
+        rename = request.data.get('NEW_SUBSERVICE_NAME', False)
 
         try:
             # request.data # json validation
             flow = Projects(self.KEYSTONE_PROTOCOL,
                             self.KEYSTONE_HOST,
                             self.KEYSTONE_PORT,
+                            self.KEYPASS_PROTOCOL,
+                            self.KEYPASS_HOST,
+                            self.KEYPASS_PORT,
+                            self.ORION_PROTOCOL,
+                            self.ORION_HOST,
+                            self.ORION_PORT,
+                            self.PERSEO_PROTOCOL,
+                            self.PERSEO_HOST,
+                            self.PERSEO_PORT,                           
+                            MONGODB_URI=self.MONGODB_URI,
+                            TRANSACTION_ID=None,                  
                             CORRELATOR_ID=CORRELATOR_ID,
                             FROM=FROM)
             CORRELATOR_ID = self.getCorrelatorId(flow, CORRELATOR_ID)
@@ -406,7 +417,8 @@ class SubServiceList_RESTView(APIView, IoTConf):
                             request.data.get("NEW_SUBSERVICE_NAME", None))
             else:
                 # Really service_id is not mandatory already in urls?
-                result['error'] = "ERROR not service_id provided"
+                result = { "error": "ERROR not service_id provided",
+                           "code": "400" }                           
 
             if 'error' not in result:
                 Stats.num_put_subservice += 1

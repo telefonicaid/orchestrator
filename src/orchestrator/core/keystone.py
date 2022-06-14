@@ -796,7 +796,7 @@ class IdMKeystoneOperations(IdMOperations):
                         SERVICE_ADMIN_TOKEN,
                         DOMAIN_ID,
                         USER_NAME):
-
+        # getTokenFromToken(SERVICE_ADMIN_TOKEN, DOMAIN_ID, None, True)
         res = self.IdMRestOperations.rest_request(
             url=self.SCIM_URI+'/Users?domain_id=%s' % DOMAIN_ID,
             method='GET',
