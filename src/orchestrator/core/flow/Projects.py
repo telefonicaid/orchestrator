@@ -360,6 +360,7 @@ class Projects(FlowBase):
                                              PROJECT_ID,
                                              NEW_SUBSERVICE_NAME)
 
+            self.logger.info("renaming project from %s to %s" % (PROJECT_NAME, NEW_SUBSERVICE_NAME))
             self.mongodb.renameDatabases(DOMAIN_NAME, PROJECT_NAME, NEW_SUBSERVICE_NAME)
 
             self.logger.info("PROJECT=%s renamed from %s to %s" % (PROJECT, PROJECT_NAME, NEW_SUBSERVICE_NAME))

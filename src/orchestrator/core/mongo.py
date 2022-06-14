@@ -103,8 +103,8 @@ class MongoDBOperations(object):
                     doc['_id']['servicePath'] = NEW_SUBSERVICE_NAME
                     db['entities'].insert(doc);
                     db['entities'].remove({'_id': oldDocId});
-            myquery = { "servicePath": SUBSERVICE_NAME }
-            newvalues = { "$set": { "servicePath": NEW_SUBSERVICE_NAME } }
+            myquery = { "servicePath": '/' + SUBSERVICE_NAME }
+            newvalues = { "$set": { "servicePath": '/' + NEW_SUBSERVICE_NAME } }
             db["csubs"].update_many(myquery, newvalues)
             db["registrations"].update_many(myquery, newvalues)
             logger.debug("renamed CB Orion database %s" % databaseName)
@@ -122,10 +122,12 @@ class MongoDBOperations(object):
                     db[collname].renameCollection(collname.replace(oldName, newName))
             logger.debug("renamed STH database %s" % databaseName)
 
-            myquery = { "subservice": SUBSERVICE_NAME }
-            newvalues = { "$set": { "subservice": NEW_SUBSERVICE_NAME } }
+
         except Exception as e:
             logger.warn("rename database STH %s exception: %s" % (databaseName,e))
+
+        myquery = { "subservice": '/' + SUBSERVICE_NAME }
+        newvalues = { "$set": { "subservice": '/' + NEW_SUBSERVICE_NAME } }
 
         # CEP
         try:
@@ -143,7 +145,7 @@ class MongoDBOperations(object):
             db = self.client[databaseName]
             db["configurations"].update_many(myquery, newvalues)
             db["protocols"].update_many(myquery, newvalues)
-            logger.debug("renamed CEP database %s" % databaseName)
+            logger.debug("renamed IoTAgentManager database %s" % databaseName)
         except Exception as e:
             logger.warn("rename database IoTAgentManager %s exception: %s" % (databaseName,e))
 
@@ -154,7 +156,7 @@ class MongoDBOperations(object):
             db["devices"].update_many(myquery, newvalues)
             db["groups"].update_many(myquery, newvalues)
             db["commands"].update_many(myquery, newvalues)
-            logger.debug("renamed CEP database %s" % databaseName)
+            logger.debug("renamed IoTAgentJson database %s" % databaseName)
         except Exception as e:
             logger.warn("rename database IoTAgentJson %s exception: %s" % (databaseName,e))
 
@@ -165,6 +167,6 @@ class MongoDBOperations(object):
             db["devices"].update_many(myquery, newvalues)
             db["groups"].update_many(myquery, newvalues)
             db["commands"].update_many(myquery, newvalues)
-            logger.debug("renamed CEP database %s" % databaseName)
+            logger.debug("renamed IoTAgentUL database %s" % databaseName)
         except Exception as e:
             logger.warn("rename database IoTAgentUL %s exception: %s" % (databaseName,e))

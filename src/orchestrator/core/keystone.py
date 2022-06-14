@@ -526,7 +526,7 @@ class IdMKeystoneOperations(IdMOperations):
 
         body_data = {
             "project": {
-                "name": "%s" % NEW_SUBSERVICE_NAME
+                "name": "/%s" % NEW_SUBSERVICE_NAME
             }
         }
         res = self.IdMRestOperations.rest_request(
