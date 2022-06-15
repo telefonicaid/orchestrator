@@ -107,9 +107,9 @@ class MongoDBOperations(object):
             newvalues = { "$set": { "servicePath": '/' + NEW_SUBSERVICE_NAME } }
             db["csubs"].update_many(myquery, newvalues)
             db["registrations"].update_many(myquery, newvalues)
-            logger.debug("renamed CB Orion database %s" % databaseName)
+            logger.info("renamed CB Orion database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
-            logger.warn("rename database Orion %s exception: %s" % (databaseName,e))
+            logger.warn("rename Orion database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
 
         # STH
         try:
@@ -120,11 +120,9 @@ class MongoDBOperations(object):
             for collname in db.collection_names():
                 if oldName in collname:
                     db[collname].renameCollection(collname.replace(oldName, newName))
-            logger.debug("renamed STH database %s" % databaseName)
-
-
+            logger.info("renamed STH database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
-            logger.warn("rename database STH %s exception: %s" % (databaseName,e))
+            logger.warn("rename STH database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
 
         myquery = { "subservice": '/' + SUBSERVICE_NAME }
         newvalues = { "$set": { "subservice": '/' + NEW_SUBSERVICE_NAME } }
@@ -135,9 +133,9 @@ class MongoDBOperations(object):
             db = self.client[databaseName]
             db["rules"].update_many(myquery, newvalues)
             db["executions"].update_many(myquery, newvalues)
-            logger.debug("renamed CEP database %s" % databaseName)
+            logger.info("renamed CEP database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
-            logger.warn("rename database CEP %s exception: %s" % (databaseName,e))
+            logger.warn("rename CEP database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
 
         # IotAgent Manager
         try:
@@ -145,9 +143,9 @@ class MongoDBOperations(object):
             db = self.client[databaseName]
             db["configurations"].update_many(myquery, newvalues)
             db["protocols"].update_many(myquery, newvalues)
-            logger.debug("renamed IoTAgentManager database %s" % databaseName)
+            logger.info("renamed IoTAgentManager database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
-            logger.warn("rename database IoTAgentManager %s exception: %s" % (databaseName,e))
+            logger.warn("rename IoTAgentManager database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
 
         # IotAgents: iota-json
         try:
@@ -156,9 +154,9 @@ class MongoDBOperations(object):
             db["devices"].update_many(myquery, newvalues)
             db["groups"].update_many(myquery, newvalues)
             db["commands"].update_many(myquery, newvalues)
-            logger.debug("renamed IoTAgentJson database %s" % databaseName)
+            logger.info("renamed IoTAgentJson database %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
-            logger.warn("rename database IoTAgentJson %s exception: %s" % (databaseName,e))
+            logger.warn("rename IoTAgentJson database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
 
         # IotAgents: iota-ul
         try:
@@ -167,6 +165,6 @@ class MongoDBOperations(object):
             db["devices"].update_many(myquery, newvalues)
             db["groups"].update_many(myquery, newvalues)
             db["commands"].update_many(myquery, newvalues)
-            logger.debug("renamed IoTAgentUL database %s" % databaseName)
+            logger.info("renamed IoTAgentUL database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
-            logger.warn("rename database IoTAgentUL %s exception: %s" % (databaseName,e))
+            logger.warn("rename IoTAgentUL database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
