@@ -116,11 +116,11 @@ class MongoDBOperations(object):
         try:
             databaseName = 'sth_' + SERVICE_NAME
             db = self.client[databaseName]
-            oldName = 'sth_' + SUBSERVICE_NAME + '_'
-            newName = 'sth_' + NEW_SUBSERVICE_NAME + '_'
-            for collname in db.collection_names():
-                if oldName in collname:
-                    db[collname].renameCollection(collname.replace(oldName, newName))
+            oldName = 'sth_' + '/' + SUBSERVICE_NAME + '_'
+            newName = 'sth_' + '/' + NEW_SUBSERVICE_NAME + '_'
+            for collName in db.collection_names():
+                if oldName in collName:
+                    db[collName].rename(collName.replace(oldName, newName))
             logger.info("renamed STH database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
         except Exception as e:
             logger.warn("rename STH database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
