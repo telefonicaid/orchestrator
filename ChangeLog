@@ -1,5 +1,7 @@
 CHANGES
 =======
+ADD: new API to rename subservice (including mongo database of Orion, STH, CEP, IotAgents)
+
 4.2.0
 
 ADD: config env vars for PEP and IOTAGENT user name
