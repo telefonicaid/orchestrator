@@ -76,11 +76,11 @@ class Roles(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                      DOMAIN_NAME)
                 else:
-                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                    ADMIN_TOKEN = self.idm.getTokenByDomainId(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
             if not ADMIN_TOKEN:
-                ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                ADMIN_TOKEN = self.idm.getTokenByDomainId(DOMAIN_ID,
                                                  ADMIN_USER,
                                                  ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
@@ -178,7 +178,7 @@ class Roles(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                      DOMAIN_NAME)
                 else:
-                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                    ADMIN_TOKEN = self.idm.getTokenByDomainId(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
@@ -360,7 +360,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -498,7 +498,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -628,7 +628,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -742,7 +742,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -860,7 +860,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -982,7 +982,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -1104,7 +1104,7 @@ class Roles(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
                                                      DOMAIN_NAME)
                 else:
-                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                    ADMIN_TOKEN = self.idm.getTokenByDomainId(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD)
             self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
@@ -1288,7 +1288,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -1427,7 +1427,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -1558,7 +1558,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -1673,7 +1673,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -1792,7 +1792,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -1914,7 +1914,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -2018,7 +2018,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -2108,7 +2108,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -2218,7 +2218,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -2330,7 +2330,7 @@ class Roles(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
