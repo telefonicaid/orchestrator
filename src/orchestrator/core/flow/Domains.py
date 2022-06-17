@@ -122,7 +122,7 @@ class Domains(FlowBase):
         try:
             if not ADMIN_TOKEN:
                 if DOMAIN_ID:
-                    ADMIN_TOKEN = self.idm.getToken2(DOMAIN_ID,
+                    ADMIN_TOKEN = self.idm.getTokenByDomainId(DOMAIN_ID,
                                                      ADMIN_USER,
                                                      ADMIN_PASSWORD, False)
                 else:
@@ -432,7 +432,7 @@ class Domains(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
@@ -547,7 +547,7 @@ class Domains(FlowBase):
                                                      DOMAIN_NAME)
 
                 else:
-                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                    SERVICE_USER_TOKEN = self.idm.getTokenByDomainId(
                         DOMAIN_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
@@ -654,7 +654,7 @@ class Domains(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
                 else:
-                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                    SERVICE_USER_TOKEN = self.idm.getTokenByDomainId(
                         DOMAIN_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)
@@ -746,7 +746,7 @@ class Domains(FlowBase):
                     DOMAIN_ID = self.idm.getDomainId(SERVICE_USER_TOKEN,
                                                      DOMAIN_NAME)
                 else:
-                    SERVICE_USER_TOKEN = self.idm.getToken2(
+                    SERVICE_USER_TOKEN = self.idm.getTokenByDomainId(
                         DOMAIN_ID,
                         SERVICE_USER_NAME,
                         SERVICE_USER_PASSWORD)

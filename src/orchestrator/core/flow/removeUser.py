@@ -73,7 +73,7 @@ class RemoveUser(FlowBase):
                     SERVICE_ID = self.idm.getDomainId(SERVICE_ADMIN_TOKEN,
                                                       SERVICE_NAME)
                 else:
-                    SERVICE_ADMIN_TOKEN = self.idm.getToken2(
+                    SERVICE_ADMIN_TOKEN = self.idm.getTokenByDomainId(
                         SERVICE_ID,
                         SERVICE_ADMIN_USER,
                         SERVICE_ADMIN_PASSWORD)
