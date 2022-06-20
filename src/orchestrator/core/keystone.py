@@ -117,7 +117,7 @@ class IdMKeystoneOperations(IdMOperations):
         assert res.code == 201, (res.code, res.msg)
         return res.headers.get('X-Subject-Token')
 
-    def getToken2(self,
+    def getTokenByDomainId(self,
                   DOMAIN_ID,
                   DOMAIN_ADMIN_USER,
                   DOMAIN_ADMIN_PASSWORD,
