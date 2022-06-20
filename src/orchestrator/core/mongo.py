@@ -23,6 +23,7 @@
 #
 import json
 import logging
+import copy
 
 from orchestrator.common.util import RestOperations
 
@@ -89,3 +90,82 @@ class MongoDBOperations(object):
             self.client.drop_database(databaseName)
         except Exception as e:
             logger.warn("remove database %s exception: %s" % (databaseName,e))
+
+
+    def renameDatabases(self, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME):
+
+        # Orion
+        try:
+            databaseName = 'orion-' + SERVICE_NAME
+            db = self.client[databaseName]
+            for doc in db['entities'].find():
+                if (doc['_id']['servicePath'] == "/" + SUBSERVICE_NAME):
+                    oldDocId = doc['_id'].copy();
+                    doc['_id']['servicePath'] = "/" + NEW_SUBSERVICE_NAME
+                    db['entities'].insert_one(doc);
+                    db['entities'].delete_one({'_id': oldDocId});
+            myquery = { "servicePath": '/' + SUBSERVICE_NAME }
+            newvalues = { "$set": { "servicePath": '/' + NEW_SUBSERVICE_NAME } }
+            db["csubs"].update_many(myquery, newvalues)
+            db["registrations"].update_many(myquery, newvalues)
+            logger.info("renamed CB Orion database %s collections (entities, csubs, registrations) service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+        except Exception as e:
+            logger.warn("rename Orion database %s collections (entities, csubs, registrations) exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+
+        # STH
+        try:
+            databaseName = 'sth_' + SERVICE_NAME
+            db = self.client[databaseName]
+            oldName = 'sth_' + '/' + SUBSERVICE_NAME + '_'
+            newName = 'sth_' + '/' + NEW_SUBSERVICE_NAME + '_'
+            for collName in db.collection_names():
+                if oldName in collName:
+                    db[collName].rename(collName.replace(oldName, newName))
+            logger.info("renamed STH database %s service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+        except Exception as e:
+            logger.warn("rename STH database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+
+        myquery = { "subservice": '/' + SUBSERVICE_NAME }
+        newvalues = { "$set": { "subservice": '/' + NEW_SUBSERVICE_NAME } }
+
+        # CEP
+        try:
+            databaseName = 'cep'
+            db = self.client[databaseName]
+            db["rules"].update_many(myquery, newvalues)
+            db["executions"].update_many(myquery, newvalues)
+            logger.info("renamed CEP database %s collections (rules, executions) service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+        except Exception as e:
+            logger.warn("rename CEP database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+
+        # IotAgent Manager
+        try:
+            databaseName = 'iotagent-manager'
+            db = self.client[databaseName]
+            db["configurations"].update_many(myquery, newvalues)
+            db["protocols"].update_many(myquery, newvalues)
+            logger.info("renamed IoTAgentManager database %s service collections (configurations, protocols) %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+        except Exception as e:
+            logger.warn("rename IoTAgentManager database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+
+        # IotAgents: iota-json
+        try:
+            databaseName = 'iotajson'
+            db = self.client[databaseName]
+            db["devices"].update_many(myquery, newvalues)
+            db["groups"].update_many(myquery, newvalues)
+            db["commands"].update_many(myquery, newvalues)
+            logger.info("renamed IoTAgentJson database %s collections (devices, groups, commands) service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+        except Exception as e:
+            logger.warn("rename IoTAgentJson database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+
+        # IotAgents: iota-ul
+        try:
+            databaseName = 'iotaul'
+            db = self.client[databaseName]
+            db["devices"].update_many(myquery, newvalues)
+            db["groups"].update_many(myquery, newvalues)
+            db["commands"].update_many(myquery, newvalues)
+            logger.info("renamed IoTAgentUL database %s collections (devices, groups, commands) service %s from %s to %s" % (databaseName, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))
+        except Exception as e:
+            logger.warn("rename IoTAgentUL database %s exception %s renaming %s from %s to %s" % (databaseName, e, SERVICE_NAME, SUBSERVICE_NAME, NEW_SUBSERVICE_NAME))

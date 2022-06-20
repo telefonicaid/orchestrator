@@ -177,6 +177,9 @@ json = {
             "NEW_SUBSERVICE_DESCRIPTION": {
                 "type": "string",
             },
+            "NEW_SUBSERVICE_NAME": {
+                "type": "string",
+            },
         },
         # "required": [ ],
     },

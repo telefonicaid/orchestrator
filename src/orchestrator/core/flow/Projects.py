@@ -284,6 +284,102 @@ class Projects(FlowBase):
 
         return PROJECT, DOMAIN_NAME, PROJECT_NAME
 
+
+    def rename_project(self,
+                       DOMAIN_ID,
+                       DOMAIN_NAME,
+                       PROJECT_ID,
+                       PROJECT_NAME,
+                       ADMIN_USER,
+                       ADMIN_PASSWORD,
+                       ADMIN_TOKEN,
+                       NEW_SUBSERVICE_NAME):
+
+        '''Rename Project Name
+
+        In case of HTTP error, return HTTP error
+
+        Params:
+        - DOMAIN_ID: id of domain
+        - DOMAIN_NAME: name of domain
+        - PROJECT_ID: id of project
+        - PROJECT_NAME: name of project
+        - SERVICE_ADMIN_USER: Service admin username
+        - SERVICE_ADMIN_PASSWORD: Service admin password
+        - SERVICE_ADMIN_TOKEN: Service admin token
+        - NEW_SUBSERVICE_NAME: New subservice name
+        Return:
+        - project detail
+        '''
+        data_log = {
+            "DOMAIN_ID": "%s" % DOMAIN_ID,
+            "DOMAIN_NAME": "%s" % DOMAIN_NAME,
+            "PROJECT_ID": "%s" % PROJECT_ID,
+            "PROJECT_NAME": "%s" % PROJECT_NAME,
+            "ADMIN_USER": "%s" % ADMIN_USER,
+            "ADMIN_PASSWORD": "%s" % "***", #ADMIN_PASSWORD,
+            "ADMIN_TOKEN": self.get_extended_token(ADMIN_TOKEN),
+            "NEW_SUBSERVICE_NAME": "%s" % NEW_SUBSERVICE_NAME,
+        }
+        self.logger.debug("FLOW rename_project invoked with: %s" % json.dumps(
+            data_log,
+            indent=3)
+        )
+        try:
+            if not ADMIN_TOKEN:
+                if not DOMAIN_ID:
+                    ADMIN_TOKEN = self.idm.getToken(DOMAIN_NAME,
+                                                    ADMIN_USER,
+                                                    ADMIN_PASSWORD)
+                    DOMAIN_ID = self.idm.getDomainId(ADMIN_TOKEN,
+                                                     DOMAIN_NAME)
+                else:
+                    ADMIN_TOKEN = self.idm.getTokenByDomainId(DOMAIN_ID,
+                                                     ADMIN_USER,
+                                                     ADMIN_PASSWORD)
+            self.logger.debug("ADMIN_TOKEN=%s" % ADMIN_TOKEN)
+
+            # Ensure DOMAIN_NAME and PROJECT_NAME
+            DOMAIN_NAME = self.ensure_service_name(ADMIN_TOKEN,
+                                                   DOMAIN_ID,
+                                                   DOMAIN_NAME)
+            self.logger.addFilter(ContextFilterService(DOMAIN_NAME))
+
+            if not PROJECT_ID:
+                PROJECT_ID = self.idm.getProjectId(ADMIN_TOKEN,
+                                                   DOMAIN_NAME,
+                                                   PROJECT_NAME)
+            PROJECT_NAME = self.ensure_subservice_name(ADMIN_TOKEN,
+                                                       DOMAIN_ID,
+                                                       PROJECT_ID,
+                                                       PROJECT_NAME)
+            self.logger.addFilter(ContextFilterSubService(PROJECT_NAME))
+            self.logger.info("renaming project from %s to %s" % (PROJECT_NAME, NEW_SUBSERVICE_NAME))
+            PROJECT = self.idm.renameProject(ADMIN_TOKEN,
+                                             DOMAIN_ID,
+                                             PROJECT_ID,
+                                             NEW_SUBSERVICE_NAME)
+
+            self.mongodb.renameDatabases(DOMAIN_NAME, PROJECT_NAME, NEW_SUBSERVICE_NAME)
+
+            self.logger.info("PROJECT=%s renamed from %s to %s" % (PROJECT, PROJECT_NAME, NEW_SUBSERVICE_NAME))
+
+        except Exception as ex:
+            error_code = self.composeErrorCode(ex)
+            self.logError(self.logger, error_code, ex)
+            return error_code
+
+        data_log = {
+            "PROJECT": PROJECT
+        }
+        self.logger.debug("Summary report : %s" % json.dumps(data_log, indent=3))
+
+        # Consolidate opetions metrics into flow metrics
+        self.collectComponentMetrics()
+
+        return PROJECT, DOMAIN_NAME, PROJECT_NAME
+
+
     def delete_project(self,
                        DOMAIN_ID,
                        DOMAIN_NAME,

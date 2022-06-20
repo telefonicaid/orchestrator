@@ -518,6 +518,28 @@ class IdMKeystoneOperations(IdMOperations):
                                                       indent=3))
         return json_body_response['project']['id']
 
+    def renameProject(self,
+                      SERVICE_ADMIN_TOKEN,
+                      ID_DOM1,
+                      SUBSERVICE_ID,
+                      NEW_SUBSERVICE_NAME):
+
+        body_data = {
+            "project": {
+                "name": "/%s" % NEW_SUBSERVICE_NAME
+            }
+        }
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/projects/%s' % SUBSERVICE_ID,
+            method='PATCH', data=body_data,
+            auth_token=SERVICE_ADMIN_TOKEN)
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response['project']['id']
+
     def getDomainId(self, SERVICE_ADMIN_TOKEN, DOMAIN_NAME, SCOPED=True):
 
         auth_data = {
@@ -774,7 +796,7 @@ class IdMKeystoneOperations(IdMOperations):
                         SERVICE_ADMIN_TOKEN,
                         DOMAIN_ID,
                         USER_NAME):
-
+        # getTokenFromToken(SERVICE_ADMIN_TOKEN, DOMAIN_ID, None, True)
         res = self.IdMRestOperations.rest_request(
             url=self.SCIM_URI+'/Users?domain_id=%s' % DOMAIN_ID,
             method='GET',
