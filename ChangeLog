@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+4.3.0
+
 ADD: new API to rename subservice (including mongo database of Orion, STH, CEP, IotAgents) (#330)
 UPGRADE: Debian version from 11.2 to 11.3 in Dockerfile
 
