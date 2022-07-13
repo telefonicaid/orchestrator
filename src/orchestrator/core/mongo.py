@@ -57,8 +57,13 @@ class MongoDBOperations(object):
             db.entities.create_index("expDate", expireAfterSeconds=0)
             db.entities.create_index([("_id.servicePath", pymongo.ASCENDING),
                                       ("_id.id", pymongo.ASCENDING),
-                                      ("_id.type", pymongo.ASCENDING)])
+                                      ("_id.type", pymongo.ASCENDING)])            
             db.entities.create_index("creDate")
+            # New indexes, requested by devops teams. See issue #335
+            db.entities.create_index("_id.id")
+            db.entities.create_index("_id.type")
+            db.entities.create_index("_id.servicePath")
+            db.entities.create_index("attrNames")                                   
         except Exception as e:
             logger.warn("createIndex database %s exception: %s" % (databaseName,e))
 
