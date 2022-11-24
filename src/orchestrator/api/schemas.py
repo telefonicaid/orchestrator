@@ -73,7 +73,7 @@ json = {
             },
             "NEW_SERVICE_ADMIN_EMAIL": {
                 "type": "string",
-                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+"
             },
             "CREATE_DEFAULT_GROUPS": {
                 "type": "boolean"
@@ -230,7 +230,7 @@ json = {
             },
             "NEW_SUBSERVICE_ADMIN_EMAIL":{
                 "type": "string",
-                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+"
             },
         },
         "required": [
@@ -300,7 +300,7 @@ json = {
                             "properties": {
                                 "value": {
                                     "type": "string",
-                                    "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                                    "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+"
                                     },
                                 }
                             },
@@ -359,7 +359,7 @@ json = {
             },
             "NEW_SERVICE_USER_EMAIL":{
                 "type": "string",
-                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+"
             },
         },
         # "required": [ ],
@@ -749,7 +749,7 @@ json = {
             },
             "NEW_USER_EMAIL": {
                 "type": "string",
-                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+"
             },
             "NEW_USER_DESCRIPTION": {
                 "type": "string"
@@ -779,7 +779,7 @@ json = {
                         },
                     "USER_EMAIL": {
                         "type": "string",
-                        "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"
+                        "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+"
                         },
                     "GROUP_NAMES": {
                         "type": "array",

@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+ADD: do not limit domain length in email check regex
+
 4.4.0
 
 ADD: new Orion indexes to optimize operations (#335)
