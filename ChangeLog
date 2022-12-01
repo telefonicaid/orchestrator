@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+4.5.0
+
 ADD: do not limit domain length in email check regex
 
 4.4.0
