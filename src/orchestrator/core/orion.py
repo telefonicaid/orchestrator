@@ -97,7 +97,7 @@ class CBOrionOperations(object):
         )
 
         res = self.CBRestOperations.rest_request(
-            url='/v2/subscriptions?options=skipInitialNotification',
+            url='/v2/subscriptions',
             method='POST',
             data=body_data,
             auth_token=SERVICE_USER_TOKEN,

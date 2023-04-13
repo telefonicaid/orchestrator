@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+FIX: remove use of skipInitialNotification with orion subscriptions
+
 4.5.0
 
 ADD: do not limit domain length in email check regex
