@@ -2,6 +2,7 @@ CHANGES
 =======
 
 FIX: remove use of skipInitialNotification with orion subscriptions
+UPGRADE: requests from 2.27.1 to 2.31.0
 
 4.5.0
 
