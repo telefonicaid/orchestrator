@@ -210,13 +210,15 @@ class Roles(FlowBase):
                 self.logger.debug("ROLE_ID=%s" % ROLE_ID)
 
 
-            # if USER_ID:
-            #     USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
-            #                                                  USER_ID,
-            #                                                  EFFECTIVE)
-            #     self.logger.debug("USER_ROLES=%s" % json.dumps(USER_ROLES, indent=3))
+            if USER_ID:
+                USER_ROLES = self.idm.getUserRoleAssignments(ADMIN_TOKEN,
+                                                             USER_ID,
+                                                             EFFECTIVE)
+                self.logger.debug("USER_ROLES=%s" % json.dumps(USER_ROLES,
+                                                               indent=3))
+                ROLE_ASSIGNMENTS = PROJECT_ROLES
 
-            if PROJECT_ID:
+            else if PROJECT_ID:
                 PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
                                                                    PROJECT_ID,
                                                                    EFFECTIVE)

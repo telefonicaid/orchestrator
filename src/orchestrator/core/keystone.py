@@ -1290,6 +1290,24 @@ class IdMKeystoneOperations(IdMOperations):
                                                       indent=3))
         return json_body_response
 
+    def getUserRoleAssignments(self,
+                               SERVICE_ADMIN_TOKEN,
+                               USER_ID,
+                               EFFECTIVE):
+
+        res = self.IdMRestOperations.rest_request(
+            url='/v3/role_assignments?user.id=%s%s' % (
+                USER_ID, "&effective" if EFFECTIVE else ""),
+            method='GET',
+            auth_token=SERVICE_ADMIN_TOKEN)
+
+        assert res.code == 200, (res.code, res.msg)
+        data = res.read()
+        json_body_response = json.loads(data)
+        logger.debug("json response: %s" % json.dumps(json_body_response,
+                                                      indent=3))
+        return json_body_response
+
     def grantInheritRole(self,
                          CLOUD_ADMIN_TOKEN,
                          ID_DOM1,
