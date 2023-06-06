@@ -218,21 +218,22 @@ class Roles(FlowBase):
                                                                indent=3))
                 ROLE_ASSIGNMENTS = PROJECT_ROLES
 
-            else if PROJECT_ID:
-                PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
-                                                                   PROJECT_ID,
-                                                                   EFFECTIVE)
-                self.logger.debug("PROJECT_ROLES=%s" % json.dumps(PROJECT_ROLES,
-                                                             indent=3))
-                ROLE_ASSIGNMENTS = PROJECT_ROLES
-
             else:
-                DOMAIN_ROLES = self.idm.getDomainRoleAssignments(ADMIN_TOKEN,
-                                                                 DOMAIN_ID,
-                                                                 EFFECTIVE)
-                self.logger.debug("DOMAIN_ROLES=%s" % json.dumps(DOMAIN_ROLES,
-                                                            indent=3))
-                ROLE_ASSIGNMENTS = DOMAIN_ROLES
+                if PROJECT_ID:
+                    PROJECT_ROLES = self.idm.getProjectRoleAssignments(ADMIN_TOKEN,
+                                                                       PROJECT_ID,
+                                                                       EFFECTIVE)
+                    self.logger.debug("PROJECT_ROLES=%s" % json.dumps(PROJECT_ROLES,
+                                                                      indent=3))
+                    ROLE_ASSIGNMENTS = PROJECT_ROLES
+
+                else:
+                    DOMAIN_ROLES = self.idm.getDomainRoleAssignments(ADMIN_TOKEN,
+                                                                     DOMAIN_ID,
+                                                                     EFFECTIVE)
+                    self.logger.debug("DOMAIN_ROLES=%s" % json.dumps(DOMAIN_ROLES,
+                                                                     indent=3))
+                    ROLE_ASSIGNMENTS = DOMAIN_ROLES
 
             role_assignments_expanded = []
             for role_assignment in ROLE_ASSIGNMENTS['role_assignments']:
