@@ -1296,7 +1296,7 @@ class IdMKeystoneOperations(IdMOperations):
                                EFFECTIVE):
 
         res = self.IdMRestOperations.rest_request(
-            url='/v3/role_assignments?user.id=%s%s' % (
+            url='/v3/role_assignments?user.id=%s%s' % ( # include_names=true
                 USER_ID, "&effective" if EFFECTIVE else ""),
             method='GET',
             auth_token=SERVICE_ADMIN_TOKEN)
