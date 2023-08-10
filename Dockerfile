@@ -1,4 +1,4 @@
-ARG  IMAGE_TAG=11.3-slim
+ARG  IMAGE_TAG=12.1-slim
 FROM debian:${IMAGE_TAG}
 
 MAINTAINER Alvaro Vega <alvaro.vegagarcia@telefonica.com>
