@@ -10,7 +10,7 @@ ENV ORCHESTRATOR_USER orchestrator
 # By default all linux users non root, has a UID above 1000, so it's taken 10001 which would never end up allocated automatically.
 ENV ORCHESTRATOR_USER_UID 10001
 ENV ORCHESTRATOR_VERSION 4.5.0
-ENV python_lib /var/env-orchestrator/lib/python3.6/site-packages
+ENV python_lib /var/env-orchestrator/lib/python3.11/site-packages
 ENV DJANGO_SETTINGS_MODULE settings
 ENV PYTHONPATH "${PYTHONPATH}:/opt/orchestrator"
 ENV CLEAN_DEV_TOOLS ${CLEAN_DEV_TOOLS:-1}
@@ -27,7 +27,6 @@ RUN \
     # Install dependencies
     apt-get -y install \
       curl \
-      python3 \
       python3-dev \
       python3-pip \
       openssl \
@@ -48,6 +47,10 @@ RUN \
     cp -r /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
     chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
+# create and activate virtual environment
+#    python3.9 -m venv /opt/venv && \
+#ENV PATH="/opt/venv/bin:$PATH" && \
+    rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
     pip3 install -r $python_lib/iotp-orchestrator/requirements.txt && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
     ln -s $python_lib/iotp-orchestrator /opt/orchestrator && \
