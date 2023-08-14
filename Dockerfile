@@ -47,9 +47,6 @@ RUN \
     cp -r /opt/sworchestrator/bin $python_lib/iotp-orchestrator && \
     chmod 755 $python_lib/iotp-orchestrator/bin/orchestrator-entrypoint.sh && \
     chown -R ${ORCHESTRATOR_USER}:${ORCHESTRATOR_USER} $python_lib/iotp-orchestrator && \
-# create and activate virtual environment
-#    python3.9 -m venv /opt/venv && \
-#ENV PATH="/opt/venv/bin:$PATH" && \
     rm /usr/lib/python3.11/EXTERNALLY-MANAGED && \
     pip3 install -r $python_lib/iotp-orchestrator/requirements.txt && \
     find $python_lib/iotp-orchestrator -name "*.pyc" -delete && \
