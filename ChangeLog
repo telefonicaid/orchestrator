@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPGRADE: Debian version from 12.1 to 12.4 in Dockerfile
+
 4.6.0
 
 UPGRADE: pymongo from 3.12.3 to 3.13.0
