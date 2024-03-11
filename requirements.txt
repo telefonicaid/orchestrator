@@ -1,4 +1,4 @@
-Django==3.2.24
+Django==3.2.25
 djangorestframework==3.11.2
 jsonschema==2.6.0
 uwsgi==2.0.23

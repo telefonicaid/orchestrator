@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-UPGRADE: django from 2.2.28 to 3.2.24 due security vulnerability
+UPGRADE: django from 2.2.28 to 3.2.25 due security vulnerability
 UPGRADE: Debian version from 12.1 to 12.4 in Dockerfile
 
 4.6.0
