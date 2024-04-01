@@ -1,5 +1,7 @@
 CHANGES
 =======
+ADD: set to 1024 and allow change default queue size for uwsgi connections
+
 4.7.0
 
 UPGRADE: uwsgi version from 2.0.23 to 2.0.24
