@@ -14,7 +14,7 @@
 
 CURR="$( cd "$( dirname "$( readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
 VIRTUALENV=/var/env-orchestrator
-ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
+ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python3.11/site-packages/iotp-orchestrator
 UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
 PROCESSES=6
