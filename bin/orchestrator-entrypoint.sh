@@ -328,7 +328,7 @@ uwsgi --http :$PORT \
       --harakiri $HARAKIRI \
       --http-timeout $HTTP_TIMEOUT \
       --max-requests $MAX_REQUESTS \
-      --iisten $QUEUE_SIZE \
+      --listen $QUEUE_SIZE \
       --vacuum \
       --enable-threads \
       --buffer-size  $UWSGI_BUFFER_SIZE
