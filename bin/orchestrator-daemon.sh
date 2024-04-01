@@ -22,6 +22,7 @@ THREADS=8
 HARAKIRI=190
 HTTP_TIMEOUT=200
 MAX_REQUESTS=250
+QUEUE_SIZE=1024
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
 PNAME="orchestrator"
@@ -42,6 +43,7 @@ exe="$UWGSI --http :${PORT} \
 --harakiri $HARAKIRI \
 --http-timeout $HTTP_TIMEOUT \
 --max-requests $MAX_REQUESTS \
+--listen $QUEUE_SIZE \
 --vacuum \
 --enable-threads"
 
