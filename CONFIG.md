@@ -199,12 +199,13 @@ THREADS=8
 HARAKIRI=190
 HTTP_TIMEOUT=200
 MAX_REQUESTS=250
+QUEUE_SIZE=1024
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
 PNAME="orchestrator"
 USER="orchestrator"
 ```
-
+For deep detail about these options follow this [guide](https://uwsgi-docs.readthedocs.io/en/latest/Options.html)
 
 ## Environment users
 
