@@ -1,6 +1,8 @@
 CHANGES
 =======
+
 ADD: set to 1024 (from previous 100) and allow change default queue size for uwsgi connections
+FIX: bad error reported (500 instead 401) when a token error (i.e. token expired)
 
 4.7.0
 

@@ -275,7 +275,7 @@ class FlowBase(object):
                 # Probably expired?
                 token_extended  = {
                     "token": USER_TOKEN,
-                    "error": ex.message
+                    "error": str(ex)
                 }
         return token_extended
 
