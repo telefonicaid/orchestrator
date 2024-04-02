@@ -1,5 +1,8 @@
 CHANGES
 =======
+
+FIX: bad error reported (500 instead 401) when a token error (i.e. token expired)
+
 4.7.0
 
 UPGRADE: uwsgi version from 2.0.23 to 2.0.24
