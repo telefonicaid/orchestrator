@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-ADD: set to 256 (from previous 100) and allow change default queue size for uwsgi connections (#352)
+ADD: set to 256 (from previous 100) and allow change default queue size for uwsgi connections (QUEUE_SIZE env var in Dockerfile) (#352)
 FIX: bad error reported (500 instead 401) when a token error (i.e. token expired)
 
 4.7.0
