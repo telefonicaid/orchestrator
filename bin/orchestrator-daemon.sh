@@ -14,7 +14,7 @@
 
 CURR="$( cd "$( dirname "$( readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
 VIRTUALENV=/var/env-orchestrator
-ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
+ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python3.11/site-packages/iotp-orchestrator
 UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
 PROCESSES=6
@@ -22,6 +22,7 @@ THREADS=8
 HARAKIRI=190
 HTTP_TIMEOUT=200
 MAX_REQUESTS=250
+QUEUE_SIZE=256
 ENVIRONMENT="DJANGO_SETTINGS_MODULE=settings.dev"
 PIDFILE="/var/run/orchestrator.pid"
 PNAME="orchestrator"
@@ -42,6 +43,7 @@ exe="$UWGSI --http :${PORT} \
 --harakiri $HARAKIRI \
 --http-timeout $HTTP_TIMEOUT \
 --max-requests $MAX_REQUESTS \
+--listen $QUEUE_SIZE \
 --vacuum \
 --enable-threads"
 

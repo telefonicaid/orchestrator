@@ -106,6 +106,7 @@ Additionally, the following environment variables are available for orchestrator
 | HARAKIRI                    |                           | 80                        |
 | HTTP_TIMEOUT                |                           | 200                       |
 | MAX_REQUESTS                |                           | 250                       |
+| QUEUE_SIZE                  |                           | 256                       |
 | UWSGI_BUFFER_SIZE           |                           | 4096                      |
 | KEYSTONE_HOST               | KEYSTONE.host             | localhost                 |
 | KEYSTONE_PORT               | KEYSTONE.port             | 5001                      |
