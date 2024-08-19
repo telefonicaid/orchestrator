@@ -1,6 +1,18 @@
 CHANGES
 =======
 
+UPGRADE: Debian version from 12.5 to 12.6 in Dockerfile
+UPGRADE: djangorestframework from 3.11.2 to 3.15.1
+UPGRADE: requests from 2.31.0 to 2.32.0
+
+4.8.0
+
+UPGRADE: pymongo version from 3.13.0 to 4.6.3
+ADD: set to 256 (from previous 100) and allow change default queue size for uwsgi connections (QUEUE_SIZE env var in Dockerfile) (#352)
+FIX: bad error reported (500 instead 401) when a token error (i.e. token expired)
+
+4.7.0
+
 UPGRADE: uwsgi version from 2.0.23 to 2.0.24
 UPGRADE: django from 2.2.28 to 3.2.25 due security vulnerability
 UPGRADE: Debian version from 12.1 to 12.5 in Dockerfile
