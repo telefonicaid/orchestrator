@@ -3,6 +3,7 @@ CHANGES
 
 UPGRADE: Debian version from 12.5 to 12.6 in Dockerfile
 UPGRADE: djangorestframework from 3.11.2 to 3.15.1
+UPGRADE: Django from 3.2.25 to 4.2.16
 UPGRADE: requests from 2.31.0 to 2.32.0
 
 4.8.0
