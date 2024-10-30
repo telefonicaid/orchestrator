@@ -4,4 +4,4 @@ jsonschema==4.23.0
 uwsgi==2.0.28
 requests==2.32.3
 python-ldap==3.4.4
-pymongo==4.6.3
+pymongo==4.8.0
