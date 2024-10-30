@@ -21,8 +21,8 @@
 #
 # Author: IoT team
 #
-from django.conf.urls import url, include
+from django.urls import (re_path, include)
 
 urlpatterns = [
-    url(r'^v1.0/', include('orchestrator.api.urls')),
+    re_path(r'^v1.0/', include('orchestrator.api.urls')),
 ]
