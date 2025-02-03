@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+4.9.0
+
 UPGRADE: Debian version from 12.5 to 12.9 in Dockerfile
 UPGRADE: djangorestframework from 3.11.2 to 3.15.2 due security vulnerability (CVE-2024-21520)
 UPGRADE: django from 3.2.25 to 4.2.18 due security vulnerability (CVE-2024-45231, CVE-2024-53907, CVE-2024-53908, CVE-2024-56374)
