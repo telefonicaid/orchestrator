@@ -321,6 +321,7 @@ while ! nc -zvw10 $KEYPASS_HOST $KEYPASS_PORT ; do sleep 10; done
 
 echo "Using UWSGI configuration options: "
 echo "  PORT=${PORT}"
+echo "  STATS_PORT=${STATS_PORT}"
 echo "  PROCESSES=${PROCESSES}"
 echo "  THREADS=${THREADS}"
 echo "  HARAKIRI=${HARAKIRI}"
