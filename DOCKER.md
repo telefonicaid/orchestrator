@@ -101,6 +101,7 @@ Additionally, the following environment variables are available for orchestrator
 | Environment variable        | Configuration attribute   | Default value             |
 |:----------------------------|:--------------------------|:--------------------------|
 | PORT                        |                           | 8084                      |
+| STATS_PORT                  |                           | 8184                      |
 | PROCESSES                   |                           | 6                         |
 | THREADS                     |                           | 8                         |
 | HARAKIRI                    |                           | 80                        |
@@ -171,7 +172,7 @@ The following line will run the container exposing port `8084`, give it a name -
 
 As a result of this command, there is a orchestrator listening on port 8084 on localhost. Try to see if it works now with
 
-        curl localhost:8084/v1.0/version
+          curl localhost:8084/v1.0/version
 
 A few points to consider:
 
@@ -179,3 +180,10 @@ A few points to consider:
 * In `-p 8084:8084` the first value represents the port to listen in on localhost. If you wanted to run a second orchestrator on your machine you should change this value to something else, for example `-p 8184:8084`.
 * Anything after the name of the container image (in this case `orchestrator`) is interpreted as a parameter for the Orchestrator.
 
+In order to obtain stats about uwsgi orchestrator could be started using:
+
+          docker run -d --name orchestrator1 -p 8084:8084 -p 8184:8184 orchestrator
+
+To obtain a json about uwsgi stats:
+
+          curl -X GET localhost:8184
