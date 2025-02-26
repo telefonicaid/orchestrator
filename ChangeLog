@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+ADD: Add stats endpoint for uwsgi
 ADD: Print Uwsgi configuration options at docker startup
 
 4.9.0
