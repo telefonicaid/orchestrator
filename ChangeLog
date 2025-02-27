@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPGRADE: django from 4.2.18 to 4.2.19
+
 4.9.0
 
 UPGRADE: Debian version from 12.5 to 12.9 in Dockerfile
