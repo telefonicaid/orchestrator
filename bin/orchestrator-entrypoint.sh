@@ -318,6 +318,16 @@ fi
 while ! nc -zvw10 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
 while ! nc -zvw10 $KEYPASS_HOST $KEYPASS_PORT ; do sleep 10; done
 
+echo "Using UWSGI configuration options: "
+echo "  PORT=${PORT}"
+echo "  PROCESSES=${PROCESSES}"
+echo "  THREADS=${THREADS}"
+echo "  HARAKIRI=${HARAKIRI}"
+echo "  HTTP_TIMEOUT=${HTTP_TIMEOUT}"
+echo "  MAX_REQUESTS=${MAX_REQUESTS}"
+echo "  QUEUE_SIZE=${QUEUE_SIZE}"
+echo "  UWSGI_BUFFER_SIZE=${UWSGI_BUFFER_SIZE}"
+
 uwsgi --http :$PORT \
       --chdir /opt/orchestrator \
       --wsgi-file wsgi.py \
