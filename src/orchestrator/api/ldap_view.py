@@ -33,8 +33,7 @@ from orchestrator.core.flow.LdapUserHelper import LdapUserHelper
 from orchestrator.core.flow.LdapGroupHelper import LdapGroupHelper
 from orchestrator.api import parsers
 from orchestrator.api.iotconf import IoTConf
-from orchestrator.api.stats import Stats
-
+from orchestrator.api.stats import Stats, manager, shared_data
 
 class LdapUser_RESTView(APIView, IoTConf):
     """

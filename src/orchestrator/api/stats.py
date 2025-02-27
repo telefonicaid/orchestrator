@@ -27,6 +27,10 @@ import threading
 
 from django.conf import settings
 from datetime import datetime
+from multiprocessing import Manager
+
+manager = Manager()
+shared_data = manager.dict()
 
 def singleton(cls):
     instances = {}
@@ -40,78 +44,82 @@ def singleton(cls):
 
     return get_instance
 
+
 @singleton
 class Stats():
 
     def __init__(self):
 
+        self.data = shared_data
+        self.lock = threading.Lock()
+
         # Start Time
-        self.uptime = datetime.utcnow()
+        self.data["uptime"] = datetime.utcnow()
 
         # All stats
-        self.num_post_service = 0
-        self.num_get_service = 0
-        self.num_put_service = 0
-        self.num_delete_service = 0
+        self.data["num_post_service"] = 0
+        self.data["num_get_service"] = 0
+        self.data["num_put_service"] = 0
+        self.data["num_delete_service"] = 0
 
-        self.num_post_subservice = 0
-        self.num_get_subservice = 0
-        self.num_put_subservice = 0
-        self.num_delete_subservice = 0
+        self.data["num_post_subservice"] = 0
+        self.data["num_get_subservice"] = 0
+        self.data["num_put_subservice"] = 0
+        self.data["num_delete_subservice"] = 0
 
-        self.num_delete_user = 0
-        self.num_put_user = 0
-        self.num_get_user = 0
-        self.num_post_user = 0
+        self.data["num_delete_user"] = 0
+        self.data["num_put_user"] = 0
+        self.data["num_get_user"] = 0
+        self.data["num_post_user"] = 0
 
-        self.num_get_userlist = 0
-        self.num_post_userlist = 0
+        self.data["num_get_userlist"] = 0
+        self.data["num_post_userlist"] = 0
 
-        self.num_delete_group = 0
-        self.num_put_group = 0
-        self.num_get_group = 0
-        self.num_post_group = 0
+        self.data["num_delete_group"] = 0
+        self.data["num_put_group"] = 0
+        self.data["num_get_group"] = 0
+        self.data["num_post_group"] = 0
 
-        self.num_get_grouplist = 0
-        self.num_post_grouplist = 0
+        self.data["num_get_grouplist"] = 0
+        self.data["num_post_grouplist"] = 0
 
-        self.num_delete_role = 0
-        self.num_post_role = 0
-        self.num_get_role = 0
-        self.num_get_role_policies = 0
-        self.num_post_role_policies = 0
+        self.data["num_delete_role"] = 0
+        self.data["num_post_role"] = 0
+        self.data["num_get_role"] = 0
+        self.data["num_get_role_policies"] = 0
+        self.data["num_post_role_policies"] = 0
 
-        self.num_delete_policy_from_role = 0
-        self.num_get_policy_from_role = 0
+        self.data["num_delete_policy_from_role"] = 0
+        self.data["num_get_policy_from_role"] = 0
 
-        self.num_delete_roleassignment = 0
-        self.num_post_roleassignment = 0
-        self.num_get_roleassignment = 0
+        self.data["num_delete_roleassignment"] = 0
+        self.data["num_post_roleassignment"] = 0
+        self.data["num_get_roleassignment"] = 0
 
-        self.num_post_trust = 0
+        self.data["num_post_trust"] = 0
 
-        self.num_post_device = 0
-        self.num_delete_device = 0
+        self.data["num_post_device"] = 0
+        self.data["num_delete_device"] = 0
 
-        self.num_post_devices = 0
-        self.num_post_entity_service = 0
+        self.data["num_post_devices"] = 0
+        self.data["num_post_entity_service"] = 0
 
-        self.num_get_module_activation = 0
-        self.num_post_module_activation = 0
-        self.num_delete_module_activation = 0
+        self.data["num_get_module_activation"] = 0
+        self.data["num_post_module_activation"] = 0
+        self.data["num_delete_module_activation"] = 0
 
-        self.num_update_loglevel = 0
+        self.data["num_update_loglevel"] = 0
 
-        self.num_post_ldap = 0
-        self.num_get_ldap = 0
-        self.num_put_ldap = 0
-        self.num_delete_ldap = 0
+        self.data["num_post_ldap"] = 0
+        self.data["num_get_ldap"] = 0
+        self.data["num_put_ldap"] = 0
+        self.data["num_delete_ldap"] = 0
 
-        self.num_api_errors = 0
-        self.num_flow_errors = 0
+        self.data["num_api_errors"] = 0
+        self.data["num_flow_errors"] = 0
 
-        self.service = {}
-        self.sum = {
+        self.data["service"] = {}
+        self.data["sum"] = {
             "incomingTransactions": 0,
             "incomingTransactionRequestSize": 0,
             "incomingTransactionResponseSize": 0,
@@ -124,14 +132,12 @@ class Stats():
             "outgoingTransactionErrors": 0,
         }
 
-        self.lock = threading.Lock()
-
     def add_statistic(self, key, value):
         with self.lock:
-            current_value = getattr(self, key)
-            new_value = current_value + value
-            setattr(self, key, new_value)
-            
+            if key in self.data:
+                self.data[key] += value
+            else:
+                self.data[key] = value
 
     def collectMetrics(self, service_start, service_name, subservice_name,
                        request, response, flow):
