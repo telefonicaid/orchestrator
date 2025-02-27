@@ -101,6 +101,7 @@ Additionally, the following environment variables are available for orchestrator
 | Environment variable        | Configuration attribute   | Default value             |
 |:----------------------------|:--------------------------|:--------------------------|
 | PORT                        |                           | 8084                      |
+| STATS_PORT                  |                           | 8184                      |
 | PROCESSES                   |                           | 6                         |
 | THREADS                     |                           | 8                         |
 | HARAKIRI                    |                           | 80                        |
@@ -171,7 +172,7 @@ The following line will run the container exposing port `8084`, give it a name -
 
 As a result of this command, there is a orchestrator listening on port 8084 on localhost. Try to see if it works now with
 
-        curl localhost:8084/v1.0/version
+          curl localhost:8084/v1.0/version
 
 A few points to consider:
 
@@ -179,3 +180,124 @@ A few points to consider:
 * In `-p 8084:8084` the first value represents the port to listen in on localhost. If you wanted to run a second orchestrator on your machine you should change this value to something else, for example `-p 8184:8084`.
 * Anything after the name of the container image (in this case `orchestrator`) is interpreted as a parameter for the Orchestrator.
 
+In order to obtain stats about uwsgi orchestrator could be started using:
+
+          docker run -d --name orchestrator1 -p 8084:8084 -p 8184:8184 orchestrator
+
+To obtain a json about uwsgi stats:
+
+          curl -X GET localhost:8184
+
+An example of json stats:
+```
+{
+    "version":"2.0.28",
+    "listen_queue":0,
+    "listen_queue_errors":0,
+    "signal_queue":0,
+    "load":0,
+    "pid":31,
+    "uid":0,
+    "gid":0,
+    "cwd":"/var/env-orchestrator/lib/python3.11/site-packages/iotp-orchestrator",
+    "locks":[
+        {
+            "user 0":0
+        },
+        {
+            "signal":0
+        },
+        {
+            "filemon":0
+        },
+        {
+            "timer":0
+        },
+        {
+            "rbtimer":0
+        },
+        {
+            "cron":0
+        },
+        {
+            "rpc":0
+        },
+        {
+            "snmp":0
+        }
+    ],
+    "sockets":[
+        {
+            "name":"127.0.0.1:40885",
+            "proto":"uwsgi",
+            "queue":0,
+            "max_queue":256,
+            "shared":0,
+            "can_offload":0
+        }
+    ],
+    "workers":[
+        {
+            "id":1,
+            "pid":42,
+            "accepting":1,
+            "requests":1,
+            "delta_requests":1,
+            "exceptions":0,
+            "harakiri_count":0,
+            "signals":0,
+            "signal_queue":0,
+            "status":"idle",
+            "rss":0,
+            "vsz":0,
+            "running_time":53062,
+            "last_spawn":1740581846,
+            "respawn_count":1,
+            "tx":1102,
+            "avg_rt":26531,
+            "apps":[
+                {
+                    "id":0,
+                    "modifier1":0,
+                    "mountpoint":"",
+                    "startup_time":0,
+                    "requests":1,
+                    "exceptions":0,
+                    "chdir":""
+                }
+            ],
+            "cores":[
+                {
+                    "id":0,
+                    "requests":0,
+                    "static_requests":0,
+                    "routed_requests":0,
+                    "offloaded_requests":0,
+                    "write_errors":0,
+                    "read_errors":0,
+                    "in_request":0,
+                    "vars":[
+
+                    ],
+                    "req_info":             {
+
+                    }
+                },
+                {
+                    "id":1,
+                    "requests":1,
+                    "static_requests":0,
+                    "routed_requests":0,
+                    "offloaded_requests":0,
+                    "write_errors":0,
+                    "read_errors":0,
+                    "in_request":0,
+                    "vars":[
+
+                    ],
+                    "req_info":             {
+
+                    }
+                },
+
+```
