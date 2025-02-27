@@ -77,10 +77,11 @@ class ServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "ServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
-
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id=None):
         self.schema_name = "ServiceList"
@@ -115,24 +116,24 @@ class ServiceList_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_ADMIN_TOKEN",
                                      HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
-                Stats.num_get_service += 1
+                self.stats.add_statistic("num_get_service", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                     headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                     status=self.getStatusFromCode(result['code']),
                                     headers={"Fiware-Correlator": CORRELATOR_ID})
 
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -159,22 +160,22 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.data.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN),
                 request.data.get("NEW_SERVICE_DESCRIPTION", None))
             if 'error' not in result:
-                Stats.num_put_service += 1
+                self.stats.add_statistic("num_put_service", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request, service_id=None):
@@ -210,22 +211,22 @@ class ServiceList_RESTView(APIView, IoTConf):
                 request.data.get("SERVICE_ADMIN_PASSWORD", None),
                 request.data.get("SERVICE_ADMIN_TOKEN", HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
-                Stats.num_delete_service += 1
+                self.stats.add_statistic("num_delete_service", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 class ServiceCreate_RESTView(ServiceList_RESTView):
@@ -235,9 +236,11 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
     """
 
     schema_name = "ServiceCreate"
+    stats = None
 
     def __init__(self):
         ServiceList_RESTView.__init__(self)
+        self.stats = Stats()
 
     def post(self, request, *args, **kw):
         service_start = time.time()
@@ -273,22 +276,22 @@ class ServiceCreate_RESTView(ServiceList_RESTView):
                 request.data.get("CREATE_DEFAULT_GENERIC_ROLES", False)
             )
             if 'token' in result:
-                Stats.num_post_service += 1
+                self.stats.add_statistic("num_post_service", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -299,9 +302,11 @@ class SubServiceList_RESTView(APIView, IoTConf):
     """
     schema_name = "SubServiceList"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id=None, subservice_id=None):
         self.schema_name = "SubServiceList"
@@ -343,23 +348,23 @@ class SubServiceList_RESTView(APIView, IoTConf):
                            "code": "400" }
 
             if 'error' not in result:
-                Stats.num_get_subservice += 1
+                self.stats.add_statistic("num_get_subservice", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def put(self, request, service_id=None, subservice_id=None):
@@ -421,23 +426,23 @@ class SubServiceList_RESTView(APIView, IoTConf):
                            "code": "400" }                           
 
             if 'error' not in result:
-                Stats.num_put_subservice += 1
+                self.stats.add_statistic("num_put_subservice", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request, service_id=None, subservice_id=None):
@@ -479,22 +484,22 @@ class SubServiceList_RESTView(APIView, IoTConf):
                 result['error'] = "ERROR not service_id provided"
 
             if 'error' not in result:
-                Stats.num_delete_subservice += 1
+                self.stats.add_statistic("num_delete_subservice", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -503,9 +508,11 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
     { Create } SubService
     """
     schema_name = "SubServiceCreate"
+    stats = None
 
     def __init__(self):
         SubServiceList_RESTView.__init__(self)
+        self.stats = Stats()
 
     def post(self, request, service_id):
         service_start = time.time()
@@ -544,23 +551,23 @@ class SubServiceCreate_RESTView(SubServiceList_RESTView):
                 )
 
             if 'id' in result and ('error' not in result):
-                Stats.num_post_subservice += 1
+                self.stats.add_statistic("num_post_subservice", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 class User_RESTView(APIView, IoTConf):
@@ -570,9 +577,11 @@ class User_RESTView(APIView, IoTConf):
     """
     schema_name = "User"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def delete(self, request, service_id, user_id):
         service_start = time.time()
@@ -597,22 +606,22 @@ class User_RESTView(APIView, IoTConf):
                 request.data.get("USER_NAME", None),
                 request.data.get("USER_ID", user_id))
             if 'error' not in result:
-                Stats.num_delete_user += 1
+                self.stats.add_statistic("num_delete_user", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def put(self, request, service_id, user_id):
@@ -639,22 +648,22 @@ class User_RESTView(APIView, IoTConf):
                 request.data.get("USER_ID", user_id),
                 request.data.get("USER_DATA_VALUE"))
             if 'error' not in result:
-                Stats.num_put_user += 1
+                self.stats.add_statistic("num_put_user", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def get(self, request, service_id, user_id):
@@ -680,22 +689,22 @@ class User_RESTView(APIView, IoTConf):
                                request.data.get("SERVICE_ADMIN_TOKEN",
                                                 HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
-                Stats.num_get_user += 1
+                self.stats.add_statistic("num_get_user", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def post(self, request, service_id, user_id):
@@ -723,22 +732,22 @@ class User_RESTView(APIView, IoTConf):
                 request.data.get("NEW_USER_PASSWORD", None),
                 )
             if 'error' not in result:
-                Stats.num_post_user += 1
+                self.stats.add_statistic("num_post_user", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -749,9 +758,11 @@ class UserList_RESTView(APIView, IoTConf):
     """
     schema_name = "UserList"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id):
         service_start = time.time()
@@ -780,22 +791,22 @@ class UserList_RESTView(APIView, IoTConf):
                 request.data.get("COUNT", count))
 
             if 'error' not in result:
-                Stats.num_get_userlist += 1
+                self.stats.add_statistic("num_get_userlist", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def post(self, request, service_id):
@@ -824,22 +835,22 @@ class UserList_RESTView(APIView, IoTConf):
                 request.data.get("NEW_SERVICE_USER_EMAIL", None),
                 request.data.get("NEW_SERVICE_USER_DESCRIPTION", None))
             if 'id' in result:
-                Stats.num_post_userlist += 1
+                self.stats.add_statistic("num_post_userlist", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -850,9 +861,11 @@ class Group_RESTView(APIView, IoTConf):
     """
     schema_name = "Group"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def delete(self, request, service_id, group_id):
         service_start = time.time()
@@ -877,22 +890,22 @@ class Group_RESTView(APIView, IoTConf):
                 request.data.get("GROUP_NAME", None),
                 request.data.get("GROUP_ID", group_id))
             if 'error' not in result:
-                Stats.num_delete_group += 1
+                self.stats.add_statistic("num_delete_group", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def put(self, request, service_id, group_id):
@@ -919,22 +932,22 @@ class Group_RESTView(APIView, IoTConf):
                 request.data.get("GROUP_ID", group_id),
                 request.data.get("GROUP_DATA_VALUE"))
             if 'error' not in result:
-                Stats.num_put_group += 1
+                self.stats.add_statistic("num_put_group", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def get(self, request, service_id, group_id):
@@ -960,22 +973,22 @@ class Group_RESTView(APIView, IoTConf):
                                 request.data.get("SERVICE_ADMIN_TOKEN",
                                                  HTTP_X_AUTH_TOKEN))
             if 'error' not in result:
-                Stats.num_get_group += 1
+                self.stats.add_statistic("num_get_group", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -986,9 +999,11 @@ class GroupList_RESTView(APIView, IoTConf):
     """
     schema_name = "GroupList"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id):
         service_start = time.time()
@@ -1017,22 +1032,22 @@ class GroupList_RESTView(APIView, IoTConf):
                 request.data.get("COUNT", count))
 
             if 'error' not in result:
-                Stats.num_get_grouplist += 1
+                self.stats.add_statistic("num_get_grouplist", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def post(self, request, service_id):
@@ -1059,22 +1074,22 @@ class GroupList_RESTView(APIView, IoTConf):
                 request.data.get("NEW_SERVICE_GROUP_NAME", None),
                 request.data.get("NEW_SERVICE_GROUP_DESCRIPTION", None))
             if 'id' in result:
-                Stats.num_post_grouplist += 1
+                self.stats.add_statistic("num_post_grouplist", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1085,9 +1100,11 @@ class Role_RESTView(APIView, IoTConf):
     """
     schema_name = "Role"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id, role_id):
         service_start = time.time()
@@ -1117,23 +1134,23 @@ class Role_RESTView(APIView, IoTConf):
                 request.data.get("ROLE_ID", role_id))
 
             if 'error' not in result:
-                Stats.num_get_role_policies += 1
+                self.stats.add_statistic("num_get_role_policies", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1168,23 +1185,23 @@ class Role_RESTView(APIView, IoTConf):
             )
 
             if 'error' not in result:
-                Stats.num_post_role_policies += 1
+                self.stats.add_statistic("num_post_role_policies", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request, service_id, role_id):
@@ -1215,22 +1232,22 @@ class Role_RESTView(APIView, IoTConf):
                 request.data.get("ROLE_ID", role_id))
 
             if 'error' not in result:
-                Stats.num_delete_role += 1
+                self.stats.add_statistic("num_delete_role", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1241,10 +1258,11 @@ class RolePolicy_RESTView(APIView, IoTConf):
     """
     schema_name = "Role"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
-
+        self.stats = Stats()
 
     def get(self, request, service_id, role_id, policy_id):
         service_start = time.time()
@@ -1275,22 +1293,22 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 request.data.get("POLICY_NAME", policy_id))
 
             if 'error' not in result:
-                Stats.num_get_policy_from_role += 1
+                self.stats.add_statistic("num_get_policy_from_role", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request, service_id, role_id, policy_id):
@@ -1322,22 +1340,22 @@ class RolePolicy_RESTView(APIView, IoTConf):
                 request.data.get("POLICY_NAME", policy_id))
 
             if 'error' not in result:
-                Stats.num_delete_policy_from_role += 1
+                self.stats.add_statistic("num_delete_policy_from_role", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1348,9 +1366,11 @@ class RoleList_RESTView(APIView, IoTConf):
     """
     schema_name = "RoleList"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def post(self, request, service_id):
         service_start = time.time()
@@ -1376,23 +1396,23 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.data.get("NEW_ROLE_NAME", None),
                 request.data.get("XACML_POLICY", None))
             if 'error' not in result:
-                Stats.num_post_role += 1
+                self.stats.add_statistic("num_post_role", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def get(self, request, service_id=None):
@@ -1422,22 +1442,22 @@ class RoleList_RESTView(APIView, IoTConf):
                 request.data.get("COUNT", count))
 
             if 'error' not in result:
-                Stats.num_get_role += 1
+                self.stats.add_statistic("num_get_role", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1446,8 +1466,11 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
    { Read, Update, Delete} User Role Assignments in a Service or Subservice
 
     """
+    stats = None
+
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id):
         service_start = time.time()
@@ -1483,22 +1506,22 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                 request.data.get("EFFECTIVE", effective))
 
             if 'error' not in result:
-                Stats.num_get_roleassignment += 1
+                self.stats.add_statistic("num_get_roleassignment", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def post(self, request, service_id):
@@ -1561,22 +1584,22 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
-                Stats.num_post_roleassignment += 1
+                self.stats.add_statistic("num_post_roleassignment", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request, service_id):
@@ -1640,22 +1663,22 @@ class AssignRoleUser_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_USER_NAME", None),
                     request.data.get("SERVICE_USER_ID", user_id))
             if 'error' not in result:
-                Stats.num_delete_roleassignment += 1
+                self.stats.add_statistic("num_delete_roleassignment", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1664,8 +1687,11 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
    { Read, Update, Delete} Group Role Assignments in a Service or Subservice
 
     """
+    stats = None
+
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id):
         service_start = time.time()
@@ -1701,22 +1727,22 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                 request.data.get("EFFECTIVE", effective))
 
             if 'error' not in result:
-                Stats.num_get_roleassignment += 1
+                self.stats.add_statistic("num_get_roleassignment", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def post(self, request, service_id):
@@ -1779,22 +1805,22 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_GROUP_NAME", None),
                     request.data.get("SERVICE_GROUP_ID", group_id))
             if 'error' not in result:
-                Stats.num_post_roleassignment += 1
+                self.stats.add_statistic("num_post_roleassignment", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request, service_id):
@@ -1858,22 +1884,22 @@ class AssignRoleGroup_RESTView(APIView, IoTConf):
                     request.data.get("SERVICE_GROUP_NAME", None),
                     request.data.get("SERVICE_GROUP_ID", group_id))
             if 'error' not in result:
-                Stats.num_delete_roleassignment += 1
+                self.stats.add_statistic("num_delete_roleassignment", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1884,9 +1910,11 @@ class Trust_RESTView(APIView, IoTConf):
     """
     schema_name = "Trust"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def post(self, request, service_id):
         service_start = time.time()
@@ -1918,23 +1946,23 @@ class Trust_RESTView(APIView, IoTConf):
                 request.data.get("TRUSTOR_USER_ID", None)
             )
             if 'error' not in result:
-                Stats.num_post_trust += 1
+                self.stats.add_statistic("num_post_trust", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -1945,9 +1973,11 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
     """
     schema_name = "IOTModuleActivation"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request, service_id, subservice_id=None):
         service_start = time.time()
@@ -2008,24 +2038,24 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             result = {}
             if 'error' not in modules:
                 result['actived_modules'] = modules
-                Stats.num_get_module_activation += 1
+                self.stats.add_statistic("num_get_module_activation", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
                 result = modules
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def post(self, request, service_id, subservice_id=None, iot_module=None):
@@ -2089,23 +2119,23 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
             result = {}
             result['subscriptionid'] = sub
             if 'error' not in result:
-                Stats.num_post_module_activation += 1
+                self.stats.add_statistic("num_post_module_activation", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -2169,23 +2199,23 @@ class IOTModuleActivation_RESTView(APIView, IoTConf):
                 )
 
             if 'error' not in result:
-                Stats.num_delete_module_activation += 1
+                self.stats.add_statistic("num_delete_module_activation", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
 
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -2193,9 +2223,11 @@ class OrchVersion_RESTView(APIView, IoTConf):
     """
      { Read } Orchestrator Statistics
     """
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request):
         service_start = time.time()
@@ -2208,56 +2240,56 @@ class OrchVersion_RESTView(APIView, IoTConf):
             # Extract version and stats data
             result = {
                 "version": settings.ORC_VERSION,
-                "uptime": str(self.uptime),
+                "uptime": str(self.stats.uptime),
                 "IoTModules": settings.IOTMODULES,
                 "API_stats": {
-                    "num_post_service": self.num_post_service,
-                    "num_get_service": self.num_get_service,
-                    "num_put_service": self.num_put_service,
-                    "num_delete_service": self.num_delete_service,
+                    "num_post_service": self.stats.num_post_service,
+                    "num_get_service": self.stats.num_get_service,
+                    "num_put_service": self.stats.num_put_service,
+                    "num_delete_service": self.stats.num_delete_service,
 
-                    "num_post_subservice": self.num_post_subservice,
-                    "num_get_subservice": self.num_get_subservice,
-                    "num_put_subservice": self.num_put_subservice,
-                    "num_delete_subservice": self.num_delete_subservice,
+                    "num_post_subservice": self.stats.num_post_subservice,
+                    "num_get_subservice": self.stats.num_get_subservice,
+                    "num_put_subservice": self.stats.num_put_subservice,
+                    "num_delete_subservice": self.stats.num_delete_subservice,
 
-                    "num_delete_user": self.num_delete_user,
-                    "num_put_user": self.num_put_user,
-                    "num_get_user ": self.num_get_user,
-                    "num_post_user": self.num_post_user,
+                    "num_delete_user": self.stats.num_delete_user,
+                    "num_put_user": self.stats.num_put_user,
+                    "num_get_user ": self.stats.num_get_user,
+                    "num_post_user": self.stats.num_post_user,
 
-                    "num_get_userlist": self.num_get_userlist,
-                    "num_post_userlist": self.num_post_userlist,
+                    "num_get_userlist": self.stats.num_get_userlist,
+                    "num_post_userlist": self.stats.num_post_userlist,
 
-                    "num_delete_role": self.num_delete_role,
-                    "num_post_role": self.num_post_role,
-                    "num_get_role": self.num_get_role,
-                    "num_post_role_policies": self.num_post_role_policies,
-                    "num_get_role_policies": self.num_get_role_policies,
+                    "num_delete_role": self.stats.num_delete_role,
+                    "num_post_role": self.stats.num_post_role,
+                    "num_get_role": self.stats.num_get_role,
+                    "num_post_role_policies": self.stats.num_post_role_policies,
+                    "num_get_role_policies": self.stats.num_get_role_policies,
 
-                    "num_delete_policy_from_role": self.num_delete_policy_from_role,
-                    "num_get_policy_from_role": self.num_get_policy_from_role,
+                    "num_delete_policy_from_role": self.stats.num_delete_policy_from_role,
+                    "num_get_policy_from_role": self.stats.num_get_policy_from_role,
 
-                    "num_delete_roleassignment": self.num_delete_roleassignment,
-                    "num_post_roleassignment": self.num_post_roleassignment,
-                    "num_get_roleassignment": self.num_get_roleassignment,
+                    "num_delete_roleassignment": self.stats.num_delete_roleassignment,
+                    "num_post_roleassignment": self.stats.num_post_roleassignment,
+                    "num_get_roleassignment": self.stats.num_get_roleassignment,
 
-                    "num_post_trust": self.num_post_trust,
+                    "num_post_trust": self.stats.num_post_trust,
 
-                    "num_post_device": self.num_post_device,
-                    "num_delete_device": self.num_delete_device,
+                    "num_post_device": self.stats.num_post_device,
+                    "num_delete_device": self.stats.num_delete_device,
 
-                    "num_post_devices": self.num_post_devices,
-                    "num_post_entity_service": self.num_post_entity_service,
+                    "num_post_devices": self.stats.num_post_devices,
+                    "num_post_entity_service": self.stats.num_post_entity_service,
 
-                    "num_get_module_activation": self.num_get_module_activation,
-                    "num_post_module_activation": self.num_post_module_activation,
-                    "num_delete_module_activation": self.num_delete_module_activation,
+                    "num_get_module_activation": self.stats.num_get_module_activation,
+                    "num_post_module_activation": self.stats.num_post_module_activation,
+                    "num_delete_module_activation": self.stats.num_delete_module_activation,
 
-                    "num_update_loglevel": self.num_update_loglevel,
+                    "num_update_loglevel": self.stats.num_update_loglevel,
 
-                    "num_api_errors": self.num_api_errors,
-                    "num_flow_errors": self.num_flow_errors
+                    "num_api_errors": self.stats.num_api_errors,
+                    "num_flow_errors": self.stats.num_flow_errors
 
                 }
             }
@@ -2277,7 +2309,7 @@ class OrchVersion_RESTView(APIView, IoTConf):
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 
@@ -2285,9 +2317,11 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
     """
      { Update } Orchestrator LogLevel
     """
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request):
         service_start = time.time()
@@ -2313,7 +2347,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def put(self, request):
@@ -2376,7 +2410,7 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
             logger.debug("Orchestrator has set logLevel to: %s" % json.dumps(
                 logLevel, indent=3))
 
-            Stats.num_update_loglevel += 1
+            self.stats.add_statistic("num_update_loglevel", 1)
             response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
@@ -2390,16 +2424,18 @@ class OrchLogLevel_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
 class OrchMetrics_RESTView(APIView, IoTConf):
     """
      { Read, Update } Orchestrator Common Metrics
     """
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        self.stats = Stats()
 
     def get(self, request):
         service_start = time.time()
@@ -2408,10 +2444,10 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         reset = request.GET.get('reset', False) == "true"
 
         try:
-            result = self.composeMetrics()
+            result = self.stats.composeMetrics()
 
             if reset:
-                self.resetMetrics()
+                self.stats.resetMetrics()
 
             response = Response(result, status=status.HTTP_200_OK,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
@@ -2425,7 +2461,7 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response
 
     def delete(self, request):
@@ -2434,8 +2470,8 @@ class OrchMetrics_RESTView(APIView, IoTConf):
         CORRELATOR_ID = self.getCorrelatorIdHeader(request)
 
         try:
-            result = self.composeMetrics()
-            self.resetMetrics()
+            result = self.stats.composeMetrics()
+            self.stats.resetMetrics()
             response = Response(result, status=status.HTTP_204_NO_CONTENT,
                             headers={"Fiware-Correlator": CORRELATOR_ID})
 
@@ -2448,5 +2484,5 @@ class OrchMetrics_RESTView(APIView, IoTConf):
                 status=status.HTTP_400_BAD_REQUEST,
                 headers={"Fiware-Correlator": CORRELATOR_ID}
             )
-        self.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
+        self.stats.collectMetrics(service_start, service_name, subservice_name, request, response, flow)
         return response

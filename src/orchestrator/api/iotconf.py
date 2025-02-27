@@ -26,11 +26,11 @@ import logging
 from rest_framework import status
 from rest_framework.throttling import AnonRateThrottle
 from django.conf import settings
-from orchestrator.api.stats import Stats
+#from orchestrator.api.stats import Stats
 
 logger = logging.getLogger('orchestrator_api')
 
-class IoTConf(Stats):
+class IoTConf():
     throttle_classes = (AnonRateThrottle,)
 
     # Class to extract Keystone/Keypass conf from django settings
