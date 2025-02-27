@@ -41,8 +41,6 @@ from orchestrator.common.util import ContextFilterService
 from orchestrator.common.util import ContextFilterSubService
 from orchestrator.common.util import ContextFilterFrom
 
-from orchestrator.api.stats import manager, shared_data
-
 logger = logging.getLogger('orchestrator_api')
 logger.addFilter(ContextFilterCorrelatorId("n/a"))
 logger.addFilter(ContextFilterTransactionId("n/a"))

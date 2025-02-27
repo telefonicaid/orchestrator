@@ -26,7 +26,6 @@ import logging
 from rest_framework import status
 from rest_framework.throttling import AnonRateThrottle
 from django.conf import settings
-#from orchestrator.api.stats import Stats
 
 logger = logging.getLogger('orchestrator_api')
 

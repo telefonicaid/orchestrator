@@ -55,7 +55,7 @@ from orchestrator.common.util import ContextFilterSubService
 from orchestrator.common.util import ContextFilterFrom
 
 from orchestrator.api.iotconf import IoTConf
-from orchestrator.api.stats import Stats, manager, shared_data
+from orchestrator.api.stats import Stats
 
 logger = logging.getLogger('orchestrator_api')
 logger.addFilter(ContextFilterCorrelatorId("n/a"))

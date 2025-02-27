@@ -27,10 +27,6 @@ import threading
 
 from django.conf import settings
 from datetime import datetime
-from multiprocessing import Manager
-
-manager = Manager()
-shared_data = manager.dict()
 
 def singleton(cls):
     instances = {}
@@ -50,87 +46,92 @@ class Stats():
 
     def __init__(self):
 
-        self.data = shared_data
+        self.data = settings.SHARED_DATA
         self.lock = threading.Lock()
 
-        # Start Time
-        self.data["uptime"] = datetime.utcnow()
+        with self.lock:
+            if 'initialized' not in self.data:
+                # Start Time
+                self.data["uptime"] = datetime.utcnow()
 
-        # All stats
-        self.data["num_post_service"] = 0
-        self.data["num_get_service"] = 0
-        self.data["num_put_service"] = 0
-        self.data["num_delete_service"] = 0
+                # All stats
+                self.data["num_post_service"] = 0
+                self.data["num_get_service"] = 0
+                self.data["num_put_service"] = 0
+                self.data["num_delete_service"] = 0
 
-        self.data["num_post_subservice"] = 0
-        self.data["num_get_subservice"] = 0
-        self.data["num_put_subservice"] = 0
-        self.data["num_delete_subservice"] = 0
+                self.data["num_post_subservice"] = 0
+                self.data["num_get_subservice"] = 0
+                self.data["num_put_subservice"] = 0
+                self.data["num_delete_subservice"] = 0
 
-        self.data["num_delete_user"] = 0
-        self.data["num_put_user"] = 0
-        self.data["num_get_user"] = 0
-        self.data["num_post_user"] = 0
+                self.data["num_delete_user"] = 0
+                self.data["num_put_user"] = 0
+                self.data["num_get_user"] = 0
+                self.data["num_post_user"] = 0
 
-        self.data["num_get_userlist"] = 0
-        self.data["num_post_userlist"] = 0
+                self.data["num_get_userlist"] = 0
+                self.data["num_post_userlist"] = 0
 
-        self.data["num_delete_group"] = 0
-        self.data["num_put_group"] = 0
-        self.data["num_get_group"] = 0
-        self.data["num_post_group"] = 0
+                self.data["num_delete_group"] = 0
+                self.data["num_put_group"] = 0
+                self.data["num_get_group"] = 0
+                self.data["num_post_group"] = 0
 
-        self.data["num_get_grouplist"] = 0
-        self.data["num_post_grouplist"] = 0
+                self.data["num_get_grouplist"] = 0
+                self.data["num_post_grouplist"] = 0
 
-        self.data["num_delete_role"] = 0
-        self.data["num_post_role"] = 0
-        self.data["num_get_role"] = 0
-        self.data["num_get_role_policies"] = 0
-        self.data["num_post_role_policies"] = 0
+                self.data["num_delete_role"] = 0
+                self.data["num_post_role"] = 0
+                self.data["num_get_role"] = 0
+                self.data["num_get_role_policies"] = 0
+                self.data["num_post_role_policies"] = 0
 
-        self.data["num_delete_policy_from_role"] = 0
-        self.data["num_get_policy_from_role"] = 0
+                self.data["num_delete_policy_from_role"] = 0
+                self.data["num_get_policy_from_role"] = 0
 
-        self.data["num_delete_roleassignment"] = 0
-        self.data["num_post_roleassignment"] = 0
-        self.data["num_get_roleassignment"] = 0
+                self.data["num_delete_roleassignment"] = 0
+                self.data["num_post_roleassignment"] = 0
+                self.data["num_get_roleassignment"] = 0
 
-        self.data["num_post_trust"] = 0
+                self.data["num_post_trust"] = 0
 
-        self.data["num_post_device"] = 0
-        self.data["num_delete_device"] = 0
+                self.data["num_post_device"] = 0
+                self.data["num_delete_device"] = 0
 
-        self.data["num_post_devices"] = 0
-        self.data["num_post_entity_service"] = 0
+                self.data["num_post_devices"] = 0
+                self.data["num_post_entity_service"] = 0
 
-        self.data["num_get_module_activation"] = 0
-        self.data["num_post_module_activation"] = 0
-        self.data["num_delete_module_activation"] = 0
+                self.data["num_get_module_activation"] = 0
+                self.data["num_post_module_activation"] = 0
+                self.data["num_delete_module_activation"] = 0
 
-        self.data["num_update_loglevel"] = 0
+                self.data["num_update_loglevel"] = 0
 
-        self.data["num_post_ldap"] = 0
-        self.data["num_get_ldap"] = 0
-        self.data["num_put_ldap"] = 0
-        self.data["num_delete_ldap"] = 0
+                self.data["num_post_ldap"] = 0
+                self.data["num_get_ldap"] = 0
+                self.data["num_put_ldap"] = 0
+                self.data["num_delete_ldap"] = 0
 
-        self.data["num_api_errors"] = 0
-        self.data["num_flow_errors"] = 0
+                self.data["num_api_errors"] = 0
+                self.data["num_flow_errors"] = 0
 
-        self.data["service"] = {}
-        self.data["sum"] = {
-            "incomingTransactions": 0,
-            "incomingTransactionRequestSize": 0,
-            "incomingTransactionResponseSize": 0,
-            "incomingTransactionErrors": 0,
-            "serviceTime": 0,
-            "serviceTimeTotal": 0,
-            "outgoingTransactions": 0,
-            "outgoingTransactionRequestSize": 0,
-            "outgoingTransactionResponseSize": 0,
-            "outgoingTransactionErrors": 0,
-        }
+                self.data["service"] = {}
+                self.data["sum"] = {
+                    "incomingTransactions": 0,
+                    "incomingTransactionRequestSize": 0,
+                    "incomingTransactionResponseSize": 0,
+                    "incomingTransactionErrors": 0,
+                    "serviceTime": 0,
+                    "serviceTimeTotal": 0,
+                    "outgoingTransactions": 0,
+                    "outgoingTransactionRequestSize": 0,
+                    "outgoingTransactionResponseSize": 0,
+                    "outgoingTransactionErrors": 0,
+                }
+                self.data['initialized'] = True
+
+
 
     def add_statistic(self, key, value):
         with self.lock:
@@ -161,7 +162,7 @@ class Stats():
                 }
 
             if service_name and not service_name in self.service:
-                self.service[service_name] = {
+                self.data.service[service_name] = {
                     "sum": {
                         "incomingTransactions": 0,
                         "incomingTransactionRequestSize": 0,
@@ -178,8 +179,8 @@ class Stats():
                 }
 
             if (service_name and subservice_name and
-                not subservice_name in self.service[service_name]["subservs"]):
-                self.service[service_name]["subservs"][subservice_name] = {
+                not subservice_name in self.data.service[service_name]["subservs"]):
+                self.data.service[service_name]["subservs"][subservice_name] = {
                     "incomingTransactions": 0,
                     "incomingTransactionRequestSize": 0,
                     "incomingTransactionResponseSize": 0,
@@ -201,54 +202,54 @@ class Stats():
                 if subservice_name:
                     # Service and Subservice
                     if not transactionError:
-                        self.service[service_name]["subservs"][subservice_name]["incomingTransactions"] += 1
+                        self.data.service[service_name]["subservs"][subservice_name]["incomingTransactions"] += 1
                     else:
-                        self.service[service_name]["subservs"][subservice_name]["incomingTransactionErrors"] += 1
-                    self.service[service_name]["subservs"][subservice_name]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
-                    self.service[service_name]["subservs"][subservice_name]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
-                    self.service[service_name]["subservs"][subservice_name]["serviceTimeTotal"] += (service_stop - service_start)
+                        self.data.service[service_name]["subservs"][subservice_name]["incomingTransactionErrors"] += 1
+                    self.data.service[service_name]["subservs"][subservice_name]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
+                    self.data.service[service_name]["subservs"][subservice_name]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
+                    self.data.service[service_name]["subservs"][subservice_name]["serviceTimeTotal"] += (service_stop - service_start)
 
-                    self.service[service_name]["subservs"][subservice_name]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
-                    self.service[service_name]["subservs"][subservice_name]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
-                    self.service[service_name]["subservs"][subservice_name]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
-                    self.service[service_name]["subservs"][subservice_name]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
-                    self.service[service_name]["subservs"][subservice_name]["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
+                    self.data.service[service_name]["subservs"][subservice_name]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
+                    self.data.service[service_name]["subservs"][subservice_name]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
+                    self.data.service[service_name]["subservs"][subservice_name]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
+                    self.data.service[service_name]["subservs"][subservice_name]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
+                    self.data.service[service_name]["subservs"][subservice_name]["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
 
 
 
                 # Service
                 if not transactionError:
-                    self.service[service_name]["sum"]["incomingTransactions"] += 1
+                    self.data.service[service_name]["sum"]["incomingTransactions"] += 1
                 else:
-                    self.service[service_name]["sum"]["incomingTransactionErrors"] += 1
-                self.service[service_name]["sum"]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
-                self.service[service_name]["sum"]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
-                self.service[service_name]["sum"]["serviceTimeTotal"] += (service_stop - service_start)
-                self.service[service_name]["sum"]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
-                self.service[service_name]["sum"]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
-                self.service[service_name]["sum"]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
-                self.service[service_name]["sum"]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
-                self.service[service_name]["sum"]["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
+                    self.data.service[service_name]["sum"]["incomingTransactionErrors"] += 1
+                self.data.service[service_name]["sum"]["incomingTransactionRequestSize"] += len(json.dumps(request.data))
+                self.data.service[service_name]["sum"]["incomingTransactionResponseSize"] += len(json.dumps(response.data))
+                self.data.service[service_name]["sum"]["serviceTimeTotal"] += (service_stop - service_start)
+                self.data.service[service_name]["sum"]["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
+                self.data.service[service_name]["sum"]["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
+                self.data.service[service_name]["sum"]["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
+                self.data.service[service_name]["sum"]["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
+                self.data.service[service_name]["sum"]["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
 
             # Sum
             if not transactionError:
-                self.sum["incomingTransactions"] += 1
+                self.data.sum["incomingTransactions"] += 1
             else:
-                self.sum["incomingTransactionErrors"] += 1
-            self.sum["incomingTransactionRequestSize"] += len(json.dumps(request.data))
-            self.sum["incomingTransactionResponseSize"] += len(json.dumps(response.data))
-            self.sum["serviceTimeTotal"] += (service_stop - service_start)
-            self.sum["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
-            self.sum["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
-            self.sum["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
-            self.sum["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
-            self.sum["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
+                self.data.sum["incomingTransactionErrors"] += 1
+            self.data.sum["incomingTransactionRequestSize"] += len(json.dumps(request.data))
+            self.data.sum["incomingTransactionResponseSize"] += len(json.dumps(response.data))
+            self.data.sum["serviceTimeTotal"] += (service_stop - service_start)
+            self.data.sum["outgoingTransactions"] += flow_metrics["outgoingTransactions"]
+            self.data.sum["outgoingTransactionRequestSize"] += flow_metrics["outgoingTransactionRequestSize"]
+            self.data.sum["outgoingTransactionResponseSize"] += flow_metrics["outgoingTransactionResponseSize"]
+            self.data.sum["outgoingTransactionErrors"] += flow_metrics["outgoingTransactionErrors"]
+            self.data.sum["serviceTimeTotal"] += flow_metrics["serviceTimeTotal"]
 
 
     def resetMetrics(self):
         with self.lock:
-            self.service = {}
-            self.sum = {
+            self.data.service = {}
+            self.data.sum = {
                 "incomingTransactions": 0,
                 "incomingTransactionRequestSize": 0,
                 "incomingTransactionResponseSize": 0,
@@ -265,8 +266,8 @@ class Stats():
     def composeMetrics(self):
         with self.lock:
             result = {
-                "service": self.service,
-                "sum": self.sum
+                "service": self.data.service,
+                "sum": self.data.sum
             }
 
             if not settings.ORC_EXTENDED_METRICS:

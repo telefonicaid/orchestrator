@@ -17,12 +17,20 @@ import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orchestrator.settings.dev")
 
+from multiprocessing import Manager
+manager = Manager()
+shared_data = manager.dict()
+
+from django.conf import settings
+settings.SHARED_DATA = shared_data
+
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
+
 
 
 #
