@@ -25,12 +25,14 @@ Orchestrator is used to:
 - Create/List Trust Tokens
 - Activate / deactivate IoT Modules
 - Retrieve statistics and metrics about API usage
+- Retrieve stats about UWSGI server usage
 - Create, List, Modify LDAP Users
 - Create, List, Modify LDAP Groups
 
 Orchestrator is based mainly on:
 - Python 3 needed
 - Django / DjangoRestFramework
+- UWSGI
 
 Orchestrator relies on these other IoT parts:
 - Identity Manager: Keystone (mandatory)

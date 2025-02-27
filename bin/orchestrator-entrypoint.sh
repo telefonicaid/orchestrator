@@ -5,6 +5,7 @@
 #
 # UWSGI
 [[ "${PORT}" == "" ]] && export PORT=8084
+[[ "${STATS_PORT}" == "" ]] && export STATS_PORT=8184
 [[ "${PROCESSES}" == "" ]] && export PROCESSES=6
 [[ "${THREADS}" == "" ]] && export THREADS=8
 [[ "${HARAKIRI}" == "" ]] && export HARAKIRI=80
@@ -320,6 +321,7 @@ while ! nc -zvw10 $KEYPASS_HOST $KEYPASS_PORT ; do sleep 10; done
 
 echo "Using UWSGI configuration options: "
 echo "  PORT=${PORT}"
+echo "  STATS_PORT=${STATS_PORT}"
 echo "  PROCESSES=${PROCESSES}"
 echo "  THREADS=${THREADS}"
 echo "  HARAKIRI=${HARAKIRI}"
@@ -329,6 +331,8 @@ echo "  QUEUE_SIZE=${QUEUE_SIZE}"
 echo "  UWSGI_BUFFER_SIZE=${UWSGI_BUFFER_SIZE}"
 
 uwsgi --http :$PORT \
+      --stats :$STATS_PORT \
+      --stats-http \
       --chdir /opt/orchestrator \
       --wsgi-file wsgi.py \
       --env $ENVIRONMENT \
@@ -341,4 +345,5 @@ uwsgi --http :$PORT \
       --listen $QUEUE_SIZE \
       --vacuum \
       --enable-threads \
-      --buffer-size  $UWSGI_BUFFER_SIZE
+      --buffer-size $UWSGI_BUFFER_SIZE
+
