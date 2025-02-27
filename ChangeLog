@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-ADD: Print Uwsgi configuration options at docker startup
+ADD: Print Uwsgi configuration options at docker startup (#376)
 
 4.9.0
 
