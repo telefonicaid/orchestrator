@@ -2240,60 +2240,8 @@ class OrchVersion_RESTView(APIView, IoTConf):
             # Extract version and stats data
             result = {
                 "version": settings.ORC_VERSION,
-                "uptime": str(self.stats.data["uptime"]),
                 "IoTModules": settings.IOTMODULES,
-                "API_stats": #self.stats.data
-
-                {
-                    "num_post_service": self.stats.data["num_post_service"],
-                    "num_get_service": self.stats.data["num_get_service"],
-                    "num_put_service": self.stats.data["num_put_service"],
-                    "num_delete_service": self.stats.data["num_delete_service"],
-
-                    "num_post_subservice": self.stats.data["num_post_subservice"],
-                    "num_get_subservice": self.stats.data["num_get_subservice"],
-                    "num_put_subservice": self.stats.data["num_put_subservice"],
-                    "num_delete_subservice": self.stats.data["num_delete_subservice"],
-
-                    "num_delete_user": self.stats.data["num_delete_user"],
-                    "num_put_user": self.stats.data["num_put_user"],
-                    "num_get_user ": self.stats.data["num_get_user"],
-                    "num_post_user": self.stats.data["num_post_user"],
-
-                    "num_get_userlist": self.stats.data["num_get_userlist"],
-                    "num_post_userlist": self.stats.data["num_post_userlist"],
-
-                    "num_delete_role": self.stats.data["num_delete_role"],
-                    "num_post_role": self.stats.data["num_post_role"],
-                    "num_get_role": self.stats.data["num_get_role"],
-                    "num_post_role_policies": self.stats.data["num_post_role_policies"],
-                    "num_get_role_policies": self.stats.data["num_get_role_policies"],
-
-                    "num_delete_policy_from_role": self.stats.data["num_delete_policy_from_role"],
-                    "num_get_policy_from_role": self.stats.data["num_get_policy_from_role"],
-
-                    "num_delete_roleassignment": self.stats.data["num_delete_roleassignment"],
-                    "num_post_roleassignment": self.stats.data["num_post_roleassignment"],
-                    "num_get_roleassignment": self.stats.data["num_get_roleassignment"],
-
-                    "num_post_trust": self.stats.data["num_post_trust"],
-
-                    "num_post_device": self.stats.data["num_post_device"],
-                    "num_delete_device": self.stats.data["num_delete_device"],
-
-                    "num_post_devices": self.stats.data["num_post_devices"],
-                    "num_post_entity_service": self.stats.data["num_post_entity_service"],
-
-                    "num_get_module_activation": self.stats.data["num_get_module_activation"],
-                    "num_post_module_activation": self.stats.data["num_post_module_activation"],
-                    "num_delete_module_activation": self.stats.data["num_delete_module_activation"],
-
-                    "num_update_loglevel": self.stats.data["num_update_loglevel"],
-
-                    "num_api_errors": self.stats.data["num_api_errors"],
-                    "num_flow_errors": self.stats.data["num_flow_errors"]
-
-                }
+                "API_stats": dict(self.stats.data)
             }
 
             # print it into a trace

@@ -52,69 +52,7 @@ class Stats():
         with self.lock:
             if 'initialized' not in self.data:
                 # Start Time
-                self.data["uptime"] = datetime.utcnow()
-
-                # All stats
-                self.data["num_post_service"] = 0
-                self.data["num_get_service"] = 0
-                self.data["num_put_service"] = 0
-                self.data["num_delete_service"] = 0
-
-                self.data["num_post_subservice"] = 0
-                self.data["num_get_subservice"] = 0
-                self.data["num_put_subservice"] = 0
-                self.data["num_delete_subservice"] = 0
-
-                self.data["num_delete_user"] = 0
-                self.data["num_put_user"] = 0
-                self.data["num_get_user"] = 0
-                self.data["num_post_user"] = 0
-
-                self.data["num_get_userlist"] = 0
-                self.data["num_post_userlist"] = 0
-
-                self.data["num_delete_group"] = 0
-                self.data["num_put_group"] = 0
-                self.data["num_get_group"] = 0
-                self.data["num_post_group"] = 0
-
-                self.data["num_get_grouplist"] = 0
-                self.data["num_post_grouplist"] = 0
-
-                self.data["num_delete_role"] = 0
-                self.data["num_post_role"] = 0
-                self.data["num_get_role"] = 0
-                self.data["num_get_role_policies"] = 0
-                self.data["num_post_role_policies"] = 0
-
-                self.data["num_delete_policy_from_role"] = 0
-                self.data["num_get_policy_from_role"] = 0
-
-                self.data["num_delete_roleassignment"] = 0
-                self.data["num_post_roleassignment"] = 0
-                self.data["num_get_roleassignment"] = 0
-
-                self.data["num_post_trust"] = 0
-
-                self.data["num_post_device"] = 0
-                self.data["num_delete_device"] = 0
-
-                self.data["num_post_devices"] = 0
-                self.data["num_post_entity_service"] = 0
-
-                self.data["num_get_module_activation"] = 0
-                self.data["num_post_module_activation"] = 0
-                self.data["num_delete_module_activation"] = 0
-
-                self.data["num_update_loglevel"] = 0
-
-                self.data["num_post_ldap"] = 0
-                self.data["num_get_ldap"] = 0
-                self.data["num_put_ldap"] = 0
-                self.data["num_delete_ldap"] = 0
-
-                self.data["num_api_errors"] = 0
-                self.data["num_flow_errors"] = 0
+                self.data["uptime"] = str(datetime.utcnow())
 
                 self.data["service"] = {}
                 self.data["sum"] = {
