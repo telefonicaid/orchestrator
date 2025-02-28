@@ -35,7 +35,6 @@ from orchestrator.api import parsers
 from orchestrator.api.iotconf import IoTConf
 from orchestrator.api.stats import Stats
 
-
 class LdapUser_RESTView(APIView, IoTConf):
     """
     { Create, Read, Update, Delete } LDAP Users
@@ -43,10 +42,11 @@ class LdapUser_RESTView(APIView, IoTConf):
     """
     schema_name = "LdapUser"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
-
+        stats = Stats()
 
     def post(self, request):
         response = flow = None
@@ -90,16 +90,16 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.data.get("GROUP_NAMES", None))
 
             if 'error' not in result:
-                Stats.num_post_ldap += 1
+                self.stats.add_statistic("num_post_ldap", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -145,16 +145,16 @@ class LdapUser_RESTView(APIView, IoTConf):
             else:
                 result = { "error": "not valid parameters", "code": 400 }
             if 'error' not in result:
-                Stats.num_get_ldap += 1
+                stats.add_statistic("num_get_ldap", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -184,16 +184,16 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.data.get("USER_PASSWORD", None),
                                request.data.get("USER_DATA", None))
             if 'error' not in result:
-                Stats.num_put_ldap += 1
+                self.stats.add_statistic("num_put_ldap", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -223,16 +223,16 @@ class LdapUser_RESTView(APIView, IoTConf):
                                request.data.get("USER_NAME", None),
                                request.data.get("USER_PASSWORD", None))
             if 'error' not in result:
-                Stats.num_delete_ldap += 1
+                self.stats.add_statistic("num_delete_ldap", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -248,9 +248,11 @@ class LdapAuth_RESTView(APIView, IoTConf):
     """
     schema_name = "LdapUser"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
+        stats = Stats()
 
     def post(self, request):
         response = flow = None
@@ -272,16 +274,16 @@ class LdapAuth_RESTView(APIView, IoTConf):
                                request.data.get("USER_PASSWORD", None))
 
             if 'error' not in result:
-                Stats.num_post_ldap += 1
+                self.stats.add_statistic("num_post_ldap", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -297,10 +299,11 @@ class LdapGroup_RESTView(APIView, IoTConf):
     """
     schema_name = "LdapGroup"
     parser_classes = (parsers.JSONSchemaParser,)
+    stats = None
 
     def __init__(self):
         IoTConf.__init__(self)
-
+        stats = Stats()
 
     def post(self, request):
         response = flow = None
@@ -332,16 +335,16 @@ class LdapGroup_RESTView(APIView, IoTConf):
                 request.data.get("NEW_GROUP_DESCRIPTION", None))
 
             if 'error' not in result:
-                Stats.num_post_ldap += 1
+                self.stats.add_statistic("num_post_ldap", 1)
                 response = Response(result, status=status.HTTP_201_CREATED,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -382,16 +385,16 @@ class LdapGroup_RESTView(APIView, IoTConf):
             else:
                 result = { "error": "not valid parameters", "code": 400 }
             if 'error' not in result:
-                Stats.num_get_ldap += 1
+                self.stats.add_statistic("num_get_ldap", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -421,16 +424,16 @@ class LdapGroup_RESTView(APIView, IoTConf):
                                request.data.get("GROUP_NAME", None),
                                request.data.get("GROUP_DESCRIPTION", None))
             if 'error' not in result:
-                Stats.num_put_ldap += 1
+                self.stats.add_statistic("num_put_ldap", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
@@ -459,16 +462,16 @@ class LdapGroup_RESTView(APIView, IoTConf):
                                request.data.get("LDAP_ADMIN_PASSWORD", None),
                                request.data.get("GROUP_NAME", None))
             if 'error' not in result:
-                Stats.num_delete_ldap += 1
+                self.stats.add_statistic("num_delete_ldap", 1)
                 response = Response(result, status=status.HTTP_204_NO_CONTENT,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                Stats.num_flow_errors += 1
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
         except ParseError as error:
-            Stats.num_api_errors += 1
+            self.stats.add_statistic("num_api_errors", 1)
             response = Response(
                 'Input validation error - {0}'.format(error.detail),
                 status=status.HTTP_400_BAD_REQUEST,
