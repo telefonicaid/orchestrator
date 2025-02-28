@@ -51,9 +51,7 @@ class Stats():
 
         with self.lock:
             if 'initialized' not in self.data:
-                # Start Time
                 self.data["uptime"] = str(datetime.utcnow())
-
                 self.data["service"] = {}
                 self.data["sum"] = {
                     "incomingTransactions": 0,
@@ -69,14 +67,15 @@ class Stats():
                 }
                 self.data['initialized'] = True
 
-
-
     def add_statistic(self, key, value):
         with self.lock:
             if key in self.data:
                 self.data[key] += value
             else:
                 self.data[key] = value
+
+    def get_statistics(self):
+        return dict(self.data)
 
     def collectMetrics(self, service_start, service_name, subservice_name,
                        request, response, flow):
