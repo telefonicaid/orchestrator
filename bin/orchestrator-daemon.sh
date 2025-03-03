@@ -17,6 +17,7 @@ VIRTUALENV=/var/env-orchestrator
 ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python3.11/site-packages/iotp-orchestrator
 UWGSI=/var/env-orchestrator/bin/uwsgi
 PORT=8084
+STATS_PORT=8184
 PROCESSES=6
 THREADS=8
 HARAKIRI=190
@@ -33,6 +34,7 @@ USER="orchestrator"
 [ -f /etc/default/orchestrator-daemon ] && . /etc/default/orchestrator-daemon
 
 exe="$UWGSI --http :${PORT} \
+--stats $STATS_PORT \
 --chdir $ORCHESTRATOR_DIR \
 --wsgi-file wsgi.py \
 --env $ENVIRONMENT \
