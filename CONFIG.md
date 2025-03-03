@@ -194,6 +194,7 @@ VIRTUALENV=/var/env-orchestrator
 ORCHESTRATOR_DIR=${VIRTUALENV}/lib/python2.6/site-packages/iotp-orchestrator
 UWGSI=uwsgi
 PORT=8084
+STATS_PORT=8184
 PROCESSES=6
 THREADS=8
 HARAKIRI=190

@@ -2,7 +2,7 @@ CHANGES
 =======
 
 FIX: metrics usage are the same by all process/threads (#58)
-ADD: Add stats endpoint for uwsgi (#376)
+ADD: Add new endpoint (by default 8184) for uwsgi stats (#376)
 ADD: Print Uwsgi configuration options at docker startup (#376)
 UPGRADE: django from 4.2.18 to 4.2.19
 
