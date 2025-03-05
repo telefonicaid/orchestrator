@@ -157,11 +157,11 @@ class Stats():
                     "outgoingTransactionResponseSize": 0,
                     "outgoingTransactionErrors": 0,
                 }
-            if service_name != None and not service_name in self.data:
+            if service_name != None and not service_name in self.data["service"]:
                 self.init_statistic_service(service_name)
 
             if (service_name != None and subservice_name != None and
-                not subservice_name in self.data[service_name]):
+                not subservice_name in self.data["service"][service_name]["subservs"]):
                 self.init_statistic_subservice(service_name, subservice_name)
 
             # Analize "response"" to know if is a Response about an error or not
@@ -208,8 +208,8 @@ class Stats():
             self.add_statistic_sum("incomingTransactionResponseSize", len(json.dumps(response.data)))
             self.add_statistic_sum("serviceTimeTotal", (service_stop - service_start))
             self.add_statistic_sum("outgoingTransactions", flow_metrics["outgoingTransactions"])
-            self.add_statistic_sum("outgoingTransactionRequestSize", flow_metrics["outgoingTransactions"])
-            self.add_statistic_sum("outgoingTransactionResponseSize", flow_metrics["outgoingTransactionRequestSize"])
+            self.add_statistic_sum("outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
+            self.add_statistic_sum("outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
             self.add_statistic_sum("outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
             self.add_statistic_sum("serviceTimeTotal", flow_metrics["serviceTimeTotal"])
 
