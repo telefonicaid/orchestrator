@@ -149,7 +149,7 @@ Additionally, the following environment variables are available for orchestrator
 | PEP_PASSWORD                | PEP.password              | pep                       |
 | IOTAGENT_USER               | IOTAGENT.user             | iotagent                  |
 | IOTAGENT_PASSWORD           | IOTAGENT.password         | iotagent                  |
-
+| ORC_EXTENDED_METRICS        | ORC_EXTENDED_METRICS      | false                     |
 
 
 ## Build the image

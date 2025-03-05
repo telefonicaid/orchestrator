@@ -23,6 +23,7 @@
 #
 import logging
 import uuid
+from functools import reduce
 
 from orchestrator.core.keystone import IdMKeystoneOperations as IdMOperations
 from orchestrator.core.keypass import AccCKeypassOperations as AccCOperations
@@ -252,15 +253,14 @@ class FlowBase(object):
 
 
     def get_extended_token(self, USER_TOKEN):
-        token_extended = USER_TOKEN
+        token_extended = {
+            "token": USER_TOKEN
+        }
         if USER_TOKEN:
             try:
                 token_detail = self.idm.getTokenDetail(USER_TOKEN)
+                token_extended["user"] = token_detail['token']['user']['name']
 
-                token_extended  = {
-                    "token": USER_TOKEN,
-                    "user": token_detail['token']['user']['name']
-                }
                 # Include service scope if available
                 if 'domain' in token_detail['token']['user']:
                     token_extended['domain'] = \
@@ -273,10 +273,8 @@ class FlowBase(object):
 
             except Exception as ex:
                 # Probably expired?
-                token_extended  = {
-                    "token": USER_TOKEN,
-                    "error": str(ex)
-                }
+                token_extended["error"] = str(ex)
+
         return token_extended
 
     def collectComponentMetrics(self):
@@ -290,9 +288,9 @@ class FlowBase(object):
             all.append(self.cb.CBRestOperations.getOutgoingMetrics())
             all.append(self.perseo.PerseoRestOperations.getOutgoingMetrics())
             # TODO: Take care of the following operation takes too much time
-            self.sum = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), all)
+            self.sum = reduce(lambda x, y: {k: v + y[k] for k, v in x.items()}, all)
         except Exception as ex:
-            self.logger.error("ERROR collecting component metrics %s", ex)
+            self.logger.error("ERROR collecting component metrics: %s", ex)
 
     def getFlowMetrics(self):
         return self.sum
