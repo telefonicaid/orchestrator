@@ -271,20 +271,22 @@ class RestOperations(object):
             transactionError = False
             if response.code not in [200, 201, 204]:
                 transactionError = True
-            #data_response = response.msg
             if transactionError:
                 self.sum["outgoingTransactionErrors"] += 1
             else:
                 self.sum["outgoingTransactions"] += 1
 
             try:
-                #self.sum["outgoingTransactionRequestSize"] += len(json.dumps(data_request)) + len(str(headers_request))
                 self.sum["outgoingTransactionRequestSize"] += len(str(data_request)) + len(str(headers_request))
             except Exception as ex:
                 self.logger.warn("ERROR collecting outgoingTransactionRequestSize: %s data_request %s headers_request %s", ex, str(data_request), str(headers_request))
-                # Check headers
-                #self.sum["outgoingTransactionResponseSize"] += len(json.dumps(data_response)) + len(str(response.headers.headers)) if 'headers' in response and 'headers' in response.headers else 0
+            try:
+                if isinstance(response, http.client.HTTPResponse):
+                    self.sum["outgoingTransactionResponseSize"] += response.getheader("Content-Length")
+            except Exception as ex:
+                self.logger.warn("ERROR collecting outgoingTransactionResponseSize: %s response %s", ex, str(response))
             self.sum["serviceTimeTotal"] += (service_stop - service_start)
+
         except Exception as ex:
             self.logger.warn("ERROR collecting outgoing metrics: %s", ex)
 
