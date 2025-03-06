@@ -48,11 +48,12 @@ class Stats():
     def __init__(self):
         self.data = settings.SHARED_DATA
         self.lock = Lock()
-        self.manmager = None
+        self.manager = None
 
         if settings.ORC_EXTENDED_METRICS:
             from multiprocessing import Manager
             self.manager = Manager()
+            self.lock = self.manager.Lock()
 
         with self.lock:
             if 'initialized' not in self.data:
