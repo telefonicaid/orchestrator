@@ -23,18 +23,15 @@
 #
 import json
 import time
-import threading
-import multiprocessing
+from threading import Lock
 
 from django.conf import settings
 from datetime import datetime
 
 
-manager = multiprocessing.Manager()
-
 def singleton(cls):
     instances = {}
-    lock = threading.Lock()
+    lock = Lock()
 
     def get_instance(*args, **kwargs):
         with lock:
@@ -49,27 +46,32 @@ def singleton(cls):
 class Stats():
 
     def __init__(self):
-
         self.data = settings.SHARED_DATA
-        self.lock = settings.SHARED_LOCK
+        self.lock = Lock()
+        self.manmager = None
+
+        if settings.ORC_EXTENDED_METRICS:
+            from multiprocessing import Manager
+            self.manager = Manager()
 
         with self.lock:
             if 'initialized' not in self.data:
                 self.data["uptime"] = str(datetime.utcnow())
-                self.data["service"] = manager.dict({})
-                data_sum = json.loads('''{ "sum": {
-                    "incomingTransactions": 0,
-                    "incomingTransactionRequestSize": 0,
-                    "incomingTransactionResponseSize": 0,
-                    "incomingTransactionErrors": 0,
-                    "serviceTime": 0,
-                    "serviceTimeTotal": 0,
-                    "outgoingTransactions": 0,
-                    "outgoingTransactionRequestSize": 0,
-                    "outgoingTransactionResponseSize": 0,
-                    "outgoingTransactionErrors": 0
-                } }''')
-                self.data["sum"] = manager.dict(data_sum["sum"])
+                if settings.ORC_EXTENDED_METRICS:
+                    self.data["service"] = self.manager.dict({})
+                    data_sum = json.loads('''{ "sum": {
+                        "incomingTransactions": 0,
+                        "incomingTransactionRequestSize": 0,
+                        "incomingTransactionResponseSize": 0,
+                        "incomingTransactionErrors": 0,
+                        "serviceTime": 0,
+                        "serviceTimeTotal": 0,
+                        "outgoingTransactions": 0,
+                        "outgoingTransactionRequestSize": 0,
+                        "outgoingTransactionResponseSize": 0,
+                        "outgoingTransactionErrors": 0
+                    } }''')
+                    self.data["sum"] = self.manager.dict(data_sum["sum"])
                 self.data['initialized'] = True
 
     def add_statistic(self, key, value):
@@ -89,9 +91,9 @@ class Stats():
         self.data["sum"][key] += value
 
     def init_statistic_service(self, service_name):
-        self.data["service"][service_name] = manager.dict({})
-        self.data["service"][service_name]["sum"] = manager.dict({})
-        self.data["service"][service_name]["subservs"] = manager.dict({})
+        self.data["service"][service_name] = self.manager.dict({})
+        self.data["service"][service_name]["sum"] = self.manager.dict({})
+        self.data["service"][service_name]["subservs"] = self.manager.dict({})
         data_service = json.loads('''{
                 "sum": {
                    "incomingTransactions": 0,
@@ -106,10 +108,10 @@ class Stats():
                    "outgoingTransactionErrors": 0
                 }
             }''')
-        self.data["service"][service_name]["sum"] = manager.dict(data_service["sum"])
+        self.data["service"][service_name]["sum"] = self.manager.dict(data_service["sum"])
 
     def init_statistic_subservice(self, service_name, subservice_name):
-        self.data["service"][service_name]["subservs"][subservice_name] = manager.dict({})
+        self.data["service"][service_name]["subservs"][subservice_name] = self.manager.dict({})
         data_subservice = json.loads('''{
               "sub": {
                 "incomingTransactions": 0,
@@ -124,10 +126,13 @@ class Stats():
                 "outgoingTransactionErrors": 0
               }
             }''')
-        self.data["service"][service_name]["subservs"][subservice_name] = manager.dict(data_subservice["sub"])
+        self.data["service"][service_name]["subservs"][subservice_name] = self.manager.dict(data_subservice["sub"])
 
     def get_statistics(self):
         standard_dict = dict(self.data)
+        if not settings.ORC_EXTENDED_METRICS:
+            return standard_dict
+
         standard_dict["sum"] = dict(self.data["sum"])
         standard_dict["service"] = dict(self.data["service"])
         for serv in dict(self.data["service"]):
@@ -215,8 +220,10 @@ class Stats():
 
 
     def resetMetrics(self):
+        if not settings.ORC_EXTENDED_METRICS:
+            return result
         with self.lock:
-            self.data["service"] = manager.dict({})
+            self.data["service"] = self.manager.dict({})
             data_sum = json.loads('''{ "sum": {
                     "incomingTransactions": 0,
                     "incomingTransactionRequestSize": 0,
@@ -229,7 +236,7 @@ class Stats():
                     "outgoingTransactionResponseSize": 0,
                     "outgoingTransactionErrors": 0
             } }''')
-            self.data["sum"] = manager.dict(data_sum["sum"])
+            self.data["sum"] = self.manager.dict(data_sum["sum"])
 
 
     def composeMetrics(self):

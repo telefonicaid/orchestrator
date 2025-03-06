@@ -20,11 +20,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orchestrator.settings.dev")
 from multiprocessing import Manager
 manager = Manager()
 shared_data = manager.dict()
-shared_lock = manager.Lock()
 
 from django.conf import settings
 settings.SHARED_DATA = shared_data
-settings.SHARED_LOCK = shared_lock
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
