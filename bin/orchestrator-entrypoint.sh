@@ -67,7 +67,7 @@
 [[ "${IOTAGENT_USER}" == "" ]] && export IOTAGENT_USER=iotagent
 [[ "${IOTAGENT_PASSWORD}" == "" ]] && export IOTAGENT_PASSWORD=iotagent
 
-
+[[ "${ORC_EXTENDED_METRICS}" == "" ]] && export ORC_EXTENDED_METRICS=false
 
 while [[ $# -gt 0 ]]; do
     PARAM=`echo $1`
@@ -304,7 +304,6 @@ sed -i ':a;N;$!ba;s/IOTAGENT = {[A-Za-z0-9,=@.\-\/\"\n: ]*}/IOTAGENT = { \
 }/g' /opt/orchestrator/settings/dev.py
 
 
-
 if [ "$DEBUG_LEVEL" ]; then
 echo "
 LOGGING['handlers']['console']['level'] = '$DEBUG_LEVEL'
@@ -314,6 +313,12 @@ LOGGING['loggers']['orchestrator_core']['level'] = '$DEBUG_LEVEL'
 " >> /opt/orchestrator/settings/dev.py
 fi
 
+
+if [ "$ORC_EXTENDED_METRICS" == "true" ]; then
+echo "
+ORC_EXTENDED_METRICS = True
+" >> /opt/orchestrator/settings/dev.py
+fi
 
 # Wait until Keystone and Keypass are up
 while ! nc -zvw10 $KEYSTONE_HOST $KEYSTONE_PORT ; do sleep 10; done
