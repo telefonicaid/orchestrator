@@ -63,7 +63,7 @@ class Stats():
             from multiprocessing import Manager
             self.manager = Manager()
             self.lock = self.manager.Lock()
-            self.data = self.manager.dict() #settings.SHARED_DATA)
+            self.data = self.manager.dict()
 
         with self.lock:
             if 'initialized' not in self.data:
