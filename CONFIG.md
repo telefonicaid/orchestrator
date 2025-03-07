@@ -241,7 +241,7 @@ IOTAGENT = {
 
 ## Metrics
 
-There are an option, that is disabled by default, to obtain a extended metrics report. This is still experimental due to enable it could imply decrease performance.
+There are an option, that is disabled by default, to obtain a extended metrics report. This is still experimental due to enable it could imply decrease performance. And implies configure uWSGI to use just one thread by each process (i.e. enabling THREADS = 1 and PROCESS = 8) instead default uWSGI used by orchestrator
 [Extended Metrics](https://orchestrator2.docs.apiary.io/#reference/orchestrator/metrics)
 
 ```

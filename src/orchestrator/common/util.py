@@ -29,6 +29,7 @@ import io
 import requests
 import logging
 import time
+import http.client
 from settings import dev as settings
 
 class RestOperations(object):
@@ -281,8 +282,10 @@ class RestOperations(object):
             except Exception as ex:
                 self.logger.warn("ERROR collecting outgoingTransactionRequestSize: %s data_request %s headers_request %s", ex, str(data_request), str(headers_request))
             try:
-                if isinstance(response, http.client.HTTPResponse):
-                    self.sum["outgoingTransactionResponseSize"] += response.getheader("Content-Length")
+                if isinstance(response, http.client.HTTPResponse) and hasattr(response, 'getheader'):
+                    inc = response.getheader("Content-Length")
+                    if inc is not None:
+                        self.sum["outgoingTransactionResponseSize"] += int(inc)
             except Exception as ex:
                 self.logger.warn("ERROR collecting outgoingTransactionResponseSize: %s response %s", ex, str(response))
             self.sum["serviceTimeTotal"] += (service_stop - service_start)

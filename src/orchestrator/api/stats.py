@@ -23,15 +23,22 @@
 #
 import json
 import time
-from threading import Lock
 
 from django.conf import settings
 from datetime import datetime
 
+class DummyLock:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
 
 def singleton(cls):
+    from multiprocessing import Lock as MultiprocessingLock
     instances = {}
-    lock = Lock()
+    lock = MultiprocessingLock()
 
     def get_instance(*args, **kwargs):
         with lock:
@@ -42,18 +49,21 @@ def singleton(cls):
     return get_instance
 
 
-@singleton
+decorator_to_use = singleton if settings.ORC_EXTENDED_METRICS else lambda cls: cls
+
+@decorator_to_use
 class Stats():
 
     def __init__(self):
-        self.data = settings.SHARED_DATA
-        self.lock = Lock()
+        self.data = dict({})
+        self.lock = DummyLock()
         self.manager = None
 
         if settings.ORC_EXTENDED_METRICS:
             from multiprocessing import Manager
             self.manager = Manager()
             self.lock = self.manager.Lock()
+            self.data = self.manager.dict() #settings.SHARED_DATA)
 
         with self.lock:
             if 'initialized' not in self.data:
@@ -74,6 +84,9 @@ class Stats():
                     } }''')
                     self.data["sum"] = self.manager.dict(data_sum["sum"])
                 self.data['initialized'] = True
+
+    def shutdown(self):
+        self.manager.shutdown()
 
     def add_statistic(self, key, value):
         with self.lock:
