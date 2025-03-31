@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+Fix: healthcheck when no PORT env var is provided (#386)
+
 4.10.0
 
 FIX: metrics usage are the same by all process/threads (#58)
