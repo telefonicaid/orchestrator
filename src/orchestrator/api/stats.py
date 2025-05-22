@@ -27,73 +27,46 @@ import time
 from django.conf import settings
 from datetime import datetime
 
-class DummyLock:
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
-
 def singleton(cls):
-    from multiprocessing import Lock as MultiprocessingLock
     instances = {}
-    lock = MultiprocessingLock()
 
     def get_instance(*args, **kwargs):
-        with lock:
-            if cls not in instances:
-                instances[cls] = cls(*args, **kwargs)
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
         return instances[cls]
 
     return get_instance
 
 
-decorator_to_use = singleton if settings.ORC_EXTENDED_METRICS else lambda cls: cls
-
-@decorator_to_use
+@singleton
 class Stats():
 
     def __init__(self):
         self.data = dict({})
-        self.lock = DummyLock()
-        self.manager = None
 
-        if settings.ORC_EXTENDED_METRICS:
-            from multiprocessing import Manager
-            self.manager = Manager()
-            self.lock = self.manager.Lock()
-            self.data = self.manager.dict()
+        if 'initialized' not in self.data:
+            self.data["uptime"] = str(datetime.utcnow())
+            self.data["service"] = dict({})
+            self.data["sum"] = {
+                "incomingTransactions": 0,
+                "incomingTransactionRequestSize": 0,
+                "incomingTransactionResponseSize": 0,
+                "incomingTransactionErrors": 0,
+                "serviceTime": 0,
+                "serviceTimeTotal": 0,
+                "outgoingTransactions": 0,
+                "outgoingTransactionRequestSize": 0,
+                "outgoingTransactionResponseSize": 0,
+                "outgoingTransactionErrors": 0,
+            }
+            self.data['initialized'] = True
 
-        with self.lock:
-            if 'initialized' not in self.data:
-                self.data["uptime"] = str(datetime.utcnow())
-                if settings.ORC_EXTENDED_METRICS:
-                    self.data["service"] = self.manager.dict({})
-                    data_sum = json.loads('''{ "sum": {
-                        "incomingTransactions": 0,
-                        "incomingTransactionRequestSize": 0,
-                        "incomingTransactionResponseSize": 0,
-                        "incomingTransactionErrors": 0,
-                        "serviceTime": 0,
-                        "serviceTimeTotal": 0,
-                        "outgoingTransactions": 0,
-                        "outgoingTransactionRequestSize": 0,
-                        "outgoingTransactionResponseSize": 0,
-                        "outgoingTransactionErrors": 0
-                    } }''')
-                    self.data["sum"] = self.manager.dict(data_sum["sum"])
-                self.data['initialized'] = True
-
-    def shutdown(self):
-        self.manager.shutdown()
 
     def add_statistic(self, key, value):
-        with self.lock:
-            if key in self.data:
-                self.data[key] += value
-            else:
-                self.data[key] = value
+        if key in self.data:
+            self.data[key] += value
+        else:
+            self.data[key] = value
 
     def add_statistic_service(self, service_name, key, value):
         self.data["service"][service_name]["sum"][key] += value
@@ -105,9 +78,9 @@ class Stats():
         self.data["sum"][key] += value
 
     def init_statistic_service(self, service_name):
-        self.data["service"][service_name] = self.manager.dict({})
-        self.data["service"][service_name]["sum"] = self.manager.dict({})
-        self.data["service"][service_name]["subservs"] = self.manager.dict({})
+        self.data["service"][service_name] = dict({})
+        self.data["service"][service_name]["sum"] = dict({})
+        self.data["service"][service_name]["subservs"] = dict({})
         data_service = json.loads('''{
                 "sum": {
                    "incomingTransactions": 0,
@@ -122,10 +95,10 @@ class Stats():
                    "outgoingTransactionErrors": 0
                 }
             }''')
-        self.data["service"][service_name]["sum"] = self.manager.dict(data_service["sum"])
+        self.data["service"][service_name]["sum"] = dict(data_service["sum"])
 
     def init_statistic_subservice(self, service_name, subservice_name):
-        self.data["service"][service_name]["subservs"][subservice_name] = self.manager.dict({})
+        self.data["service"][service_name]["subservs"][subservice_name] = dict({})
         data_subservice = json.loads('''{
               "sub": {
                 "incomingTransactions": 0,
@@ -140,7 +113,7 @@ class Stats():
                 "outgoingTransactionErrors": 0
               }
             }''')
-        self.data["service"][service_name]["subservs"][subservice_name] = self.manager.dict(data_subservice["sub"])
+        self.data["service"][service_name]["subservs"][subservice_name] = dict(data_subservice["sub"])
 
     def get_statistics(self):
         standard_dict = dict(self.data)
@@ -162,83 +135,81 @@ class Stats():
         if not settings.ORC_EXTENDED_METRICS:
             return
 
-        with self.lock:
-            service_stop = time.time()
-            transactionError = False
-            if flow:
-                flow_metrics = flow.getFlowMetrics()
-            else:
-                flow_metrics = {
-                    "serviceTime": 0,
-                    "serviceTimeTotal": 0,
-                    "outgoingTransactions": 0,
-                    "outgoingTransactionRequestSize": 0,
-                    "outgoingTransactionResponseSize": 0,
-                    "outgoingTransactionErrors": 0,
-                }
-            if service_name != None and not service_name in self.data["service"]:
-                self.init_statistic_service(service_name)
+        service_stop = time.time()
+        transactionError = False
+        if flow:
+            flow_metrics = flow.getFlowMetrics()
+        else:
+            flow_metrics = {
+                "serviceTime": 0,
+                "serviceTimeTotal": 0,
+                "outgoingTransactions": 0,
+                "outgoingTransactionRequestSize": 0,
+                "outgoingTransactionResponseSize": 0,
+                "outgoingTransactionErrors": 0,
+            }
+        if service_name != None and not service_name in self.data["service"]:
+            self.init_statistic_service(service_name)
 
-            if (service_name != None and subservice_name != None and
-                not subservice_name in self.data["service"][service_name]["subservs"]):
-                self.init_statistic_subservice(service_name, subservice_name)
+        if (service_name != None and subservice_name != None and
+            not subservice_name in self.data["service"][service_name]["subservs"]):
+            self.init_statistic_subservice(service_name, subservice_name)
 
-            # Analize "response"" to know if is a Response about an error or not
-            if response.status_code not in [200, 201, 204]:
-                # API error
-                transactionError = True
+        # Analize "response"" to know if is a Response about an error or not
+        if response.status_code not in [200, 201, 204]:
+            # API error
+            transactionError = True
 
-            if service_name != None:
-                if subservice_name != None:
-                    # Service and Subservice
-                    if not transactionError:
-                        self.add_statistic_subservice(service_name, subservice_name, "incomingTransactions", 1)
-                    else:
-                        self.add_statistic_subservice(service_name, subservice_name, "incomingTransactionErrors", 1)
-                    self.add_statistic_subservice(service_name, subservice_name, "incomingTransactionRequestSize", len(json.dumps(request.data)))
-                    self.add_statistic_subservice(service_name, subservice_name, "incomingTransactionResponseSize", len(json.dumps(response.data)))
-                    self.add_statistic_subservice(service_name, subservice_name, "serviceTimeTotal", (service_stop - service_start))
-                    self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactions", flow_metrics["outgoingTransactions"])
-                    self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
-                    self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
-                    self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
-                    self.add_statistic_subservice(service_name, subservice_name, "serviceTimeTotal", flow_metrics["serviceTimeTotal"])
-
-                # Service
+        if service_name != None:
+            if subservice_name != None:
+                # Service and Subservice
                 if not transactionError:
-                    self.add_statistic_service(service_name, "incomingTransactions", 1)
+                    self.add_statistic_subservice(service_name, subservice_name, "incomingTransactions", 1)
                 else:
-                    self.add_statistic_service(service_name, "incomingTransactionErrors", 1)
-                self.add_statistic_service(service_name, "incomingTransactionRequestSize", len(json.dumps(request.data)))
-                self.add_statistic_service(service_name, "incomingTransactionResponseSize", len(json.dumps(response.data)))
-                self.add_statistic_service(service_name, "serviceTimeTotal", (service_stop - service_start))
-                self.add_statistic_service(service_name, "outgoingTransactions", flow_metrics["outgoingTransactions"])
-                self.add_statistic_service(service_name, "outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
-                self.add_statistic_service(service_name, "outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
-                self.add_statistic_service(service_name, "outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
-                self.add_statistic_service(service_name, "serviceTimeTotal", flow_metrics["serviceTimeTotal"])
+                    self.add_statistic_subservice(service_name, subservice_name, "incomingTransactionErrors", 1)
+                self.add_statistic_subservice(service_name, subservice_name, "incomingTransactionRequestSize", len(json.dumps(request.data)))
+                self.add_statistic_subservice(service_name, subservice_name, "incomingTransactionResponseSize", len(json.dumps(response.data)))
+                self.add_statistic_subservice(service_name, subservice_name, "serviceTimeTotal", (service_stop - service_start))
+                self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactions", flow_metrics["outgoingTransactions"])
+                self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
+                self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
+                self.add_statistic_subservice(service_name, subservice_name, "outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
+                self.add_statistic_subservice(service_name, subservice_name, "serviceTimeTotal", flow_metrics["serviceTimeTotal"])
 
-            # Sum
+            # Service
             if not transactionError:
-                self.add_statistic_sum("incomingTransactions", 1)
+                self.add_statistic_service(service_name, "incomingTransactions", 1)
             else:
-                self.add_statistic_sum("incomingTransactionErrors", 1)
-            self.add_statistic_sum("incomingTransactionRequestSize", len(json.dumps(request.data)) )
-            self.add_statistic_sum("incomingTransactionResponseSize", len(json.dumps(response.data)))
-            self.add_statistic_sum("serviceTimeTotal", (service_stop - service_start))
-            self.add_statistic_sum("outgoingTransactions", flow_metrics["outgoingTransactions"])
-            self.add_statistic_sum("outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
-            self.add_statistic_sum("outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
-            self.add_statistic_sum("outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
-            self.add_statistic_sum("serviceTimeTotal", flow_metrics["serviceTimeTotal"])
+                self.add_statistic_service(service_name, "incomingTransactionErrors", 1)
+            self.add_statistic_service(service_name, "incomingTransactionRequestSize", len(json.dumps(request.data)))
+            self.add_statistic_service(service_name, "incomingTransactionResponseSize", len(json.dumps(response.data)))
+            self.add_statistic_service(service_name, "serviceTimeTotal", (service_stop - service_start))
+            self.add_statistic_service(service_name, "outgoingTransactions", flow_metrics["outgoingTransactions"])
+            self.add_statistic_service(service_name, "outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
+            self.add_statistic_service(service_name, "outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
+            self.add_statistic_service(service_name, "outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
+            self.add_statistic_service(service_name, "serviceTimeTotal", flow_metrics["serviceTimeTotal"])
+
+        # Sum
+        if not transactionError:
+            self.add_statistic_sum("incomingTransactions", 1)
+        else:
+            self.add_statistic_sum("incomingTransactionErrors", 1)
+        self.add_statistic_sum("incomingTransactionRequestSize", len(json.dumps(request.data)) )
+        self.add_statistic_sum("incomingTransactionResponseSize", len(json.dumps(response.data)))
+        self.add_statistic_sum("serviceTimeTotal", (service_stop - service_start))
+        self.add_statistic_sum("outgoingTransactions", flow_metrics["outgoingTransactions"])
+        self.add_statistic_sum("outgoingTransactionRequestSize", flow_metrics["outgoingTransactionRequestSize"])
+        self.add_statistic_sum("outgoingTransactionResponseSize", flow_metrics["outgoingTransactionResponseSize"])
+        self.add_statistic_sum("outgoingTransactionErrors", flow_metrics["outgoingTransactionErrors"])
+        self.add_statistic_sum("serviceTimeTotal", flow_metrics["serviceTimeTotal"])
 
 
     def resetMetrics(self):
         if not settings.ORC_EXTENDED_METRICS:
             return result
-        with self.lock:
-            self.data["service"] = self.manager.dict({})
-            data_sum = json.loads('''{ "sum": {
+        self.data["service"] = dict({})
+        data_sum = json.loads('''{ "sum": {
                     "incomingTransactions": 0,
                     "incomingTransactionRequestSize": 0,
                     "incomingTransactionResponseSize": 0,
@@ -249,8 +220,8 @@ class Stats():
                     "outgoingTransactionRequestSize": 0,
                     "outgoingTransactionResponseSize": 0,
                     "outgoingTransactionErrors": 0
-            } }''')
-            self.data["sum"] = self.manager.dict(data_sum["sum"])
+        } }''')
+        self.data["sum"] = dict(data_sum["sum"])
 
 
     def composeMetrics(self):
