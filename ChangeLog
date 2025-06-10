@@ -4,6 +4,7 @@ CHANGES
 Fix: healthcheck when no PORT env var is provided (#386)
 FIX: Upgrade Debian version from 12.9 to 12.10 in Dockerfile
 UPGRADE: django from 4.2.20 to 4.2.22 due to CVE-2025-32873 and CVE-2025-48432
+UPGRADE: requests from 2.32.3 to 2.32.4 due to CVE-2024-47081
 
 4.10.0
 
