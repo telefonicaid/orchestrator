@@ -46,7 +46,7 @@ class LdapUser_RESTView(APIView, IoTConf):
 
     def __init__(self):
         IoTConf.__init__(self)
-        stats = Stats()
+        self.stats = Stats()
 
     def post(self, request):
         response = flow = None
@@ -145,11 +145,11 @@ class LdapUser_RESTView(APIView, IoTConf):
             else:
                 result = { "error": "not valid parameters", "code": 400 }
             if 'error' not in result:
-                stats.add_statistic("num_get_ldap", 1)
+                self.stats.add_statistic("num_get_ldap", 1)
                 response = Response(result, status=status.HTTP_200_OK,
                                 headers={"Fiware-Correlator": CORRELATOR_ID})
             else:
-                stats.add_statistic("num_flow_errors", 1)
+                self.stats.add_statistic("num_flow_errors", 1)
                 response = Response(result['error'],
                                 status=self.getStatusFromCode(result['code']),
                                 headers={"Fiware-Correlator": CORRELATOR_ID})

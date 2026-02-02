@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+Fix: bad access to stats from ldap view (#58)
 Fix: healthcheck when no PORT env var is provided (#386)
 FIX: Upgrade Debian version from 12.9 to 12.12 in Dockerfile
 UPGRADE: django from 4.2.20 to 4.2.27 due to CVE-2025-32873, CVE-2025-48432, CVE-2025-57833, CVE-2025-59681, CVE-2025-64459 and CVE-2025-64458, CVE-2025-13372
