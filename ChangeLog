@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-4.11
+4.11.0
 
 Fix: bad access to stats from ldap view (#58)
 Fix: healthcheck when no PORT env var is provided (#386)
