@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPGRADE: django from 4.2.27 to 4.2.28 due to CVE-2025-14550
+
 4.11.0
 
 Fix: bad access to stats from ldap view (#58)
