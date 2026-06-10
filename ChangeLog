@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-REMOVE: role assigment for admin and default policies for STH when create new service
+REMOVE: role assigment for admin and default policies for STH when create new service (#411)
 UPGRADE: requests from 2.32.4 to 2.33.1 due to CVE-2026-25645
 UPGRADE: Debian version from 12.12 to 13.5 in Dockerfile
 UPGRADE: uwsgi version from 2.0.28 to 2.0.31
