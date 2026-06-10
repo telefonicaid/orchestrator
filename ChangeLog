@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+REMOVE: Do not assign component roles when create admin service when create new service (#412)
 REMOVE: role assigment for admin and default policies for STH when create new service (#411)
 UPGRADE: requests from 2.32.4 to 2.33.1 due to CVE-2026-25645
 UPGRADE: Debian version from 12.12 to 13.5 in Dockerfile

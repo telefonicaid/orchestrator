@@ -250,14 +250,15 @@ class CreateNewService(FlowBase):
                                       ID_DOM1,
                                       ID_ADM1,
                                       ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN)
-
-            for component in components:
-                self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
-                                         ID_NEW_SERVICE_ROLE_ADMIN_SET[component])
-                self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
-                                          ID_DOM1,
-                                          ID_ADM1,
-                                          ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component])
+ 
+            # Do not assign admin service to component roles
+            # for component in components:
+            #    self.idm.grantDomainRole(DOMAIN_ADMIN_TOKEN, ID_DOM1, ID_ADM1,
+            #                             ID_NEW_SERVICE_ROLE_ADMIN_SET[component])
+            #    self.idm.grantInheritRole(NEW_SERVICE_ADMIN_TOKEN,
+            #                              ID_DOM1,
+            #                              ID_ADM1,
+            #                              ID_NEW_SERVICE_ROLE_SUBSERVICEADMIN_SET[component])
 
             #
             # 5. Provision default platform roles AccessControl policies
