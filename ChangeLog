@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+UPGRADE: django from 4.2.30 to 5.2.16 due to CWE-347, CWE-178, CWE-1023, CWE-524, CWE-144 and CWE-805
+
 4.12.0 - Jun 19, 2026
 
 REMOVE: Do not assign component roles when create admin service when create new service (#412)
