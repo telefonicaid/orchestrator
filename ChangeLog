@@ -1,8 +1,9 @@
-UPGRADE: Debian version from 13.5 to 13.6 in Dockerfile
-FIX: regex pattern definitions to use Python-compatible escaping/raw string notation, preventing "SyntaxWarning: invalid escape sequence" warnings when running on Python 3.12+ (including Python 3.13).
-
 CHANGES
 =======
+
+FIX: regex pattern definitions to use Python-compatible escaping/raw string notation, preventing "SyntaxWarning: invalid escape sequence" warnings when running on Python 3.12+ (including Python 3.13).
+UPGRADE: django from 4.2.30 to 5.2.16 due to CWE-347, CWE-178, CWE-1023, CWE-524, CWE-144 and CWE-805
+UPGRADE: Debian version from 13.5 to 13.6 in Dockerfile
 
 4.12.0 - Jun 19, 2026
 
