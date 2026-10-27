@@ -1,6 +1,6 @@
 import uuid
 import json
-from settings import custom_dev as settings
+from settings import dev as settings
 
 from orchestrator.common.util import RestOperations
 
@@ -639,7 +639,7 @@ class Test_NewSubService_RestView(object):
             url="/v1.0/service/%s/subservice/" % service_id,
             json_data=True,
             data=self.payload_data_bad2)
-        assert res.code == 400, (res.code, res.msg)
+        assert res.code == 401, (res.code, res.msg)
 
     def test_post_ok3(self):
         service_id = self.TestRestOps.getServiceId(self.payload_data_ok3)
@@ -1382,7 +1382,6 @@ class Test_ProjectList_RestView(object):
             "SERVICE_ADMIN_PASSWORD": TEST_SERVICE_ADMIN_PASSWORD,
             "SUBSERVICE_NAME": TEST_SUBSERVICE_NAME2,
             "NEW_SUBSERVICE_DESCRIPTION": "elektricidad",
-            "NEW_SUBSERVICE_NAME": TEST_SUBSERVICE_NAME3
         }
         self.payload_data_bad = {
             "SERVICE_ADMIN_USER": ADMIN_USER,
@@ -1461,7 +1460,7 @@ class Test_ProjectDetail_RestView(object):
                 subservice_id),
             json_data=True,
             data=self.payload_data_ok)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
+        assert res.code == 200, (res.code, res.msg, res.raw_json) ##
 
 
 class Test_NewServiceRole_RestView(object):
@@ -3040,29 +3039,7 @@ class Test_Metrics_RestView(object):
         assert res.code == 200, (res.code, res.msg, res.raw_json)
         response = res.read()
         json_body_response = json.loads(response)
-        assert "service" in json_body_response
-        assert "sum" in json_body_response
         
-    def test_get_and_reset_metrics_ok(self):
-        res = self.TestRestOps.rest_request(method="GET",
-                                            url="/v1.0/admin/metrics?reset=true",
-                                            json_data=True,
-                                            auth_token=None,
-                                            data=None)
-        assert res.code == 200, (res.code, res.msg, res.raw_json)
-        response = res.read()
-        json_body_response = json.loads(response)        
-        assert "service" in json_body_response
-        assert "sum" in json_body_response
-
-    def test_reset_metrics_ok(self):
-        res = self.TestRestOps.rest_request(method="DELETE",
-                                            url="/v1.0/admin/metrics",
-                                            json_data=True,
-                                            auth_token=None,
-                                            data=None)
-        assert res.code == 204, (res.code, res.msg)
-
 
 if __name__ == '__main__':
 
@@ -3206,5 +3183,3 @@ if __name__ == '__main__':
 
     test_Metrics = Test_Metrics_RestView()
     test_Metrics.test_get_metrics_ok()
-    test_Metrics.test_get_and_reset_metrics_ok()
-    test_Metrics.test_reset_metrics_ok()

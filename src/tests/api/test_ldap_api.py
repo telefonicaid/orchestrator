@@ -23,7 +23,7 @@
 #
 import uuid
 import json
-from settings import custom_dev as settings
+from settings import dev as settings
 
 from test_api import TestRestOperations
 

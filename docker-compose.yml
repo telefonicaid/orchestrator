@@ -1,0 +1,121 @@
+services:
+  
+  iot-mongo:
+    container_name: iot-mongo
+    hostname: iot-mongo
+    restart: "unless-stopped"
+    image: mongo:8.0.5   
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_VERSION: 8.0.5
+    logging:
+      driver: json-file
+      options:
+        max-size: "250m"
+
+  iot-mysql:
+    container_name: iot-mysql
+    hostname: iot-mysql
+    restart: "unless-stopped"
+    image: mysql:5.7.43
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpwd
+      MYSQL_DATABASE: keypass
+      MYSQL_USER: keypass
+      MYSQL_PASSWORD: keypass
+    logging:
+      driver: json-file
+      options:
+        max-size: "250m"
+        
+  iot-orion:
+    container_name: iot-orion
+    hostname: iot-orion
+    restart: "unless-stopped"
+    image: telefonicaiot/fiware-orion:4.7.0
+    links:
+      - iot-mongo
+    ports:
+      - "10026:1026"
+    environment:
+      - ORION_MONGO_HOST=iot-mongo
+      - ORION_MONGO_URI=mongodb://iot-mongo
+      - ORION_LOG_LEVEL=INFO
+    logging:
+      driver: json-file
+      options:
+        max-size: "250m"
+
+  iot-keypass:
+    container_name: iot-keypass
+    hostname: iot-keypass
+    restart: "unless-stopped"
+    image: telefonicaiot/fiware-keypass:1.14.0
+    links:
+      - iot-mysql
+    ports:
+      - "127.0.0.1:17070:7070"
+      - "127.0.0.1:7071:7071"
+    environment:
+      - KEYPASS_DB_TIMEOUT=240
+      - KEYPASS_LOG_LEVEL=INFO
+      - KEYPASS_DB_HOST_NAME=iot-mysql
+      - KEYPASS_DB_HOST_PORT=3306
+      - KEYPASS_DB_USER=keypass
+      - KEYPASS_DB_NAME=keypass
+      - KEYPASS_DB_PASSWORD=keypass
+      - KEYPASS_DB_TYPE=mysql
+    command: -dbhost iot-mysql
+    logging:
+      driver: json-file
+      options:
+        max-size: "250m"
+
+  iot-keystone:
+    container_name: iot-keystone
+    hostname: iot-keystone
+    restart: "unless-stopped"
+    image: telefonicaiot/fiware-keystone-spassword:1.24.0
+    links:
+      - iot-mysql
+    ports:
+      - "5001:5001"
+    environment:
+      - SPASSWORD_SNDFA=True
+      - DB_PASSWORD=keystone
+      - DB_NAME=keystone
+    command: -dbhost iot-mysql -default_pwd 4pass1w0rd -mysql_pwd mysqlpwd
+    logging:
+      driver: json-file
+      options:
+        max-size: "250m"
+
+  iot-orchestrator:
+    container_name: iot-orchestrator
+    hostname: iot-orchestrator
+    restart: "unless-stopped"
+    image: telefonicaiot/orchestrator:latest
+    links:
+      - iot-keystone
+      - iot-keypass
+      - iot-mongo
+      - iot-orion
+    ports:
+      - "8084:8084"
+      - "8184:8184"
+    environment:
+      - DEBUG_LEVEL=INFO
+      - KEYSTONE_HOST=iot-keystone
+      - KEYPASS_HOST=iot-keypass
+      - ORION_HOST=iot-orion
+      - MONGODB_URI=iot-mongo
+    logging:
+      driver: json-file
+      options:
+        max-size: "250m"
+

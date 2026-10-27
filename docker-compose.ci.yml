@@ -1,0 +1,5 @@
+services:
+  iot-orchestrator:
+    image: orchestrator:ci
+    build:
+      context: .
